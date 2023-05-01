@@ -1,0 +1,29 @@
+name: passkeys_android
+description: Android implementation of the passkeys plugin
+version: 0.1.0+1
+publish_to: none
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+
+flutter:
+  plugin:
+    implements: passkeys
+    platforms:
+      android:
+        package: com.corbado.passkeys_android
+        pluginClass: FlutterPasskeysPlugin
+        dartPluginClass: PasskeysAndroid
+
+dependencies:
+  flutter:
+    sdk: flutter
+  passkeys_platform_interface:
+    path: ../passkeys_platform_interface
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  pigeon: ^10.0.1
+  plugin_platform_interface: ^2.0.0
+  very_good_analysis: ^5.0.0
