@@ -1,0 +1,781 @@
+# Todos
+#
+# - Add examples
+openapi: 3.0.3
+
+###################################################################
+# General                                                         #
+###################################################################
+info:
+  version: 1.0.0
+  title: Corbado Frontend API
+  description: Overview of all Corbado Frontend API calls to implement a password less future.
+  contact:
+    name: Corbado API Team
+    email: support@corbado.com
+    url: https://www.corbado.com
+
+servers:
+  - url: https://auth.corbado.com
+
+tags:
+  - name: Users
+    description: All API calls to handle users
+
+  - name: Projects
+    description: All API calls to handle project
+
+  - name: Assets
+    description: All asset calls
+
+  - name: Sessions
+    description: All API calls to handle session management
+
+paths:
+  ################
+  ### PassKeys ###
+  ################
+
+  /v1/users/passkey/login/start:
+    post:
+      description: Performs passkey login start
+      operationId: PassKeyLoginStart
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/passKeyLoginStartReq'
+      responses:
+        '200':
+          description: Provides challenge for perform PassKey ceremony
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/passKeyStartRsp'
+        default:
+          $ref: '#/components/responses/error'
+
+  /v1/users/passkey/login/finish:
+    post:
+      description: Performs passkey login finish
+      operationId: PassKeyLoginFinish
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/passKeyFinishReq'
+      responses:
+        '200':
+          description: Provides a session token to initialize your session
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/passKeyLoginFinishRsp'
+        default:
+          $ref: '#/components/responses/error'
+
+  /v1/users/passkey/register/start:
+    post:
+      description: Performs passkey register start
+      operationId: PassKeyRegisterStart
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/passKeyRegisterStartReq'
+      responses:
+        '200':
+          description: Provides challenge for perform PassKey ceremony
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/passKeyStartRsp'
+        default:
+          $ref: '#/components/responses/error'
+
+  /v1/users/passkey/register/finish:
+    post:
+      description: Performs passkey register finish
+      operationId: PassKeyRegisterFinish
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/passKeyFinishReq'
+      responses:
+        '200':
+          description: Provides a session token to initialize your session
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/passKeyRegisterFinishRsp'
+        default:
+          $ref: '#/components/responses/error'
+
+  /v1/users/passkey/append/start:
+    post:
+      description: Performs passkey append start
+      operationId: PassKeyAppendStart
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/emptyReq'
+      responses:
+        '200':
+          description: Provides challenge for perform PassKey ceremony
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/passKeyStartRsp'
+        default:
+          $ref: '#/components/responses/error'
+
+  /v1/users/passkey/append/finish:
+    post:
+      description: Performs passkey append finish
+      operationId: PassKeyAppendFinish
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/passKeyFinishReq'
+      responses:
+        '200':
+          description: Provides a session token to initialize your session
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/passKeyAppendFinishRsp'
+        default:
+          $ref: '#/components/responses/error'
+
+
+
+
+
+components:
+  ###################################################################
+  # Security schemes                                                #
+  ###################################################################
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    projectID:
+      in: header
+      name: X-Corbado-ProjectID
+      type: apiKey
+
+  schemas:
+    ###################################################################
+    # Schemas: Users                                                  #
+    ###################################################################
+
+    authMethodsListReq:
+      type: object
+      required:
+        - username
+      properties:
+        username:
+          type: string
+          description: Users login name
+        requestID:
+          $ref: 'common.yml#/components/schemas/requestID'
+
+    authMethodsListRsp:
+      allOf:
+        - $ref: 'common.yml#/components/schemas/genericRsp'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              type: object
+              required:
+                - selectedMethods
+                - possibleMethods
+              properties:
+                selectedMethods:
+                  $ref: 'common.yml#/components/schemas/authMethods'
+                possibleMethods:
+                  $ref: 'common.yml#/components/schemas/authMethods'
+
+    ########################
+    ### PassKeys section ###
+    ########################
+
+    passKeyLoginStartReq:
+      type: object
+      required:
+        - username
+      properties:
+        username:
+          type: string
+          description: Users login name
+        requestID:
+          $ref: 'common.yml#/components/schemas/requestID'
+
+    passKeyStartRsp:
+      allOf:
+        - $ref: 'common.yml#/components/schemas/genericRsp'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              type: object
+              required:
+                - challenge
+              properties:
+                challenge:
+                  type: string
+                  description: Contains json payload data for start webauthn login challenge
+
+    passKeyFinishReq:
+      type: object
+      properties:
+        signedChallenge:
+          type: string
+        requestID:
+          $ref: 'common.yml#/components/schemas/requestID'
+      required:
+        - signedChallenge
+
+    passKeyLoginFinishRsp:
+      allOf:
+        - $ref: 'common.yml#/components/schemas/genericRsp'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              type: object
+              properties:
+                username:
+                  type: string
+                confirmedCredential:
+                  type: boolean
+                redirectURL:
+                  type: string
+                sessionToken:
+                  type: string
+                  description: Only given when using session v1, newer versions work with cookies
+                shortSession:
+                  $ref: '#/components/schemas/shortSession'
+              required:
+                - redirectURL
+                - username
+                - confirmedCredential
+                - sessionToken
+
+    passKeyRegisterFinishRsp:
+      allOf:
+        - $ref: 'common.yml#/components/schemas/genericRsp'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              type: object
+              properties:
+                redirectURL:
+                  type: string
+                sessionToken:
+                  type: string
+                  description: Only given when using session v1, newer versions work with cookies
+                shortSession:
+                  $ref: '#/components/schemas/shortSession'
+              required:
+                - redirectURL
+                - sessionToken
+
+    passKeyRegisterStartReq:
+      type: object
+      required:
+        - username
+      properties:
+        username:
+          type: string
+          description: Users login name
+        fullName:
+          type: string
+          description: Users full name
+        requestID:
+          $ref: 'common.yml#/components/schemas/requestID'
+
+    passKeyAppendFinishRsp:
+      allOf:
+        - $ref: 'common.yml#/components/schemas/genericRsp'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              type: object
+              properties:
+                redirectURL:
+                  type: string
+              required:
+                - redirectURL
+
+
+    passKeyMediationStartReq:
+      type: object
+      properties:
+        requestID:
+          $ref: 'common.yml#/components/schemas/requestID'
+        username:
+          type: string
+
+    passKeyMediationStartRsp:
+      allOf:
+        - $ref: 'common.yml#/components/schemas/genericRsp'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              type: object
+              required:
+                - challenge
+              properties:
+                challenge:
+                  type: string
+                  description: Contains json payload data for start webauthn mediation challenge
+
+
+    ##########################
+    ### Email Link section ###
+    ##########################
+
+    emailLinkRegisterStartReq:
+      type: object
+      properties:
+        username:
+          type: string
+        email:
+          type: string
+        requestID:
+          $ref: 'common.yml#/components/schemas/requestID'
+      required:
+        - email
+
+    emailLinkRegisterStartRsp:
+      allOf:
+        - $ref: 'common.yml#/components/schemas/genericRsp'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              type: object
+              properties:
+                emailLinkID:
+                  type: string
+              required:
+                - emailLinkID
+
+    emailLinkConfirmReq:
+      type: object
+      properties:
+        emailLinkID:
+          type: string
+        token:
+          type: string
+        requestID:
+          $ref: 'common.yml#/components/schemas/requestID'
+      required:
+        - emailLinkID
+        - token
+
+    emailLinkLoginStartReq:
+      type: object
+      properties:
+        username:
+          type: string
+        requestID:
+          $ref: 'common.yml#/components/schemas/requestID'
+      required:
+        - username
+
+    emailLinkLoginStartRsp:
+      allOf:
+        - $ref: 'common.yml#/components/schemas/genericRsp'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              type: object
+              properties:
+                emailLinkID:
+                  type: string
+              required:
+                - emailLinkID
+
+    emailLinkStatusReq:
+      type: object
+      properties:
+        emailLinkID:
+          type: string
+        requestID:
+          $ref: 'common.yml#/components/schemas/requestID'
+      required:
+        - emailLinkID
+
+    emailLinkStatusRsp:
+      allOf:
+        - $ref: 'common.yml#/components/schemas/genericRsp'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              type: object
+              properties:
+                redirectURL:
+                  type: string
+                sessionToken:
+                  type: string
+                  description: Only given when using session v1, newer versions work with cookies
+                shortSession:
+                  $ref: '#/components/schemas/shortSession'
+              required:
+                - redirectURL
+                - sessionToken
+
+    emailLinkConfirmRsp:
+      allOf:
+        - $ref: 'common.yml#/components/schemas/genericRsp'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              type: object
+              properties:
+                redirectURL:
+                  type: string
+                sessionToken:
+                  type: string
+                  description: Only given when using session v1, newer versions work with cookies
+                shortSession:
+                  $ref: '#/components/schemas/shortSession'
+                authMethods:
+                  $ref: 'common.yml#/components/schemas/authMethods'
+              required:
+                - redirectURL
+                - authMethods
+                - sessionToken
+
+    passwordVerifyReq:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+        requestID:
+          $ref: 'common.yml#/components/schemas/requestID'
+      required:
+        - username
+        - password
+
+    passwordVerifyRsp:
+      allOf:
+        - $ref: 'common.yml#/components/schemas/genericRsp'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              type: object
+              properties:
+                redirectURL:
+                  type: string
+                sessionToken:
+                  type: string
+                  description: Only given when using session v1, newer versions work with cookies
+                shortSession:
+                  $ref: '#/components/schemas/shortSession'
+              required:
+                - redirectURL
+                - sessionToken
+
+
+    loginTokenReq:
+      type: object
+      properties:
+        token:
+          type: string
+        requestID:
+          $ref: 'common.yml#/components/schemas/requestID'
+      required:
+        - token
+
+    loginTokenRsp:
+      allOf:
+        - $ref: 'common.yml#/components/schemas/genericRsp'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              type: object
+              properties:
+                redirectURL:
+                  type: string
+                sessionToken:
+                  type: string
+                  description: Only given when using session v1, newer versions work with cookies
+                shortSession:
+                  $ref: '#/components/schemas/shortSession'
+              required:
+                - redirectURL
+                - sessionToken
+
+    projectConfigRsp:
+      allOf:
+        - $ref: 'common.yml#/components/schemas/genericRsp'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              type: object
+              required:
+                - allowUserRegistration
+                - passkeyAppendInterval
+                - fallbackLanguage
+                - autoDetectLanguage
+                - userFullNameRequired
+                - webComponentDebug
+              properties:
+                allowUserRegistration:
+                  type: boolean
+                passkeyAppendInterval:
+                  type: string
+                fallbackLanguage:
+                  type: string
+                autoDetectLanguage:
+                  type: boolean
+                userFullNameRequired:
+                  type: boolean
+                webComponentDebug:
+                  type: boolean
+
+    assetLinksRsp:
+      type: array
+      items:
+        $ref: '#/components/schemas/assetLink'
+
+    assetLink:
+      type: object
+      required:
+        - relation
+        - target
+      properties:
+        relation:
+          type: array
+          items:
+            type: string
+        target:
+          $ref: '#/components/schemas/assetLinkTarget'
+
+    assetLinkTarget:
+      type: object
+      required:
+        - namespace
+      properties:
+        namespace:
+          type: string
+        package_name:
+          type: string
+        site:
+          type: string
+        sha256_cert_fingerprints:
+          type: array
+          items:
+            type: string
+
+    appleAppSiteAssociationRsp:
+      type: object
+      required:
+        - applinks
+        - webcredentials
+        - appclips
+      properties:
+        applinks:
+          type: object
+          required:
+            - details
+          properties:
+            details:
+              type: array
+              items:
+                type: object
+                required:
+                  - appID
+                  - paths
+                properties:
+                  appID:
+                    type: string
+                  paths:
+                    type: array
+                    items:
+                      type: string
+
+        webcredentials:
+          type: object
+          required:
+            - apps
+          properties:
+            apps:
+              type: array
+              items:
+                type: string
+
+        appclips:
+          type: object
+          required:
+            - apps
+          properties:
+            apps:
+              type: array
+              items:
+                type: string
+    wellKnownJWKSListRsp:
+      type: object
+      required:
+        - keys
+      properties:
+        keys:
+          type: array
+          items:
+            $ref: '#/components/schemas/jwk'
+
+    # DO NOT MODIFY - see https://www.rfc-editor.org/rfc/rfc7517#section-4
+    jwk:
+      description: JSON Web Key
+      type: object
+      required:
+        - alg
+        - kty
+        - use
+        - 'n'
+        - e
+        - kid
+      properties:
+        alg:
+          description: The specific cryptographic algorithm used with the key
+          type: string
+          example: 'RS256'
+        kty:
+          description: The family of cryptographic algorithms used with the key
+          type: string
+          example: 'RSA'
+        use:
+          description: How the key was meant to be used; sig represents the signature
+          type: string
+        # 'n' is a reserved key in yaml and must be escaped, otherwise code generation breaks!
+        'n':
+          description: The modulus for the RSA public key
+          type: string
+        e:
+          description: The exponent for the RSA public key
+          type: string
+        kid:
+          description: The unique identifier for the key
+          type: string
+
+    sessionRefreshRsp:
+      type: object
+      allOf:
+        - $ref: 'common.yml#/components/schemas/genericRsp'
+        - type: object
+          required:
+            - sessionToken
+            - redirectURL
+          properties:
+            sessionToken:
+              type: string
+            shortSession:
+              $ref: '#/components/schemas/shortSession'
+            redirectURL:
+              type: string
+
+    shortSession:
+      type: object
+      required:
+        - key
+        - value
+        - domain
+        - path
+        - secure
+        - expires
+        - sameSite
+      properties:
+        key:
+          type: string
+        value:
+          type: string
+        domain:
+          type: string
+        path:
+          type: string
+        secure:
+          type: boolean
+        expires:
+          type: string
+        sameSite:
+          type: string
+
+    logoutRsp:
+      type: object
+      allOf:
+        - $ref: 'common.yml#/components/schemas/genericRsp'
+        - type: object
+          properties:
+            shortSession:
+              $ref: '#/components/schemas/shortSession'
+
+    emptyReq:
+      type: object
+      properties:
+        requestID:
+          $ref: 'common.yml#/components/schemas/requestID'
+
+  responses:
+    error:
+      description: Error
+      content:
+        application/json:
+          schema:
+            $ref: 'common.yml#/components/schemas/errorRsp'
+
+security:
+  - bearerAuth: [ ]
+  - projectID: [ ]

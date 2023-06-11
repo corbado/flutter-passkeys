@@ -1,0 +1,38 @@
+name: passkeys
+description: A Very Good Project created by Very Good CLI.
+version: 0.1.0+1
+publish_to: none
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+
+flutter:
+  plugin:
+    platforms:
+      android:
+        default_package: passkeys_android
+      ios:
+        default_package: passkeys_ios
+
+dependencies:
+  flutter:
+    sdk: flutter
+  passkeys_ios:
+    path: ../passkeys_ios
+  passkeys_platform_interface:
+    path: ../passkeys_platform_interface
+
+  corbado_api:
+    path: lib/backend/corbado/generated
+  json_annotation: ^4.8.1
+  openapi_generator_annotations: ^4.10.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  mocktail: ^0.3.0
+  plugin_platform_interface: ^2.0.0
+  very_good_analysis: ^5.0.0
+  openapi_generator: ^4.10.0
+  build_runner: ^2.4.5
+  json_serializable: ^6.7.0
