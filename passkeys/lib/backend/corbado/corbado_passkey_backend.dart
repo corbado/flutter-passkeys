@@ -21,7 +21,7 @@ class CorbadoPasskeyBackend extends PasskeyBackend {
   @override
   Future<RegistrationInitResponse> initRegister(String email) async {
     final result = await UsersApi(_client).passKeyRegisterStart(
-        PassKeyRegisterStartReq(username: email, fullName: "test"));
+        PassKeyRegisterStartReq(username: email, fullName: 'test'),);
 
     if (result == null) {
       throw Exception('An unknown error occured during the Corbado API call');
@@ -44,7 +44,7 @@ class CorbadoPasskeyBackend extends PasskeyBackend {
     );
 
     if (result == null) {
-      throw Exception("An unknown error occurred during the Corbado API call");
+      throw Exception('An unknown error occurred during the Corbado API call');
     }
 
     return;

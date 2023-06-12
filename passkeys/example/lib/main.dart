@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
 
 class HomePage extends StatefulWidget {
   HomePage({super.key})
-      : _auth = PasskeyAuth(CorbadoPasskeyBackend("pro-3320381079973729266"));
+      : _auth = PasskeyAuth(CorbadoPasskeyBackend('pro-3320381079973729266'));
 
   final PasskeyAuth _auth;
 

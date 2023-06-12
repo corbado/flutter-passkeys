@@ -6,9 +6,12 @@ part 'registration.g.dart';
 
 @JsonSerializable()
 class CorbadoRegisterChallenge {
-  final CorbadoPublicKey publicKey;
 
   CorbadoRegisterChallenge(this.publicKey);
+
+  factory CorbadoRegisterChallenge.fromJson(Map<String, dynamic> json) =>
+      _$CorbadoRegisterChallengeFromJson(json);
+  final CorbadoPublicKey publicKey;
 
   RegistrationInitResponse toRegisterInitResponse() {
     final rp = RelyingParty(publicKey.rp.name, publicKey.rp.id);
@@ -16,61 +19,61 @@ class CorbadoRegisterChallenge {
     return RegistrationInitResponse(rp, user, publicKey.challenge);
   }
 
-  factory CorbadoRegisterChallenge.fromJson(Map<String, dynamic> json) =>
-      _$CorbadoRegisterChallengeFromJson(json);
-
   Map<String, dynamic> toJson() => _$CorbadoRegisterChallengeToJson(this);
 }
 
 @JsonSerializable()
 class CorbadoPublicKey {
-  final CorbadoRelyingParty rp;
-  final CorbadoUser user;
-  final String challenge;
 
   CorbadoPublicKey(this.rp, this.user, this.challenge);
 
   factory CorbadoPublicKey.fromJson(Map<String, dynamic> json) =>
       _$CorbadoPublicKeyFromJson(json);
+  final CorbadoRelyingParty rp;
+  final CorbadoUser user;
+  final String challenge;
 
   Map<String, dynamic> toJson() => _$CorbadoPublicKeyToJson(this);
 }
 
 @JsonSerializable()
 class CorbadoRelyingParty {
-  final String name;
-  final String id;
 
   CorbadoRelyingParty(this.name, this.id);
 
   factory CorbadoRelyingParty.fromJson(Map<String, dynamic> json) =>
       _$CorbadoRelyingPartyFromJson(json);
+  final String name;
+  final String id;
 
   Map<String, dynamic> toJson() => _$CorbadoRelyingPartyToJson(this);
 }
 
 @JsonSerializable()
 class CorbadoUser {
-  final String name;
-  final String id;
 
   CorbadoUser(this.name, this.id);
 
   factory CorbadoUser.fromJson(Map<String, dynamic> json) =>
       _$CorbadoUserFromJson(json);
+  final String name;
+  final String id;
 
   Map<String, dynamic> toJson() => _$CorbadoUserToJson(this);
 }
 
 @JsonSerializable(explicitToJson: true)
 class CorbadoRegisterSignedChallengeRequest {
-  final String id;
-  final String rawId;
-  final CorbadoRegisterSignedChallengeRequestResponse response;
-  final String type;
+
+  CorbadoRegisterSignedChallengeRequest({
+    required this.id,
+    required this.rawId,
+    required this.response,
+    this.type = 'public-key',
+  });
 
   factory CorbadoRegisterSignedChallengeRequest.fromRegisterCompleteRequest(
-      RegistrationCompleteRequest r) {
+      RegistrationCompleteRequest r,) {
     final response = CorbadoRegisterSignedChallengeRequestResponse(
       clientDataJSON: r.clientDataJSON,
       attestationObject: r.attestationObject,
@@ -83,16 +86,13 @@ class CorbadoRegisterSignedChallengeRequest {
     );
   }
 
-  CorbadoRegisterSignedChallengeRequest({
-    required this.id,
-    required this.rawId,
-    required this.response,
-    this.type = "public-key",
-  });
-
   factory CorbadoRegisterSignedChallengeRequest.fromJson(
-          Map<String, dynamic> json) =>
+          Map<String, dynamic> json,) =>
       _$CorbadoRegisterSignedChallengeRequestFromJson(json);
+  final String id;
+  final String rawId;
+  final CorbadoRegisterSignedChallengeRequestResponse response;
+  final String type;
 
   Map<String, dynamic> toJson() =>
       _$CorbadoRegisterSignedChallengeRequestToJson(this);
@@ -100,19 +100,19 @@ class CorbadoRegisterSignedChallengeRequest {
 
 @JsonSerializable()
 class CorbadoRegisterSignedChallengeRequestResponse {
-  final String clientDataJSON;
-  final String attestationObject;
-  final List<String> transports;
 
   CorbadoRegisterSignedChallengeRequestResponse({
     required this.clientDataJSON,
     required this.attestationObject,
-    this.transports = const ["internal"],
+    this.transports = const ['internal'],
   });
 
   factory CorbadoRegisterSignedChallengeRequestResponse.fromJson(
-          Map<String, dynamic> json) =>
+          Map<String, dynamic> json,) =>
       _$CorbadoRegisterSignedChallengeRequestResponseFromJson(json);
+  final String clientDataJSON;
+  final String attestationObject;
+  final List<String> transports;
 
   Map<String, dynamic> toJson() =>
       _$CorbadoRegisterSignedChallengeRequestResponseToJson(this);

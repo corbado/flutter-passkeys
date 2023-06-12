@@ -7,13 +7,13 @@ part of 'registration.dart';
 // **************************************************************************
 
 CorbadoRegisterChallenge _$CorbadoRegisterChallengeFromJson(
-        Map<String, dynamic> json) =>
+        Map<String, dynamic> json,) =>
     CorbadoRegisterChallenge(
       CorbadoPublicKey.fromJson(json['publicKey'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$CorbadoRegisterChallengeToJson(
-        CorbadoRegisterChallenge instance) =>
+        CorbadoRegisterChallenge instance,) =>
     <String, dynamic>{
       'publicKey': instance.publicKey,
     };
@@ -39,7 +39,7 @@ CorbadoRelyingParty _$CorbadoRelyingPartyFromJson(Map<String, dynamic> json) =>
     );
 
 Map<String, dynamic> _$CorbadoRelyingPartyToJson(
-        CorbadoRelyingParty instance) =>
+        CorbadoRelyingParty instance,) =>
     <String, dynamic>{
       'name': instance.name,
       'id': instance.id,
@@ -58,17 +58,17 @@ Map<String, dynamic> _$CorbadoUserToJson(CorbadoUser instance) =>
 
 CorbadoRegisterSignedChallengeRequest
     _$CorbadoRegisterSignedChallengeRequestFromJson(
-            Map<String, dynamic> json) =>
+            Map<String, dynamic> json,) =>
         CorbadoRegisterSignedChallengeRequest(
           id: json['id'] as String,
           rawId: json['rawId'] as String,
           response: CorbadoRegisterSignedChallengeRequestResponse.fromJson(
-              json['response'] as Map<String, dynamic>),
-          type: json['type'] as String? ?? "public-key",
+              json['response'] as Map<String, dynamic>,),
+          type: json['type'] as String? ?? 'public-key',
         );
 
 Map<String, dynamic> _$CorbadoRegisterSignedChallengeRequestToJson(
-        CorbadoRegisterSignedChallengeRequest instance) =>
+        CorbadoRegisterSignedChallengeRequest instance,) =>
     <String, dynamic>{
       'id': instance.id,
       'rawId': instance.rawId,
@@ -78,18 +78,18 @@ Map<String, dynamic> _$CorbadoRegisterSignedChallengeRequestToJson(
 
 CorbadoRegisterSignedChallengeRequestResponse
     _$CorbadoRegisterSignedChallengeRequestResponseFromJson(
-            Map<String, dynamic> json) =>
+            Map<String, dynamic> json,) =>
         CorbadoRegisterSignedChallengeRequestResponse(
           clientDataJSON: json['clientDataJSON'] as String,
           attestationObject: json['attestationObject'] as String,
           transports: (json['transports'] as List<dynamic>?)
                   ?.map((e) => e as String)
                   .toList() ??
-              const ["internal"],
+              const ['internal'],
         );
 
 Map<String, dynamic> _$CorbadoRegisterSignedChallengeRequestResponseToJson(
-        CorbadoRegisterSignedChallengeRequestResponse instance) =>
+        CorbadoRegisterSignedChallengeRequestResponse instance,) =>
     <String, dynamic>{
       'clientDataJSON': instance.clientDataJSON,
       'attestationObject': instance.attestationObject,

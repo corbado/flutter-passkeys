@@ -1,30 +1,26 @@
 class RegistrationInitResponse {
+
+  RegistrationInitResponse(this.rp, this.user, this.challenge);
   final RelyingParty rp;
   final User user;
   final String challenge;
-
-  RegistrationInitResponse(this.rp, this.user, this.challenge);
 }
 
 class RelyingParty {
-  final String name;
-  final String id;
 
   RelyingParty(this.name, this.id);
+  final String name;
+  final String id;
 }
 
 class User {
-  final String name;
-  final String id;
 
   User(this.name, this.id);
+  final String name;
+  final String id;
 }
 
 class RegistrationCompleteRequest {
-  final String id;
-  final String rawId;
-  final String clientDataJSON;
-  final String attestationObject;
 
   RegistrationCompleteRequest({
     required this.id,
@@ -32,4 +28,8 @@ class RegistrationCompleteRequest {
     required this.clientDataJSON,
     required this.attestationObject,
   });
+  final String id;
+  final String rawId;
+  final String clientDataJSON;
+  final String attestationObject;
 }

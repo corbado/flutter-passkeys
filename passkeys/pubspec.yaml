@@ -17,6 +17,8 @@ flutter:
 dependencies:
   flutter:
     sdk: flutter
+  passkeys_android:
+    path: ../passkeys_android
   passkeys_ios:
     path: ../passkeys_ios
   passkeys_platform_interface:
