@@ -1,7 +1,11 @@
 package com.corbado.passkeys_android;
 
 import android.app.Activity;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
+import android.os.Build;
 
+import androidx.annotation.NonNull;
 import androidx.credentials.CreateCredentialResponse;
 import androidx.credentials.CreatePublicKeyCredentialRequest;
 import androidx.credentials.Credential;
@@ -13,6 +17,9 @@ import androidx.credentials.GetPublicKeyCredentialOption;
 import androidx.credentials.PublicKeyCredential;
 import androidx.credentials.exceptions.CreateCredentialException;
 import androidx.credentials.exceptions.GetCredentialException;
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 public class MessageHandler implements Messages.PasskeysApi {
 
@@ -98,5 +105,39 @@ public class MessageHandler implements Messages.PasskeysApi {
                     }
                 }
         );
+    }
+
+    @Override
+    public void getSignatureFingerprint(@NonNull Messages.Result<String> result) {
+        Activity activity = plugin.getCustomActivity();
+        if (activity == null) throw new IllegalStateException("Activity not found");
+        Signature[] signs;
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                signs = activity.getPackageManager().getPackageInfo(activity.getPackageName(),
+                        PackageManager.GET_SIGNING_CERTIFICATES).signingInfo.getApkContentsSigners();
+            } else {
+                signs = activity.getPackageManager().getPackageInfo(activity.getPackageName(),
+                        PackageManager.GET_SIGNATURES).signatures;
+            }
+            if (signs.length == 0) {
+                result.error(new Exception("No signatures found"));
+            }
+
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            md.update(signs[0].toByteArray());
+            byte[] digest = md.digest();
+            StringBuilder toRet = new StringBuilder();
+            for (int x = 0; x < digest.length; x++) {
+                toRet.append(String.format("%02x", digest[x]).toUpperCase());
+                if (x < digest.length - 1) {
+                    toRet.append(":");
+                }
+            }
+
+            result.success(toRet.toString());
+        } catch (PackageManager.NameNotFoundException | NoSuchAlgorithmException e) {
+            result.error(e);
+        }
     }
 }

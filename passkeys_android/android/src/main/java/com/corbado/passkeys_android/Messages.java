@@ -203,6 +203,8 @@ public class Messages {
 
     void authenticate(@NonNull String options, @NonNull Result<AuthenticateResponse> result);
 
+    void getSignatureFingerprint(@NonNull Result<String> result);
+
     /** The codec used by PasskeysApi. */
     static @NonNull MessageCodec<Object> getCodec() {
       return PasskeysApiCodec.INSTANCE;
@@ -284,6 +286,33 @@ public class Messages {
                     };
 
                 api.authenticate(optionsArg, resultCallback);
+              });
+        } else {
+          channel.setMessageHandler(null);
+        }
+      }
+      {
+        BasicMessageChannel<Object> channel =
+            new BasicMessageChannel<>(
+                binaryMessenger, "dev.flutter.pigeon.PasskeysApi.getSignatureFingerprint", getCodec());
+        if (api != null) {
+          channel.setMessageHandler(
+              (message, reply) -> {
+                ArrayList<Object> wrapped = new ArrayList<Object>();
+                Result<String> resultCallback =
+                    new Result<String>() {
+                      public void success(String result) {
+                        wrapped.add(0, result);
+                        reply.reply(wrapped);
+                      }
+
+                      public void error(Throwable error) {
+                        ArrayList<Object> wrappedError = wrapError(error);
+                        reply.reply(wrappedError);
+                      }
+                    };
+
+                api.getSignatureFingerprint(resultCallback);
               });
         } else {
           channel.setMessageHandler(null);

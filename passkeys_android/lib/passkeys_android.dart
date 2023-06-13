@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 import 'package:passkeys_android/messages.g.dart';
 import 'package:passkeys_platform_interface/passkeys_platform_interface.dart';
@@ -35,8 +37,33 @@ class PasskeysAndroid extends PasskeysPlatform {
 
   @override
   Future<RegisterResponseType> register(
-      String challenge, RelyingPartyType relyingParty, UserType user) {
-    // TODO: implement register
-    throw UnimplementedError();
+      String challenge, RelyingPartyType relyingParty, UserType user) async {
+    final options = {
+      "challenge": challenge,
+      "rp": {"name": relyingParty.name, "id": relyingParty.id},
+      "user": {"name": user.name, "displayName": user.name, "id": user.id},
+      "pubKeyCredParams": [
+        {"type": "public-key", "alg": -7},
+        {"type": "public-key", "alg": -257}
+      ],
+      "authenticatorSelection": {
+        "authenticatorAttachment": "platform",
+        "requireResidentKey": false,
+        "residentKey": "required",
+        "userVerification": "required"
+      },
+      "timeout": 60000,
+      "attestation": "none"
+    };
+
+    final r = await _api.register(jsonEncode(options));
+    final resp = jsonDecode(r.responseJSON);
+
+    return RegisterResponseType(
+      id: resp['id'] as String,
+      rawId: resp['rawId'] as String,
+      clientDataJSON: resp['response']['clientDataJSON'] as String,
+      attestationObject: resp['response']['attestationObject'] as String,
+    );
   }
 }

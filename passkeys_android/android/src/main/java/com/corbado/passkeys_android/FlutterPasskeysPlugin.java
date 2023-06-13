@@ -23,37 +23,6 @@ public class FlutterPasskeysPlugin extends FlutterActivity implements FlutterPlu
     private BinaryMessenger binaryMessenger;
     private Activity activity;
 
-    public String getSigningCertFingerprint(Activity context, String key) {
-        Signature[] signs;
-        try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                signs = context.getPackageManager().getPackageInfo(context.getPackageName(),
-                        PackageManager.GET_SIGNING_CERTIFICATES).signingInfo.getApkContentsSigners();
-            } else {
-                signs = context.getPackageManager().getPackageInfo(context.getPackageName(),
-                        PackageManager.GET_SIGNATURES).signatures;
-            }
-            if (signs.length == 0) {
-                return null;
-            }
-
-            MessageDigest md = MessageDigest.getInstance(key);
-            md.update(signs[0].toByteArray());
-            byte[] digest = md.digest();
-            StringBuilder toRet = new StringBuilder();
-            for (int x = 0; x < digest.length; x++) {
-                toRet.append(String.format("%02x", digest[x]).toUpperCase());
-                if (x < digest.length - 1) {
-                    toRet.append(":");
-                }
-            }
-            return toRet.toString();
-        } catch (PackageManager.NameNotFoundException | NoSuchAlgorithmException e) {
-            Log.e(TAG, "Exception occurred while obtaining signature " + e.getMessage());
-            return null;
-        }
-    }
-
     @Override
     public void onAttachedToEngine(@NonNull FlutterPluginBinding binding) {
         Log.e(TAG, "HEEEEEEEEEEEEEEEEEEEEEEEEEE onAttachedToEngine called");

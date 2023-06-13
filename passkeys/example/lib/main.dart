@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
 
 class HomePage extends StatefulWidget {
   HomePage({super.key})
-      : _auth = PasskeyAuth(CorbadoPasskeyBackend('pro-3320381079973729266'));
+      : _auth = PasskeyAuth(CorbadoPasskeyBackend('pro-7261753124658840425'));
 
   final PasskeyAuth _auth;
 
@@ -55,6 +55,7 @@ class _HomePageState extends State<HomePage> {
                     SnackBar(
                       backgroundColor: Theme.of(context).primaryColor,
                       content: Text('$error'),
+                      duration: const Duration(seconds: 10),
                     ),
                   );
                 }
@@ -82,6 +83,7 @@ class _HomePageState extends State<HomePage> {
                     SnackBar(
                       backgroundColor: Theme.of(context).primaryColor,
                       content: Text('$error'),
+                      duration: const Duration(seconds: 10),
                     ),
                   );
                 }
@@ -109,6 +111,7 @@ class _HomePageState extends State<HomePage> {
                     SnackBar(
                       backgroundColor: Theme.of(context).primaryColor,
                       content: Text('$error'),
+                      duration: const Duration(seconds: 10),
                     ),
                   );
                 }

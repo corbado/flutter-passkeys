@@ -34,4 +34,7 @@ abstract class PasskeysApi {
 
   @async
   AuthenticateResponse authenticate(String options);
+
+  @async
+  String getSignatureFingerprint();
 }
