@@ -109,6 +109,7 @@ public class MessageHandler implements Messages.PasskeysApi {
 
     @Override
     public void getSignatureFingerprint(@NonNull Messages.Result<String> result) {
+        System.out.println("getSignatureFingerprint called for android  #########################################");
         Activity activity = plugin.getCustomActivity();
         if (activity == null) throw new IllegalStateException("Activity not found");
         Signature[] signs;

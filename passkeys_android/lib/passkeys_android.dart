@@ -13,14 +13,23 @@ class PasskeysAndroid extends PasskeysPlatform {
   /// The method channel used to interact with the native platform.
   PasskeysAndroid({
     @visibleForTesting PasskeysApi? api,
-  }) : _api = api ?? PasskeysApi();
+  }) : _api = api ?? PasskeysApi() {
+    debugPrint("PasskeysAndroid.constructor");
+  }
 
   /// Registers this class as the default instance of [PasskeysPlatform]
   static void registerWith() {
+    debugPrint("PasskeysAndroid.registerWith");
     PasskeysPlatform.instance = PasskeysAndroid();
   }
 
   final PasskeysApi _api;
+
+  @override
+  Future<String> getSignatureFingerprint() async {
+    debugPrint("PasskeysAndroid.getSignatureFingerprint");
+    return _api.getSignatureFingerprint();
+  }
 
   @override
   Future<AuthenticateResponseType> authenticate(

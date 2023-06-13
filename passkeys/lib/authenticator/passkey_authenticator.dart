@@ -1,3 +1,7 @@
+import 'dart:convert';
+
+import 'package:convert/convert.dart';
+import 'package:flutter/foundation.dart';
 import 'package:passkeys_platform_interface/passkeys_platform_interface.dart';
 import 'package:passkeys_platform_interface/types/types.dart';
 
@@ -7,6 +11,23 @@ class PasskeyAuthenticator {
   PasskeyAuthenticator() : _platform = PasskeysPlatform.instance;
 
   final PasskeysPlatform _platform;
+
+  Future<String> getSignatureFingerprint() async {
+    debugPrint('getSignatureFingerprint');
+    final res = await _platform.getSignatureFingerprint();
+    if (res.isEmpty) return '';
+
+    final h = res.replaceAll(':', '');
+    final b = base64Url.encode(hex.decode(h));
+    final c = b.replaceAll('=', '');
+    debugPrint(
+        '########################### Fingerprint ###########################');
+    debugPrint('SHA256: $res');
+    debugPrint('Base64URL encoded: $c');
+    debugPrint(
+        '###################################################################');
+    return c;
+  }
 
   ///
   Future<bool> canAuthenticate() {

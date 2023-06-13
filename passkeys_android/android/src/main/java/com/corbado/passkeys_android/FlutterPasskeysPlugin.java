@@ -23,6 +23,10 @@ public class FlutterPasskeysPlugin extends FlutterActivity implements FlutterPlu
     private BinaryMessenger binaryMessenger;
     private Activity activity;
 
+    public FlutterPasskeysPlugin() {
+        Log.e(TAG, "HEEEEEEEEEEEEEEEEEEEEEEEEEE FlutterPasskeysPlugin constructor called");
+    }
+
     @Override
     public void onAttachedToEngine(@NonNull FlutterPluginBinding binding) {
         Log.e(TAG, "HEEEEEEEEEEEEEEEEEEEEEEEEEE onAttachedToEngine called");
