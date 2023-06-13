@@ -3,7 +3,10 @@ import 'package:pigeon/pigeon.dart';
 @ConfigurePigeon(
   PigeonOptions(
     dartOut: 'lib/messages.g.dart',
-    swiftOut: 'ios/Classes/messages.swift',
+    javaOut: 'android/src/main/java/com/corbado/passkeys_android/Messages.java',
+    javaOptions: JavaOptions(
+      package: 'com.corbado.passkeys_android',
+    ),
   ),
 )
 class RelyingParty {
@@ -22,32 +25,18 @@ class User {
 
 class RegisterResponse {
   const RegisterResponse({
-    required this.id,
-    required this.rawId,
-    required this.clientDataJSON,
-    required this.attestationObject,
+    required this.responseJSON,
   });
 
-  final String id;
-  final String rawId;
-  final String clientDataJSON;
-  final String attestationObject;
+  final String responseJSON;
 }
 
 class AuthenticateResponse {
   const AuthenticateResponse({
-    required this.id,
-    required this.rawId,
-    required this.clientDataJSON,
-    required this.authenticatorData,
-    required this.signature,
+    required this.responseJSON,
   });
 
-  final String id;
-  final String rawId;
-  final String clientDataJSON;
-  final String authenticatorData;
-  final String signature;
+  final String responseJSON;
 }
 
 @HostApi()
@@ -55,15 +44,8 @@ abstract class PasskeysApi {
   bool canAuthenticate();
 
   @async
-  RegisterResponse register(
-    String challenge,
-    RelyingParty relyingParty,
-    User user,
-  );
+  RegisterResponse register(String options);
 
   @async
-  AuthenticateResponse authenticate(
-    String relyingPartyId,
-    String challenge,
-  );
+  AuthenticateResponse authenticate(String options);
 }
