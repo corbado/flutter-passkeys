@@ -11,8 +11,8 @@ flutter:
     implements: passkeys
     platforms:
       android:
-        package: 
-        pluginClass: PasskeysPlugin
+        package: com.corbado.passkeys_android
+        pluginClass: FlutterPasskeysPlugin
         dartPluginClass: PasskeysAndroid
 
 dependencies:

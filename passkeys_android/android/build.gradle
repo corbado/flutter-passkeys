@@ -1,4 +1,4 @@
-group ''
+group 'com.corbado.passkeys_android'
 version '1.0-SNAPSHOT'
 
 buildscript {
@@ -41,10 +41,16 @@ android {
     }
 
     defaultConfig {
-        minSdkVersion 16
+        minSdkVersion 19
     }
 }
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'androidx.annotation:annotation:1.1.0'
+    implementation("androidx.credentials:credentials:1.0.0-alpha03")
+
+    // optional - needed for credentials support from play services, for devices running
+    // Android 13 and below.
+    implementation("androidx.credentials:credentials-play-services-auth:1.0.0-alpha03")
 }

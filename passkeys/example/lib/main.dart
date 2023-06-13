@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
 
 class HomePage extends StatefulWidget {
   HomePage({super.key})
-      : _auth = PasskeyAuth(CorbadoPasskeyBackend('pro-7261753124658840425'));
+      : _auth = PasskeyAuth(CorbadoPasskeyBackend("pro-4458631100550777696"));
 
   final PasskeyAuth _auth;
 
@@ -51,6 +51,7 @@ class _HomePageState extends State<HomePage> {
                   final result = await widget._auth.isSupported();
                   setState(() => _canAuthenticate = result);
                 } catch (error) {
+                  debugPrint('error: $error');
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       backgroundColor: Theme.of(context).primaryColor,
@@ -74,11 +75,13 @@ class _HomePageState extends State<HomePage> {
             ElevatedButton(
               onPressed: () async {
                 try {
-                  const arguments = 'martinkellner470@gmail.com';
+                  const arguments = 'jepper@web.de';
                   final result =
                       await widget._auth.registerWithEmail(arguments);
+                  debugPrint("result: $result");
                   setState(() => _register = result);
                 } catch (error) {
+                  debugPrint('error: $error');
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       backgroundColor: Theme.of(context).primaryColor,
@@ -107,6 +110,7 @@ class _HomePageState extends State<HomePage> {
                       await widget._auth.authenticateWithEmail(arguments);
                   setState(() => _authenticate = result);
                 } catch (error) {
+                  debugPrint('error: $error');
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       backgroundColor: Theme.of(context).primaryColor,
