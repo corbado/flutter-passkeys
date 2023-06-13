@@ -49,6 +49,7 @@ class _HomePageState extends State<HomePage> {
               onPressed: () async {
                 try {
                   final result = await widget._auth.isSupported();
+                  debugPrint("result: $result");
                   setState(() => _canAuthenticate = result);
                 } catch (error) {
                   debugPrint('error: $error');
@@ -75,7 +76,7 @@ class _HomePageState extends State<HomePage> {
             ElevatedButton(
               onPressed: () async {
                 try {
-                  const arguments = 'jepper@web.de';
+                  const arguments = 'ugabaer@gmail.com';
                   final result =
                       await widget._auth.registerWithEmail(arguments);
                   debugPrint("result: $result");
@@ -105,7 +106,7 @@ class _HomePageState extends State<HomePage> {
             ElevatedButton(
               onPressed: () async {
                 try {
-                  const arguments = 'martinkellner470@gmail.com';
+                  const arguments = 'ugabaer@gmail.com';
                   final result =
                       await widget._auth.authenticateWithEmail(arguments);
                   setState(() => _authenticate = result);
