@@ -1,7 +1,6 @@
 package com.corbado.passkeys_android;
 
 import android.app.Activity;
-import android.content.Context;
 
 import androidx.credentials.CreateCredentialResponse;
 import androidx.credentials.CreatePublicKeyCredentialRequest;
@@ -15,8 +14,6 @@ import androidx.credentials.PublicKeyCredential;
 import androidx.credentials.exceptions.CreateCredentialException;
 import androidx.credentials.exceptions.GetCredentialException;
 
-import java.util.function.BiConsumer;
-
 public class MessageHandler implements Messages.PasskeysApi {
 
     Activity activity;
@@ -24,15 +21,6 @@ public class MessageHandler implements Messages.PasskeysApi {
     public MessageHandler(Activity activity) {
         this.activity = activity;
     }
-
-   /*     List<Book> search(String keyword) {
-            Book result = new Book();
-            result.author = keyword;
-            result.title = String.format("%s's Life", keyword);
-            return Collections.singletonList(result)
-        }
-
-    */
 
     @Override
     public Boolean canAuthenticate() {
