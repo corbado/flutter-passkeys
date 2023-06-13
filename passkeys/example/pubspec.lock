@@ -168,6 +168,13 @@ packages:
       relative: true
     source: path
     version: "0.1.0+1"
+  passkeys_android:
+    dependency: transitive
+    description:
+      path: "../../passkeys_android"
+      relative: true
+    source: path
+    version: "0.1.0+1"
   passkeys_ios:
     dependency: transitive
     description:
