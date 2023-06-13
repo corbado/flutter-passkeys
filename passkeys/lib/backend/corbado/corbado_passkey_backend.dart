@@ -20,7 +20,10 @@ class CorbadoPasskeyBackend extends PasskeyBackend {
     _client.addDefaultHeader('X-Corbado-Project-ID', _projectID);
     debugPrint('CorbadoPasskeyBackend: $_projectID');
     _authenticator.getSignatureFingerprint().then(
-          (value) => _client.addDefaultHeader('Origin', value),
+          (value) => {
+            debugPrint('setting header to $value'),
+            _client.addDefaultHeader('Origin', 'android:apk-key-hash:$value'),
+          },
         );
     // Set origin header to allow CORS requests
   }

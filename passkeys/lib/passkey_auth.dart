@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:passkeys/authenticator/passkey_authenticator.dart';
 import 'package:passkeys/backend/passkey_backend.dart';
 import 'package:passkeys/backend/types/authentication.dart';
@@ -19,6 +20,7 @@ class PasskeyAuth {
 
   ///
   dynamic registerWithEmail(String email) async {
+    debugPrint('registerWithEmail: $email');
     final initResponse = await _backend.initRegister(email);
 
     final challenge = initResponse.challenge;
