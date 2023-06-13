@@ -20,8 +20,6 @@ import io.flutter.plugin.common.MethodChannel;
 
 public class FlutterPasskeysPlugin extends FlutterActivity implements FlutterPlugin, ActivityAware {
     private static final String TAG = "MainActivity";
-    private static final String CHANNEL = "corbado.com/passkeys";
-    private MethodChannel channel;
     private BinaryMessenger binaryMessenger;
     private Activity activity;
 
@@ -58,34 +56,42 @@ public class FlutterPasskeysPlugin extends FlutterActivity implements FlutterPlu
 
     @Override
     public void onAttachedToEngine(@NonNull FlutterPluginBinding binding) {
+        Log.e(TAG, "HEEEEEEEEEEEEEEEEEEEEEEEEEE onAttachedToEngine called");
         binaryMessenger = binding.getBinaryMessenger();
     }
 
     @Override
     public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
-        channel.setMethodCallHandler(null);
+        Log.e(TAG, "HEEEEEEEEEEEEEEEEEEEEEEEEEE onDetachedFromEngine called");
+        binaryMessenger = null;
     }
 
     @Override
     public void onAttachedToActivity(@NonNull ActivityPluginBinding binding) {
+        Log.e(TAG, "HEEEEEEEEEEEEEEEEEEEEEEEEEE onAttachedToActivity called");
         activity = binding.getActivity();
-        Messages.PasskeysApi.setup(binaryMessenger, new MessageHandler(activity));
+        Messages.PasskeysApi.setup(binaryMessenger, new MessageHandler(this));
     }
 
     @Override
     public void onDetachedFromActivityForConfigChanges() {
+        Log.e(TAG, "HEEEEEEEEEEEEEEEEEEEEEEEEEE onDetachedFromActivityForConfigChanges called");
         activity = null;
     }
 
     @Override
     public void onReattachedToActivityForConfigChanges(@NonNull ActivityPluginBinding binding) {
+        Log.e(TAG, "HEEEEEEEEEEEEEEEEEEEEEEEEEE onReattachedToActivityForConfigChanges called");
         activity = binding.getActivity();
     }
 
     @Override
     public void onDetachedFromActivity() {
+        Log.e(TAG, "HEEEEEEEEEEEEEEEEEEEEEEEEEE onDetachedFromActivity called");
         activity = null;
     }
 
-
+    public Activity getCustomActivity() {
+        return activity;
+    }
 }

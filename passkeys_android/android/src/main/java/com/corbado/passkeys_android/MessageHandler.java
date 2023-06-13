@@ -16,10 +16,10 @@ import androidx.credentials.exceptions.GetCredentialException;
 
 public class MessageHandler implements Messages.PasskeysApi {
 
-    Activity activity;
+    FlutterPasskeysPlugin plugin;
 
-    public MessageHandler(Activity activity) {
-        this.activity = activity;
+    public MessageHandler(FlutterPasskeysPlugin plugin) {
+        this.plugin = plugin;
     }
 
     @Override
@@ -29,12 +29,14 @@ public class MessageHandler implements Messages.PasskeysApi {
 
     @Override
     public void register(String options, Messages.Result<Messages.RegisterResponse> result) {
+
+        Activity activity = plugin.getCustomActivity();
+        if (activity == null) throw new IllegalStateException("Activity not found");
+
         CredentialManager credentialManager = CredentialManager.create(activity);
         CreatePublicKeyCredentialRequest createPublicKeyCredentialRequest =
                 new CreatePublicKeyCredentialRequest(
                         options, false);
-
-        if (activity == null) throw new IllegalStateException("Activity not found");
 
         credentialManager.createCredentialAsync(
                 createPublicKeyCredentialRequest,
@@ -46,8 +48,6 @@ public class MessageHandler implements Messages.PasskeysApi {
                     @Override
                     public void onResult(CreateCredentialResponse res) {
                         String resp = res.getData().getString("androidx.credentials.BUNDLE_KEY_REGISTRATION_RESPONSE_JSON");
-
-                        //TODO: parse resp and return the right object
                         result.success(new Messages.RegisterResponse.Builder().setResponseJSON(resp).build());
                     }
 
@@ -61,6 +61,10 @@ public class MessageHandler implements Messages.PasskeysApi {
 
     @Override
     public void authenticate(String options, Messages.Result<Messages.AuthenticateResponse> result) {
+
+        Activity activity = plugin.getCustomActivity();
+        if (activity == null) throw new IllegalStateException("Activity not found");
+
         CredentialManager credentialManager = CredentialManager.create(activity);
         GetPublicKeyCredentialOption getPublicKeyCredentialOption =
                 new GetPublicKeyCredentialOption(options, false);
@@ -68,8 +72,6 @@ public class MessageHandler implements Messages.PasskeysApi {
         GetCredentialRequest getCredRequest = new GetCredentialRequest.Builder()
                 .addCredentialOption(getPublicKeyCredentialOption)
                 .build();
-
-        if (activity == null) throw new IllegalStateException("Activity not found");
 
         credentialManager.getCredentialAsync(
                 getCredRequest,

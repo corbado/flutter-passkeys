@@ -9,20 +9,6 @@ import 'package:pigeon/pigeon.dart';
     ),
   ),
 )
-class RelyingParty {
-  const RelyingParty(this.name, this.id);
-
-  final String name;
-  final String id;
-}
-
-class User {
-  const User(this.name, this.id);
-
-  final String name;
-  final String id;
-}
-
 class RegisterResponse {
   const RegisterResponse({
     required this.responseJSON,
