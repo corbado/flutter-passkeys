@@ -74,8 +74,6 @@ public class MessageHandler implements Messages.PasskeysApi {
             authSelectionObj.put("residentKey", authenticatorSelection.getResidentKey());
             authSelectionObj.put("userVerification", authenticatorSelection.getUserVerification());
 
-            Log.e(TAG, "authSelectionObj: " + authSelectionObj.toString());
-
             JSONObject optionsObj = new JSONObject();
             optionsObj.put("challenge", challenge);
             optionsObj.put("rp", rpObj);
@@ -85,15 +83,11 @@ public class MessageHandler implements Messages.PasskeysApi {
 
             String options = optionsObj.toString();
 
-            Log.e(TAG, "options: " + options);
             Activity activity = plugin.requireActivity();
-
             CredentialManager credentialManager = CredentialManager.create(activity);
             CreatePublicKeyCredentialRequest createPublicKeyCredentialRequest =
                     new CreatePublicKeyCredentialRequest(
                             options, null, false);
-
-            Log.e(TAG, "pubkey options: " + createPublicKeyCredentialRequest.getRequestJson());
 
             credentialManager.createCredentialAsync(
                     activity,
@@ -140,7 +134,6 @@ public class MessageHandler implements Messages.PasskeysApi {
             optionsObj.put("rpId", relyingPartyId);
 
         String options = optionsObj.toString();
-        Log.e(TAG, "options: " + options);
         Activity activity = plugin.requireActivity();
 
         CredentialManager credentialManager = CredentialManager.create(activity);
