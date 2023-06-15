@@ -29,8 +29,12 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 public class MessageHandler implements Messages.PasskeysApi {
+
+    private static final String TAG = "MessageHandler";
 
     FlutterPasskeysPlugin plugin;
 
@@ -41,8 +45,7 @@ public class MessageHandler implements Messages.PasskeysApi {
     @Override
     public void canAuthenticate(@NonNull Messages.Result<Boolean> result) {
 
-        Activity activity = plugin.getCustomActivity();
-        if (activity == null) throw new IllegalStateException("Activity not found");
+        Activity activity = plugin.requireActivity();
 
         Fido2ApiClient fido2ApiClient = Fido.getFido2ApiClient(activity.getApplicationContext());
 
@@ -55,16 +58,15 @@ public class MessageHandler implements Messages.PasskeysApi {
     public void register(@NonNull String options,
                          @NonNull Messages.Result<Messages.RegisterResponse> result) {
 
-        Log.e("MainActivity", "options: " + options);
-        Activity activity = plugin.getCustomActivity();
-        if (activity == null) throw new IllegalStateException("Activity not found");
+        Log.e(TAG, "options: " + options);
+        Activity activity = plugin.requireActivity();
 
         CredentialManager credentialManager = CredentialManager.create(activity);
         CreatePublicKeyCredentialRequest createPublicKeyCredentialRequest =
                 new CreatePublicKeyCredentialRequest(
                         options, null, false);
 
-        Log.e("MainActivity", "PUBKEY OPTIONS##########: " + createPublicKeyCredentialRequest.getRequestJson());
+        Log.e(TAG, "pubkey options: " + createPublicKeyCredentialRequest.getRequestJson());
 
         credentialManager.createCredentialAsync(
                 activity,
@@ -90,9 +92,8 @@ public class MessageHandler implements Messages.PasskeysApi {
     @Override
     public void authenticate(String options, Messages.Result<Messages.AuthenticateResponse> result) {
 
-        Log.e("MainActivity", "options: " + options);
-        Activity activity = plugin.getCustomActivity();
-        if (activity == null) throw new IllegalStateException("Activity not found");
+        Log.e(TAG, "options: " + options);
+        Activity activity = plugin.requireActivity();
 
         CredentialManager credentialManager = CredentialManager.create(activity);
         GetPublicKeyCredentialOption getPublicKeyCredentialOption =
@@ -131,8 +132,7 @@ public class MessageHandler implements Messages.PasskeysApi {
 
     @Override
     public void getSignatureFingerprint(@NonNull Messages.Result<String> result) {
-        System.out.println("getSignatureFingerprint called for android  #########################################");
-        Activity activity = plugin.getCustomActivity();
+        Activity activity = plugin.requireActivity();
         if (activity == null) throw new IllegalStateException("Activity not found");
         Signature[] signs;
         try {

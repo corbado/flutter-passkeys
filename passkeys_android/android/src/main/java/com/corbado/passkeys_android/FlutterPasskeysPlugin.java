@@ -19,7 +19,7 @@ import io.flutter.plugin.common.BinaryMessenger;
 import io.flutter.plugin.common.MethodChannel;
 
 public class FlutterPasskeysPlugin extends FlutterActivity implements FlutterPlugin, ActivityAware {
-    private static final String TAG = "MainActivity";
+    private static final String TAG = "FlutterPasskeysPlugin";
     private BinaryMessenger binaryMessenger;
     private Activity activity;
 
@@ -42,6 +42,11 @@ public class FlutterPasskeysPlugin extends FlutterActivity implements FlutterPlu
         Messages.PasskeysApi.setup(binaryMessenger, new MessageHandler(this));
     }
 
+    public Activity requireActivity() {
+        if (activity == null) throw new IllegalStateException("Activity not found");
+        return activity;
+    }
+
     @Override
     public void onDetachedFromActivityForConfigChanges() {
         activity = null;
@@ -55,9 +60,5 @@ public class FlutterPasskeysPlugin extends FlutterActivity implements FlutterPlu
     @Override
     public void onDetachedFromActivity() {
         activity = null;
-    }
-
-    public Activity getCustomActivity() {
-        return activity;
     }
 }
