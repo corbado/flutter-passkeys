@@ -27,7 +27,7 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-const email = 'joggel18@gmail.com';
+const email = 'ugabaer@gmail.com';
 
 class _HomePageState extends State<HomePage> {
   bool? _canAuthenticate;

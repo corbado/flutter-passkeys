@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/foundation.dart';
 import 'package:passkeys_android/messages.g.dart';
 import 'package:passkeys_platform_interface/passkeys_platform_interface.dart';
@@ -30,14 +28,7 @@ class PasskeysAndroid extends PasskeysPlatform {
     String challenge,
     String rawOptions,
   ) async {
-    var options = {
-      'challenge': challenge,
-      'timeout': 300000,
-      'rpId': relyingPartyId,
-      'userVerification': 'preferred',
-    };
-
-    final r = await _api.authenticate(jsonEncode(options));
+    final r = await _api.authenticate(rawOptions);
 
     return AuthenticateResponseType(
       id: r.id,
