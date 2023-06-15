@@ -10,42 +10,77 @@ import 'package:flutter/services.dart';
 
 class RegisterResponse {
   RegisterResponse({
-    required this.responseJSON,
+    required this.id,
+    required this.rawId,
+    required this.clientDataJSON,
+    required this.attestationObject,
   });
 
-  String responseJSON;
+  String id;
+
+  String rawId;
+
+  String clientDataJSON;
+
+  String attestationObject;
 
   Object encode() {
     return <Object?>[
-      responseJSON,
+      id,
+      rawId,
+      clientDataJSON,
+      attestationObject,
     ];
   }
 
   static RegisterResponse decode(Object result) {
     result as List<Object?>;
     return RegisterResponse(
-      responseJSON: result[0]! as String,
+      id: result[0]! as String,
+      rawId: result[1]! as String,
+      clientDataJSON: result[2]! as String,
+      attestationObject: result[3]! as String,
     );
   }
 }
 
 class AuthenticateResponse {
   AuthenticateResponse({
-    required this.responseJSON,
+    required this.id,
+    required this.rawId,
+    required this.clientDataJSON,
+    required this.authenticatorData,
+    required this.signature,
   });
 
-  String responseJSON;
+  String id;
+
+  String rawId;
+
+  String clientDataJSON;
+
+  String authenticatorData;
+
+  String signature;
 
   Object encode() {
     return <Object?>[
-      responseJSON,
+      id,
+      rawId,
+      clientDataJSON,
+      authenticatorData,
+      signature,
     ];
   }
 
   static AuthenticateResponse decode(Object result) {
     result as List<Object?>;
     return AuthenticateResponse(
-      responseJSON: result[0]! as String,
+      id: result[0]! as String,
+      rawId: result[1]! as String,
+      clientDataJSON: result[2]! as String,
+      authenticatorData: result[3]! as String,
+      signature: result[4]! as String,
     );
   }
 }

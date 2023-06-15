@@ -59,17 +59,56 @@ public class Messages {
 
   /** Generated class from Pigeon that represents data sent in messages. */
   public static final class RegisterResponse {
-    private @NonNull String responseJSON;
+    private @NonNull String id;
 
-    public @NonNull String getResponseJSON() {
-      return responseJSON;
+    public @NonNull String getId() {
+      return id;
     }
 
-    public void setResponseJSON(@NonNull String setterArg) {
+    public void setId(@NonNull String setterArg) {
       if (setterArg == null) {
-        throw new IllegalStateException("Nonnull field \"responseJSON\" is null.");
+        throw new IllegalStateException("Nonnull field \"id\" is null.");
       }
-      this.responseJSON = setterArg;
+      this.id = setterArg;
+    }
+
+    private @NonNull String rawId;
+
+    public @NonNull String getRawId() {
+      return rawId;
+    }
+
+    public void setRawId(@NonNull String setterArg) {
+      if (setterArg == null) {
+        throw new IllegalStateException("Nonnull field \"rawId\" is null.");
+      }
+      this.rawId = setterArg;
+    }
+
+    private @NonNull String clientDataJSON;
+
+    public @NonNull String getClientDataJSON() {
+      return clientDataJSON;
+    }
+
+    public void setClientDataJSON(@NonNull String setterArg) {
+      if (setterArg == null) {
+        throw new IllegalStateException("Nonnull field \"clientDataJSON\" is null.");
+      }
+      this.clientDataJSON = setterArg;
+    }
+
+    private @NonNull String attestationObject;
+
+    public @NonNull String getAttestationObject() {
+      return attestationObject;
+    }
+
+    public void setAttestationObject(@NonNull String setterArg) {
+      if (setterArg == null) {
+        throw new IllegalStateException("Nonnull field \"attestationObject\" is null.");
+      }
+      this.attestationObject = setterArg;
     }
 
     /** Constructor is non-public to enforce null safety; use Builder. */
@@ -77,48 +116,133 @@ public class Messages {
 
     public static final class Builder {
 
-      private @Nullable String responseJSON;
+      private @Nullable String id;
 
-      public @NonNull Builder setResponseJSON(@NonNull String setterArg) {
-        this.responseJSON = setterArg;
+      public @NonNull Builder setId(@NonNull String setterArg) {
+        this.id = setterArg;
+        return this;
+      }
+
+      private @Nullable String rawId;
+
+      public @NonNull Builder setRawId(@NonNull String setterArg) {
+        this.rawId = setterArg;
+        return this;
+      }
+
+      private @Nullable String clientDataJSON;
+
+      public @NonNull Builder setClientDataJSON(@NonNull String setterArg) {
+        this.clientDataJSON = setterArg;
+        return this;
+      }
+
+      private @Nullable String attestationObject;
+
+      public @NonNull Builder setAttestationObject(@NonNull String setterArg) {
+        this.attestationObject = setterArg;
         return this;
       }
 
       public @NonNull RegisterResponse build() {
         RegisterResponse pigeonReturn = new RegisterResponse();
-        pigeonReturn.setResponseJSON(responseJSON);
+        pigeonReturn.setId(id);
+        pigeonReturn.setRawId(rawId);
+        pigeonReturn.setClientDataJSON(clientDataJSON);
+        pigeonReturn.setAttestationObject(attestationObject);
         return pigeonReturn;
       }
     }
 
     @NonNull
     ArrayList<Object> toList() {
-      ArrayList<Object> toListResult = new ArrayList<Object>(1);
-      toListResult.add(responseJSON);
+      ArrayList<Object> toListResult = new ArrayList<Object>(4);
+      toListResult.add(id);
+      toListResult.add(rawId);
+      toListResult.add(clientDataJSON);
+      toListResult.add(attestationObject);
       return toListResult;
     }
 
     static @NonNull RegisterResponse fromList(@NonNull ArrayList<Object> list) {
       RegisterResponse pigeonResult = new RegisterResponse();
-      Object responseJSON = list.get(0);
-      pigeonResult.setResponseJSON((String) responseJSON);
+      Object id = list.get(0);
+      pigeonResult.setId((String) id);
+      Object rawId = list.get(1);
+      pigeonResult.setRawId((String) rawId);
+      Object clientDataJSON = list.get(2);
+      pigeonResult.setClientDataJSON((String) clientDataJSON);
+      Object attestationObject = list.get(3);
+      pigeonResult.setAttestationObject((String) attestationObject);
       return pigeonResult;
     }
   }
 
   /** Generated class from Pigeon that represents data sent in messages. */
   public static final class AuthenticateResponse {
-    private @NonNull String responseJSON;
+    private @NonNull String id;
 
-    public @NonNull String getResponseJSON() {
-      return responseJSON;
+    public @NonNull String getId() {
+      return id;
     }
 
-    public void setResponseJSON(@NonNull String setterArg) {
+    public void setId(@NonNull String setterArg) {
       if (setterArg == null) {
-        throw new IllegalStateException("Nonnull field \"responseJSON\" is null.");
+        throw new IllegalStateException("Nonnull field \"id\" is null.");
       }
-      this.responseJSON = setterArg;
+      this.id = setterArg;
+    }
+
+    private @NonNull String rawId;
+
+    public @NonNull String getRawId() {
+      return rawId;
+    }
+
+    public void setRawId(@NonNull String setterArg) {
+      if (setterArg == null) {
+        throw new IllegalStateException("Nonnull field \"rawId\" is null.");
+      }
+      this.rawId = setterArg;
+    }
+
+    private @NonNull String clientDataJSON;
+
+    public @NonNull String getClientDataJSON() {
+      return clientDataJSON;
+    }
+
+    public void setClientDataJSON(@NonNull String setterArg) {
+      if (setterArg == null) {
+        throw new IllegalStateException("Nonnull field \"clientDataJSON\" is null.");
+      }
+      this.clientDataJSON = setterArg;
+    }
+
+    private @NonNull String authenticatorData;
+
+    public @NonNull String getAuthenticatorData() {
+      return authenticatorData;
+    }
+
+    public void setAuthenticatorData(@NonNull String setterArg) {
+      if (setterArg == null) {
+        throw new IllegalStateException("Nonnull field \"authenticatorData\" is null.");
+      }
+      this.authenticatorData = setterArg;
+    }
+
+    private @NonNull String signature;
+
+    public @NonNull String getSignature() {
+      return signature;
+    }
+
+    public void setSignature(@NonNull String setterArg) {
+      if (setterArg == null) {
+        throw new IllegalStateException("Nonnull field \"signature\" is null.");
+      }
+      this.signature = setterArg;
     }
 
     /** Constructor is non-public to enforce null safety; use Builder. */
@@ -126,31 +250,75 @@ public class Messages {
 
     public static final class Builder {
 
-      private @Nullable String responseJSON;
+      private @Nullable String id;
 
-      public @NonNull Builder setResponseJSON(@NonNull String setterArg) {
-        this.responseJSON = setterArg;
+      public @NonNull Builder setId(@NonNull String setterArg) {
+        this.id = setterArg;
+        return this;
+      }
+
+      private @Nullable String rawId;
+
+      public @NonNull Builder setRawId(@NonNull String setterArg) {
+        this.rawId = setterArg;
+        return this;
+      }
+
+      private @Nullable String clientDataJSON;
+
+      public @NonNull Builder setClientDataJSON(@NonNull String setterArg) {
+        this.clientDataJSON = setterArg;
+        return this;
+      }
+
+      private @Nullable String authenticatorData;
+
+      public @NonNull Builder setAuthenticatorData(@NonNull String setterArg) {
+        this.authenticatorData = setterArg;
+        return this;
+      }
+
+      private @Nullable String signature;
+
+      public @NonNull Builder setSignature(@NonNull String setterArg) {
+        this.signature = setterArg;
         return this;
       }
 
       public @NonNull AuthenticateResponse build() {
         AuthenticateResponse pigeonReturn = new AuthenticateResponse();
-        pigeonReturn.setResponseJSON(responseJSON);
+        pigeonReturn.setId(id);
+        pigeonReturn.setRawId(rawId);
+        pigeonReturn.setClientDataJSON(clientDataJSON);
+        pigeonReturn.setAuthenticatorData(authenticatorData);
+        pigeonReturn.setSignature(signature);
         return pigeonReturn;
       }
     }
 
     @NonNull
     ArrayList<Object> toList() {
-      ArrayList<Object> toListResult = new ArrayList<Object>(1);
-      toListResult.add(responseJSON);
+      ArrayList<Object> toListResult = new ArrayList<Object>(5);
+      toListResult.add(id);
+      toListResult.add(rawId);
+      toListResult.add(clientDataJSON);
+      toListResult.add(authenticatorData);
+      toListResult.add(signature);
       return toListResult;
     }
 
     static @NonNull AuthenticateResponse fromList(@NonNull ArrayList<Object> list) {
       AuthenticateResponse pigeonResult = new AuthenticateResponse();
-      Object responseJSON = list.get(0);
-      pigeonResult.setResponseJSON((String) responseJSON);
+      Object id = list.get(0);
+      pigeonResult.setId((String) id);
+      Object rawId = list.get(1);
+      pigeonResult.setRawId((String) rawId);
+      Object clientDataJSON = list.get(2);
+      pigeonResult.setClientDataJSON((String) clientDataJSON);
+      Object authenticatorData = list.get(3);
+      pigeonResult.setAuthenticatorData((String) authenticatorData);
+      Object signature = list.get(4);
+      pigeonResult.setSignature((String) signature);
       return pigeonResult;
     }
   }

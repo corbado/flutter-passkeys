@@ -13,22 +13,16 @@ class PasskeysAndroid extends PasskeysPlatform {
   /// The method channel used to interact with the native platform.
   PasskeysAndroid({
     @visibleForTesting PasskeysApi? api,
-  }) : _api = api ?? PasskeysApi() {
-    debugPrint("PasskeysAndroid.constructor");
-  }
+  }) : _api = api ?? PasskeysApi();
 
   /// Registers this class as the default instance of [PasskeysPlatform]
-  static void registerWith() {
-    debugPrint("PasskeysAndroid.registerWith");
-    PasskeysPlatform.instance = PasskeysAndroid();
-  }
+  static void registerWith() => PasskeysPlatform.instance = PasskeysAndroid();
 
   final PasskeysApi _api;
 
   @override
-  Future<String> getSignatureFingerprint() async {
-    return _api.getSignatureFingerprint();
-  }
+  Future<String> getSignatureFingerprint() async =>
+      _api.getSignatureFingerprint();
 
   @override
   Future<AuthenticateResponseType> authenticate(
@@ -36,15 +30,21 @@ class PasskeysAndroid extends PasskeysPlatform {
     String challenge,
     String rawOptions,
   ) async {
-    final r = await _api.authenticate(rawOptions);
-    final resp = jsonDecode(r.responseJSON);
+    var options = {
+      'challenge': challenge,
+      'timeout': 300000,
+      'rpId': relyingPartyId,
+      'userVerification': 'preferred',
+    };
+
+    final r = await _api.authenticate(jsonEncode(options));
 
     return AuthenticateResponseType(
-      id: resp['id'] as String,
-      rawId: resp['rawId'] as String,
-      clientDataJSON: resp['response']['clientDataJSON'] as String,
-      authenticatorData: resp['response']['authenticatorData'] as String,
-      signature: resp['response']['signature'] as String,
+      id: r.id,
+      rawId: r.rawId,
+      clientDataJSON: r.clientDataJSON,
+      authenticatorData: r.authenticatorData,
+      signature: r.signature,
     );
   }
 
@@ -56,18 +56,13 @@ class PasskeysAndroid extends PasskeysPlatform {
   @override
   Future<RegisterResponseType> register(String challenge,
       RelyingPartyType relyingParty, UserType user, String rawOptions) async {
-    debugPrint("Using rawOptions: $rawOptions");
-
     final r = await _api.register(rawOptions);
-    final resp = jsonDecode(r.responseJSON);
-
-    debugPrint("ClientDataJSON: ${resp['response']['clientDataJSON']}");
 
     return RegisterResponseType(
-      id: resp['id'] as String,
-      rawId: resp['rawId'] as String,
-      clientDataJSON: resp['response']['clientDataJSON'] as String,
-      attestationObject: resp['response']['attestationObject'] as String,
+      id: r.id,
+      rawId: r.rawId,
+      clientDataJSON: r.clientDataJSON,
+      attestationObject: r.attestationObject,
     );
   }
 }

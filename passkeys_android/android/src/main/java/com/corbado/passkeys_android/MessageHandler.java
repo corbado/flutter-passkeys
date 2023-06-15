@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.os.Build;
-import android.util.Base64;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -22,15 +21,13 @@ import androidx.credentials.exceptions.GetCredentialException;
 
 import com.google.android.gms.fido.Fido;
 import com.google.android.gms.fido.fido2.Fido2ApiClient;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
-import java.nio.charset.StandardCharsets;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
-import java.util.function.Consumer;
-import java.util.function.Function;
 
 public class MessageHandler implements Messages.PasskeysApi {
 
@@ -78,7 +75,19 @@ public class MessageHandler implements Messages.PasskeysApi {
                     @Override
                     public void onResult(CreateCredentialResponse res) {
                         String resp = res.getData().getString("androidx.credentials.BUNDLE_KEY_REGISTRATION_RESPONSE_JSON");
-                        result.success(new Messages.RegisterResponse.Builder().setResponseJSON(resp).build());
+                        try {
+                            JSONObject json = new JSONObject(resp);
+                            JSONObject response = json.getJSONObject("response");
+                            result.success(new Messages.RegisterResponse.Builder()
+                                    .setId(json.getString("id"))
+                                    .setRawId(json.getString("rawId"))
+                                    .setClientDataJSON(response.getString("clientDataJSON"))
+                                    .setAttestationObject(response.getString("attestationObject"))
+                                    .build());
+                        } catch (JSONException e) {
+                            Log.e(TAG, "Error parsing response: " + resp, e);
+                            result.error(e);
+                        }
                     }
 
                     @Override
@@ -115,7 +124,20 @@ public class MessageHandler implements Messages.PasskeysApi {
                         if (credential instanceof PublicKeyCredential) {
                             String responseJson = ((PublicKeyCredential) credential)
                                     .getAuthenticationResponseJson();
-                            result.success(new Messages.AuthenticateResponse.Builder().setResponseJSON(responseJson).build());
+                            try {
+                                JSONObject json = new JSONObject(responseJson);
+                                JSONObject response = json.getJSONObject("response");
+                                result.success(new Messages.AuthenticateResponse.Builder()
+                                        .setId(json.getString("id"))
+                                        .setRawId(json.getString("rawId"))
+                                        .setClientDataJSON(response.getString("clientDataJSON"))
+                                        .setAuthenticatorData(response.getString("authenticatorData"))
+                                        .setSignature(response.getString("signature"))
+                                        .build());
+                            } catch (JSONException e) {
+                                Log.e(TAG, "Error parsing response: " + responseJson, e);
+                                result.error(e);
+                            }
                         } else {
                             result.error(new Exception("Credential is of type " + credential.getClass().getName()
                                     + ", but should be of type PublicKeyCredential"));
