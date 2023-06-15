@@ -1,4 +1,6 @@
 // TODO: this whole file can be removed as we better type open api spec
+import 'dart:convert';
+
 import 'package:json_annotation/json_annotation.dart';
 import 'package:passkeys/backend/types/registration.dart';
 
@@ -6,17 +8,22 @@ part 'registration.g.dart';
 
 @JsonSerializable()
 class CorbadoRegisterChallenge {
-
   CorbadoRegisterChallenge(this.publicKey);
 
-  factory CorbadoRegisterChallenge.fromJson(Map<String, dynamic> json) =>
-      _$CorbadoRegisterChallengeFromJson(json);
+  factory CorbadoRegisterChallenge.fromJson(Map<String, dynamic> json) {
+    final cbRegisterChallenge = _$CorbadoRegisterChallengeFromJson(json);
+    cbRegisterChallenge.rawOptions = jsonEncode(json['publicKey']);
+    return cbRegisterChallenge;
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  late final String rawOptions;
   final CorbadoPublicKey publicKey;
 
   RegistrationInitResponse toRegisterInitResponse() {
     final rp = RelyingParty(publicKey.rp.name, publicKey.rp.id);
     final user = User(publicKey.user.name, publicKey.user.id);
-    return RegistrationInitResponse(rp, user, publicKey.challenge);
+    return RegistrationInitResponse(rp, user, publicKey.challenge, rawOptions);
   }
 
   Map<String, dynamic> toJson() => _$CorbadoRegisterChallengeToJson(this);
@@ -24,7 +31,6 @@ class CorbadoRegisterChallenge {
 
 @JsonSerializable()
 class CorbadoPublicKey {
-
   CorbadoPublicKey(this.rp, this.user, this.challenge);
 
   factory CorbadoPublicKey.fromJson(Map<String, dynamic> json) =>
@@ -38,7 +44,6 @@ class CorbadoPublicKey {
 
 @JsonSerializable()
 class CorbadoRelyingParty {
-
   CorbadoRelyingParty(this.name, this.id);
 
   factory CorbadoRelyingParty.fromJson(Map<String, dynamic> json) =>
@@ -51,7 +56,6 @@ class CorbadoRelyingParty {
 
 @JsonSerializable()
 class CorbadoUser {
-
   CorbadoUser(this.name, this.id);
 
   factory CorbadoUser.fromJson(Map<String, dynamic> json) =>
@@ -64,7 +68,6 @@ class CorbadoUser {
 
 @JsonSerializable(explicitToJson: true)
 class CorbadoRegisterSignedChallengeRequest {
-
   CorbadoRegisterSignedChallengeRequest({
     required this.id,
     required this.rawId,
@@ -73,7 +76,8 @@ class CorbadoRegisterSignedChallengeRequest {
   });
 
   factory CorbadoRegisterSignedChallengeRequest.fromRegisterCompleteRequest(
-      RegistrationCompleteRequest r,) {
+    RegistrationCompleteRequest r,
+  ) {
     final response = CorbadoRegisterSignedChallengeRequestResponse(
       clientDataJSON: r.clientDataJSON,
       attestationObject: r.attestationObject,
@@ -87,7 +91,8 @@ class CorbadoRegisterSignedChallengeRequest {
   }
 
   factory CorbadoRegisterSignedChallengeRequest.fromJson(
-          Map<String, dynamic> json,) =>
+    Map<String, dynamic> json,
+  ) =>
       _$CorbadoRegisterSignedChallengeRequestFromJson(json);
   final String id;
   final String rawId;
@@ -100,7 +105,6 @@ class CorbadoRegisterSignedChallengeRequest {
 
 @JsonSerializable()
 class CorbadoRegisterSignedChallengeRequestResponse {
-
   CorbadoRegisterSignedChallengeRequestResponse({
     required this.clientDataJSON,
     required this.attestationObject,
@@ -108,7 +112,8 @@ class CorbadoRegisterSignedChallengeRequestResponse {
   });
 
   factory CorbadoRegisterSignedChallengeRequestResponse.fromJson(
-          Map<String, dynamic> json,) =>
+    Map<String, dynamic> json,
+  ) =>
       _$CorbadoRegisterSignedChallengeRequestResponseFromJson(json);
   final String clientDataJSON;
   final String attestationObject;

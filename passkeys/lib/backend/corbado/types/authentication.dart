@@ -1,4 +1,6 @@
 // TODO: this whole file can be removed as we better type open api spec
+import 'dart:convert';
+
 import 'package:json_annotation/json_annotation.dart';
 import 'package:passkeys/backend/types/authentication.dart';
 
@@ -6,18 +8,26 @@ part 'authentication.g.dart';
 
 @JsonSerializable()
 class CorbadoAuthenticationInitResponse {
-
   CorbadoAuthenticationInitResponse(this.publicKey);
 
   factory CorbadoAuthenticationInitResponse.fromJson(
-          Map<String, dynamic> json,) =>
-      _$CorbadoAuthenticationInitResponseFromJson(json);
+    Map<String, dynamic> json,
+  ) {
+    final cbAuthenticationInitResp =
+        _$CorbadoAuthenticationInitResponseFromJson(json);
+    cbAuthenticationInitResp.rawOptions = jsonEncode(json['publicKey']);
+    return cbAuthenticationInitResp;
+  }
   final CorbadoAuthenticationResponsePublicKey publicKey;
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  late final String rawOptions;
 
   AuthenticationInitResponse toAuthenticationInitResponse() {
     return AuthenticationInitResponse(
       rpId: publicKey.rpId,
       challenge: publicKey.challenge,
+      rawOptions: rawOptions,
     );
   }
 
@@ -27,14 +37,14 @@ class CorbadoAuthenticationInitResponse {
 
 @JsonSerializable()
 class CorbadoAuthenticationResponsePublicKey {
-
   CorbadoAuthenticationResponsePublicKey({
     required this.rpId,
     required this.challenge,
   });
 
   factory CorbadoAuthenticationResponsePublicKey.fromJson(
-          Map<String, dynamic> json,) =>
+    Map<String, dynamic> json,
+  ) =>
       _$CorbadoAuthenticationResponsePublicKeyFromJson(json);
   final String rpId;
   final String challenge;
@@ -45,7 +55,6 @@ class CorbadoAuthenticationResponsePublicKey {
 
 @JsonSerializable(explicitToJson: true)
 class CorbadoAuthenticationCompleteRequest {
-
   CorbadoAuthenticationCompleteRequest({
     required this.id,
     required this.rawId,
@@ -54,19 +63,22 @@ class CorbadoAuthenticationCompleteRequest {
   });
 
   factory CorbadoAuthenticationCompleteRequest.fromAuthenticationCompleteRequest(
-      AuthenticationCompleteRequest r,) {
+    AuthenticationCompleteRequest r,
+  ) {
     return CorbadoAuthenticationCompleteRequest(
       id: r.id,
       rawId: r.rawId,
       response: CorbadoAuthenticationComplete(
-          clientDataJSON: r.clientDataJSON,
-          authenticatorData: r.authenticatorData,
-          signature: r.signature,),
+        clientDataJSON: r.clientDataJSON,
+        authenticatorData: r.authenticatorData,
+        signature: r.signature,
+      ),
     );
   }
 
   factory CorbadoAuthenticationCompleteRequest.fromJson(
-          Map<String, dynamic> json,) =>
+    Map<String, dynamic> json,
+  ) =>
       _$CorbadoAuthenticationCompleteRequestFromJson(json);
   final String id;
   final String rawId;
@@ -79,7 +91,6 @@ class CorbadoAuthenticationCompleteRequest {
 
 @JsonSerializable()
 class CorbadoAuthenticationComplete {
-
   CorbadoAuthenticationComplete({
     required this.clientDataJSON,
     required this.authenticatorData,

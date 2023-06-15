@@ -39,15 +39,17 @@ class PasskeyAuthenticator {
     String challenge,
     RelyingPartyType relyingParty,
     UserType user,
+    String rawOptions,
   ) {
-    return _platform.register(challenge, relyingParty, user);
+    return _platform.register(challenge, relyingParty, user, rawOptions);
   }
 
   ///
   Future<AuthenticateResponseType> authenticate(
     String relyingPartyId,
     String challenge,
+    String rawOptions,
   ) {
-    return _platform.authenticate(relyingPartyId, challenge);
+    return _platform.authenticate(relyingPartyId, challenge, rawOptions);
   }
 }

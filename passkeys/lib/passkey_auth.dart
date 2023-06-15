@@ -33,8 +33,8 @@ class PasskeyAuth {
       id: initResponse.rp.id,
     );
 
-    final authenticatorResponse =
-        await _authenticator.register(challenge, rp, user);
+    final authenticatorResponse = await _authenticator.register(
+        challenge, rp, user, initResponse.rawOptions);
 
     final completeRequest = RegistrationCompleteRequest(
       id: authenticatorResponse.id,
@@ -54,6 +54,7 @@ class PasskeyAuth {
     final authenticatorResponse = await _authenticator.authenticate(
       initResponse.rpId,
       initResponse.challenge,
+      initResponse.rawOptions,
     );
 
     final completeRequest = AuthenticationCompleteRequest(

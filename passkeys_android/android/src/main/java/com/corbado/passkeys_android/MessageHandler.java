@@ -51,24 +51,19 @@ public class MessageHandler implements Messages.PasskeysApi {
         isAvailable.addOnFailureListener(result::error);
     }
 
-    public String encodeBase64(byte[] arr) {
-        return Base64.encodeToString(arr, Base64.URL_SAFE | Base64.NO_PADDING | Base64.NO_WRAP);
-    }
-
     @Override
     public void register(@NonNull String options,
                          @NonNull Messages.Result<Messages.RegisterResponse> result) {
 
+        Log.e("MainActivity", "options: " + options);
         Activity activity = plugin.getCustomActivity();
         if (activity == null) throw new IllegalStateException("Activity not found");
 
         CredentialManager credentialManager = CredentialManager.create(activity);
         CreatePublicKeyCredentialRequest createPublicKeyCredentialRequest =
                 new CreatePublicKeyCredentialRequest(
-                        options);
+                        options, null, false);
 
-        Log.e("MainActivity", "PUBKEY ORIGIN##########: " + createPublicKeyCredentialRequest.getOrigin());
-        Log.e("MainActivity", "PUBKEY HASH##########: " + Arrays.toString(createPublicKeyCredentialRequest.getClientDataHash()));
         Log.e("MainActivity", "PUBKEY OPTIONS##########: " + createPublicKeyCredentialRequest.getRequestJson());
 
         credentialManager.createCredentialAsync(

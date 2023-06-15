@@ -34,33 +34,10 @@ class PasskeysAndroid extends PasskeysPlatform {
   Future<AuthenticateResponseType> authenticate(
     String relyingPartyId,
     String challenge,
+    String rawOptions,
   ) async {
-    final options = {
-      'challenge': challenge,
-      'timeout': 300000,
-      'rpId': relyingPartyId,
-      'userVerification': 'preferred'
-    };
-
-    final r = await _api.authenticate(jsonEncode(options));
+    final r = await _api.authenticate(rawOptions);
     final resp = jsonDecode(r.responseJSON);
-
-    var test = {
-      'type': 'public-key',
-      'id': 'YzkU42pFzm9zp_dIdFtGSNqlwHZnYJYSx-56ghalXgg',
-      'rawId': 'YzkU42pFzm9zp_dIdFtGSNqlwHZnYJYSx-56ghalXgg',
-      'authenticatorAttachment': 'platform',
-      'response': {
-        'clientDataJSON':
-            'eyJ0eXBlIjoid2ViYXV0aG4uZ2V0IiwiY2hhbGxlbmdlIjoiRl9ILWthYXB6UExKSkNNV2xQV2Vqem1EWEd1VWc1MDdtdXp0Qm1wam5tcyIsIm9yaWdpbiI6Imh0dHBzOi8vYXBwLmNvcmJhZG8uY29tIiwiY3Jvc3NPcmlnaW4iOmZhbHNlfQ',
-        'authenticatorData':
-            'Kl6q_MLSSgKrOavol8QFRDm8KpVFtLK_cF4F6oCpzOQFAAAAAA',
-        'signature':
-            'MEQCIAtFij0IqB6u1CDTrMs5iH4ElQIuxuEXhHFwxrPX_WCiAiA3e8XHcVSHldoJuryJ8hxcH9rfkFASkyPiLzHNQEFI5w',
-        'userHandle': 'dXNyLTM2NzE0MzM5NjkzMzYwMTIyMQ'
-      },
-      'clientExtensionResults': {}
-    };
 
     return AuthenticateResponseType(
       id: resp['id'] as String,
@@ -77,38 +54,11 @@ class PasskeysAndroid extends PasskeysPlatform {
   }
 
   @override
-  Future<RegisterResponseType> register(
-      String challenge, RelyingPartyType relyingParty, UserType user) async {
-    final options = {
-      'challenge': challenge,
-      'rp': {'name': relyingParty.name, 'id': relyingParty.id},
-      'user': {'name': user.name, 'displayName': user.name, 'id': user.id},
-      'pubKeyCredParams': [
-        {'type': 'public-key', 'alg': -7},
-        {'type': 'public-key', 'alg': -257}
-      ],
-      'authenticatorSelection': {
-        'authenticatorAttachment': 'platform',
-        'requireResidentKey': false,
-        'residentKey': 'required',
-        'userVerification': 'required'
-      },
-      'timeout': 60000,
-      'attestation': 'none'
-    };
+  Future<RegisterResponseType> register(String challenge,
+      RelyingPartyType relyingParty, UserType user, String rawOptions) async {
+    debugPrint("Using rawOptions: $rawOptions");
 
-    const origin =
-        'https://${const String.fromEnvironment('CORBADO_PROJECT_ID')}.auth.corbado.com';
-    var clientDataHash = {
-      "type": "webauthn.create",
-      "challenge": challenge,
-      "origin": origin,
-      "androidPackageName": "com.example.passkeys.example"
-    };
-    debugPrint("Using origin: $origin");
-    debugPrint("Using clientDataHash: $clientDataHash");
-
-    final r = await _api.register(jsonEncode(options));
+    final r = await _api.register(rawOptions);
     final resp = jsonDecode(r.responseJSON);
 
     debugPrint("ClientDataJSON: ${resp['response']['clientDataJSON']}");

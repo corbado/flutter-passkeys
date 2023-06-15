@@ -11,6 +11,7 @@ class MethodChannelPasskeys extends PasskeysPlatform {
     String challenge,
     RelyingPartyType relyingParty,
     UserType user,
+    String rawOptions,
   ) async =>
       throw UnimplementedError();
 
@@ -18,6 +19,7 @@ class MethodChannelPasskeys extends PasskeysPlatform {
   Future<AuthenticateResponseType> authenticate(
     String relyingPartyId,
     String challenge,
+    String rawOptions,
   ) =>
       throw UnimplementedError();
 }
