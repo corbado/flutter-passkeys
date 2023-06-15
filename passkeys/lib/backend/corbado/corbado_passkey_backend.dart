@@ -25,7 +25,6 @@ class CorbadoPasskeyBackend extends PasskeyBackend {
             _client.addDefaultHeader('Origin', 'android:apk-key-hash:$value'),
           },
         );
-    // Set origin header to allow CORS requests
   }
 
   final String _projectID;

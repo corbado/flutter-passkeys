@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.os.Build;
+import android.util.Base64;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.credentials.CreateCredentialResponse;
@@ -18,8 +20,15 @@ import androidx.credentials.PublicKeyCredential;
 import androidx.credentials.exceptions.CreateCredentialException;
 import androidx.credentials.exceptions.GetCredentialException;
 
+import com.google.android.gms.fido.Fido;
+import com.google.android.gms.fido.fido2.Fido2ApiClient;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 
 public class MessageHandler implements Messages.PasskeysApi {
 
@@ -30,12 +39,25 @@ public class MessageHandler implements Messages.PasskeysApi {
     }
 
     @Override
-    public Boolean canAuthenticate() {
-        return true;
+    public void canAuthenticate(@NonNull Messages.Result<Boolean> result) {
+
+        Activity activity = plugin.getCustomActivity();
+        if (activity == null) throw new IllegalStateException("Activity not found");
+
+        Fido2ApiClient fido2ApiClient = Fido.getFido2ApiClient(activity.getApplicationContext());
+
+        Task<Boolean> isAvailable = fido2ApiClient.isUserVerifyingPlatformAuthenticatorAvailable();
+        isAvailable.addOnSuccessListener(result::success);
+        isAvailable.addOnFailureListener(result::error);
+    }
+
+    public String encodeBase64(byte[] arr) {
+        return Base64.encodeToString(arr, Base64.URL_SAFE | Base64.NO_PADDING | Base64.NO_WRAP);
     }
 
     @Override
-    public void register(String options, Messages.Result<Messages.RegisterResponse> result) {
+    public void register(@NonNull String options,
+                         @NonNull Messages.Result<Messages.RegisterResponse> result) {
 
         Activity activity = plugin.getCustomActivity();
         if (activity == null) throw new IllegalStateException("Activity not found");
@@ -43,11 +65,15 @@ public class MessageHandler implements Messages.PasskeysApi {
         CredentialManager credentialManager = CredentialManager.create(activity);
         CreatePublicKeyCredentialRequest createPublicKeyCredentialRequest =
                 new CreatePublicKeyCredentialRequest(
-                        options, false);
+                        options);
+
+        Log.e("MainActivity", "PUBKEY ORIGIN##########: " + createPublicKeyCredentialRequest.getOrigin());
+        Log.e("MainActivity", "PUBKEY HASH##########: " + Arrays.toString(createPublicKeyCredentialRequest.getClientDataHash()));
+        Log.e("MainActivity", "PUBKEY OPTIONS##########: " + createPublicKeyCredentialRequest.getRequestJson());
 
         credentialManager.createCredentialAsync(
-                createPublicKeyCredentialRequest,
                 activity,
+                createPublicKeyCredentialRequest,
                 null,
                 Runnable::run,
                 new CredentialManagerCallback<CreateCredentialResponse, CreateCredentialException>() {
@@ -69,20 +95,21 @@ public class MessageHandler implements Messages.PasskeysApi {
     @Override
     public void authenticate(String options, Messages.Result<Messages.AuthenticateResponse> result) {
 
+        Log.e("MainActivity", "options: " + options);
         Activity activity = plugin.getCustomActivity();
         if (activity == null) throw new IllegalStateException("Activity not found");
 
         CredentialManager credentialManager = CredentialManager.create(activity);
         GetPublicKeyCredentialOption getPublicKeyCredentialOption =
-                new GetPublicKeyCredentialOption(options, false);
+                new GetPublicKeyCredentialOption(options);
 
         GetCredentialRequest getCredRequest = new GetCredentialRequest.Builder()
                 .addCredentialOption(getPublicKeyCredentialOption)
                 .build();
 
         credentialManager.getCredentialAsync(
-                getCredRequest,
                 activity,
+                getCredRequest,
                 null,
                 Runnable::run,
                 new CredentialManagerCallback<GetCredentialResponse, GetCredentialException>() {

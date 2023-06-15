@@ -24,43 +24,36 @@ public class FlutterPasskeysPlugin extends FlutterActivity implements FlutterPlu
     private Activity activity;
 
     public FlutterPasskeysPlugin() {
-        Log.e(TAG, "HEEEEEEEEEEEEEEEEEEEEEEEEEE FlutterPasskeysPlugin constructor called");
     }
 
     @Override
     public void onAttachedToEngine(@NonNull FlutterPluginBinding binding) {
-        Log.e(TAG, "HEEEEEEEEEEEEEEEEEEEEEEEEEE onAttachedToEngine called");
         binaryMessenger = binding.getBinaryMessenger();
     }
 
     @Override
     public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
-        Log.e(TAG, "HEEEEEEEEEEEEEEEEEEEEEEEEEE onDetachedFromEngine called");
         binaryMessenger = null;
     }
 
     @Override
     public void onAttachedToActivity(@NonNull ActivityPluginBinding binding) {
-        Log.e(TAG, "HEEEEEEEEEEEEEEEEEEEEEEEEEE onAttachedToActivity called");
         activity = binding.getActivity();
         Messages.PasskeysApi.setup(binaryMessenger, new MessageHandler(this));
     }
 
     @Override
     public void onDetachedFromActivityForConfigChanges() {
-        Log.e(TAG, "HEEEEEEEEEEEEEEEEEEEEEEEEEE onDetachedFromActivityForConfigChanges called");
         activity = null;
     }
 
     @Override
     public void onReattachedToActivityForConfigChanges(@NonNull ActivityPluginBinding binding) {
-        Log.e(TAG, "HEEEEEEEEEEEEEEEEEEEEEEEEEE onReattachedToActivityForConfigChanges called");
         activity = binding.getActivity();
     }
 
     @Override
     public void onDetachedFromActivity() {
-        Log.e(TAG, "HEEEEEEEEEEEEEEEEEEEEEEEEEE onDetachedFromActivity called");
         activity = null;
     }
 

@@ -27,7 +27,6 @@ class PasskeysAndroid extends PasskeysPlatform {
 
   @override
   Future<String> getSignatureFingerprint() async {
-    debugPrint("PasskeysAndroid.getSignatureFingerprint");
     return _api.getSignatureFingerprint();
   }
 
@@ -37,12 +36,10 @@ class PasskeysAndroid extends PasskeysPlatform {
     String challenge,
   ) async {
     final options = {
-      'publicKey': {
-        'challenge': challenge,
-        'timeout': 300000,
-        'rpId': relyingPartyId,
-        'userVerification': 'preferred'
-      }
+      'challenge': challenge,
+      'timeout': 300000,
+      'rpId': relyingPartyId,
+      'userVerification': 'preferred'
     };
 
     final r = await _api.authenticate(jsonEncode(options));
@@ -100,8 +97,21 @@ class PasskeysAndroid extends PasskeysPlatform {
       'attestation': 'none'
     };
 
+    const origin =
+        'https://${const String.fromEnvironment('CORBADO_PROJECT_ID')}.auth.corbado.com';
+    var clientDataHash = {
+      "type": "webauthn.create",
+      "challenge": challenge,
+      "origin": origin,
+      "androidPackageName": "com.example.passkeys.example"
+    };
+    debugPrint("Using origin: $origin");
+    debugPrint("Using clientDataHash: $clientDataHash");
+
     final r = await _api.register(jsonEncode(options));
     final resp = jsonDecode(r.responseJSON);
+
+    debugPrint("ClientDataJSON: ${resp['response']['clientDataJSON']}");
 
     return RegisterResponseType(
       id: resp['id'] as String,

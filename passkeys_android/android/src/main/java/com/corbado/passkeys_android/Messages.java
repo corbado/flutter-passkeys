@@ -196,8 +196,7 @@ public class Messages {
   /** Generated interface from Pigeon that represents a handler of messages from Flutter. */
   public interface PasskeysApi {
 
-    @NonNull 
-    Boolean canAuthenticate();
+    void canAuthenticate(@NonNull Result<Boolean> result);
 
     void register(@NonNull String options, @NonNull Result<RegisterResponse> result);
 
@@ -219,15 +218,20 @@ public class Messages {
           channel.setMessageHandler(
               (message, reply) -> {
                 ArrayList<Object> wrapped = new ArrayList<Object>();
-                try {
-                  Boolean output = api.canAuthenticate();
-                  wrapped.add(0, output);
-                }
- catch (Throwable exception) {
-                  ArrayList<Object> wrappedError = wrapError(exception);
-                  wrapped = wrappedError;
-                }
-                reply.reply(wrapped);
+                Result<Boolean> resultCallback =
+                    new Result<Boolean>() {
+                      public void success(Boolean result) {
+                        wrapped.add(0, result);
+                        reply.reply(wrapped);
+                      }
+
+                      public void error(Throwable error) {
+                        ArrayList<Object> wrappedError = wrapError(error);
+                        reply.reply(wrappedError);
+                      }
+                    };
+
+                api.canAuthenticate(resultCallback);
               });
         } else {
           channel.setMessageHandler(null);

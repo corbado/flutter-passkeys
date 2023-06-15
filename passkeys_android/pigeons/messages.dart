@@ -27,6 +27,7 @@ class AuthenticateResponse {
 
 @HostApi()
 abstract class PasskeysApi {
+  @async
   bool canAuthenticate();
 
   @async
