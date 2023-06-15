@@ -9,6 +9,20 @@ import 'package:pigeon/pigeon.dart';
     ),
   ),
 )
+class RelyingParty {
+  const RelyingParty(this.name, this.id);
+
+  final String name;
+  final String id;
+}
+
+class User {
+  const User(this.displayName, this.name, this.id);
+  final String displayName;
+  final String name;
+  final String id;
+}
+
 class RegisterResponse {
   const RegisterResponse({
     required this.id,
@@ -45,10 +59,17 @@ abstract class PasskeysApi {
   bool canAuthenticate();
 
   @async
-  RegisterResponse register(String options);
+  RegisterResponse register(
+    String challenge,
+    RelyingParty relyingParty,
+    User user,
+  );
 
   @async
-  AuthenticateResponse authenticate(String options);
+  AuthenticateResponse authenticate(
+    String relyingPartyId,
+    String challenge,
+  );
 
   @async
   String getSignatureFingerprint();

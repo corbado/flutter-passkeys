@@ -25,7 +25,6 @@ class PasskeysIOS extends PasskeysPlatform {
     String challenge,
     RelyingPartyType relyingParty,
     UserType user,
-    String rawOptions,
   ) async {
     final userArg = User(name: user.name, id: user.id);
     final relyingPartyArg = RelyingParty(
@@ -46,7 +45,6 @@ class PasskeysIOS extends PasskeysPlatform {
   Future<AuthenticateResponseType> authenticate(
     String relyingPartyId,
     String challenge,
-    String rawOptions,
   ) async {
     final r = await _api.authenticate(relyingPartyId, challenge);
     return AuthenticateResponseType(

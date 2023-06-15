@@ -13,7 +13,6 @@ class PasskeysMock extends PasskeysPlatform {
     String challenge,
     RelyingPartyType relyingParty,
     UserType user,
-    String rawOptions,
   ) async =>
       throw UnimplementedError();
 
@@ -21,7 +20,6 @@ class PasskeysMock extends PasskeysPlatform {
   Future<AuthenticateResponseType> authenticate(
     String relyingPartyId,
     String challenge,
-    String rawOptions,
   ) =>
       throw UnimplementedError();
 }

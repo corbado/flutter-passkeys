@@ -1,6 +1,5 @@
 class RegistrationInitResponse {
-  RegistrationInitResponse(this.rp, this.user, this.challenge, this.rawOptions);
-  final String rawOptions;
+  RegistrationInitResponse(this.rp, this.user, this.challenge);
   final RelyingParty rp;
   final User user;
   final String challenge;
@@ -13,7 +12,8 @@ class RelyingParty {
 }
 
 class User {
-  User(this.name, this.id);
+  User(this.displayName, this.name, this.id);
+  final String displayName;
   final String name;
   final String id;
 }

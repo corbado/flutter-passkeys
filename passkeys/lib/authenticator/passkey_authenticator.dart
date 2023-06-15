@@ -13,7 +13,6 @@ class PasskeyAuthenticator {
   final PasskeysPlatform _platform;
 
   Future<String> getSignatureFingerprint() async {
-    debugPrint('getSignatureFingerprint');
     final res = await _platform.getSignatureFingerprint();
     if (res.isEmpty) return '';
 
@@ -39,17 +38,15 @@ class PasskeyAuthenticator {
     String challenge,
     RelyingPartyType relyingParty,
     UserType user,
-    String rawOptions,
   ) {
-    return _platform.register(challenge, relyingParty, user, rawOptions);
+    return _platform.register(challenge, relyingParty, user);
   }
 
   ///
   Future<AuthenticateResponseType> authenticate(
     String relyingPartyId,
     String challenge,
-    String rawOptions,
   ) {
-    return _platform.authenticate(relyingPartyId, challenge, rawOptions);
+    return _platform.authenticate(relyingPartyId, challenge);
   }
 }

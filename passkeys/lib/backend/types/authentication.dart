@@ -2,11 +2,9 @@ class AuthenticationInitResponse {
   AuthenticationInitResponse({
     required this.rpId,
     required this.challenge,
-    required this.rawOptions,
   });
   final String rpId;
   final String challenge;
-  final String rawOptions;
 }
 
 class AuthenticationCompleteRequest {

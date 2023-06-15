@@ -1,6 +1,4 @@
 // TODO: this whole file can be removed as we better type open api spec
-import 'dart:convert';
-
 import 'package:json_annotation/json_annotation.dart';
 import 'package:passkeys/backend/types/authentication.dart';
 
@@ -12,23 +10,14 @@ class CorbadoAuthenticationInitResponse {
 
   factory CorbadoAuthenticationInitResponse.fromJson(
     Map<String, dynamic> json,
-  ) {
-    final cbAuthenticationInitResp =
-        _$CorbadoAuthenticationInitResponseFromJson(json);
-    cbAuthenticationInitResp.rawOptions = jsonEncode(json['publicKey']);
-    return cbAuthenticationInitResp;
-  }
-  final CorbadoAuthenticationResponsePublicKey publicKey;
+  ) =>
+      _$CorbadoAuthenticationInitResponseFromJson(json);
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  late final String rawOptions;
+  final CorbadoAuthenticationResponsePublicKey publicKey;
 
   AuthenticationInitResponse toAuthenticationInitResponse() {
     return AuthenticationInitResponse(
-      rpId: publicKey.rpId,
-      challenge: publicKey.challenge,
-      rawOptions: rawOptions,
-    );
+        rpId: publicKey.rpId, challenge: publicKey.challenge);
   }
 
   Map<String, dynamic> toJson() =>

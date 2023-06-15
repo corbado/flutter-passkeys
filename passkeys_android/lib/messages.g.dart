@@ -8,6 +8,63 @@ import 'dart:typed_data' show Float64List, Int32List, Int64List, Uint8List;
 import 'package:flutter/foundation.dart' show ReadBuffer, WriteBuffer;
 import 'package:flutter/services.dart';
 
+class RelyingParty {
+  RelyingParty({
+    required this.name,
+    required this.id,
+  });
+
+  String name;
+
+  String id;
+
+  Object encode() {
+    return <Object?>[
+      name,
+      id,
+    ];
+  }
+
+  static RelyingParty decode(Object result) {
+    result as List<Object?>;
+    return RelyingParty(
+      name: result[0]! as String,
+      id: result[1]! as String,
+    );
+  }
+}
+
+class User {
+  User({
+    required this.displayName,
+    required this.name,
+    required this.id,
+  });
+
+  String displayName;
+
+  String name;
+
+  String id;
+
+  Object encode() {
+    return <Object?>[
+      displayName,
+      name,
+      id,
+    ];
+  }
+
+  static User decode(Object result) {
+    result as List<Object?>;
+    return User(
+      displayName: result[0]! as String,
+      name: result[1]! as String,
+      id: result[2]! as String,
+    );
+  }
+}
+
 class RegisterResponse {
   RegisterResponse({
     required this.id,
@@ -95,6 +152,12 @@ class _PasskeysApiCodec extends StandardMessageCodec {
     } else if (value is RegisterResponse) {
       buffer.putUint8(129);
       writeValue(buffer, value.encode());
+    } else if (value is RelyingParty) {
+      buffer.putUint8(130);
+      writeValue(buffer, value.encode());
+    } else if (value is User) {
+      buffer.putUint8(131);
+      writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
     }
@@ -107,6 +170,10 @@ class _PasskeysApiCodec extends StandardMessageCodec {
         return AuthenticateResponse.decode(readValue(buffer)!);
       case 129: 
         return RegisterResponse.decode(readValue(buffer)!);
+      case 130: 
+        return RelyingParty.decode(readValue(buffer)!);
+      case 131: 
+        return User.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
     }
@@ -150,12 +217,12 @@ class PasskeysApi {
     }
   }
 
-  Future<RegisterResponse> register(String arg_options) async {
+  Future<RegisterResponse> register(String arg_challenge, RelyingParty arg_relyingParty, User arg_user) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
         'dev.flutter.pigeon.PasskeysApi.register', codec,
         binaryMessenger: _binaryMessenger);
     final List<Object?>? replyList =
-        await channel.send(<Object?>[arg_options]) as List<Object?>?;
+        await channel.send(<Object?>[arg_challenge, arg_relyingParty, arg_user]) as List<Object?>?;
     if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
@@ -177,12 +244,12 @@ class PasskeysApi {
     }
   }
 
-  Future<AuthenticateResponse> authenticate(String arg_options) async {
+  Future<AuthenticateResponse> authenticate(String arg_relyingPartyId, String arg_challenge) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
         'dev.flutter.pigeon.PasskeysApi.authenticate', codec,
         binaryMessenger: _binaryMessenger);
     final List<Object?>? replyList =
-        await channel.send(<Object?>[arg_options]) as List<Object?>?;
+        await channel.send(<Object?>[arg_relyingPartyId, arg_challenge]) as List<Object?>?;
     if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',

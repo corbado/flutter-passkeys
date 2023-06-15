@@ -26,9 +26,8 @@ class PasskeysAndroid extends PasskeysPlatform {
   Future<AuthenticateResponseType> authenticate(
     String relyingPartyId,
     String challenge,
-    String rawOptions,
   ) async {
-    final r = await _api.authenticate(rawOptions);
+    final r = await _api.authenticate(relyingPartyId, challenge);
 
     return AuthenticateResponseType(
       id: r.id,
@@ -45,9 +44,16 @@ class PasskeysAndroid extends PasskeysPlatform {
   }
 
   @override
-  Future<RegisterResponseType> register(String challenge,
-      RelyingPartyType relyingParty, UserType user, String rawOptions) async {
-    final r = await _api.register(rawOptions);
+  Future<RegisterResponseType> register(
+      String challenge, RelyingPartyType relyingParty, UserType user) async {
+    final userArg =
+        User(displayName: user.displayName, name: user.name, id: user.id);
+    final relyingPartyArg = RelyingParty(
+      name: relyingParty.name,
+      id: relyingParty.id,
+    );
+
+    final r = await _api.register(challenge, relyingPartyArg, userArg);
 
     return RegisterResponseType(
       id: r.id,

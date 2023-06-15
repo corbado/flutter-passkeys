@@ -1,6 +1,4 @@
 // TODO: this whole file can be removed as we better type open api spec
-import 'dart:convert';
-
 import 'package:json_annotation/json_annotation.dart';
 import 'package:passkeys/backend/types/registration.dart';
 
@@ -10,20 +8,16 @@ part 'registration.g.dart';
 class CorbadoRegisterChallenge {
   CorbadoRegisterChallenge(this.publicKey);
 
-  factory CorbadoRegisterChallenge.fromJson(Map<String, dynamic> json) {
-    final cbRegisterChallenge = _$CorbadoRegisterChallengeFromJson(json);
-    cbRegisterChallenge.rawOptions = jsonEncode(json['publicKey']);
-    return cbRegisterChallenge;
-  }
+  factory CorbadoRegisterChallenge.fromJson(Map<String, dynamic> json) =>
+      _$CorbadoRegisterChallengeFromJson(json);
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  late final String rawOptions;
   final CorbadoPublicKey publicKey;
 
   RegistrationInitResponse toRegisterInitResponse() {
     final rp = RelyingParty(publicKey.rp.name, publicKey.rp.id);
-    final user = User(publicKey.user.name, publicKey.user.id);
-    return RegistrationInitResponse(rp, user, publicKey.challenge, rawOptions);
+    final user = User(
+        publicKey.user.displayName, publicKey.user.name, publicKey.user.id);
+    return RegistrationInitResponse(rp, user, publicKey.challenge);
   }
 
   Map<String, dynamic> toJson() => _$CorbadoRegisterChallengeToJson(this);
@@ -56,10 +50,12 @@ class CorbadoRelyingParty {
 
 @JsonSerializable()
 class CorbadoUser {
-  CorbadoUser(this.name, this.id);
+  CorbadoUser(this.displayName, this.name, this.id);
 
   factory CorbadoUser.fromJson(Map<String, dynamic> json) =>
       _$CorbadoUserFromJson(json);
+
+  final String displayName;
   final String name;
   final String id;
 

@@ -23,6 +23,7 @@ import com.google.android.gms.fido.Fido;
 import com.google.android.gms.fido.fido2.Fido2ApiClient;
 import com.google.android.gms.tasks.Task;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -51,56 +52,123 @@ public class MessageHandler implements Messages.PasskeysApi {
         isAvailable.addOnFailureListener(result::error);
     }
 
+    //{
+    //  "rp": {
+    //    "name": "Widget",
+    //    "id": "pro-4458631100550777696.auth.corbado.com"
+    //  },
+    //  "user": {
+    //    "name": "ugabaer2@gmail.com",
+    //    "icon": "https://pics.com/avatar.png",
+    //    "displayName": "ugabaer2@gmail.com",
+    //    "id": "dXNyLTE0NTA4MjcwNTc5NzI1Mzc5Njc3"
+    //  },
+    //  "challenge": "p8Aa-Va6z4NhxoFFGs_crdmplO25bkt4QzMEYqHGeXA",
+    //  "pubKeyCredParams": [
+    //    {
+    //      "type": "public-key",
+    //      "alg": -7
+    //    },
+    //    {
+    //      "type": "public-key",
+    //      "alg": -257
+    //    }
+    //  ],
+    //  "timeout": 300000,
+    //  "authenticatorSelection": {
+    //    "authenticatorAttachment": "platform",
+    //    "requireResidentKey": false,
+    //    "residentKey": "required",
+    //    "userVerification": "required"
+    //  },
+    //  "attestation": "none"
+    //}
     @Override
-    public void register(@NonNull String options,
-                         @NonNull Messages.Result<Messages.RegisterResponse> result) {
+    public void register(@NonNull String challenge, @NonNull Messages.RelyingParty relyingParty,
+                         @NonNull Messages.User user, @NonNull Messages.Result<Messages.RegisterResponse> result) {
+        try {
+            JSONObject rpObj = new JSONObject();
+            rpObj.put("name", relyingParty.getName());
+            rpObj.put("id", relyingParty.getId());
 
-        Log.e(TAG, "options: " + options);
-        Activity activity = plugin.requireActivity();
+            JSONObject userObj = new JSONObject();
+            userObj.put("id", user.getId());
+            userObj.put("name", user.getName());
+            userObj.put("displayName", user.getDisplayName());
 
-        CredentialManager credentialManager = CredentialManager.create(activity);
-        CreatePublicKeyCredentialRequest createPublicKeyCredentialRequest =
-                new CreatePublicKeyCredentialRequest(
-                        options, null, false);
+            JSONArray pubKeyCredParams = new JSONArray();
+            pubKeyCredParams.put(new JSONObject().put("type", "public-key").put("alg", -7));
+            pubKeyCredParams.put(new JSONObject().put("type", "public-key").put("alg", -257));
+/*
+            JSONObject authenticatorSelection = new JSONObject();
+            authenticatorSelection.put("authenticatorAttachment", "platform");
+            authenticatorSelection.put("requireResidentKey", false);
+            authenticatorSelection.put("residentKey", "required");
+            authenticatorSelection.put("userVerification", "required");
+*/
+            JSONObject optionsObj = new JSONObject();
+            optionsObj.put("challenge", challenge);
+            optionsObj.put("rp", rpObj);
+            optionsObj.put("user", userObj);
+            optionsObj.put("pubKeyCredParams", pubKeyCredParams);
 
-        Log.e(TAG, "pubkey options: " + createPublicKeyCredentialRequest.getRequestJson());
+            String options = optionsObj.toString();
 
-        credentialManager.createCredentialAsync(
-                activity,
-                createPublicKeyCredentialRequest,
-                null,
-                Runnable::run,
-                new CredentialManagerCallback<CreateCredentialResponse, CreateCredentialException>() {
+            Log.e(TAG, "options: " + options);
+            Activity activity = plugin.requireActivity();
 
-                    @Override
-                    public void onResult(CreateCredentialResponse res) {
-                        String resp = res.getData().getString("androidx.credentials.BUNDLE_KEY_REGISTRATION_RESPONSE_JSON");
-                        try {
-                            JSONObject json = new JSONObject(resp);
-                            JSONObject response = json.getJSONObject("response");
-                            result.success(new Messages.RegisterResponse.Builder()
-                                    .setId(json.getString("id"))
-                                    .setRawId(json.getString("rawId"))
-                                    .setClientDataJSON(response.getString("clientDataJSON"))
-                                    .setAttestationObject(response.getString("attestationObject"))
-                                    .build());
-                        } catch (JSONException e) {
-                            Log.e(TAG, "Error parsing response: " + resp, e);
+            CredentialManager credentialManager = CredentialManager.create(activity);
+            CreatePublicKeyCredentialRequest createPublicKeyCredentialRequest =
+                    new CreatePublicKeyCredentialRequest(
+                            options, null, false);
+
+            Log.e(TAG, "pubkey options: " + createPublicKeyCredentialRequest.getRequestJson());
+
+            credentialManager.createCredentialAsync(
+                    activity,
+                    createPublicKeyCredentialRequest,
+                    null,
+                    Runnable::run,
+                    new CredentialManagerCallback<CreateCredentialResponse, CreateCredentialException>() {
+
+                        @Override
+                        public void onResult(CreateCredentialResponse res) {
+                            String resp = res.getData().getString("androidx.credentials.BUNDLE_KEY_REGISTRATION_RESPONSE_JSON");
+                            try {
+                                JSONObject json = new JSONObject(resp);
+                                JSONObject response = json.getJSONObject("response");
+                                result.success(new Messages.RegisterResponse.Builder()
+                                        .setId(json.getString("id"))
+                                        .setRawId(json.getString("rawId"))
+                                        .setClientDataJSON(response.getString("clientDataJSON"))
+                                        .setAttestationObject(response.getString("attestationObject"))
+                                        .build());
+                            } catch (JSONException e) {
+                                Log.e(TAG, "Error parsing response: " + resp, e);
+                                result.error(e);
+                            }
+                        }
+
+                        @Override
+                        public void onError(CreateCredentialException e) {
                             result.error(e);
                         }
                     }
-
-                    @Override
-                    public void onError(CreateCredentialException e) {
-                        result.error(e);
-                    }
-                }
-        );
+            );
+        } catch (JSONException e) {
+            Log.e(TAG, "Error parsing rp: " + relyingParty, e);
+            result.error(e);
+        }
     }
 
     @Override
-    public void authenticate(String options, Messages.Result<Messages.AuthenticateResponse> result) {
+    public void authenticate(@NonNull String relyingPartyId, @NonNull String challenge, @NonNull Messages.Result<Messages.AuthenticateResponse> result) {
+        JSONObject optionsObj = new JSONObject();
+        try {
+            optionsObj.put("challenge", challenge);
+            optionsObj.put("rpId", relyingPartyId);
 
+        String options = optionsObj.toString();
         Log.e(TAG, "options: " + options);
         Activity activity = plugin.requireActivity();
 
@@ -150,6 +218,9 @@ public class MessageHandler implements Messages.PasskeysApi {
                     }
                 }
         );
+        } catch (JSONException e) {
+            result.error(e);
+        }
     }
 
     @Override

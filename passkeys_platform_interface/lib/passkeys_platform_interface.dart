@@ -39,7 +39,6 @@ abstract class PasskeysPlatform extends PlatformInterface {
     String challenge,
     RelyingPartyType relyingParty,
     UserType user,
-    String rawOptions,
   );
 
   /// Handles the platform-specific steps for the authentication flow
@@ -48,7 +47,6 @@ abstract class PasskeysPlatform extends PlatformInterface {
   Future<AuthenticateResponseType> authenticate(
     String relyingPartyId,
     String challenge,
-    String rawOptions,
   );
 
   /// Returns the SHA-256 fingerprint of the app's signing certificate

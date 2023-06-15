@@ -58,6 +58,176 @@ public class Messages {
   }
 
   /** Generated class from Pigeon that represents data sent in messages. */
+  public static final class RelyingParty {
+    private @NonNull String name;
+
+    public @NonNull String getName() {
+      return name;
+    }
+
+    public void setName(@NonNull String setterArg) {
+      if (setterArg == null) {
+        throw new IllegalStateException("Nonnull field \"name\" is null.");
+      }
+      this.name = setterArg;
+    }
+
+    private @NonNull String id;
+
+    public @NonNull String getId() {
+      return id;
+    }
+
+    public void setId(@NonNull String setterArg) {
+      if (setterArg == null) {
+        throw new IllegalStateException("Nonnull field \"id\" is null.");
+      }
+      this.id = setterArg;
+    }
+
+    /** Constructor is non-public to enforce null safety; use Builder. */
+    RelyingParty() {}
+
+    public static final class Builder {
+
+      private @Nullable String name;
+
+      public @NonNull Builder setName(@NonNull String setterArg) {
+        this.name = setterArg;
+        return this;
+      }
+
+      private @Nullable String id;
+
+      public @NonNull Builder setId(@NonNull String setterArg) {
+        this.id = setterArg;
+        return this;
+      }
+
+      public @NonNull RelyingParty build() {
+        RelyingParty pigeonReturn = new RelyingParty();
+        pigeonReturn.setName(name);
+        pigeonReturn.setId(id);
+        return pigeonReturn;
+      }
+    }
+
+    @NonNull
+    ArrayList<Object> toList() {
+      ArrayList<Object> toListResult = new ArrayList<Object>(2);
+      toListResult.add(name);
+      toListResult.add(id);
+      return toListResult;
+    }
+
+    static @NonNull RelyingParty fromList(@NonNull ArrayList<Object> list) {
+      RelyingParty pigeonResult = new RelyingParty();
+      Object name = list.get(0);
+      pigeonResult.setName((String) name);
+      Object id = list.get(1);
+      pigeonResult.setId((String) id);
+      return pigeonResult;
+    }
+  }
+
+  /** Generated class from Pigeon that represents data sent in messages. */
+  public static final class User {
+    private @NonNull String displayName;
+
+    public @NonNull String getDisplayName() {
+      return displayName;
+    }
+
+    public void setDisplayName(@NonNull String setterArg) {
+      if (setterArg == null) {
+        throw new IllegalStateException("Nonnull field \"displayName\" is null.");
+      }
+      this.displayName = setterArg;
+    }
+
+    private @NonNull String name;
+
+    public @NonNull String getName() {
+      return name;
+    }
+
+    public void setName(@NonNull String setterArg) {
+      if (setterArg == null) {
+        throw new IllegalStateException("Nonnull field \"name\" is null.");
+      }
+      this.name = setterArg;
+    }
+
+    private @NonNull String id;
+
+    public @NonNull String getId() {
+      return id;
+    }
+
+    public void setId(@NonNull String setterArg) {
+      if (setterArg == null) {
+        throw new IllegalStateException("Nonnull field \"id\" is null.");
+      }
+      this.id = setterArg;
+    }
+
+    /** Constructor is non-public to enforce null safety; use Builder. */
+    User() {}
+
+    public static final class Builder {
+
+      private @Nullable String displayName;
+
+      public @NonNull Builder setDisplayName(@NonNull String setterArg) {
+        this.displayName = setterArg;
+        return this;
+      }
+
+      private @Nullable String name;
+
+      public @NonNull Builder setName(@NonNull String setterArg) {
+        this.name = setterArg;
+        return this;
+      }
+
+      private @Nullable String id;
+
+      public @NonNull Builder setId(@NonNull String setterArg) {
+        this.id = setterArg;
+        return this;
+      }
+
+      public @NonNull User build() {
+        User pigeonReturn = new User();
+        pigeonReturn.setDisplayName(displayName);
+        pigeonReturn.setName(name);
+        pigeonReturn.setId(id);
+        return pigeonReturn;
+      }
+    }
+
+    @NonNull
+    ArrayList<Object> toList() {
+      ArrayList<Object> toListResult = new ArrayList<Object>(3);
+      toListResult.add(displayName);
+      toListResult.add(name);
+      toListResult.add(id);
+      return toListResult;
+    }
+
+    static @NonNull User fromList(@NonNull ArrayList<Object> list) {
+      User pigeonResult = new User();
+      Object displayName = list.get(0);
+      pigeonResult.setDisplayName((String) displayName);
+      Object name = list.get(1);
+      pigeonResult.setName((String) name);
+      Object id = list.get(2);
+      pigeonResult.setId((String) id);
+      return pigeonResult;
+    }
+  }
+
+  /** Generated class from Pigeon that represents data sent in messages. */
   public static final class RegisterResponse {
     private @NonNull String id;
 
@@ -342,6 +512,10 @@ public class Messages {
           return AuthenticateResponse.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 129:
           return RegisterResponse.fromList((ArrayList<Object>) readValue(buffer));
+        case (byte) 130:
+          return RelyingParty.fromList((ArrayList<Object>) readValue(buffer));
+        case (byte) 131:
+          return User.fromList((ArrayList<Object>) readValue(buffer));
         default:
           return super.readValueOfType(type, buffer);
       }
@@ -355,6 +529,12 @@ public class Messages {
       } else if (value instanceof RegisterResponse) {
         stream.write(129);
         writeValue(stream, ((RegisterResponse) value).toList());
+      } else if (value instanceof RelyingParty) {
+        stream.write(130);
+        writeValue(stream, ((RelyingParty) value).toList());
+      } else if (value instanceof User) {
+        stream.write(131);
+        writeValue(stream, ((User) value).toList());
       } else {
         super.writeValue(stream, value);
       }
@@ -366,9 +546,9 @@ public class Messages {
 
     void canAuthenticate(@NonNull Result<Boolean> result);
 
-    void register(@NonNull String options, @NonNull Result<RegisterResponse> result);
+    void register(@NonNull String challenge, @NonNull RelyingParty relyingParty, @NonNull User user, @NonNull Result<RegisterResponse> result);
 
-    void authenticate(@NonNull String options, @NonNull Result<AuthenticateResponse> result);
+    void authenticate(@NonNull String relyingPartyId, @NonNull String challenge, @NonNull Result<AuthenticateResponse> result);
 
     void getSignatureFingerprint(@NonNull Result<String> result);
 
@@ -414,7 +594,9 @@ public class Messages {
               (message, reply) -> {
                 ArrayList<Object> wrapped = new ArrayList<Object>();
                 ArrayList<Object> args = (ArrayList<Object>) message;
-                String optionsArg = (String) args.get(0);
+                String challengeArg = (String) args.get(0);
+                RelyingParty relyingPartyArg = (RelyingParty) args.get(1);
+                User userArg = (User) args.get(2);
                 Result<RegisterResponse> resultCallback =
                     new Result<RegisterResponse>() {
                       public void success(RegisterResponse result) {
@@ -428,7 +610,7 @@ public class Messages {
                       }
                     };
 
-                api.register(optionsArg, resultCallback);
+                api.register(challengeArg, relyingPartyArg, userArg, resultCallback);
               });
         } else {
           channel.setMessageHandler(null);
@@ -443,7 +625,8 @@ public class Messages {
               (message, reply) -> {
                 ArrayList<Object> wrapped = new ArrayList<Object>();
                 ArrayList<Object> args = (ArrayList<Object>) message;
-                String optionsArg = (String) args.get(0);
+                String relyingPartyIdArg = (String) args.get(0);
+                String challengeArg = (String) args.get(1);
                 Result<AuthenticateResponse> resultCallback =
                     new Result<AuthenticateResponse>() {
                       public void success(AuthenticateResponse result) {
@@ -457,7 +640,7 @@ public class Messages {
                       }
                     };
 
-                api.authenticate(optionsArg, resultCallback);
+                api.authenticate(relyingPartyIdArg, challengeArg, resultCallback);
               });
         } else {
           channel.setMessageHandler(null);
