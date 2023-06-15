@@ -11,34 +11,9 @@ void main() {
     late PasskeysAndroid passkeys;
     late List<MethodCall> log;
 
-    setUp(() async {
-      passkeys = PasskeysAndroid();
-
-      log = <MethodCall>[];
-      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
-          .setMockMethodCallHandler(passkeys.methodChannel, (methodCall) async {
-        log.add(methodCall);
-        switch (methodCall.method) {
-          case 'getPlatformName':
-            return kPlatformName;
-          default:
-            return null;
-        }
-      });
-    });
-
     test('can be registered', () {
       PasskeysAndroid.registerWith();
       expect(PasskeysPlatform.instance, isA<PasskeysAndroid>());
-    });
-
-    test('getPlatformName returns correct name', () async {
-      final name = await passkeys.getPlatformName();
-      expect(
-        log,
-        <Matcher>[isMethodCall('getPlatformName', arguments: null)],
-      );
-      expect(name, equals(kPlatformName));
     });
   });
 }
