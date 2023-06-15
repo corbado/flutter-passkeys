@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:passkeys_android/messages.g.dart';
 import 'package:passkeys_platform_interface/passkeys_platform_interface.dart';
 import 'package:passkeys_platform_interface/types/authenticate_response.dart';
+import 'package:passkeys_platform_interface/types/authenticator_selection.dart';
 import 'package:passkeys_platform_interface/types/register_response.dart';
 import 'package:passkeys_platform_interface/types/relying_party.dart';
 import 'package:passkeys_platform_interface/types/user.dart';
@@ -45,7 +46,10 @@ class PasskeysAndroid extends PasskeysPlatform {
 
   @override
   Future<RegisterResponseType> register(
-      String challenge, RelyingPartyType relyingParty, UserType user) async {
+      String challenge,
+      RelyingPartyType relyingParty,
+      UserType user,
+      AuthenticatorSelectionType authSelectionType) async {
     final userArg =
         User(displayName: user.displayName, name: user.name, id: user.id);
     final relyingPartyArg = RelyingParty(
@@ -53,7 +57,19 @@ class PasskeysAndroid extends PasskeysPlatform {
       id: relyingParty.id,
     );
 
-    final r = await _api.register(challenge, relyingPartyArg, userArg);
+    final authenticatorSelection = AuthenticatorSelection(
+      authenticatorAttachment: authSelectionType.authenticatorAttachment,
+      requireResidentKey: authSelectionType.requireResidentKey,
+      residentKey: authSelectionType.residentKey,
+      userVerification: authSelectionType.userVerification,
+    );
+
+    final r = await _api.register(
+      challenge,
+      relyingPartyArg,
+      userArg,
+      authenticatorSelection,
+    );
 
     return RegisterResponseType(
       id: r.id,

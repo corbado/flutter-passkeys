@@ -52,40 +52,8 @@ public class MessageHandler implements Messages.PasskeysApi {
         isAvailable.addOnFailureListener(result::error);
     }
 
-    //{
-    //  "rp": {
-    //    "name": "Widget",
-    //    "id": "pro-4458631100550777696.auth.corbado.com"
-    //  },
-    //  "user": {
-    //    "name": "ugabaer2@gmail.com",
-    //    "icon": "https://pics.com/avatar.png",
-    //    "displayName": "ugabaer2@gmail.com",
-    //    "id": "dXNyLTE0NTA4MjcwNTc5NzI1Mzc5Njc3"
-    //  },
-    //  "challenge": "p8Aa-Va6z4NhxoFFGs_crdmplO25bkt4QzMEYqHGeXA",
-    //  "pubKeyCredParams": [
-    //    {
-    //      "type": "public-key",
-    //      "alg": -7
-    //    },
-    //    {
-    //      "type": "public-key",
-    //      "alg": -257
-    //    }
-    //  ],
-    //  "timeout": 300000,
-    //  "authenticatorSelection": {
-    //    "authenticatorAttachment": "platform",
-    //    "requireResidentKey": false,
-    //    "residentKey": "required",
-    //    "userVerification": "required"
-    //  },
-    //  "attestation": "none"
-    //}
     @Override
-    public void register(@NonNull String challenge, @NonNull Messages.RelyingParty relyingParty,
-                         @NonNull Messages.User user, @NonNull Messages.Result<Messages.RegisterResponse> result) {
+    public void register(@NonNull String challenge, @NonNull Messages.RelyingParty relyingParty, @NonNull Messages.User user, @NonNull Messages.AuthenticatorSelection authenticatorSelection, @NonNull Messages.Result<Messages.RegisterResponse> result) {
         try {
             JSONObject rpObj = new JSONObject();
             rpObj.put("name", relyingParty.getName());
@@ -99,18 +67,21 @@ public class MessageHandler implements Messages.PasskeysApi {
             JSONArray pubKeyCredParams = new JSONArray();
             pubKeyCredParams.put(new JSONObject().put("type", "public-key").put("alg", -7));
             pubKeyCredParams.put(new JSONObject().put("type", "public-key").put("alg", -257));
-/*
-            JSONObject authenticatorSelection = new JSONObject();
-            authenticatorSelection.put("authenticatorAttachment", "platform");
-            authenticatorSelection.put("requireResidentKey", false);
-            authenticatorSelection.put("residentKey", "required");
-            authenticatorSelection.put("userVerification", "required");
-*/
+
+            JSONObject authSelectionObj = new JSONObject();
+            authSelectionObj.put("authenticatorAttachment", authenticatorSelection.getAuthenticatorAttachment());
+            authSelectionObj.put("requireResidentKey", authenticatorSelection.getRequireResidentKey());
+            authSelectionObj.put("residentKey", authenticatorSelection.getResidentKey());
+            authSelectionObj.put("userVerification", authenticatorSelection.getUserVerification());
+
+            Log.e(TAG, "authSelectionObj: " + authSelectionObj.toString());
+
             JSONObject optionsObj = new JSONObject();
             optionsObj.put("challenge", challenge);
             optionsObj.put("rp", rpObj);
             optionsObj.put("user", userObj);
             optionsObj.put("pubKeyCredParams", pubKeyCredParams);
+            optionsObj.put("authenticatorSelection", authSelectionObj);
 
             String options = optionsObj.toString();
 

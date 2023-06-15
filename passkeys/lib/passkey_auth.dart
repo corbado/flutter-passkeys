@@ -3,6 +3,7 @@ import 'package:passkeys/authenticator/passkey_authenticator.dart';
 import 'package:passkeys/backend/passkey_backend.dart';
 import 'package:passkeys/backend/types/authentication.dart';
 import 'package:passkeys/backend/types/registration.dart';
+import 'package:passkeys_platform_interface/types/authenticator_selection.dart';
 import 'package:passkeys_platform_interface/types/types.dart';
 
 ///
@@ -34,8 +35,17 @@ class PasskeyAuth {
       id: initResponse.rp.id,
     );
 
+    final authSelectionType = AuthenticatorSelectionType(
+      authenticatorAttachment:
+          initResponse.authenticatorSelection.authenticatorAttachment,
+      requireResidentKey:
+          initResponse.authenticatorSelection.requireResidentKey,
+      residentKey: initResponse.authenticatorSelection.residentKey,
+      userVerification: initResponse.authenticatorSelection.userVerification,
+    );
+
     final authenticatorResponse =
-        await _authenticator.register(challenge, rp, user);
+        await _authenticator.register(challenge, rp, user, authSelectionType);
 
     final completeRequest = RegistrationCompleteRequest(
       id: authenticatorResponse.id,

@@ -91,7 +91,6 @@ class CorbadoPasskeyBackend extends PasskeyBackend {
     if (result == null) {
       throw Exception('An unknown error occured during the Corbado API call');
     }
-
     return;
   }
 }

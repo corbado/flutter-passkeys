@@ -1,4 +1,5 @@
 import 'package:passkeys_platform_interface/passkeys_platform_interface.dart';
+import 'package:passkeys_platform_interface/types/authenticator_selection.dart';
 import 'package:passkeys_platform_interface/types/types.dart';
 
 /// An implementation of [PasskeysPlatform] that uses method channels.
@@ -11,6 +12,7 @@ class MethodChannelPasskeys extends PasskeysPlatform {
     String challenge,
     RelyingPartyType relyingParty,
     UserType user,
+    AuthenticatorSelectionType authSelectionType,
   ) async =>
       throw UnimplementedError();
 

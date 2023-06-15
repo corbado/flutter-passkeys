@@ -23,6 +23,15 @@ class User {
   final String id;
 }
 
+class AuthenticatorSelection {
+  const AuthenticatorSelection(this.authenticatorAttachment,
+      this.requireResidentKey, this.residentKey, this.userVerification);
+  final String authenticatorAttachment;
+  final bool requireResidentKey;
+  final String residentKey;
+  final String userVerification;
+}
+
 class RegisterResponse {
   const RegisterResponse({
     required this.id,
@@ -63,6 +72,7 @@ abstract class PasskeysApi {
     String challenge,
     RelyingParty relyingParty,
     User user,
+    AuthenticatorSelection authenticatorSelection,
   );
 
   @async

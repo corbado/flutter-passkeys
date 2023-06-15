@@ -228,6 +228,127 @@ public class Messages {
   }
 
   /** Generated class from Pigeon that represents data sent in messages. */
+  public static final class AuthenticatorSelection {
+    private @NonNull String authenticatorAttachment;
+
+    public @NonNull String getAuthenticatorAttachment() {
+      return authenticatorAttachment;
+    }
+
+    public void setAuthenticatorAttachment(@NonNull String setterArg) {
+      if (setterArg == null) {
+        throw new IllegalStateException("Nonnull field \"authenticatorAttachment\" is null.");
+      }
+      this.authenticatorAttachment = setterArg;
+    }
+
+    private @NonNull Boolean requireResidentKey;
+
+    public @NonNull Boolean getRequireResidentKey() {
+      return requireResidentKey;
+    }
+
+    public void setRequireResidentKey(@NonNull Boolean setterArg) {
+      if (setterArg == null) {
+        throw new IllegalStateException("Nonnull field \"requireResidentKey\" is null.");
+      }
+      this.requireResidentKey = setterArg;
+    }
+
+    private @NonNull String residentKey;
+
+    public @NonNull String getResidentKey() {
+      return residentKey;
+    }
+
+    public void setResidentKey(@NonNull String setterArg) {
+      if (setterArg == null) {
+        throw new IllegalStateException("Nonnull field \"residentKey\" is null.");
+      }
+      this.residentKey = setterArg;
+    }
+
+    private @NonNull String userVerification;
+
+    public @NonNull String getUserVerification() {
+      return userVerification;
+    }
+
+    public void setUserVerification(@NonNull String setterArg) {
+      if (setterArg == null) {
+        throw new IllegalStateException("Nonnull field \"userVerification\" is null.");
+      }
+      this.userVerification = setterArg;
+    }
+
+    /** Constructor is non-public to enforce null safety; use Builder. */
+    AuthenticatorSelection() {}
+
+    public static final class Builder {
+
+      private @Nullable String authenticatorAttachment;
+
+      public @NonNull Builder setAuthenticatorAttachment(@NonNull String setterArg) {
+        this.authenticatorAttachment = setterArg;
+        return this;
+      }
+
+      private @Nullable Boolean requireResidentKey;
+
+      public @NonNull Builder setRequireResidentKey(@NonNull Boolean setterArg) {
+        this.requireResidentKey = setterArg;
+        return this;
+      }
+
+      private @Nullable String residentKey;
+
+      public @NonNull Builder setResidentKey(@NonNull String setterArg) {
+        this.residentKey = setterArg;
+        return this;
+      }
+
+      private @Nullable String userVerification;
+
+      public @NonNull Builder setUserVerification(@NonNull String setterArg) {
+        this.userVerification = setterArg;
+        return this;
+      }
+
+      public @NonNull AuthenticatorSelection build() {
+        AuthenticatorSelection pigeonReturn = new AuthenticatorSelection();
+        pigeonReturn.setAuthenticatorAttachment(authenticatorAttachment);
+        pigeonReturn.setRequireResidentKey(requireResidentKey);
+        pigeonReturn.setResidentKey(residentKey);
+        pigeonReturn.setUserVerification(userVerification);
+        return pigeonReturn;
+      }
+    }
+
+    @NonNull
+    ArrayList<Object> toList() {
+      ArrayList<Object> toListResult = new ArrayList<Object>(4);
+      toListResult.add(authenticatorAttachment);
+      toListResult.add(requireResidentKey);
+      toListResult.add(residentKey);
+      toListResult.add(userVerification);
+      return toListResult;
+    }
+
+    static @NonNull AuthenticatorSelection fromList(@NonNull ArrayList<Object> list) {
+      AuthenticatorSelection pigeonResult = new AuthenticatorSelection();
+      Object authenticatorAttachment = list.get(0);
+      pigeonResult.setAuthenticatorAttachment((String) authenticatorAttachment);
+      Object requireResidentKey = list.get(1);
+      pigeonResult.setRequireResidentKey((Boolean) requireResidentKey);
+      Object residentKey = list.get(2);
+      pigeonResult.setResidentKey((String) residentKey);
+      Object userVerification = list.get(3);
+      pigeonResult.setUserVerification((String) userVerification);
+      return pigeonResult;
+    }
+  }
+
+  /** Generated class from Pigeon that represents data sent in messages. */
   public static final class RegisterResponse {
     private @NonNull String id;
 
@@ -511,10 +632,12 @@ public class Messages {
         case (byte) 128:
           return AuthenticateResponse.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 129:
-          return RegisterResponse.fromList((ArrayList<Object>) readValue(buffer));
+          return AuthenticatorSelection.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 130:
-          return RelyingParty.fromList((ArrayList<Object>) readValue(buffer));
+          return RegisterResponse.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 131:
+          return RelyingParty.fromList((ArrayList<Object>) readValue(buffer));
+        case (byte) 132:
           return User.fromList((ArrayList<Object>) readValue(buffer));
         default:
           return super.readValueOfType(type, buffer);
@@ -526,14 +649,17 @@ public class Messages {
       if (value instanceof AuthenticateResponse) {
         stream.write(128);
         writeValue(stream, ((AuthenticateResponse) value).toList());
-      } else if (value instanceof RegisterResponse) {
+      } else if (value instanceof AuthenticatorSelection) {
         stream.write(129);
+        writeValue(stream, ((AuthenticatorSelection) value).toList());
+      } else if (value instanceof RegisterResponse) {
+        stream.write(130);
         writeValue(stream, ((RegisterResponse) value).toList());
       } else if (value instanceof RelyingParty) {
-        stream.write(130);
+        stream.write(131);
         writeValue(stream, ((RelyingParty) value).toList());
       } else if (value instanceof User) {
-        stream.write(131);
+        stream.write(132);
         writeValue(stream, ((User) value).toList());
       } else {
         super.writeValue(stream, value);
@@ -546,7 +672,7 @@ public class Messages {
 
     void canAuthenticate(@NonNull Result<Boolean> result);
 
-    void register(@NonNull String challenge, @NonNull RelyingParty relyingParty, @NonNull User user, @NonNull Result<RegisterResponse> result);
+    void register(@NonNull String challenge, @NonNull RelyingParty relyingParty, @NonNull User user, @NonNull AuthenticatorSelection authenticatorSelection, @NonNull Result<RegisterResponse> result);
 
     void authenticate(@NonNull String relyingPartyId, @NonNull String challenge, @NonNull Result<AuthenticateResponse> result);
 
@@ -597,6 +723,7 @@ public class Messages {
                 String challengeArg = (String) args.get(0);
                 RelyingParty relyingPartyArg = (RelyingParty) args.get(1);
                 User userArg = (User) args.get(2);
+                AuthenticatorSelection authenticatorSelectionArg = (AuthenticatorSelection) args.get(3);
                 Result<RegisterResponse> resultCallback =
                     new Result<RegisterResponse>() {
                       public void success(RegisterResponse result) {
@@ -610,7 +737,7 @@ public class Messages {
                       }
                     };
 
-                api.register(challengeArg, relyingPartyArg, userArg, resultCallback);
+                api.register(challengeArg, relyingPartyArg, userArg, authenticatorSelectionArg, resultCallback);
               });
         } else {
           channel.setMessageHandler(null);

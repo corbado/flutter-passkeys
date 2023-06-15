@@ -65,6 +65,42 @@ class User {
   }
 }
 
+class AuthenticatorSelection {
+  AuthenticatorSelection({
+    required this.authenticatorAttachment,
+    required this.requireResidentKey,
+    required this.residentKey,
+    required this.userVerification,
+  });
+
+  String authenticatorAttachment;
+
+  bool requireResidentKey;
+
+  String residentKey;
+
+  String userVerification;
+
+  Object encode() {
+    return <Object?>[
+      authenticatorAttachment,
+      requireResidentKey,
+      residentKey,
+      userVerification,
+    ];
+  }
+
+  static AuthenticatorSelection decode(Object result) {
+    result as List<Object?>;
+    return AuthenticatorSelection(
+      authenticatorAttachment: result[0]! as String,
+      requireResidentKey: result[1]! as bool,
+      residentKey: result[2]! as String,
+      userVerification: result[3]! as String,
+    );
+  }
+}
+
 class RegisterResponse {
   RegisterResponse({
     required this.id,
@@ -149,14 +185,17 @@ class _PasskeysApiCodec extends StandardMessageCodec {
     if (value is AuthenticateResponse) {
       buffer.putUint8(128);
       writeValue(buffer, value.encode());
-    } else if (value is RegisterResponse) {
+    } else if (value is AuthenticatorSelection) {
       buffer.putUint8(129);
       writeValue(buffer, value.encode());
-    } else if (value is RelyingParty) {
+    } else if (value is RegisterResponse) {
       buffer.putUint8(130);
       writeValue(buffer, value.encode());
-    } else if (value is User) {
+    } else if (value is RelyingParty) {
       buffer.putUint8(131);
+      writeValue(buffer, value.encode());
+    } else if (value is User) {
+      buffer.putUint8(132);
       writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
@@ -169,10 +208,12 @@ class _PasskeysApiCodec extends StandardMessageCodec {
       case 128: 
         return AuthenticateResponse.decode(readValue(buffer)!);
       case 129: 
-        return RegisterResponse.decode(readValue(buffer)!);
+        return AuthenticatorSelection.decode(readValue(buffer)!);
       case 130: 
-        return RelyingParty.decode(readValue(buffer)!);
+        return RegisterResponse.decode(readValue(buffer)!);
       case 131: 
+        return RelyingParty.decode(readValue(buffer)!);
+      case 132: 
         return User.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
@@ -217,12 +258,12 @@ class PasskeysApi {
     }
   }
 
-  Future<RegisterResponse> register(String arg_challenge, RelyingParty arg_relyingParty, User arg_user) async {
+  Future<RegisterResponse> register(String arg_challenge, RelyingParty arg_relyingParty, User arg_user, AuthenticatorSelection arg_authenticatorSelection) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
         'dev.flutter.pigeon.PasskeysApi.register', codec,
         binaryMessenger: _binaryMessenger);
     final List<Object?>? replyList =
-        await channel.send(<Object?>[arg_challenge, arg_relyingParty, arg_user]) as List<Object?>?;
+        await channel.send(<Object?>[arg_challenge, arg_relyingParty, arg_user, arg_authenticatorSelection]) as List<Object?>?;
     if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',

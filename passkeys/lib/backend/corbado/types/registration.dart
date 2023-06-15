@@ -17,7 +17,13 @@ class CorbadoRegisterChallenge {
     final rp = RelyingParty(publicKey.rp.name, publicKey.rp.id);
     final user = User(
         publicKey.user.displayName, publicKey.user.name, publicKey.user.id);
-    return RegistrationInitResponse(rp, user, publicKey.challenge);
+    final authenticatorSelection = AuthenticatorSelection(
+        publicKey.authenticatorSelection.authenticatorAttachment,
+        publicKey.authenticatorSelection.requireResidentKey,
+        publicKey.authenticatorSelection.residentKey,
+        publicKey.authenticatorSelection.userVerification);
+    return RegistrationInitResponse(
+        rp, user, publicKey.challenge, authenticatorSelection);
   }
 
   Map<String, dynamic> toJson() => _$CorbadoRegisterChallengeToJson(this);
@@ -25,15 +31,32 @@ class CorbadoRegisterChallenge {
 
 @JsonSerializable()
 class CorbadoPublicKey {
-  CorbadoPublicKey(this.rp, this.user, this.challenge);
+  CorbadoPublicKey(
+      this.rp, this.user, this.challenge, this.authenticatorSelection);
 
   factory CorbadoPublicKey.fromJson(Map<String, dynamic> json) =>
       _$CorbadoPublicKeyFromJson(json);
   final CorbadoRelyingParty rp;
   final CorbadoUser user;
   final String challenge;
+  final CorbadoAuthenticatorSelection authenticatorSelection;
 
   Map<String, dynamic> toJson() => _$CorbadoPublicKeyToJson(this);
+}
+
+@JsonSerializable()
+class CorbadoAuthenticatorSelection {
+  CorbadoAuthenticatorSelection(this.authenticatorAttachment,
+      this.requireResidentKey, this.residentKey, this.userVerification);
+
+  factory CorbadoAuthenticatorSelection.fromJson(Map<String, dynamic> json) =>
+      _$CorbadoAuthenticatorSelectionFromJson(json);
+  final String authenticatorAttachment;
+  final bool requireResidentKey;
+  final String residentKey;
+  final String userVerification;
+
+  Map<String, dynamic> toJson() => _$CorbadoAuthenticatorSelectionToJson(this);
 }
 
 @JsonSerializable()

@@ -1,8 +1,10 @@
 class RegistrationInitResponse {
-  RegistrationInitResponse(this.rp, this.user, this.challenge);
+  RegistrationInitResponse(
+      this.rp, this.user, this.challenge, this.authenticatorSelection);
   final RelyingParty rp;
   final User user;
   final String challenge;
+  final AuthenticatorSelection authenticatorSelection;
 }
 
 class RelyingParty {
@@ -16,6 +18,15 @@ class User {
   final String displayName;
   final String name;
   final String id;
+}
+
+class AuthenticatorSelection {
+  AuthenticatorSelection(this.authenticatorAttachment, this.requireResidentKey,
+      this.residentKey, this.userVerification);
+  final String authenticatorAttachment;
+  final bool requireResidentKey;
+  final String residentKey;
+  final String userVerification;
 }
 
 class RegistrationCompleteRequest {

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:convert/convert.dart';
 import 'package:flutter/foundation.dart';
 import 'package:passkeys_platform_interface/passkeys_platform_interface.dart';
+import 'package:passkeys_platform_interface/types/authenticator_selection.dart';
 import 'package:passkeys_platform_interface/types/types.dart';
 
 ///
@@ -38,8 +39,9 @@ class PasskeyAuthenticator {
     String challenge,
     RelyingPartyType relyingParty,
     UserType user,
+    AuthenticatorSelectionType authSelectionType,
   ) {
-    return _platform.register(challenge, relyingParty, user);
+    return _platform.register(challenge, relyingParty, user, authSelectionType);
   }
 
   ///

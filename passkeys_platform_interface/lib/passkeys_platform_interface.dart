@@ -1,4 +1,5 @@
 import 'package:passkeys_platform_interface/method_channel_passkeys.dart';
+import 'package:passkeys_platform_interface/types/authenticator_selection.dart';
 import 'package:passkeys_platform_interface/types/types.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
@@ -39,6 +40,7 @@ abstract class PasskeysPlatform extends PlatformInterface {
     String challenge,
     RelyingPartyType relyingParty,
     UserType user,
+    AuthenticatorSelectionType authenticatorSelection,
   );
 
   /// Handles the platform-specific steps for the authentication flow

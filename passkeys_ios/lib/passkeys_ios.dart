@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:passkeys_ios/messages.g.dart';
 import 'package:passkeys_platform_interface/passkeys_platform_interface.dart';
+import 'package:passkeys_platform_interface/types/authenticator_selection.dart';
 import 'package:passkeys_platform_interface/types/types.dart';
 
 /// The iOS implementation of [PasskeysPlatform].
@@ -25,6 +26,7 @@ class PasskeysIOS extends PasskeysPlatform {
     String challenge,
     RelyingPartyType relyingParty,
     UserType user,
+    AuthenticatorSelectionType authSelectionType,
   ) async {
     final userArg = User(name: user.name, id: user.id);
     final relyingPartyArg = RelyingParty(
