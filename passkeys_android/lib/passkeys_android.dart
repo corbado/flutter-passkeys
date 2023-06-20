@@ -32,22 +32,18 @@ class PasskeysAndroid extends PasskeysPlatform {
     String? userVerification,
     List<AllowCredentialType>? allowCredentials,
   ) async {
-    var allowCredentialsArg = <AllowCredential>[];
-    if (allowCredentials != null) {
-      allowCredentialsArg = allowCredentials.map((e) {
-        return AllowCredential(
-          id: e.id,
-          type: e.type,
-          transports: e.transports,
-        );
-      }).toList();
-    }
     final r = await _api.authenticate(
       relyingPartyId,
       challenge,
       timeout,
       userVerification,
-      allowCredentialsArg,
+      allowCredentials?.map((e) {
+        return AllowCredential(
+          id: e.id,
+          type: e.type,
+          transports: e.transports,
+        );
+      }).toList(),
     );
 
     return AuthenticateResponseType(
@@ -88,24 +84,19 @@ class PasskeysAndroid extends PasskeysPlatform {
       userVerification: authenticatorSelection.userVerification,
     );
 
-    var pubKeyCredParamsArg = <PubKeyCredParam>[];
-    if (pubKeyCredParams != null) {
-      pubKeyCredParamsArg = pubKeyCredParams
-          .map(
-            (e) => PubKeyCredParam(
-              alg: e.alg,
-              type: e.type,
-            ),
-          )
-          .toList();
-    }
-
     final r = await _api.register(
       challenge,
       relyingPartyArg,
       userArg,
       authSelection,
-      pubKeyCredParamsArg,
+      pubKeyCredParams
+          ?.map(
+            (e) => PubKeyCredParam(
+              alg: e.alg,
+              type: e.type,
+            ),
+          )
+          .toList(),
       timeout,
       attestation,
     );

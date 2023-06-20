@@ -58,6 +58,7 @@ android {
             signingConfig signingConfigs.debug
         }
     }
+    namespace 'com.example.passkeys.example'
 }
 
 flutter {

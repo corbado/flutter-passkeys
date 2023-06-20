@@ -184,8 +184,8 @@ public class MessageHandler implements Messages.PasskeysApi {
 
             String encoded = android.util.Base64.encodeToString(digest,
                     android.util.Base64.URL_SAFE | android.util.Base64.NO_PADDING | android.util.Base64.NO_WRAP);
-            Log.e(TAG, "Fingerprint: " + toRet.toString());
-            Log.e(TAG, "Fingerprint (base64): " + encoded);
+            Log.i(TAG, "Fingerprint: " + toRet.toString());
+            Log.i(TAG, "Fingerprint (base64): " + encoded);
 
             result.success("android:apk-key-hash:" + encoded);
         } catch (PackageManager.NameNotFoundException | NoSuchAlgorithmException e) {
