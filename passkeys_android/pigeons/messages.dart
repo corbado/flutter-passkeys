@@ -16,11 +16,25 @@ class RelyingParty {
   final String id;
 }
 
+class PubKeyCredParam {
+  const PubKeyCredParam(this.type, this.alg);
+  final String type;
+  final int alg;
+}
+
 class User {
-  const User(this.displayName, this.name, this.id);
+  const User(this.displayName, this.name, this.id, {this.icon});
   final String displayName;
   final String name;
   final String id;
+  final String? icon;
+}
+
+class AllowCredential {
+  const AllowCredential(this.type, this.id, this.transports);
+  final String type;
+  final String id;
+  final List<String?> transports;
 }
 
 class AuthenticatorSelection {
@@ -73,12 +87,18 @@ abstract class PasskeysApi {
     RelyingParty relyingParty,
     User user,
     AuthenticatorSelection authenticatorSelection,
+    List<PubKeyCredParam>? pubKeyCredParams,
+    int? timeout,
+    String? attestation,
   );
 
   @async
   AuthenticateResponse authenticate(
     String relyingPartyId,
     String challenge,
+    int? timeout,
+    String? userVerification,
+    List<AllowCredential>? allowCredentials,
   );
 
   @async

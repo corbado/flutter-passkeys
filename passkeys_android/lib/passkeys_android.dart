@@ -28,7 +28,8 @@ class PasskeysAndroid extends PasskeysPlatform {
     String relyingPartyId,
     String challenge,
   ) async {
-    final r = await _api.authenticate(relyingPartyId, challenge);
+    final r =
+        await _api.authenticate(relyingPartyId, challenge, null, null, null);
 
     return AuthenticateResponseType(
       id: r.id,
@@ -64,12 +65,8 @@ class PasskeysAndroid extends PasskeysPlatform {
       userVerification: authSelectionType.userVerification,
     );
 
-    final r = await _api.register(
-      challenge,
-      relyingPartyArg,
-      userArg,
-      authenticatorSelection,
-    );
+    final r = await _api.register(challenge, relyingPartyArg, userArg,
+        authenticatorSelection, null, null, null);
 
     return RegisterResponseType(
       id: r.id,
