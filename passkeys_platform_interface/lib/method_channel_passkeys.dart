@@ -30,4 +30,9 @@ class MethodChannelPasskeys extends PasskeysPlatform {
     List<AllowCredentialType>? allowCredentials,
   ) =>
       throw UnimplementedError();
+
+  @override
+  Future<String> getFacetID() {
+    throw UnimplementedError();
+  }
 }

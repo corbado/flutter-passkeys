@@ -62,5 +62,5 @@ abstract class PasskeysPlatform extends PlatformInterface {
   /// Returns the SHA-256 fingerprint of the app's signing certificate
   /// Only implemented in the android package
   /// (see https://developer.android.com/reference/androidx/security/crypto/EncryptedSharedPreferences)
-  Future<String> getSignatureFingerprint() async => '';
+  Future<String> getFacetID();
 }

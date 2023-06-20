@@ -37,6 +37,7 @@ import org.json.JSONObject;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -156,7 +157,7 @@ public class MessageHandler implements Messages.PasskeysApi {
     }
 
     @Override
-    public void getSignatureFingerprint(@NonNull Messages.Result<String> result) {
+    public void getFacetID(@NonNull Messages.Result<String> result) {
         Activity activity = plugin.requireActivity();
         if (activity == null) throw new IllegalStateException("Activity not found");
         Signature[] signs;
@@ -181,7 +182,12 @@ public class MessageHandler implements Messages.PasskeysApi {
                 }
             }
 
-            result.success(toRet.toString());
+            String encoded = android.util.Base64.encodeToString(digest,
+                    android.util.Base64.URL_SAFE | android.util.Base64.NO_PADDING | android.util.Base64.NO_WRAP);
+            Log.e(TAG, "Fingerprint: " + toRet.toString());
+            Log.e(TAG, "Fingerprint (base64): " + encoded);
+
+            result.success("android:apk-key-hash:" + encoded);
         } catch (PackageManager.NameNotFoundException | NoSuchAlgorithmException e) {
             result.error(e);
         }

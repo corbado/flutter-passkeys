@@ -877,7 +877,7 @@ public class Messages {
 
     void authenticate(@NonNull String relyingPartyId, @NonNull String challenge, @Nullable Long timeout, @Nullable String userVerification, @Nullable List<AllowCredential> allowCredentials, @NonNull Result<AuthenticateResponse> result);
 
-    void getSignatureFingerprint(@NonNull Result<String> result);
+    void getFacetID(@NonNull Result<String> result);
 
     /** The codec used by PasskeysApi. */
     static @NonNull MessageCodec<Object> getCodec() {
@@ -983,7 +983,7 @@ public class Messages {
       {
         BasicMessageChannel<Object> channel =
             new BasicMessageChannel<>(
-                binaryMessenger, "dev.flutter.pigeon.PasskeysApi.getSignatureFingerprint", getCodec());
+                binaryMessenger, "dev.flutter.pigeon.PasskeysApi.getFacetID", getCodec());
         if (api != null) {
           channel.setMessageHandler(
               (message, reply) -> {
@@ -1001,7 +1001,7 @@ public class Messages {
                       }
                     };
 
-                api.getSignatureFingerprint(resultCallback);
+                api.getFacetID(resultCallback);
               });
         } else {
           channel.setMessageHandler(null);

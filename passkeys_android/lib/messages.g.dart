@@ -384,9 +384,9 @@ class PasskeysApi {
     }
   }
 
-  Future<String> getSignatureFingerprint() async {
+  Future<String> getFacetID() async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.PasskeysApi.getSignatureFingerprint', codec,
+        'dev.flutter.pigeon.PasskeysApi.getFacetID', codec,
         binaryMessenger: _binaryMessenger);
     final List<Object?>? replyList =
         await channel.send(null) as List<Object?>?;

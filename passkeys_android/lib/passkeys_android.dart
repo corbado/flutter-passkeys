@@ -22,8 +22,7 @@ class PasskeysAndroid extends PasskeysPlatform {
   final PasskeysApi _api;
 
   @override
-  Future<String> getSignatureFingerprint() async =>
-      _api.getSignatureFingerprint();
+  Future<String> getFacetID() async => _api.getFacetID();
 
   @override
   Future<AuthenticateResponseType> authenticate(

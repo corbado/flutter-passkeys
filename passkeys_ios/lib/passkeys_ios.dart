@@ -65,4 +65,7 @@ class PasskeysIOS extends PasskeysPlatform {
       signature: r.signature,
     );
   }
+
+  @override
+  Future<String> getFacetID() async => _api.getFacetID();
 }

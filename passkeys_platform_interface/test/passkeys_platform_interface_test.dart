@@ -32,6 +32,11 @@ class PasskeysMock extends PasskeysPlatform {
     List<AllowCredentialType>? allowCredentials,
   ) =>
       throw UnimplementedError();
+
+  @override
+  Future<String> getFacetID() {
+    throw UnimplementedError();
+  }
 }
 
 void main() {

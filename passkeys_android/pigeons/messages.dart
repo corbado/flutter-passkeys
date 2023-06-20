@@ -102,5 +102,5 @@ abstract class PasskeysApi {
   );
 
   @async
-  String getSignatureFingerprint();
+  String getFacetID();
 }
