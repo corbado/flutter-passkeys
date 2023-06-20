@@ -25,6 +25,12 @@ CorbadoPublicKey _$CorbadoPublicKeyFromJson(Map<String, dynamic> json) =>
       json['challenge'] as String,
       CorbadoAuthenticatorSelection.fromJson(
           json['authenticatorSelection'] as Map<String, dynamic>),
+      pubKeyCredParams: (json['pubKeyCredParams'] as List<dynamic>?)
+          ?.map(
+              (e) => CorbadoPubKeyCredParam.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      timeout: json['timeout'] as int?,
+      attestation: json['attestation'] as String?,
     );
 
 Map<String, dynamic> _$CorbadoPublicKeyToJson(CorbadoPublicKey instance) =>
@@ -33,6 +39,23 @@ Map<String, dynamic> _$CorbadoPublicKeyToJson(CorbadoPublicKey instance) =>
       'user': instance.user,
       'challenge': instance.challenge,
       'authenticatorSelection': instance.authenticatorSelection,
+      'pubKeyCredParams': instance.pubKeyCredParams,
+      'timeout': instance.timeout,
+      'attestation': instance.attestation,
+    };
+
+CorbadoPubKeyCredParam _$CorbadoPubKeyCredParamFromJson(
+        Map<String, dynamic> json) =>
+    CorbadoPubKeyCredParam(
+      json['type'] as String,
+      json['alg'] as int,
+    );
+
+Map<String, dynamic> _$CorbadoPubKeyCredParamToJson(
+        CorbadoPubKeyCredParam instance) =>
+    <String, dynamic>{
+      'type': instance.type,
+      'alg': instance.alg,
     };
 
 CorbadoAuthenticatorSelection _$CorbadoAuthenticatorSelectionFromJson(

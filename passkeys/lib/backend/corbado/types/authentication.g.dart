@@ -25,6 +25,12 @@ CorbadoAuthenticationResponsePublicKey
         CorbadoAuthenticationResponsePublicKey(
           rpId: json['rpId'] as String,
           challenge: json['challenge'] as String,
+          timeout: json['timeout'] as int?,
+          userVerification: json['userVerification'] as String?,
+          allowCredentials: (json['allowCredentials'] as List<dynamic>?)
+              ?.map((e) =>
+                  CorbadoAllowCredential.fromJson(e as Map<String, dynamic>))
+              .toList(),
         );
 
 Map<String, dynamic> _$CorbadoAuthenticationResponsePublicKeyToJson(
@@ -32,6 +38,27 @@ Map<String, dynamic> _$CorbadoAuthenticationResponsePublicKeyToJson(
     <String, dynamic>{
       'rpId': instance.rpId,
       'challenge': instance.challenge,
+      'timeout': instance.timeout,
+      'userVerification': instance.userVerification,
+      'allowCredentials': instance.allowCredentials,
+    };
+
+CorbadoAllowCredential _$CorbadoAllowCredentialFromJson(
+        Map<String, dynamic> json) =>
+    CorbadoAllowCredential(
+      type: json['type'] as String,
+      id: json['id'] as String,
+      transports: (json['transports'] as List<dynamic>)
+          .map((e) => e as String)
+          .toList(),
+    );
+
+Map<String, dynamic> _$CorbadoAllowCredentialToJson(
+        CorbadoAllowCredential instance) =>
+    <String, dynamic>{
+      'type': instance.type,
+      'id': instance.id,
+      'transports': instance.transports,
     };
 
 CorbadoAuthenticationCompleteRequest

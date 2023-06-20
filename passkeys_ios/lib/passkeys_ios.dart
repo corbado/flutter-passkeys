@@ -1,7 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:passkeys_ios/messages.g.dart';
 import 'package:passkeys_platform_interface/passkeys_platform_interface.dart';
+import 'package:passkeys_platform_interface/types/allow_credential.dart';
 import 'package:passkeys_platform_interface/types/authenticator_selection.dart';
+import 'package:passkeys_platform_interface/types/pubkeycred_param.dart';
 import 'package:passkeys_platform_interface/types/types.dart';
 
 /// The iOS implementation of [PasskeysPlatform].
@@ -26,7 +28,10 @@ class PasskeysIOS extends PasskeysPlatform {
     String challenge,
     RelyingPartyType relyingParty,
     UserType user,
-    AuthenticatorSelectionType authSelectionType,
+    AuthenticatorSelectionType authenticatorSelection,
+    List<PubKeyCredParamType>? pubKeyCredParams,
+    int? timeout,
+    String? attestation,
   ) async {
     final userArg = User(name: user.name, id: user.id);
     final relyingPartyArg = RelyingParty(
@@ -47,6 +52,9 @@ class PasskeysIOS extends PasskeysPlatform {
   Future<AuthenticateResponseType> authenticate(
     String relyingPartyId,
     String challenge,
+    int? timeout,
+    String? userVerification,
+    List<AllowCredentialType>? allowCredentials,
   ) async {
     final r = await _api.authenticate(relyingPartyId, challenge);
     return AuthenticateResponseType(
