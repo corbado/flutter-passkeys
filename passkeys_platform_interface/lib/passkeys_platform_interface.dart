@@ -59,8 +59,7 @@ abstract class PasskeysPlatform extends PlatformInterface {
     List<AllowCredentialType>? allowCredentials,
   );
 
-  /// Returns the SHA-256 fingerprint of the app's signing certificate
-  /// Only implemented in the android package
+  /// Returns the FACET ID of the app.
   /// (see https://developer.android.com/reference/androidx/security/crypto/EncryptedSharedPreferences)
   Future<String> getFacetID();
 }
