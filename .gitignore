@@ -1,37 +1,56 @@
-# Miscellaneous
-*.class
-*.log
-*.pyc
-*.swp
 .DS_Store
 .atom/
-.buildlog/
-.history
-.svn/
-migrate_working_dir/
-
-# IntelliJ related
-*.iml
-*.ipr
-*.iws
-.idea/
-
-# The .vscode folder contains launch configuration and tasks you configure in
-# VS Code which you may wish to be included in version control, so this line
-# is commented out by default.
-#.vscode/
-
-# Flutter/Dart/Pub related
-# Libraries should not include pubspec.lock, per https://dart.dev/guides/libraries/private-files#pubspeclock.
-/pubspec.lock
-**/doc/api/
-.dart_tool/
-.packages
-build/
 .idea
+.packages
+.pub/
+.dart_tool/
+.vscode/
+*.iml
 
-android/local.properties
-ios/Flutter/flutter_export_environment.sh
-ios/Flutter/Generated.xcconfig
-macos/Flutter/ephemeral/Flutter-Generated.xcconfig
-macos/Flutter/ephemeral/flutter_export_environment.sh
+# Gradle?
+.uuid
+
+pubspec.lock
+
+Podfile.lock
+Pods/
+.symlinks/
+
+*instrumentscli*.trace
+*.cipd
+
+# Build directories are produced when building using the Flutter CLI.
+build
+
+# This file is produced as a back-up when web_benchmarks fails to parse a
+# Chrome trace.
+chrome-trace.json
+
+# Generated files on example apps
+flutter_export_environment.sh
+.flutter-plugins*
+local.properties
+keystore.properties
+**/Flutter/Generated.xcconfig
+**/Flutter/App.framework/
+**/Flutter/ephemeral/
+**/Flutter/Flutter.podspec
+**/Flutter/Flutter.framework/
+**/Flutter/flutter_assets/
+
+ServiceDefinitions.json
+xcuserdata/
+**/DerivedData/
+
+generated_plugin_registrant.*
+GeneratedPluginRegistrant.*
+
+# Gradle
+**/gradle-wrapper.jar
+.gradle/
+gradlew
+gradlew.bat
+
+.project
+.classpath
+.settings
