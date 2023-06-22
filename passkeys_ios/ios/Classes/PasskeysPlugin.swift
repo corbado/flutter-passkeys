@@ -26,6 +26,10 @@ public class PasskeysPlugin: NSObject, FlutterPlugin, PasskeysApi {
         return LocalAuth.shared.canAuthenticate()
     }
     
+    func getFacetID(completion: @escaping (Result<String, Error>) -> Void) {
+        completion(.success(""))
+    }
+    
     func register(
         challenge: String,
         relyingParty: RelyingParty,

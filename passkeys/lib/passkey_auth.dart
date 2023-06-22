@@ -84,13 +84,12 @@ class PasskeyAuth {
       initResponse.userVerification,
       initResponse.allowCredentials
           ?.map(
-            (e) => AllowCredential(
+            (e) => AllowCredentialType(
               id: e.id,
               type: e.type,
               transports: e.transports,
             ),
           )
-          .cast<AllowCredentialType>()
           .toList(),
     );
 
