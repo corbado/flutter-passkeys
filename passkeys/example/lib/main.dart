@@ -15,13 +15,19 @@ class MyApp extends StatelessWidget {
 
 class HomePage extends StatefulWidget {
   HomePage({super.key})
-      : _auth = PasskeyAuth(CorbadoPasskeyBackend('pro-3320381079973729266'));
+      : _auth = PasskeyAuth(
+          CorbadoPasskeyBackend(
+            const String.fromEnvironment('CORBADO_PROJECT_ID'),
+          ),
+        );
 
   final PasskeyAuth _auth;
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
+
+const email = 'nicolai.stein@corbado.com';
 
 class _HomePageState extends State<HomePage> {
   bool? _canAuthenticate;
@@ -49,12 +55,15 @@ class _HomePageState extends State<HomePage> {
               onPressed: () async {
                 try {
                   final result = await widget._auth.isSupported();
+                  debugPrint("result: $result");
                   setState(() => _canAuthenticate = result);
                 } catch (error) {
+                  debugPrint('error: $error');
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       backgroundColor: Theme.of(context).primaryColor,
                       content: Text('$error'),
+                      duration: const Duration(seconds: 10),
                     ),
                   );
                 }
@@ -73,15 +82,16 @@ class _HomePageState extends State<HomePage> {
             ElevatedButton(
               onPressed: () async {
                 try {
-                  const arguments = 'martinkellner470@gmail.com';
-                  final result =
-                      await widget._auth.registerWithEmail(arguments);
+                  final result = await widget._auth.registerWithEmail(email);
+                  debugPrint("result: $result");
                   setState(() => _register = result);
                 } catch (error) {
+                  debugPrint('error: $error');
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       backgroundColor: Theme.of(context).primaryColor,
                       content: Text('$error'),
+                      duration: const Duration(seconds: 10),
                     ),
                   );
                 }
@@ -100,15 +110,17 @@ class _HomePageState extends State<HomePage> {
             ElevatedButton(
               onPressed: () async {
                 try {
-                  const arguments = 'martinkellner470@gmail.com';
                   final result =
-                      await widget._auth.authenticateWithEmail(arguments);
+                      await widget._auth.authenticateWithEmail(email);
+                  debugPrint("result: $result");
                   setState(() => _authenticate = result);
                 } catch (error) {
+                  debugPrint('error: $error');
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       backgroundColor: Theme.of(context).primaryColor,
                       content: Text('$error'),
+                      duration: const Duration(seconds: 10),
                     ),
                   );
                 }

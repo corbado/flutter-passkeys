@@ -66,4 +66,7 @@ abstract class PasskeysApi {
     String relyingPartyId,
     String challenge,
   );
+
+  @async
+  String getFacetID();
 }

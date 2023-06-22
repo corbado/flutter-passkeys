@@ -198,6 +198,7 @@ protocol PasskeysApi {
   func canAuthenticate() throws -> Bool
   func register(challenge: String, relyingParty: RelyingParty, user: User, completion: @escaping (Result<RegisterResponse, Error>) -> Void)
   func authenticate(relyingPartyId: String, challenge: String, completion: @escaping (Result<AuthenticateResponse, Error>) -> Void)
+  func getFacetID(completion: @escaping (Result<String, Error>) -> Void)
 }
 
 /// Generated setup class from Pigeon to handle messages through the `binaryMessenger`.
@@ -255,6 +256,21 @@ class PasskeysApiSetup {
       }
     } else {
       authenticateChannel.setMessageHandler(nil)
+    }
+    let getFacetIDChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.PasskeysApi.getFacetID", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getFacetIDChannel.setMessageHandler { _, reply in
+        api.getFacetID() { result in
+          switch result {
+            case .success(let res):
+              reply(wrapResult(res))
+            case .failure(let error):
+              reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      getFacetIDChannel.setMessageHandler(nil)
     }
   }
 }

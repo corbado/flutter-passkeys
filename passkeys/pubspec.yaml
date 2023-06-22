@@ -28,6 +28,7 @@ dependencies:
     path: lib/backend/corbado/generated
   json_annotation: ^4.8.1
   openapi_generator_annotations: ^4.10.0
+  convert: ^3.1.1
 
 dev_dependencies:
   flutter_test:

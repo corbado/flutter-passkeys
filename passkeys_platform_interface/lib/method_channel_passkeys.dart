@@ -1,4 +1,7 @@
 import 'package:passkeys_platform_interface/passkeys_platform_interface.dart';
+import 'package:passkeys_platform_interface/types/allow_credential.dart';
+import 'package:passkeys_platform_interface/types/authenticator_selection.dart';
+import 'package:passkeys_platform_interface/types/pubkeycred_param.dart';
 import 'package:passkeys_platform_interface/types/types.dart';
 
 /// An implementation of [PasskeysPlatform] that uses method channels.
@@ -11,6 +14,10 @@ class MethodChannelPasskeys extends PasskeysPlatform {
     String challenge,
     RelyingPartyType relyingParty,
     UserType user,
+    AuthenticatorSelectionType authenticatorSelection,
+    List<PubKeyCredParamType>? pubKeyCredParams,
+    int? timeout,
+    String? attestation,
   ) async =>
       throw UnimplementedError();
 
@@ -18,6 +25,14 @@ class MethodChannelPasskeys extends PasskeysPlatform {
   Future<AuthenticateResponseType> authenticate(
     String relyingPartyId,
     String challenge,
+    int? timeout,
+    String? userVerification,
+    List<AllowCredentialType>? allowCredentials,
   ) =>
       throw UnimplementedError();
+
+  @override
+  Future<String> getFacetID() {
+    throw UnimplementedError();
+  }
 }
