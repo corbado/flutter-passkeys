@@ -16,14 +16,27 @@ class CorbadoRegisterChallenge {
   RegistrationInitResponse toRegisterInitResponse() {
     final rp = RelyingParty(publicKey.rp.name, publicKey.rp.id);
     final user = User(
-        publicKey.user.displayName, publicKey.user.name, publicKey.user.id);
+      publicKey.user.displayName,
+      publicKey.user.name,
+      publicKey.user.id,
+    );
     final authenticatorSelection = AuthenticatorSelection(
-        publicKey.authenticatorSelection.authenticatorAttachment,
-        publicKey.authenticatorSelection.requireResidentKey,
-        publicKey.authenticatorSelection.residentKey,
-        publicKey.authenticatorSelection.userVerification);
+      publicKey.authenticatorSelection.authenticatorAttachment,
+      publicKey.authenticatorSelection.requireResidentKey,
+      publicKey.authenticatorSelection.residentKey,
+      publicKey.authenticatorSelection.userVerification,
+    );
     return RegistrationInitResponse(
-        rp, user, publicKey.challenge, authenticatorSelection);
+      rp,
+      user,
+      publicKey.challenge,
+      authenticatorSelection,
+      timeout: publicKey.timeout,
+      attestation: publicKey.attestation,
+      pubKeyCredParams: publicKey.pubKeyCredParams
+          ?.map((e) => PubKeyCredParam(e.alg, e.type))
+          .toList(),
+    );
   }
 
   Map<String, dynamic> toJson() => _$CorbadoRegisterChallengeToJson(this);
@@ -32,7 +45,8 @@ class CorbadoRegisterChallenge {
 @JsonSerializable()
 class CorbadoPublicKey {
   CorbadoPublicKey(
-      this.rp, this.user, this.challenge, this.authenticatorSelection);
+      this.rp, this.user, this.challenge, this.authenticatorSelection,
+      {this.pubKeyCredParams, this.timeout, this.attestation});
 
   factory CorbadoPublicKey.fromJson(Map<String, dynamic> json) =>
       _$CorbadoPublicKeyFromJson(json);
@@ -40,8 +54,23 @@ class CorbadoPublicKey {
   final CorbadoUser user;
   final String challenge;
   final CorbadoAuthenticatorSelection authenticatorSelection;
+  final List<CorbadoPubKeyCredParam>? pubKeyCredParams;
+  final int? timeout;
+  final String? attestation;
 
   Map<String, dynamic> toJson() => _$CorbadoPublicKeyToJson(this);
+}
+
+@JsonSerializable()
+class CorbadoPubKeyCredParam {
+  CorbadoPubKeyCredParam(this.type, this.alg);
+
+  factory CorbadoPubKeyCredParam.fromJson(Map<String, dynamic> json) =>
+      _$CorbadoPubKeyCredParamFromJson(json);
+  final String type;
+  final int alg;
+
+  Map<String, dynamic> toJson() => _$CorbadoPubKeyCredParamToJson(this);
 }
 
 @JsonSerializable()

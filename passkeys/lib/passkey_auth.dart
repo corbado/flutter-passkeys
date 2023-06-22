@@ -2,10 +2,12 @@ import 'package:passkeys/authenticator/passkey_authenticator.dart';
 import 'package:passkeys/backend/passkey_backend.dart';
 import 'package:passkeys/backend/types/authentication.dart';
 import 'package:passkeys/backend/types/registration.dart';
+import 'package:passkeys_platform_interface/types/allow_credential.dart';
 import 'package:passkeys_platform_interface/types/authenticator_selection.dart';
+import 'package:passkeys_platform_interface/types/pubkeycred_param.dart';
 import 'package:passkeys_platform_interface/types/types.dart';
 
-///
+///y
 class PasskeyAuth {
   ///
   PasskeyAuth(this._backend) : _authenticator = PasskeyAuthenticator();
@@ -42,8 +44,23 @@ class PasskeyAuth {
       userVerification: initResponse.authenticatorSelection.userVerification,
     );
 
-    final authenticatorResponse =
-        await _authenticator.register(challenge, rp, user, authSelectionType);
+    final authenticatorResponse = await _authenticator.register(
+      challenge,
+      rp,
+      user,
+      authSelectionType,
+      initResponse.pubKeyCredParams
+          ?.map(
+            (e) => PubKeyCredParamType(
+              alg: e.alg,
+              type: e.type,
+            ),
+          )
+          .cast<PubKeyCredParamType>()
+          .toList(),
+      initResponse.timeout,
+      initResponse.attestation,
+    );
 
     final completeRequest = RegistrationCompleteRequest(
       id: authenticatorResponse.id,
@@ -63,6 +80,18 @@ class PasskeyAuth {
     final authenticatorResponse = await _authenticator.authenticate(
       initResponse.rpId,
       initResponse.challenge,
+      initResponse.timeout,
+      initResponse.userVerification,
+      initResponse.allowCredentials
+          ?.map(
+            (e) => AllowCredential(
+              id: e.id,
+              type: e.type,
+              transports: e.transports,
+            ),
+          )
+          .cast<AllowCredentialType>()
+          .toList(),
     );
 
     final completeRequest = AuthenticationCompleteRequest(

@@ -131,6 +131,79 @@ public class Messages {
   }
 
   /** Generated class from Pigeon that represents data sent in messages. */
+  public static final class PubKeyCredParam {
+    private @NonNull String type;
+
+    public @NonNull String getType() {
+      return type;
+    }
+
+    public void setType(@NonNull String setterArg) {
+      if (setterArg == null) {
+        throw new IllegalStateException("Nonnull field \"type\" is null.");
+      }
+      this.type = setterArg;
+    }
+
+    private @NonNull Long alg;
+
+    public @NonNull Long getAlg() {
+      return alg;
+    }
+
+    public void setAlg(@NonNull Long setterArg) {
+      if (setterArg == null) {
+        throw new IllegalStateException("Nonnull field \"alg\" is null.");
+      }
+      this.alg = setterArg;
+    }
+
+    /** Constructor is non-public to enforce null safety; use Builder. */
+    PubKeyCredParam() {}
+
+    public static final class Builder {
+
+      private @Nullable String type;
+
+      public @NonNull Builder setType(@NonNull String setterArg) {
+        this.type = setterArg;
+        return this;
+      }
+
+      private @Nullable Long alg;
+
+      public @NonNull Builder setAlg(@NonNull Long setterArg) {
+        this.alg = setterArg;
+        return this;
+      }
+
+      public @NonNull PubKeyCredParam build() {
+        PubKeyCredParam pigeonReturn = new PubKeyCredParam();
+        pigeonReturn.setType(type);
+        pigeonReturn.setAlg(alg);
+        return pigeonReturn;
+      }
+    }
+
+    @NonNull
+    ArrayList<Object> toList() {
+      ArrayList<Object> toListResult = new ArrayList<Object>(2);
+      toListResult.add(type);
+      toListResult.add(alg);
+      return toListResult;
+    }
+
+    static @NonNull PubKeyCredParam fromList(@NonNull ArrayList<Object> list) {
+      PubKeyCredParam pigeonResult = new PubKeyCredParam();
+      Object type = list.get(0);
+      pigeonResult.setType((String) type);
+      Object alg = list.get(1);
+      pigeonResult.setAlg((alg == null) ? null : ((alg instanceof Integer) ? (Integer) alg : (Long) alg));
+      return pigeonResult;
+    }
+  }
+
+  /** Generated class from Pigeon that represents data sent in messages. */
   public static final class User {
     private @NonNull String displayName;
 
@@ -171,6 +244,16 @@ public class Messages {
       this.id = setterArg;
     }
 
+    private @Nullable String icon;
+
+    public @Nullable String getIcon() {
+      return icon;
+    }
+
+    public void setIcon(@Nullable String setterArg) {
+      this.icon = setterArg;
+    }
+
     /** Constructor is non-public to enforce null safety; use Builder. */
     User() {}
 
@@ -197,21 +280,30 @@ public class Messages {
         return this;
       }
 
+      private @Nullable String icon;
+
+      public @NonNull Builder setIcon(@Nullable String setterArg) {
+        this.icon = setterArg;
+        return this;
+      }
+
       public @NonNull User build() {
         User pigeonReturn = new User();
         pigeonReturn.setDisplayName(displayName);
         pigeonReturn.setName(name);
         pigeonReturn.setId(id);
+        pigeonReturn.setIcon(icon);
         return pigeonReturn;
       }
     }
 
     @NonNull
     ArrayList<Object> toList() {
-      ArrayList<Object> toListResult = new ArrayList<Object>(3);
+      ArrayList<Object> toListResult = new ArrayList<Object>(4);
       toListResult.add(displayName);
       toListResult.add(name);
       toListResult.add(id);
+      toListResult.add(icon);
       return toListResult;
     }
 
@@ -223,6 +315,105 @@ public class Messages {
       pigeonResult.setName((String) name);
       Object id = list.get(2);
       pigeonResult.setId((String) id);
+      Object icon = list.get(3);
+      pigeonResult.setIcon((String) icon);
+      return pigeonResult;
+    }
+  }
+
+  /** Generated class from Pigeon that represents data sent in messages. */
+  public static final class AllowCredential {
+    private @NonNull String type;
+
+    public @NonNull String getType() {
+      return type;
+    }
+
+    public void setType(@NonNull String setterArg) {
+      if (setterArg == null) {
+        throw new IllegalStateException("Nonnull field \"type\" is null.");
+      }
+      this.type = setterArg;
+    }
+
+    private @NonNull String id;
+
+    public @NonNull String getId() {
+      return id;
+    }
+
+    public void setId(@NonNull String setterArg) {
+      if (setterArg == null) {
+        throw new IllegalStateException("Nonnull field \"id\" is null.");
+      }
+      this.id = setterArg;
+    }
+
+    private @NonNull List<String> transports;
+
+    public @NonNull List<String> getTransports() {
+      return transports;
+    }
+
+    public void setTransports(@NonNull List<String> setterArg) {
+      if (setterArg == null) {
+        throw new IllegalStateException("Nonnull field \"transports\" is null.");
+      }
+      this.transports = setterArg;
+    }
+
+    /** Constructor is non-public to enforce null safety; use Builder. */
+    AllowCredential() {}
+
+    public static final class Builder {
+
+      private @Nullable String type;
+
+      public @NonNull Builder setType(@NonNull String setterArg) {
+        this.type = setterArg;
+        return this;
+      }
+
+      private @Nullable String id;
+
+      public @NonNull Builder setId(@NonNull String setterArg) {
+        this.id = setterArg;
+        return this;
+      }
+
+      private @Nullable List<String> transports;
+
+      public @NonNull Builder setTransports(@NonNull List<String> setterArg) {
+        this.transports = setterArg;
+        return this;
+      }
+
+      public @NonNull AllowCredential build() {
+        AllowCredential pigeonReturn = new AllowCredential();
+        pigeonReturn.setType(type);
+        pigeonReturn.setId(id);
+        pigeonReturn.setTransports(transports);
+        return pigeonReturn;
+      }
+    }
+
+    @NonNull
+    ArrayList<Object> toList() {
+      ArrayList<Object> toListResult = new ArrayList<Object>(3);
+      toListResult.add(type);
+      toListResult.add(id);
+      toListResult.add(transports);
+      return toListResult;
+    }
+
+    static @NonNull AllowCredential fromList(@NonNull ArrayList<Object> list) {
+      AllowCredential pigeonResult = new AllowCredential();
+      Object type = list.get(0);
+      pigeonResult.setType((String) type);
+      Object id = list.get(1);
+      pigeonResult.setId((String) id);
+      Object transports = list.get(2);
+      pigeonResult.setTransports((List<String>) transports);
       return pigeonResult;
     }
   }
@@ -630,14 +821,18 @@ public class Messages {
     protected Object readValueOfType(byte type, @NonNull ByteBuffer buffer) {
       switch (type) {
         case (byte) 128:
-          return AuthenticateResponse.fromList((ArrayList<Object>) readValue(buffer));
+          return AllowCredential.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 129:
-          return AuthenticatorSelection.fromList((ArrayList<Object>) readValue(buffer));
+          return AuthenticateResponse.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 130:
-          return RegisterResponse.fromList((ArrayList<Object>) readValue(buffer));
+          return AuthenticatorSelection.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 131:
-          return RelyingParty.fromList((ArrayList<Object>) readValue(buffer));
+          return PubKeyCredParam.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 132:
+          return RegisterResponse.fromList((ArrayList<Object>) readValue(buffer));
+        case (byte) 133:
+          return RelyingParty.fromList((ArrayList<Object>) readValue(buffer));
+        case (byte) 134:
           return User.fromList((ArrayList<Object>) readValue(buffer));
         default:
           return super.readValueOfType(type, buffer);
@@ -646,20 +841,26 @@ public class Messages {
 
     @Override
     protected void writeValue(@NonNull ByteArrayOutputStream stream, Object value) {
-      if (value instanceof AuthenticateResponse) {
+      if (value instanceof AllowCredential) {
         stream.write(128);
+        writeValue(stream, ((AllowCredential) value).toList());
+      } else if (value instanceof AuthenticateResponse) {
+        stream.write(129);
         writeValue(stream, ((AuthenticateResponse) value).toList());
       } else if (value instanceof AuthenticatorSelection) {
-        stream.write(129);
-        writeValue(stream, ((AuthenticatorSelection) value).toList());
-      } else if (value instanceof RegisterResponse) {
         stream.write(130);
+        writeValue(stream, ((AuthenticatorSelection) value).toList());
+      } else if (value instanceof PubKeyCredParam) {
+        stream.write(131);
+        writeValue(stream, ((PubKeyCredParam) value).toList());
+      } else if (value instanceof RegisterResponse) {
+        stream.write(132);
         writeValue(stream, ((RegisterResponse) value).toList());
       } else if (value instanceof RelyingParty) {
-        stream.write(131);
+        stream.write(133);
         writeValue(stream, ((RelyingParty) value).toList());
       } else if (value instanceof User) {
-        stream.write(132);
+        stream.write(134);
         writeValue(stream, ((User) value).toList());
       } else {
         super.writeValue(stream, value);
@@ -672,11 +873,11 @@ public class Messages {
 
     void canAuthenticate(@NonNull Result<Boolean> result);
 
-    void register(@NonNull String challenge, @NonNull RelyingParty relyingParty, @NonNull User user, @NonNull AuthenticatorSelection authenticatorSelection, @NonNull Result<RegisterResponse> result);
+    void register(@NonNull String challenge, @NonNull RelyingParty relyingParty, @NonNull User user, @NonNull AuthenticatorSelection authenticatorSelection, @Nullable List<PubKeyCredParam> pubKeyCredParams, @Nullable Long timeout, @Nullable String attestation, @NonNull Result<RegisterResponse> result);
 
-    void authenticate(@NonNull String relyingPartyId, @NonNull String challenge, @NonNull Result<AuthenticateResponse> result);
+    void authenticate(@NonNull String relyingPartyId, @NonNull String challenge, @Nullable Long timeout, @Nullable String userVerification, @Nullable List<AllowCredential> allowCredentials, @NonNull Result<AuthenticateResponse> result);
 
-    void getSignatureFingerprint(@NonNull Result<String> result);
+    void getFacetID(@NonNull Result<String> result);
 
     /** The codec used by PasskeysApi. */
     static @NonNull MessageCodec<Object> getCodec() {
@@ -724,6 +925,9 @@ public class Messages {
                 RelyingParty relyingPartyArg = (RelyingParty) args.get(1);
                 User userArg = (User) args.get(2);
                 AuthenticatorSelection authenticatorSelectionArg = (AuthenticatorSelection) args.get(3);
+                List<PubKeyCredParam> pubKeyCredParamsArg = (List<PubKeyCredParam>) args.get(4);
+                Number timeoutArg = (Number) args.get(5);
+                String attestationArg = (String) args.get(6);
                 Result<RegisterResponse> resultCallback =
                     new Result<RegisterResponse>() {
                       public void success(RegisterResponse result) {
@@ -737,7 +941,7 @@ public class Messages {
                       }
                     };
 
-                api.register(challengeArg, relyingPartyArg, userArg, authenticatorSelectionArg, resultCallback);
+                api.register(challengeArg, relyingPartyArg, userArg, authenticatorSelectionArg, pubKeyCredParamsArg, (timeoutArg == null) ? null : timeoutArg.longValue(), attestationArg, resultCallback);
               });
         } else {
           channel.setMessageHandler(null);
@@ -754,6 +958,9 @@ public class Messages {
                 ArrayList<Object> args = (ArrayList<Object>) message;
                 String relyingPartyIdArg = (String) args.get(0);
                 String challengeArg = (String) args.get(1);
+                Number timeoutArg = (Number) args.get(2);
+                String userVerificationArg = (String) args.get(3);
+                List<AllowCredential> allowCredentialsArg = (List<AllowCredential>) args.get(4);
                 Result<AuthenticateResponse> resultCallback =
                     new Result<AuthenticateResponse>() {
                       public void success(AuthenticateResponse result) {
@@ -767,7 +974,7 @@ public class Messages {
                       }
                     };
 
-                api.authenticate(relyingPartyIdArg, challengeArg, resultCallback);
+                api.authenticate(relyingPartyIdArg, challengeArg, (timeoutArg == null) ? null : timeoutArg.longValue(), userVerificationArg, allowCredentialsArg, resultCallback);
               });
         } else {
           channel.setMessageHandler(null);
@@ -776,7 +983,7 @@ public class Messages {
       {
         BasicMessageChannel<Object> channel =
             new BasicMessageChannel<>(
-                binaryMessenger, "dev.flutter.pigeon.PasskeysApi.getSignatureFingerprint", getCodec());
+                binaryMessenger, "dev.flutter.pigeon.PasskeysApi.getFacetID", getCodec());
         if (api != null) {
           channel.setMessageHandler(
               (message, reply) -> {
@@ -794,7 +1001,7 @@ public class Messages {
                       }
                     };
 
-                api.getSignatureFingerprint(resultCallback);
+                api.getFacetID(resultCallback);
               });
         } else {
           channel.setMessageHandler(null);

@@ -1,5 +1,7 @@
 import 'package:passkeys_platform_interface/method_channel_passkeys.dart';
+import 'package:passkeys_platform_interface/types/allow_credential.dart';
 import 'package:passkeys_platform_interface/types/authenticator_selection.dart';
+import 'package:passkeys_platform_interface/types/pubkeycred_param.dart';
 import 'package:passkeys_platform_interface/types/types.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
@@ -41,6 +43,9 @@ abstract class PasskeysPlatform extends PlatformInterface {
     RelyingPartyType relyingParty,
     UserType user,
     AuthenticatorSelectionType authenticatorSelection,
+    List<PubKeyCredParamType>? pubKeyCredParams,
+    int? timeout,
+    String? attestation,
   );
 
   /// Handles the platform-specific steps for the authentication flow
@@ -49,10 +54,12 @@ abstract class PasskeysPlatform extends PlatformInterface {
   Future<AuthenticateResponseType> authenticate(
     String relyingPartyId,
     String challenge,
+    int? timeout,
+    String? userVerification,
+    List<AllowCredentialType>? allowCredentials,
   );
 
-  /// Returns the SHA-256 fingerprint of the app's signing certificate
-  /// Only implemented in the android package
+  /// Returns the FACET ID of the app.
   /// (see https://developer.android.com/reference/androidx/security/crypto/EncryptedSharedPreferences)
-  Future<String> getSignatureFingerprint() async => '';
+  Future<String> getFacetID();
 }

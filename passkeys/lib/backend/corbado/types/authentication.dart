@@ -17,7 +17,20 @@ class CorbadoAuthenticationInitResponse {
 
   AuthenticationInitResponse toAuthenticationInitResponse() {
     return AuthenticationInitResponse(
-        rpId: publicKey.rpId, challenge: publicKey.challenge);
+      rpId: publicKey.rpId,
+      challenge: publicKey.challenge,
+      timeout: publicKey.timeout,
+      userVerification: publicKey.userVerification,
+      allowCredentials: publicKey.allowCredentials
+          ?.map(
+            (e) => AllowCredential(
+              type: e.type,
+              id: e.id,
+              transports: e.transports,
+            ),
+          )
+          .toList(),
+    );
   }
 
   Map<String, dynamic> toJson() =>
@@ -29,6 +42,9 @@ class CorbadoAuthenticationResponsePublicKey {
   CorbadoAuthenticationResponsePublicKey({
     required this.rpId,
     required this.challenge,
+    this.timeout,
+    this.userVerification,
+    this.allowCredentials,
   });
 
   factory CorbadoAuthenticationResponsePublicKey.fromJson(
@@ -37,9 +53,31 @@ class CorbadoAuthenticationResponsePublicKey {
       _$CorbadoAuthenticationResponsePublicKeyFromJson(json);
   final String rpId;
   final String challenge;
+  final int? timeout;
+  final String? userVerification;
+  final List<CorbadoAllowCredential>? allowCredentials;
 
   Map<String, dynamic> toJson() =>
       _$CorbadoAuthenticationResponsePublicKeyToJson(this);
+}
+
+@JsonSerializable()
+class CorbadoAllowCredential {
+  CorbadoAllowCredential({
+    required this.type,
+    required this.id,
+    required this.transports,
+  });
+
+  factory CorbadoAllowCredential.fromJson(
+    Map<String, dynamic> json,
+  ) =>
+      _$CorbadoAllowCredentialFromJson(json);
+  final String type;
+  final String id;
+  final List<String> transports;
+
+  Map<String, dynamic> toJson() => _$CorbadoAllowCredentialToJson(this);
 }
 
 @JsonSerializable(explicitToJson: true)

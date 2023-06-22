@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:passkeys/authenticator/passkey_authenticator.dart';
@@ -20,14 +19,12 @@ class CorbadoPasskeyBackend extends PasskeyBackend {
         _authenticator = PasskeyAuthenticator() {
     _client.addDefaultHeader('X-Corbado-Project-ID', _projectID);
     debugPrint('CorbadoPasskeyBackend: $_projectID');
-    if (Platform.isAndroid) {
-      _authenticator.getSignatureFingerprint().then(
-            (value) => {
-              debugPrint('setting Origin of API requests to $value'),
-              _client.addDefaultHeader('Origin', 'android:apk-key-hash:$value'),
-            },
-          );
-    }
+    _authenticator.getFacetID().then(
+          (value) => {
+            debugPrint('setting Origin of API requests to $value'),
+            _client.addDefaultHeader('Origin', value),
+          },
+        );
   }
 
   final String _projectID;
