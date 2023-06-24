@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:passkeys/authenticator/passkey_authenticator.dart';
@@ -10,7 +11,8 @@ import 'package:passkeys/backend/types/authentication.dart';
 import 'package:passkeys/backend/types/registration.dart';
 
 ///
-class CorbadoPasskeyBackend extends PasskeyBackend {
+class CorbadoPasskeyBackend
+    extends PasskeyBackend<CorbadoAuthenticationCompleteResponse> {
   final PasskeyAuthenticator _authenticator;
 
   ///
@@ -22,7 +24,7 @@ class CorbadoPasskeyBackend extends PasskeyBackend {
     _authenticator.getFacetID().then(
           (value) => {
             debugPrint('setting Origin of API requests to $value'),
-            _client.addDefaultHeader('Origin', value),
+            // _client.addDefaultHeader('Origin', value),
           },
         );
   }
@@ -78,19 +80,17 @@ class CorbadoPasskeyBackend extends PasskeyBackend {
   }
 
   @override
-  Future<void> completeAuthenticate(AuthenticationCompleteRequest r) async {
+  Future<CorbadoAuthenticationCompleteResponse> completeAuthenticate(
+      AuthenticationCompleteRequest r) async {
     final signedChallenge = jsonEncode(
       CorbadoAuthenticationCompleteRequest.fromAuthenticationCompleteRequest(r)
           .toJson(),
     );
 
-    final result = await UsersApi(_client).passKeyLoginFinish(
+    final response = await UsersApi(_client).passKeyLoginFinishWithHttpInfo(
       PassKeyFinishReq(signedChallenge: signedChallenge),
     );
 
-    if (result == null) {
-      throw Exception('An unknown error occured during the Corbado API call');
-    }
-    return;
+    return CorbadoAuthenticationCompleteResponse.fromHttpResponse(response);
   }
 }

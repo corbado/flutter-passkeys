@@ -1,5 +1,10 @@
 // TODO: this whole file can be removed as we better type open api spec
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:http/http.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:passkeys/backend/corbado/generated/lib/api.dart';
 import 'package:passkeys/backend/types/authentication.dart';
 
 part 'authentication.g.dart';
@@ -124,11 +129,45 @@ class CorbadoAuthenticationComplete {
     required this.signature,
   });
 
-  factory CorbadoAuthenticationComplete.fromJson(Map<String, dynamic> json) =>
-      _$CorbadoAuthenticationCompleteFromJson(json);
   final String clientDataJSON;
   final String authenticatorData;
   final String signature;
 
+  factory CorbadoAuthenticationComplete.fromJson(Map<String, dynamic> json) =>
+      _$CorbadoAuthenticationCompleteFromJson(json);
+
   Map<String, dynamic> toJson() => _$CorbadoAuthenticationCompleteToJson(this);
+}
+
+class CorbadoAuthenticationCompleteResponse {
+  CorbadoAuthenticationCompleteResponse({
+    required this.token,
+    required this.refreshToken,
+  });
+
+  factory CorbadoAuthenticationCompleteResponse.fromHttpResponse(
+      Response response) {
+    if (response.statusCode >= HttpStatus.badRequest || response.body.isEmpty) {
+      throw Exception('An unknown error occured during the Corbado API call');
+    }
+
+    final result =
+        jsonDecode(utf8.decode(response.bodyBytes)) as Map<String, dynamic>;
+    final token = result['data']['sessionToken'] as String;
+    final setCookieString = response.headers['set-cookie'] as String;
+    final cookieRegex = RegExp(r'cbo_long_session=(\w+);.*');
+    final refreshToken = cookieRegex.firstMatch(setCookieString);
+
+    if (refreshToken == null) {
+      throw Exception('RefreshToken could not be parsed.');
+    }
+
+    return CorbadoAuthenticationCompleteResponse(
+      token: token,
+      refreshToken: refreshToken.group(1)!,
+    );
+  }
+
+  final String token;
+  final String refreshToken;
 }

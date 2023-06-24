@@ -1,16 +1,41 @@
+import 'dart:async';
+
+import 'package:corbado_auth/src/services/secure_storage.dart';
 import 'package:corbado_auth/src/types/user.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:passkeys/backend/corbado/types/authentication.dart';
 import 'package:passkeys/passkey_auth.dart';
 
 /// {@template corbado_auth}
 /// Corbado auth flutter package
 /// {@endtemplate}
 class CorbadoAuth {
-
   /// {@macro corbado_auth}
-  const CorbadoAuth(this._passkeyAuth);
+  CorbadoAuth(this._passkeyAuth) {
+    _storage = SecureStorage();
+  }
 
-  final Stream<User?> _userStream = const Stream.empty();
-  final PasskeyAuth _passkeyAuth;
+  ///
+  Stream<User?> get userStream => _userStreamController.stream;
+
+  ///
+  Future<User?> get currentUser => _userStreamController.stream.first;
+
+  late SecureStorage _storage;
+  final PasskeyAuth<CorbadoAuthenticationCompleteResponse> _passkeyAuth;
+  final _userStreamController = StreamController<User?>();
+
+  ///
+  Future<void> init() async {
+    try {
+      final maybeUser = await _storage.getUser();
+      return _userStreamController.add(maybeUser);
+    } catch (e) {
+      debugPrint(e.toString());
+      return _userStreamController.add(null);
+    }
+  }
 
   ///
   Future<void> registerWithPasskey({required String email}) async {
@@ -20,14 +45,14 @@ class CorbadoAuth {
   ///
   Future<void> signInWithPasskey({required String email}) async {
     final signInResponse = await _passkeyAuth.authenticateWithEmail(email);
-    return;
+    final user = User.fromIdToken(signInResponse.token);
+    _userStreamController.add(user);
+    await _storage.setUser(user);
   }
 
+  ///
   Future<void> signOut() async {
-
+    await _storage.clear();
+    _userStreamController.add(null);
   }
-
-  /// Notifies about changes to the user's sign-in state (such as sign-in or
-  /// sign-out) and also token refresh events.
-  Stream<User?> idTokenChanges() => _userStream;
 }

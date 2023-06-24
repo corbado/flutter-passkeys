@@ -10,11 +10,16 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_keychain: ^2.2.1
+  json_annotation: ^4.8.1
+  jwt_decoder: ^2.0.1
   passkeys:
     path: ../passkeys/passkeys
 
 dev_dependencies:
+  build_runner: ^2.4.5
   flutter_test:
     sdk: flutter
+  json_serializable: ^6.7.0
   mocktail: ^0.3.0
   very_good_analysis: ^5.0.0

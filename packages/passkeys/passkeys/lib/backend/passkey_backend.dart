@@ -2,7 +2,7 @@ import 'package:passkeys/backend/types/authentication.dart';
 import 'package:passkeys/backend/types/registration.dart';
 
 ///
-abstract class PasskeyBackend {
+abstract class PasskeyBackend<T> {
   ///
   Future<RegistrationInitResponse> initRegister(String email);
 
@@ -13,7 +13,7 @@ abstract class PasskeyBackend {
   Future<AuthenticationInitResponse> initAuthenticate(String email);
 
   ///
-  Future<void> completeAuthenticate(
+  Future<T> completeAuthenticate(
     AuthenticationCompleteRequest signedChallenge,
   );
 }
