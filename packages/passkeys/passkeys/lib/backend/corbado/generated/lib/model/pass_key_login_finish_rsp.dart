@@ -33,7 +33,7 @@ class PassKeyLoginFinishRsp {
   /// Runtime in seconds for this request
   double runtime;
 
-  PassKeyLoginFinishRspAllOfData data;
+  AuthenticationRsp data;
 
   @override
   bool operator ==(Object other) => identical(this, other) || other is PassKeyLoginFinishRsp &&
@@ -88,7 +88,7 @@ class PassKeyLoginFinishRsp {
         message: mapValueOfType<String>(json, r'message')!,
         requestData: RequestData.fromJson(json[r'requestData'])!,
         runtime: mapValueOfType<double>(json, r'runtime')!,
-        data: PassKeyLoginFinishRspAllOfData.fromJson(json[r'data'])!,
+        data: AuthenticationRsp.fromJson(json[r'data'])!,
       );
     }
     return null;

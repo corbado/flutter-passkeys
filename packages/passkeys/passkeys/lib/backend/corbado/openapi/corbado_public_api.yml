@@ -9,14 +9,14 @@ openapi: 3.0.3
 info:
   version: 1.0.0
   title: Corbado Frontend API
-  description: Overview of all Corbado Frontend API calls to implement a password less future.
+  description: Overview of all Corbado Frontend API calls to implement passwordless authentication.
   contact:
-    name: Corbado API Team
+    name: Corbado team
     email: support@corbado.com
     url: https://www.corbado.com
 
 servers:
-  - url: https://auth.corbado.com
+  - url: https://<project ID>.frontendapi.corbado.io
 
 tags:
   - name: Users
@@ -32,6 +32,47 @@ tags:
     description: All API calls to handle session management
 
 paths:
+  ###################################################################
+  # Paths: Users                                                    #
+  ###################################################################
+  /v1/me:
+    get:
+      description: Gets current user
+      operationId: CurrentUserGet
+      tags:
+        - Users
+      responses:
+        '200':
+          description: Provides current user data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/meRsp'
+        default:
+          $ref: '#/components/responses/error'
+
+  /v1/users/authmethods:
+    post:
+      description: Lists user's available authentication methods
+      operationId: AuthMethodsList
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/authMethodsListReq'
+      responses:
+        '200':
+          description: Authentication methods retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/authMethodsListRsp'
+        default:
+          $ref: '#/components/responses/error'
+
   ################
   ### PassKeys ###
   ################
@@ -77,6 +118,28 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/passKeyLoginFinishRsp'
+        default:
+          $ref: '#/components/responses/error'
+
+  /v1/users/passkey/mediation/start:
+    post:
+      description: Performs passkey mediation start
+      operationId: PassKeyMediationStart
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/passKeyMediationStartReq'
+      responses:
+        '200':
+          description: Provides challenge for perform PassKey ceremony
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/passKeyMediationStartRsp'
         default:
           $ref: '#/components/responses/error'
 
@@ -168,9 +231,259 @@ paths:
         default:
           $ref: '#/components/responses/error'
 
+  ###################
+  ### Email links ###
+  ###################
 
+  /v1/users/emaillinks/register/start:
+    post:
+      description: Performs email link register start
+      operationId: EmailLinkRegisterStart
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/emailLinkRegisterStartReq'
+      responses:
+        '200':
+          description: Successfully started register
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/emailLinkRegisterStartRsp'
+        default:
+          $ref: '#/components/responses/error'
 
+  /v1/users/emaillinks/confirm:
+    post:
+      description: Performs email link register confirm
+      operationId: EmailLinkConfirm
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/emailLinkConfirmReq'
+      responses:
+        '200':
+          description: Successfully confirmed email link
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/emailLinkConfirmRsp'
+        default:
+          $ref: '#/components/responses/error'
 
+  /v1/users/emaillinks/login/start:
+    post:
+      description: Performs email link login start
+      operationId: EmailLinkLoginStart
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/emailLinkLoginStartReq'
+      responses:
+        '200':
+          description: Provides a session token to initialize your session
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/emailLinkLoginStartRsp'
+        default:
+          $ref: '#/components/responses/error'
+
+  /v1/users/emaillinks/status:
+    post:
+      description: Performs email link login status check
+      operationId: EmailLinkStatus
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/emailLinkStatusReq'
+      responses:
+        '200':
+          description: Provides a session token to initialize your session
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/emailLinkStatusRsp'
+        default:
+          $ref: '#/components/responses/error'
+
+  ###################
+  #### Password  ####
+  ###################
+  /v1/users/password/verify:
+    post:
+      description: Performs password verify
+      operationId: Password
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/passwordVerifyReq'
+      responses:
+        '200':
+          description: Provides a session token to initialize your session
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/passwordVerifyRsp'
+        default:
+          $ref: '#/components/responses/error'
+
+  ############
+  ### MISC ###
+  ############
+  /v1/users/logintoken:
+    post:
+      description: Performs login for given token
+      operationId: LoginToken
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/loginTokenReq'
+      responses:
+        '200':
+          description: Provides a session token to initialize your session
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/loginTokenRsp'
+        default:
+          $ref: '#/components/responses/error'
+
+  /v1/projects/projectConfig:
+    get:
+      description: Get project configuration
+      operationId: ProjectConfig
+      tags:
+        - Projects
+      responses:
+        '200':
+          description: Project Configuration successfully retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/projectConfigRsp'
+        default:
+          $ref: '#/components/responses/error'
+
+  /.well-known/assetlinks.json:
+    get:
+      description: Provides asset links for android devices
+      operationId: AssetLinks
+      tags:
+        - Assets
+      responses:
+        '200':
+          description: Provides a list of assets links
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/assetLinksRsp'
+        default:
+          $ref: '#/components/responses/error'
+
+  /.well-known/apple-app-site-association:
+    get:
+      description: Provides apple app site association
+      operationId: AppleAppSiteAssociation
+      tags:
+        - Assets
+      responses:
+        '200':
+          description: Provides a list of site association
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/appleAppSiteAssociationRsp'
+        default:
+          $ref: '#/components/responses/error'
+
+  ###############
+  ### Session ###
+  ###############
+
+  /v1/sessions/logout:
+    delete:
+      description: Performs session logout
+      operationId: SessionLogout
+      tags:
+        - Sessions
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/emptyReq'
+      responses:
+        '200':
+          description: Successful performed logout
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/logoutRsp'
+        default:
+          $ref: '#/components/responses/error'
+
+  /v1/sessions/refresh:
+    put:
+      description: Performs session refresh
+      operationId: SessionRefresh
+      tags:
+        - Sessions
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/emptyReq'
+      responses:
+        '200':
+          description: Provides a session token to initialize your session
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/sessionRefreshRsp'
+        default:
+          $ref: '#/components/responses/error'
+
+  /.well-known/jwks:
+    get:
+      description: Retrieves well-known JWKS for Project ID
+      operationId: WellKnownJWKSList
+      tags:
+        - Sessions
+      responses:
+        '200':
+          description: JWKS successfully retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/wellKnownJWKSListRsp'
+        default:
+          $ref: '#/components/responses/error'
 
 components:
   ###################################################################
@@ -193,6 +506,15 @@ components:
     ###################################################################
     # Schemas: Users                                                  #
     ###################################################################
+    meRsp:
+      allOf:
+        - $ref: 'common.yml#/components/schemas/genericRsp'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: 'common.yml#/components/schemas/fullUser'
 
     authMethodsListReq:
       type: object
@@ -272,24 +594,17 @@ components:
             - data
           properties:
             data:
-              type: object
-              properties:
-                username:
-                  type: string
-                confirmedCredential:
-                  type: boolean
-                redirectURL:
-                  type: string
-                sessionToken:
-                  type: string
-                  description: Only given when using session v1, newer versions work with cookies
-                shortSession:
-                  $ref: '#/components/schemas/shortSession'
-              required:
-                - redirectURL
-                - username
-                - confirmedCredential
-                - sessionToken
+              allOf:
+                - type: object
+                  properties:
+                    username:
+                      type: string
+                    confirmedCredential:
+                      type: boolean
+                  required:
+                    - username
+                    - confirmedCredential
+                - $ref: '#/components/schemas/authenticationRsp'
 
     passKeyRegisterFinishRsp:
       allOf:
@@ -299,18 +614,17 @@ components:
             - data
           properties:
             data:
-              type: object
-              properties:
-                redirectURL:
-                  type: string
-                sessionToken:
-                  type: string
-                  description: Only given when using session v1, newer versions work with cookies
-                shortSession:
-                  $ref: '#/components/schemas/shortSession'
-              required:
-                - redirectURL
-                - sessionToken
+              $ref: '#/components/schemas/authenticationRsp'
+
+      allOf:
+        - $ref: 'common.yml#/components/schemas/genericRsp'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: '#/components/schemas/authenticationRsp'
+
 
     passKeyRegisterStartReq:
       type: object
@@ -454,18 +768,7 @@ components:
             - data
           properties:
             data:
-              type: object
-              properties:
-                redirectURL:
-                  type: string
-                sessionToken:
-                  type: string
-                  description: Only given when using session v1, newer versions work with cookies
-                shortSession:
-                  $ref: '#/components/schemas/shortSession'
-              required:
-                - redirectURL
-                - sessionToken
+              $ref: '#/components/schemas/authenticationRsp'
 
     emailLinkConfirmRsp:
       allOf:
@@ -475,21 +778,14 @@ components:
             - data
           properties:
             data:
-              type: object
-              properties:
-                redirectURL:
-                  type: string
-                sessionToken:
-                  type: string
-                  description: Only given when using session v1, newer versions work with cookies
-                shortSession:
-                  $ref: '#/components/schemas/shortSession'
-                authMethods:
-                  $ref: 'common.yml#/components/schemas/authMethods'
-              required:
-                - redirectURL
-                - authMethods
-                - sessionToken
+              allOf:
+                - type: object
+                  properties:
+                    authMethods:
+                      $ref: 'common.yml#/components/schemas/authMethods'
+                  required:
+                    - authMethods
+                - $ref: '#/components/schemas/authenticationRsp'
 
     passwordVerifyReq:
       type: object
@@ -512,18 +808,7 @@ components:
             - data
           properties:
             data:
-              type: object
-              properties:
-                redirectURL:
-                  type: string
-                sessionToken:
-                  type: string
-                  description: Only given when using session v1, newer versions work with cookies
-                shortSession:
-                  $ref: '#/components/schemas/shortSession'
-              required:
-                - redirectURL
-                - sessionToken
+              $ref: '#/components/schemas/authenticationRsp'
 
 
     loginTokenReq:
@@ -544,18 +829,7 @@ components:
             - data
           properties:
             data:
-              type: object
-              properties:
-                redirectURL:
-                  type: string
-                sessionToken:
-                  type: string
-                  description: Only given when using session v1, newer versions work with cookies
-                shortSession:
-                  $ref: '#/components/schemas/shortSession'
-              required:
-                - redirectURL
-                - sessionToken
+              $ref: '#/components/schemas/authenticationRsp'
 
     projectConfigRsp:
       allOf:
@@ -715,17 +989,7 @@ components:
       type: object
       allOf:
         - $ref: 'common.yml#/components/schemas/genericRsp'
-        - type: object
-          required:
-            - sessionToken
-            - redirectURL
-          properties:
-            sessionToken:
-              type: string
-            shortSession:
-              $ref: '#/components/schemas/shortSession'
-            redirectURL:
-              type: string
+        - $ref: '#/components/schemas/authenticationRsp'
 
     shortSession:
       type: object
@@ -767,6 +1031,22 @@ components:
       properties:
         requestID:
           $ref: 'common.yml#/components/schemas/requestID'
+
+    authenticationRsp:
+      type: object
+      required:
+        - redirectURL
+      properties:
+        redirectURL:
+          type: string
+        sessionToken:
+          type: string
+          description: Only given when using session v1
+        longSession:
+          type: string
+          description: Only given when project environment is dev
+        shortSession:
+          $ref: '#/components/schemas/shortSession'
 
   responses:
     error:

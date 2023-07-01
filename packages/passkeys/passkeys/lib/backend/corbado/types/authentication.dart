@@ -168,6 +168,15 @@ class CorbadoAuthenticationCompleteResponse {
     );
   }
 
+  factory CorbadoAuthenticationCompleteResponse.fromPassKeyLoginFinishRsp(
+      PassKeyLoginFinishRsp response) {
+    return CorbadoAuthenticationCompleteResponse(
+      token: response.data.shortSession!.value,
+      refreshToken: response.data.longSession!,
+    );
+  }
+
+
   final String token;
   final String refreshToken;
 }

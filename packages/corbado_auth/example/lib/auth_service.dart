@@ -41,6 +41,10 @@ class AuthService with ChangeNotifier {
     return _auth.signInWithPasskey(email: email);
   }
 
+  Future<void> refreshToken() {
+    return _auth.refreshToken();
+  }
+
   Future<void> signOut() {
     return _auth.signOut();
   }

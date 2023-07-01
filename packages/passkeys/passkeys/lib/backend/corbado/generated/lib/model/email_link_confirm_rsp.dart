@@ -33,7 +33,7 @@ class EmailLinkConfirmRsp {
   /// Runtime in seconds for this request
   double runtime;
 
-  EmailLinkConfirmRspAllOfData data;
+  Object data;
 
   @override
   bool operator ==(Object other) => identical(this, other) || other is EmailLinkConfirmRsp &&
@@ -88,7 +88,7 @@ class EmailLinkConfirmRsp {
         message: mapValueOfType<String>(json, r'message')!,
         requestData: RequestData.fromJson(json[r'requestData'])!,
         runtime: mapValueOfType<double>(json, r'runtime')!,
-        data: EmailLinkConfirmRspAllOfData.fromJson(json[r'data'])!,
+        data: AuthenticationRsp.fromJson(json[r'data'])!,
       );
     }
     return null;

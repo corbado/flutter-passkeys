@@ -11,7 +11,7 @@
 part of openapi.api;
 
 class ApiClient {
-  ApiClient({this.basePath = 'https://auth.corbado.com', this.authentication,});
+  ApiClient({this.basePath = 'https://<project ID>.frontendapi.corbado.io', this.authentication,});
 
   final String basePath;
   final Authentication? authentication;
@@ -203,14 +203,12 @@ class ApiClient {
           return AuthMethodsListRspAllOf.fromJson(value);
         case 'AuthMethodsListRspAllOfData':
           return AuthMethodsListRspAllOfData.fromJson(value);
+        case 'AuthenticationRsp':
+          return AuthenticationRsp.fromJson(value);
         case 'EmailLinkConfirmReq':
           return EmailLinkConfirmReq.fromJson(value);
         case 'EmailLinkConfirmRsp':
           return EmailLinkConfirmRsp.fromJson(value);
-        case 'EmailLinkConfirmRspAllOf':
-          return EmailLinkConfirmRspAllOf.fromJson(value);
-        case 'EmailLinkConfirmRspAllOfData':
-          return EmailLinkConfirmRspAllOfData.fromJson(value);
         case 'EmailLinkLoginStartReq':
           return EmailLinkLoginStartReq.fromJson(value);
         case 'EmailLinkLoginStartRsp':
@@ -237,6 +235,8 @@ class ApiClient {
           return ErrorRspAllOfError.fromJson(value);
         case 'ErrorRspAllOfErrorValidation':
           return ErrorRspAllOfErrorValidation.fromJson(value);
+        case 'FullUser':
+          return FullUser.fromJson(value);
         case 'GenericRsp':
           return GenericRsp.fromJson(value);
         case 'Jwk':
@@ -249,6 +249,10 @@ class ApiClient {
           return LogoutRsp.fromJson(value);
         case 'LogoutRspAllOf':
           return LogoutRspAllOf.fromJson(value);
+        case 'MeRsp':
+          return MeRsp.fromJson(value);
+        case 'MeRspAllOf':
+          return MeRspAllOf.fromJson(value);
         case 'PassKeyAppendFinishRsp':
           return PassKeyAppendFinishRsp.fromJson(value);
         case 'PassKeyAppendFinishRspAllOf':
@@ -259,10 +263,6 @@ class ApiClient {
           return PassKeyFinishReq.fromJson(value);
         case 'PassKeyLoginFinishRsp':
           return PassKeyLoginFinishRsp.fromJson(value);
-        case 'PassKeyLoginFinishRspAllOf':
-          return PassKeyLoginFinishRspAllOf.fromJson(value);
-        case 'PassKeyLoginFinishRspAllOfData':
-          return PassKeyLoginFinishRspAllOfData.fromJson(value);
         case 'PassKeyLoginStartReq':
           return PassKeyLoginStartReq.fromJson(value);
         case 'PassKeyMediationStartReq':
@@ -277,8 +277,6 @@ class ApiClient {
           return PassKeyRegisterFinishRsp.fromJson(value);
         case 'PassKeyRegisterFinishRspAllOf':
           return PassKeyRegisterFinishRspAllOf.fromJson(value);
-        case 'PassKeyRegisterFinishRspAllOfData':
-          return PassKeyRegisterFinishRspAllOfData.fromJson(value);
         case 'PassKeyRegisterStartReq':
           return PassKeyRegisterStartReq.fromJson(value);
         case 'PassKeyStartRsp':
@@ -301,10 +299,14 @@ class ApiClient {
           return RequestData.fromJson(value);
         case 'SessionRefreshRsp':
           return SessionRefreshRsp.fromJson(value);
-        case 'SessionRefreshRspAllOf':
-          return SessionRefreshRspAllOf.fromJson(value);
         case 'ShortSession':
           return ShortSession.fromJson(value);
+        case 'Status':
+          return StatusTypeTransformer().decode(value);
+        case 'UserEmail':
+          return UserEmail.fromJson(value);
+        case 'UserPhoneNumber':
+          return UserPhoneNumber.fromJson(value);
         case 'WellKnownJWKSListRsp':
           return WellKnownJWKSListRsp.fromJson(value);
         default:

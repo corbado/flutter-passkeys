@@ -87,10 +87,11 @@ class CorbadoPasskeyBackend
           .toJson(),
     );
 
-    final response = await UsersApi(_client).passKeyLoginFinishWithHttpInfo(
+    final response = await UsersApi(_client).passKeyLoginFinish(
       PassKeyFinishReq(signedChallenge: signedChallenge),
     );
 
-    return CorbadoAuthenticationCompleteResponse.fromHttpResponse(response);
+    return CorbadoAuthenticationCompleteResponse.fromPassKeyLoginFinishRsp(
+        response!);
   }
 }

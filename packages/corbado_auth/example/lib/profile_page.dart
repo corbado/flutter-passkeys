@@ -48,6 +48,14 @@ class ProfilePage extends StatelessWidget {
             ),
             SizedBox(height: 10),
             SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
+                  onPressed: () => _authService.refreshToken(),
+                  child: const Text('refresh token'),
+                )),
+            SizedBox(height: 10),
+            SizedBox(
               width: double.infinity,
               height: 50,
               child: OutlinedButton(

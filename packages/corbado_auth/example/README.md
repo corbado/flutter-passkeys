@@ -1,16 +1,21 @@
-# example
-
-A new Flutter project.
+# Corbado Auth for Flutter: Example (custom backend)
 
 ## Getting Started
+This example demonstrates how you can use Corbado Authentication to setup Passkey based authentication in a matter of minutes.
 
-This project is a starting point for a Flutter application.
+### Android
 
-A few resources to get you started if this is your first Flutter project:
+### iOS
+#### 1. Setup Corbado project
+Create a free Corbado project at https://corbado.com if you haven't got one yet.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+#### 2. Setup an iOS app
+Setup an iOS app at https://app.corbado.com/app/settings/credentials/native-apps by clicking "Add New". 
+You will need your **App ID Prefix** and your **Bundle ID**.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+#### 3. Configure your iOS project
+In your Xcode workspace, you need to configure the following settings:
+- In `Signing & Capabilities` tab, add the `Associated Domains` capability and add the following domain: `applinks:{PROJECT_ID}.frontend.api.corbado.io`
+
+#### 4. Start the example
+```flutter run --dart-define=CORBADO_PROJECT_ID=PROJECT_ID lib/main.dart```

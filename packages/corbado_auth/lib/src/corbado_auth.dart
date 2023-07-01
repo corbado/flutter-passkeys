@@ -1,9 +1,10 @@
 import 'dart:async';
 
-import 'package:corbado_auth/src/services/secure_storage.dart';
+import 'package:corbado_auth/src/services/corbado_api/generated/lib/api.dart';
+import 'package:corbado_auth/src/services/session_storage/secure_storage.dart';
 import 'package:corbado_auth/src/types/user.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:passkeys/backend/corbado/corbado_passkey_backend.dart';
 import 'package:passkeys/backend/corbado/types/authentication.dart';
 import 'package:passkeys/passkey_auth.dart';
 
@@ -12,8 +13,15 @@ import 'package:passkeys/passkey_auth.dart';
 /// {@endtemplate}
 class CorbadoAuth {
   /// {@macro corbado_auth}
-  CorbadoAuth(this._passkeyAuth) {
+  CorbadoAuth(this._projectID) {
     _storage = SecureStorage();
+  }
+
+  @visibleForTesting
+  PasskeyAuth<CorbadoAuthenticationCompleteResponse>? passkeyAuth;
+
+  PasskeyAuth<CorbadoAuthenticationCompleteResponse> get _passkeyAuth {
+    return passkeyAuth ??= PasskeyAuth(CorbadoPasskeyBackend(_projectID));
   }
 
   ///
@@ -23,7 +31,9 @@ class CorbadoAuth {
   Future<User?> get currentUser => _userStreamController.stream.first;
 
   late SecureStorage _storage;
-  final PasskeyAuth<CorbadoAuthenticationCompleteResponse> _passkeyAuth;
+
+  final String _projectID;
+
   final _userStreamController = StreamController<User?>();
 
   ///
@@ -48,6 +58,19 @@ class CorbadoAuth {
     final user = User.fromIdToken(signInResponse.token);
     _userStreamController.add(user);
     await _storage.setUser(user);
+    await _storage.setRefreshToken(signInResponse.refreshToken);
+  }
+
+  Future<void> refreshToken() async {
+    final client = ApiClient(basePath: 'https://$_projectID.auth.corbado.com');
+    final refreshToken = await _storage.getRefreshToken();
+    if (refreshToken == null) {
+      throw Exception('Stopped refreshToken: missing token.');
+    }
+
+    // TODO: add refresh token here (currently not easy, as it must be sent as a cookie)
+    final res = await SessionsApi(client).sessionRefreshWithHttpInfo(EmptyReq());
+    debugPrint(res.toString());
   }
 
   ///
