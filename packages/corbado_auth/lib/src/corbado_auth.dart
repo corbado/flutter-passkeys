@@ -18,9 +18,9 @@ class CorbadoAuth {
   }
 
   @visibleForTesting
-  PasskeyAuth<CorbadoAuthenticationCompleteResponse>? passkeyAuth;
+  PasskeyAuth<CorbadoTokens>? passkeyAuth;
 
-  PasskeyAuth<CorbadoAuthenticationCompleteResponse> get _passkeyAuth {
+  PasskeyAuth<CorbadoTokens> get _passkeyAuth {
     return passkeyAuth ??= PasskeyAuth(CorbadoPasskeyBackend(_projectID));
   }
 
@@ -47,18 +47,24 @@ class CorbadoAuth {
     }
   }
 
-  ///
-  Future<void> registerWithPasskey({required String email}) async {
-    return _passkeyAuth.registerWithEmail(email);
+  /// Signs up a user by registering a new passkey.
+  Future<String?> registerWithPasskey({required String email}) async {
+    final response = await _passkeyAuth.registerWithEmail(email);
+    final user = User.fromIdToken(response.token);
+    _userStreamController.add(user);
+    await _storage.setUser(user);
+    await _storage.setRefreshToken(response.refreshToken);
+
+    return null;
   }
 
   ///
   Future<void> signInWithPasskey({required String email}) async {
-    final signInResponse = await _passkeyAuth.authenticateWithEmail(email);
-    final user = User.fromIdToken(signInResponse.token);
+    final response = await _passkeyAuth.authenticateWithEmail(email);
+    final user = User.fromIdToken(response.token);
     _userStreamController.add(user);
     await _storage.setUser(user);
-    await _storage.setRefreshToken(signInResponse.refreshToken);
+    await _storage.setRefreshToken(response.refreshToken);
   }
 
   Future<void> refreshToken() async {

@@ -139,13 +139,13 @@ class CorbadoAuthenticationComplete {
   Map<String, dynamic> toJson() => _$CorbadoAuthenticationCompleteToJson(this);
 }
 
-class CorbadoAuthenticationCompleteResponse {
-  CorbadoAuthenticationCompleteResponse({
+class CorbadoTokens {
+  CorbadoTokens({
     required this.token,
     required this.refreshToken,
   });
 
-  factory CorbadoAuthenticationCompleteResponse.fromHttpResponse(
+  factory CorbadoTokens.fromHttpResponse(
       Response response) {
     if (response.statusCode >= HttpStatus.badRequest || response.body.isEmpty) {
       throw Exception('An unknown error occured during the Corbado API call');
@@ -162,15 +162,23 @@ class CorbadoAuthenticationCompleteResponse {
       throw Exception('RefreshToken could not be parsed.');
     }
 
-    return CorbadoAuthenticationCompleteResponse(
+    return CorbadoTokens(
       token: token,
       refreshToken: refreshToken.group(1)!,
     );
   }
 
-  factory CorbadoAuthenticationCompleteResponse.fromPassKeyLoginFinishRsp(
+  factory CorbadoTokens.fromPassKeyLoginFinishRsp(
       PassKeyLoginFinishRsp response) {
-    return CorbadoAuthenticationCompleteResponse(
+    return CorbadoTokens(
+      token: response.data.shortSession!.value,
+      refreshToken: response.data.longSession!,
+    );
+  }
+
+  factory CorbadoTokens.fromPassKeyRegisterFinishRsp(
+      PassKeyRegisterFinishRsp response) {
+    return CorbadoTokens(
       token: response.data.shortSession!.value,
       refreshToken: response.data.longSession!,
     );

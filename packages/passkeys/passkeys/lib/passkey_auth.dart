@@ -7,7 +7,7 @@ import 'package:passkeys_platform_interface/types/authenticator_selection.dart';
 import 'package:passkeys_platform_interface/types/pubkeycred_param.dart';
 import 'package:passkeys_platform_interface/types/types.dart';
 
-///y
+///
 class PasskeyAuth<T> {
   ///
   PasskeyAuth(this._backend) : _authenticator = PasskeyAuthenticator();
@@ -21,7 +21,7 @@ class PasskeyAuth<T> {
   }
 
   ///
-  dynamic registerWithEmail(String email) async {
+  Future<T> registerWithEmail(String email) async {
     final initResponse = await _backend.initRegister(email);
 
     final challenge = initResponse.challenge;

@@ -8,11 +8,12 @@ import 'package:passkeys/backend/corbado/types/authentication.dart';
 import 'package:passkeys/backend/corbado/types/registration.dart';
 import 'package:passkeys/backend/passkey_backend.dart';
 import 'package:passkeys/backend/types/authentication.dart';
+import 'package:passkeys/backend/types/exceptions.dart';
 import 'package:passkeys/backend/types/registration.dart';
 
 ///
 class CorbadoPasskeyBackend
-    extends PasskeyBackend<CorbadoAuthenticationCompleteResponse> {
+    extends PasskeyBackend<CorbadoTokens> {
   final PasskeyAuthenticator _authenticator;
 
   ///
@@ -24,7 +25,9 @@ class CorbadoPasskeyBackend
     _authenticator.getFacetID().then(
           (value) => {
             debugPrint('setting Origin of API requests to $value'),
-            // _client.addDefaultHeader('Origin', value),
+            // TODO: so far we have to uncomment this on iOS devices (we could of course add a platform condition around it)
+            // question is though, if we should also include this header in iOS requests (probably yes) and what we have to do to fix it
+            _client.addDefaultHeader('Origin', value),
           },
         );
   }
@@ -34,35 +37,44 @@ class CorbadoPasskeyBackend
 
   @override
   Future<RegistrationInitResponse> initRegister(String email) async {
-    final result = await UsersApi(_client).passKeyRegisterStart(
-      PassKeyRegisterStartReq(username: email, fullName: 'test'),
-    );
+    try {
+      final result = await UsersApi(_client).passKeyRegisterStart(
+        PassKeyRegisterStartReq(username: email, fullName: 'test'),
+      );
 
-    if (result == null) {
-      throw Exception('An unknown error occured during the Corbado API call');
+      if (result == null) {
+        throw UnexpectedBackendException('passKeyRegisterStart', 'result was null');
+      }
+
+      final json = jsonDecode(result.data.challenge) as Map<String, dynamic>;
+      final typed = CorbadoRegisterChallenge.fromJson(json);
+      return typed.toRegisterInitResponse();
+    } on ApiException catch(e) {
+      // TODO: better typed errors from backend
+      throw UnexpectedBackendException('passKeyRegisterStart', e.message ?? '');
     }
-
-    final json = jsonDecode(result.data.challenge) as Map<String, dynamic>;
-    final typed = CorbadoRegisterChallenge.fromJson(json);
-    return typed.toRegisterInitResponse();
   }
 
   @override
-  Future<void> completeRegister(RegistrationCompleteRequest r) async {
-    final signedChallenge = jsonEncode(
-      CorbadoRegisterSignedChallengeRequest.fromRegisterCompleteRequest(r)
-          .toJson(),
-    );
+  Future<CorbadoTokens> completeRegister(RegistrationCompleteRequest r) async {
+    try {
+      final signedChallenge = jsonEncode(
+        CorbadoRegisterSignedChallengeRequest.fromRegisterCompleteRequest(r)
+            .toJson(),
+      );
 
-    final result = await UsersApi(_client).passKeyRegisterFinish(
-      PassKeyFinishReq(signedChallenge: signedChallenge),
-    );
+      final result = await UsersApi(_client).passKeyRegisterFinish(
+        PassKeyFinishReq(signedChallenge: signedChallenge),
+      );
 
-    if (result == null) {
-      throw Exception('An unknown error occurred during the Corbado API call');
+      if (result == null) {
+        throw UnexpectedBackendException('passKeyRegisterFinish', 'result was null');
+      }
+
+      return CorbadoTokens.fromPassKeyRegisterFinishRsp(result);
+    } on ApiException catch(e) {
+      throw UnexpectedBackendException('passKeyRegisterFinish', e.message ?? '');
     }
-
-    return;
   }
 
   @override
@@ -80,7 +92,7 @@ class CorbadoPasskeyBackend
   }
 
   @override
-  Future<CorbadoAuthenticationCompleteResponse> completeAuthenticate(
+  Future<CorbadoTokens> completeAuthenticate(
       AuthenticationCompleteRequest r) async {
     final signedChallenge = jsonEncode(
       CorbadoAuthenticationCompleteRequest.fromAuthenticationCompleteRequest(r)
@@ -91,7 +103,7 @@ class CorbadoPasskeyBackend
       PassKeyFinishReq(signedChallenge: signedChallenge),
     );
 
-    return CorbadoAuthenticationCompleteResponse.fromPassKeyLoginFinishRsp(
+    return CorbadoTokens.fromPassKeyLoginFinishRsp(
         response!);
   }
 }

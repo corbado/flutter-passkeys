@@ -13,6 +13,14 @@ class _LoginPageState extends State<LoginPage> {
   final _emailController = TextEditingController();
   final AuthService _authService = getIt<AuthService>();
 
+  String? _registerError;
+
+  @override
+  void initState() {
+    _registerError = null;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,7 +59,14 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
             ),
-            SizedBox(height: 10),
+            _registerError != null
+                ? Text(
+                    _registerError!,
+                    style:
+                        TextStyle(color: Theme.of(context).colorScheme.error),
+                  )
+                : Container(),
+            SizedBox(height: 20),
             SizedBox(
               width: double.infinity,
               height: 50,
@@ -96,18 +111,12 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   _signUp() async {
-    try {
-      final email = _emailController.value.text;
-      await _authService.register(email: email);
-    } catch (error) {
-      debugPrint('error: $error');
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          backgroundColor: Theme.of(context).primaryColor,
-          content: Text('$error'),
-          duration: const Duration(seconds: 10),
-        ),
-      );
+    final email = _emailController.value.text;
+    final maybeError = await _authService.register(email: email);
+    if (maybeError != null) {
+      setState(() {
+        _registerError = maybeError;
+      });
     }
   }
 

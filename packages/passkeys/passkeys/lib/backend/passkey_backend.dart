@@ -7,7 +7,7 @@ abstract class PasskeyBackend<T> {
   Future<RegistrationInitResponse> initRegister(String email);
 
   ///
-  Future<void> completeRegister(RegistrationCompleteRequest signedChallenge);
+  Future<T> completeRegister(RegistrationCompleteRequest signedChallenge);
 
   ///
   Future<AuthenticationInitResponse> initAuthenticate(String email);

@@ -4,6 +4,7 @@ import 'package:corbado_auth/corbado_auth.dart';
 import 'package:corbado_auth_example/app_locator.dart';
 import 'package:flutter/material.dart';
 import 'package:corbado_auth/src/types/user.dart';
+import 'package:passkeys/backend/types/exceptions.dart';
 
 enum AuthState { Initializing, LoggedIn, LoggedOut }
 
@@ -33,8 +34,16 @@ class AuthService with ChangeNotifier {
     });
   }
 
-  Future<void> register({required String email}) {
-    return _auth.registerWithPasskey(email: email);
+  Future<String?> register({required String email}) async {
+    try {
+      final maybeError = await _auth.registerWithPasskey(email: email);
+      return maybeError;
+    } on UnexpectedBackendException catch (e) {
+      debugPrint(e.toString());
+      return 'An unexpected error happened during registration. Please try again later.';
+    } catch (e) {
+      return e.toString();
+    }
   }
 
   Future<void> signIn({required String email}) {
