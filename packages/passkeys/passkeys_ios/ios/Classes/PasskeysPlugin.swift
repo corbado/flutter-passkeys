@@ -152,10 +152,12 @@ extension Data {
 
 enum RegisterError: Error {
     case decodingChallenge
+    case cancelled
     case unknown
 }
 
 enum AuthenticateError: Error {
     case decodingChallenge
+    case cancelled
     case unknown
 }

@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:corbado_auth/corbado_auth.dart';
 import 'package:corbado_auth_example/app_locator.dart';
 import 'package:flutter/material.dart';
-import 'package:corbado_auth/src/types/user.dart';
-import 'package:passkeys/backend/types/exceptions.dart';
+import 'package:passkeys/relying_party_server/types/exceptions.dart';
+import 'package:rxdart/rxdart.dart';
 
 enum AuthState { Initializing, LoggedIn, LoggedOut }
 
@@ -17,11 +17,11 @@ class AuthService with ChangeNotifier {
 
   User? get user => _user;
 
+  BehaviorSubject<User?> get userSteam => _auth.userStream;
+
   AuthState get authState => _authState;
 
   init() async {
-    await _auth.init();
-
     _userStreamSub = _auth.userStream.listen((event) {
       if (event == null) {
         _authState = AuthState.LoggedOut;
@@ -32,12 +32,17 @@ class AuthService with ChangeNotifier {
       _user = event;
       notifyListeners();
     });
+
+    await _auth.init();
   }
 
   Future<String?> register({required String email}) async {
     try {
-      final maybeError = await _auth.registerWithPasskey(email: email);
+      final maybeError =
+          await _auth.registerWithPasskey(email: email, fullName: email);
       return maybeError;
+    } on ValidationException catch (e) {
+      return 'validation error: ${e.toString()}';
     } on UnexpectedBackendException catch (e) {
       debugPrint(e.toString());
       return 'An unexpected error happened during registration. Please try again later.';
