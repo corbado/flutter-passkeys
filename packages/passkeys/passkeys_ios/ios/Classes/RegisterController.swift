@@ -33,7 +33,7 @@ class RegisterController: NSObject, ASAuthorizationControllerDelegate, ASAuthori
     }
 
     func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
-        completion?(.failure(error))
+        completion?(.failure(RegisterError.cancelled))
     }
 
     func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {

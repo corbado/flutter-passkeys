@@ -30,19 +30,16 @@ class AuthenticateController: NSObject, ASAuthorizationControllerDelegate, ASAut
             completion?(.success(response))
             break
         default:
-            print("error")
             completion?(.failure(RegisterError.unknown))
         }
 
     }
 
     func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
-        print("error")
-        completion?(.failure(error))
+        completion?(.failure(AuthenticateError.cancelled))
     }
 
     func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
-        print("presentation")
         let delegate = UIApplication.shared.delegate
 
         if let flutterDelegate = delegate as? FlutterAppDelegate {

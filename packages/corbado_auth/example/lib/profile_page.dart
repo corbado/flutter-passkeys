@@ -1,6 +1,7 @@
 import 'package:corbado_auth_example/app_locator.dart';
 import 'package:corbado_auth_example/auth_service.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class ProfilePage extends StatelessWidget {
   ProfilePage({super.key});
@@ -30,7 +31,7 @@ class ProfilePage extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
               child: Text(
-                _authService.user!.email,
+                _authService.user?.email ?? '',
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
@@ -51,8 +52,8 @@ class ProfilePage extends StatelessWidget {
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
-                  onPressed: () => _authService.refreshToken(),
-                  child: const Text('refresh token'),
+                  onPressed: () => context.push('/tokendetails'),
+                  child: const Text('token details'),
                 )),
             SizedBox(height: 10),
             SizedBox(

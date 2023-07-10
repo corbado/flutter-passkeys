@@ -2,6 +2,7 @@ import 'package:corbado_auth_example/auth_service.dart';
 import 'package:corbado_auth_example/app_locator.dart';
 import 'package:corbado_auth_example/login_page.dart';
 import 'package:corbado_auth_example/profile_page.dart';
+import 'package:corbado_auth_example/tokendetails_page.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -29,6 +30,10 @@ class MyApp extends StatelessWidget {
         GoRoute(
           path: "/profile",
           builder: (context, state) => ProfilePage(),
+        ),
+        GoRoute(
+          path: "/tokendetails",
+          builder: (context, state) => TokenDetailsPage(),
         )
       ],
       redirect: (BuildContext context, GoRouterState state) async {

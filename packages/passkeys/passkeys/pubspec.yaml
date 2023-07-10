@@ -15,8 +15,14 @@ flutter:
         default_package: passkeys_ios
 
 dependencies:
+  convert: ^3.1.1
+  corbado_api:
+    path: lib/relying_party_server/corbado/generated
   flutter:
     sdk: flutter
+  http: '>=0.13.0 <0.14.0'
+  json_annotation: ^4.8.1
+  openapi_generator_annotations: ^4.10.0
   passkeys_android:
     path: ../passkeys_android
   passkeys_ios:
@@ -24,19 +30,12 @@ dependencies:
   passkeys_platform_interface:
     path: ../passkeys_platform_interface
 
-  corbado_api:
-    path: lib/backend/corbado/generated
-  json_annotation: ^4.8.1
-  openapi_generator_annotations: ^4.10.0
-  convert: ^3.1.1
-  http: '>=0.13.0 <0.14.0'
-
 dev_dependencies:
+  build_runner: ^2.4.5
   flutter_test:
     sdk: flutter
+  json_serializable: ^6.7.0
   mocktail: ^0.3.0
+  openapi_generator: ^4.10.0
   plugin_platform_interface: ^2.0.0
   very_good_analysis: ^5.0.0
-  openapi_generator: ^4.10.0
-  build_runner: ^2.4.5
-  json_serializable: ^6.7.0
