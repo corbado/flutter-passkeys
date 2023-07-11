@@ -16,7 +16,8 @@ class CorbadoPasskeyBackend
     extends RelyingPartyServer<CorbadoRequest, CorbadoTokens> {
   /// Sets up the client for the Corbado API.
   CorbadoPasskeyBackend(this._projectID)
-      : _client = ApiClient(basePath: 'https://$_projectID.auth.corbado.com'),
+      : _client =
+            ApiClient(basePath: 'https://$_projectID.frontendapi.corbado.io'),
         _authenticator = PasskeyAuthenticator() {
     _client.addDefaultHeader('X-Corbado-Project-ID', _projectID);
     debugPrint('CorbadoPasskeyBackend: $_projectID');

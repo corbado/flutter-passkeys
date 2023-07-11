@@ -99,7 +99,8 @@ class CorbadoAuth {
 
   ///
   Future<User> refreshToken() async {
-    final client = ApiClient(basePath: 'https://$_projectID.auth.corbado.com');
+    final client =
+        ApiClient(basePath: 'https://$_projectID.frontendapi.corbado.io');
     //final refreshToken = await _storage.getRefreshToken();
     if (_refreshToken == null) {
       throw Exception('Stopped refreshToken: missing refresh token.');
