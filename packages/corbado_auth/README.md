@@ -24,12 +24,12 @@ These steps are required to run the example but you also need to follow them to 
 
 #### 1. Setup Corbado project
 
-Create a free Corbado project at https://corbado.com if you haven't got one yet. Select integration mode as `Web compoenent`.
+Create a free Corbado project at the [Corbado developer panel](https://app.corbado.com/signin#register) if you haven't got one yet. Select integration mode as `Web component`.
 
 #### 2. Setup an iOS app
 
 Setup an iOS app at https://app.corbado.com/app/settings/credentials/native-apps by clicking "Add New".
-You will need your **App ID Prefix** (e.g. `9RF9KY77B2`) and your **Bundle ID** (e.g. `com.corbado.passkeys`). Corbado automatically creates an `apple-app-site-association` file for you at [{PROJECT_ID}.frontendapi.corbado.io/.well-known/apple-app-site-association], which is required for Universal Links to work.
+You will need your **App ID Prefix** (e.g. `9RF9KY77B2`) and your **Bundle ID** (e.g. `com.corbado.passkeys`). Corbado automatically creates an `apple-app-site-association` file for you at [https://{PROJECT_ID}.frontendapi.corbado.io/.well-known/apple-app-site-association], which is required for Universal Links to work.
 
 #### 3. Configure your iOS project
 
@@ -46,7 +46,7 @@ You will need your **App ID Prefix** (e.g. `9RF9KY77B2`) and your **Bundle ID** 
 
 #### 1. Setup Corbado project
 
-Create a free Corbado project at https://corbado.com if you haven't got one yet.
+Create a free Corbado project at the [Corbado developer panel](https://app.corbado.com/signin#register) if you haven't got one yet.
 
 #### 2. Setup an Android app
 
@@ -61,13 +61,13 @@ You will need your **Package name** (e.g. `com.corbado.passkeys`) and your **App
 
 After following the configuration steps above you can run the app.
 The first screen you will see is the login page.
-Here you can create a new user account by providing an email address and clicking on 'sign up'.
-After providing your fingerprint a new passkey is created and stored on your device.
+Here, you can create a new user account by providing an email address and clicking on 'sign up'.
+After providing your fingerprint / face scan, a new passkey is created and stored on your device.
 
 You will now be logged into the app and see the home page.
 Your user info is represented by an id token that has been retrieved from the Corbado API during the sign up process.
 You can view that token by clicking on "token details".
-Here you can observe how the token is refreshed automatically (its lifetime will increase once in a while).
+Here, you can observe how the token is refreshed automatically (its lifetime will increase once in a while).
 
 You can also close and reopen the app.
 You should still be logged in.
