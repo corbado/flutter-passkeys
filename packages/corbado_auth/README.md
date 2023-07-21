@@ -22,11 +22,11 @@ These steps are required to run the example but you also need to follow them to 
 
 ### iOS
 
-#### 1. Setup Corbado project
+#### 1. Set up Corbado project
 
 Create a free Corbado project at the [Corbado developer panel](https://app.corbado.com/signin#register) if you haven't got one yet. Select integration mode as `Web component`.
 
-#### 2. Setup an iOS app
+#### 2. Set up an iOS app
 
 Setup an iOS app at https://app.corbado.com/app/settings/credentials/native-apps by clicking "Add New".
 You will need your **App ID Prefix** (e.g. `9RF9KY77B2`) and your **Bundle ID** (e.g. `com.corbado.passkeys`). Corbado automatically creates an `apple-app-site-association` file for you at [https://{PROJECT_ID}.frontendapi.corbado.io/.well-known/apple-app-site-association], which is required for Universal Links to work.
@@ -44,11 +44,11 @@ You will need your **App ID Prefix** (e.g. `9RF9KY77B2`) and your **Bundle ID** 
 
 ### Android
 
-#### 1. Setup Corbado project
+#### 1. Set up Corbado project
 
 Create a free Corbado project at the [Corbado developer panel](https://app.corbado.com/signin#register) if you haven't got one yet.
 
-#### 2. Setup an Android app
+#### 2. Set up an Android app
 
 Setup an Android app at https://app.corbado.com/app/settings/credentials/native-apps by clicking "Add New".
 You will need your **Package name** (e.g. `com.corbado.passkeys`) and your **App fingerprint** (e.g. `54:4C:94:2C:E9:...`).
