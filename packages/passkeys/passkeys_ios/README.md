@@ -1,6 +1,6 @@
 # passkeys_ios
 
-The ios implementation of `passkeys`.
+The iOS implementation of `passkeys`.
 
 ## Usage
 
