@@ -24,7 +24,7 @@ These steps are required to run the example but you also need to follow them to 
 
 #### 1. Set up Corbado project
 
-Create a free Corbado project at the [Corbado developer panel](https://app.corbado.com/signin#register) if you haven't got one yet. Select integration mode as `Web component`.
+Create a free Corbado project at the [Corbado developer panel](https://app.corbado.com/signin#register) if you haven't got one yet. Select app type as `Native / mobile app`.
 
 #### 2. Set up an iOS app
 
