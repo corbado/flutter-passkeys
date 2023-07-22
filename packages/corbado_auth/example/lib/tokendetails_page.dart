@@ -77,7 +77,7 @@ class _TokenDetailsPageState extends State<TokenDetailsPage> {
                   recognizer: TapGestureRecognizer()
                     ..onTap = () async {
                       Uri url = Uri.parse(
-                          'https://github.com/corbado/flutter-passkeys/blob/feature/prepare-opensource/packages/corbado_auth/README.md');
+                          'https://github.com/corbado/flutter-passkeys/blob/main/packages/corbado_auth/README.md');
                       launchUrl(url);
                     },
                 )

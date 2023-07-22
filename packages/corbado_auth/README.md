@@ -22,40 +22,92 @@ These steps are required to run the example but you also need to follow them to 
 
 ### iOS
 
-#### 1. Set up Corbado project
+#### 1. Create an iOS app and configure the example in XCode
 
-Create a free Corbado project at the [Corbado developer panel](https://app.corbado.com/signin#register) if you haven't got one yet. Select app type as `Native / mobile app`.
+We need to establish trust between your iOS app and the relying party server.
+Your app will be identified through your **App ID Prefix** (e.g. `9RF9KY77B2`) and your **Bundle ID** (e.g. `com.corbado.passkeys`).
+You need an Apple developer account to setup both.
+If you haven't got one yet, set up a new account.
 
-#### 2. Set up an iOS app
+**Note:** When creating your Bundle ID make sure that the "Associated Domains" capability is enabled.
+
+<img src="./docs/bundleId.png" alt="xcode-associated-domains">
+
+Open the example in Xcode now by opening `packages/passkeys/passkeys/example/ios`.
+In *Runner* -> *Signing & Capabilites* enter your *App ID Prefix* and your *Bundle ID*.
+
+#### 2. Set up Corbado project
+
+Create a free Corbado project at the [Corbado developer panel](https://app.corbado.com/signin#register) if you haven't got one yet.
+It will act as your relying party server.
+
+There will be a quick setup procedure. Follow it and make sure to select 'Native app'.
+
+#### 3. Set up an iOS app in Corbado
+
+Make sure that under *Settings* -> *User interface* -> *Identity verification* "Option 2: No verification required" is selected (https://app.corbado.com/app/settings/userinterface).
 
 Setup an iOS app at https://app.corbado.com/app/settings/credentials/native-apps by clicking "Add New".
-You will need your **App ID Prefix** (e.g. `9RF9KY77B2`) and your **Bundle ID** (e.g. `com.corbado.passkeys`). Corbado automatically creates an `apple-app-site-association` file for you at [https://{PROJECT_ID}.frontendapi.corbado.io/.well-known/apple-app-site-association], which is required for Universal Links to work.
+You will need your **App ID Prefix** and your **Bundle ID** that we set up in step 1.
 
-#### 3. Configure your iOS project
+After you did that your relying party server will host an apple-app-site-association file (the url looks like this: https://{PROJECT_ID}}.frontendapi.corbado.io/.well-known/apple-app-site-association).
+This file will by downloaded by iOS when you install your app.
+To tell iOS where to look for the file we need the next step in our set up.
 
-- open the Runner Xcode
-- In `Signing & Capabilities` tab add the `Associated Domains` capability and add the following domain: `applinks:{PROJECT_ID}.frontendapi.corbado.io`
-- `Associated Domains` if necessary, should also be activated in your [Apple Developer](https://developer.apple.com) account. See [here](https://developer.apple.com/documentation/xcode/supporting-universal-links-in-your-app) for more information.
-- You can add the App Links to your project in developer mode, e.g. `applinks:{PROJECT_ID}.frontendapi.corbado.io?mode=developer`. This way the applinks are discovered immediately, and no waiting is required. In this case, the App Link capability should be activated in the developer settings on the testing device.
+#### 4. Configure your iOS project
 
-#### 4. Start the example
+In your Xcode workspace, you need to configure the following settings:
+In `Signing & Capabilities` tab, add the `Associated Domains` capability and add the following domain: `webcredentials:{PROJECT_ID}.frontendapi.corbado.io`
+Now iOS knows where to download the apple-app-site-association file from.
+
+If you forget about this step the example will show you an error message like `Your app is not associated with your relying party server. You have to add...`.
+Your configuration inside Xcode should look like something like in the screenshot below (you will have your own projectId and a different bundle identifier).
+
+<img src="./docs/passkeys_example_ios_associated_domains.png" height="250" alt="xcode-associated-domains">
+
+#### 5. Start the example
 
 `flutter run --dart-define=CORBADO_PROJECT_ID=PROJECT_ID lib/main.dart`
+
+If you want to run the example from your IDE please make sure to either
+- set the CORBADO_PROJECT_ID environment variable to your Corbado projectID
+- replace `const String.fromEnvironment('CORBADO_PROJECT_ID')` directly in the example with your Corbado projectID
 
 ### Android
 
 #### 1. Set up Corbado project
 
 Create a free Corbado project at the [Corbado developer panel](https://app.corbado.com/signin#register) if you haven't got one yet.
+It will act as your relying party server.
 
-#### 2. Set up an Android app
+There will be a quick setup procedure. Follow it and make sure to select 'Native app'.
 
-Setup an Android app at https://app.corbado.com/app/settings/credentials/native-apps by clicking "Add New".
-You will need your **Package name** (e.g. `com.corbado.passkeys`) and your **App fingerprint** (e.g. `54:4C:94:2C:E9:...`).
+After creating the project you will get a projectId (e.g. `pro-4268394291597054564`).
+You will need it in the next steps.
 
-#### 3. Start the example
+#### 2. Start the example
 
 `flutter run --dart-define=CORBADO_PROJECT_ID=PROJECT_ID lib/main.dart`
+
+#### 3. Set up an Android app in Corbado
+
+Setup an Android app at *https://app.corbado.com/app/settings/credentials/native-apps* by clicking "Add new".
+You will need your **Package name** (e.g. `com.corbado.corbadoauth.example`) and your **App fingerprint** (e.g. `54:4C:94:2C:E9:...`).
+
+The package name of your app is defined in *example/android/app/build.gradle* (applicationId).
+It's default value for the example app is `com.corbado.corbadoauth.example`.
+
+The easiest way to find your app fingerprint is to look into the logs of the example app.
+You will find a log message like `Fingerprint: 54:4C:94:2C:E9:...`.
+Copy the full fingerprint and use it to setup the Android app in Corbado.
+
+Finally, you have to whitelist your app for the Corbado API.
+To do this, go to *https://app.corbado.com/app/settings/credentials* (authorized origins) and click "Add new".
+For the *Name* field you can choose any value you like.
+For the *Origin* field provide `android:apk-key-hash:<base64-encoded-app-fingerprint>` (e.g. `android:apk-key-hash:VEyULOkvasF9VsJd29ZecTKkDWJ-PvLkCagYn9BjqPs`).
+The value for your app can also be found in the log messages of the example (`setting Origin of API requests to android:apk-key-hash:VEy...`).
+
+Now you are fully set and you can start registering your first passkey in the example.
 
 ## A closer look at the example
 

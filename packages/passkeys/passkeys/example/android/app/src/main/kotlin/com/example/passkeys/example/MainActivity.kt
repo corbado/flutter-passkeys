@@ -1,4 +1,4 @@
-package com.example.passkeys.example
+package com.corbado.passkeys.example
 
 import io.flutter.embedding.android.FlutterActivity
 

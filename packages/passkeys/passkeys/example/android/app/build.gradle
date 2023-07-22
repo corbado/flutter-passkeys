@@ -42,14 +42,11 @@ android {
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "com.example.passkeys.example"
+        applicationId "com.corbado.passkeys.example"
         minSdkVersion 24
-        minSdkVersion flutter.minSdkVersion
-        targetSdkVersion flutter.targetSdkVersion
+        targetSdk 34
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
-        multiDexEnabled true
     }
 
     buildTypes {
@@ -59,7 +56,7 @@ android {
             signingConfig signingConfigs.debug
         }
     }
-    namespace 'com.example.passkeys.example'
+    namespace 'com.corbado.passkeys.example'
 }
 
 flutter {
