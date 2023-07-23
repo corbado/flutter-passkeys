@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:corbado_auth/src/services/corbado_api/generated/lib/api.dart';
+import 'package:corbado_api_client/api.dart';
 import 'package:corbado_auth/src/services/session_storage/secure_storage.dart';
 import 'package:corbado_auth/src/types/user.dart';
 import 'package:flutter/cupertino.dart';
@@ -11,7 +11,6 @@ import 'package:rxdart/rxdart.dart';
 
 /// The entrypoint for the Cobardo Auth SDK.
 class CorbadoAuth {
-
   /// Constructor
   CorbadoAuth(this._projectID) {
     _storage = SecureStorage();

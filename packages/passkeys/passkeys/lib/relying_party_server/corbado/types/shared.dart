@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:corbado_api_client/api.dart';
 import 'package:http/http.dart';
-import 'package:passkeys/relying_party_server/corbado/generated/lib/api.dart';
 
 ///
 class CorbadoTokens {

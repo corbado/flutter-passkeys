@@ -4,7 +4,7 @@ version: 0.1.0+1
 publish_to: none
 
 environment:
-  sdk: ">=3.0.0 <4.0.0"
+  sdk: ">=2.12.0 <4.0.0"
 
 flutter:
   plugin:
@@ -16,8 +16,8 @@ flutter:
 
 dependencies:
   convert: ^3.1.1
-  corbado_api:
-    path: lib/relying_party_server/corbado/generated
+  corbado_api_client:
+    path: ../../corbado_api_client/lib/frontendapi
   flutter:
     sdk: flutter
   http: '>=0.13.0 <0.14.0'

@@ -2,9 +2,9 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:io' show Platform;
 
+import 'package:corbado_api_client/api.dart';
 import 'package:flutter/foundation.dart';
 import 'package:passkeys/authenticator/passkey_authenticator.dart';
-import 'package:passkeys/relying_party_server/corbado/generated/lib/api.dart';
 import 'package:passkeys/relying_party_server/corbado/types/authentication.dart';
 import 'package:passkeys/relying_party_server/corbado/types/exceptions.dart';
 import 'package:passkeys/relying_party_server/corbado/types/registration.dart';
@@ -12,6 +12,7 @@ import 'package:passkeys/relying_party_server/corbado/types/shared.dart';
 import 'package:passkeys/relying_party_server/relying_party_server.dart';
 import 'package:passkeys/relying_party_server/types/authentication.dart';
 import 'package:passkeys/relying_party_server/types/registration.dart';
+
 
 /// Implementation of [RelyingPartyServer] that allows to use Corbado as a
 /// relying party.
