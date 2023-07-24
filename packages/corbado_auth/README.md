@@ -124,7 +124,9 @@ Here, you can observe how the token is refreshed automatically (its lifetime wil
 You can also close and reopen the app.
 You should still be logged in.
 
-<img src="https://raw.githubusercontent.com/corbado/flutter-passkeys/main/packages/corbado_auth/doc/img/signup.jpeg" height="500" alt="signup">
-<img src="https://raw.githubusercontent.com/corbado/flutter-passkeys/main/packages/corbado_auth/doc/img/signup_fingerprint.jpeg" height="500" alt="signup fingerpring">
-<img src="https://raw.githubusercontent.com/corbado/flutter-passkeys/main/packages/corbado_auth/doc/img/home.jpeg" height="500" alt="home">
-<img src="https://raw.githubusercontent.com/corbado/flutter-passkeys/main/packages/corbado_auth/doc/img/idtoken.jpeg" height="500" alt="id token">
+<p float="left">
+    <img src="https://raw.githubusercontent.com/corbado/flutter-passkeys/main/packages/corbado_auth/doc/img/signup.jpeg" height="500" alt="signup">
+    <img src="https://raw.githubusercontent.com/corbado/flutter-passkeys/main/packages/corbado_auth/doc/img/signup_fingerprint.jpeg" height="500" alt="signup fingerpring">
+    <img src="https://raw.githubusercontent.com/corbado/flutter-passkeys/main/packages/corbado_auth/doc/img/home.jpeg" height="500" alt="home">
+    <img src="https://raw.githubusercontent.com/corbado/flutter-passkeys/main/packages/corbado_auth/doc/img/idtoken.jpeg" height="500" alt="id token">
+</p>
