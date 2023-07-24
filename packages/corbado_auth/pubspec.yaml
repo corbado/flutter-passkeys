@@ -2,7 +2,7 @@ name: corbado_auth
 description: Corbado auth flutter package
 homepage: https://docs.corbado.com/overview/welcome
 repository: https://github.com/corbado/flutter-passkeys/tree/main/packages/corbado_auth
-version: 0.1.0
+version: 0.1.1
 
 environment:
   sdk: ">=3.0.0 <4.0.0"

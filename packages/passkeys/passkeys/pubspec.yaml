@@ -2,7 +2,7 @@ name: passkeys
 description: A flutter package to enable passkey authentication.
 homepage: https://docs.corbado.com/overview/welcome
 repository: https://github.com/corbado/flutter-passkeys/tree/main/packages/passkeys/passkeys
-version: 0.1.0
+version: 0.1.1
 
 environment:
   sdk: ">=3.0.0 <4.0.0"
