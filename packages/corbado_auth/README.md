@@ -31,7 +31,7 @@ If you haven't got one yet, set up a new account.
 
 **Note:** When creating your Bundle ID make sure that the "Associated Domains" capability is enabled.
 
-<img src="https://github.com/corbado/flutter-passkeys/blob/main/packages/corbado_auth/doc/bundleId.png" alt="xcode-associated-domains">
+<img src="https://raw.githubusercontent.com/corbado/flutter-passkeys/main/packages/corbado_auth/doc/img/bundleId.png" alt="xcode-associated-domains">
 
 Open the example in Xcode now by opening `packages/passkeys/passkeys/example/ios`.
 In *Runner* -> *Signing & Capabilites* enter your *App ID Prefix* and your *Bundle ID*.
@@ -63,7 +63,7 @@ Now iOS knows where to download the apple-app-site-association file from.
 If you forget about this step the example will show you an error message like `Your app is not associated with your relying party server. You have to add...`.
 Your configuration inside Xcode should look like something like in the screenshot below (you will have your own projectId and a different bundle identifier).
 
-<img src="https://github.com/corbado/flutter-passkeys/blob/main/packages/corbado_auth/doc/passkeys_example_ios_associated_domains.png" height="250" alt="xcode-associated-domains">
+<img src="https://raw.githubusercontent.com/corbado/flutter-passkeys/main/packages/corbado_auth/doc/img/passkeys_example_ios_associated_domains.png" height="250" alt="xcode-associated-domains">
 
 #### 5. Start the example
 
@@ -124,7 +124,7 @@ Here, you can observe how the token is refreshed automatically (its lifetime wil
 You can also close and reopen the app.
 You should still be logged in.
 
-<img src="https://github.com/corbado/flutter-passkeys/blob/main/packages/corbado_auth/doc/img/signup.jpeg" height="500" alt="signup">
-<img src="https://github.com/corbado/flutter-passkeys/blob/main/packages/corbado_auth/doc/img/signup_fingerprint.jpeg" height="500" alt="signup fingerpring">
-<img src="https://github.com/corbado/flutter-passkeys/blob/main/packages/corbado_auth/doc/img/home.jpeg" height="500" alt="home">
-<img src="https://github.com/corbado/flutter-passkeys/blob/main/packages/corbado_auth/doc/img/idtoken.jpeg" height="500" alt="id token">
+<img src="https://raw.githubusercontent.com/corbado/flutter-passkeys/main/packages/corbado_auth/doc/img/signup.jpeg" height="500" alt="signup">
+<img src="https://raw.githubusercontent.com/corbado/flutter-passkeys/main/packages/corbado_auth/doc/img/signup_fingerprint.jpeg" height="500" alt="signup fingerpring">
+<img src="https://raw.githubusercontent.com/corbado/flutter-passkeys/main/packages/corbado_auth/doc/img/home.jpeg" height="500" alt="home">
+<img src="https://raw.githubusercontent.com/corbado/flutter-passkeys/main/packages/corbado_auth/doc/img/idtoken.jpeg" height="500" alt="id token">
