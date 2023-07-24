@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:corbado_api_client/api.dart';
 import 'package:corbado_auth/src/services/session_storage/secure_storage.dart';
 import 'package:corbado_auth/src/types/user.dart';
+import 'package:corbado_frontend_api_client/frontendapi/lib/api.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:passkeys/passkey_auth.dart';
 import 'package:passkeys/relying_party_server/corbado/corbado_passkey_backend.dart';

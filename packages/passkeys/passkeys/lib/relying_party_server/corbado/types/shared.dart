@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:corbado_api_client/api.dart';
+import 'package:corbado_frontend_api_client/frontendapi/lib/api.dart';
 import 'package:http/http.dart';
 
 ///

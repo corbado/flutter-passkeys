@@ -1,10 +1,12 @@
 name: passkeys_ios
 description: iOS implementation of the passkeys plugin
-version: 0.1.0+1
-publish_to: none
+homepage: https://docs.corbado.com/overview/welcome
+repository: https://github.com/corbado/flutter-passkeys/tree/main/packages/passkeys/passkeys_ios
+version: 0.1.0
 
 environment:
   sdk: ">=3.0.0 <4.0.0"
+  flutter: ">=3.0.0"
 
 flutter:
   plugin:
@@ -17,8 +19,7 @@ flutter:
 dependencies:
   flutter:
     sdk: flutter
-  passkeys_platform_interface:
-    path: ../passkeys_platform_interface
+  passkeys_platform_interface: ^0.1.0
 
 dev_dependencies:
   flutter_test:

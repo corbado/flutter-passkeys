@@ -2,7 +2,7 @@ name: corbado_frontend_api_client
 description: Corbado API flutter client
 homepage: https://docs.corbado.com/overview/welcome
 repository: https://github.com/corbado/flutter-passkeys/tree/main/packages/corbado_api_client
-version: 0.1.0
+version: 0.1.1
 
 environment:
   sdk: ">=3.0.0 <4.0.0"

@@ -1,22 +1,21 @@
 name: corbado_auth
 description: Corbado auth flutter package
-version: 0.1.0+1
-publish_to: none
+homepage: https://docs.corbado.com/overview/welcome
+repository: https://github.com/corbado/flutter-passkeys/tree/main/packages/corbado_auth
+version: 0.1.0
 
 environment:
   sdk: ">=3.0.0 <4.0.0"
-  flutter: 3.10.0
+  flutter: ">=3.0.0"
 
 dependencies:
-  corbado_api_client:
-    path: ../corbado_api_client/lib/generated
+  corbado_frontend_api_client: ^0.1.1
   flutter:
     sdk: flutter
   flutter_keychain: ^2.2.1
   json_annotation: ^4.8.1
   jwt_decoder: ^2.0.1
-  passkeys:
-    path: ../passkeys/passkeys
+  passkeys: ^0.1.0
   rxdart: ^0.27.7
 
 dev_dependencies:

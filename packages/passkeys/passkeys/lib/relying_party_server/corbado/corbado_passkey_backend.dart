@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:io' show Platform;
 
-import 'package:corbado_api_client/api.dart';
+import 'package:corbado_frontend_api_client/frontendapi/lib/api.dart';
 import 'package:flutter/foundation.dart';
 import 'package:passkeys/authenticator/passkey_authenticator.dart';
 import 'package:passkeys/relying_party_server/corbado/types/authentication.dart';
