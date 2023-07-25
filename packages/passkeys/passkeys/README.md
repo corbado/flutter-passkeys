@@ -142,7 +142,7 @@ Your configuration inside Xcode should look something like in the screenshot bel
 
 #### 5. Start the example
 
-`flutter run --dart-define=CORBADO_PROJECT_ID=PROJECT_ID lib/main.dart`
+`flutter run --dart-define=CORBADO_PROJECT_ID=<your-corbado-project-id> lib/main.dart`
 
 Now you are fully set and you can start signing up with your first passkey in the example.
 
@@ -164,7 +164,7 @@ You will need it in the next steps.
 
 #### 2. Start the example
 
-`flutter run --dart-define=CORBADO_PROJECT_ID=PROJECT_ID lib/main.dart`
+`flutter run --dart-define=CORBADO_PROJECT_ID=<your-corbado-project-id> lib/main.dart`
 
 #### 3. Set up an Android app in Corbado
 
