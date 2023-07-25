@@ -34,7 +34,7 @@ If you haven't got one yet, set up a new account.
 <img src="https://raw.githubusercontent.com/corbado/flutter-passkeys/main/packages/corbado_auth/doc/img/bundleId.png" alt="xcode-associated-domains">
 
 Open the example in Xcode now by opening `packages/passkeys/passkeys/example/ios`.
-In *Runner* -> *Signing & Capabilites* enter your *App ID Prefix* and your *Bundle ID*.
+In *Runner* -> *Signing & Capabilites* enter your *Application Identifier Prefix* and your *Bundle Identifier*.
 
 #### 2. Set up Corbado project
 
