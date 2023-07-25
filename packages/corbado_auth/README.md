@@ -67,7 +67,7 @@ Your configuration inside Xcode should look something like in the screenshot bel
 
 #### 5. Start the example
 
-`flutter run --dart-define=CORBADO_PROJECT_ID=PROJECT_ID lib/main.dart`
+`flutter run --dart-define=CORBADO_PROJECT_ID=<your-corbado-project-id> lib/main.dart`
 
 If you want to run the example from your IDE, please make sure to either
 - set the CORBADO_PROJECT_ID environment variable to your Corbado project ID
@@ -87,7 +87,7 @@ You will need it in the next steps.
 
 #### 2. Start the example
 
-`flutter run --dart-define=CORBADO_PROJECT_ID=PROJECT_ID lib/main.dart`
+`flutter run --dart-define=CORBADO_PROJECT_ID=<your-corbado-project-id> lib/main.dart`
 
 #### 3. Set up an Android app in Corbado
 
