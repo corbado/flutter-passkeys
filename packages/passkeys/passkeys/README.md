@@ -71,7 +71,7 @@ When it comes to understanding passkeys, there are three parties:
 - a relying party server (a backend where users' public keys will be stored)
 
 To read more about the general flow of passkeys, please have look
-at [our detailed explanation here](https://github.com/corbado/flutter-passkeys/blob/adapt-readme-to-flutter-best-practice/packages/passkeys/passkeys/doc/general_flow_of_passkeys.md).
+at [our detailed explanation here](https://github.com/corbado/flutter-passkeys/blob/main/packages/passkeys/passkeys/doc/general_flow_of_passkeys.md).
 
 ## 3. Challenges of default Flutter passkey implementation
 
@@ -128,11 +128,11 @@ All you need to do is a bit of configuration in [Corbado's developer panel](http
 
 ### 5.1 iOS
 
-To set up your iOS app, please have a look at [our iOS guide](https://github.com/corbado/flutter-passkeys/blob/adapt-readme-to-flutter-best-practice/packages/passkeys/passkeys/doc/ios_configuration.md).
+To set up your iOS app, please have a look at [our iOS guide](https://github.com/corbado/flutter-passkeys/blob/main/packages/passkeys/passkeys/doc/ios_configuration.md).
 
 ### 5.2 Android
 
-To set up your iOS app, please have a look at [our Android guide](https://github.com/corbado/flutter-passkeys/blob/adapt-readme-to-flutter-best-practice/packages/passkeys/passkeys/doc/android_configuration.md).
+To set up your iOS app, please have a look at [our Android guide](https://github.com/corbado/flutter-passkeys/blob/main/packages/passkeys/passkeys/doc/android_configuration.md).
 
 ## 6. Resources
 
