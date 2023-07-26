@@ -77,7 +77,7 @@ class AuthenticateResponse {
   /// The authenticator data
   final String authenticatorData;
 
-  /// The signature
+  /// Signed challenge
   final String signature;
 }
 

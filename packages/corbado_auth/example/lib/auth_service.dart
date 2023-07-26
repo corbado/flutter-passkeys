@@ -55,9 +55,9 @@ class AuthService with ChangeNotifier {
     try {
       await _auth.signInWithPasskey(email: email);
       return null;
-    } on NoPasskeyForDeviceException catch (e) {
+    } on NoPasskeyForDeviceException {
       return 'No passkey has been setup on this device for ${email}.';
-    } on UnknownUserException catch (e) {
+    } on UnknownUserException {
       return 'Incorrect user identifier. Please check your email.';
     } catch (e) {
       return e.toString();

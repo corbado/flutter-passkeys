@@ -52,13 +52,13 @@ class CorbadoAuthenticationResponsePublicKey {
   ) =>
       _$CorbadoAuthenticationResponsePublicKeyFromJson(json);
 
-  /// The rp id
+  /// The relying party id
   final String rpId;
 
-  /// The challenge
+  /// Challenge that must be signed by the authenticator
   final String challenge;
 
-  /// The timeout
+  /// Timeout in seconds
   final int? timeout;
 
   /// The user verification

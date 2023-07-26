@@ -27,10 +27,10 @@ class UnexpectedBackendException implements Exception {
   /// Constructor
   UnexpectedBackendException(this.operation, this.message);
 
-  /// The operation
+  /// Operation where the error occurred
   final String operation;
 
-  /// The message
+  /// Error message
   final String message;
 
   @override
@@ -74,7 +74,7 @@ class ExceptionFactory {
   }
 }
 
-/// Represents a backend message
+/// Represents a message from a Corbado API
 @JsonSerializable(explicitToJson: true)
 class BackendMessage {
   /// Constructor
@@ -84,19 +84,19 @@ class BackendMessage {
     required this.details,
   });
 
-  /// Parses a json object
+  /// Deserializes a BackendMessage
   factory BackendMessage.fromJson(
     Map<String, dynamic> json,
   ) =>
       _$BackendMessageFromJson(json);
 
-  /// The type
+  /// Message type
   final String type;
 
-  /// The validation
+  /// List of validation errors
   final List<BackendValidationError>? validation;
 
-  /// The details
+  /// Error details
   final String? details;
 
   /// Serializes object to json
@@ -112,7 +112,7 @@ class BackendValidationError {
     required this.message,
   });
 
-  /// Parses a json object
+  /// Deserializes a BackendValidationError
   factory BackendValidationError.fromJson(
     Map<String, dynamic> json,
   ) =>
