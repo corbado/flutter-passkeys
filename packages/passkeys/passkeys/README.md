@@ -7,7 +7,7 @@ A Flutter package to enable authentication through passkeys (based on WebAuthn /
 | **Support** | yes     | yes | no    | no    | no  | no      |
 
 
-<img src="https://raw.githubusercontent.com/corbado/flutter-passkeys/main/packages/passkeys/passkeys/doc/screenshot_signup_ios.png" alt="signup">
+<img src="https://raw.githubusercontent.com/corbado/flutter-passkeys/main/packages/passkeys/passkeys/doc/screenshot_signup_ios.png" alt="signup" height="500">
 
 # Overview
 
