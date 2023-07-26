@@ -72,4 +72,4 @@ If you run the application in a virtual Android device, and it says that you can
 set up a screen lock or biometrics on the device. To do so, open the settings, search for security settings and add a
 PIN as well as a fingerprint as shown below (PIN is required for fingerprint):
 
-TODO IMAGE
+<img src="https://github.com/corbado/flutter-passkeys/blob/adapt-readme-to-flutter-best-practice/packages/passkeys/passkeys/doc/troubleshooting-no-screen-lock.png?raw=true" style="width: 100%" alt="troubleshooting"/>
