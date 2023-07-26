@@ -7,9 +7,7 @@ A Flutter package to enable authentication through passkeys (based on WebAuthn /
 | **Support** | yes     | yes | no    | no    | no  | no      |
 
 
-<img src="https://github.com/corbado/flutter-passkeys/assets/18458907/a132203f-4667-4bf1-9717-7b5761a2d2bd" style="width: 30%;" />
-<img src="https://github.com/corbado/flutter-passkeys/assets/18458907/2bc01aa3-9ec3-4727-b41d-67e04323621e" style="width: 30%;" />
-
+<img src="https://raw.githubusercontent.com/corbado/flutter-passkeys/main/packages/passkeys/passkeys/doc/screenshot_signup_ios.png" alt="signup">
 
 # Overview
 
@@ -73,7 +71,7 @@ When it comes to understanding passkeys, there are three parties:
 - a relying party server (a backend where users' public keys will be stored)
 
 To read more about the general flow of passkeys, please have look
-at [our detailed explanation here](./doc/general_flow_of_passkeys.md).
+at [our detailed explanation here](https://github.com/corbado/flutter-passkeys/blob/adapt-readme-to-flutter-best-practice/packages/passkeys/passkeys/doc/general_flow_of_passkeys.md).
 
 ## 3. Challenges of default Flutter passkey implementation
 
@@ -130,17 +128,17 @@ All you need to do is a bit of configuration in [Corbado's developer panel](http
 
 ### 5.1 iOS
 
-To set up your iOS app, please have a look at [our iOS guide](#51-ios).
+To set up your iOS app, please have a look at [our iOS guide](https://github.com/corbado/flutter-passkeys/blob/adapt-readme-to-flutter-best-practice/packages/passkeys/passkeys/doc/ios_configuration.md).
 
 ### 5.2 Android
 
-To set up your iOS app, please have a look at [our Android guide](#52-android).
+To set up your iOS app, please have a look at [our Android guide](https://github.com/corbado/flutter-passkeys/blob/adapt-readme-to-flutter-best-practice/packages/passkeys/passkeys/doc/android_configuration.md).
 
 ## 6. Resources
 
 - For a more detailed explanation on how to use this Flutter package and understand the underlying architecture, please
   take a look at the following [blog post](https://corbado.com/blog/flutter-passkeys-package).
-- To give you a head start, you can use the [corbado_auth package](https://pub.dev/packages/corbado_auth) (which is also
+- To give you a head start, you can use the [corbado_auth](https://pub.dev/packages/corbado_auth) package (which is also
   used in the examples) and serves as the bridge to a hosted relying party server that you can use out-of-the-box for
   free.
 
