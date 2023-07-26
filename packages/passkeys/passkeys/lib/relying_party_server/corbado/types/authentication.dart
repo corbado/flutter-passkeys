@@ -38,6 +38,7 @@ class CorbadoAuthenticationInitResponse {
 
 @JsonSerializable()
 class CorbadoAuthenticationResponsePublicKey {
+  /// Constructor
   CorbadoAuthenticationResponsePublicKey({
     required this.rpId,
     required this.challenge,
@@ -50,31 +51,48 @@ class CorbadoAuthenticationResponsePublicKey {
     Map<String, dynamic> json,
   ) =>
       _$CorbadoAuthenticationResponsePublicKeyFromJson(json);
+
+  /// The relying party id
   final String rpId;
+
+  /// Challenge that must be signed by the authenticator
   final String challenge;
+
+  /// Timeout in seconds
   final int? timeout;
+
+  /// The user verification
   final String? userVerification;
+
+  /// List of allowed credentials
   final List<CorbadoAllowCredential>? allowCredentials;
 
+  /// Serializes object to json
   Map<String, dynamic> toJson() =>
       _$CorbadoAuthenticationResponsePublicKeyToJson(this);
 }
 
 @JsonSerializable()
 class CorbadoAllowCredential {
+  /// Constructor
   CorbadoAllowCredential({
     required this.type,
     required this.id,
     required this.transports,
   });
 
+  /// The type
   final String type;
+
+  /// The id
   final String id;
+
+  /// The transports
   final List<String> transports;
 
   factory CorbadoAllowCredential.fromJson(
-      Map<String, dynamic> json,
-      ) =>
+    Map<String, dynamic> json,
+  ) =>
       _$CorbadoAllowCredentialFromJson(json);
 
   Map<String, dynamic> toJson() => _$CorbadoAllowCredentialToJson(this);
@@ -82,6 +100,7 @@ class CorbadoAllowCredential {
 
 @JsonSerializable(explicitToJson: true)
 class CorbadoAuthenticationCompleteRequest {
+  /// Constructor
   CorbadoAuthenticationCompleteRequest({
     required this.id,
     required this.rawId,
@@ -107,9 +126,17 @@ class CorbadoAuthenticationCompleteRequest {
     Map<String, dynamic> json,
   ) =>
       _$CorbadoAuthenticationCompleteRequestFromJson(json);
+
+  /// The id
   final String id;
+
+  /// The raw id
   final String rawId;
+
+  /// The response
   final CorbadoAuthenticationComplete response;
+
+  /// The type
   final String type;
 
   Map<String, dynamic> toJson() =>
@@ -118,16 +145,23 @@ class CorbadoAuthenticationCompleteRequest {
 
 @JsonSerializable()
 class CorbadoAuthenticationComplete {
+  /// Constructor
   CorbadoAuthenticationComplete({
     required this.clientDataJSON,
     required this.authenticatorData,
     required this.signature,
   });
 
+  /// The client data json
   final String clientDataJSON;
+
+  /// The authenticator data
   final String authenticatorData;
+
+  /// The signature
   final String signature;
 
+  /// Parses a json object
   factory CorbadoAuthenticationComplete.fromJson(Map<String, dynamic> json) =>
       _$CorbadoAuthenticationCompleteFromJson(json);
 
