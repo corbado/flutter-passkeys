@@ -1,5 +1,5 @@
 name: passkeys
-description: A flutter package to enable passkey authentication.
+description: This package provides a high-level passkey authentication solution with either Corbado or an external passkeys backend provider.
 homepage: https://docs.corbado.com/overview/welcome
 repository: https://github.com/corbado/flutter-passkeys/tree/main/packages/passkeys/passkeys
 version: 0.1.1
@@ -18,10 +18,10 @@ flutter:
 
 dependencies:
   convert: ^3.1.1
-  corbado_frontend_api_client: ^0.1.1
+  corbado_frontend_api_client: ^1.0.0
   flutter:
     sdk: flutter
-  http: '>=0.13.0 <0.14.0'
+  http: ^1.1.0
   json_annotation: ^4.8.1
   openapi_generator_annotations: ^4.10.0
   passkeys_android: ^0.1.0
