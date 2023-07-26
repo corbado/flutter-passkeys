@@ -1,5 +1,5 @@
 name: corbado_auth
-description: Corbado auth flutter package
+description: This package provides an all-in-one authentication solution including session management using Corbado as provider.
 homepage: https://docs.corbado.com/overview/welcome
 repository: https://github.com/corbado/flutter-passkeys/tree/main/packages/corbado_auth
 version: 0.1.1
