@@ -6,6 +6,10 @@ A Flutter package to enable authentication through passkeys (based on WebAuthn /
 |-------------|---------|-----|-------|-------|-----|---------|
 | **Support** | yes     | yes | no    | no    | no  | no      |
 
+![flutter-passkey-signup](https://github.com/corbado/flutter-passkeys/assets/18458907/a132203f-4667-4bf1-9717-7b5761a2d2bd)
+![flutter-passkey-google-password-manager](https://github.com/corbado/flutter-passkeys/assets/18458907/2bc01aa3-9ec3-4727-b41d-67e04323621e)
+
+
 # Overview
 
 1. [Usage](#1-usage)
@@ -18,8 +22,6 @@ A Flutter package to enable authentication through passkeys (based on WebAuthn /
 8. [Getting started](#5-getting-started)
     1. [iOS](#51-ios)
     2. [Android](#52-android)
-
-TODO add screenshots wit signup screen and passkey popup
 
 ## 1. Usage
 
