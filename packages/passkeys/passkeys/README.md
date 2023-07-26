@@ -6,19 +6,10 @@ A Flutter package to enable authentication through passkeys (based on WebAuthn /
 |-------------|---------|-----|-------|-------|-----|---------|
 | **Support** | yes     | yes | no    | no    | no  | no      |
 
-<style>
-    .desktop { display: none; }
-    @media screen and (min-width: 768px) {
-        .mobile { display: none; }
-        .desktop { display: inline; width: 50%; }
-    }
-</style>
+Example preview:
 
-<img class="mobile" src="https://github.com/corbado/flutter-passkeys/assets/18458907/a132203f-4667-4bf1-9717-7b5761a2d2bd" style="width: 100%;" />
-<img class="desktop" src="https://github.com/corbado/flutter-passkeys/assets/18458907/a132203f-4667-4bf1-9717-7b5761a2d2bd"/>
-
-<img class="mobile" src="https://github.com/corbado/flutter-passkeys/assets/18458907/2bc01aa3-9ec3-4727-b41d-67e04323621e" style="width: 100%;" />
-<img class="desktop" src="https://github.com/corbado/flutter-passkeys/assets/18458907/2bc01aa3-9ec3-4727-b41d-67e04323621e"/>
+<img src="https://github.com/corbado/flutter-passkeys/assets/18458907/a132203f-4667-4bf1-9717-7b5761a2d2bd" style="width: 30%;" />
+<img src="https://github.com/corbado/flutter-passkeys/assets/18458907/2bc01aa3-9ec3-4727-b41d-67e04323621e" style="width: 30%;" />
 
 # Overview
 
@@ -44,7 +35,7 @@ the [`corbado_auth` package](https://pub.dev/packages/corbado_auth).
 To start right away, you can use the following code (using Corbado as passkey backend provider, but you can use your own
 passkey backend provider of course as well):
 
-*main.dart*
+*main.dart:*
 
 ```dart
 import 'package:passkeys/passkey_auth.dart';
@@ -54,7 +45,7 @@ import 'package:passkeys/relying_party_server/corbado/types/shared.dart';
 void main() async {
   final auth = PasskeyAuth(
     CorbadoPasskeyBackend(
-      const String.fromEnvironment('CORBADO_PROJECT_ID'),
+      const String.fromEnvironment('CORBADO_PROJECT_ID'), // retrieve from https://app.corbado.com
     ),
   );
 
