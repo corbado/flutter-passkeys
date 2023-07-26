@@ -6,6 +6,8 @@ A Flutter package to enable authentication through passkeys (based on WebAuthn /
 |-------------|---------|-----|-------|-------|-----|---------|
 | **Support** | yes     | yes | no    | no    | no  | no      |
 
+
+
 # Overview
 
 1. [Usage](#1-usage)
@@ -18,8 +20,6 @@ A Flutter package to enable authentication through passkeys (based on WebAuthn /
 8. [Getting started](#5-getting-started)
     1. [iOS](#51-ios)
     2. [Android](#52-android)
-
-TODO add screenshots wit signup screen and passkey popup
 
 ## 1. Usage
 

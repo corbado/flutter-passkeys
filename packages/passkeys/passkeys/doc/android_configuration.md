@@ -30,7 +30,9 @@ To find your SHA-256 fingerprint, you can execute the following command:
 
 - macOS /
   Linux: `keytool -list -v -keystore ~/.android/debug.keystore -alias androiddebugkey -storepass android -keypass android`
-- Windows: `keytool -list -v -keystore "\.android\debug.keystore" -alias androiddebugkey -storepass android -keypass android`
+-
+
+Windows: `keytool -list -v -keystore "\.android\debug.keystore" -alias androiddebugkey -storepass android -keypass android`
 
 Alternatively, you can look in to the logs of the running example app.You will find a log message
 like `Fingerprint: 54:4C:94:2C:E9:...`.
@@ -47,10 +49,12 @@ To find your base64 encoded app fingerprint, you can execute the following comma
 
 - macOS /
   Linux: `keytool -exportcert -alias androiddebugkey -keystore ~/.android/debug.keystore | openssl sha256 -binary | openssl base64`
-- Windows: `keytool -exportcert -alias androiddebugkey -keystore "\.android\debug.keystore” | openssl sha256 -binary | openssl base64`
+-
+
+Windows: `keytool -exportcert -alias androiddebugkey -keystore "\.android\debug.keystore” | openssl sha256 -binary | openssl base64`
 
 Alternatively, the base64 encoded app fingerprint can also be found in the log messages of the
-example (`setting Origin of API requests to android:apk-key-hash:VEy...`), after you've started the app with 
+example (`setting Origin of API requests to android:apk-key-hash:VEy...`), after you've started the app with
 
 ## 3. Start the example
 
@@ -63,3 +67,9 @@ example (`setting Origin of API requests to android:apk-key-hash:VEy...`), after
 Now, you are fully set and can start signing up with your first passkey in the example.
 
 ## 4. Troubleshooting
+
+If you run the application in a virtual Android device, and it says that you can't create a passkey, you have to properly
+set up a screen lock or biometrics on the device. To do so, open the settings, search for security settings and add a
+PIN as well as a fingerprint as shown below (PIN is required for fingerprint):
+
+TODO IMAGE
