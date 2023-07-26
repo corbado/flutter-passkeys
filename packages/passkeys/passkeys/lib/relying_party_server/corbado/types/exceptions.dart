@@ -1,32 +1,46 @@
 import 'dart:convert';
+
 import 'package:json_annotation/json_annotation.dart';
 
 part 'exceptions.g.dart';
 
+/// Exception thrown when the user already exists
 class UserAlreadyExistsException implements Exception {
+  /// Constructor
   UserAlreadyExistsException(this.message);
 
+  /// The message
   final String message;
 }
 
+/// Exception thrown when the user is unknown
 class UnknownUserException implements Exception {
+  /// Constructor
   UnknownUserException(this.message);
 
+  /// The message
   final String message;
 }
 
+/// Exception thrown when the backend returns an unexpected response
 class UnexpectedBackendException implements Exception {
+  /// Constructor
   UnexpectedBackendException(this.operation, this.message);
 
+  /// The operation
   final String operation;
+
+  /// The message
   final String message;
 
   @override
   String toString() {
-    return "Error when calling backend with operation ${operation}, message: ${message}";
+    return 'Error when calling backend with operation $operation,'
+        ' message: $message';
   }
 }
 
+/// Factory for creating exceptions from backend messages
 class ExceptionFactory {
   ///
   static Exception fromBackendMessage(String operation, String message) {
@@ -60,49 +74,72 @@ class ExceptionFactory {
   }
 }
 
+/// Represents a backend message
 @JsonSerializable(explicitToJson: true)
 class BackendMessage {
+  /// Constructor
   BackendMessage({
     required this.type,
     required this.validation,
     required this.details,
   });
 
-  final String type;
-  final List<BackendValidationError>? validation;
-  final String? details;
-
+  /// Parses a json object
   factory BackendMessage.fromJson(
     Map<String, dynamic> json,
   ) =>
       _$BackendMessageFromJson(json);
 
+  /// The type
+  final String type;
+
+  /// The validation
+  final List<BackendValidationError>? validation;
+
+  /// The details
+  final String? details;
+
+  /// Serializes object to json
   Map<String, dynamic> toJson() => _$BackendMessageToJson(this);
 }
 
+/// Represents a backend validation error
 @JsonSerializable()
 class BackendValidationError {
+  /// Constructor
   BackendValidationError({
     required this.field,
     required this.message,
   });
 
-  final String field;
-  final String message;
-
+  /// Parses a json object
   factory BackendValidationError.fromJson(
     Map<String, dynamic> json,
   ) =>
       _$BackendValidationErrorFromJson(json);
 
+  /// The field
+  final String field;
+
+  /// The message
+  final String message;
+
+  /// Serializes object to json
   Map<String, dynamic> toJson() => _$BackendValidationErrorToJson(this);
 }
 
+/// Represents a validation exception
 class ValidationException implements Exception {
+  /// Constructor
   ValidationException(this.operation, this.message, this.validationErrors);
 
+  /// The operation
   final String operation;
+
+  /// The message
   final String message;
+
+  /// The validation errors
   final List<BackendValidationError> validationErrors;
 
   @override
@@ -120,6 +157,5 @@ class ValidationException implements Exception {
   }
 }
 
-class NoPasskeyForDeviceException implements Exception {
-
-}
+/// Exception thrown when no passkey is available for the device
+class NoPasskeyForDeviceException implements Exception {}

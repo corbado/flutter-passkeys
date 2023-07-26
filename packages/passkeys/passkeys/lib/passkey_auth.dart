@@ -1,8 +1,6 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:passkeys/authenticator/exceptions.dart';
 import 'package:passkeys/authenticator/passkey_authenticator.dart';
-import 'package:passkeys/relying_party_server/corbado/types/exceptions.dart';
 import 'package:passkeys/relying_party_server/relying_party_server.dart';
 import 'package:passkeys/relying_party_server/types/authentication.dart';
 import 'package:passkeys/relying_party_server/types/registration.dart';
@@ -168,11 +166,6 @@ class PasskeyAuth<Request, Response> {
           await _backend.completeAuthenticate(completeRequest);
 
       return completeResponse;
-    } on NoPasskeyForDeviceException catch (e) {
-      // no passkey has been created for this device
-      // TODO: send a email challenge instead
-      debugPrint('No passkey has been created for this device. The user must login with another method.');
-      rethrow;
     } on PlatformException catch (e) {
       switch (e.code) {
         case 'cancelled':
