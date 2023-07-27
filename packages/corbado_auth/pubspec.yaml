@@ -9,13 +9,13 @@ environment:
   flutter: ">=3.0.0"
 
 dependencies:
-  corbado_frontend_api_client: ^0.1.1
+  corbado_frontend_api_client: ^1.0.0
   flutter:
     sdk: flutter
   flutter_keychain: ^2.2.1
   json_annotation: ^4.8.1
   jwt_decoder: ^2.0.1
-  passkeys: ^0.1.0
+  passkeys: ^1.0.0
   rxdart: ^0.27.7
 
 dev_dependencies:

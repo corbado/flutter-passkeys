@@ -1,3 +1,7 @@
+## 1.0.0
+
+* Better comments. Stable release.
+
 ## 0.1.1
 
 * Update image links in docs.
