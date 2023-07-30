@@ -26,12 +26,12 @@ When it comes to understanding passkeys, there are three parties:
 - a relying party server (a backend where users' public keys will be stored)
 
 <details>
-<summary>More information on how these three parties interact with each other to make passkeys work</summary>
-
-<img src="https://raw.githubusercontent.com/corbado/flutter-passkeys/main/packages/passkeys/passkeys/doc/register_flow.png" style="width: 100%" alt="signup">
+<summary>More information on how these three parties interact with each other to make passkeys work.</summary>
 
 Like with traditional password-based authentication flows, a user has to sign up first, i.e. set up a passkey.
-The flow is shown in the image above.
+The flow is shown in the image below.
+
+<img src="https://raw.githubusercontent.com/corbado/flutter-passkeys/main/packages/passkeys/passkeys/doc/register_flow.png" style="width: 100%" alt="signup">
 
 At first, the user will provide his email address to your app.
 This email address will be sent to the relying party server.
@@ -108,8 +108,8 @@ Then the example of this package is the right point for you to start.
 There is no configuration required and you can go through sign up and sign in flows on your simulator/emulator.
 
 **Shortcomings:**
-* You share a relying party server with the whole world. For an example this is ok but if you want to build your own app you need your own relying party server.
-* You can not run the example on physical iOS devices but only on a simulator (for Android physical devices + emulators work)
+* ⚠️ You share a relying party server with the whole world. Its user table is flushed every day. We have built the example this way to make it very simple to set up. For an example this works totally fine but if you want to build your own app you need your own relying party server.
+* ⚠️ You can not run the example on physical iOS devices but only on a simulator (for Android physical devices + emulators work)
 
 ### 2. You want to use passkeys for your app and you already have built your relying party server
 
@@ -120,12 +120,86 @@ Use that implementation to initialize the *PasskeyAuth* object.
 ```dart
 import 'package:passkeys/passkey_auth.dart';
  
-_signIn() async {
+_signUp() async {
   final auth = PasskeyAuth(YourOwnRelyingPartyServer());
   final registerResponse = await auth.registerWithEmail(const RpRequest(email: 'user@example.com'));
   print('Registration successful: ${registerResponse != null}');
 }
+
+_signIn() async {
+  final auth = PasskeyAuth(YourOwnRelyingPartyServer());
+  final signInResponse = await auth.authenticateWithEmail(const RpRequest(email: email));
+  print('Sign in successful: ${signInResponse != null}');
+}
 ```
+
+<details>
+<summary>How to implement the *RelyingPartyServer* interface?</summary>
+
+The code below gives an idea on how you can connect your own relying party server by implementing *RelyingPartyServer*.
+
+```dart
+import 'package:passkeys/relying_party_server/relying_party_server.dart';
+import 'package:passkeys/relying_party_server/types/authentication.dart';
+import 'package:passkeys/relying_party_server/types/registration.dart';
+
+class YourOwnRelyingPartyServer implements RelyingPartyServer<Request, Response> {
+  // an instance of a HTTP client that can perform the required 4 types of requests against your relying party server
+  // - initRegister
+  // - completeRegister
+  // - initAuthenticate
+  // completeAuthenticate
+  final YourApiClient _client;
+  
+  @override
+  Future<Response> completeAuthenticate(AuthenticationCompleteRequest request) {
+    // build the request that your backend (and thus your client) expects
+    const request = YouApiClientAuthenticateRequest.from(request);
+    
+    // make the completeAuthenticate call to your relying party server
+    const response = _client.completeAuthenticate(request);
+    
+    // map the backend response to the Response class
+    return Response(idToken: response.idToken);
+  }
+
+  @override
+  Future<Response> completeRegister(RegistrationCompleteRequest request) {
+    // similar in its structure to completeAuthenticate
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<AuthenticationInitResponse> initAuthenticate(Request request) {
+    // similar in its structure to completeAuthenticate
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<RegistrationInitResponse> initRegister(Request request) {
+    // similar in its structure to completeAuthenticate
+    throw UnimplementedError();
+  }
+}
+
+// Define all fields in this class that your relying party server expects during the initial sign up and sign in call
+// At most this must contain some kind of user identifier (e.g. an email address).
+class Request {
+  const Request({required this.email});
+
+  final String email;
+}
+
+// Define all data in this class that can be returned by your relying party server on a successful authentication.
+// Usually this is some kind of token (e.g. a JWT token that encodes user data).
+class Response {
+  const Response({required this.idToken});
+
+  final String idToken;
+}
+```
+</details>
+
 
 ### 3. You want to use passkeys for your app but you don't want to build your own relying party server
 
@@ -135,7 +209,7 @@ To allow this package to integrate with a relying party server the *RelyingParty
 
 [Corbado](https://app.corbado.com) lets you set up a relying party server.
 This package also comes with a ready to use implementation for the *RelyingPartyServer* interface that connects to your relying party server.
-So, to save a bit of time and effort you can use Corbado as a relying party server. 
+So, to save a bit of time and effort you can use [Corbado](https://app.corbado.com) as a relying party server. 
 Find an example how to do this including a step by step guide [here]().
 
 You can use every other SaaS provider that allows you to set up a relying party server though.
@@ -149,7 +223,12 @@ While this package allows you to use passkeys for authentication a few challenge
 * A user might have used your app on another device and now try to sign in on a new one. His passkey is still on that old device, so how can we sign him in on the new one?
 
 Solving these challenges goes beyond the scope of this package.
-To address them, we have built another Flutter package: [corbado_auth](https://pub.dev/packages/corbado_auth).
+
+As a solution you can create your own authentication SDK that builds on top of the *passkeys* package.
+This can make sense if you want to build your own authentication backend.
+
+Alternatively, you can safe some time and use our solution for that problem: [corbado_auth](https://pub.dev/packages/corbado_auth).
+This is a separate flutter package that builds on top of the *passkeys* package to provide solutions for the above challenges.
 For more information, check out its documentation and examples.
 
 ### 5. You want to use Firebase together with passkeys
