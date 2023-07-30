@@ -1,8 +1,8 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:passkeys/passkey_auth.dart';
-import 'package:passkeys/relying_party_server/corbado/corbado_passkey_backend.dart';
 import 'package:passkeys/relying_party_server/corbado/types/shared.dart';
+import 'package:passkeys_example/relying_party_server.dart';
 
 void main() => runApp(const MyApp());
 
@@ -33,14 +33,9 @@ class MyApp extends StatelessWidget {
 }
 
 class HomePage extends StatefulWidget {
-  HomePage({super.key})
-      : _auth = PasskeyAuth(
-          CorbadoPasskeyBackend(
-            const String.fromEnvironment('CORBADO_PROJECT_ID'),
-          ),
-        );
+  HomePage({super.key}) : _auth = PasskeyAuth(SharedRelyingPartyServer());
 
-  final PasskeyAuth<CorbadoRequest, CorbadoTokens> _auth;
+  final PasskeyAuth<RpRequest, RpResponse> _auth;
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -84,16 +79,14 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               const SizedBox(height: 16),
-              AutofillGroup(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 4),
-                  child: TextField(
-                    autofillHints: const [AutofillHints.username],
-                    controller: _emailController,
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      hintText: 'email address',
-                    ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4),
+                child: TextField(
+                  autofillHints: const [AutofillHints.username],
+                  controller: _emailController,
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    hintText: 'email address',
                   ),
                 ),
               ),
@@ -178,7 +171,7 @@ class _HomePageState extends State<HomePage> {
     try {
       if (_pageMode == PageMode.registration) {
         final response =
-            await widget._auth.registerWithEmail(CorbadoRequest(email));
+            await widget._auth.registerWithEmail(RpRequest(email: email));
 
         if (response != null) {
           setState(() {
@@ -187,7 +180,7 @@ class _HomePageState extends State<HomePage> {
         }
       } else if (_pageMode == PageMode.login) {
         final response =
-            await widget._auth.authenticateWithEmail(CorbadoRequest(email));
+            await widget._auth.authenticateWithEmail(RpRequest(email: email));
 
         if (response != null) {
           setState(() {
