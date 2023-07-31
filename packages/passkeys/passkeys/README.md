@@ -11,7 +11,7 @@ A Flutter package to enable authentication through passkeys (based on WebAuthn /
 
 ## Features
 
-* register and sign in users with passkeys
+* sign up and login users with passkeys
 * connect your own relying party server or use pre-implemented ones
 
 ## Getting started
@@ -61,18 +61,18 @@ Using the public key, it will validate the signed challenge and the server will 
 ### Example
 
 To run the [example](https://github.com/corbado/flutter-passkeys/blob/main/packages/passkeys/passkeys/example/lib/main.dart) follow these steps:
-* Clone the GitHub Repo `git clone git@github.com:corbado/flutter-passkeys.git`
-* Go to the example directory and run the example app `cd packages/passkeys/passkeys/example` and `flutter run lib/main.dart`
-* Register a new user by providing an email address and clicking *sign up*.
-* After logging out you can sign in by providing the exact same email address again or sign up another user by providing a new one.
+1. Clone the GitHub repo `git clone git@github.com:corbado/flutter-passkeys.git`
+2. Go to the example directory `cd packages/passkeys/passkeys/example` and run the example app `flutter run lib/main.dart`
+3. Sign up a new user by providing an email address and clicking *sign up*.
+4. After logging out, you can login by providing the exact same email address again or sign up another user by providing a new one.
 
 Find more explanations to this example and troubleshooting in the example's [readme](https://github.com/corbado/flutter-passkeys/blob/main/packages/passkeys/passkeys/example/README.md).
 
 ## Usage
 
-To get an idea about how to use this package to register and sign in users take a look at the code below.
+To get an idea on how to use this package to sign up and login users take a look at the code below.
 It has been extracted from the example of this package.
-So to see this code in connection with a UI take a look at the example and run it on your machine.
+To see this code in connection with a UI, take a look at the example and run it on your machine.
 
 ```dart
 import 'package:passkeys/passkey_auth.dart';
@@ -91,7 +91,7 @@ import 'package:passkeys_example/relying_party_server.dart';
  
 _signIn() async {
   final auth = PasskeyAuth(SharedRelyingPartyServer());
-  final signInResponse = await auth.authenticateWithEmail(const RpRequest(email: email));
+  final signInResponse = await auth.authenticateWithEmail(const RpRequest(email: 'user@example.com'));
   print('Sign in successful: ${signInResponse != null}');
 }
 ```
@@ -101,19 +101,26 @@ We will try to show how this package can help with each use case.
 While use case 1 is a very basic one (exploration only) 2 and 3 show cases in which real apps are built.
 Use case 4 and 5 are more advanced solutions that try to help you with building more complicated apps.
 
-### 1. You just want to prototype with passkeys
+1. [Use case: You just want to prototype with passkeys](#1-use-case-you-just-want-to-prototype-with-passkeys)
+2. [Use case: You want to use passkeys for your app and you already have built your relying party server](#2-use-case-you-want-to-use-passkeys-for-your-app-and-you-already-have-built-your-relying-party-server)
+3. [Use case: You want to use passkeys for your app but you don't want to build your own relying party server](#3-use-case-you-want-to-use-passkeys-for-your-app-but-you-dont-want-to-build-your-own-relying-party-server)
+4. [Use case: You want to build an app that supports more advanced use cases with passkeys](#4-use-case-you-want-to-build-an-app-that-supports-more-advanced-use-cases-with-passkeys)
+5. [Use case: You want to use Firebase together with passkeys](#5-use-case-you-want-to-use-firebase-together-with-passkeys)
+
+
+### 1. Use case: You just want to prototype with passkeys
 
 You just want to see passkeys in action in a Flutter app?
 Then the example of this package is the right point for you to start.
-There is no configuration required and you can go through sign up and sign in flows on your simulator/emulator.
+There is no configuration required and you can go through sign up and login flows on your emulator.
 
-**Shortcomings:**
-* ⚠️ You share a relying party server with the whole world. Its user table is flushed every day. We have built the example this way to make it very simple to set up. For an example this works totally fine but if you want to build your own app you need your own relying party server.
-* ⚠️ You can not run the example on physical iOS devices but only on a simulator (for Android physical devices + emulators work)
+**Note:**
+* ⚠️ You share a relying party server with other Flutter developers. Its user table is flushed every day. We have built the example this way to make it very simple to set up. For an example, this works totally fine, but if you want to build your own app you need your own relying party server.
+* ⚠️ You cannot run the example on physical iOS devices but only on an emulator (for Android, physical devices + emulators work)
 
-### 2. You want to use passkeys for your app and you already have built your relying party server
+### 2. Use case: You want to use passkeys for your app and you already have built your relying party server
 
-If you already have a relying party server you just need to tell this package how to interact with it.
+If you already have a relying party server, you just need to tell this package how to interact with it.
 This is done by implementing the *RelyingPartyServer* interface.
 Use that implementation to initialize the *PasskeyAuth* object.
 
@@ -128,7 +135,7 @@ _signUp() async {
 
 _signIn() async {
   final auth = PasskeyAuth(YourOwnRelyingPartyServer());
-  final signInResponse = await auth.authenticateWithEmail(const RpRequest(email: email));
+  final signInResponse = await auth.authenticateWithEmail(const RpRequest(email: 'user@example.com'));
   print('Sign in successful: ${signInResponse != null}');
 }
 ```
@@ -148,7 +155,7 @@ class YourOwnRelyingPartyServer implements RelyingPartyServer<Request, Response>
   // - initRegister
   // - completeRegister
   // - initAuthenticate
-  // completeAuthenticate
+  // - completeAuthenticate
   final YourApiClient _client;
   
   @override
@@ -182,8 +189,8 @@ class YourOwnRelyingPartyServer implements RelyingPartyServer<Request, Response>
   }
 }
 
-// Define all fields in this class that your relying party server expects during the initial sign up and sign in call
-// At most this must contain some kind of user identifier (e.g. an email address).
+// Define all fields in this class that your relying party server expects during the initial sign up and login call
+// At most, this must contain some kind of user identifier (e.g. an email address).
 class Request {
   const Request({required this.email});
 
@@ -201,37 +208,37 @@ class Response {
 </details>
 
 
-### 3. You want to use passkeys for your app but you don't want to build your own relying party server
+### 3. Use case: You want to use passkeys for your app but you don't want to build your own relying party server
 
-To use passkeys in your own app you need a relying party server.
-If you don't want to build one you can use already existing solutions.
-To allow this package to integrate with a relying party server the *RelyingPartyServer* interface must be implemented for that particular server.
+To use passkeys in your own app, you need a relying party server.
+If you don't want to build one, you can use already existing solutions.
+To allow this package to integrate with a relying party server, the *RelyingPartyServer* interface must be implemented for that particular server.
 
 [Corbado](https://app.corbado.com) lets you set up a relying party server.
 This package also comes with a ready to use implementation for the *RelyingPartyServer* interface that connects to your relying party server.
-So, to save a bit of time and effort you can use [Corbado](https://app.corbado.com) as a relying party server. 
+To save time and effort, you can use [Corbado](https://app.corbado.com) as a relying party server. 
 Find an example how to do this including a step by step guide [here](https://github.com/corbado/example-passkeys-api-flutter).
 
 You can use every other SaaS provider that allows you to set up a relying party server though.
 All you need to do is implement the *RelyingPartyServer* interface.
 
-### 4. You want to build an app that supports more advanced use cases with passkeys
+### 4. Use case: You want to build an app that supports more advanced use cases with passkeys
 
-While this package allows you to use passkeys for authentication a few challenges remain unsolved, e.g.:
-* App users don't want to sign in every time they open an app, so how can we keep them signed in?
-* Not every device supports passkeys yet, how can we provide an alternative sign in for these users?
-* A user might have used your app on another device and now try to sign in on a new one. His passkey is still on that old device, so how can we sign him in on the new one?
+While this package allows you to use passkeys for authentication, a few challenges remain unsolved, e.g.:
+* App users don't want to login every time they open an app, so how can we keep them logged in?
+* Not every device supports passkeys yet, how can we provide an alternative login for these users?
+* A user might have used your app on another device and now tries to login on a new device. His passkey is still on that old device, so how can we log him in on the new device?
 
 Solving these challenges goes beyond the scope of this package.
 
 As a solution you can create your own authentication SDK that builds on top of the *passkeys* package.
 This can make sense if you want to build your own authentication backend.
 
-Alternatively, you can safe some time and use our solution for that problem: [corbado_auth](https://pub.dev/packages/corbado_auth).
+Alternatively, you can save time and use our solution for that problem: [corbado_auth](https://pub.dev/packages/corbado_auth).
 This is a separate flutter package that builds on top of the *passkeys* package to provide solutions for the above challenges.
 For more information, check out its documentation and examples.
 
-### 5. You want to use Firebase together with passkeys
+### 5. Use case: You want to use Firebase together with passkeys
 
 Firebase is a great technology that helps you with building your app.
 We are currently working on a solution that enables this package to be used together with Firebase Auth.
