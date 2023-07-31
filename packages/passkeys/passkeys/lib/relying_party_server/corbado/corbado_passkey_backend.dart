@@ -17,7 +17,7 @@ import 'package:passkeys/relying_party_server/types/registration.dart';
 /// Implementation of [RelyingPartyServer] that allows to use Corbado as a
 /// relying party.
 class CorbadoPasskeyBackend
-    extends RelyingPartyServer<CorbadoRequest, CorbadoTokens> {
+    extends RelyingPartyServer<AuthRequest, AuthResponse> {
   /// Sets up the client for the Corbado API.
   CorbadoPasskeyBackend(this._projectID)
       : _client =
@@ -46,7 +46,7 @@ class CorbadoPasskeyBackend
   final ApiClient _client;
 
   @override
-  Future<RegistrationInitResponse> initRegister(CorbadoRequest request) async {
+  Future<RegistrationInitResponse> initRegister(AuthRequest request) async {
     try {
       final result = await UsersApi(_client).passKeyRegisterStart(
         PassKeyRegisterStartReq(
@@ -74,7 +74,7 @@ class CorbadoPasskeyBackend
   }
 
   @override
-  Future<CorbadoTokens> completeRegister(
+  Future<AuthResponse> completeRegister(
     RegistrationCompleteRequest request,
   ) async {
     try {
@@ -95,7 +95,7 @@ class CorbadoPasskeyBackend
         );
       }
 
-      return CorbadoTokens.fromPassKeyRegisterFinishRsp(result);
+      return AuthResponse.fromPassKeyRegisterFinishRsp(result);
     } on ApiException catch (e) {
       throw ExceptionFactory.fromBackendMessage(
         'passKeyRegisterFinish',
@@ -106,14 +106,14 @@ class CorbadoPasskeyBackend
 
   @override
   Future<AuthenticationInitResponse> initAuthenticate(
-    CorbadoRequest request,
+    AuthRequest request,
   ) async {
     try {
       final result = await UsersApi(_client)
           .passKeyLoginStart(PassKeyLoginStartReq(username: request.email));
 
       if (result == null) {
-        throw Exception('An unknown error occured during the Corbado API call');
+        throw Exception('An unknown error occurred during the Corbado API call');
       }
 
       if (result.data.challenge.isEmpty) {
@@ -132,7 +132,7 @@ class CorbadoPasskeyBackend
   }
 
   @override
-  Future<CorbadoTokens> completeAuthenticate(
+  Future<AuthResponse> completeAuthenticate(
     AuthenticationCompleteRequest request,
   ) async {
     try {
@@ -146,7 +146,7 @@ class CorbadoPasskeyBackend
         PassKeyFinishReq(signedChallenge: signedChallenge),
       );
 
-      return CorbadoTokens.fromPassKeyLoginFinishRsp(response!);
+      return AuthResponse.fromPassKeyLoginFinishRsp(response!);
     } on ApiException catch (e) {
       throw ExceptionFactory.fromBackendMessage(
         'passKeyAuthenticateFinish',

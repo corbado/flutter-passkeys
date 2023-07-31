@@ -58,7 +58,7 @@ class CorbadoAuthenticationResponsePublicKey {
   /// Challenge that must be signed by the authenticator
   final String challenge;
 
-  /// Timeout in seconds
+  /// Timeout in milliseconds
   final int? timeout;
 
   /// The user verification

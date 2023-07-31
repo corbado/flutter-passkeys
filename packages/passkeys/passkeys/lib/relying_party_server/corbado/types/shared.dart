@@ -5,14 +5,14 @@ import 'package:corbado_frontend_api_client/frontendapi/lib/api.dart';
 import 'package:http/http.dart';
 
 ///
-class CorbadoTokens {
+class AuthResponse {
   ///
-  CorbadoTokens({
+  AuthResponse({
     required this.token,
     required this.refreshToken,
   });
 
-  factory CorbadoTokens.fromHttpResponse(Response response) {
+  factory AuthResponse.fromHttpResponse(Response response) {
     if (response.statusCode >= HttpStatus.badRequest || response.body.isEmpty) {
       throw Exception('An unknown error occured during the Corbado API call');
     }
@@ -28,23 +28,23 @@ class CorbadoTokens {
       throw Exception('RefreshToken could not be parsed.');
     }
 
-    return CorbadoTokens(
+    return AuthResponse(
       token: token,
       refreshToken: refreshToken.group(1)!,
     );
   }
 
-  factory CorbadoTokens.fromPassKeyLoginFinishRsp(
+  factory AuthResponse.fromPassKeyLoginFinishRsp(
       PassKeyLoginFinishRsp response) {
-    return CorbadoTokens(
+    return AuthResponse(
       token: response.data.shortSession!.value,
       refreshToken: response.data.longSession!,
     );
   }
 
-  factory CorbadoTokens.fromPassKeyRegisterFinishRsp(
+  factory AuthResponse.fromPassKeyRegisterFinishRsp(
       PassKeyRegisterFinishRsp response) {
-    return CorbadoTokens(
+    return AuthResponse(
       token: response.data.shortSession!.value,
       refreshToken: response.data.longSession!,
     );
@@ -54,8 +54,8 @@ class CorbadoTokens {
   final String refreshToken;
 }
 
-class CorbadoRequest {
-  const CorbadoRequest(this.email, {this.username});
+class AuthRequest {
+  const AuthRequest(this.email, {this.username});
 
   final String email;
   final String? username;

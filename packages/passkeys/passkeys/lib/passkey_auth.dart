@@ -1,5 +1,4 @@
 import 'package:flutter/services.dart';
-import 'package:passkeys/authenticator/exceptions.dart';
 import 'package:passkeys/authenticator/passkey_authenticator.dart';
 import 'package:passkeys/relying_party_server/relying_party_server.dart';
 import 'package:passkeys/relying_party_server/types/authentication.dart';
@@ -114,8 +113,6 @@ class PasskeyAuth<Request, Response> {
       switch (e.code) {
         case 'cancelled':
           return null;
-        case 'domainNotAssociated':
-          throw DomainNotAssociatedException();
         default:
           rethrow;
       }
@@ -170,8 +167,6 @@ class PasskeyAuth<Request, Response> {
       switch (e.code) {
         case 'cancelled':
           return null;
-        case 'domainNotAssociated':
-          throw DomainNotAssociatedException();
         default:
           rethrow;
       }

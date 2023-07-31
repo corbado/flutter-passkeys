@@ -6,7 +6,6 @@ import 'package:corbado_frontend_api_client/frontendapi/lib/api.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:passkeys/passkey_auth.dart';
 import 'package:passkeys/relying_party_server/corbado/corbado_passkey_backend.dart';
-import 'package:passkeys/relying_party_server/corbado/types/shared.dart';
 import 'package:rxdart/rxdart.dart';
 
 /// The entrypoint for the Cobardo Auth SDK.
@@ -18,9 +17,9 @@ class CorbadoAuth {
 
   ///
   @visibleForTesting
-  PasskeyAuth<CorbadoRequest, CorbadoTokens>? passkeyAuth;
+  PasskeyAuth<AuthRequest, AuthResponse>? passkeyAuth;
 
-  PasskeyAuth<CorbadoRequest, CorbadoTokens> get _passkeyAuth {
+  PasskeyAuth<AuthRequest, AuthResponse> get _passkeyAuth {
     return passkeyAuth ??= PasskeyAuth(CorbadoPasskeyBackend(_projectID));
   }
 
@@ -74,7 +73,7 @@ class CorbadoAuth {
     String fullName = '',
   }) async {
     final response = await _passkeyAuth
-        .registerWithEmail(CorbadoRequest(email, username: fullName));
+        .registerWithEmail(AuthRequest(email, username: fullName));
     // user has not finished the registration
     if (response == null) {
       return null;
@@ -89,7 +88,7 @@ class CorbadoAuth {
   /// Signs in a user relying on a passkey.
   Future<void> signInWithPasskey({required String email}) async {
     final response =
-        await _passkeyAuth.authenticateWithEmail(CorbadoRequest(email));
+        await _passkeyAuth.authenticateWithEmail(AuthRequest(email));
     // user has not finished the authentication
     if (response == null) {
       return;
