@@ -210,7 +210,7 @@ To allow this package to integrate with a relying party server the *RelyingParty
 [Corbado](https://app.corbado.com) lets you set up a relying party server.
 This package also comes with a ready to use implementation for the *RelyingPartyServer* interface that connects to your relying party server.
 So, to save a bit of time and effort you can use [Corbado](https://app.corbado.com) as a relying party server. 
-Find an example how to do this including a step by step guide [here]().
+Find an example how to do this including a step by step guide [here](https://github.com/corbado/example-passkeys-api-flutter).
 
 You can use every other SaaS provider that allows you to set up a relying party server though.
 All you need to do is implement the *RelyingPartyServer* interface.
