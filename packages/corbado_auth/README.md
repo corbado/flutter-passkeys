@@ -101,10 +101,9 @@ The easiest way to find your SHA-256 fingerprint is to look into the logs of the
 You will find a log message like `Fingerprint: 54:4C:94:2C:E9:...`.
 Copy the full SHA-256 fingerprint and use it to set up the Android app in the Corbado developer panel.
 
-Finally, you have to whitelist your app in the Corbado developer panel’s authorized origins. To do so, go to [“Settings” -> “Credentials” -> “Authorized Origins”](https://app.corbado.com/app/settings/credentials/authorized-origins) and click "Add new". 
-For the *Name* field you can choose any value you like.
-For the *Origin* field provide `android:apk-key-hash:<base64-encoded-app-fingerprint>` (e.g. `android:apk-key-hash:VEyULOkvasF9VsJd29ZecTKkDWJ-PvLkCagYn9BjqPs`).
-The value for your app can also be found in the log messages of the example (`setting Origin of API requests to android:apk-key-hash:VEy...`).
+Alternatively, you can execute one of the following commands to obtain the SHA-256 fingerprint:
+- macOS / Linux: `keytool -list -v -keystore ~/.android/debug.keystore -alias androiddebugkey -storepass android -keypass android`
+- Windows: `keytool -list -v -keystore "\.android\debug.keystore" -alias androiddebugkey -storepass android -keypass android`
 
 Now, you are fully set and you can start signing up with your first passkey in the example.
 
