@@ -116,7 +116,7 @@ There is no configuration required and you can go through sign up and login flow
 
 **Note:**
 * ⚠️ You share a relying party server with other Flutter developers. Its user table is flushed every day. We have built the example this way to make it very simple to set up. For an example, this works totally fine, but if you want to build your own app you need your own relying party server.
-* ⚠️ You cannot run the example on physical iOS devices but only on an emulator (for Android, physical devices + emulators work)
+* ⚠️ You cannot run the example on physical iOS devices but only on a simulator (for Android, physical devices + emulators work)
 
 ### 2. Use case: You want to use passkeys for your app and you already have built your relying party server
 
