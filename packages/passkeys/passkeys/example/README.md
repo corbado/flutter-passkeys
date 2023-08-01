@@ -20,7 +20,7 @@ set up a screen lock or biometrics on the device.
 
 First, to log into your Google account, open settings, click on the icon in the top right and then on "Sign in to your Google Account".
 
-<img src="https://github.com/corbado/flutter-passkeys/blob/main/packages/passkeys/passkeys/doc/roubleshooting-sign-in-to-google-account.png?raw=true" style="width: 100%" alt="troubleshooting_google_account"/>
+<img src="https://github.com/corbado/flutter-passkeys/blob/main/packages/passkeys/passkeys/doc/troubleshooting-sign-in-to-google-account.png?raw=true" style="width: 100%" alt="troubleshooting_google_account"/>
 
 Secondly, to set up the screen lock, open the settings, search for security settings and add a PIN as well as a fingerprint as shown below (PIN is required for fingerprint):
 
@@ -33,4 +33,4 @@ Secondly, to set up the screen lock, open the settings, search for security sett
 If you get an error like this during sign up or login, activate Face ID for your simulator.
 This can be done under *Features* => *Face ID* by clicking on "Enrolled".
 
-<img src="https://raw.githubusercontent.com/corbado/flutter-passkeys/main/packages/passkeys/passkeys/doc/ios_error_enrolled_biometrics.png" style="width: 50%" alt="ios_enrolled_biometrics">
+<img src="https://raw.githubusercontent.com/corbado/flutter-passkeys/main/packages/passkeys/passkeys/doc/ios_error_enrolled_biometrics.png" style="width: 50%" calt="ios_enrolled_biometrics">
