@@ -13,7 +13,6 @@ import 'package:passkeys/relying_party_server/relying_party_server.dart';
 import 'package:passkeys/relying_party_server/types/authentication.dart';
 import 'package:passkeys/relying_party_server/types/registration.dart';
 
-
 /// Implementation of [RelyingPartyServer] that allows to use Corbado as a
 /// relying party.
 class CorbadoPasskeyBackend
@@ -51,7 +50,7 @@ class CorbadoPasskeyBackend
       final result = await UsersApi(_client).passKeyRegisterStart(
         PassKeyRegisterStartReq(
           username: request.email,
-          fullName: 'test',
+          fullName: request.username,
         ),
       );
 
@@ -113,7 +112,8 @@ class CorbadoPasskeyBackend
           .passKeyLoginStart(PassKeyLoginStartReq(username: request.email));
 
       if (result == null) {
-        throw Exception('An unknown error occurred during the Corbado API call');
+        throw Exception(
+            'An unknown error occurred during the Corbado API call');
       }
 
       if (result.data.challenge.isEmpty) {
