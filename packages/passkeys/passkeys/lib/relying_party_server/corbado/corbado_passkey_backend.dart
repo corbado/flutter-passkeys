@@ -50,7 +50,7 @@ class CorbadoPasskeyBackend
       final result = await UsersApi(_client).passKeyRegisterStart(
         PassKeyRegisterStartReq(
           username: request.email,
-          fullName: request.username,
+          fullName: request.username ?? request.email,
         ),
       );
 
