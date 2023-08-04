@@ -36,27 +36,28 @@ public class PasskeysPlugin: NSObject, FlutterPlugin, PasskeysApi {
         user: User,
         completion: @escaping (Result<RegisterResponse, Error>) -> Void
     ) {
-        guard let challenge = Data.fromBase64Url(challenge) else {
-            completion(.failure(RegisterError.decodingChallenge))
+        guard let decodedChallenge = Data.fromBase64Url(challenge) else {
+            completion(.failure(CustomErrors.decodingChallenge))
             return
         }
-        
-        let platformProvider = ASAuthorizationPlatformPublicKeyCredentialProvider(relyingPartyIdentifier: relyingParty.id)
+
+        let rp = relyingParty.id
+        let platformProvider = ASAuthorizationPlatformPublicKeyCredentialProvider(relyingPartyIdentifier: rp)
         let request = platformProvider.createCredentialRegistrationRequest(
-            challenge: challenge,
+            challenge: decodedChallenge,
             name: user.name,
             userID: user.id.data(using: .utf8)!
         )
-        
+
         registerController.register(request: request, completion: completion)
     }
-    
+
     func authenticate(relyingPartyId: String, challenge: String, completion: @escaping (Result<AuthenticateResponse, Error>) -> Void) {
-        guard let decodedChallenge = Data.fromBase64Url(challenge) else {
-            completion(.failure(AuthenticateError.decodingChallenge))
+        guard let decodedChallenge = Da                 ta.fromBase64Url(challenge) else {
+            completion(.failure(CustomErrors.decodingChallenge))
             return
         }
-        
+
         let platformProvider = ASAuthorizationPlatformPublicKeyCredentialProvider(relyingPartyIdentifier: relyingPartyId)
         let request = platformProvider.createCredentialAssertionRequest(
             challenge: decodedChallenge
@@ -68,11 +69,11 @@ public class PasskeysPlugin: NSObject, FlutterPlugin, PasskeysApi {
 
 open class LocalAuth: NSObject {
     public static let shared = LocalAuth()
-    
+
     override private init() {}
-    
+
     var laContext = LAContext()
-    
+
     func canAuthenticate() -> Bool {
         var error: NSError?
         let hasTouchId = laContext.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error)
@@ -84,12 +85,12 @@ struct PublicKeyCredentialCreateResponse: Codable {
     let challenge: String
     let user: User
     let rp: RP
-    
+
     struct RP: Codable {
         let name: String
         let id: String
     }
-    
+
     struct User: Codable {
         let name: String
         let displayName: String
@@ -110,21 +111,21 @@ public extension Data {
                 withPad: "=", startingAt: 0
             )
         }
-        
+
         // Finally, decode.
         return Data(base64Encoded: encoded)
     }
-    
+
     static func fromBase64Url(_ encoded: String) -> Data? {
         let base64String = base64UrlToBase64(base64Url: encoded)
         return fromBase64(base64String)
     }
-    
+
     private static func base64UrlToBase64(base64Url: String) -> String {
         let base64 = base64Url
             .replacingOccurrences(of: "-", with: "+")
             .replacingOccurrences(of: "_", with: "/")
-        
+
         return base64
     }
 }
@@ -141,25 +142,11 @@ public extension String {
 extension Data {
     func toBase64URL() -> String {
         let current = self
-        
+
         var result = current.base64EncodedString()
         result = result.replacingOccurrences(of: "+", with: "-")
         result = result.replacingOccurrences(of: "/", with: "_")
         result = result.replacingOccurrences(of: "=", with: "")
         return result
     }
-}
-
-enum RegisterError: Error {
-    case decodingChallenge
-    case cancelled
-    case domainNotAssociated
-    case unknown
-}
-
-enum AuthenticateError: Error {
-    case decodingChallenge
-    case cancelled
-    case domainNotAssociated
-    case unknown
 }

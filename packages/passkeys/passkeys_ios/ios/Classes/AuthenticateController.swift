@@ -30,21 +30,17 @@ class AuthenticateController: NSObject, ASAuthorizationControllerDelegate, ASAut
             completion?(.success(response))
             break
         default:
-            completion?(.failure(RegisterError.unknown))
+            completion?(.failure(FlutterError(code: CustomErrors.unexpectedAuthorizationResponse)))
         }
 
     }
 
     func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
         if let err = error as? ASAuthorizationError {
-            if (err.code.rawValue == 1004) {
-                completion?(.failure(AuthenticateError.domainNotAssociated))
-            } else if (err.code.rawValue == 1001) {
-                completion?(.failure(AuthenticateError.cancelled))
-            }
+            completion?(.failure(FlutterError(from: err)))
         }
-        
-        completion?(.failure(AuthenticateError.unknown))
+
+        completion?(.failure(FlutterError(code: CustomErrors.unknown)))
     }
 
     func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {

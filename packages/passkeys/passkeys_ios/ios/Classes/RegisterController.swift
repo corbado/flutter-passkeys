@@ -27,23 +27,20 @@ class RegisterController: NSObject, ASAuthorizationControllerDelegate, ASAuthori
             completion?(.success(response))
             break
         default:
-            completion?(.failure(RegisterError.unknown))
+            let message = "Expected instance of ASAuthorizationPlatformPublicKeyCredentialRegistration but got: " + authorization.credential.description
+            completion?(.failure(FlutterError(code: CustomErrors.unexpectedAuthorizationResponse, message: message)))
         }
 
     }
 
     func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
         if let err = error as? ASAuthorizationError {
-            if (err.code.rawValue == 1004) {
-                completion?(.failure(RegisterError.domainNotAssociated))
-            } else if (err.code.rawValue == 1001) {
-                completion?(.failure(RegisterError.cancelled))
-            }
+            completion?(.failure(FlutterError(from: err)))
         }
-        
-        completion?(.failure(RegisterError.unknown))
+
+        completion?(.failure(FlutterError(code: CustomErrors.unknown)))
     }
-    
+
     func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
         let delegate = UIApplication.shared.delegate
 
@@ -53,5 +50,4 @@ class RegisterController: NSObject, ASAuthorizationControllerDelegate, ASAuthori
 
         return (delegate?.window!!)!
     }
-
 }
