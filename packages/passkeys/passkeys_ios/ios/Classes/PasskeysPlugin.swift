@@ -53,7 +53,7 @@ public class PasskeysPlugin: NSObject, FlutterPlugin, PasskeysApi {
     }
 
     func authenticate(relyingPartyId: String, challenge: String, completion: @escaping (Result<AuthenticateResponse, Error>) -> Void) {
-        guard let decodedChallenge = Da                 ta.fromBase64Url(challenge) else {
+        guard let decodedChallenge = Data.fromBase64Url(challenge) else {
             completion(.failure(CustomErrors.decodingChallenge))
             return
         }

@@ -1,6 +1,10 @@
-## 1.0.0
+## 1.0.2
 
-* Better comments. Stable release.
+* Fixed typo that breaks iOS build.
+
+## 1.0.1
+
+* Improved error handling.
 
 ## 1.0.0
 

@@ -1,3 +1,9 @@
+## 1.0.1
+
+* Improved docs.
+* Simplified example.
+* Bump iOS version.
+
 ## 1.0.0
 
 * Better comments. Stable release.
