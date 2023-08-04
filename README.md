@@ -42,4 +42,4 @@ We're happy to receive your pull requests. For major changes, please open an iss
 If you have questions, feedback or wishes regarding features, please reach out to us via [email](mailto:contact@corbado.com) or join our [passkeys community on Slack](https://join.slack.com/t/corbado/shared_invite/zt-1b7867yz8-V~Xr~ngmSGbt7IA~g16ZsQ).
 
 ## License
-[BSD-3-clause](./LICENSE.md)
+[BSD-3-clause](./LICENSE)
