@@ -45,7 +45,7 @@ Our recommendation if you run the example on an Android emulator is to follow th
 5. Restart the emulator (don't just put the emulator in stand-by).
 6. You can now run the example app on your Android emulator.
 
-<img>
+<img src="https://github.com/corbado/flutter-passkeys/blob/main/packages/passkeys/passkeys/doc/platformexception-android-emulator.png?raw=true" style="width: 100%" alt="android-emulator-platform-exception" />
 
 ### iOS
 
