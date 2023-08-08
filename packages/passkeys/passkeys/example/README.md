@@ -41,9 +41,11 @@ Our recommendation if you run the example on an Android emulator is to follow th
 1. Start your Android emulator (preferrably: Pixel 7 with Android API 33 or API 34 - see table above).
 2. Open the emulator's settings and sign into your Google account.
 3. Stay in the settings and add a screen lock (optionally: add fingerprint).
-4. Open Google Chrome and activate sync.
+4. Open Google Chrome and activate sync (see screenshot below).
 5. Restart the emulator (don't just put the emulator in stand-by).
 6. You can now run the example app on your Android emulator.
+
+<img>
 
 ### iOS
 
