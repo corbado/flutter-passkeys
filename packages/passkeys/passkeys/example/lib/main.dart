@@ -1,7 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:passkeys/passkey_auth.dart';
-import 'package:passkeys/relying_party_server/corbado/types/shared.dart';
 import 'package:passkeys_example/relying_party_server.dart';
 
 void main() => runApp(const MyApp());
@@ -193,6 +192,7 @@ class _HomePageState extends State<HomePage> {
         });
       }
     } catch (e) {
+      debugPrint(e.toString());
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           backgroundColor: Theme.of(context).primaryColor,
