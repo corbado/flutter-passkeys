@@ -27,22 +27,25 @@ Secondly, to set up the screen lock, open the settings, search for security sett
 <img src="https://github.com/corbado/flutter-passkeys/blob/main/packages/passkeys/passkeys/doc/troubleshooting-no-screen-lock.png?raw=true" style="width: 100%" alt="troubleshooting_screen_lock"/>
 
 #### Error: Emulator throws PlatformException
-During our implementation and testing, we detected some bugs when using specific API versions / devices of Android emulator (physical devices worked at any time though). According to our testing, we could get the example up and running with a Pixel 7 device (API 33 or API 34) that comes with PlayStore Support.
-| Device | API Version | PlayStore Support | PlayStore Update | Test result  |
-|---|---|---|---|---|
-| Pixel 6 | 33 | No | not required | Error |
-| Pixel 6 | 34 | No | not required | Error |
-| Pixel 7 | 33 | Yes | not required | Success |
-| Pixel 7 | 34 | Yes | not required | Success |
+During our implementation and testing, we detected some bugs when using specific API versions / devices of Android emulator (physical devices worked at any time though). 
+To avoid these issues, make sure that you are using an emulator with the following traits:
+- API version 33 or 34
+- Play Store Support (indicated by the Google Play icon when you create a new emulator device)
 
-We continuously update the package to make things work on more emulators, once there are patches by Google. In some forums (e.g. [here](https://stackoverflow.com/questions/71325279/missing-featurename-auth-api-credentials-begin-sign-in-version-6)), it was suggested to update the PlayStore, which didn't change the result during our tests.
+We tested this example on:
+- Pixel 7 Pro
+- Pixel 7
+- Pixel 6a
+- Pixel 4
+
+We continuously update the package to make things work on more emulators, once there are patches by Google. 
 
 Our recommendation if you run the example on an Android emulator is to follow these steps:
-1. Start your Android emulator (preferrably: Pixel 7 with Android API 33 or API 34 - see table above).
+1. Start your Android emulator (one of the emulators we mentioned above).
 2. Open the emulator's settings and sign into your Google account.
-3. Stay in the settings and add a screen lock (optionally: add fingerprint).
-4. Open Google Chrome and activate sync (see screenshot below).
-5. Restart the emulator (don't just put the emulator in stand-by).
+3. Stay in the settings and add a screen lock and a fingerprint.
+4. Update Google Play (Extended Controls => Google Play => Update).
+5. Restart the emulator (cold boot).
 6. You can now run the example app on your Android emulator.
 
 <img src="https://github.com/corbado/flutter-passkeys/blob/main/packages/passkeys/passkeys/doc/platformexception-android-emulator.png?raw=true" style="width: 100%" alt="android-emulator-platform-exception" />
