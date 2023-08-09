@@ -6,6 +6,7 @@ import 'package:corbado_frontend_api_client/frontendapi/lib/api.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:passkeys/passkey_auth.dart';
 import 'package:passkeys/relying_party_server/corbado/corbado_passkey_backend.dart';
+import 'package:passkeys/relying_party_server/corbado/types/shared.dart';
 import 'package:rxdart/rxdart.dart';
 
 /// The entrypoint for the Cobardo Auth SDK.

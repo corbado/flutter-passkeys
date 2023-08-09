@@ -47,7 +47,7 @@ After successful sign up, in the wizard, select 'Integration guide', 'Native / m
 
 Make sure that under [*Settings* -> *User interface* -> *Identity verification*](https://app.corbado.com/app/settings/userinterface) "Option 2: No verification required" is selected. This should be set by default, when selecting 'Native / mobile app' in the [previous step](#2-set-up-corbado-project).
 
-Set up an iOS app at [*Settings* -> *Credentials* -> *Native apps*](https://app.corbado.com/app/settings/credentials/native-apps) by clicking "Add New".
+Set up an iOS app at [*Settings* -> *Native apps*](https://app.corbado.com/app/settings/credentials/native-apps) by clicking "Add New".
 You will need your **Application Identifier Prefix** and your **Bundle Identifier** that we set up in [step 1](#1-create-an-ios-app-and-configure-the-example-in-xcode).
 
 Afterwards, your relying party server will host an `apple-app-site-association` file at `https://{PROJECT_ID}}.frontendapi.corbado.io/.well-known/apple-app-site-association`.
