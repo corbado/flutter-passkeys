@@ -11,6 +11,13 @@ Therefore, we clear user data nightly.
 
 ## Troubleshooting
 
+**Android**
+  - [Error: Emulator requires enrolled biometrics to use passkeys](#error-emulator-requires-enrolled-biometrics-to-use-passkeys)
+  - [Error: Emulator throws PlatformException](#error-emulator-throws-platformexception)
+    
+**iOS**
+  - [Error: Simulator requires enrolled biometrics to use passkeys](#error-simulator-requires-enrolled-biometrics-to-use-passkeys)
+
 ### Android
 
 #### Error: Emulator requires enrolled biometrics to use passkeys
@@ -30,9 +37,11 @@ Secondly, to set up the screen lock, open the settings, search for security sett
 During our implementation and testing, we detected some bugs when using specific API versions / devices of Android emulator (physical devices worked at any time though). 
 To avoid these issues, make sure that you are using an emulator with the following traits:
 - API version 33 or 34
-- Play Store Support (indicated by the Google Play icon when you create a new emulator device)
+- Play Store Support (indicated by the Google Play icon when you create a new emulator device):
 
-We tested this example on:
+<img src="https://raw.githubusercontent.com/corbado/flutter-passkeys/main/packages/passkeys/passkeys/doc/play-store-support.png" style="width: 100%" alt="android-play-store-support"/>
+
+We tested this example successfully on:
 - Pixel 7 Pro
 - Pixel 7
 - Pixel 6a
@@ -43,12 +52,24 @@ We continuously update the package to make things work on more emulators, once t
 Our recommendation if you run the example on an Android emulator is to follow these steps:
 1. Start your Android emulator (one of the emulators we mentioned above).
 2. Open the emulator's settings and sign into your Google account.
-3. Stay in the settings and add a screen lock and a fingerprint.
-4. Update Google Play (Extended Controls => Google Play => Update).
-5. Restart the emulator (cold boot).
-6. You can now run the example app on your Android emulator.
 
-<img src="https://github.com/corbado/flutter-passkeys/blob/main/packages/passkeys/passkeys/doc/platformexception-android-emulator.png?raw=true" style="width: 100%" alt="android-emulator-platform-exception" />
+<img src="https://raw.githubusercontent.com/corbado/flutter-passkeys/main/packages/passkeys/passkeys/doc/sign-in-to-google-account.png" style="width: 100%" alt="sign-in-to-google-account"/>
+<img src="https://raw.githubusercontent.com/corbado/flutter-passkeys/main/packages/passkeys/passkeys/doc/sign-in-to-google-account-details.png" style="width: 100%" alt="sign-in-to-google-account-details"/>
+
+4. Stay in the settings and add a screen lock (and optionally a fingerprint).
+
+<img src="https://raw.githubusercontent.com/corbado/flutter-passkeys/main/packages/passkeys/passkeys/doc/add-screen-lock.png" style="width: 100%" alt="add-screen-lock"/>
+
+6. Update Google Play (Extended Controls => Google Play => Update).
+
+<img src="https://raw.githubusercontent.com/corbado/flutter-passkeys/main/packages/passkeys/passkeys/doc/update-google-play.png" style="width: 100%" alt="update-google-play"/>
+
+8. Restart the emulator (cold boot).
+
+<img src="https://raw.githubusercontent.com/corbado/flutter-passkeys/main/packages/passkeys/passkeys/doc/restart-emulator.png" style="width: 50%" alt="restart-emulator"/>
+
+10. You can now run the example app on your Android emulator.
+
 
 ### iOS
 
