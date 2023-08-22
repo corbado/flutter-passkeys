@@ -73,6 +73,17 @@ Our recommendation if you run the example on an Android emulator is to follow th
 
 ### iOS
 
+#### Warning: XCode shows "Team: Unknown Name"
+
+To allow for an easy setup in the example we configure it with a development team id of "0000000000".
+This is not a real development team id but as the example is only run on Simulators (and therefore no real app signing takes place) this is not a problem.
+You can still build and run the example on a Simulator.
+If you change the development team id you will get an error on sign up/sign in 
+because the relying party server in the example only trusts apps that have been built with a development team id of "0000000000" and a Bundle Identifier of "com.corbado.passkeys.pub".
+
+<img src="https://raw.githubusercontent.com/corbado/flutter-passkeys/main/packages/passkeys/passkeys/doc/xcode-team-unknown-name.png" style="width: 50%" calt="ios_enrolled_biometrics">
+
+
 #### Error: Simulator requires enrolled biometrics to use passkeys
 
 If you get an error like this during sign up or login, activate Face ID for your simulator.
