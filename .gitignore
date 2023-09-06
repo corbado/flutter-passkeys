@@ -54,3 +54,6 @@ gradlew.bat
 .project
 .classpath
 .settings
+
+# Melos
+**/pubspec_overrides.yaml
