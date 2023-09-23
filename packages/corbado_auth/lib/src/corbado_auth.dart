@@ -21,11 +21,6 @@ class CorbadoAuth {
   /// Constructor
   CorbadoAuth(this._projectID) {
     _storage = SecureStorage();
-    _client = ApiClient(basePath: 'https://auth.corbado.com');
-    _client.addDefaultHeader('Origin', 'https://corbado.com');
-
-    _passkeyAuth = PasskeyAuth(CorbadoPasskeyBackend(_projectID,
-        explicitOrigin: 'https://corbado.com'));
   }
 
   ///
@@ -80,6 +75,11 @@ class CorbadoAuth {
   /// Tries to get the user object from secure storage (this only works if
   /// the user has already signed in before and then closed the app).
   Future<void> init() async {
+    final relyingPartyServer = CorbadoPasskeyBackend(_projectID);
+    await relyingPartyServer.init();
+    _passkeyAuth = PasskeyAuth(relyingPartyServer);
+    _client = await relyingPartyServer.buildClient(_projectID);
+
     try {
       final passkeysSupported = await _passkeyAuth.isSupported();
       if (!passkeysSupported) {
@@ -96,6 +96,7 @@ class CorbadoAuth {
 
       final maybeRefreshToken = await _storage.getRefreshToken();
       await _postSignIn(maybeUser, maybeRefreshToken);
+      await refreshToken();
     } catch (e) {
       debugPrint(e.toString());
       _userStreamController.add(null);
@@ -105,40 +106,39 @@ class CorbadoAuth {
   }
 
   /// Signs up a user by registering a new passkey (using the passkeys package).
-  Future<String?> registerWithPasskey({
+  Future<void> registerWithPasskey({
+    required String email,
+    String fullName = '',
+  }) async {
+    final response = await _passkeyAuth
+        .registerWithEmail(AuthRequest(email, username: fullName));
+    // user has not finished the registration
+    if (response == null) {
+      return null;
+    }
+
+    final user = User.fromIdToken(response.token);
+    await _postSignIn(user, response.refreshToken);
+  }
+
+  Future<void> registerWithEmailCode({
     required String email,
     String fullName = '',
   }) async {
     try {
-      _authStateNewStreamController.add(AuthState.SignUpPasskeyInProgress);
-      final response = await _passkeyAuth
-          .registerWithEmail(AuthRequest(email, username: fullName));
-      // user has not finished the registration
-      if (response == null) {
-        return null;
+      final req = EmailCodeRegisterStartReq(email: email, username: fullName);
+      final res = await UsersApi(_client).emailCodeRegisterStart(req);
+      if (res == null) {
+        throw UnexpectedBackendException('emailLinkRegisterStart', '');
       }
 
-      final user = User.fromIdToken(response.token);
-      await _postSignIn(user, response.refreshToken);
-    } on PlatformException catch (e) {
-      return e.message;
+      _emailOTPState = EmailOTPState(EmailOTPFlow.SignUp, res.data.emailCodeID);
+    } on ApiException catch (e) {
+      throw ExceptionFactory.fromBackendMessage(
+        'emailCodeRegisterStart',
+        e.message ?? '',
+      );
     }
-
-    return null;
-  }
-
-  Future<String?> registerWithEmailCode({
-    required String email,
-    String fullName = '',
-  }) async {
-    final req = EmailCodeRegisterStartReq(email: email, username: fullName);
-    final res = await UsersApi(_client).emailCodeRegisterStart(req);
-    if (res == null) {
-      throw UnexpectedBackendException('emailLinkRegisterStart', '');
-    }
-
-    _authStateNewStreamController.add(AuthState.SignUpEmailOtpInProgress);
-    _emailOTPState = EmailOTPState(EmailOTPFlow.SignUp, res.data.emailCodeID);
   }
 
   Future<String?> completeEmailCode({
@@ -161,15 +161,15 @@ class CorbadoAuth {
         case EmailOTPFlow.SignIn:
           await _postSignIn(user, res.data.longSession);
         case EmailOTPFlow.SignUp:
-          await _postSignIn(
-            user,
-            res.data.longSession,
-            publishState: AuthState.SignUpPasskeyInProgress,
-          );
+          await _postSignIn(user, res.data.longSession,
+              publishAuthState: false);
       }
     } on ApiException catch (e) {
-      ExceptionFactory.fromBackendMessage('emailCodeConfirm', e.message ?? '');
+      throw ExceptionFactory.fromBackendMessage(
+          'emailCodeConfirm', e.message ?? '');
     }
+
+    return null;
   }
 
   Future<String?> appendPasskey() async {
@@ -245,43 +245,43 @@ class CorbadoAuth {
     }
 
     _authStateNewStreamController.add(AuthState.SignedIn);
+    return null;
   }
 
   void finishSignUp() {
     _authStateNewStreamController.add(AuthState.SignedIn);
   }
 
-  Future<String?> signInWithEmailCode({
+  Future<void> signInWithEmailCode({
     required String email,
   }) async {
-    final req = EmailCodeLoginStartReq(username: email);
-    final res = await UsersApi(_client).emailCodeLoginStart(req);
-    if (res == null) {
-      throw UnexpectedBackendException('emailCodeLoginStart', '');
-    }
+    try {
+      final req = EmailCodeLoginStartReq(username: email);
+      final res = await UsersApi(_client).emailCodeLoginStart(req);
+      if (res == null) {
+        throw UnexpectedBackendException('emailCodeLoginStart', '');
+      }
 
-    _authStateNewStreamController.add(AuthState.SignInEmailOtpInProgress);
-    _emailOTPState = EmailOTPState(EmailOTPFlow.SignIn, res.data.emailCodeID);
+      _emailOTPState = EmailOTPState(EmailOTPFlow.SignIn, res.data.emailCodeID);
+    } on ApiException catch (e) {
+      throw ExceptionFactory.fromBackendMessage(
+        'emailCodeLoginStart',
+        e.message ?? '',
+      );
+    }
   }
 
   /// Signs in a user relying on a passkey.
-  Future<String?> signInWithPasskey({required String email}) async {
-    _authStateNewStreamController.add(AuthState.SignInPasskeyInProgress);
-    try {
-      final response =
-          await _passkeyAuth.authenticateWithEmail(AuthRequest(email));
-      // user has not finished the authentication
-      if (response == null) {
-        return null;
-      }
-
-      final user = User.fromIdToken(response.token);
-      await _postSignIn(user, response.refreshToken);
-    } on PlatformException catch (e) {
-      return e.message;
+  Future<void> signInWithPasskey({required String email}) async {
+    final response =
+        await _passkeyAuth.authenticateWithEmail(AuthRequest(email));
+    // user has not finished the authentication
+    if (response == null) {
+      return null;
     }
 
-    return null;
+    final user = User.fromIdToken(response.token);
+    await _postSignIn(user, response.refreshToken);
   }
 
   /// Load all passkeys that are available to the currently logged in user.
@@ -322,7 +322,7 @@ class CorbadoAuth {
   Future<void> _postSignIn(
     User user,
     String? refreshToken, {
-    AuthState publishState = AuthState.SignedIn,
+    bool publishAuthState = true,
   }) async {
     await _storage.setUser(user);
 
@@ -333,10 +333,10 @@ class CorbadoAuth {
     }
 
     _authStateStreamController.add(user);
-    _authStateNewStreamController.add(publishState);
     _userStreamController.add(user);
+    if (publishAuthState) _authStateNewStreamController.add(AuthState.SignedIn);
 
-    _loadPasskeys();
+    await _loadPasskeys();
   }
 
   void _scheduleRefreshRoutine(User user) {

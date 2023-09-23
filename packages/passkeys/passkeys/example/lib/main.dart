@@ -3,7 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:passkeys/passkey_auth.dart';
 import 'package:passkeys_example/relying_party_server.dart';
 
-void main() => runApp(const MyApp());
+final relyingPartServer = SharedRelyingPartyServer();
+
+void main() async {
+  await relyingPartServer.init();
+  runApp(const MyApp());
+}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -32,7 +37,7 @@ class MyApp extends StatelessWidget {
 }
 
 class HomePage extends StatefulWidget {
-  HomePage({super.key}) : _auth = PasskeyAuth(SharedRelyingPartyServer());
+  HomePage({super.key}) : _auth = PasskeyAuth(relyingPartServer);
 
   final PasskeyAuth<RpRequest, RpResponse> _auth;
 

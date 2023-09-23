@@ -17,34 +17,18 @@ import 'package:passkeys/relying_party_server/types/registration.dart';
 class CorbadoPasskeyBackend
     extends RelyingPartyServer<AuthRequest, AuthResponse> {
   /// Sets up the client for the Corbado API.
-  CorbadoPasskeyBackend(this._projectID, {String? explicitOrigin})
-      : _client =
-            ApiClient(basePath: 'https://$_projectID.frontendapi.corbado.io'),
-        _authenticator = PasskeyAuthenticator() {
-    _client.addDefaultHeader('X-Corbado-Project-ID', _projectID);
-
-    var origin = 'https://$_projectID.frontendapi.corbado.io';
-    if (explicitOrigin != null) {
-      origin = explicitOrigin;
-    }
-    _client.addDefaultHeader('Origin', origin);
-
-    if (Platform.isAndroid) {
-      _client.addDefaultHeader(
-        'User-Agent',
-        'Android ${Platform.operatingSystemVersion}',
-      );
-    } else if (Platform.isIOS) {
-      _client.addDefaultHeader(
-          'User-Agent',
-          'iOS ${Platform.operatingSystemVersion}',
-        );
-    }
+  CorbadoPasskeyBackend(this._projectID) {
+    _authenticator = PasskeyAuthenticator();
   }
 
-  final PasskeyAuthenticator _authenticator;
+  /// Initializes the client by setting all required headers
+  Future<void> init() async {
+    _client = await buildClient(_projectID);
+  }
+
+  late final PasskeyAuthenticator _authenticator;
+  late final ApiClient _client;
   final String _projectID;
-  final ApiClient _client;
 
   @override
   Future<RegistrationInitResponse> initRegister(AuthRequest request) async {
@@ -148,5 +132,37 @@ class CorbadoPasskeyBackend
         e.message ?? '',
       );
     }
+  }
+
+  Future<ApiClient> buildClient(String projectID) async {
+    final client =
+        ApiClient(basePath: 'https://$projectID.frontendapi.corbado.io')
+          ..addDefaultHeader('X-Corbado-Project-ID', projectID);
+
+    if (Platform.isAndroid) {
+      final originHeader = await _authenticator.getFacetID();
+
+      client
+        ..addDefaultHeader(
+          'Origin',
+          originHeader,
+        )
+        ..addDefaultHeader(
+          'User-Agent',
+          'Android ${Platform.operatingSystemVersion}',
+        );
+    } else if (Platform.isIOS) {
+      client
+        ..addDefaultHeader(
+          'Origin',
+          'https://corbado.com',
+        )
+        ..addDefaultHeader(
+          'User-Agent',
+          'iOS ${Platform.operatingSystemVersion}',
+        );
+    }
+
+    return client;
   }
 }

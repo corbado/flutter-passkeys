@@ -13,6 +13,10 @@ class SharedRelyingPartyServer
 
   final CorbadoPasskeyBackend _auth;
 
+  Future<void> init() async {
+    await _auth.init();
+  }
+
   @override
   Future<RpResponse> completeAuthenticate(
       AuthenticationCompleteRequest request) async {

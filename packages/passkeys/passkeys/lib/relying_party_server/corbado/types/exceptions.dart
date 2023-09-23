@@ -53,15 +53,12 @@ class ExceptionFactory {
         BackendMessage.fromJson(decoded['error'] as Map<String, dynamic>);
     switch (backendMessage.type) {
       case 'validation_error':
-        if (backendMessage.validation == null) {
+        final err = backendMessage.validation;
+        if (err == null || err.isEmpty) {
           return UnexpectedBackendException(operation, message);
         }
 
-        return ValidationException(
-          operation,
-          message,
-          backendMessage.validation!,
-        );
+        return _fromValidationError(operation, message, err);
       case 'not_found':
         if (backendMessage.details == "user doesn't exist") {
           return UnknownUserException(backendMessage.details!);
@@ -71,6 +68,19 @@ class ExceptionFactory {
       default:
         return UnexpectedBackendException(operation, message);
     }
+  }
+
+  static Exception _fromValidationError(
+    String operation,
+    String message,
+    List<BackendValidationError> e,
+  ) {
+    if (e.first.field == 'username' &&
+        e.first.message == 'user already exists') {
+      return UserAlreadyExistsException(message);
+    }
+
+    return ValidationException(operation, message, e);
   }
 }
 
