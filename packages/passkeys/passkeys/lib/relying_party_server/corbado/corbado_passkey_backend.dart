@@ -32,11 +32,21 @@ class CorbadoPasskeyBackend
               _client.addDefaultHeader('Origin', value),
             },
           );
-    } else if (Platform.isIOS) {
+
       _client.addDefaultHeader(
-        'Origin',
-        'https://$_projectID.frontendapi.corbado.io',
+        'User-Agent',
+        'Android ${Platform.operatingSystemVersion}',
       );
+    } else if (Platform.isIOS) {
+      _client
+        ..addDefaultHeader(
+          'Origin',
+          'https://$_projectID.frontendapi.corbado.io',
+        )
+        ..addDefaultHeader(
+          'User-Agent',
+          'iOS ${Platform.operatingSystemVersion}',
+        );
     }
   }
 

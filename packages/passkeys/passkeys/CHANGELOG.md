@@ -1,3 +1,8 @@
+## 1.0.3
+
+* Fixed bug that happens when executing the Android example.
+* Activate alternate mode for iOS (entitlements).
+
 ## 1.0.2
 
 * Improved docs.
