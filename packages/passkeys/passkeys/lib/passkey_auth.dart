@@ -35,6 +35,8 @@ class PasskeyAuth<Request, Response> {
   final PasskeyAuthenticator _authenticator;
   final RelyingPartyServer<Request, Response> _backend;
 
+  PasskeyAuthenticator get authenticator => _authenticator;
+
   /// Determines if passkeys are supported on the current platform by checking
   /// if an authenticator is available.
   Future<bool> isSupported() async {

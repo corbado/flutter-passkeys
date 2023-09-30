@@ -3,7 +3,6 @@ import 'dart:io';
 import 'dart:io' show Platform;
 
 import 'package:corbado_frontend_api_client/frontendapi/lib/api.dart';
-import 'package:flutter/foundation.dart';
 import 'package:passkeys/authenticator/passkey_authenticator.dart';
 import 'package:passkeys/relying_party_server/corbado/types/authentication.dart';
 import 'package:passkeys/relying_party_server/corbado/types/exceptions.dart';
@@ -18,32 +17,25 @@ import 'package:passkeys/relying_party_server/types/registration.dart';
 class CorbadoPasskeyBackend
     extends RelyingPartyServer<AuthRequest, AuthResponse> {
   /// Sets up the client for the Corbado API.
-  CorbadoPasskeyBackend(this._projectID)
+  CorbadoPasskeyBackend(this._projectID, {String? explicitOrigin})
       : _client =
             ApiClient(basePath: 'https://$_projectID.frontendapi.corbado.io'),
         _authenticator = PasskeyAuthenticator() {
     _client.addDefaultHeader('X-Corbado-Project-ID', _projectID);
-    debugPrint('CorbadoPasskeyBackend: $_projectID');
+
+    var origin = 'https://$_projectID.frontendapi.corbado.io';
+    if (explicitOrigin != null) {
+      origin = explicitOrigin;
+    }
+    _client.addDefaultHeader('Origin', origin);
 
     if (Platform.isAndroid) {
-      _authenticator.getFacetID().then(
-            (value) => {
-              debugPrint('setting Origin of API requests to $value'),
-              _client.addDefaultHeader('Origin', value),
-            },
-          );
-
       _client.addDefaultHeader(
         'User-Agent',
         'Android ${Platform.operatingSystemVersion}',
       );
     } else if (Platform.isIOS) {
-      _client
-        ..addDefaultHeader(
-          'Origin',
-          'https://$_projectID.frontendapi.corbado.io',
-        )
-        ..addDefaultHeader(
+      _client.addDefaultHeader(
           'User-Agent',
           'iOS ${Platform.operatingSystemVersion}',
         );

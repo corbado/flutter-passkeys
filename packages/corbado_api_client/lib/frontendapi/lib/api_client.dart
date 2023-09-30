@@ -205,6 +205,26 @@ class ApiClient {
           return AuthMethodsListRspAllOfData.fromJson(value);
         case 'AuthenticationRsp':
           return AuthenticationRsp.fromJson(value);
+        case 'EmailCodeConfirmReq':
+          return EmailCodeConfirmReq.fromJson(value);
+        case 'EmailCodeConfirmRsp':
+          return EmailCodeConfirmRsp.fromJson(value);
+        case 'EmailCodeLoginStartReq':
+          return EmailCodeLoginStartReq.fromJson(value);
+        case 'EmailCodeLoginStartRsp':
+          return EmailCodeLoginStartRsp.fromJson(value);
+        case 'EmailCodeRegisterStartReq':
+          return EmailCodeRegisterStartReq.fromJson(value);
+        case 'EmailCodeRegisterStartRsp':
+          return EmailCodeRegisterStartRsp.fromJson(value);
+        case 'EmailCodeRegisterStartRspAllOf':
+          return EmailCodeRegisterStartRspAllOf.fromJson(value);
+        case 'EmailCodeRegisterStartRspAllOfData':
+          return EmailCodeRegisterStartRspAllOfData.fromJson(value);
+        case 'EmailCodeStatusReq':
+          return EmailCodeStatusReq.fromJson(value);
+        case 'EmailCodeStatusRsp':
+          return EmailCodeStatusRsp.fromJson(value);
         case 'EmailLinkConfirmReq':
           return EmailLinkConfirmReq.fromJson(value);
         case 'EmailLinkConfirmRsp':
@@ -247,6 +267,8 @@ class ApiClient {
           return GenericRsp.fromJson(value);
         case 'Jwk':
           return Jwk.fromJson(value);
+        case 'LoginIdentifierType':
+          return LoginIdentifierTypeTypeTransformer().decode(value);
         case 'LoginTokenReq':
           return LoginTokenReq.fromJson(value);
         case 'LoginTokenRsp':
@@ -255,18 +277,36 @@ class ApiClient {
           return LogoutRsp.fromJson(value);
         case 'LogoutRspAllOf':
           return LogoutRspAllOf.fromJson(value);
+        case 'MePassKeyRsp':
+          return MePassKeyRsp.fromJson(value);
+        case 'MePassKeyRspAllOf':
+          return MePassKeyRspAllOf.fromJson(value);
         case 'MeRsp':
           return MeRsp.fromJson(value);
         case 'MeRspAllOf':
           return MeRspAllOf.fromJson(value);
+        case 'Paging':
+          return Paging.fromJson(value);
         case 'PassKeyAppendFinishRsp':
           return PassKeyAppendFinishRsp.fromJson(value);
         case 'PassKeyAppendFinishRspAllOf':
           return PassKeyAppendFinishRspAllOf.fromJson(value);
         case 'PassKeyAppendFinishRspAllOfData':
           return PassKeyAppendFinishRspAllOfData.fromJson(value);
+        case 'PassKeyAssociateStartReq':
+          return PassKeyAssociateStartReq.fromJson(value);
+        case 'PassKeyCredentialExistsReq':
+          return PassKeyCredentialExistsReq.fromJson(value);
+        case 'PassKeyCredentialExistsRsp':
+          return PassKeyCredentialExistsRsp.fromJson(value);
+        case 'PassKeyCredentialExistsRspAllOf':
+          return PassKeyCredentialExistsRspAllOf.fromJson(value);
         case 'PassKeyFinishReq':
           return PassKeyFinishReq.fromJson(value);
+        case 'PassKeyItem':
+          return PassKeyItem.fromJson(value);
+        case 'PassKeyList':
+          return PassKeyList.fromJson(value);
         case 'PassKeyLoginFinishRsp':
           return PassKeyLoginFinishRsp.fromJson(value);
         case 'PassKeyLoginFinishRspAllOf':

@@ -112,6 +112,313 @@ class UsersApi {
     return null;
   }
 
+  /// Delete current user's passkeys
+  ///
+  /// Note: This method returns the HTTP [Response].
+  ///
+  /// Parameters:
+  ///
+  /// * [String] credentialID (required):
+  ///   Credential ID from passkeys
+  Future<Response> currentUserPassKeyDeleteWithHttpInfo(String credentialID,) async {
+    // ignore: prefer_const_declarations
+    final path = r'/v1/me/passkeys/{credentialID}'
+      .replaceAll('{credentialID}', credentialID);
+
+    // ignore: prefer_final_locals
+    Object? postBody;
+
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
+
+    const contentTypes = <String>[];
+
+
+    return apiClient.invokeAPI(
+      path,
+      'DELETE',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      contentTypes.isEmpty ? null : contentTypes.first,
+    );
+  }
+
+  /// Delete current user's passkeys
+  ///
+  /// Parameters:
+  ///
+  /// * [String] credentialID (required):
+  ///   Credential ID from passkeys
+  Future<GenericRsp?> currentUserPassKeyDelete(String credentialID,) async {
+    final response = await currentUserPassKeyDeleteWithHttpInfo(credentialID,);
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
+    }
+    // When a remote server returns no body with a status of 204, we shall not decode it.
+    // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
+    // FormatException when trying to decode an empty string.
+    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
+      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'GenericRsp',) as GenericRsp;
+    
+    }
+    return null;
+  }
+
+  /// Gets current user's passkeys
+  ///
+  /// Note: This method returns the HTTP [Response].
+  Future<Response> currentUserPassKeyGetWithHttpInfo() async {
+    // ignore: prefer_const_declarations
+    final path = r'/v1/me/passkeys';
+
+    // ignore: prefer_final_locals
+    Object? postBody;
+
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
+
+    const contentTypes = <String>[];
+
+
+    return apiClient.invokeAPI(
+      path,
+      'GET',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      contentTypes.isEmpty ? null : contentTypes.first,
+    );
+  }
+
+  /// Gets current user's passkeys
+  Future<MePassKeyRsp?> currentUserPassKeyGet() async {
+    final response = await currentUserPassKeyGetWithHttpInfo();
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
+    }
+    // When a remote server returns no body with a status of 204, we shall not decode it.
+    // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
+    // FormatException when trying to decode an empty string.
+    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
+      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'MePassKeyRsp',) as MePassKeyRsp;
+    
+    }
+    return null;
+  }
+
+  /// Performs email OTP register confirm
+  ///
+  /// Note: This method returns the HTTP [Response].
+  ///
+  /// Parameters:
+  ///
+  /// * [EmailCodeConfirmReq] emailCodeConfirmReq (required):
+  Future<Response> emailCodeConfirmWithHttpInfo(EmailCodeConfirmReq emailCodeConfirmReq,) async {
+    // ignore: prefer_const_declarations
+    final path = r'/v1/users/emailcodes/confirm';
+
+    // ignore: prefer_final_locals
+    Object? postBody = emailCodeConfirmReq;
+
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
+
+    const contentTypes = <String>['application/json'];
+
+
+    return apiClient.invokeAPI(
+      path,
+      'POST',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      contentTypes.isEmpty ? null : contentTypes.first,
+    );
+  }
+
+  /// Performs email OTP register confirm
+  ///
+  /// Parameters:
+  ///
+  /// * [EmailCodeConfirmReq] emailCodeConfirmReq (required):
+  Future<EmailCodeConfirmRsp?> emailCodeConfirm(EmailCodeConfirmReq emailCodeConfirmReq,) async {
+    final response = await emailCodeConfirmWithHttpInfo(emailCodeConfirmReq,);
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
+    }
+    // When a remote server returns no body with a status of 204, we shall not decode it.
+    // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
+    // FormatException when trying to decode an empty string.
+    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
+      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'EmailCodeConfirmRsp',) as EmailCodeConfirmRsp;
+    
+    }
+    return null;
+  }
+
+  /// Performs email OTP login start
+  ///
+  /// Note: This method returns the HTTP [Response].
+  ///
+  /// Parameters:
+  ///
+  /// * [EmailCodeLoginStartReq] emailCodeLoginStartReq (required):
+  Future<Response> emailCodeLoginStartWithHttpInfo(EmailCodeLoginStartReq emailCodeLoginStartReq,) async {
+    // ignore: prefer_const_declarations
+    final path = r'/v1/users/emailcodes/login/start';
+
+    // ignore: prefer_final_locals
+    Object? postBody = emailCodeLoginStartReq;
+
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
+
+    const contentTypes = <String>['application/json'];
+
+
+    return apiClient.invokeAPI(
+      path,
+      'POST',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      contentTypes.isEmpty ? null : contentTypes.first,
+    );
+  }
+
+  /// Performs email OTP login start
+  ///
+  /// Parameters:
+  ///
+  /// * [EmailCodeLoginStartReq] emailCodeLoginStartReq (required):
+  Future<EmailCodeLoginStartRsp?> emailCodeLoginStart(EmailCodeLoginStartReq emailCodeLoginStartReq,) async {
+    final response = await emailCodeLoginStartWithHttpInfo(emailCodeLoginStartReq,);
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
+    }
+    // When a remote server returns no body with a status of 204, we shall not decode it.
+    // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
+    // FormatException when trying to decode an empty string.
+    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
+      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'EmailCodeLoginStartRsp',) as EmailCodeLoginStartRsp;
+    
+    }
+    return null;
+  }
+
+  /// Performs email OTP register start
+  ///
+  /// Note: This method returns the HTTP [Response].
+  ///
+  /// Parameters:
+  ///
+  /// * [EmailCodeRegisterStartReq] emailCodeRegisterStartReq (required):
+  Future<Response> emailCodeRegisterStartWithHttpInfo(EmailCodeRegisterStartReq emailCodeRegisterStartReq,) async {
+    // ignore: prefer_const_declarations
+    final path = r'/v1/users/emailcodes/register/start';
+
+    // ignore: prefer_final_locals
+    Object? postBody = emailCodeRegisterStartReq;
+
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
+
+    const contentTypes = <String>['application/json'];
+
+
+    return apiClient.invokeAPI(
+      path,
+      'POST',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      contentTypes.isEmpty ? null : contentTypes.first,
+    );
+  }
+
+  /// Performs email OTP register start
+  ///
+  /// Parameters:
+  ///
+  /// * [EmailCodeRegisterStartReq] emailCodeRegisterStartReq (required):
+  Future<EmailCodeRegisterStartRsp?> emailCodeRegisterStart(EmailCodeRegisterStartReq emailCodeRegisterStartReq,) async {
+    final response = await emailCodeRegisterStartWithHttpInfo(emailCodeRegisterStartReq,);
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
+    }
+    // When a remote server returns no body with a status of 204, we shall not decode it.
+    // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
+    // FormatException when trying to decode an empty string.
+    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
+      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'EmailCodeRegisterStartRsp',) as EmailCodeRegisterStartRsp;
+    
+    }
+    return null;
+  }
+
+  /// Performs email OTP login status check
+  ///
+  /// Note: This method returns the HTTP [Response].
+  ///
+  /// Parameters:
+  ///
+  /// * [EmailCodeStatusReq] emailCodeStatusReq (required):
+  Future<Response> emailCodeStatusWithHttpInfo(EmailCodeStatusReq emailCodeStatusReq,) async {
+    // ignore: prefer_const_declarations
+    final path = r'/v1/users/emailcodes/status';
+
+    // ignore: prefer_final_locals
+    Object? postBody = emailCodeStatusReq;
+
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
+
+    const contentTypes = <String>['application/json'];
+
+
+    return apiClient.invokeAPI(
+      path,
+      'POST',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      contentTypes.isEmpty ? null : contentTypes.first,
+    );
+  }
+
+  /// Performs email OTP login status check
+  ///
+  /// Parameters:
+  ///
+  /// * [EmailCodeStatusReq] emailCodeStatusReq (required):
+  Future<EmailCodeStatusRsp?> emailCodeStatus(EmailCodeStatusReq emailCodeStatusReq,) async {
+    final response = await emailCodeStatusWithHttpInfo(emailCodeStatusReq,);
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
+    }
+    // When a remote server returns no body with a status of 204, we shall not decode it.
+    // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
+    // FormatException when trying to decode an empty string.
+    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
+      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'EmailCodeStatusRsp',) as EmailCodeStatusRsp;
+    
+    }
+    return null;
+  }
+
   /// Performs email link register confirm
   ///
   /// Note: This method returns the HTTP [Response].
@@ -471,6 +778,110 @@ class UsersApi {
     // FormatException when trying to decode an empty string.
     if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
       return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'PassKeyStartRsp',) as PassKeyStartRsp;
+    
+    }
+    return null;
+  }
+
+  /// Performs passkey associate start
+  ///
+  /// Note: This method returns the HTTP [Response].
+  ///
+  /// Parameters:
+  ///
+  /// * [PassKeyAssociateStartReq] passKeyAssociateStartReq (required):
+  Future<Response> passKeyAssociateStartWithHttpInfo(PassKeyAssociateStartReq passKeyAssociateStartReq,) async {
+    // ignore: prefer_const_declarations
+    final path = r'/v1/users/passkey/associate/start';
+
+    // ignore: prefer_final_locals
+    Object? postBody = passKeyAssociateStartReq;
+
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
+
+    const contentTypes = <String>['application/json'];
+
+
+    return apiClient.invokeAPI(
+      path,
+      'POST',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      contentTypes.isEmpty ? null : contentTypes.first,
+    );
+  }
+
+  /// Performs passkey associate start
+  ///
+  /// Parameters:
+  ///
+  /// * [PassKeyAssociateStartReq] passKeyAssociateStartReq (required):
+  Future<PassKeyStartRsp?> passKeyAssociateStart(PassKeyAssociateStartReq passKeyAssociateStartReq,) async {
+    final response = await passKeyAssociateStartWithHttpInfo(passKeyAssociateStartReq,);
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
+    }
+    // When a remote server returns no body with a status of 204, we shall not decode it.
+    // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
+    // FormatException when trying to decode an empty string.
+    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
+      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'PassKeyStartRsp',) as PassKeyStartRsp;
+    
+    }
+    return null;
+  }
+
+  /// Checks if active passkey credential exists for provided user and device
+  ///
+  /// Note: This method returns the HTTP [Response].
+  ///
+  /// Parameters:
+  ///
+  /// * [PassKeyCredentialExistsReq] passKeyCredentialExistsReq (required):
+  Future<Response> passKeyCredentialExistsWithHttpInfo(PassKeyCredentialExistsReq passKeyCredentialExistsReq,) async {
+    // ignore: prefer_const_declarations
+    final path = r'/v1/users/device/passkey';
+
+    // ignore: prefer_final_locals
+    Object? postBody = passKeyCredentialExistsReq;
+
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
+
+    const contentTypes = <String>['application/json'];
+
+
+    return apiClient.invokeAPI(
+      path,
+      'POST',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      contentTypes.isEmpty ? null : contentTypes.first,
+    );
+  }
+
+  /// Checks if active passkey credential exists for provided user and device
+  ///
+  /// Parameters:
+  ///
+  /// * [PassKeyCredentialExistsReq] passKeyCredentialExistsReq (required):
+  Future<PassKeyCredentialExistsRsp?> passKeyCredentialExists(PassKeyCredentialExistsReq passKeyCredentialExistsReq,) async {
+    final response = await passKeyCredentialExistsWithHttpInfo(passKeyCredentialExistsReq,);
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
+    }
+    // When a remote server returns no body with a status of 204, we shall not decode it.
+    // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
+    // FormatException when trying to decode an empty string.
+    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
+      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'PassKeyCredentialExistsRsp',) as PassKeyCredentialExistsRsp;
     
     }
     return null;

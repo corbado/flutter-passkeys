@@ -18,6 +18,12 @@ dependencies:
   passkeys: ^1.0.2
   rxdart: ^0.27.7
 
+dependency_overrides:
+  corbado_frontend_api_client:
+    path: /Users/hackfred/personal/programming/corbado/flutter-passkeys/packages/corbado_api_client
+  passkeys:
+    path: /Users/hackfred/personal/programming/corbado/flutter-passkeys/packages/passkeys/passkeys
+
 dev_dependencies:
   build_runner: ^2.4.5
   flutter_test:

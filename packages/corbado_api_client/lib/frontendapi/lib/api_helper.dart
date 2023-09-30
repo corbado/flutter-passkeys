@@ -58,6 +58,9 @@ String parameterToString(dynamic value) {
   if (value is AuthMethod) {
     return AuthMethodTypeTransformer().encode(value).toString();
   }
+  if (value is LoginIdentifierType) {
+    return LoginIdentifierTypeTypeTransformer().encode(value).toString();
+  }
   if (value is Status) {
     return StatusTypeTransformer().encode(value).toString();
   }

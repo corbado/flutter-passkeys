@@ -281,9 +281,14 @@ components:
       description: ID of the email magic link
       type: string
 
-    additionalPayload:
-      description: Additional payload
+    emailCodeID:
+      description: ID of the email OTP
       type: string
+
+    additionalPayload:
+      description: Additional payload in JSON format
+      type: string
+      example: '{"projectAbbreviation":"CRBD"}'
 
     created:
       description: Timestamp of when the entity was created in yyyy-MM-dd'T'HH:mm:ss format
@@ -296,6 +301,11 @@ components:
     deleted:
       description: Timestamp of when the entity was deleted in yyyy-MM-dd'T'HH:mm:ss format
       type: string
+
+    loginIdentifierType:
+      description: Login Identifier type
+      type: string
+      enum: [ 'email', 'phone_number', 'custom' ]
 
     requestData:
       description: Data about the request itself, can be used for debugging
@@ -351,6 +361,10 @@ components:
           $ref: '#/components/schemas/authMethods'
         p18:
           $ref: '#/components/schemas/fullUser'
+        p19:
+          $ref: '#/components/schemas/loginIdentifierType'
+        p20:
+          $ref: '#/components/schemas/emailCodeID'
 
     genericRsp:
       type: object

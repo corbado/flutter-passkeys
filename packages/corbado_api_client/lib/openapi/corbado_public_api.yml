@@ -51,6 +51,42 @@ paths:
         default:
           $ref: '#/components/responses/error'
 
+  /v1/me/passkeys:
+    get:
+      description: Gets current user's passkeys
+      operationId: CurrentUserPassKeyGet
+      tags:
+        - Users
+      responses:
+        '200':
+          description: Provides current user data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/mePassKeyRsp'
+        default:
+          $ref: '#/components/responses/error'
+
+  /v1/me/passkeys/{credentialID}:
+    delete:
+      description: Delete current user's passkeys
+      operationId: CurrentUserPassKeyDelete
+      parameters:
+        - in: path
+          required: true
+          name: credentialID
+          schema:
+            type: string
+          description: 'Credential ID from passkeys'
+          example: 'cre-abc123'
+      tags:
+        - Users
+      responses:
+        '200':
+          $ref: '#/components/responses/200'
+        default:
+          $ref: '#/components/responses/error'
+
   /v1/users/authmethods:
     post:
       description: Lists user's available authentication methods
@@ -231,10 +267,31 @@ paths:
         default:
           $ref: '#/components/responses/error'
 
+  /v1/users/passkey/associate/start:
+    post:
+      description: Performs passkey associate start
+      operationId: PassKeyAssociateStart
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/passKeyAssociateStartReq'
+      responses:
+        '200':
+          description: Provides challenge for perform PassKey ceremony
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/passKeyStartRsp'
+        default:
+          $ref: '#/components/responses/error'
+
   ###################
   ### Email links ###
   ###################
-
   /v1/users/emaillinks/register/start:
     post:
       description: Performs email link register start
@@ -324,6 +381,97 @@ paths:
           $ref: '#/components/responses/error'
 
   ###################
+  ### Email OTP   ###
+  ###################
+  /v1/users/emailcodes/register/start:
+    post:
+      description: Performs email OTP register start
+      operationId: EmailCodeRegisterStart
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/emailCodeRegisterStartReq'
+      responses:
+        '200':
+          description: Successfully started register
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/emailCodeRegisterStartRsp'
+        default:
+          $ref: '#/components/responses/error'
+
+  /v1/users/emailcodes/confirm:
+    post:
+      description: Performs email OTP register confirm
+      operationId: EmailCodeConfirm
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/emailCodeConfirmReq'
+      responses:
+        '200':
+          description: Successfully confirmed email OTP
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/emailCodeConfirmRsp'
+        default:
+          $ref: '#/components/responses/error'
+
+  /v1/users/emailcodes/login/start:
+    post:
+      description: Performs email OTP login start
+      operationId: EmailCodeLoginStart
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/emailCodeLoginStartReq'
+      responses:
+        '200':
+          description: Provides a session token to initialize your session
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/emailCodeLoginStartRsp'
+        default:
+          $ref: '#/components/responses/error'
+
+  /v1/users/emailcodes/status:
+    post:
+      description: Performs email OTP login status check
+      operationId: EmailCodeStatus
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/emailCodeStatusReq'
+      responses:
+        '200':
+          description: Provides a session token to initialize your session
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/emailCodeStatusRsp'
+        default:
+          $ref: '#/components/responses/error'
+
+  ###################
   #### Password  ####
   ###################
   /v1/users/password/verify:
@@ -370,6 +518,28 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/loginTokenRsp'
+        default:
+          $ref: '#/components/responses/error'
+
+  /v1/users/device/passkey:
+    post:
+      description: Checks if active passkey credential exists for provided user and device
+      operationId: PassKeyCredentialExists
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/passKeyCredentialExistsReq'
+      responses:
+        '200':
+          description: PassKeys credentials check completed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/passKeyCredentialExistsRsp'
         default:
           $ref: '#/components/responses/error'
 
@@ -424,7 +594,6 @@ paths:
   ###############
   ### Session ###
   ###############
-
   /v1/sessions/logout:
     delete:
       description: Performs session logout
@@ -516,6 +685,64 @@ components:
             data:
               $ref: 'common.yml#/components/schemas/fullUser'
 
+    mePassKeyRsp:
+      allOf:
+        - $ref: 'common.yml#/components/schemas/genericRsp'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: '#/components/schemas/passKeyList'
+
+    passKeyList:
+      type: object
+      required:
+        - passkeys
+      properties:
+        passkeys:
+          type: array
+          items:
+            $ref: '#/components/schemas/passKeyItem'
+        paging:
+          $ref: 'common.yml#/components/schemas/paging'
+
+    passKeyItem:
+      type: object
+      required:
+        - id
+        - aaguid
+        - userAgent
+        - attestationType
+        - transport
+        - backupEligible
+        - backupState
+        - status
+        - created
+      properties:
+        id:
+          type: string
+        aaguid:
+          type: string
+        userAgent:
+          type: string
+        attestationType:
+          type: string
+        transport:
+          type: array
+          items:
+            type: string
+        backupEligible:
+          type: boolean
+        backupState:
+          type: boolean
+        status:
+          type: string
+          enum: [ 'pending', 'active' ]
+          description: "Status"
+        created:
+          $ref: 'common.yml#/components/schemas/created'
+
     authMethodsListReq:
       type: object
       required:
@@ -548,7 +775,6 @@ components:
     ########################
     ### PassKeys section ###
     ########################
-
     passKeyLoginStartReq:
       type: object
       required:
@@ -670,11 +896,19 @@ components:
                   type: string
                   description: Contains json payload data for start webauthn mediation challenge
 
+    passKeyAssociateStartReq:
+      type: object
+      required:
+        - associationToken
+      properties:
+        associationToken:
+          type: string
+        requestID:
+          $ref: 'common.yml#/components/schemas/requestID'
 
     ##########################
     ### Email Link section ###
     ##########################
-
     emailLinkRegisterStartReq:
       type: object
       properties:
@@ -777,6 +1011,111 @@ components:
                     - authMethods
                 - $ref: '#/components/schemas/authenticationRsp'
 
+    ##########################
+    ### Email OTP section  ###
+    ##########################
+    emailCodeRegisterStartReq:
+      type: object
+      properties:
+        username:
+          type: string
+        email:
+          type: string
+        requestID:
+          $ref: 'common.yml#/components/schemas/requestID'
+      required:
+        - email
+
+    emailCodeRegisterStartRsp:
+      allOf:
+        - $ref: 'common.yml#/components/schemas/genericRsp'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              type: object
+              properties:
+                emailCodeID:
+                  type: string
+              required:
+                - emailCodeID
+
+    emailCodeConfirmReq:
+      type: object
+      properties:
+        emailCodeID:
+          type: string
+        code:
+          type: string
+        requestID:
+          $ref: 'common.yml#/components/schemas/requestID'
+      required:
+        - emailCodeID
+        - code
+
+    emailCodeLoginStartReq:
+      type: object
+      properties:
+        username:
+          type: string
+        requestID:
+          $ref: 'common.yml#/components/schemas/requestID'
+      required:
+        - username
+
+    emailCodeLoginStartRsp:
+      allOf:
+        - $ref: 'common.yml#/components/schemas/genericRsp'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              type: object
+              properties:
+                emailCodeID:
+                  type: string
+              required:
+                - emailCodeID
+
+    emailCodeStatusReq:
+      type: object
+      properties:
+        emailCodeID:
+          type: string
+        requestID:
+          $ref: 'common.yml#/components/schemas/requestID'
+      required:
+        - emailCodeID
+
+    emailCodeStatusRsp:
+      allOf:
+        - $ref: 'common.yml#/components/schemas/genericRsp'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: '#/components/schemas/authenticationRsp'
+
+    emailCodeConfirmRsp:
+      allOf:
+        - $ref: 'common.yml#/components/schemas/genericRsp'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              allOf:
+                - type: object
+                  properties:
+                    authMethods:
+                      $ref: 'common.yml#/components/schemas/authMethods'
+                  required:
+                    - authMethods
+                - $ref: '#/components/schemas/authenticationRsp'
+
     passwordVerifyReq:
       type: object
       properties:
@@ -820,6 +1159,29 @@ components:
           properties:
             data:
               $ref: '#/components/schemas/authenticationRsp'
+
+    passKeyCredentialExistsReq:
+      type: object
+      required:
+        - loginIdentifier
+        - loginIdentifierType
+      properties:
+        loginIdentifier:
+          type: string
+        loginIdentifierType:
+          $ref: 'common.yml#/components/schemas/loginIdentifierType'
+        requestID:
+          $ref: 'common.yml#/components/schemas/requestID'
+
+    passKeyCredentialExistsRsp:
+      allOf:
+        - $ref: 'common.yml#/components/schemas/genericRsp'
+        - type: object
+          required:
+            - exists
+          properties:
+            exists:
+              type: boolean
 
     projectConfigRsp:
       allOf:
@@ -1026,6 +1388,7 @@ components:
       type: object
       required:
         - redirectURL
+        - authMethods
       properties:
         redirectURL:
           type: string
@@ -1039,6 +1402,19 @@ components:
           $ref: '#/components/schemas/shortSession'
 
   responses:
+    ###################################################################
+    # Responses: 200                                                  #
+    ###################################################################
+    '200':
+      description: Operation succeeded
+      content:
+        application/json:
+          schema:
+            $ref: 'common.yml#/components/schemas/genericRsp'
+
+    ###################################################################
+    # Responses: Error                                                #
+    ###################################################################
     error:
       description: Error
       content:

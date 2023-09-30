@@ -76,6 +76,12 @@ Class | Method | HTTP request | Description
 *SessionsApi* | [**wellKnownJWKSList**](doc//SessionsApi.md#wellknownjwkslist) | **GET** /.well-known/jwks | 
 *UsersApi* | [**authMethodsList**](doc//UsersApi.md#authmethodslist) | **POST** /v1/users/authmethods | 
 *UsersApi* | [**currentUserGet**](doc//UsersApi.md#currentuserget) | **GET** /v1/me | 
+*UsersApi* | [**currentUserPassKeyDelete**](doc//UsersApi.md#currentuserpasskeydelete) | **DELETE** /v1/me/passkeys/{credentialID} | 
+*UsersApi* | [**currentUserPassKeyGet**](doc//UsersApi.md#currentuserpasskeyget) | **GET** /v1/me/passkeys | 
+*UsersApi* | [**emailCodeConfirm**](doc//UsersApi.md#emailcodeconfirm) | **POST** /v1/users/emailcodes/confirm | 
+*UsersApi* | [**emailCodeLoginStart**](doc//UsersApi.md#emailcodeloginstart) | **POST** /v1/users/emailcodes/login/start | 
+*UsersApi* | [**emailCodeRegisterStart**](doc//UsersApi.md#emailcoderegisterstart) | **POST** /v1/users/emailcodes/register/start | 
+*UsersApi* | [**emailCodeStatus**](doc//UsersApi.md#emailcodestatus) | **POST** /v1/users/emailcodes/status | 
 *UsersApi* | [**emailLinkConfirm**](doc//UsersApi.md#emaillinkconfirm) | **POST** /v1/users/emaillinks/confirm | 
 *UsersApi* | [**emailLinkLoginStart**](doc//UsersApi.md#emaillinkloginstart) | **POST** /v1/users/emaillinks/login/start | 
 *UsersApi* | [**emailLinkRegisterStart**](doc//UsersApi.md#emaillinkregisterstart) | **POST** /v1/users/emaillinks/register/start | 
@@ -83,6 +89,8 @@ Class | Method | HTTP request | Description
 *UsersApi* | [**loginToken**](doc//UsersApi.md#logintoken) | **POST** /v1/users/logintoken | 
 *UsersApi* | [**passKeyAppendFinish**](doc//UsersApi.md#passkeyappendfinish) | **POST** /v1/users/passkey/append/finish | 
 *UsersApi* | [**passKeyAppendStart**](doc//UsersApi.md#passkeyappendstart) | **POST** /v1/users/passkey/append/start | 
+*UsersApi* | [**passKeyAssociateStart**](doc//UsersApi.md#passkeyassociatestart) | **POST** /v1/users/passkey/associate/start | 
+*UsersApi* | [**passKeyCredentialExists**](doc//UsersApi.md#passkeycredentialexists) | **POST** /v1/users/device/passkey | 
 *UsersApi* | [**passKeyLoginFinish**](doc//UsersApi.md#passkeyloginfinish) | **POST** /v1/users/passkey/login/finish | 
 *UsersApi* | [**passKeyLoginStart**](doc//UsersApi.md#passkeyloginstart) | **POST** /v1/users/passkey/login/start | 
 *UsersApi* | [**passKeyMediationStart**](doc//UsersApi.md#passkeymediationstart) | **POST** /v1/users/passkey/mediation/start | 
@@ -105,6 +113,16 @@ Class | Method | HTTP request | Description
  - [AuthMethodsListRspAllOf](doc//AuthMethodsListRspAllOf.md)
  - [AuthMethodsListRspAllOfData](doc//AuthMethodsListRspAllOfData.md)
  - [AuthenticationRsp](doc//AuthenticationRsp.md)
+ - [EmailCodeConfirmReq](doc//EmailCodeConfirmReq.md)
+ - [EmailCodeConfirmRsp](doc//EmailCodeConfirmRsp.md)
+ - [EmailCodeLoginStartReq](doc//EmailCodeLoginStartReq.md)
+ - [EmailCodeLoginStartRsp](doc//EmailCodeLoginStartRsp.md)
+ - [EmailCodeRegisterStartReq](doc//EmailCodeRegisterStartReq.md)
+ - [EmailCodeRegisterStartRsp](doc//EmailCodeRegisterStartRsp.md)
+ - [EmailCodeRegisterStartRspAllOf](doc//EmailCodeRegisterStartRspAllOf.md)
+ - [EmailCodeRegisterStartRspAllOfData](doc//EmailCodeRegisterStartRspAllOfData.md)
+ - [EmailCodeStatusReq](doc//EmailCodeStatusReq.md)
+ - [EmailCodeStatusRsp](doc//EmailCodeStatusRsp.md)
  - [EmailLinkConfirmReq](doc//EmailLinkConfirmReq.md)
  - [EmailLinkConfirmRsp](doc//EmailLinkConfirmRsp.md)
  - [EmailLinkConfirmRspAllOf](doc//EmailLinkConfirmRspAllOf.md)
@@ -126,16 +144,26 @@ Class | Method | HTTP request | Description
  - [FullUser](doc//FullUser.md)
  - [GenericRsp](doc//GenericRsp.md)
  - [Jwk](doc//Jwk.md)
+ - [LoginIdentifierType](doc//LoginIdentifierType.md)
  - [LoginTokenReq](doc//LoginTokenReq.md)
  - [LoginTokenRsp](doc//LoginTokenRsp.md)
  - [LogoutRsp](doc//LogoutRsp.md)
  - [LogoutRspAllOf](doc//LogoutRspAllOf.md)
+ - [MePassKeyRsp](doc//MePassKeyRsp.md)
+ - [MePassKeyRspAllOf](doc//MePassKeyRspAllOf.md)
  - [MeRsp](doc//MeRsp.md)
  - [MeRspAllOf](doc//MeRspAllOf.md)
+ - [Paging](doc//Paging.md)
  - [PassKeyAppendFinishRsp](doc//PassKeyAppendFinishRsp.md)
  - [PassKeyAppendFinishRspAllOf](doc//PassKeyAppendFinishRspAllOf.md)
  - [PassKeyAppendFinishRspAllOfData](doc//PassKeyAppendFinishRspAllOfData.md)
+ - [PassKeyAssociateStartReq](doc//PassKeyAssociateStartReq.md)
+ - [PassKeyCredentialExistsReq](doc//PassKeyCredentialExistsReq.md)
+ - [PassKeyCredentialExistsRsp](doc//PassKeyCredentialExistsRsp.md)
+ - [PassKeyCredentialExistsRspAllOf](doc//PassKeyCredentialExistsRspAllOf.md)
  - [PassKeyFinishReq](doc//PassKeyFinishReq.md)
+ - [PassKeyItem](doc//PassKeyItem.md)
+ - [PassKeyList](doc//PassKeyList.md)
  - [PassKeyLoginFinishRsp](doc//PassKeyLoginFinishRsp.md)
  - [PassKeyLoginFinishRspAllOf](doc//PassKeyLoginFinishRspAllOf.md)
  - [PassKeyLoginFinishRspAllOfData](doc//PassKeyLoginFinishRspAllOfData.md)
