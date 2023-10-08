@@ -87,8 +87,8 @@ class CorbadoPasskeyBackend
     AuthRequest request,
   ) async {
     try {
-      final result = await UsersApi(_client)
-          .passKeyLoginStart(PassKeyLoginStartReq(username: request.email));
+      final result = await UsersApi(_client).passKeyMediationStart(
+          PassKeyMediationStartReq(username: request.email));
 
       if (result == null) {
         throw Exception(

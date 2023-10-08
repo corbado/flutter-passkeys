@@ -2,15 +2,23 @@ import 'dart:convert';
 
 import 'package:json_annotation/json_annotation.dart';
 
+import 'field.dart';
+
 part 'exceptions.g.dart';
 
-/// Exception thrown when the user already exists
-class UserAlreadyExistsException implements Exception {
-  /// Constructor
-  UserAlreadyExistsException(this.message);
+class CorbadoException implements Exception {
+  CorbadoException(this._message);
 
-  /// The message
-  final String message;
+  final String _message;
+
+  String toString() => _message;
+}
+
+/// Exception thrown when the user already exists
+class UserAlreadyExistsException extends CorbadoException {
+  /// Constructor
+  UserAlreadyExistsException(String username)
+      : super('User with name ${username} already exists.');
 }
 
 /// Exception thrown when the user is unknown
@@ -20,6 +28,43 @@ class UnknownUserException implements Exception {
 
   /// The message
   final String message;
+}
+
+/// Exception thrown when one of the required fields is empty
+class RequiredFieldEmptyException extends CorbadoException {
+  /// Constructor
+  RequiredFieldEmptyException(String rawField)
+      : field = CorbadoField.fromString(rawField),
+        super('Required field "$rawField" can not be empty.');
+
+  /// Field name
+  final CorbadoField field;
+}
+
+/// Exception thrown when a field contains an invalid value
+class FieldWithInvalidValueException extends CorbadoException {
+  /// Constructor
+  FieldWithInvalidValueException(String rawField)
+      : field = CorbadoField.fromString(rawField),
+        super(
+            'Please check the field "$rawField", it contains an invalid value.');
+
+  final CorbadoField field;
+}
+
+/// Exception thrown when the submitted OTP code is wrong
+class InvalidOTPCodeException extends CorbadoException {
+  /// Constructor
+  InvalidOTPCodeException()
+      : super('The 6-digit code is wrong. Please check it once again.');
+}
+
+/// Exception thrown when the submitted OTP code is wrong
+class InvalidPasskeyException extends CorbadoException {
+  /// Constructor
+  InvalidPasskeyException()
+      : super(
+            'The passkey you used is incorrect. Please check if you used the right one.');
 }
 
 /// Exception thrown when the backend returns an unexpected response
@@ -64,6 +109,14 @@ class ExceptionFactory {
           return UnknownUserException(backendMessage.details!);
         }
 
+        if (backendMessage.details == 'Email code not valid') {
+          return InvalidOTPCodeException();
+        }
+
+        if (backendMessage.details == 'Used invalid credentials') {
+          return InvalidPasskeyException();
+        }
+
         return UnexpectedBackendException(operation, message);
       default:
         return UnexpectedBackendException(operation, message);
@@ -75,6 +128,25 @@ class ExceptionFactory {
     String message,
     List<BackendValidationError> e,
   ) {
+    // we only handle a single error (the first one)
+
+    if (e.first.message == 'cannot be blank') {
+      return RequiredFieldEmptyException(e.first.field);
+    }
+
+    if (e.first.message == 'Invalid / unreachable email address') {
+      return FieldWithInvalidValueException('email');
+    }
+
+    switch (e.first.field) {
+      case 'username':
+        if (e.first.message == 'user already exists') {
+          return UserAlreadyExistsException(message);
+        }
+      case 'email':
+        break;
+    }
+
     if (e.first.field == 'username' &&
         e.first.message == 'user already exists') {
       return UserAlreadyExistsException(message);

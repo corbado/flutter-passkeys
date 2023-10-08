@@ -27,3 +27,7 @@ dev_dependencies:
   pigeon: ^11.0.1
   plugin_platform_interface: ^2.0.0
   very_good_analysis: ^5.0.0
+
+dependency_overrides:
+  passkeys_platform_interface:
+    path: /Users/hackfred/personal/programming/corbado/flutter-passkeys/packages/passkeys/passkeys_platform_interface

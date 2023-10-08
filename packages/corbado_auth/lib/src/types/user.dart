@@ -34,6 +34,11 @@ class User {
 
   /// Serialize user
   Map<String, dynamic> toJson() => _$UserToJson(this);
+
+  bool hasValidToken() {
+    final t = DateTime.fromMillisecondsSinceEpoch(decoded.exp);
+    return t.isAfter(DateTime.now());
+  }
 }
 
 /// JWT token that is returned from Corbado's API after signIn and signUp.

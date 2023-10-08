@@ -101,7 +101,7 @@ class CorbadoAuth {
       debugPrint(e.toString());
       _userStreamController.add(null);
       _authStateNewStreamController.add(AuthState.None);
-      return _authStateStreamController.add(null);
+      _authStateStreamController.add(null);
     }
   }
 
@@ -141,9 +141,8 @@ class CorbadoAuth {
     }
   }
 
-  Future<String?> completeEmailCode({
-    required String code,
-  }) async {
+  Future<String?> completeEmailCode(
+      {required String code, bool askForPasskeyAppend = false}) async {
     if (_emailOTPState == null) {
       return 'No OTP process has been started. Please start one first before you submit a code.';
     }
@@ -151,19 +150,13 @@ class CorbadoAuth {
     final req =
         EmailCodeConfirmReq(emailCodeID: _emailOTPState!.token, code: code);
     try {
-      final res = await UsersApi(_client).emailCodeConfirm(req);
-      if (res == null) {
-        throw UnexpectedBackendException('emailLinkConfirm', '');
-      }
+      final res = await UsersApi(_client).emailCodeConfirmWithHttpInfo(req);
+      final authResponse = await AuthResponse.fromHttpResponse(res);
 
-      final user = User.fromIdToken(res.data.shortSession!.value);
-      switch (_emailOTPState!.flow) {
-        case EmailOTPFlow.SignIn:
-          await _postSignIn(user, res.data.longSession);
-        case EmailOTPFlow.SignUp:
-          await _postSignIn(user, res.data.longSession,
-              publishAuthState: false);
-      }
+      final user = User.fromIdToken(authResponse.token);
+      final publishAuthState = !askForPasskeyAppend;
+      await _postSignIn(user, authResponse.refreshToken,
+          publishAuthState: publishAuthState);
     } on ApiException catch (e) {
       throw ExceptionFactory.fromBackendMessage(
           'emailCodeConfirm', e.message ?? '');
@@ -190,38 +183,10 @@ class CorbadoAuth {
     }
 
     final json = jsonDecode(resStart!.data.challenge) as Map<String, dynamic>;
-    final r = CorbadoRegisterChallenge.fromJson(json).toRegisterInitResponse();
-    final challenge = r.challenge;
-    final user = UserType(
-      displayName: r.user.displayName,
-      name: r.user.name,
-      id: r.user.id,
-    );
-    final rp = RelyingPartyType(name: r.rp.name, id: r.rp.id);
-    final authSelectionType = AuthenticatorSelectionType(
-      authenticatorAttachment: r.authenticatorSelection.authenticatorAttachment,
-      requireResidentKey: r.authenticatorSelection.requireResidentKey,
-      residentKey: r.authenticatorSelection.residentKey,
-      userVerification: r.authenticatorSelection.userVerification,
-    );
-
-    final resAuthenticator = await _passkeyAuth.authenticator.register(
-      challenge,
-      rp,
-      user,
-      authSelectionType,
-      r.pubKeyCredParams
-          ?.map(
-            (e) => PubKeyCredParamType(
-              alg: e.alg,
-              type: e.type,
-            ),
-          )
-          .cast<PubKeyCredParamType>()
-          .toList(),
-      r.timeout,
-      r.attestation,
-    );
+    final resAuthenticator = await _registerPasskey(json);
+    if (resAuthenticator == null) {
+      return null;
+    }
 
     final signedChallenge = jsonEncode(
       CorbadoRegisterSignedChallengeRequest(
@@ -244,7 +209,7 @@ class CorbadoAuth {
       );
     }
 
-    _authStateNewStreamController.add(AuthState.SignedIn);
+    await _loadPasskeys();
     return null;
   }
 
@@ -282,6 +247,50 @@ class CorbadoAuth {
 
     final user = User.fromIdToken(response.token);
     await _postSignIn(user, response.refreshToken);
+  }
+
+  Future<RegisterResponseType?> _registerPasskey(Map<String, dynamic> json) async {
+    final r = CorbadoRegisterChallenge.fromJson(json).toRegisterInitResponse();
+    final challenge = r.challenge;
+    final user = UserType(
+      displayName: r.user.displayName,
+      name: r.user.name,
+      id: r.user.id,
+    );
+    final rp = RelyingPartyType(name: r.rp.name, id: r.rp.id);
+    final authSelectionType = AuthenticatorSelectionType(
+      authenticatorAttachment: r.authenticatorSelection.authenticatorAttachment,
+      requireResidentKey: r.authenticatorSelection.requireResidentKey,
+      residentKey: r.authenticatorSelection.residentKey,
+      userVerification: r.authenticatorSelection.userVerification,
+    );
+
+    try {
+      return _passkeyAuth.authenticator.register(
+        challenge,
+        rp,
+        user,
+        authSelectionType,
+        r.pubKeyCredParams
+            ?.map(
+              (e) => PubKeyCredParamType(
+                alg: e.alg,
+                type: e.type,
+              ),
+            )
+            .cast<PubKeyCredParamType>()
+            .toList(),
+        r.timeout,
+        r.attestation,
+      );
+    } on PlatformException catch (e) {
+      switch (e.code) {
+        case 'cancelled':
+          return null;
+        default:
+          rethrow;
+      }
+    }
   }
 
   /// Load all passkeys that are available to the currently logged in user.
