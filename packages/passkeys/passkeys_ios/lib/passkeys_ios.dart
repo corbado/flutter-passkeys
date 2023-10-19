@@ -63,6 +63,7 @@ class PasskeysIOS extends PasskeysPlatform {
       clientDataJSON: r.clientDataJSON,
       authenticatorData: r.authenticatorData,
       signature: r.signature,
+      userHandle: r.userHandle,
     );
   }
 

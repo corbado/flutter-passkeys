@@ -2,7 +2,7 @@ name: passkeys_platform_interface
 description: A common platform interface for the passkeys plugin. Must be implemented to support passkeys for a new platform.
 homepage: https://docs.corbado.com/overview/welcome
 repository: https://github.com/corbado/flutter-passkeys/tree/main/packages/passkeys/passkeys_platform_interface
-version: 1.0.0
+version: 1.1.0
 
 environment:
   sdk: ">=3.0.0 <4.0.0"

@@ -158,6 +158,7 @@ class PasskeyAuth<Request, Response> {
         clientDataJSON: authenticatorResponse.clientDataJSON,
         authenticatorData: authenticatorResponse.authenticatorData,
         signature: authenticatorResponse.signature,
+        userHandle: authenticatorResponse.userHandle,
       );
       final completeResponse =
           await _backend.completeAuthenticate(completeRequest);

@@ -1,3 +1,7 @@
+## 1.1.0
+
+* Added userHandle to AuthenticateResponseType.
+
 ## 1.0.2
 
 * Fixed typo that breaks iOS build.

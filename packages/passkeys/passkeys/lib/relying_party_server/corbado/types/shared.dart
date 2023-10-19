@@ -12,14 +12,14 @@ class AuthResponse {
     required this.refreshToken,
   });
 
-  factory AuthResponse.fromHttpResponse(Response response) {
+  static Future<AuthResponse> fromHttpResponse(Response response) async {
     if (response.statusCode >= HttpStatus.badRequest || response.body.isEmpty) {
-      throw Exception('An unknown error occured during the Corbado API call');
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
 
     final result =
         jsonDecode(utf8.decode(response.bodyBytes)) as Map<String, dynamic>;
-    final token = result['data']['sessionToken'] as String;
+    final token = result['data']['shortSession']['value'] as String;
     final setCookieString = response.headers['set-cookie'] as String;
     final cookieRegex = RegExp(r'cbo_long_session=(\w+);.*');
     final refreshToken = cookieRegex.firstMatch(setCookieString);
@@ -52,6 +52,16 @@ class AuthResponse {
 
   final String token;
   final String refreshToken;
+
+  static Future<String> _decodeBodyBytes(Response response) async {
+    final contentType = response.headers['content-type'];
+    return contentType != null &&
+            contentType.toLowerCase().startsWith('application/json')
+        ? response.bodyBytes.isEmpty
+            ? ''
+            : utf8.decode(response.bodyBytes)
+        : response.body;
+  }
 }
 
 class AuthRequest {

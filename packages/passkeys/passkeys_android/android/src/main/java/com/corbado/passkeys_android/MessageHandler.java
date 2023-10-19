@@ -134,9 +134,20 @@ public class MessageHandler implements Messages.PasskeysApi {
                     if (credential instanceof PublicKeyCredential) {
                         String responseJson = ((PublicKeyCredential) credential).getAuthenticationResponseJson();
                         try {
-                            JSONObject json = new JSONObject(responseJson);
-                            JSONObject response = json.getJSONObject("response");
-                            result.success(new Messages.AuthenticateResponse.Builder().setId(json.getString("id")).setRawId(json.getString("rawId")).setClientDataJSON(response.getString("clientDataJSON")).setAuthenticatorData(response.getString("authenticatorData")).setSignature(response.getString("signature")).build());
+                            final JSONObject json = new JSONObject(responseJson);
+                            final JSONObject response = json.getJSONObject("response");
+
+                            final String id = json.getString("id");
+                            final String rawId = json.getString("rawId");
+
+                            final String clientDataJSON = response.getString("clientDataJSON");
+                            final String userHandle = response.getString("userHandle");
+                            final String signature = response.getString("signature");
+                            final String authenticatorData = response.getString("authenticatorData");
+
+                            final Messages.AuthenticateResponse msg = new Messages.AuthenticateResponse.Builder().setId(id).setRawId(rawId).setClientDataJSON(clientDataJSON).setAuthenticatorData(authenticatorData).setSignature(signature).setUserHandle(userHandle).build();
+
+                            result.success(msg);
                         } catch (JSONException e) {
                             Log.e(TAG, "Error parsing response: " + responseJson, e);
                             result.error(e);
@@ -182,8 +193,7 @@ public class MessageHandler implements Messages.PasskeysApi {
                 }
             }
 
-            String encoded = android.util.Base64.encodeToString(digest,
-                    android.util.Base64.URL_SAFE | android.util.Base64.NO_PADDING | android.util.Base64.NO_WRAP);
+            String encoded = android.util.Base64.encodeToString(digest, android.util.Base64.URL_SAFE | android.util.Base64.NO_PADDING | android.util.Base64.NO_WRAP);
             Log.i(TAG, "Fingerprint: " + toRet.toString());
             Log.i(TAG, "Fingerprint (base64): " + encoded);
 

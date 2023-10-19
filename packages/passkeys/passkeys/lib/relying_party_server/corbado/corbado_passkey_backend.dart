@@ -93,18 +93,11 @@ class CorbadoPasskeyBackend
         ).toJson(),
       );
 
-      final result = await UsersApi(_client).passKeyRegisterFinish(
+      final result = await UsersApi(_client).passKeyRegisterFinishWithHttpInfo(
         PassKeyFinishReq(signedChallenge: signedChallenge),
       );
 
-      if (result == null) {
-        throw UnexpectedBackendException(
-          'passKeyRegisterFinish',
-          'result was null',
-        );
-      }
-
-      return AuthResponse.fromPassKeyRegisterFinishRsp(result);
+      return AuthResponse.fromHttpResponse(result);
     } on ApiException catch (e) {
       throw ExceptionFactory.fromBackendMessage(
         'passKeyRegisterFinish',
@@ -152,11 +145,11 @@ class CorbadoPasskeyBackend
         ).toJson(),
       );
 
-      final response = await UsersApi(_client).passKeyLoginFinish(
+      final response = await UsersApi(_client).passKeyLoginFinishWithHttpInfo(
         PassKeyFinishReq(signedChallenge: signedChallenge),
       );
 
-      return AuthResponse.fromPassKeyLoginFinishRsp(response!);
+      return AuthResponse.fromHttpResponse(response);
     } on ApiException catch (e) {
       throw ExceptionFactory.fromBackendMessage(
         'passKeyAuthenticateFinish',

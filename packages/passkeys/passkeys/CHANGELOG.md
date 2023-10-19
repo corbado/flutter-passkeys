@@ -1,3 +1,7 @@
+## 1.1.0
+
+* Added userHandle to AuthenticateResponseType.
+
 ## 1.0.3
 
 * Fixed bug that happens when executing the Android example.

@@ -118,6 +118,7 @@ class CorbadoAuthenticationCompleteRequest {
         clientDataJSON: r.clientDataJSON,
         authenticatorData: r.authenticatorData,
         signature: r.signature,
+        userHandle: r.userHandle,
       ),
     );
   }
@@ -150,6 +151,7 @@ class CorbadoAuthenticationComplete {
     required this.clientDataJSON,
     required this.authenticatorData,
     required this.signature,
+    required this.userHandle,
   });
 
   /// The client data json
@@ -160,6 +162,8 @@ class CorbadoAuthenticationComplete {
 
   /// The signature
   final String signature;
+
+  final String userHandle;
 
   /// Parses a json object
   factory CorbadoAuthenticationComplete.fromJson(Map<String, dynamic> json) =>

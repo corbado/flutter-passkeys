@@ -118,6 +118,7 @@ class AuthenticateResponse {
     required this.clientDataJSON,
     required this.authenticatorData,
     required this.signature,
+    required this.userHandle,
   });
 
   /// The ID
@@ -134,6 +135,8 @@ class AuthenticateResponse {
 
   /// The signature
   final String signature;
+
+  final String userHandle;
 }
 
 @HostApi()

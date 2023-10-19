@@ -5,6 +5,7 @@ class AuthenticateResponseType {
     required this.clientDataJSON,
     required this.authenticatorData,
     required this.signature,
+    required this.userHandle
   });
 
   final String id;
@@ -12,4 +13,5 @@ class AuthenticateResponseType {
   final String clientDataJSON;
   final String authenticatorData;
   final String signature;
+  final String userHandle;
 }

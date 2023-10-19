@@ -63,6 +63,7 @@ class AuthenticateResponse {
     required this.clientDataJSON,
     required this.authenticatorData,
     required this.signature,
+    required this.userHandle,
   });
 
   /// The ID
@@ -79,6 +80,8 @@ class AuthenticateResponse {
 
   /// Signed challenge
   final String signature;
+
+  final String userHandle;
 }
 
 @HostApi()
@@ -86,17 +89,13 @@ abstract class PasskeysApi {
   bool canAuthenticate();
 
   @async
-  RegisterResponse register(
-    String challenge,
-    RelyingParty relyingParty,
-    User user,
-  );
+  RegisterResponse register(String challenge,
+      RelyingParty relyingParty,
+      User user,);
 
   @async
-  AuthenticateResponse authenticate(
-    String relyingPartyId,
-    String challenge,
-  );
+  AuthenticateResponse authenticate(String relyingPartyId,
+      String challenge,);
 
   @async
   String getFacetID();
