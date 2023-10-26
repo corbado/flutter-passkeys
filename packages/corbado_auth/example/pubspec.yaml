@@ -14,6 +14,10 @@ dependencies:
   go_router: ^10.1.2
   json_editor: ^0.0.8
   url_launcher: ^6.1.12
+  flutter_hooks: ^0.20.3
+  riverpod: ^2.3.10
+  flutter_riverpod: ^2.3.10
+  hooks_riverpod: 2.4.0
 
 flutter:
   uses-material-design: true

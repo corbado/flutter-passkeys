@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:io' show Platform;
 
 import 'package:corbado_frontend_api_client/frontendapi/lib/api.dart';
+import 'package:flutter/material.dart';
 import 'package:passkeys/authenticator/passkey_authenticator.dart';
 import 'package:passkeys/relying_party_server/corbado/types/authentication.dart';
 import 'package:passkeys/relying_party_server/corbado/types/exceptions.dart';
@@ -17,18 +18,21 @@ import 'package:passkeys/relying_party_server/types/registration.dart';
 class CorbadoPasskeyBackend
     extends RelyingPartyServer<AuthRequest, AuthResponse> {
   /// Sets up the client for the Corbado API.
-  CorbadoPasskeyBackend(this._projectID) {
-    _authenticator = PasskeyAuthenticator();
-  }
+  CorbadoPasskeyBackend(this._projectID, {String? customDomain})
+      : _authenticator = PasskeyAuthenticator(),
+        _customDomain = customDomain,
+        _frontendAPI = 'https://$_projectID.frontendapi.corbado.io';
 
   /// Initializes the client by setting all required headers
   Future<void> init() async {
-    _client = await buildClient(_projectID);
+    _client = await buildClient();
   }
 
   late final PasskeyAuthenticator _authenticator;
   late final ApiClient _client;
   final String _projectID;
+  final String _frontendAPI;
+  final String? _customDomain;
 
   @override
   Future<RegistrationInitResponse> initRegister(AuthRequest request) async {
@@ -87,12 +91,44 @@ class CorbadoPasskeyBackend
     AuthRequest request,
   ) async {
     try {
-      final result = await UsersApi(_client).passKeyMediationStart(
-          PassKeyMediationStartReq(username: request.email));
+      final result = await UsersApi(_client).passKeyLoginStart(
+        PassKeyLoginStartReq(username: request.email),
+      );
 
       if (result == null) {
         throw Exception(
-            'An unknown error occurred during the Corbado API call');
+          'An unknown error occurred during the Corbado API call',
+        );
+      }
+
+      if (result.data.challenge.isEmpty) {
+        throw NoPasskeyForDeviceException();
+      }
+
+      final json = jsonDecode(result.data.challenge) as Map<String, dynamic>;
+      final typed = CorbadoAuthenticationInitResponse.fromJson(json);
+      return typed.toAuthenticationInitResponse();
+    } on ApiException catch (e) {
+      throw ExceptionFactory.fromBackendMessage(
+        'passKeyAuthenticateStart',
+        e.message ?? '',
+      );
+    }
+  }
+
+  @override
+  Future<AuthenticationInitResponse> initAuthenticateWithAutoComplete(
+    AuthRequest request,
+  ) async {
+    try {
+      final result = await UsersApi(_client).passKeyMediationStart(
+        PassKeyMediationStartReq(username: request.email),
+      );
+
+      if (result == null) {
+        throw Exception(
+          'An unknown error occurred during the Corbado API call',
+        );
       }
 
       if (result.data.challenge.isEmpty) {
@@ -125,7 +161,8 @@ class CorbadoPasskeyBackend
         PassKeyFinishReq(signedChallenge: signedChallenge),
       );
 
-      return AuthResponse.fromHttpResponse(response);
+      final res = await AuthResponse.fromHttpResponse(response);
+      return res;
     } on ApiException catch (e) {
       throw ExceptionFactory.fromBackendMessage(
         'passKeyAuthenticateFinish',
@@ -134,10 +171,11 @@ class CorbadoPasskeyBackend
     }
   }
 
-  Future<ApiClient> buildClient(String projectID) async {
-    final client =
-        ApiClient(basePath: 'https://$projectID.frontendapi.corbado.io')
-          ..addDefaultHeader('X-Corbado-Project-ID', projectID);
+  /// Builds an API client to interact with the Corbado frontend API.
+  /// Depending on the platform different headers will be set.
+  Future<ApiClient> buildClient() async {
+    final client = ApiClient(basePath: _frontendAPI)
+      ..addDefaultHeader('X-Corbado-Project-ID', _projectID);
 
     if (Platform.isAndroid) {
       final originHeader = await _authenticator.getFacetID();
@@ -153,10 +191,7 @@ class CorbadoPasskeyBackend
         );
     } else if (Platform.isIOS) {
       client
-        ..addDefaultHeader(
-          'Origin',
-          'https://corbado.com',
-        )
+        ..addDefaultHeader('Origin', _customDomain ?? _frontendAPI)
         ..addDefaultHeader(
           'User-Agent',
           'iOS ${Platform.operatingSystemVersion}',

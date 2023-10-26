@@ -1,3 +1,11 @@
+## 1.1.0
+* Added email OTP for sign up and sign in.
+* Added autocomplete for passkeys.
+* Added appendPasskey and deletePasskey.
+* Allow using custom domains (CNAME to the frontend API).
+* Added autocomplete to the example.
+* Start using riverpod in the example.
+
 ## 1.0.1
 
 * Fix broken import from passkeys package

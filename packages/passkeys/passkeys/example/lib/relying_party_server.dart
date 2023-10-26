@@ -7,7 +7,7 @@ import 'package:passkeys/relying_party_server/types/registration.dart';
 // For the example we make use of a shared and preconfigured Corbado project.
 // This makes it easy to setup (no configuration required for the developer).
 class SharedRelyingPartyServer
-    implements RelyingPartyServer<RpRequest, RpResponse> {
+    extends RelyingPartyServer<RpRequest, RpResponse> {
   SharedRelyingPartyServer()
       : _auth = CorbadoPasskeyBackend('pro-6244024196016258271');
 
@@ -41,7 +41,7 @@ class SharedRelyingPartyServer
 
   @override
   Future<AuthenticationInitResponse> initAuthenticate(RpRequest request) {
-      return _auth.initAuthenticate(AuthRequest(request.email));
+    return _auth.initAuthenticate(AuthRequest(request.email));
   }
 
   @override

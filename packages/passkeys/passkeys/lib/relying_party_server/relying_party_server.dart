@@ -1,8 +1,8 @@
 import 'package:passkeys/relying_party_server/types/authentication.dart';
 import 'package:passkeys/relying_party_server/types/registration.dart';
 
-/// Defines an interface that an implementation of a relying party server should
-/// comply to.
+/// Defines class that an implementation of a relying party server should
+/// extend.
 abstract class RelyingPartyServer<Request, Response> {
   /// Initiates the registration by asking for a challenge.
   Future<RegistrationInitResponse> initRegister(Request request);
@@ -14,6 +14,14 @@ abstract class RelyingPartyServer<Request, Response> {
 
   /// Initiates the authentication by asking for a challenge.
   Future<AuthenticationInitResponse> initAuthenticate(Request request);
+
+  /// Initiates the authentication by asking for a challenge.
+  /// Can be implemented if the relying party server provides a different
+  /// endpoint for autocompleted sign ins.
+  Future<AuthenticationInitResponse> initAuthenticateWithAutoComplete(
+    Request request,
+  ) =>
+      initAuthenticateWithAutoComplete(request);
 
   /// Completes the authentication by sending the solution to the challenge
   /// back.

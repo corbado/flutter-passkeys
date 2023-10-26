@@ -1,3 +1,7 @@
+## 1.2.0
+
+* Added autocomplete to sign in (authenticateWithAutocompletion). 
+
 ## 1.1.0
 
 * Added userHandle to AuthenticateResponseType.

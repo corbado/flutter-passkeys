@@ -1,15 +1,17 @@
-import 'package:corbado_auth_example/app_locator.dart';
-import 'package:corbado_auth_example/auth_service.dart';
+import 'package:corbado_auth_example/auth_provider.dart';
+import 'package:corbado_auth_example/router.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends ConsumerWidget {
   ProfilePage({super.key});
 
-  final AuthService _authService = getIt<AuthService>();
-
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final authService = ref.watch(authServiceProvider);
+    final user = ref.watch(userProvider);
+
     return Scaffold(
       appBar: AppBar(title: const Text('Corbado authentication')),
       body: Padding(
@@ -31,7 +33,7 @@ class ProfilePage extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
               child: Text(
-                _authService.user?.username ?? '',
+                user.value?.username ?? '',
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
@@ -52,7 +54,7 @@ class ProfilePage extends StatelessWidget {
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
-                  onPressed: () => context.push('/tokendetails'),
+                  onPressed: () => context.push(Routes.tokenDetails),
                   child: const Text('token details'),
                 )),
             SizedBox(height: 10),
@@ -64,7 +66,7 @@ class ProfilePage extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(vertical: 10),
                     side: BorderSide(
                         width: 2, color: Theme.of(context).primaryColor)),
-                onPressed: () => _authService.signOut(),
+                onPressed: () => authService.signOut(),
                 child: const Text('sign out'),
               ),
             ),

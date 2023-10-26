@@ -1,46 +1,19 @@
 import 'dart:async';
 
 import 'package:corbado_auth/corbado_auth.dart';
-import 'package:corbado_auth_example/app_locator.dart';
 import 'package:flutter/material.dart';
-import 'package:passkeys/relying_party_server/corbado/types/exceptions.dart';
-import 'package:rxdart/rxdart.dart';
 
-enum AuthState { Initializing, LoggedIn, LoggedOut }
+// This service encapsulates all authentication functionality.
+// It makes use of the corbado SDK through CorbadoAuth.
+class AuthService {
+  final CorbadoAuth _auth;
 
-class AuthService with ChangeNotifier {
-  final CorbadoAuth _auth = getIt<CorbadoAuth>();
-
-  User? _user;
-  AuthState _authState = AuthState.Initializing;
-  late StreamSubscription _userStreamSub;
-
-  User? get user => _user;
-
-  BehaviorSubject<User?> get userSteam => _auth.userStream;
-
-  AuthState get authState => _authState;
-
-  init() async {
-    _userStreamSub = _auth.userStream.listen((event) {
-      if (event == null) {
-        _authState = AuthState.LoggedOut;
-      } else {
-        _authState = AuthState.LoggedIn;
-      }
-
-      _user = event;
-      notifyListeners();
-    });
-
-    await _auth.init();
-  }
+  AuthService(this._auth);
 
   Future<String?> register({required String email}) async {
     try {
-      final maybeError =
       await _auth.registerWithPasskey(email: email, fullName: email);
-      return maybeError;
+      return null;
     } on ValidationException catch (e) {
       return 'validation error: ${e.toString()}';
     } on UnexpectedBackendException catch (e) {
@@ -64,17 +37,11 @@ class AuthService with ChangeNotifier {
     }
   }
 
-  Future<void> refreshToken() {
-    return _auth.refreshToken();
+  Future<SignInHandler> signInWithAutocomplete() async {
+    return await _auth.autocompletedSignInWithPasskey();
   }
 
   Future<void> signOut() {
     return _auth.signOut();
-  }
-
-  @override
-  void dispose() {
-    _userStreamSub.cancel();
-    super.dispose();
   }
 }

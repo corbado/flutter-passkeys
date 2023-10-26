@@ -6,6 +6,8 @@ import 'package:passkeys_example/relying_party_server.dart';
 final relyingPartServer = SharedRelyingPartyServer();
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
   await relyingPartServer.init();
   runApp(const MyApp());
 }

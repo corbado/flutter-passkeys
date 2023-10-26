@@ -4,7 +4,7 @@
 <dict>
 	<key>com.apple.developer.associated-domains</key>
 	<array>
-		<string>webcredentials:pro-4268394291597054564.frontendapi.corbado.io</string>
+		<string>webcredentials:pro-4268394291597054564.frontendapi.corbado.io?mode=developer</string>
 	</array>
 </dict>
 </plist>

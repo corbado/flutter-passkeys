@@ -17,7 +17,9 @@ import androidx.credentials.GetCredentialRequest;
 import androidx.credentials.GetCredentialResponse;
 import androidx.credentials.GetPublicKeyCredentialOption;
 import androidx.credentials.PublicKeyCredential;
+import androidx.credentials.exceptions.CreateCredentialCancellationException;
 import androidx.credentials.exceptions.CreateCredentialException;
+import androidx.credentials.exceptions.GetCredentialCancellationException;
 import androidx.credentials.exceptions.GetCredentialException;
 
 import com.corbado.passkeys_android.models.login.AllowCredentialType;
@@ -37,7 +39,6 @@ import org.json.JSONObject;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -76,8 +77,6 @@ public class MessageHandler implements Messages.PasskeysApi {
         try {
             String options = createCredentialOptions.toJSON().toString();
 
-            Log.e(TAG, "Options: " + options);
-
             Activity activity = plugin.requireActivity();
             CredentialManager credentialManager = CredentialManager.create(activity);
             CreatePublicKeyCredentialRequest createPublicKeyCredentialRequest = new CreatePublicKeyCredentialRequest(options);
@@ -99,7 +98,12 @@ public class MessageHandler implements Messages.PasskeysApi {
 
                 @Override
                 public void onError(CreateCredentialException e) {
-                    result.error(e);
+                    Exception platformException = e;
+                    if (e instanceof CreateCredentialCancellationException) {
+                        platformException = new Messages.FlutterError("cancelled", e.getMessage(), "");
+                    }
+
+                    result.error(platformException);
                 }
             });
         } catch (JSONException e) {
@@ -119,7 +123,6 @@ public class MessageHandler implements Messages.PasskeysApi {
         try {
             String options = getCredentialOptions.toJSON().toString();
 
-            Log.e(TAG, "Options: " + options);
             Activity activity = plugin.requireActivity();
 
             CredentialManager credentialManager = CredentialManager.create(activity);
@@ -159,7 +162,12 @@ public class MessageHandler implements Messages.PasskeysApi {
 
                 @Override
                 public void onError(GetCredentialException e) {
-                    result.error(e);
+                    Exception platformException = e;
+                    if (e instanceof GetCredentialCancellationException) {
+                        platformException = new Messages.FlutterError("cancelled", e.getMessage(), "");
+                    }
+
+                    result.error(platformException);
                 }
             });
         } catch (JSONException e) {

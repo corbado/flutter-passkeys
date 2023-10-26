@@ -1,58 +1,47 @@
-import 'package:corbado_auth_example/auth_service.dart';
-import 'package:corbado_auth_example/app_locator.dart';
-import 'package:corbado_auth_example/login_page.dart';
-import 'package:corbado_auth_example/profile_page.dart';
-import 'package:corbado_auth_example/tokendetails_page.dart';
+import 'package:corbado_auth/corbado_auth.dart';
+import 'package:corbado_auth_example/auth_provider.dart';
+import 'package:corbado_auth_example/pages/loading_page.dart';
+import 'package:corbado_auth_example/router.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  initLocator();
-  runApp(MyApp());
+
+  // This is a nice pattern if you need to initialize some of your services
+  // before the app starts.
+  // As we are using riverpod this initialization happens inside providers.
+  // First we show a loading page.
+  runApp(const LoadingPage());
+
+  // Now we do the initialization.
+  final corbadoProjectID = const String.fromEnvironment('CORBADO_PROJECT_ID');
+  final corbadoAuth = CorbadoAuth(corbadoProjectID);
+  await corbadoAuth.init();
+
+  // Finally we override the providers that needed initialization.
+  // Now the real app can be loaded.
+  runApp(ProviderScope(
+    overrides: [
+      corbadoProvider.overrideWithValue(corbadoAuth),
+    ],
+    child: MyApp(),
+  ));
+
 }
 
-class MyApp extends StatelessWidget {
-  MyApp({super.key});
+class MyApp extends ConsumerWidget {
+  const MyApp({super.key});
 
-  final GoRouter _router = GoRouter(
-      refreshListenable: getIt<AuthService>(),
-      initialLocation: '/',
-      routes: [
-        GoRoute(
-          path: "/",
-          builder: (context, state) => LoadingPage(),
-        ),
-        GoRoute(
-          path: "/login",
-          builder: (context, state) => LoginPage(),
-        ),
-        GoRoute(
-          path: "/profile",
-          builder: (context, state) => ProfilePage(),
-        ),
-        GoRoute(
-          path: "/tokendetails",
-          builder: (context, state) => TokenDetailsPage(),
-        )
-      ],
-      redirect: (BuildContext context, GoRouterState state) async {
-        final _authService = getIt<AuthService>();
-        if (_authService.authState == AuthState.LoggedOut &&
-            state.matchedLocation != '/login') {
-          return '/login';
-        } else if (_authService.authState == AuthState.LoggedIn &&
-            (state.matchedLocation == '/login' ||
-                state.matchedLocation == '/')) {
-          return '/profile';
-        }
-        return null;
-      });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final router = ref.watch(routerProvider);
+
     return MaterialApp.router(
-      routerConfig: _router,
+      routeInformationParser: router.routeInformationParser,
+      routerDelegate: router.routerDelegate,
+      routeInformationProvider: router.routeInformationProvider,
       theme: ThemeData(
         colorScheme: ColorScheme(
           brightness: Brightness.light,
@@ -67,29 +56,6 @@ class MyApp extends StatelessWidget {
           surface: Color(0xFF1953ff),
           onSurface: Color(0xFF1953ff),
         ),
-      ),
-    );
-  }
-}
-
-class LoadingPage extends StatefulWidget {
-  @override
-  State<LoadingPage> createState() => _LoadingPageState();
-}
-
-class _LoadingPageState extends State<LoadingPage> {
-  final AuthService _authService = getIt<AuthService>();
-
-  void initState() {
-    _authService.init();
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        child: Center(child: CircularProgressIndicator()),
       ),
     );
   }

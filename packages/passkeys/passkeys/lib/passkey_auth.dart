@@ -1,12 +1,10 @@
 import 'package:flutter/services.dart';
 import 'package:passkeys/authenticator/passkey_authenticator.dart';
+import 'package:passkeys/authenticator/types.dart';
 import 'package:passkeys/relying_party_server/relying_party_server.dart';
 import 'package:passkeys/relying_party_server/types/authentication.dart';
 import 'package:passkeys/relying_party_server/types/registration.dart';
-import 'package:passkeys_platform_interface/types/allow_credential.dart';
-import 'package:passkeys_platform_interface/types/authenticator_selection.dart';
-import 'package:passkeys_platform_interface/types/pubkeycred_param.dart';
-import 'package:passkeys_platform_interface/types/types.dart';
+import 'package:passkeys/sign_in_handler.dart';
 
 /// Enables passkey based registration and authentication.
 /// Entrypoint of the Flutter passkeys package.
@@ -114,14 +112,48 @@ class PasskeyAuth<Request, Response> {
     } on PlatformException catch (e) {
       switch (e.code) {
         case 'cancelled':
-          return null;
+          throw PasskeyAuthCancelledException();
         default:
           rethrow;
       }
     }
   }
 
-  /// Signs in an existing user identified by an email address.
+  /// Sign in an existing user using a passkey.
+  /// While [authenticateWithEmail] can also be used to do this
+  /// [authenticateWithAutocompletion] is the better way and should be used by
+  /// default because it is more convenient for the user.
+  ///
+  /// [authenticateWithAutocompletion] should be called when the sign in page
+  /// is loaded and before any user interaction has happened.
+  /// It returns a [SignInHandler].
+  /// Call .complete on this handler as soon as the user focuses the username
+  /// input field. Now the user will be shown a list of all available passkeys
+  /// and he can complete the sign in flow.
+  Future<SignInHandler> authenticateWithAutocompletion({
+    required Request request,
+    required Future<void> Function(Response) callback,
+  }) async {
+    final initResponse =
+        await _backend.initAuthenticateWithAutoComplete(request);
+
+    return SignInHandler(
+      complete: (void Function(Exception)? onError) async {
+        try {
+          final completeResponse = await _completeSignIn(initResponse);
+          await callback(completeResponse);
+        } on Exception catch (e) {
+          if (onError == null) {
+            return;
+          }
+
+          onError(e);
+        }
+      },
+    );
+  }
+
+  /// Sign in an existing user using a passkey.
   ///
   /// Authentication consists of the following three steps:
   /// 1. Ask the relying party server for a challenge.
@@ -136,8 +168,14 @@ class PasskeyAuth<Request, Response> {
   ///
   /// returns null if the user did cancel the authentication.
   Future<Response?> authenticateWithEmail(Request request) async {
+    final initResponse = await _backend.initAuthenticate(request);
+    return _completeSignIn(initResponse);
+  }
+
+  Future<Response> _completeSignIn(
+    AuthenticationInitResponse initResponse,
+  ) async {
     try {
-      final initResponse = await _backend.initAuthenticate(request);
       final authenticatorResponse = await _authenticator.authenticate(
         initResponse.rpId,
         initResponse.challenge,
@@ -169,7 +207,7 @@ class PasskeyAuth<Request, Response> {
     } on PlatformException catch (e) {
       switch (e.code) {
         case 'cancelled':
-          return null;
+          throw PasskeyAuthCancelledException();
         default:
           rethrow;
       }

@@ -1,41 +1,17 @@
-import 'dart:async';
-
-import 'package:corbado_auth/corbado_auth.dart';
-import 'package:corbado_auth_example/app_locator.dart';
-import 'package:corbado_auth_example/auth_service.dart';
-import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:json_editor/json_editor.dart';
+import 'package:corbado_auth_example/auth_provider.dart';
 import 'package:flutter/gestures.dart';
+import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:json_editor/json_editor.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class TokenDetailsPage extends StatefulWidget {
+class TokenDetailsPage extends HookConsumerWidget {
   TokenDetailsPage({super.key});
 
   @override
-  State<TokenDetailsPage> createState() => _TokenDetailsPageState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final user = ref.watch(userProvider);
 
-class _TokenDetailsPageState extends State<TokenDetailsPage> {
-  final AuthService _authService = getIt<AuthService>();
-
-  User? user;
-  StreamSubscription? _userSub;
-
-  @override
-  void initState() {
-    super.initState();
-    _userSub = _authService.userSteam.listen((event) {
-      if (mounted) {
-        setState(() {
-          user = event;
-        });
-      }
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Token details')),
       body: Padding(
@@ -57,7 +33,7 @@ class _TokenDetailsPageState extends State<TokenDetailsPage> {
             SizedBox(
                 height: 250,
                 child: JsonEditor.object(
-                    object: user?.decoded.toJson(), enabled: false)),
+                    object: user.value?.decoded.toJson(), enabled: false)),
             SizedBox(height: 10),
             Text('The id token above serves two purposes:'),
             Text('1. Provide user data (name, email)'),
@@ -87,11 +63,5 @@ class _TokenDetailsPageState extends State<TokenDetailsPage> {
         ),
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _userSub?.cancel();
   }
 }

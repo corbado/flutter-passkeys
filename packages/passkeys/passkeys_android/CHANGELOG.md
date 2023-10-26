@@ -1,3 +1,8 @@
+## 1.1.1
+
+* Removed unnecessary logs
+* Catch CancellationExceptions from CredentialManager
+
 ## 1.1.0
 
 * Added userHandle to AuthenticateResponseType.

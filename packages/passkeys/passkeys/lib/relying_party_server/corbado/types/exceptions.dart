@@ -1,8 +1,7 @@
 import 'dart:convert';
 
 import 'package:json_annotation/json_annotation.dart';
-
-import 'field.dart';
+import 'package:passkeys/relying_party_server/corbado/types/field.dart';
 
 part 'exceptions.g.dart';
 

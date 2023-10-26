@@ -1,3 +1,7 @@
+## 1.1.0
+
+* Added support for email OTP endpoints.
+
 ## 1.0.0
 
 * Better comments. Stable release.
