@@ -24,8 +24,8 @@ IdToken _$IdTokenFromJson(Map<String, dynamic> json) => IdToken(
       json['iat'] as int,
       json['name'] as String,
       json['orig'] as String,
-      json['email'] as String?,
       json['version'] as int,
+      email: json['email'] as String? ?? '',
     );
 
 Map<String, dynamic> _$IdTokenToJson(IdToken instance) => <String, dynamic>{

@@ -15,7 +15,7 @@ dependencies:
   flutter_keychain: ^2.2.1
   json_annotation: ^4.8.1
   jwt_decoder: ^2.0.1
-  passkeys: ^1.1.0
+  passkeys: ^1.2.0
   rxdart: ^0.27.7
 
 dev_dependencies:

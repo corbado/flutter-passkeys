@@ -3,7 +3,6 @@ import 'dart:io';
 import 'dart:io' show Platform;
 
 import 'package:corbado_frontend_api_client/frontendapi/lib/api.dart';
-import 'package:flutter/material.dart';
 import 'package:passkeys/authenticator/passkey_authenticator.dart';
 import 'package:passkeys/relying_party_server/corbado/types/authentication.dart';
 import 'package:passkeys/relying_party_server/corbado/types/exceptions.dart';

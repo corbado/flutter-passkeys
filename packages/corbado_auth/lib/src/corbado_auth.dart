@@ -304,14 +304,13 @@ class CorbadoAuth {
 
   Future<void> deletePasskey(String credentialID) async {
     try {
-      final idToken = (await _storage.getUser())?.idToken;
       if (_refreshToken == null) {
         throw Exception('missing _refreshToken');
       }
 
       _frontendAPIClient.addDefaultHeader(
           'cookie', 'cbo_long_session=$_refreshToken');
-      final resStart = await UsersApi(_frontendAPIClient)
+      await UsersApi(_frontendAPIClient)
           .currentUserPassKeyDelete(credentialID);
       await _loadPasskeys();
     } on ApiException catch (e) {
@@ -433,7 +432,7 @@ class CorbadoAuth {
         final user = await refreshToken();
         _scheduleRefreshRoutine(user);
       } catch (e) {
-        await Future.delayed(const Duration(seconds: 10));
+        await Future.delayed(const Duration(seconds: 10), () {});
         debugPrint(e.toString());
         _scheduleRefreshRoutine(user);
       }

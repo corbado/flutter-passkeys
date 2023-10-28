@@ -46,7 +46,7 @@ class User {
 class IdToken {
   /// Constructor
   IdToken(this.iss, this.sub, this.exp, this.nbf, this.iat, this.name,
-      this.orig, this.email, this.version);
+      this.orig, this.version, {this.email = ''});
 
   /// Deserialize token.
   factory IdToken.fromJson(Map<String, dynamic> json) =>
