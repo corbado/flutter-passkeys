@@ -82,41 +82,32 @@ class PasskeyAuth<Request, Response> {
       userVerification: initResponse.authenticatorSelection.userVerification,
     );
 
-    try {
-      final authenticatorResponse = await _authenticator.register(
-        challenge,
-        rp,
-        user,
-        authSelectionType,
-        initResponse.pubKeyCredParams
-            ?.map(
-              (e) => PubKeyCredParamType(
-                alg: e.alg,
-                type: e.type,
-              ),
-            )
-            .cast<PubKeyCredParamType>()
-            .toList(),
-        initResponse.timeout,
-        initResponse.attestation,
-      );
-      final completeRequest = RegistrationCompleteRequest(
-        id: authenticatorResponse.id,
-        rawId: authenticatorResponse.rawId,
-        clientDataJSON: authenticatorResponse.clientDataJSON,
-        attestationObject: authenticatorResponse.attestationObject,
-      );
-      final completeResponse = await _backend.completeRegister(completeRequest);
+    final authenticatorResponse = await _authenticator.register(
+      challenge,
+      rp,
+      user,
+      authSelectionType,
+      initResponse.pubKeyCredParams
+          ?.map(
+            (e) => PubKeyCredParamType(
+              alg: e.alg,
+              type: e.type,
+            ),
+          )
+          .cast<PubKeyCredParamType>()
+          .toList(),
+      initResponse.timeout,
+      initResponse.attestation,
+    );
+    final completeRequest = RegistrationCompleteRequest(
+      id: authenticatorResponse.id,
+      rawId: authenticatorResponse.rawId,
+      clientDataJSON: authenticatorResponse.clientDataJSON,
+      attestationObject: authenticatorResponse.attestationObject,
+    );
+    final completeResponse = await _backend.completeRegister(completeRequest);
 
-      return completeResponse;
-    } on PlatformException catch (e) {
-      switch (e.code) {
-        case 'cancelled':
-          throw PasskeyAuthCancelledException();
-        default:
-          rethrow;
-      }
-    }
+    return completeResponse;
   }
 
   /// Sign in an existing user using a passkey.
@@ -175,42 +166,33 @@ class PasskeyAuth<Request, Response> {
   Future<Response> _completeSignIn(
     AuthenticationInitResponse initResponse,
   ) async {
-    try {
-      final authenticatorResponse = await _authenticator.authenticate(
-        initResponse.rpId,
-        initResponse.challenge,
-        initResponse.timeout,
-        initResponse.userVerification,
-        initResponse.allowCredentials
-            ?.map(
-              (e) => AllowCredentialType(
-                id: e.id,
-                type: e.type,
-                transports: e.transports,
-              ),
-            )
-            .toList(),
-      );
+    final authenticatorResponse = await _authenticator.authenticate(
+      initResponse.rpId,
+      initResponse.challenge,
+      initResponse.timeout,
+      initResponse.userVerification,
+      initResponse.allowCredentials
+          ?.map(
+            (e) => AllowCredentialType(
+              id: e.id,
+              type: e.type,
+              transports: e.transports,
+            ),
+          )
+          .toList(),
+    );
 
-      final completeRequest = AuthenticationCompleteRequest(
-        id: authenticatorResponse.id,
-        rawId: authenticatorResponse.rawId,
-        clientDataJSON: authenticatorResponse.clientDataJSON,
-        authenticatorData: authenticatorResponse.authenticatorData,
-        signature: authenticatorResponse.signature,
-        userHandle: authenticatorResponse.userHandle,
-      );
-      final completeResponse =
-          await _backend.completeAuthenticate(completeRequest);
+    final completeRequest = AuthenticationCompleteRequest(
+      id: authenticatorResponse.id,
+      rawId: authenticatorResponse.rawId,
+      clientDataJSON: authenticatorResponse.clientDataJSON,
+      authenticatorData: authenticatorResponse.authenticatorData,
+      signature: authenticatorResponse.signature,
+      userHandle: authenticatorResponse.userHandle,
+    );
+    final completeResponse =
+        await _backend.completeAuthenticate(completeRequest);
 
-      return completeResponse;
-    } on PlatformException catch (e) {
-      switch (e.code) {
-        case 'cancelled':
-          throw PasskeyAuthCancelledException();
-        default:
-          rethrow;
-      }
-    }
+    return completeResponse;
   }
 }

@@ -1,3 +1,7 @@
+## 1.2.1
+
+* Improved exception handling for Android and iOS.
+
 ## 1.2.0
 
 * Added autocomplete to sign in (authenticateWithAutocompletion). 

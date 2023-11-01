@@ -1,3 +1,7 @@
+## 1.1.2
+
+* Catch native Android exceptions when user is not signed in to Google account.
+
 ## 1.1.1
 
 * Removed unnecessary logs

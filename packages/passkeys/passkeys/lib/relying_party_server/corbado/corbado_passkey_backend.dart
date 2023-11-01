@@ -11,6 +11,7 @@ import 'package:passkeys/relying_party_server/corbado/types/shared.dart';
 import 'package:passkeys/relying_party_server/relying_party_server.dart';
 import 'package:passkeys/relying_party_server/types/authentication.dart';
 import 'package:passkeys/relying_party_server/types/registration.dart';
+import 'package:ua_client_hints/ua_client_hints.dart';
 
 /// Implementation of [RelyingPartyServer] that allows to use Corbado as a
 /// relying party.
@@ -179,23 +180,16 @@ class CorbadoPasskeyBackend
     if (Platform.isAndroid) {
       final originHeader = await _authenticator.getFacetID();
 
-      client
-        ..addDefaultHeader(
-          'Origin',
-          originHeader,
-        )
-        ..addDefaultHeader(
-          'User-Agent',
-          'Android ${Platform.operatingSystemVersion}',
-        );
+      client.addDefaultHeader(
+        'Origin',
+        originHeader,
+      );
     } else if (Platform.isIOS) {
-      client
-        ..addDefaultHeader('Origin', _customDomain ?? _frontendAPI)
-        ..addDefaultHeader(
-          'User-Agent',
-          'iOS ${Platform.operatingSystemVersion}',
-        );
+      client.addDefaultHeader('Origin', _customDomain ?? _frontendAPI);
     }
+
+    final ua = await userAgent();
+    client.addDefaultHeader('User-Agent', ua);
 
     return client;
   }
