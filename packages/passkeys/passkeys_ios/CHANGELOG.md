@@ -1,3 +1,7 @@
+## 1.1.1
+
+* Improved exception handling. 
+
 ## 1.1.0
 
 * Added userHandle to AuthenticateResponseType.

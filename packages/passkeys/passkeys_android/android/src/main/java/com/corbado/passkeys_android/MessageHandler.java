@@ -21,6 +21,9 @@ import androidx.credentials.exceptions.CreateCredentialCancellationException;
 import androidx.credentials.exceptions.CreateCredentialException;
 import androidx.credentials.exceptions.GetCredentialCancellationException;
 import androidx.credentials.exceptions.GetCredentialException;
+import androidx.credentials.exceptions.NoCredentialException;
+import androidx.credentials.exceptions.publickeycredential.CreatePublicKeyCredentialDomException;
+import androidx.credentials.exceptions.publickeycredential.GetPublicKeyCredentialDomException;
 
 import com.corbado.passkeys_android.models.login.AllowCredentialType;
 import com.corbado.passkeys_android.models.signup.AuthenticatorSelectionType;
@@ -40,11 +43,14 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class MessageHandler implements Messages.PasskeysApi {
 
     private static final String TAG = "MessageHandler";
+    private static final String SYNC_ACCOUNT_NOT_AVAILABLE_ERROR = "Sync account could not be accessed. If you are running on an emulator, please restart that device (select 'Could boot now').";
+    private static final String MISSING_GOOGLE_SIGN_IN_ERROR = "Please sign in with a Google account first to create a new passkey.";
 
     FlutterPasskeysPlugin plugin;
 
@@ -101,6 +107,16 @@ public class MessageHandler implements Messages.PasskeysApi {
                     Exception platformException = e;
                     if (e instanceof CreateCredentialCancellationException) {
                         platformException = new Messages.FlutterError("cancelled", e.getMessage(), "");
+                    } else if (e instanceof CreatePublicKeyCredentialDomException) {
+                        if (Objects.equals(e.getMessage(), "User is unable to create passkeys.")) {
+                            platformException = new Messages.FlutterError("android-missing-google-sign-in", e.getMessage(), MISSING_GOOGLE_SIGN_IN_ERROR);
+                        } else if (Objects.equals(e.getMessage(), "Unable to get sync account.")) {
+                            platformException = new Messages.FlutterError("android-sync-account-not-available", e.getMessage(), SYNC_ACCOUNT_NOT_AVAILABLE_ERROR);
+                        } else {
+                            platformException = new Messages.FlutterError("android-unhandled: " + e.getType(), e.getMessage(), e.getErrorMessage());
+                        }
+                    } else {
+                        platformException = new Messages.FlutterError("android-unhandled" + e.getType(), e.getMessage(), e.getErrorMessage());
                     }
 
                     result.error(platformException);
@@ -165,6 +181,16 @@ public class MessageHandler implements Messages.PasskeysApi {
                     Exception platformException = e;
                     if (e instanceof GetCredentialCancellationException) {
                         platformException = new Messages.FlutterError("cancelled", e.getMessage(), "");
+                    } else if (e instanceof NoCredentialException) {
+                        platformException = new Messages.FlutterError("android-no-credential", e.getMessage(), "");
+                    } else if (e instanceof GetPublicKeyCredentialDomException) {
+                        if (Objects.equals(e.getMessage(), "Failed to decrypt credential.")) {
+                            platformException = new Messages.FlutterError("android-sync-account-not-available", e.getMessage(), SYNC_ACCOUNT_NOT_AVAILABLE_ERROR);
+                        } else {
+                            platformException = new Messages.FlutterError("android-unhandled: " + e.getType(), e.getMessage(), e.getErrorMessage());
+                        }
+                    } else {
+                        platformException = new Messages.FlutterError("android-unhandled: " + e.getType(), e.getMessage(), e.getErrorMessage());
                     }
 
                     result.error(platformException);

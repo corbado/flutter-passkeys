@@ -1,3 +1,5 @@
+import 'package:flutter/services.dart';
+import 'package:passkeys/authenticator/exceptions.dart';
 import 'package:passkeys_platform_interface/passkeys_platform_interface.dart';
 import 'package:passkeys_platform_interface/types/allow_credential.dart';
 import 'package:passkeys_platform_interface/types/authenticator_selection.dart';
@@ -32,15 +34,28 @@ class PasskeyAuthenticator {
     int? timeout,
     String? attestation,
   ) {
-    return _platform.register(
-      challenge,
-      relyingParty,
-      user,
-      authSelectionType,
-      pubKeyCredParams,
-      timeout,
-      attestation,
-    );
+    try {
+      return _platform.register(
+        challenge,
+        relyingParty,
+        user,
+        authSelectionType,
+        pubKeyCredParams,
+        timeout,
+        attestation,
+      );
+    } on PlatformException catch (e) {
+      switch (e.code) {
+        case 'cancelled':
+          throw PasskeyAuthCancelledException();
+        case 'android-missing-google-sign-in':
+          throw MissingGoogleSignInException();
+        case 'android-sync-account-not-available':
+          throw SyncAccountNotAvailableException();
+        default:
+          rethrow;
+      }
+    }
   }
 
   /// Returns a solution to the [challenge] from [relyingParty]
@@ -51,12 +66,29 @@ class PasskeyAuthenticator {
     String? userVerification,
     List<AllowCredentialType>? allowCredentials,
   ) {
-    return _platform.authenticate(
-      relyingPartyId,
-      challenge,
-      timeout,
-      userVerification,
-      allowCredentials,
-    );
+    try {
+      return _platform.authenticate(
+        relyingPartyId,
+        challenge,
+        timeout,
+        userVerification,
+        allowCredentials,
+      );
+    } on PlatformException catch (e) {
+      switch (e.code) {
+        case 'cancelled':
+          throw PasskeyAuthCancelledException();
+        case 'android-no-credential':
+          throw MissingGoogleSignInException();
+        default:
+          if (e.code.startsWith('android-unhandled')) {
+            throw UnhandledAuthenticatorException(e.code, e.message, e.details);
+          } else if (e.code.startsWith('ios-unhandled')) {
+            throw UnhandledAuthenticatorException(e.code, e.message, e.details);
+          } else {
+            rethrow;
+          }
+      }
+    }
   }
 }

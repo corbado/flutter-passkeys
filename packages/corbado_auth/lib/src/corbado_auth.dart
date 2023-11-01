@@ -224,13 +224,6 @@ class CorbadoAuth {
 
       await _loadPasskeys();
       return null;
-    } on PlatformException catch (e) {
-      switch (e.code) {
-        case 'cancelled':
-          throw PasskeyAuthCancelledException();
-        default:
-          rethrow;
-      }
     } on Exception {
       rethrow;
     }
