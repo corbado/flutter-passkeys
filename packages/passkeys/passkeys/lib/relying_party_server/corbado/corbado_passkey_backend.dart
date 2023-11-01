@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:corbado_frontend_api_client/frontendapi/lib/api.dart';
+import 'package:flutter/foundation.dart';
 import 'package:passkeys/relying_party_server/corbado/types/authentication.dart';
 import 'package:passkeys/relying_party_server/corbado/types/exceptions.dart';
 import 'package:passkeys/relying_party_server/corbado/types/registration.dart';
@@ -172,8 +173,10 @@ class CorbadoPasskeyBackend
     final client = ApiClient(basePath: _frontendAPI)
       ..addDefaultHeader('X-Corbado-Project-ID', _projectID);
 
-    final ua = await userAgent();
-    client.addDefaultHeader('User-Agent', ua);
+    if (!kIsWeb) {
+      final ua = await userAgent();
+      client.addDefaultHeader('User-Agent', ua);
+    }
 
     return client;
   }

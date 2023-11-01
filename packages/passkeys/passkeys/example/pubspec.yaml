@@ -28,3 +28,9 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
+dependency_overrides:
+  passkeys_web:
+    path: /Users/hackfred/personal/programming/corbado/flutter-passkeys/packages/passkeys/passkeys_web
+  passkeys_platform_interface:
+    path: /Users/hackfred/personal/programming/corbado/flutter-passkeys/packages/passkeys/passkeys_platform_interface

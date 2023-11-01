@@ -1,0 +1,40 @@
+name: passkeys_web
+description: Web implementation of the test_plugin plugin
+version: 0.1.0+1
+publish_to: none
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+  flutter: ">=3.3.0"
+
+flutter:
+  plugin:
+    implements: test_plugin
+    platforms:
+      web:
+        pluginClass: PasskeysWeb
+        fileName: passkeys_web.dart
+
+  assets:
+    - assets/script.js
+    - assets/bundle.js
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_web_plugins:
+    sdk: flutter
+  js: ^0.6.4
+  passkeys_platform_interface: ^1.1.0
+  json_annotation: ^4.8.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  very_good_analysis: ^5.0.0
+  build_runner: ^2.4.5
+  json_serializable: ^6.7.0
+
+dependency_overrides:
+  passkeys_platform_interface:
+    path: /Users/hackfred/personal/programming/corbado/flutter-passkeys/packages/passkeys/passkeys_platform_interface

@@ -9,7 +9,9 @@ import 'package:passkeys/relying_party_server/types/registration.dart';
 class SharedRelyingPartyServer
     extends RelyingPartyServer<RpRequest, RpResponse> {
   SharedRelyingPartyServer()
-      : _auth = CorbadoPasskeyBackend('pro-6244024196016258271');
+      : _auth = CorbadoPasskeyBackend(
+          const String.fromEnvironment('CORBADO_PROJECT_ID'),
+        );
 
   final CorbadoPasskeyBackend _auth;
 
