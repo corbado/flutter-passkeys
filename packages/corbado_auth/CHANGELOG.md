@@ -1,3 +1,6 @@
+## 1.1.1
+* Bump passkeys version
+
 ## 1.1.0
 * Added email OTP for sign up and sign in.
 * Added autocomplete for passkeys.

@@ -1,4 +1,3 @@
-import 'package:flutter/services.dart';
 import 'package:passkeys/authenticator/passkey_authenticator.dart';
 import 'package:passkeys/authenticator/types.dart';
 import 'package:passkeys/relying_party_server/relying_party_server.dart';

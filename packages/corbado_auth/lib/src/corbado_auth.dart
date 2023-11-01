@@ -8,7 +8,6 @@ import 'package:corbado_auth/src/types/passkey_info.dart';
 import 'package:corbado_auth/src/types/user.dart';
 import 'package:corbado_frontend_api_client/frontendapi/lib/api.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/services.dart';
 import 'package:passkeys/authenticator/types.dart';
 import 'package:passkeys/passkey_auth.dart';
 import 'package:passkeys/relying_party_server/corbado/corbado_passkey_backend.dart';
