@@ -16,6 +16,8 @@ class PasskeyAuthenticator {
 
   /// Returns the facetID.
   /// On Android this is the hash of the APK signature.
+  @Deprecated(
+      'The facetID should no longer be needed as this value is not used for the origin header anymore')
   Future<String> getFacetID() async => _platform.getFacetID();
 
   /// Returns true only if passkeys are supported by the platform.

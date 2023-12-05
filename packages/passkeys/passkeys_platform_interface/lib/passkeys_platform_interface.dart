@@ -61,5 +61,7 @@ abstract class PasskeysPlatform extends PlatformInterface {
 
   /// Returns the FACET ID of the app.
   /// (see https://developer.android.com/reference/androidx/security/crypto/EncryptedSharedPreferences)
+  @Deprecated(
+      'The facetID should no longer be needed as this value is not used for the origin header anymore')
   Future<String> getFacetID();
 }

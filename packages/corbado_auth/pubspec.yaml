@@ -25,3 +25,7 @@ dev_dependencies:
   json_serializable: ^6.7.0
   mocktail: ^1.0.0
   very_good_analysis: ^5.0.0
+
+dependency_overrides:
+  passkeys:
+    path: /Users/hackfred/personal/programming/corbado/flutter-passkeys/packages/passkeys/passkeys
