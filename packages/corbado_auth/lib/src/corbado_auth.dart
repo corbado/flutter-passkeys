@@ -20,9 +20,10 @@ import 'package:passkeys/sign_in_handler.dart';
 /// app.
 class CorbadoAuth {
   /// Constructor
-  CorbadoAuth(this._projectID, {String? customDomain})
-      : _storage = SecureStorage(),
-        _customDomain = customDomain;
+  CorbadoAuth(
+    this._projectID, {
+    @Deprecated('customDomain no longer needs to be set') String? customDomain,
+  }) : _storage = SecureStorage();
 
   /// Should be listened to to get updates to the User object
   /// (e.g. updates to the idToken, sign in, sign out, changes to user data).
@@ -46,18 +47,17 @@ class CorbadoAuth {
   late ApiClient _frontendAPIClient;
 
   final StreamController<User?> _userStreamController =
-  StreamController<User?>();
+      StreamController<User?>();
 
   final StreamController<AuthState> _authStateStreamController =
-  StreamController<AuthState>();
+      StreamController<AuthState>();
 
   final StreamController<List<PasskeyInfo>> _passkeysStreamController =
-  StreamController();
+      StreamController();
 
   // Used to persist information (e.g. idToken and refreshToken) securely.
   final SecureStorage _storage;
   final String _projectID;
-  final String? _customDomain;
   String? _refreshToken;
   final _preemptiveRefreshDuration = const Duration(seconds: 240);
   Timer? _refreshTimer;
@@ -68,10 +68,7 @@ class CorbadoAuth {
   /// Tries to get the user object from secure storage (this only works if
   /// the user has already signed in before and then closed the app).
   Future<void> init() async {
-    final relyingPartyServer = CorbadoPasskeyBackend(
-      _projectID,
-      customDomain: _customDomain,
-    );
+    final relyingPartyServer = CorbadoPasskeyBackend(_projectID);
     await relyingPartyServer.init();
 
     _passkeyAuth = PasskeyAuth(relyingPartyServer);
@@ -127,7 +124,7 @@ class CorbadoAuth {
     try {
       final req = EmailCodeRegisterStartReq(email: email, username: fullName);
       final res =
-      await UsersApi(_frontendAPIClient).emailCodeRegisterStart(req);
+          await UsersApi(_frontendAPIClient).emailCodeRegisterStart(req);
       if (res == null) {
         throw UnexpectedBackendException('emailLinkRegisterStart', '');
       }
@@ -152,10 +149,10 @@ class CorbadoAuth {
     }
 
     final req =
-    EmailCodeConfirmReq(emailCodeID: _emailOTPState!.token, code: code);
+        EmailCodeConfirmReq(emailCodeID: _emailOTPState!.token, code: code);
     try {
       final res =
-      await UsersApi(_frontendAPIClient).emailCodeConfirmWithHttpInfo(req);
+          await UsersApi(_frontendAPIClient).emailCodeConfirmWithHttpInfo(req);
       final authResponse = await AuthResponse.fromHttpResponse(res);
 
       final user = User.fromIdToken(authResponse.token);
@@ -190,7 +187,7 @@ class CorbadoAuth {
         'cbo_long_session=$refreshToken',
       );
       resStart =
-      await UsersApi(_frontendAPIClient).passKeyAppendStart(EmptyReq());
+          await UsersApi(_frontendAPIClient).passKeyAppendStart(EmptyReq());
     } on ApiException catch (e) {
       throw ExceptionFactory.fromBackendMessage(
         'passKeyAppendStart',
@@ -198,34 +195,32 @@ class CorbadoAuth {
       );
     }
 
-    try {
-      final json = jsonDecode(resStart!.data.challenge) as Map<String, dynamic>;
-      final resAuthenticator = await _registerPasskey(json);
-      final signedChallenge = jsonEncode(
-        CorbadoRegisterSignedChallengeRequest(
-          id: resAuthenticator.id,
-          rawId: resAuthenticator.rawId,
-          response: CorbadoRegisterSignedChallengeRequestResponse(
-            clientDataJSON: resAuthenticator.clientDataJSON,
-            attestationObject: resAuthenticator.attestationObject,
-          ),
-        ).toJson(),
-      );
-      try {
-        final reqFinish = PassKeyFinishReq(signedChallenge: signedChallenge);
-        await UsersApi(_frontendAPIClient).passKeyAppendFinish(reqFinish);
-      } on ApiException catch (e) {
-        throw ExceptionFactory.fromBackendMessage(
-          'passKeyAppendFinish',
-          e.message ?? '',
-        );
-      }
+    final json = jsonDecode(resStart!.data.challenge) as Map<String, dynamic>;
+    late RegisterResponseType resAuthenticator;
+    resAuthenticator = await _registerPasskey(json);
+    final signedChallenge = jsonEncode(
+      CorbadoRegisterSignedChallengeRequest(
+        id: resAuthenticator.id,
+        rawId: resAuthenticator.rawId,
+        response: CorbadoRegisterSignedChallengeRequestResponse(
+          clientDataJSON: resAuthenticator.clientDataJSON,
+          attestationObject: resAuthenticator.attestationObject,
+        ),
+      ).toJson(),
+    );
 
-      await _loadPasskeys();
-      return null;
-    } on Exception {
-      rethrow;
+    try {
+      final reqFinish = PassKeyFinishReq(signedChallenge: signedChallenge);
+      await UsersApi(_frontendAPIClient).passKeyAppendFinish(reqFinish);
+    } on ApiException catch (e) {
+      throw ExceptionFactory.fromBackendMessage(
+        'passKeyAppendFinish',
+        e.message ?? '',
+      );
     }
+
+    await _loadPasskeys();
+    return null;
   }
 
   /// Finish a user sign up.
@@ -249,8 +244,7 @@ class CorbadoAuth {
         throw UnexpectedBackendException('emailCodeLoginStart', '');
       }
 
-      _emailOTPState =
-          EmailOTPState(EmailOTPFlow.SignIn, res.data.emailCodeID);
+      _emailOTPState = EmailOTPState(EmailOTPFlow.SignIn, res.data.emailCodeID);
     } on ApiException catch (e) {
       throw ExceptionFactory.fromBackendMessage(
         'emailCodeLoginStart',
@@ -284,7 +278,7 @@ class CorbadoAuth {
   /// It should be called when the user explicitly wants to type in a username.
   Future<void> signInWithPasskey({required String email}) async {
     final response =
-    await _passkeyAuth.authenticateWithEmail(AuthRequest(email));
+        await _passkeyAuth.authenticateWithEmail(AuthRequest(email));
     // user has not finished the authentication
     if (response == null) {
       return;
@@ -302,8 +296,7 @@ class CorbadoAuth {
 
       _frontendAPIClient.addDefaultHeader(
           'cookie', 'cbo_long_session=$_refreshToken');
-      await UsersApi(_frontendAPIClient)
-          .currentUserPassKeyDelete(credentialID);
+      await UsersApi(_frontendAPIClient).currentUserPassKeyDelete(credentialID);
       await _loadPasskeys();
     } on ApiException catch (e) {
       throw ExceptionFactory.fromBackendMessage(
@@ -314,9 +307,9 @@ class CorbadoAuth {
   }
 
   Future<RegisterResponseType> _registerPasskey(
-      Map<String, dynamic> json,) async {
-    final r = CorbadoRegisterChallenge.fromJson(json)
-        .toRegisterInitResponse();
+    Map<String, dynamic> json,
+  ) async {
+    final r = CorbadoRegisterChallenge.fromJson(json).toRegisterInitResponse();
     final challenge = r.challenge;
     final user = UserType(
       displayName: r.user.displayName,
@@ -325,8 +318,7 @@ class CorbadoAuth {
     );
     final rp = RelyingPartyType(name: r.rp.name, id: r.rp.id);
     final authSelectionType = AuthenticatorSelectionType(
-      authenticatorAttachment: r.authenticatorSelection
-          .authenticatorAttachment,
+      authenticatorAttachment: r.authenticatorSelection.authenticatorAttachment,
       requireResidentKey: r.authenticatorSelection.requireResidentKey,
       residentKey: r.authenticatorSelection.residentKey,
       userVerification: r.authenticatorSelection.userVerification,
@@ -339,12 +331,11 @@ class CorbadoAuth {
       authSelectionType,
       r.pubKeyCredParams
           ?.map(
-            (e) =>
-            PubKeyCredParamType(
+            (e) => PubKeyCredParamType(
               alg: e.alg,
               type: e.type,
             ),
-      )
+          )
           .cast<PubKeyCredParamType>()
           .toList(),
       r.timeout,
@@ -364,7 +355,7 @@ class CorbadoAuth {
     }
 
     final passkeys =
-    response.data.passkeys.map(PasskeyInfo.fromResponse).toList();
+        response.data.passkeys.map(PasskeyInfo.fromResponse).toList();
 
     _passkeysStreamController.sink.add(passkeys);
   }
@@ -382,7 +373,7 @@ class CorbadoAuth {
       'cbo_long_session=$_refreshToken',
     );
     final response =
-    await SessionsApi(_frontendAPIClient).sessionRefresh(EmptyReq());
+        await SessionsApi(_frontendAPIClient).sessionRefresh(EmptyReq());
     if (response == null || response.shortSession == null) {
       throw Exception('Stopped refreshToken: missing token in response.');
     }
@@ -394,10 +385,11 @@ class CorbadoAuth {
     return user;
   }
 
-  Future<void> _postSignIn(User user,
-      String? refreshToken, {
-        bool publishAuthState = true,
-      }) async {
+  Future<void> _postSignIn(
+    User user,
+    String? refreshToken, {
+    bool publishAuthState = true,
+  }) async {
     await _storage.setUser(user);
 
     if (refreshToken != null) {
@@ -432,9 +424,7 @@ class CorbadoAuth {
   }
 
   Duration _getWaitDurationForNextRefresh(User user) {
-    final now = (DateTime
-        .now()
-        .millisecondsSinceEpoch / 1000).round();
+    final now = (DateTime.now().millisecondsSinceEpoch / 1000).round();
 
     // is token already timed out?
     if (user.decoded.exp < now) {

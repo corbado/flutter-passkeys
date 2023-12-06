@@ -16,6 +16,8 @@ class PasskeyAuthenticator {
 
   /// Returns the facetID.
   /// On Android this is the hash of the APK signature.
+  @Deprecated(
+      'The facetID should no longer be needed as this value is not used for the origin header anymore')
   Future<String> getFacetID() async => _platform.getFacetID();
 
   /// Returns true only if passkeys are supported by the platform.
@@ -33,9 +35,9 @@ class PasskeyAuthenticator {
     List<PubKeyCredParamType>? pubKeyCredParams,
     int? timeout,
     String? attestation,
-  ) {
+  ) async {
     try {
-      return _platform.register(
+      final r = await _platform.register(
         challenge,
         relyingParty,
         user,
@@ -44,6 +46,8 @@ class PasskeyAuthenticator {
         timeout,
         attestation,
       );
+
+      return r;
     } on PlatformException catch (e) {
       switch (e.code) {
         case 'cancelled':
@@ -65,15 +69,17 @@ class PasskeyAuthenticator {
     int? timeout,
     String? userVerification,
     List<AllowCredentialType>? allowCredentials,
-  ) {
+  ) async {
     try {
-      return _platform.authenticate(
+      final r = await _platform.authenticate(
         relyingPartyId,
         challenge,
         timeout,
         userVerification,
         allowCredentials,
       );
+
+      return r;
     } on PlatformException catch (e) {
       switch (e.code) {
         case 'cancelled':
