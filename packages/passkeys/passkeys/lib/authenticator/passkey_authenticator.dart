@@ -35,9 +35,9 @@ class PasskeyAuthenticator {
     List<PubKeyCredParamType>? pubKeyCredParams,
     int? timeout,
     String? attestation,
-  ) {
+  ) async {
     try {
-      return _platform.register(
+      final r = await _platform.register(
         challenge,
         relyingParty,
         user,
@@ -46,6 +46,8 @@ class PasskeyAuthenticator {
         timeout,
         attestation,
       );
+
+      return r;
     } on PlatformException catch (e) {
       switch (e.code) {
         case 'cancelled':
@@ -67,15 +69,17 @@ class PasskeyAuthenticator {
     int? timeout,
     String? userVerification,
     List<AllowCredentialType>? allowCredentials,
-  ) {
+  ) async {
     try {
-      return _platform.authenticate(
+      final r = await _platform.authenticate(
         relyingPartyId,
         challenge,
         timeout,
         userVerification,
         allowCredentials,
       );
+
+      return r;
     } on PlatformException catch (e) {
       switch (e.code) {
         case 'cancelled':

@@ -66,6 +66,15 @@ class InvalidPasskeyException extends CorbadoException {
             'The passkey you used is incorrect. Please check if you used the right one.');
 }
 
+/// Exception thrown when the user already has a passkey that is available
+/// on the current device
+class PasskeyAlreadyExistsException extends CorbadoException {
+  /// Constructor
+  PasskeyAlreadyExistsException()
+      : super(
+            'You have already set up a passkey that can be used on this device.');
+}
+
 /// Exception thrown when the backend returns an unexpected response
 class UnexpectedBackendException implements Exception {
   /// Constructor
@@ -144,11 +153,10 @@ class ExceptionFactory {
         }
       case 'email':
         break;
-    }
-
-    if (e.first.field == 'username' &&
-        e.first.message == 'user already exists') {
-      return UserAlreadyExistsException(message);
+      case 'sessionToken':
+        if (e.first.message == 'user already exists') {
+          return PasskeyAlreadyExistsException();
+        }
     }
 
     return ValidationException(operation, message, e);

@@ -1,3 +1,8 @@
+## 1.3.0
+* Corbado: Deprecate the customDomain setting (this does not have to be configured to production projects)
+* Corbado: Added new exception type (PasskeyAlreadyExistsException)
+* Fix: Make sure that exceptions are awaited within the authenticator
+
 ## 1.2.1
 
 * Improved exception handling for Android and iOS.

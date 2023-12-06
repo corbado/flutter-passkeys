@@ -195,34 +195,32 @@ class CorbadoAuth {
       );
     }
 
-    try {
-      final json = jsonDecode(resStart!.data.challenge) as Map<String, dynamic>;
-      final resAuthenticator = await _registerPasskey(json);
-      final signedChallenge = jsonEncode(
-        CorbadoRegisterSignedChallengeRequest(
-          id: resAuthenticator.id,
-          rawId: resAuthenticator.rawId,
-          response: CorbadoRegisterSignedChallengeRequestResponse(
-            clientDataJSON: resAuthenticator.clientDataJSON,
-            attestationObject: resAuthenticator.attestationObject,
-          ),
-        ).toJson(),
-      );
-      try {
-        final reqFinish = PassKeyFinishReq(signedChallenge: signedChallenge);
-        await UsersApi(_frontendAPIClient).passKeyAppendFinish(reqFinish);
-      } on ApiException catch (e) {
-        throw ExceptionFactory.fromBackendMessage(
-          'passKeyAppendFinish',
-          e.message ?? '',
-        );
-      }
+    final json = jsonDecode(resStart!.data.challenge) as Map<String, dynamic>;
+    late RegisterResponseType resAuthenticator;
+    resAuthenticator = await _registerPasskey(json);
+    final signedChallenge = jsonEncode(
+      CorbadoRegisterSignedChallengeRequest(
+        id: resAuthenticator.id,
+        rawId: resAuthenticator.rawId,
+        response: CorbadoRegisterSignedChallengeRequestResponse(
+          clientDataJSON: resAuthenticator.clientDataJSON,
+          attestationObject: resAuthenticator.attestationObject,
+        ),
+      ).toJson(),
+    );
 
-      await _loadPasskeys();
-      return null;
-    } on Exception {
-      rethrow;
+    try {
+      final reqFinish = PassKeyFinishReq(signedChallenge: signedChallenge);
+      await UsersApi(_frontendAPIClient).passKeyAppendFinish(reqFinish);
+    } on ApiException catch (e) {
+      throw ExceptionFactory.fromBackendMessage(
+        'passKeyAppendFinish',
+        e.message ?? '',
+      );
     }
+
+    await _loadPasskeys();
+    return null;
   }
 
   /// Finish a user sign up.

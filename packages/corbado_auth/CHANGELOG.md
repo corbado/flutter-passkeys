@@ -1,3 +1,6 @@
+## 1.2.0
+* Deprecate the customDomain setting (this does not have to be configured to production projects)
+
 ## 1.1.1
 * Bump passkeys version
 
