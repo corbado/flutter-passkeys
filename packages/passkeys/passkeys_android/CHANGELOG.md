@@ -1,3 +1,7 @@
+## 1.2.1
+
+* Catch more situations when a user interrupts biometrics ceremony (e.g. providing his fingerprint).
+
 ## 1.2.0
 
 * Bump passkeys_platform_interface version.

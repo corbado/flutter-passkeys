@@ -23,6 +23,7 @@ import androidx.credentials.exceptions.GetCredentialCancellationException;
 import androidx.credentials.exceptions.GetCredentialException;
 import androidx.credentials.exceptions.NoCredentialException;
 import androidx.credentials.exceptions.publickeycredential.CreatePublicKeyCredentialDomException;
+import androidx.credentials.exceptions.publickeycredential.CreatePublicKeyCredentialException;
 import androidx.credentials.exceptions.publickeycredential.GetPublicKeyCredentialDomException;
 
 import com.corbado.passkeys_android.models.login.AllowCredentialType;
@@ -105,7 +106,10 @@ public class MessageHandler implements Messages.PasskeysApi {
                 @Override
                 public void onError(CreateCredentialException e) {
                     Exception platformException = e;
-                    if (e instanceof CreateCredentialCancellationException) {
+                    if (Objects.equals(e.getMessage(), "Unable to create key during registration")) {
+                        // currently, Android throws this error when users skip the fingerPrint animation => we interpret this as a cancellation for now
+                        platformException = new Messages.FlutterError("cancelled", e.getMessage(), "");
+                    } else if (e instanceof CreateCredentialCancellationException) {
                         platformException = new Messages.FlutterError("cancelled", e.getMessage(), "");
                     } else if (e instanceof CreatePublicKeyCredentialDomException) {
                         if (Objects.equals(e.getMessage(), "User is unable to create passkeys.")) {
@@ -179,7 +183,12 @@ public class MessageHandler implements Messages.PasskeysApi {
                 @Override
                 public void onError(GetCredentialException e) {
                     Exception platformException = e;
-                    if (e instanceof GetCredentialCancellationException) {
+                    Log.e(TAG, "onError called", e);
+
+                    // currently, Android throws this error when users skip the fingerPrint animation => we interpret this as a cancellation for now
+                    if (Objects.equals(e.getMessage(), "None of the allowed credentials can be authenticated")) {
+                        platformException = new Messages.FlutterError("cancelled", e.getMessage(), "");
+                    } else if (e instanceof GetCredentialCancellationException) {
                         platformException = new Messages.FlutterError("cancelled", e.getMessage(), "");
                     } else if (e instanceof NoCredentialException) {
                         platformException = new Messages.FlutterError("android-no-credential", e.getMessage(), "");

@@ -1,3 +1,6 @@
+## 1.3.2
+* Bump version for passkeys_android
+
 ## 1.3.1
 * Bump versions for passkeys_ios, passkeys_android and passkeys_platform_interface
 

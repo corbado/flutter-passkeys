@@ -1,3 +1,6 @@
+## 1.2.1
+* Bump version for passkeys
+
 ## 1.2.0
 * Deprecate the customDomain setting (this does not have to be configured to production projects)
 * Bump passkeys and flutter_keychain version
