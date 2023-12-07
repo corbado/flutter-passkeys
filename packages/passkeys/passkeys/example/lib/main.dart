@@ -20,6 +20,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       home: HomePage(),
       theme: ThemeData(
+        useMaterial3: false,
         colorScheme: const ColorScheme(
           brightness: Brightness.light,
           primary: Color(0xFF1953ff),

@@ -18,7 +18,7 @@ class CorbadoPasskeyBackend
   CorbadoPasskeyBackend(
     this._projectID, {
     @Deprecated('customDomain no longer needs to be set') String? customDomain,
-  })  : _frontendAPI = 'https://$_projectID.frontendapi.corbado.io';
+  }) : _frontendAPI = 'https://$_projectID.frontendapi.corbado.io';
 
   /// Initializes the client by setting all required headers
   Future<void> init() async {

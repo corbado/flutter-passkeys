@@ -5,7 +5,6 @@ enum CorbadoField {
 
   /// email field
   email,
-
   code;
 
   factory CorbadoField.fromString(String v) {

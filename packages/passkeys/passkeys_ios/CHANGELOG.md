@@ -1,3 +1,7 @@
+## 1.2.0
+
+* Bump passkeys_platform_interface version.
+
 ## 1.1.1
 
 * Improved exception handling. 

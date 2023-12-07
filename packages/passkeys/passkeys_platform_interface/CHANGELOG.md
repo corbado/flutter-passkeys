@@ -1,3 +1,10 @@
+## 1.2.0
+* Deprecate getFacetID.
+
+## 1.2.0
+
+* Added userHandle to AuthenticateResponseType.
+
 ## 1.1.0
 
 * Added userHandle to AuthenticateResponseType.

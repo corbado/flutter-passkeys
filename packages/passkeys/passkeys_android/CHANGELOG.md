@@ -1,3 +1,7 @@
+## 1.2.0
+
+* Bump passkeys_platform_interface version.
+
 ## 1.1.2
 
 * Catch native Android exceptions when user is not signed in to Google account.

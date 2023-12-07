@@ -1,3 +1,6 @@
+## 1.3.1
+* Bump versions for passkeys_ios, passkeys_android and passkeys_platform_interface
+
 ## 1.3.0
 * Corbado: Deprecate the customDomain setting (this does not have to be configured to production projects)
 * Corbado: Added new exception type (PasskeyAlreadyExistsException)

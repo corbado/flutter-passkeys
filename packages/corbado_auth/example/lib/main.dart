@@ -43,6 +43,7 @@ class MyApp extends ConsumerWidget {
       routerDelegate: router.routerDelegate,
       routeInformationProvider: router.routeInformationProvider,
       theme: ThemeData(
+        useMaterial3: false,
         colorScheme: ColorScheme(
           brightness: Brightness.light,
           primary: Color(0xFF1953ff),

@@ -17,7 +17,7 @@ class CorbadoException implements Exception {
 class UserAlreadyExistsException extends CorbadoException {
   /// Constructor
   UserAlreadyExistsException(String username)
-      : super('User with name ${username} already exists.');
+      : super('User with name "$username" already exists.');
 }
 
 /// Exception thrown when the user is unknown
