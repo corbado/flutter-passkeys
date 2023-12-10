@@ -94,8 +94,13 @@ abstract class PasskeysApi {
       User user,);
 
   @async
-  AuthenticateResponse authenticate(String relyingPartyId,
-      String challenge,);
+  AuthenticateResponse authenticate(
+      String relyingPartyId,
+      String challenge,
+      bool conditionalUI);
+
+  @async
+  void cancelCurrentAuthenticatorOperation();
 
   @async
   String getFacetID();

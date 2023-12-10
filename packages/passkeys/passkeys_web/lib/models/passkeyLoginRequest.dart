@@ -1,12 +1,13 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:passkeys_platform_interface/types/allow_credential.dart';
-import 'package:passkeys_platform_interface/types/pubkeycred_param.dart';
 import 'package:passkeys_platform_interface/types/types.dart';
 
 part 'passkeyLoginRequest.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 class PasskeyLoginRequest {
+  PasskeyLoginRequest(this.publicKey, this.mediation);
+
   factory PasskeyLoginRequest.fromJson(Map<String, dynamic> json) =>
       _$PasskeyLoginRequestFromJson(json);
 
@@ -16,14 +17,16 @@ class PasskeyLoginRequest {
     int? timeout,
     String? platformUserVerification,
     List<AllowCredentialType>? platformAllowCredentials,
+    MediationType platformMediation,
   ) {
     final allowCredentials = platformAllowCredentials?.map((e) {
-      return PasskeyLoginAllowCredentialType(
-        e.type,
-        e.id,
-        e.transports.map(AuthenticatorTransport.fromPlatformType).toList(),
-      );
-    }).toList();
+          return PasskeyLoginAllowCredentialType(
+            e.type,
+            e.id,
+            e.transports.map(AuthenticatorTransport.fromPlatformType).toList(),
+          );
+        }).toList() ??
+        [];
 
     final publicKey = PasskeyLoginPublicKey(
       challenge: challenge,
@@ -36,12 +39,12 @@ class PasskeyLoginRequest {
       allowCredentials: allowCredentials,
     );
 
-    return PasskeyLoginRequest(publicKey);
+    final mediation =
+        PasskeyLoginMediationType.fromPlatformType(platformMediation);
+    return PasskeyLoginRequest(publicKey, mediation);
   }
 
-  PasskeyLoginRequest(this.publicKey, {this.mediation = 'conditional'});
-
-  final String mediation;
+  final PasskeyLoginMediationType mediation;
   final PasskeyLoginPublicKey publicKey;
 
   Map<String, dynamic> toJson() => _$PasskeyLoginRequestToJson(this);
@@ -49,9 +52,6 @@ class PasskeyLoginRequest {
 
 @JsonSerializable(explicitToJson: true)
 class PasskeyLoginPublicKey {
-  factory PasskeyLoginPublicKey.fromJson(Map<String, dynamic> json) =>
-      _$PasskeyLoginPublicKeyFromJson(json);
-
   PasskeyLoginPublicKey(
       {required this.challenge,
       this.timeout,
@@ -59,6 +59,9 @@ class PasskeyLoginPublicKey {
       this.allowCredentials,
       this.userVerification,
       this.loginExtensions});
+
+  factory PasskeyLoginPublicKey.fromJson(Map<String, dynamic> json) =>
+      _$PasskeyLoginPublicKeyFromJson(json);
 
   final String challenge;
   final int? timeout;
@@ -72,10 +75,10 @@ class PasskeyLoginPublicKey {
 
 @JsonSerializable(explicitToJson: true)
 class PasskeyLoginAllowCredentialType {
+  PasskeyLoginAllowCredentialType(this.type, this.id, this.transports);
+
   factory PasskeyLoginAllowCredentialType.fromJson(Map<String, dynamic> json) =>
       _$PasskeyLoginAllowCredentialTypeFromJson(json);
-
-  PasskeyLoginAllowCredentialType(this.type, this.id, this.transports);
 
   final String type;
   final String id;
@@ -95,6 +98,30 @@ enum AuthenticatorTransport {
         return AuthenticatorTransport.Internal;
       default:
         throw ArgumentError.value(value);
+    }
+  }
+}
+
+enum PasskeyLoginMediationType {
+  @JsonValue('conditional')
+  Conditional,
+  @JsonValue('optional')
+  Optional,
+  @JsonValue('required')
+  Required,
+  @JsonValue('silent')
+  Silent;
+
+  factory PasskeyLoginMediationType.fromPlatformType(MediationType value) {
+    switch (value) {
+      case MediationType.Conditional:
+        return PasskeyLoginMediationType.Conditional;
+      case MediationType.Optional:
+        return PasskeyLoginMediationType.Optional;
+      case MediationType.Required:
+        return PasskeyLoginMediationType.Required;
+      case MediationType.Silent:
+        return PasskeyLoginMediationType.Silent;
     }
   }
 }
@@ -123,10 +150,10 @@ enum UserVerificationRequirement {
 
 @JsonSerializable(explicitToJson: true)
 class LoginExtensions {
+  LoginExtensions(this.appid, this.appidExclude, this.credProps);
+
   factory LoginExtensions.fromJson(Map<String, dynamic> json) =>
       _$LoginExtensionsFromJson(json);
-
-  LoginExtensions(this.appid, this.appidExclude, this.credProps);
 
   final String? appid;
   final String? appidExclude;

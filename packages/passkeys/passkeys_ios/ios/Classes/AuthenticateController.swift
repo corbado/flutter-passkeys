@@ -3,19 +3,26 @@ import LocalAuthentication
 import Flutter
 import Foundation
 
-@available(iOS 15.0, *)
+@available(iOS 16.0, *)
 class AuthenticateController: NSObject, ASAuthorizationControllerDelegate, ASAuthorizationControllerPresentationContextProviding {
     private var completion: ((Result<AuthenticateResponse, Error>) -> Void)?
 
-    func authenticate(request: ASAuthorizationPlatformPublicKeyCredentialAssertionRequest, completion: @escaping ((Result<AuthenticateResponse, Error>) -> Void)) {
+    func authenticate(request: ASAuthorizationPlatformPublicKeyCredentialAssertionRequest, conditionalUI: Bool, completion: @escaping ((Result<AuthenticateResponse, Error>) -> Void)) -> ASAuthorizationController {
         self.completion = completion;
 
         let authorizationController = ASAuthorizationController(authorizationRequests: [request])
+        
         authorizationController.delegate = self
         authorizationController.presentationContextProvider = self
-        authorizationController.performRequests()
+        if (conditionalUI) {
+            authorizationController.performAutoFillAssistedRequests()
+        } else {
+            authorizationController.performRequests()
+        }
+        
+        return authorizationController
     }
-
+    
     func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
         switch authorization.credential {
         case let r as ASAuthorizationPublicKeyCredentialAssertion:

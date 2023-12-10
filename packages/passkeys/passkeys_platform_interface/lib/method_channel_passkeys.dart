@@ -1,6 +1,6 @@
+import 'package:async/async.dart';
 import 'package:passkeys_platform_interface/passkeys_platform_interface.dart';
 import 'package:passkeys_platform_interface/types/allow_credential.dart';
-import 'package:passkeys_platform_interface/types/authenticator_selection.dart';
 import 'package:passkeys_platform_interface/types/pubkeycred_param.dart';
 import 'package:passkeys_platform_interface/types/types.dart';
 
@@ -27,12 +27,18 @@ class MethodChannelPasskeys extends PasskeysPlatform {
     String challenge,
     int? timeout,
     String? userVerification,
-    List<AllowCredentialType>? allowCredentials,
-  ) =>
+    List<AllowCredentialType>? allowCredentials, {
+    MediationType mediation = MediationType.Optional,
+  }) =>
       throw UnimplementedError();
 
   @override
+  Future<void> cancelCurrentAuthenticatorOperation() {
+    return Future.value();
+  }
+
+  @override
   Future<String> getFacetID() {
-    throw UnimplementedError();
+    return Future.value('');
   }
 }

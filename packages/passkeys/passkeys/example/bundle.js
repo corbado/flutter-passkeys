@@ -241,17 +241,14 @@ var PasskeyAuthenticator = (function (exports) {
       return getResponseToJSON(credential);
     }
 
-    var _PasskeyAuthenticator_instances, _PasskeyAuthenticator_abortController, _PasskeyAuthenticator_abortCurrentWebAuthnOperation;
+    var _PasskeyAuthenticator_abortController;
     const ABORTED_BY_USER = 'operation aborted by user.';
     class PasskeyAuthenticator {
         constructor() {
-            _PasskeyAuthenticator_instances.add(this);
             _PasskeyAuthenticator_abortController.set(this, void 0);
         }
         async register(params) {
             try {
-                // make sure that any previous WebAuthn operations are aborted
-                __classPrivateFieldGet(this, _PasskeyAuthenticator_instances, "m", _PasskeyAuthenticator_abortCurrentWebAuthnOperation).call(this);
                 const typedParams = JSON.parse(params);
                 const out = await create(typedParams);
                 return JSON.stringify(out);
@@ -274,8 +271,6 @@ var PasskeyAuthenticator = (function (exports) {
         }
         async login(params) {
             try {
-                // make sure that any previous WebAuthn operations are aborted
-                __classPrivateFieldGet(this, _PasskeyAuthenticator_instances, "m", _PasskeyAuthenticator_abortCurrentWebAuthnOperation).call(this);
                 __classPrivateFieldSet(this, _PasskeyAuthenticator_abortController, new AbortController(), "f");
                 const typedParams = JSON.parse(params);
                 typedParams.signal = __classPrivateFieldGet(this, _PasskeyAuthenticator_abortController, "f").signal;
@@ -300,13 +295,14 @@ var PasskeyAuthenticator = (function (exports) {
                 return Promise.reject(serializedError);
             }
         }
-    }
-    _PasskeyAuthenticator_abortController = new WeakMap(), _PasskeyAuthenticator_instances = new WeakSet(), _PasskeyAuthenticator_abortCurrentWebAuthnOperation = function _PasskeyAuthenticator_abortCurrentWebAuthnOperation() {
-        if (!__classPrivateFieldGet(this, _PasskeyAuthenticator_abortController, "f")) {
-            return;
+        abortCurrentWebAuthnOperation() {
+            if (!__classPrivateFieldGet(this, _PasskeyAuthenticator_abortController, "f")) {
+                return;
+            }
+            __classPrivateFieldGet(this, _PasskeyAuthenticator_abortController, "f").abort(ABORTED_BY_USER);
         }
-        __classPrivateFieldGet(this, _PasskeyAuthenticator_abortController, "f").abort(ABORTED_BY_USER);
-    };
+    }
+    _PasskeyAuthenticator_abortController = new WeakMap();
     class PlatformError {
         constructor(code, message, details) {
             this.code = code;
@@ -342,8 +338,13 @@ var PasskeyAuthenticator = (function (exports) {
     function login(params) {
         return passkeyAuthenticator.login(params);
     }
+    function cancelCurrentAuthenticatorOperation() {
+    console.log('cancelCurrentAuthenticatorOperation')
+        passkeyAuthenticator.abortCurrentWebAuthnOperation();
+    }
 
     exports.canAuthenticate = canAuthenticate;
+    exports.cancelCurrentAuthenticatorOperation = cancelCurrentAuthenticatorOperation;
     exports.init = init;
     exports.login = login;
     exports.register = register;

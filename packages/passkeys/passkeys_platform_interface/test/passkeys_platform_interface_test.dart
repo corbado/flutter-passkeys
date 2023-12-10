@@ -29,12 +29,19 @@ class PasskeysMock extends PasskeysPlatform {
     String challenge,
     int? timeout,
     String? userVerification,
-    List<AllowCredentialType>? allowCredentials,
-  ) =>
+    List<AllowCredentialType>? allowCredentials, {
+    MediationType mediation = MediationType.Optional,
+  }) =>
       throw UnimplementedError();
 
   @override
   Future<String> getFacetID() {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> cancelCurrentAuthenticatorOperation() {
+    // TODO: implement cancelCurrentAuthenticatorOperation
     throw UnimplementedError();
   }
 }

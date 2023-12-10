@@ -9,15 +9,22 @@ part of 'passkeyLoginRequest.dart';
 PasskeyLoginRequest _$PasskeyLoginRequestFromJson(Map<String, dynamic> json) =>
     PasskeyLoginRequest(
       PasskeyLoginPublicKey.fromJson(json['publicKey'] as Map<String, dynamic>),
-      mediation: json['mediation'] as String? ?? 'conditional',
+      $enumDecode(_$PasskeyLoginMediationTypeEnumMap, json['mediation']),
     );
 
 Map<String, dynamic> _$PasskeyLoginRequestToJson(
         PasskeyLoginRequest instance) =>
     <String, dynamic>{
-      'mediation': instance.mediation,
+      'mediation': _$PasskeyLoginMediationTypeEnumMap[instance.mediation]!,
       'publicKey': instance.publicKey.toJson(),
     };
+
+const _$PasskeyLoginMediationTypeEnumMap = {
+  PasskeyLoginMediationType.Conditional: 'conditional',
+  PasskeyLoginMediationType.Optional: 'optional',
+  PasskeyLoginMediationType.Required: 'required',
+  PasskeyLoginMediationType.Silent: 'silent',
+};
 
 PasskeyLoginPublicKey _$PasskeyLoginPublicKeyFromJson(
         Map<String, dynamic> json) =>

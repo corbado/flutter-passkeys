@@ -42,6 +42,3 @@ dev_dependencies:
   plugin_platform_interface: ^2.0.0
   very_good_analysis: ^5.0.0
 
-dependency_overrides:
-  passkeys_web:
-    path: /Users/hackfred/personal/programming/corbado/flutter-passkeys/packages/passkeys/passkeys_web

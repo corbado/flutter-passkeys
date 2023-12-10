@@ -5,10 +5,12 @@ import LocalAuthentication
 import Foundation
 import Combine
 
-@available(iOS 15.0, *)
+@available(iOS 16.0, *)
 public class PasskeysPlugin: NSObject, FlutterPlugin, PasskeysApi {
     let registerController: RegisterController
     let authenticateController: AuthenticateController
+    
+    var currentAuthorizationController: ASAuthorizationController?;
     
     init(registerController: RegisterController, authenticateController: AuthenticateController) {
         self.registerController = registerController
@@ -49,10 +51,10 @@ public class PasskeysPlugin: NSObject, FlutterPlugin, PasskeysApi {
             userID: user.id.data(using: .utf8)!
         )
 
-        registerController.register(request: request, completion: completion)
+        currentAuthorizationController = registerController.register(request: request, completion: completion)
     }
 
-    func authenticate(relyingPartyId: String, challenge: String, completion: @escaping (Result<AuthenticateResponse, Error>) -> Void) {
+    func authenticate(relyingPartyId: String, challenge: String, conditionalUI: Bool, completion: @escaping (Result<AuthenticateResponse, Error>) -> Void) {
         guard let decodedChallenge = Data.fromBase64Url(challenge) else {
             completion(.failure(CustomErrors.decodingChallenge))
             return
@@ -63,7 +65,13 @@ public class PasskeysPlugin: NSObject, FlutterPlugin, PasskeysApi {
             challenge: decodedChallenge
         )
 
-        authenticateController.authenticate(request: request, completion: completion)
+        currentAuthorizationController = authenticateController.authenticate(request: request, conditionalUI: conditionalUI, completion: completion)
+    }
+    
+    func cancelCurrentAuthenticatorOperation(completion: @escaping (Result<Void, Error>) -> Void) {
+        currentAuthorizationController?.cancel()
+        
+        completion(.success(Void()))
     }
 }
 

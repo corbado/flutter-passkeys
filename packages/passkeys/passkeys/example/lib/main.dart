@@ -1,15 +1,31 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:passkeys/passkey_auth.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:passkeys_example/pages/loading_page.dart';
+import 'package:passkeys_example/providers.dart';
 import 'package:passkeys_example/relying_party_server.dart';
-
-final relyingPartServer = SharedRelyingPartyServer();
+import 'package:passkeys_example/router.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await relyingPartServer.init();
-  runApp(const MyApp());
+  // This is a nice pattern if you need to initialize some of your services
+  // before the app starts.
+  // As we are using riverpod this initialization happens inside providers.
+  // First we show a loading page.
+  runApp(const LoadingPage());
+
+  // Now we do the initialization.
+  final relyingPartyServer = SharedRelyingPartyServer();
+  await relyingPartyServer.init();
+
+  runApp(
+    ProviderScope(
+      overrides: [
+        relyingPartyServerProvider.overrideWithValue(relyingPartyServer),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -17,8 +33,8 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: HomePage(),
+    return MaterialApp.router(
+      routerConfig: router,
       theme: ThemeData(
         useMaterial3: false,
         colorScheme: const ColorScheme(
@@ -36,178 +52,5 @@ class MyApp extends StatelessWidget {
         ),
       ),
     );
-  }
-}
-
-class HomePage extends StatefulWidget {
-  HomePage({super.key}) : _auth = PasskeyAuth(relyingPartServer);
-
-  final PasskeyAuth<RpRequest, RpResponse> _auth;
-
-  @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-enum PageMode { registration, login, loggedIn }
-
-class _HomePageState extends State<HomePage> {
-  final _emailController = TextEditingController();
-  PageMode _pageMode = PageMode.registration;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Passkeys Example')),
-      body: Padding(
-        padding: const EdgeInsets.all(10),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Padding(
-                padding: EdgeInsets.symmetric(
-                  vertical: 5,
-                ),
-                child: Text(
-                  'Tired of passwords?',
-                  style: TextStyle(
-                    fontSize: 40,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              const Padding(
-                padding: EdgeInsets.only(left: 50, top: 10, bottom: 10),
-                child: Text(
-                  'Sign in using your biometrics like fingerprint or face.',
-                  style: TextStyle(
-                    fontSize: 20,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 16),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 4),
-                child: TextField(
-                  autofillHints: const [AutofillHints.username],
-                  controller: _emailController,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    hintText: 'email address',
-                  ),
-                ),
-              ),
-              SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                  onPressed: _onclick,
-                  child: Text(_buttonText()),
-                ),
-              ),
-              const SizedBox(height: 16),
-              _drawSubLine()
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  String _buttonText() {
-    if (_pageMode == PageMode.registration) {
-      return 'sign up';
-    } else if (_pageMode == PageMode.login) {
-      return 'sign in';
-    } else {
-      return 'logout';
-    }
-  }
-
-  Widget _drawSubLine() {
-    if (_pageMode == PageMode.registration) {
-      return RichText(
-        text: TextSpan(
-          children: [
-            const TextSpan(
-              text: 'Already have an account? ',
-              style: TextStyle(color: Colors.black),
-            ),
-            TextSpan(
-              text: 'Sign in',
-              style: TextStyle(color: Theme.of(context).primaryColor),
-              recognizer: TapGestureRecognizer()
-                ..onTap = () async {
-                  setState(() {
-                    _pageMode = PageMode.login;
-                  });
-                },
-            )
-          ],
-        ),
-      );
-    } else if (_pageMode == PageMode.login) {
-      return RichText(
-        text: TextSpan(
-          children: [
-            const TextSpan(
-              text: 'First time here? ',
-              style: TextStyle(color: Colors.black),
-            ),
-            TextSpan(
-              text: 'Sign up',
-              style: TextStyle(color: Theme.of(context).primaryColor),
-              recognizer: TapGestureRecognizer()
-                ..onTap = () async {
-                  setState(() {
-                    _pageMode = PageMode.registration;
-                  });
-                },
-            )
-          ],
-        ),
-      );
-    } else {
-      return const Text('You are currently logged in.');
-    }
-  }
-
-  Future<void> _onclick() async {
-    final email = _emailController.value.text;
-
-    try {
-      if (_pageMode == PageMode.registration) {
-        final response =
-            await widget._auth.registerWithEmail(RpRequest(email: email));
-
-        if (response != null) {
-          setState(() {
-            _pageMode = PageMode.loggedIn;
-          });
-        }
-      } else if (_pageMode == PageMode.login) {
-        final response =
-            await widget._auth.authenticateWithEmail(RpRequest(email: email));
-
-        if (response != null) {
-          setState(() {
-            _pageMode = PageMode.loggedIn;
-          });
-        }
-      } else {
-        setState(() {
-          _pageMode = PageMode.login;
-        });
-      }
-    } catch (e) {
-      debugPrint(e.toString());
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          backgroundColor: Theme.of(context).primaryColor,
-          content: Text(e.toString()),
-          duration: const Duration(seconds: 10),
-        ),
-      );
-    }
   }
 }

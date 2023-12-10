@@ -18,10 +18,11 @@ abstract class RelyingPartyServer<Request, Response> {
   /// Initiates the authentication by asking for a challenge.
   /// Can be implemented if the relying party server provides a different
   /// endpoint for autocompleted sign ins.
+  @Deprecated('initAuthenticate should handle autocompletion as well')
   Future<AuthenticationInitResponse> initAuthenticateWithAutoComplete(
     Request request,
   ) =>
-      initAuthenticateWithAutoComplete(request);
+      initAuthenticate(request);
 
   /// Completes the authentication by sending the solution to the challenge
   /// back.

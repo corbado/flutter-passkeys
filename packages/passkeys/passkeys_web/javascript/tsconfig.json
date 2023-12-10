@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    "alwaysStrict": false,
+    "declaration": true,
+    "declarationMap": false,
+    "downlevelIteration": true,
+    "forceConsistentCasingInFileNames": true,
+    "importHelpers": true,
+    "lib": ["es6", "DOM"],
+    "module": "ES2020",
+    "moduleResolution": "node",
+    "noEmitHelpers": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "pretty": true,
+    "sourceMap": false,
+    "strict": true,
+    "target": "ES2019",
+    "noErrorTruncation": true,
+    "esModuleInterop": true
+  },
+  "exclude": ["node_modules", "dist"]
+}

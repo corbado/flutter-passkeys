@@ -226,7 +226,8 @@ class PasskeysApiCodec: FlutterStandardMessageCodec {
 protocol PasskeysApi {
   func canAuthenticate() throws -> Bool
   func register(challenge: String, relyingParty: RelyingParty, user: User, completion: @escaping (Result<RegisterResponse, Error>) -> Void)
-  func authenticate(relyingPartyId: String, challenge: String, completion: @escaping (Result<AuthenticateResponse, Error>) -> Void)
+  func authenticate(relyingPartyId: String, challenge: String, conditionalUI: Bool, completion: @escaping (Result<AuthenticateResponse, Error>) -> Void)
+  func cancelCurrentAuthenticatorOperation(completion: @escaping (Result<Void, Error>) -> Void)
   func getFacetID(completion: @escaping (Result<String, Error>) -> Void)
 }
 
@@ -274,7 +275,8 @@ class PasskeysApiSetup {
         let args = message as! [Any?]
         let relyingPartyIdArg = args[0] as! String
         let challengeArg = args[1] as! String
-        api.authenticate(relyingPartyId: relyingPartyIdArg, challenge: challengeArg) { result in
+        let conditionalUIArg = args[2] as! Bool
+        api.authenticate(relyingPartyId: relyingPartyIdArg, challenge: challengeArg, conditionalUI: conditionalUIArg) { result in
           switch result {
             case .success(let res):
               reply(wrapResult(res))
@@ -285,6 +287,21 @@ class PasskeysApiSetup {
       }
     } else {
       authenticateChannel.setMessageHandler(nil)
+    }
+    let cancelCurrentAuthenticatorOperationChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.passkeys_ios.PasskeysApi.cancelCurrentAuthenticatorOperation", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      cancelCurrentAuthenticatorOperationChannel.setMessageHandler { _, reply in
+        api.cancelCurrentAuthenticatorOperation() { result in
+          switch result {
+            case .success:
+              reply(wrapResult(nil))
+            case .failure(let error):
+              reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      cancelCurrentAuthenticatorOperationChannel.setMessageHandler(nil)
     }
     let getFacetIDChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.passkeys_ios.PasskeysApi.getFacetID", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {

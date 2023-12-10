@@ -87,51 +87,38 @@ class CorbadoPasskeyBackend
     AuthRequest request,
   ) async {
     try {
-      final result = await UsersApi(_client).passKeyLoginStart(
-        PassKeyLoginStartReq(username: request.email),
-      );
-
-      if (result == null) {
-        throw Exception(
-          'An unknown error occurred during the Corbado API call',
+      String challenge;
+      if (request.email.isEmpty) {
+        final result = await UsersApi(_client).passKeyMediationStart(
+          PassKeyMediationStartReq(username: request.email),
         );
+
+        if (result == null) {
+          throw Exception(
+            'An unknown error occurred during the Corbado API call',
+          );
+        }
+
+        challenge = result.data.challenge;
+      } else {
+        final result = await UsersApi(_client).passKeyLoginStart(
+          PassKeyLoginStartReq(username: request.email),
+        );
+
+        if (result == null) {
+          throw Exception(
+            'An unknown error occurred during the Corbado API call',
+          );
+        }
+
+        challenge = result.data.challenge;
       }
 
-      if (result.data.challenge.isEmpty) {
+      if (challenge.isEmpty) {
         throw NoPasskeyForDeviceException();
       }
 
-      final json = jsonDecode(result.data.challenge) as Map<String, dynamic>;
-      final typed = CorbadoAuthenticationInitResponse.fromJson(json);
-      return typed.toAuthenticationInitResponse();
-    } on ApiException catch (e) {
-      throw ExceptionFactory.fromBackendMessage(
-        'passKeyAuthenticateStart',
-        e.message ?? '',
-      );
-    }
-  }
-
-  @override
-  Future<AuthenticationInitResponse> initAuthenticateWithAutoComplete(
-    AuthRequest request,
-  ) async {
-    try {
-      final result = await UsersApi(_client).passKeyMediationStart(
-        PassKeyMediationStartReq(username: request.email),
-      );
-
-      if (result == null) {
-        throw Exception(
-          'An unknown error occurred during the Corbado API call',
-        );
-      }
-
-      if (result.data.challenge.isEmpty) {
-        throw NoPasskeyForDeviceException();
-      }
-
-      final json = jsonDecode(result.data.challenge) as Map<String, dynamic>;
+      final json = jsonDecode(challenge) as Map<String, dynamic>;
       final typed = CorbadoAuthenticationInitResponse.fromJson(json);
       return typed.toAuthenticationInitResponse();
     } on ApiException catch (e) {

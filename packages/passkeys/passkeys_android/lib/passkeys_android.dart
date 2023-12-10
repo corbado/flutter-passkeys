@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/foundation.dart';
 import 'package:passkeys_android/messages.g.dart';
 import 'package:passkeys_platform_interface/passkeys_platform_interface.dart';
@@ -7,6 +9,7 @@ import 'package:passkeys_platform_interface/types/authenticator_selection.dart';
 import 'package:passkeys_platform_interface/types/pubkeycred_param.dart';
 import 'package:passkeys_platform_interface/types/register_response.dart';
 import 'package:passkeys_platform_interface/types/relying_party.dart';
+import 'package:passkeys_platform_interface/types/types.dart';
 import 'package:passkeys_platform_interface/types/user.dart';
 
 /// The Android implementation of [PasskeysPlatform].
@@ -30,8 +33,9 @@ class PasskeysAndroid extends PasskeysPlatform {
     String challenge,
     int? timeout,
     String? userVerification,
-    List<AllowCredentialType>? allowCredentials,
-  ) async {
+    List<AllowCredentialType>? allowCredentials, {
+    MediationType? mediation = MediationType.Optional,
+  }) async {
     final r = await _api.authenticate(
       relyingPartyId,
       challenge,
@@ -47,13 +51,12 @@ class PasskeysAndroid extends PasskeysPlatform {
     );
 
     return AuthenticateResponseType(
-      id: r.id,
-      rawId: r.rawId,
-      clientDataJSON: r.clientDataJSON,
-      authenticatorData: r.authenticatorData,
-      signature: r.signature,
-      userHandle: r.userHandle
-    );
+        id: r.id,
+        rawId: r.rawId,
+        clientDataJSON: r.clientDataJSON,
+        authenticatorData: r.authenticatorData,
+        signature: r.signature,
+        userHandle: r.userHandle);
   }
 
   @override
@@ -108,5 +111,10 @@ class PasskeysAndroid extends PasskeysPlatform {
       clientDataJSON: r.clientDataJSON,
       attestationObject: r.attestationObject,
     );
+  }
+
+  @override
+  Future<void> cancelCurrentAuthenticatorOperation() async {
+    return;
   }
 }

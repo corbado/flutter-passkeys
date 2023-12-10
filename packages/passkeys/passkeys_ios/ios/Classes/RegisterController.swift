@@ -7,12 +7,14 @@ import Foundation
 class RegisterController: NSObject, ASAuthorizationControllerDelegate, ASAuthorizationControllerPresentationContextProviding {
     private var completion: ((Result<RegisterResponse, Error>) -> Void)?
 
-    func register(request: ASAuthorizationPlatformPublicKeyCredentialRegistrationRequest, completion: @escaping ((Result<RegisterResponse, Error>) -> Void)) {
+    func register(request: ASAuthorizationPlatformPublicKeyCredentialRegistrationRequest, completion: @escaping ((Result<RegisterResponse, Error>) -> Void)) -> ASAuthorizationController {
         self.completion = completion;
         let authorizationController = ASAuthorizationController(authorizationRequests: [request])
         authorizationController.delegate = self
         authorizationController.presentationContextProvider = self
         authorizationController.performRequests()
+        
+        return authorizationController
     }
 
     func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {

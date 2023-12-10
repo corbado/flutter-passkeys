@@ -1,3 +1,4 @@
+import 'package:async/async.dart';
 import 'package:passkeys_platform_interface/method_channel_passkeys.dart';
 import 'package:passkeys_platform_interface/types/allow_credential.dart';
 import 'package:passkeys_platform_interface/types/authenticator_selection.dart';
@@ -56,8 +57,11 @@ abstract class PasskeysPlatform extends PlatformInterface {
     String challenge,
     int? timeout,
     String? userVerification,
-    List<AllowCredentialType>? allowCredentials,
-  );
+    List<AllowCredentialType>? allowCredentials, {
+    MediationType mediation,
+  });
+
+  Future<void> cancelCurrentAuthenticatorOperation();
 
   /// Returns the FACET ID of the app.
   /// (see https://developer.android.com/reference/androidx/security/crypto/EncryptedSharedPreferences)

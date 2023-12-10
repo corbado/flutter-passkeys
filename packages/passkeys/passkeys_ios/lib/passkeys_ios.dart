@@ -50,13 +50,18 @@ class PasskeysIOS extends PasskeysPlatform {
 
   @override
   Future<AuthenticateResponseType> authenticate(
-    String relyingPartyId,
-    String challenge,
-    int? timeout,
-    String? userVerification,
-    List<AllowCredentialType>? allowCredentials,
-  ) async {
-    final r = await _api.authenticate(relyingPartyId, challenge);
+      String relyingPartyId,
+      String challenge,
+      int? timeout,
+      String? userVerification,
+      List<AllowCredentialType>? allowCredentials,
+      {MediationType? mediation = MediationType.Optional}) async {
+    var conditionalUI = false;
+    if (mediation == MediationType.Conditional) {
+      conditionalUI = true;
+    }
+
+    final r = await _api.authenticate(relyingPartyId, challenge, conditionalUI);
     return AuthenticateResponseType(
       id: r.id,
       rawId: r.rawId,
@@ -66,6 +71,10 @@ class PasskeysIOS extends PasskeysPlatform {
       userHandle: r.userHandle,
     );
   }
+
+  @override
+  Future<void> cancelCurrentAuthenticatorOperation() async =>
+      _api.cancelCurrentAuthenticatorOperation();
 
   @override
   Future<String> getFacetID() async => _api.getFacetID();

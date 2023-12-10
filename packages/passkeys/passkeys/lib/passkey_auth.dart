@@ -113,33 +113,14 @@ class PasskeyAuth<Request, Response> {
   /// While [authenticateWithEmail] can also be used to do this
   /// [authenticateWithAutocompletion] is the better way and should be used by
   /// default because it is more convenient for the user.
-  ///
-  /// [authenticateWithAutocompletion] should be called when the sign in page
-  /// is loaded and before any user interaction has happened.
-  /// It returns a [SignInHandler].
-  /// Call .complete on this handler as soon as the user focuses the username
-  /// input field. Now the user will be shown a list of all available passkeys
-  /// and he can complete the sign in flow.
-  Future<SignInHandler> authenticateWithAutocompletion({
+  Future<Response?> authenticateWithAutocompletion({
     required Request request,
-    required Future<void> Function(Response) callback,
   }) async {
-    final initResponse =
-        await _backend.initAuthenticateWithAutoComplete(request);
+    final initResponse = await _backend.initAuthenticate(request);
 
-    return SignInHandler(
-      complete: (void Function(Exception)? onError) async {
-        try {
-          final completeResponse = await _completeSignIn(initResponse);
-          await callback(completeResponse);
-        } on Exception catch (e) {
-          if (onError == null) {
-            return;
-          }
-
-          onError(e);
-        }
-      },
+    return _completeSignIn(
+      initResponse,
+      mediationType: MediationType.Conditional,
     );
   }
 
@@ -163,22 +144,25 @@ class PasskeyAuth<Request, Response> {
   }
 
   Future<Response> _completeSignIn(
-    AuthenticationInitResponse initResponse,
-  ) async {
+    AuthenticationInitResponse initResponse, {
+    MediationType mediationType = MediationType.Optional,
+  }) async {
+    final allowCredentials = initResponse.allowCredentials
+        ?.map(
+          (e) => AllowCredentialType(
+            id: e.id,
+            type: e.type,
+            transports: e.transports,
+          ),
+        )
+        .toList();
     final authenticatorResponse = await _authenticator.authenticate(
       initResponse.rpId,
       initResponse.challenge,
       initResponse.timeout,
       initResponse.userVerification,
-      initResponse.allowCredentials
-          ?.map(
-            (e) => AllowCredentialType(
-              id: e.id,
-              type: e.type,
-              transports: e.transports,
-            ),
-          )
-          .toList(),
+      allowCredentials,
+      mediationType,
     );
 
     final completeRequest = AuthenticationCompleteRequest(

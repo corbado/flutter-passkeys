@@ -10,12 +10,12 @@ dependencies:
   flutter:
     sdk: flutter
   passkeys:
-    # When depending on this package from a real application you should use:
-    #   passkeys: ^x.y.z
-    # See https://dart.dev/tools/pub/dependencies#version-constraints
-    # The example app is bundled with the plugin so we use a path dependency on
-    # the parent directory to use the current plugin's version.
     path: ../
+  go_router: ^10.1.2
+  flutter_hooks: ^0.20.3
+  riverpod: ^2.3.10
+  flutter_riverpod: ^2.3.10
+  hooks_riverpod: 2.4.0
 
 dev_dependencies:
   flutter_driver:
@@ -29,8 +29,3 @@ dev_dependencies:
 flutter:
   uses-material-design: true
 
-dependency_overrides:
-  passkeys_web:
-    path: /Users/hackfred/personal/programming/corbado/flutter-passkeys/packages/passkeys/passkeys_web
-  passkeys_platform_interface:
-    path: /Users/hackfred/personal/programming/corbado/flutter-passkeys/packages/passkeys/passkeys_platform_interface

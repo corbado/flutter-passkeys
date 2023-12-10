@@ -1,6 +1,7 @@
 import 'dart:convert';
 
-import 'package:flutter/cupertino.dart';
+import 'package:async/async.dart';
+import 'package:flutter/services.dart';
 import 'package:js/js_util.dart';
 import 'package:passkeys_platform_interface/passkeys_platform_interface.dart';
 import 'package:passkeys_platform_interface/types/allow_credential.dart';
@@ -9,6 +10,7 @@ import 'package:passkeys_platform_interface/types/authenticator_selection.dart';
 import 'package:passkeys_platform_interface/types/pubkeycred_param.dart';
 import 'package:passkeys_platform_interface/types/register_response.dart';
 import 'package:passkeys_platform_interface/types/relying_party.dart';
+import 'package:passkeys_platform_interface/types/types.dart';
 import 'package:passkeys_platform_interface/types/user.dart';
 import 'package:passkeys_web/interop.dart';
 import 'package:passkeys_web/models/passkeyLoginRequest.dart';
@@ -21,10 +23,8 @@ class PasskeysWeb extends PasskeysPlatform {
   /// Registers this class as the default instance of [TestPluginPlatform]
   static void registerWith([Object? registrar]) {
     PasskeysPlatform.instance = PasskeysWeb();
+    init();
   }
-
-  @override
-  Future<String?> getPlatformName() async => 'Web';
 
   @override
   Future<bool> canAuthenticate() {
@@ -72,24 +72,27 @@ class PasskeysWeb extends PasskeysPlatform {
         attestationObject: typedResponse.response.attestationObject,
       );
     } catch (e) {
-      debugPrint(e.toString());
-      rethrow;
+      final exception = _parseException(e as String);
+      throw exception;
     }
   }
 
   @override
   Future<AuthenticateResponseType> authenticate(
-      String relyingPartyId,
-      String challenge,
-      int? timeout,
-      String? userVerification,
-      List<AllowCredentialType>? allowCredentials) async {
+    String relyingPartyId,
+    String challenge,
+    int? timeout,
+    String? userVerification,
+    List<AllowCredentialType>? allowCredentials, {
+    MediationType mediation = MediationType.Optional,
+  }) async {
     final request = PasskeyLoginRequest.fromPlatformType(
       relyingPartyId,
       challenge,
       timeout,
       userVerification,
       allowCredentials,
+      mediation,
     );
 
     try {
@@ -103,8 +106,29 @@ class PasskeysWeb extends PasskeysPlatform {
 
       return typedResponse.toAuthenticateResponseType();
     } catch (e) {
-      debugPrint(e.toString());
-      rethrow;
+      final exception = _parseException(e as String);
+      throw exception;
     }
+  }
+
+  PlatformException _parseException(String exception) {
+    try {
+      final decoded = jsonDecode(exception) as Map<String, dynamic>;
+      final code = decoded['code'] as String;
+      final message = decoded['message'] as String;
+      final details = decoded['details'] as String;
+      return PlatformException(code: code, message: message, details: details);
+    } catch (e) {
+      return PlatformException(
+        code: 'parse-error',
+        message: 'Could not parse exception: $e',
+        details: exception,
+      );
+    }
+  }
+
+  @override
+  Future<void> cancelCurrentAuthenticatorOperation() async {
+    await authenticatorCancel();
   }
 }

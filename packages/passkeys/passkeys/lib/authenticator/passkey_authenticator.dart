@@ -1,3 +1,4 @@
+import 'package:async/async.dart';
 import 'package:flutter/services.dart';
 import 'package:passkeys/authenticator/exceptions.dart';
 import 'package:passkeys_platform_interface/passkeys_platform_interface.dart';
@@ -37,6 +38,8 @@ class PasskeyAuthenticator {
     String? attestation,
   ) async {
     try {
+      await _platform.cancelCurrentAuthenticatorOperation();
+
       final r = await _platform.register(
         challenge,
         relyingParty,
@@ -69,14 +72,18 @@ class PasskeyAuthenticator {
     int? timeout,
     String? userVerification,
     List<AllowCredentialType>? allowCredentials,
+    MediationType mediation,
   ) async {
     try {
+      await _platform.cancelCurrentAuthenticatorOperation();
+
       final r = await _platform.authenticate(
         relyingPartyId,
         challenge,
         timeout,
         userVerification,
         allowCredentials,
+        mediation: mediation,
       );
 
       return r;
