@@ -61,11 +61,8 @@ abstract class PasskeysPlatform extends PlatformInterface {
     MediationType mediation,
   });
 
+  /// Cancels the ongoing authenticator operation (if there is one).
+  /// This is important for the case when conditional UI has been started but
+  /// the user decides ignore that and login by typing his username instead.
   Future<void> cancelCurrentAuthenticatorOperation();
-
-  /// Returns the FACET ID of the app.
-  /// (see https://developer.android.com/reference/androidx/security/crypto/EncryptedSharedPreferences)
-  @Deprecated(
-      'The facetID should no longer be needed as this value is not used for the origin header anymore')
-  Future<String> getFacetID();
 }

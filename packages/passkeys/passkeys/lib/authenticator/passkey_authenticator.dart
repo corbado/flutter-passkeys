@@ -1,9 +1,7 @@
-import 'package:async/async.dart';
 import 'package:flutter/services.dart';
 import 'package:passkeys/authenticator/exceptions.dart';
 import 'package:passkeys_platform_interface/passkeys_platform_interface.dart';
 import 'package:passkeys_platform_interface/types/allow_credential.dart';
-import 'package:passkeys_platform_interface/types/authenticator_selection.dart';
 import 'package:passkeys_platform_interface/types/pubkeycred_param.dart';
 import 'package:passkeys_platform_interface/types/types.dart';
 
@@ -14,12 +12,6 @@ class PasskeyAuthenticator {
   PasskeyAuthenticator() : _platform = PasskeysPlatform.instance;
 
   final PasskeysPlatform _platform;
-
-  /// Returns the facetID.
-  /// On Android this is the hash of the APK signature.
-  @Deprecated(
-      'The facetID should no longer be needed as this value is not used for the origin header anymore')
-  Future<String> getFacetID() async => _platform.getFacetID();
 
   /// Returns true only if passkeys are supported by the platform.
   Future<bool> canAuthenticate() {

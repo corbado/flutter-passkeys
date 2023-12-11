@@ -1,4 +1,9 @@
+## 2.0.0-dev.1
+
+* Removed getFacetID (no longer needed)
+
 ## 1.2.0
+
 * Deprecate getFacetID.
 
 ## 1.2.0

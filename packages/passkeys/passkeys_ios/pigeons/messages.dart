@@ -101,7 +101,4 @@ abstract class PasskeysApi {
 
   @async
   void cancelCurrentAuthenticatorOperation();
-
-  @async
-  String getFacetID();
 }
