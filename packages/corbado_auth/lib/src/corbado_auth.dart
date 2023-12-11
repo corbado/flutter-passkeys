@@ -14,7 +14,6 @@ import 'package:passkeys/relying_party_server/corbado/corbado_passkey_backend.da
 import 'package:passkeys/relying_party_server/corbado/types/exceptions.dart';
 import 'package:passkeys/relying_party_server/corbado/types/registration.dart';
 import 'package:passkeys/relying_party_server/corbado/types/shared.dart';
-import 'package:passkeys/sign_in_handler.dart';
 
 /// The Cobardo Auth SDK helps you with bringing passkey authentication to your
 /// app.
@@ -263,14 +262,17 @@ class CorbadoAuth {
   /// this SignInHandler should be completed by calling .complete() on it.
   /// Now the user gets a list of all available passkeys.
   /// As soon as he selects one and provides his biometrics he is logged in.
-  Future<SignInHandler> autocompletedSignInWithPasskey() async {
-    return _passkeyAuth.authenticateWithAutocompletion(
+  Future<void> autocompletedSignInWithPasskey() async {
+    final response = await _passkeyAuth.authenticateWithAutocompletion(
       request: const AuthRequest(''),
-      callback: (response) async {
-        final user = User.fromIdToken(response.token);
-        await _postSignIn(user, response.refreshToken);
-      },
     );
+    // user has not finished the authentication
+    if (response == null) {
+      return;
+    }
+
+    final user = User.fromIdToken(response.token);
+    await _postSignIn(user, response.refreshToken);
   }
 
   /// Signs in a user relying on a passkey.

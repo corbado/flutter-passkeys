@@ -5,9 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 class SignInPage extends StatefulHookConsumerWidget {
-  SignInPage({super.key}) {}
+  SignInPage({super.key});
 
   @override
   ConsumerState<SignInPage> createState() => _SignInPageState();
@@ -15,8 +16,6 @@ class SignInPage extends StatefulHookConsumerWidget {
 
 class _SignInPageState extends ConsumerState<SignInPage> {
   final _emailController = TextEditingController();
-
-  SignInHandler? _signInHandler;
 
   @override
   void initState() {
@@ -26,7 +25,12 @@ class _SignInPageState extends ConsumerState<SignInPage> {
       final authService = ref.watch(authServiceProvider);
 
       // As soon as the view has been loaded prepare the autocompleted passkey sign in.
-      authService.signInWithAutocomplete().then((value) => _signInHandler = value);
+      authService.signInWithAutocomplete().onError((error, stackTrace) {
+        if (error is PasskeyAuthCancelledException) {
+          debugPrint('FYI: User has cancelled passkey auth.');
+          return;
+        }
+      });
     });
   }
 
@@ -70,24 +74,8 @@ class _SignInPageState extends ConsumerState<SignInPage> {
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 4),
                 child: TextField(
+                  autofillHints: [_getAutofillHint()],
                   controller: _emailController,
-                  onTap: () {
-                    if (_signInHandler == null) {
-                      return;
-                    }
-
-                    if (numberOfAutoCompletions.value >= 1) {
-                      return;
-                    }
-
-                    numberOfAutoCompletions.value++;
-                    // When the user focuses the text field start the real sign in.
-                    _signInHandler!.complete((Exception e) {
-                      if (e is PasskeyAuthCancelledException) {
-                        debugPrint('FYI: User has cancelled passkey auth.');
-                      }
-                    });
-                  },
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
                     hintText: 'email address',
@@ -145,5 +133,13 @@ class _SignInPageState extends ConsumerState<SignInPage> {
         ),
       ),
     );
+  }
+
+  String _getAutofillHint() {
+    if (kIsWeb) {
+      return 'webauthn';
+    } else {
+      return AutofillHints.username;
+    }
   }
 }

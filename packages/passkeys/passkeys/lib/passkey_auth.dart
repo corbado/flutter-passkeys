@@ -3,7 +3,6 @@ import 'package:passkeys/authenticator/types.dart';
 import 'package:passkeys/relying_party_server/relying_party_server.dart';
 import 'package:passkeys/relying_party_server/types/authentication.dart';
 import 'package:passkeys/relying_party_server/types/registration.dart';
-import 'package:passkeys/sign_in_handler.dart';
 
 /// Enables passkey based registration and authentication.
 /// Entrypoint of the Flutter passkeys package.

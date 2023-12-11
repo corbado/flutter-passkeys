@@ -14,6 +14,8 @@ class AuthService {
     try {
       await _auth.registerWithPasskey(email: email, fullName: email);
       return null;
+    } on PasskeyAuthCancelledException {
+      return null;
     } on ValidationException catch (e) {
       return 'validation error: ${e.toString()}';
     } on UnexpectedBackendException catch (e) {
@@ -28,6 +30,8 @@ class AuthService {
     try {
       await _auth.signInWithPasskey(email: email);
       return null;
+    } on PasskeyAuthCancelledException {
+      return null;
     } on NoPasskeyForDeviceException {
       return 'No passkey has been setup on this device for ${email}.';
     } on UnknownUserException {
@@ -37,7 +41,7 @@ class AuthService {
     }
   }
 
-  Future<SignInHandler> signInWithAutocomplete() async {
+  Future<void> signInWithAutocomplete() async {
     return await _auth.autocompletedSignInWithPasskey();
   }
 

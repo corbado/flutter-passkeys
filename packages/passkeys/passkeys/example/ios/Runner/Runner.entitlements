@@ -5,7 +5,6 @@
 	<key>com.apple.developer.associated-domains</key>
 	<array>
 		<string>webcredentials:pro-6244024196016258271.frontendapi.corbado.io?mode=developer</string>
-		<string>webcredentials:pro-6244024196016258271.frontendapi.corbado.io</string>
 	</array>
 </dict>
 </plist>

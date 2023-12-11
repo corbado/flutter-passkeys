@@ -28,3 +28,28 @@ scripts:
     packageFilters:
       dirExists:
         - test
+
+  example-passkeys-web:
+    description: Run passkeys example on web.
+    run: |
+      cd packages/passkeys/passkeys/example
+      flutter run lib/main.dart -d chrome --web-browser-flag "--disable-web-security" --dart-define=CORBADO_PROJECT_ID=pro-8625954987319941884
+
+  example-passkeys-native:
+    description: Run passkeys example on iOS or Android (you should start the emulator/simulator before you run this command).
+    run: |
+      cd packages/passkeys/passkeys/example
+      flutter run lib/main.dart --dart-define=CORBADO_PROJECT_ID=pro-6244024196016258271
+
+  example-corbado_auth-native:
+    description: Run corbado_auth example on iOS or Android (you should start the emulator/simulator before you run this command).
+    run: |
+      cd packages/corbado_auth/example
+      flutter run lib/main.dart --dart-define=CORBADO_PROJECT_ID=pro-4268394291597054564
+
+  build-passkeys-web-javascript:
+    description: Build passkeys_web's javascript code and copy it to the example.
+    run: |
+      cd packages/passkeys/passkeys_web
+      npm run build
+      cp javascript/dist/bundle.js ../passkeys/example/web/bundle.js

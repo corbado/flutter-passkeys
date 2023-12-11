@@ -69,7 +69,9 @@ class SignUpPage extends HookConsumerWidget {
                   onPressed: () async {
                     final email = _emailController.value.text;
                     final maybeError = await authService.register(email: email);
-                    error.value = maybeError;
+                    if (maybeError != null) {
+                      error.value = maybeError;
+                    }
                   },
                   child: const Text('sign up'),
                 ),

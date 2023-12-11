@@ -1,4 +1,4 @@
-name: futter_passkeys_workspace
+name: flutter_passkeys_workspace
 
 environment:
   sdk: '>=2.18.0 <4.0.0'
