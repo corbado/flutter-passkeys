@@ -1,13 +1,12 @@
 import 'package:pigeon/pigeon.dart';
 
+/// Represents a relying party
 @ConfigurePigeon(
   PigeonOptions(
     dartOut: 'lib/messages.g.dart',
     swiftOut: 'ios/Classes/messages.swift',
   ),
 )
-
-/// Represents a relying party
 class RelyingParty {
   /// Constructor
   const RelyingParty(this.name, this.id);
@@ -89,15 +88,15 @@ abstract class PasskeysApi {
   bool canAuthenticate();
 
   @async
-  RegisterResponse register(String challenge,
-      RelyingParty relyingParty,
-      User user,);
+  RegisterResponse register(
+    String challenge,
+    RelyingParty relyingParty,
+    User user,
+  );
 
   @async
   AuthenticateResponse authenticate(
-      String relyingPartyId,
-      String challenge,
-      bool conditionalUI);
+      String relyingPartyId, String challenge, bool conditionalUI);
 
   @async
   void cancelCurrentAuthenticatorOperation();

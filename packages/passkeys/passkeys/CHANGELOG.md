@@ -3,6 +3,7 @@
 * Added flutter_web support
 * Updated conditional UI support for iOS (it is now triggered from the iOS keyboard)
 * Removed getFacetID (no longer needed)
+* Updated the example to showcase conditional UI
 * Fix: Cancel any pending authenticator operation before register/login calls
 * BREAKING CHANGE: Parameters of "authenticateWithAutocompletion" have changed
 * BREAKING CHANGE: For conditional UI on iOS you now need to

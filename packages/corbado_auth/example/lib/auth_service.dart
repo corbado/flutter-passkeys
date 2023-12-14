@@ -28,7 +28,7 @@ class AuthService {
 
   Future<String?> signIn({required String email}) async {
     try {
-      await _auth.signInWithPasskey(email: email);
+      await _auth.loginWithPasskey(email: email);
       return null;
     } on PasskeyAuthCancelledException {
       return null;
@@ -42,7 +42,7 @@ class AuthService {
   }
 
   Future<void> signInWithAutocomplete() async {
-    return await _auth.autocompletedSignInWithPasskey();
+    return await _auth.autocompletedLoginWithPasskey();
   }
 
   Future<void> signOut() {

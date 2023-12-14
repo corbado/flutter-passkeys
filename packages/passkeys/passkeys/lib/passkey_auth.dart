@@ -112,9 +112,7 @@ class PasskeyAuth<Request, Response> {
   /// While [authenticateWithEmail] can also be used to do this
   /// [authenticateWithAutocompletion] is the better way and should be used by
   /// default because it is more convenient for the user.
-  Future<Response?> authenticateWithAutocompletion({
-    required Request request,
-  }) async {
+  Future<Response?> authenticateWithAutocompletion(Request request) async {
     final initResponse = await _backend.initAuthenticate(request);
 
     return _completeSignIn(

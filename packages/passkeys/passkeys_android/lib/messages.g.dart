@@ -420,9 +420,9 @@ class PasskeysApi {
     }
   }
 
-  Future<String> getFacetID() async {
+  Future<void> cancelCurrentAuthenticatorOperation() async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.passkeys_android.PasskeysApi.getFacetID', codec,
+        'dev.flutter.pigeon.passkeys_android.PasskeysApi.cancelCurrentAuthenticatorOperation', codec,
         binaryMessenger: _binaryMessenger);
     final List<Object?>? replyList =
         await channel.send(null) as List<Object?>?;
@@ -437,13 +437,8 @@ class PasskeysApi {
         message: replyList[1] as String?,
         details: replyList[2],
       );
-    } else if (replyList[0] == null) {
-      throw PlatformException(
-        code: 'null-error',
-        message: 'Host platform returned null value for non-null return value.',
-      );
     } else {
-      return (replyList[0] as String?)!;
+      return;
     }
   }
 }

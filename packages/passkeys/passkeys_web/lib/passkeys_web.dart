@@ -1,26 +1,20 @@
 import 'dart:convert';
 
-import 'package:async/async.dart';
 import 'package:flutter/services.dart';
 import 'package:js/js_util.dart';
 import 'package:passkeys_platform_interface/passkeys_platform_interface.dart';
 import 'package:passkeys_platform_interface/types/allow_credential.dart';
-import 'package:passkeys_platform_interface/types/authenticate_response.dart';
-import 'package:passkeys_platform_interface/types/authenticator_selection.dart';
 import 'package:passkeys_platform_interface/types/pubkeycred_param.dart';
-import 'package:passkeys_platform_interface/types/register_response.dart';
-import 'package:passkeys_platform_interface/types/relying_party.dart';
 import 'package:passkeys_platform_interface/types/types.dart';
-import 'package:passkeys_platform_interface/types/user.dart';
 import 'package:passkeys_web/interop.dart';
 import 'package:passkeys_web/models/passkeyLoginRequest.dart';
 import 'package:passkeys_web/models/passkeyLoginResponse.dart';
 import 'package:passkeys_web/models/passkeySignUpRequest.dart';
 import 'package:passkeys_web/models/passkeySignUpResponse.dart';
 
-/// The Web implementation of [TestPluginPlatform].
+/// The Web implementation of [PasskeysPlatform].
 class PasskeysWeb extends PasskeysPlatform {
-  /// Registers this class as the default instance of [TestPluginPlatform]
+  /// Registers this class as the default instance of [PasskeysPlatform]
   static void registerWith([Object? registrar]) {
     PasskeysPlatform.instance = PasskeysWeb();
     init();
@@ -29,11 +23,6 @@ class PasskeysWeb extends PasskeysPlatform {
   @override
   Future<bool> canAuthenticate() {
     return Future.value(true);
-  }
-
-  @override
-  Future<String> getFacetID() {
-    return Future.value('');
   }
 
   @override

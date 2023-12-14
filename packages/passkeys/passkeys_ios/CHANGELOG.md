@@ -1,7 +1,7 @@
 ## 2.0.0-dev.1
 
 * Changed conditional UI (use performAutoFillAssistedRequests)
-* Removed getFacetID
+* Removed getFacetID (no longer needed)
 * Added cancelCurrentAuthenticatorOperation
 
 ## 1.2.0

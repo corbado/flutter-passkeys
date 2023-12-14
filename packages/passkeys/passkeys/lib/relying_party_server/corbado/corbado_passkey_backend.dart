@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:corbado_frontend_api_client/frontendapi/lib/api.dart';
 import 'package:flutter/foundation.dart';
+import 'package:http/browser_client.dart';
 import 'package:passkeys/relying_party_server/corbado/types/authentication.dart';
 import 'package:passkeys/relying_party_server/corbado/types/exceptions.dart';
 import 'package:passkeys/relying_party_server/corbado/types/registration.dart';
@@ -16,10 +17,8 @@ import 'package:ua_client_hints/ua_client_hints.dart';
 class CorbadoPasskeyBackend
     extends RelyingPartyServer<AuthRequest, AuthResponse> {
   /// Sets up the client for the Corbado API.
-  CorbadoPasskeyBackend(
-    this._projectID, {
-    @Deprecated('customDomain no longer needs to be set') String? customDomain,
-  }) : _frontendAPI = 'https://$_projectID.frontendapi.corbado.io';
+  CorbadoPasskeyBackend(this._projectID)
+      : _frontendAPI = 'https://login.flutter-corbadoauth-example.korbado.com';
 
   /// Initializes the client by setting all required headers
   Future<void> init() async {
@@ -157,14 +156,17 @@ class CorbadoPasskeyBackend
   /// Builds an API client to interact with the Corbado frontend API.
   /// Depending on the platform different headers will be set.
   Future<ApiClient> buildClient() async {
-    final client = ApiClient(basePath: _frontendAPI)
-      ..addDefaultHeader('X-Corbado-Project-ID', _projectID);
+    final apiClient = ApiClient(basePath: _frontendAPI)
+      ..addDefaultHeader('X-Corbado-ProjectID', _projectID);
 
-    if (!kIsWeb) {
+    if (kIsWeb) {
+      final httpClient = BrowserClient()..withCredentials = true;
+      apiClient.client = httpClient;
+    } else {
       final ua = await userAgent();
-      client.addDefaultHeader('User-Agent', ua);
+      apiClient.addDefaultHeader('User-Agent', ua);
     }
 
-    return client;
+    return apiClient;
   }
 }

@@ -1,16 +1,9 @@
-import 'dart:ffi';
-
 import 'package:flutter/foundation.dart';
 import 'package:passkeys_android/messages.g.dart';
 import 'package:passkeys_platform_interface/passkeys_platform_interface.dart';
 import 'package:passkeys_platform_interface/types/allow_credential.dart';
-import 'package:passkeys_platform_interface/types/authenticate_response.dart';
-import 'package:passkeys_platform_interface/types/authenticator_selection.dart';
 import 'package:passkeys_platform_interface/types/pubkeycred_param.dart';
-import 'package:passkeys_platform_interface/types/register_response.dart';
-import 'package:passkeys_platform_interface/types/relying_party.dart';
 import 'package:passkeys_platform_interface/types/types.dart';
-import 'package:passkeys_platform_interface/types/user.dart';
 
 /// The Android implementation of [PasskeysPlatform].
 class PasskeysAndroid extends PasskeysPlatform {
@@ -23,9 +16,6 @@ class PasskeysAndroid extends PasskeysPlatform {
   static void registerWith() => PasskeysPlatform.instance = PasskeysAndroid();
 
   final PasskeysApi _api;
-
-  @override
-  Future<String> getFacetID() async => _api.getFacetID();
 
   @override
   Future<AuthenticateResponseType> authenticate(
@@ -113,6 +103,7 @@ class PasskeysAndroid extends PasskeysPlatform {
     );
   }
 
+  //
   @override
   Future<void> cancelCurrentAuthenticatorOperation() async {
     return;

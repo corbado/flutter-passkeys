@@ -1,4 +1,3 @@
-import 'package:async/async.dart';
 import 'package:passkeys_platform_interface/passkeys_platform_interface.dart';
 import 'package:passkeys_platform_interface/types/allow_credential.dart';
 import 'package:passkeys_platform_interface/types/pubkeycred_param.dart';

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.os.Build;
+import android.os.CancellationSignal;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -53,7 +54,9 @@ public class MessageHandler implements Messages.PasskeysApi {
     private static final String SYNC_ACCOUNT_NOT_AVAILABLE_ERROR = "Sync account could not be accessed. If you are running on an emulator, please restart that device (select 'Could boot now').";
     private static final String MISSING_GOOGLE_SIGN_IN_ERROR = "Please sign in with a Google account first to create a new passkey.";
 
-    FlutterPasskeysPlugin plugin;
+    private final FlutterPasskeysPlugin plugin;
+
+    private CancellationSignal currentCancellationSignal;
 
     public MessageHandler(FlutterPasskeysPlugin plugin) {
         this.plugin = plugin;
@@ -87,8 +90,8 @@ public class MessageHandler implements Messages.PasskeysApi {
             Activity activity = plugin.requireActivity();
             CredentialManager credentialManager = CredentialManager.create(activity);
             CreatePublicKeyCredentialRequest createPublicKeyCredentialRequest = new CreatePublicKeyCredentialRequest(options);
-
-            credentialManager.createCredentialAsync(activity, createPublicKeyCredentialRequest, null, Runnable::run, new CredentialManagerCallback<CreateCredentialResponse, CreateCredentialException>() {
+            currentCancellationSignal = new CancellationSignal();
+            credentialManager.createCredentialAsync(activity, createPublicKeyCredentialRequest, currentCancellationSignal, Runnable::run, new CredentialManagerCallback<CreateCredentialResponse, CreateCredentialException>() {
 
                 @Override
                 public void onResult(CreateCredentialResponse res) {
@@ -149,8 +152,9 @@ public class MessageHandler implements Messages.PasskeysApi {
             GetPublicKeyCredentialOption getPublicKeyCredentialOption = new GetPublicKeyCredentialOption(options);
 
             GetCredentialRequest getCredRequest = new GetCredentialRequest.Builder().addCredentialOption(getPublicKeyCredentialOption).build();
+            currentCancellationSignal = new CancellationSignal();
 
-            credentialManager.getCredentialAsync(activity, getCredRequest, null, Runnable::run, new CredentialManagerCallback<GetCredentialResponse, GetCredentialException>() {
+            credentialManager.getCredentialAsync(activity, getCredRequest, currentCancellationSignal, Runnable::run, new CredentialManagerCallback<GetCredentialResponse, GetCredentialException>() {
                 @Override
                 public void onResult(GetCredentialResponse res) {
                     Credential credential = res.getCredential();
@@ -211,38 +215,12 @@ public class MessageHandler implements Messages.PasskeysApi {
     }
 
     @Override
-    public void getFacetID(@NonNull Messages.Result<String> result) {
-        Activity activity = plugin.requireActivity();
-        if (activity == null) throw new IllegalStateException("Activity not found");
-        Signature[] signs;
-        try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                signs = activity.getPackageManager().getPackageInfo(activity.getPackageName(), PackageManager.GET_SIGNING_CERTIFICATES).signingInfo.getApkContentsSigners();
-            } else {
-                signs = activity.getPackageManager().getPackageInfo(activity.getPackageName(), PackageManager.GET_SIGNATURES).signatures;
-            }
-            if (signs.length == 0) {
-                result.error(new Exception("No signatures found"));
-            }
-
-            MessageDigest md = MessageDigest.getInstance("SHA-256");
-            md.update(signs[0].toByteArray());
-            byte[] digest = md.digest();
-            StringBuilder toRet = new StringBuilder();
-            for (int x = 0; x < digest.length; x++) {
-                toRet.append(String.format("%02x", digest[x]).toUpperCase());
-                if (x < digest.length - 1) {
-                    toRet.append(":");
-                }
-            }
-
-            String encoded = android.util.Base64.encodeToString(digest, android.util.Base64.URL_SAFE | android.util.Base64.NO_PADDING | android.util.Base64.NO_WRAP);
-            Log.i(TAG, "Fingerprint: " + toRet.toString());
-            Log.i(TAG, "Fingerprint (base64): " + encoded);
-
-            result.success("android:apk-key-hash:" + encoded);
-        } catch (PackageManager.NameNotFoundException | NoSuchAlgorithmException e) {
-            result.error(e);
+    public void cancelCurrentAuthenticatorOperation(@NonNull Messages.Result<Void> result) {
+        if (currentCancellationSignal != null) {
+            currentCancellationSignal.cancel();
+            currentCancellationSignal = null;
         }
+
+        result.success(null);
     }
 }

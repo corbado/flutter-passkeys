@@ -15,6 +15,7 @@ class RelyingPartyType {
 
   ///
   final String name;
+
   ///
   final String id;
 

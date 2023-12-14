@@ -953,7 +953,7 @@ public class Messages {
 
     void authenticate(@NonNull String relyingPartyId, @NonNull String challenge, @Nullable Long timeout, @Nullable String userVerification, @Nullable List<AllowCredential> allowCredentials, @NonNull Result<AuthenticateResponse> result);
 
-    void getFacetID(@NonNull Result<String> result);
+    void cancelCurrentAuthenticatorOperation(@NonNull Result<Void> result);
 
     /** The codec used by PasskeysApi. */
     static @NonNull MessageCodec<Object> getCodec() {
@@ -1059,15 +1059,15 @@ public class Messages {
       {
         BasicMessageChannel<Object> channel =
             new BasicMessageChannel<>(
-                binaryMessenger, "dev.flutter.pigeon.passkeys_android.PasskeysApi.getFacetID", getCodec());
+                binaryMessenger, "dev.flutter.pigeon.passkeys_android.PasskeysApi.cancelCurrentAuthenticatorOperation", getCodec());
         if (api != null) {
           channel.setMessageHandler(
               (message, reply) -> {
                 ArrayList<Object> wrapped = new ArrayList<Object>();
-                Result<String> resultCallback =
-                    new Result<String>() {
-                      public void success(String result) {
-                        wrapped.add(0, result);
+                Result<Void> resultCallback =
+                    new Result<Void>() {
+                      public void success(Void result) {
+                        wrapped.add(0, null);
                         reply.reply(wrapped);
                       }
 
@@ -1077,7 +1077,7 @@ public class Messages {
                       }
                     };
 
-                api.getFacetID(resultCallback);
+                api.cancelCurrentAuthenticatorOperation(resultCallback);
               });
         } else {
           channel.setMessageHandler(null);

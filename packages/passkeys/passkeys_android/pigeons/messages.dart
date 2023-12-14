@@ -1,5 +1,6 @@
 import 'package:pigeon/pigeon.dart';
 
+/// Represents a relying party
 @ConfigurePigeon(
   PigeonOptions(
     dartOut: 'lib/messages.g.dart',
@@ -9,8 +10,6 @@ import 'package:pigeon/pigeon.dart';
     ),
   ),
 )
-
-/// Represents a relying party
 class RelyingParty {
   /// Constructor
   const RelyingParty(this.name, this.id);
@@ -165,5 +164,5 @@ abstract class PasskeysApi {
   );
 
   @async
-  String getFacetID();
+  void cancelCurrentAuthenticatorOperation();
 }

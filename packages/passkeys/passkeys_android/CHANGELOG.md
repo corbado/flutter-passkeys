@@ -1,3 +1,8 @@
+## 2.0.0-dev.1
+
+* Removed getFacetID (no longer needed)
+* Added cancelCurrentAuthenticatorOperation
+
 ## 1.2.1
 
 * Catch more situations when a user interrupts biometrics ceremony (e.g. providing his fingerprint).

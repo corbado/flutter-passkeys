@@ -1,13 +1,18 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:corbado_auth/src/services/session_storage/secure_storage.dart';
+import 'package:corbado_auth/src/services/corbado/corbado.dart';
+import 'package:corbado_auth/src/services/corbado/corbado_native.dart';
+import 'package:corbado_auth/src/services/corbado/corbado_web.dart';
+import 'package:corbado_auth/src/services/storage/storage.dart';
+import 'package:corbado_auth/src/services/storage/storage_native.dart';
+import 'package:corbado_auth/src/services/storage/storage_web.dart';
 import 'package:corbado_auth/src/types/auth_state.dart';
 import 'package:corbado_auth/src/types/email_otp_state.dart';
 import 'package:corbado_auth/src/types/passkey_info.dart';
 import 'package:corbado_auth/src/types/user.dart';
 import 'package:corbado_frontend_api_client/frontendapi/lib/api.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:passkeys/authenticator/types.dart';
 import 'package:passkeys/passkey_auth.dart';
 import 'package:passkeys/relying_party_server/corbado/corbado_passkey_backend.dart';
@@ -22,7 +27,7 @@ class CorbadoAuth {
   CorbadoAuth(
     this._projectID, {
     @Deprecated('customDomain no longer needs to be set') String? customDomain,
-  }) : _storage = SecureStorage();
+  }) : _storageService = _buildStorageService();
 
   /// Should be listened to to get updates to the User object
   /// (e.g. updates to the idToken, sign in, sign out, changes to user data).
@@ -55,9 +60,9 @@ class CorbadoAuth {
       StreamController();
 
   // Used to persist information (e.g. idToken and refreshToken) securely.
-  final SecureStorage _storage;
+  final StorageService _storageService;
+  late CorbadoService _corbadoService;
   final String _projectID;
-  String? _refreshToken;
   final _preemptiveRefreshDuration = const Duration(seconds: 240);
   Timer? _refreshTimer;
 
@@ -70,8 +75,10 @@ class CorbadoAuth {
     final relyingPartyServer = CorbadoPasskeyBackend(_projectID);
     await relyingPartyServer.init();
 
+    _corbadoService = _buildCorbadoService(_storageService);
     _passkeyAuth = PasskeyAuth(relyingPartyServer);
     _frontendAPIClient = await relyingPartyServer.buildClient();
+    _corbadoService.init(_frontendAPIClient, _passkeyAuth);
 
     try {
       final passkeysSupported = await _passkeyAuth.isSupported();
@@ -79,15 +86,14 @@ class CorbadoAuth {
         debugPrint('passkeys are not supported on this device');
       }
 
-      final maybeUser = await _storage.getUser();
+      final maybeUser = await _storageService.getUser();
       if (maybeUser == null) {
         _userStreamController.add(null);
         _authStateStreamController.add(AuthState.None);
         return;
       }
 
-      final maybeRefreshToken = await _storage.getRefreshToken();
-      await _postSignIn(maybeUser, maybeRefreshToken);
+      await _postSignIn(maybeUser);
       await refreshToken();
     } catch (e) {
       debugPrint(e.toString());
@@ -101,15 +107,10 @@ class CorbadoAuth {
     required String email,
     String fullName = '',
   }) async {
-    final response = await _passkeyAuth
-        .registerWithEmail(AuthRequest(email, username: fullName));
-    // user has not finished the registration
-    if (response == null) {
-      return;
-    }
+    final user = await _corbadoService.signUpWithPasskey(email, fullName);
+    await _postSignIn(user);
 
-    final user = User.fromIdToken(response.token);
-    await _postSignIn(user, response.refreshToken);
+    return;
   }
 
   /// Signs up a user by sending out an email OTP (one-time password)
@@ -120,21 +121,10 @@ class CorbadoAuth {
     required String email,
     String fullName = '',
   }) async {
-    try {
-      final req = EmailCodeRegisterStartReq(email: email, username: fullName);
-      final res =
-          await UsersApi(_frontendAPIClient).emailCodeRegisterStart(req);
-      if (res == null) {
-        throw UnexpectedBackendException('emailLinkRegisterStart', '');
-      }
-
-      _emailOTPState = EmailOTPState(EmailOTPFlow.SignUp, res.data.emailCodeID);
-    } on ApiException catch (e) {
-      throw ExceptionFactory.fromBackendMessage(
-        'emailCodeRegisterStart',
-        e.message ?? '',
-      );
-    }
+    _emailOTPState = await _corbadoService.signUpWithEmailCode(
+      email,
+      fullName,
+    );
   }
 
   /// Completes an email OTP transaction.
@@ -147,26 +137,10 @@ class CorbadoAuth {
       return 'No OTP process has been started. Please start one first before you submit a code.';
     }
 
-    final req =
-        EmailCodeConfirmReq(emailCodeID: _emailOTPState!.token, code: code);
-    try {
-      final res =
-          await UsersApi(_frontendAPIClient).emailCodeConfirmWithHttpInfo(req);
-      final authResponse = await AuthResponse.fromHttpResponse(res);
-
-      final user = User.fromIdToken(authResponse.token);
-      final publishAuthState = !askForPasskeyAppend;
-      await _postSignIn(
-        user,
-        authResponse.refreshToken,
-        publishAuthState: publishAuthState,
-      );
-    } on ApiException catch (e) {
-      throw ExceptionFactory.fromBackendMessage(
-        'emailCodeConfirm',
-        e.message ?? '',
-      );
-    }
+    final user =
+        await _corbadoService.completeEmailCode(_emailOTPState!.token, code);
+    final publishAuthState = !askForPasskeyAppend;
+    await _postSignIn(user, publishAuthState: publishAuthState);
 
     return null;
   }
@@ -174,27 +148,9 @@ class CorbadoAuth {
   /// Create a passkey for a user that is already signed in.
   /// This method can be called after a user has signed up using email OTP.
   Future<String?> appendPasskey() async {
-    final refreshToken = await _storage.getRefreshToken();
-    if (refreshToken == null) {
-      throw Exception('User must be logged in');
-    }
+    final challenge = await _corbadoService.startPasskeyAppend();
 
-    final PassKeyStartRsp? resStart;
-    try {
-      _frontendAPIClient.addDefaultHeader(
-        'cookie',
-        'cbo_long_session=$refreshToken',
-      );
-      resStart =
-          await UsersApi(_frontendAPIClient).passKeyAppendStart(EmptyReq());
-    } on ApiException catch (e) {
-      throw ExceptionFactory.fromBackendMessage(
-        'passKeyAppendStart',
-        e.message ?? '',
-      );
-    }
-
-    final json = jsonDecode(resStart!.data.challenge) as Map<String, dynamic>;
+    final json = jsonDecode(challenge) as Map<String, dynamic>;
     late RegisterResponseType resAuthenticator;
     resAuthenticator = await _registerPasskey(json);
     final signedChallenge = jsonEncode(
@@ -236,20 +192,7 @@ class CorbadoAuth {
   Future<void> signInWithEmailCode({
     required String email,
   }) async {
-    try {
-      final req = EmailCodeLoginStartReq(username: email);
-      final res = await UsersApi(_frontendAPIClient).emailCodeLoginStart(req);
-      if (res == null) {
-        throw UnexpectedBackendException('emailCodeLoginStart', '');
-      }
-
-      _emailOTPState = EmailOTPState(EmailOTPFlow.SignIn, res.data.emailCodeID);
-    } on ApiException catch (e) {
-      throw ExceptionFactory.fromBackendMessage(
-        'emailCodeLoginStart',
-        e.message ?? '',
-      );
-    }
+    _emailOTPState = await _corbadoService.loginWithEmailCode(email);
   }
 
   /// Signs in a user relying on a passkey.
@@ -257,55 +200,27 @@ class CorbadoAuth {
   /// not have to remember his username.
   ///
   /// This method should be called when the sign in page is loaded.
-  /// It returns a SignInHandler.
-  /// As soon as the user focuses the username input field for sign in,
-  /// this SignInHandler should be completed by calling .complete() on it.
-  /// Now the user gets a list of all available passkeys.
-  /// As soon as he selects one and provides his biometrics he is logged in.
-  Future<void> autocompletedSignInWithPasskey() async {
-    final response = await _passkeyAuth.authenticateWithAutocompletion(
-      request: const AuthRequest(''),
-    );
-    // user has not finished the authentication
-    if (response == null) {
-      return;
-    }
-
-    final user = User.fromIdToken(response.token);
-    await _postSignIn(user, response.refreshToken);
+  /// Depending on the platform, the passkey ceremony will be started
+  /// immediately without any user interaction (e.g. Android) or it requires
+  /// additional user input (e.g. iOS or web where the user needs to click the
+  /// TextField).
+  Future<void> autocompletedLoginWithPasskey() async {
+    final user = await _corbadoService.loginWithPasskey('', conditional: true);
+    await _postSignIn(user);
   }
 
   /// Signs in a user relying on a passkey.
   /// This is an alternative to autocompletedSignInWithPasskey.
   /// It should be called when the user explicitly wants to type in a username.
-  Future<void> signInWithPasskey({required String email}) async {
-    final response =
-        await _passkeyAuth.authenticateWithEmail(AuthRequest(email));
-    // user has not finished the authentication
-    if (response == null) {
-      return;
-    }
-
-    final user = User.fromIdToken(response.token);
-    await _postSignIn(user, response.refreshToken);
+  Future<void> loginWithPasskey({required String email}) async {
+    final user = await _corbadoService.loginWithPasskey(email);
+    await _postSignIn(user);
   }
 
+  /// Deletes a passkey by its credentialID.
   Future<void> deletePasskey(String credentialID) async {
-    try {
-      if (_refreshToken == null) {
-        throw Exception('missing _refreshToken');
-      }
-
-      _frontendAPIClient.addDefaultHeader(
-          'cookie', 'cbo_long_session=$_refreshToken');
-      await UsersApi(_frontendAPIClient).currentUserPassKeyDelete(credentialID);
-      await _loadPasskeys();
-    } on ApiException catch (e) {
-      throw ExceptionFactory.fromBackendMessage(
-        'currentUserPassKeyDelete',
-        e.message ?? '',
-      );
-    }
+    await _corbadoService.deletePasskey(credentialID);
+    await _loadPasskeys();
   }
 
   Future<RegisterResponseType> _registerPasskey(
@@ -347,17 +262,7 @@ class CorbadoAuth {
 
   /// Load all passkeys that are available to the currently logged in user.
   Future<void> _loadPasskeys() async {
-    _frontendAPIClient.addDefaultHeader(
-      'cookie',
-      'cbo_long_session=$_refreshToken',
-    );
-    final response = await UsersApi(_frontendAPIClient).currentUserPassKeyGet();
-    if (response == null) {
-      return;
-    }
-
-    final passkeys =
-        response.data.passkeys.map(PasskeyInfo.fromResponse).toList();
+    final passkeys = await _corbadoService.getPasskeys();
 
     _passkeysStreamController.sink.add(passkeys);
   }
@@ -366,39 +271,17 @@ class CorbadoAuth {
   /// This requires a valid refreshToken that has been obtained during signIn
   /// or signUp.
   Future<User> refreshToken() async {
-    if (_refreshToken == null) {
-      throw Exception('Stopped refreshToken: missing refresh token.');
-    }
-
-    _frontendAPIClient.addDefaultHeader(
-      'cookie',
-      'cbo_long_session=$_refreshToken',
-    );
-    final response =
-        await SessionsApi(_frontendAPIClient).sessionRefresh(EmptyReq());
-    if (response == null || response.shortSession == null) {
-      throw Exception('Stopped refreshToken: missing token in response.');
-    }
-
-    final user = User.fromIdToken(response.shortSession!.value);
-    await _storage.setUser(user);
+    final user = await _corbadoService.refreshToken();
     _userStreamController.add(user);
 
     return user;
   }
 
   Future<void> _postSignIn(
-    User user,
-    String? refreshToken, {
+    User user, {
     bool publishAuthState = true,
   }) async {
-    await _storage.setUser(user);
-
-    if (refreshToken != null) {
-      await _storage.setRefreshToken(refreshToken);
-      _refreshToken = refreshToken;
-      _scheduleRefreshRoutine(user);
-    }
+    _scheduleRefreshRoutine(user);
 
     _userStreamController.add(user);
     if (publishAuthState) _authStateStreamController.add(AuthState.SignedIn);
@@ -442,11 +325,27 @@ class CorbadoAuth {
   /// Sign the user out.
   /// Removed all state from persistent storage.
   Future<void> signOut() async {
-    await _storage.clear();
+    await _storageService.clear();
     _refreshTimer?.cancel();
 
     _authStateStreamController.add(AuthState.None);
     _userStreamController.add(null);
     _passkeysStreamController.add([]);
+  }
+
+  static StorageService _buildStorageService() {
+    if (kIsWeb) {
+      return WebStorageService();
+    } else {
+      return NativeStorageService();
+    }
+  }
+
+  static CorbadoService _buildCorbadoService(StorageService storageService) {
+    if (kIsWeb) {
+      return WebCorbadoService(storageService, );
+    } else {
+      return NativeCorbadoService(storageService);
+    }
   }
 }

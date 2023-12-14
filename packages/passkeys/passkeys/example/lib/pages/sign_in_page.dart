@@ -28,7 +28,7 @@ class _SignInPageState extends ConsumerState<SignInPage> {
 
       // As soon as the view has been loaded prepare the autocompleted passkey sign in.
       passkeyAuth
-          .authenticateWithAutocompletion(request: const RpRequest(email: ''))
+          .authenticateWithAutocompletion(const RpRequest(email: ''))
           .then((value) => context.go(Routes.profile))
           .onError(
         (error, stackTrace) {
