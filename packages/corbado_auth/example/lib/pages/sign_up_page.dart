@@ -1,6 +1,8 @@
 import 'package:corbado_auth_example/auth_provider.dart';
 import 'package:corbado_auth_example/pages/base_page.dart';
 import 'package:corbado_auth_example/router.dart';
+import 'package:corbado_auth_example/widgets/filled_text_button.dart';
+import 'package:corbado_auth_example/widgets/outlined_text_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
@@ -14,6 +16,7 @@ class SignUpPage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final error = useState<String?>(null);
+    final loading = useState<bool>(false);
     final authService = ref.watch(authServiceProvider);
 
     return BasePage(
@@ -61,28 +64,27 @@ class SignUpPage extends HookConsumerWidget {
             SizedBox(
               width: double.infinity,
               height: 50,
-              child: ElevatedButton(
-                onPressed: () async {
+              child: FilledTextButton(
+                isLoading: loading.value,
+                onTap: () async {
                   final email = _emailController.value.text;
+                  loading.value = true;
                   final maybeError = await authService.register(email: email);
+                  loading.value = false;
                   if (maybeError != null) {
                     error.value = maybeError;
                   }
                 },
-                child: const Text('sign up'),
+                content: 'sign up',
               ),
             ),
             SizedBox(height: 10),
             SizedBox(
               width: double.infinity,
               height: 50,
-              child: OutlinedButton(
-                style: OutlinedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 10),
-                    side: BorderSide(
-                        width: 2, color: Theme.of(context).primaryColor)),
-                onPressed: () => context.go(Routes.signIn),
-                child: const Text('I already have an account'),
+              child: OutlinedTextButton(
+                onTap: () => context.go(Routes.signIn),
+                content: 'I already have an account',
               ),
             ),
           ],

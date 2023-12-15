@@ -3,6 +3,7 @@
 * Changed conditional UI (use performAutoFillAssistedRequests)
 * Removed getFacetID (no longer needed)
 * Added cancelCurrentAuthenticatorOperation
+* Adapted to new passkeys_platform_interface
 
 ## 1.2.0
 

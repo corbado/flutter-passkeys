@@ -1,5 +1,5 @@
 import 'package:flutter/services.dart';
-import 'package:passkeys/authenticator/exceptions.dart';
+import 'package:passkeys/exceptions.dart';
 import 'package:passkeys_platform_interface/passkeys_platform_interface.dart';
 import 'package:passkeys_platform_interface/types/types.dart';
 
@@ -17,7 +17,8 @@ class PasskeyAuthenticator {
   }
 
   /// Creates a new passkey and stores it on the device.
-  /// Returns a solution to the [challenge] from [relyingParty]
+  /// Returns [RegisterResponseType] which must be sent to the relying party
+  /// server.
   Future<RegisterResponseType> register(RegisterRequestType request) async {
     try {
       await _platform.cancelCurrentAuthenticatorOperation();
@@ -38,7 +39,9 @@ class PasskeyAuthenticator {
     }
   }
 
-  /// Returns a solution to the [challenge] from [relyingParty]
+  /// Authenticates a user with a passkey.
+  /// Returns [AuthenticateResponseType] which must be sent to the relying party
+  /// server.
   Future<AuthenticateResponseType> authenticate(
     AuthenticateRequestType request,
   ) async {

@@ -50,7 +50,7 @@ class MyApp extends ConsumerWidget {
           primary: Color(0xFF1953ff),
           onPrimary: Colors.white,
           secondary: Colors.white,
-          onSecondary: Colors.black,
+          onSecondary: Color(0xFF1953ff),
           error: Colors.redAccent,
           onError: Colors.white,
           background: Color(0xFF1953ff),

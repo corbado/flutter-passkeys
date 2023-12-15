@@ -1,14 +1,14 @@
 import 'dart:async';
 
-import 'package:corbado_auth/src/types/webauthn/authentication.dart';
-import 'package:corbado_auth/src/types/webauthn/registration.dart';
-import 'package:corbado_auth/src/types/auth_response.dart';
 import 'package:corbado_auth/src/services/corbado/corbado.dart';
 import 'package:corbado_auth/src/services/corbado/corbado_stub.dart'
     if (dart.library.html) 'package:corbado_auth/src/services/corbado/corbado_web.dart'
     if (dart.library.io) 'package:corbado_auth/src/services/corbado/corbado_native.dart';
+import 'package:corbado_auth/src/types/auth_response.dart';
 import 'package:corbado_auth/src/types/email_otp_state.dart';
-import 'package:passkeys/authenticator/passkey_authenticator.dart';
+import 'package:corbado_auth/src/types/webauthn/authentication.dart';
+import 'package:corbado_auth/src/types/webauthn/registration.dart';
+import 'package:passkeys/authenticator.dart';
 
 /// The Cobardo Auth SDK helps you with bringing passkey authentication to your
 /// app.

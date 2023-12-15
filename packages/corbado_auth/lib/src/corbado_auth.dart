@@ -6,7 +6,6 @@ import 'package:corbado_auth/src/services/storage/storage.dart';
 import 'package:corbado_auth/src/services/storage/storage_native.dart';
 import 'package:corbado_auth/src/services/storage/storage_web.dart';
 import 'package:corbado_auth/src/types/email_otp_state.dart';
-import 'package:corbado_auth/src/types/exceptions/exceptions.dart';
 import 'package:corbado_auth/src/types/webauthn/registration.dart';
 import 'package:corbado_frontend_api_client/frontendapi/lib/api.dart';
 import 'package:flutter/foundation.dart';

@@ -53,3 +53,17 @@ scripts:
       cd packages/passkeys/passkeys_web
       npm run build
       cp javascript/dist/bundle.js ../passkeys/example/web/bundle.js
+
+  publish-passkeys-web-javascript:
+    description: Publish passkeys_web's javascript code.
+    run: |
+      cd packages/passkeys/passkeys_web
+      npm run build
+      cp javascript/dist/bundle.js ../passkeys/example/web/bundle.js
+
+  deploy-corbado_auth-web:
+    description: Deploy corbado_auth example to Vercel.
+    run: |
+      cd packages/corbado_auth/example
+      vercel build --prod
+      vercel deploy --prebuilt --prod

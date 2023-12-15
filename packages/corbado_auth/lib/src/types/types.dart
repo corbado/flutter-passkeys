@@ -1,4 +1,4 @@
-export 'package:passkeys/authenticator/exceptions.dart';
+export 'package:passkeys/exceptions.dart';
 
 export 'auth_state.dart';
 export 'exceptions/exceptions.dart';

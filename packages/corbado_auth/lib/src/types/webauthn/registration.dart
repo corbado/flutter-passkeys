@@ -1,5 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:passkeys/authenticator/types.dart';
+import 'package:passkeys/types.dart';
 
 part 'registration.g.dart';
 

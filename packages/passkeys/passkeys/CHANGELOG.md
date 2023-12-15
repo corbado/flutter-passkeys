@@ -2,10 +2,12 @@
 
 * Added flutter_web support
 * Updated conditional UI support for iOS (it is now triggered from the iOS keyboard)
-* Removed getFacetID (no longer needed)
 * Updated the example to showcase conditional UI
+* Removed the RelyingPartyServer interface and the Corbado implementation of it (this is now part of
+  the corbado_auth package)
 * Fix: Cancel any pending authenticator operation before register/login calls
 * BREAKING CHANGE: Parameters of "authenticateWithAutocompletion" have changed
+* BREAKING CHANGE: Removed getFacetID (no longer needed)
 * BREAKING CHANGE: For conditional UI on iOS you now need to
   set `autofillHints: [AutofillHints.username]` for the TextField
 

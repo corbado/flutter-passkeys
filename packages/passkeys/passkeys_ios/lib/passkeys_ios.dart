@@ -1,8 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:passkeys_ios/messages.g.dart';
 import 'package:passkeys_platform_interface/passkeys_platform_interface.dart';
-import 'package:passkeys_platform_interface/types/allow_credential.dart';
-import 'package:passkeys_platform_interface/types/pubkeycred_param.dart';
 import 'package:passkeys_platform_interface/types/types.dart';
 
 /// The iOS implementation of [PasskeysPlatform].

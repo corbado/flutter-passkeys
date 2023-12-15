@@ -2,11 +2,13 @@ import 'package:corbado_auth/corbado_auth.dart';
 import 'package:corbado_auth_example/auth_provider.dart';
 import 'package:corbado_auth_example/pages/base_page.dart';
 import 'package:corbado_auth_example/router.dart';
+import 'package:corbado_auth_example/widgets/filled_text_button.dart';
+import 'package:corbado_auth_example/widgets/outlined_text_button.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
 
 class SignInPage extends StatefulHookConsumerWidget {
   SignInPage({super.key});
@@ -38,6 +40,7 @@ class _SignInPageState extends ConsumerState<SignInPage> {
   @override
   Widget build(BuildContext context) {
     final error = useState<String?>(null);
+    final loading = useState<bool>(false);
     final authService = ref.watch(authServiceProvider);
 
     return BasePage(
@@ -85,15 +88,18 @@ class _SignInPageState extends ConsumerState<SignInPage> {
           SizedBox(
             width: double.infinity,
             height: 50,
-            child: ElevatedButton(
-              onPressed: () async {
+            child: FilledTextButton(
+              onTap: () async {
                 try {
+                  loading.value = true;
                   final email = _emailController.value.text;
                   final maybeError = await authService.signIn(email: email);
+                  loading.value = false;
                   if (maybeError != null) {
                     error.value = maybeError;
                   }
                 } catch (error) {
+                  loading.value = false;
                   debugPrint('error: $error');
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
@@ -104,20 +110,17 @@ class _SignInPageState extends ConsumerState<SignInPage> {
                   );
                 }
               },
-              child: const Text('sign in'),
+              isLoading: loading.value,
+              content: 'sign in',
             ),
           ),
           SizedBox(height: 10),
           SizedBox(
             width: double.infinity,
             height: 50,
-            child: OutlinedButton(
-              style: OutlinedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                  side: BorderSide(
-                      width: 2, color: Theme.of(context).primaryColor)),
-              onPressed: () => context.go(Routes.signUp),
-              child: const Text('I want to create a new account'),
+            child: OutlinedTextButton(
+              onTap: () => context.go(Routes.signUp),
+              content: 'I want to create a new account',
             ),
           ),
         ],

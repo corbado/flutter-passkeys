@@ -2,6 +2,8 @@
 
 * Removed getFacetID (no longer needed)
 * Added cancelCurrentAuthenticatorOperation
+* Grouped parameters of register and authenticate methods (RegisterRequestType and
+  AuthenticateRequestType)
 
 ## 1.2.0
 
