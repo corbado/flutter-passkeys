@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:passkeys_example/pages/base_page.dart';
 import 'package:passkeys_example/providers.dart';
-import 'package:passkeys_example/relying_party_server.dart';
 import 'package:passkeys_example/router.dart';
 
 class SignUpPage extends HookConsumerWidget {
@@ -14,7 +13,7 @@ class SignUpPage extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final emailController = TextEditingController();
     final error = useState<String?>(null);
-    final passkeyAuth = ref.watch(passkeyAuthProvider);
+    final passkeyAuth = ref.watch(relyingPartyServerProvider);
 
     return BasePage(
       child: Column(
@@ -65,7 +64,7 @@ class SignUpPage extends HookConsumerWidget {
               onPressed: () async {
                 final email = emailController.value.text;
                 try {
-                  await passkeyAuth.registerWithEmail(RpRequest(email: email));
+                  await passkeyAuth.customSignUpWithPasskey(email: email);
                   context.go(Routes.profile);
                 } catch (e) {
                   error.value = e.toString();

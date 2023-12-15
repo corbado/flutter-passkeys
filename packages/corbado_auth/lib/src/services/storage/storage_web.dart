@@ -1,8 +1,8 @@
 import 'dart:convert';
-import 'dart:html';
 
 import 'package:corbado_auth/src/services/storage/storage.dart';
 import 'package:corbado_auth/src/types/user.dart';
+import 'package:universal_html/html.dart';
 
 const _refreshTokenKey = 'refresh_token';
 const _userKey = 'user';

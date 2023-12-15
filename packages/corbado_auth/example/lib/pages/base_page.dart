@@ -8,7 +8,7 @@ class BasePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Passkey authentication')),
+      appBar: AppBar(title: const Text('Corbado authentication')),
       body: Center(
         child: Container(
           constraints: const BoxConstraints(maxWidth: 500),

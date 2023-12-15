@@ -1,45 +1,49 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:passkeys/relying_party_server/types/authentication.dart';
+import 'package:passkeys/authenticator/types.dart';
 
 part 'authentication.g.dart';
 
 @JsonSerializable()
-class CorbadoAuthenticationInitResponse {
-  CorbadoAuthenticationInitResponse(this.publicKey);
+class StartLoginResponse {
+  StartLoginResponse(this.publicKey);
 
-  factory CorbadoAuthenticationInitResponse.fromJson(
+  factory StartLoginResponse.fromJson(
     Map<String, dynamic> json,
   ) =>
-      _$CorbadoAuthenticationInitResponseFromJson(json);
+      _$StartLoginResponseFromJson(json);
 
-  final CorbadoAuthenticationResponsePublicKey publicKey;
+  final StartLoginPublicKey publicKey;
 
-  AuthenticationInitResponse toAuthenticationInitResponse() {
-    return AuthenticationInitResponse(
-      rpId: publicKey.rpId,
+  AuthenticateRequestType toPlatformType({
+    required bool conditional,
+  }) {
+    return AuthenticateRequestType(
+      relyingPartyId: publicKey.rpId,
       challenge: publicKey.challenge,
       timeout: publicKey.timeout,
       userVerification: publicKey.userVerification,
       allowCredentials: publicKey.allowCredentials
           ?.map(
-            (e) => AllowCredential(
+            (e) => AllowCredentialType(
               type: e.type,
               id: e.id,
               transports: e.transports,
             ),
           )
           .toList(),
+      mediation:
+          conditional ? MediationType.Conditional : MediationType.Optional,
     );
   }
 
   Map<String, dynamic> toJson() =>
-      _$CorbadoAuthenticationInitResponseToJson(this);
+      _$StartLoginResponseToJson(this);
 }
 
 @JsonSerializable()
-class CorbadoAuthenticationResponsePublicKey {
+class StartLoginPublicKey {
   /// Constructor
-  CorbadoAuthenticationResponsePublicKey({
+  StartLoginPublicKey({
     required this.rpId,
     required this.challenge,
     this.timeout,
@@ -47,10 +51,10 @@ class CorbadoAuthenticationResponsePublicKey {
     this.allowCredentials,
   });
 
-  factory CorbadoAuthenticationResponsePublicKey.fromJson(
+  factory StartLoginPublicKey.fromJson(
     Map<String, dynamic> json,
   ) =>
-      _$CorbadoAuthenticationResponsePublicKeyFromJson(json);
+      _$StartLoginPublicKeyFromJson(json);
 
   /// The relying party id
   final String rpId;
@@ -65,17 +69,17 @@ class CorbadoAuthenticationResponsePublicKey {
   final String? userVerification;
 
   /// List of allowed credentials
-  final List<CorbadoAllowCredential>? allowCredentials;
+  final List<AllowCredential>? allowCredentials;
 
   /// Serializes object to json
   Map<String, dynamic> toJson() =>
-      _$CorbadoAuthenticationResponsePublicKeyToJson(this);
+      _$StartLoginPublicKeyToJson(this);
 }
 
 @JsonSerializable()
-class CorbadoAllowCredential {
+class AllowCredential {
   /// Constructor
-  CorbadoAllowCredential({
+  AllowCredential({
     required this.type,
     required this.id,
     required this.transports,
@@ -90,31 +94,31 @@ class CorbadoAllowCredential {
   /// The transports
   final List<String> transports;
 
-  factory CorbadoAllowCredential.fromJson(
+  factory AllowCredential.fromJson(
     Map<String, dynamic> json,
   ) =>
-      _$CorbadoAllowCredentialFromJson(json);
+      _$AllowCredentialFromJson(json);
 
-  Map<String, dynamic> toJson() => _$CorbadoAllowCredentialToJson(this);
+  Map<String, dynamic> toJson() => _$AllowCredentialToJson(this);
 }
 
 @JsonSerializable(explicitToJson: true)
-class CorbadoAuthenticationCompleteRequest {
+class FinishLoginRequest {
   /// Constructor
-  CorbadoAuthenticationCompleteRequest({
+  FinishLoginRequest({
     required this.id,
     required this.rawId,
     required this.response,
     this.type = 'public-key',
   });
 
-  factory CorbadoAuthenticationCompleteRequest.fromAuthenticationCompleteRequest(
-    AuthenticationCompleteRequest r,
+  factory FinishLoginRequest.fromPlatformType(
+    AuthenticateResponseType r,
   ) {
-    return CorbadoAuthenticationCompleteRequest(
+    return FinishLoginRequest(
       id: r.id,
       rawId: r.rawId,
-      response: CorbadoAuthenticationComplete(
+      response: FinishLoginPlatformResponse(
         clientDataJSON: r.clientDataJSON,
         authenticatorData: r.authenticatorData,
         signature: r.signature,
@@ -123,10 +127,10 @@ class CorbadoAuthenticationCompleteRequest {
     );
   }
 
-  factory CorbadoAuthenticationCompleteRequest.fromJson(
+  factory FinishLoginRequest.fromJson(
     Map<String, dynamic> json,
   ) =>
-      _$CorbadoAuthenticationCompleteRequestFromJson(json);
+      _$FinishLoginRequestFromJson(json);
 
   /// The id
   final String id;
@@ -135,19 +139,19 @@ class CorbadoAuthenticationCompleteRequest {
   final String rawId;
 
   /// The response
-  final CorbadoAuthenticationComplete response;
+  final FinishLoginPlatformResponse response;
 
   /// The type
   final String type;
 
   Map<String, dynamic> toJson() =>
-      _$CorbadoAuthenticationCompleteRequestToJson(this);
+      _$FinishLoginRequestToJson(this);
 }
 
 @JsonSerializable()
-class CorbadoAuthenticationComplete {
+class FinishLoginPlatformResponse {
   /// Constructor
-  CorbadoAuthenticationComplete({
+  FinishLoginPlatformResponse({
     required this.clientDataJSON,
     required this.authenticatorData,
     required this.signature,
@@ -166,8 +170,8 @@ class CorbadoAuthenticationComplete {
   final String userHandle;
 
   /// Parses a json object
-  factory CorbadoAuthenticationComplete.fromJson(Map<String, dynamic> json) =>
-      _$CorbadoAuthenticationCompleteFromJson(json);
+  factory FinishLoginPlatformResponse.fromJson(Map<String, dynamic> json) =>
+      _$FinishLoginPlatformResponseFromJson(json);
 
-  Map<String, dynamic> toJson() => _$CorbadoAuthenticationCompleteToJson(this);
+  Map<String, dynamic> toJson() => _$FinishLoginPlatformResponseToJson(this);
 }

@@ -23,22 +23,14 @@ class PasskeysIOS extends PasskeysPlatform {
   Future<bool> canAuthenticate() async => _api.canAuthenticate();
 
   @override
-  Future<RegisterResponseType> register(
-    String challenge,
-    RelyingPartyType relyingParty,
-    UserType user,
-    AuthenticatorSelectionType authenticatorSelection,
-    List<PubKeyCredParamType>? pubKeyCredParams,
-    int? timeout,
-    String? attestation,
-  ) async {
-    final userArg = User(name: user.name, id: user.id);
+  Future<RegisterResponseType> register(RegisterRequestType request) async {
+    final userArg = User(name: request.user.name, id: request.user.id);
     final relyingPartyArg = RelyingParty(
-      name: relyingParty.name,
-      id: relyingParty.id,
+      name: request.relyingParty.name,
+      id: request.relyingParty.id,
     );
 
-    final r = await _api.register(challenge, relyingPartyArg, userArg);
+    final r = await _api.register(request.challenge, relyingPartyArg, userArg);
     return RegisterResponseType(
       id: r.id,
       rawId: r.rawId,
@@ -49,18 +41,19 @@ class PasskeysIOS extends PasskeysPlatform {
 
   @override
   Future<AuthenticateResponseType> authenticate(
-      String relyingPartyId,
-      String challenge,
-      int? timeout,
-      String? userVerification,
-      List<AllowCredentialType>? allowCredentials,
-      {MediationType? mediation = MediationType.Optional}) async {
+    AuthenticateRequestType request,
+  ) async {
     var conditionalUI = false;
-    if (mediation == MediationType.Conditional) {
+    if (request.mediation == MediationType.Conditional) {
       conditionalUI = true;
     }
 
-    final r = await _api.authenticate(relyingPartyId, challenge, conditionalUI);
+    final r = await _api.authenticate(
+      request.relyingPartyId,
+      request.challenge,
+      conditionalUI,
+    );
+
     return AuthenticateResponseType(
       id: r.id,
       rawId: r.rawId,

@@ -1,8 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:passkeys_android/messages.g.dart';
 import 'package:passkeys_platform_interface/passkeys_platform_interface.dart';
-import 'package:passkeys_platform_interface/types/allow_credential.dart';
-import 'package:passkeys_platform_interface/types/pubkeycred_param.dart';
 import 'package:passkeys_platform_interface/types/types.dart';
 
 /// The Android implementation of [PasskeysPlatform].
@@ -19,19 +17,14 @@ class PasskeysAndroid extends PasskeysPlatform {
 
   @override
   Future<AuthenticateResponseType> authenticate(
-    String relyingPartyId,
-    String challenge,
-    int? timeout,
-    String? userVerification,
-    List<AllowCredentialType>? allowCredentials, {
-    MediationType? mediation = MediationType.Optional,
-  }) async {
+    AuthenticateRequestType request,
+  ) async {
     final r = await _api.authenticate(
-      relyingPartyId,
-      challenge,
-      timeout,
-      userVerification,
-      allowCredentials?.map((e) {
+      request.relyingPartyId,
+      request.challenge,
+      request.timeout,
+      request.userVerification,
+      request.allowCredentials?.map((e) {
         return AllowCredential(
           id: e.id,
           type: e.type,
@@ -55,35 +48,31 @@ class PasskeysAndroid extends PasskeysPlatform {
   }
 
   @override
-  Future<RegisterResponseType> register(
-    String challenge,
-    RelyingPartyType relyingParty,
-    UserType user,
-    AuthenticatorSelectionType authenticatorSelection,
-    List<PubKeyCredParamType>? pubKeyCredParams,
-    int? timeout,
-    String? attestation,
-  ) async {
-    final userArg =
-        User(displayName: user.displayName, name: user.name, id: user.id);
+  Future<RegisterResponseType> register(RegisterRequestType request) async {
+    final userArg = User(
+      displayName: request.user.displayName,
+      name: request.user.name,
+      id: request.user.id,
+    );
     final relyingPartyArg = RelyingParty(
-      name: relyingParty.name,
-      id: relyingParty.id,
+      name: request.relyingParty.name,
+      id: request.relyingParty.id,
     );
 
+    final a = request.authSelectionType;
     final authSelection = AuthenticatorSelection(
-      authenticatorAttachment: authenticatorSelection.authenticatorAttachment,
-      requireResidentKey: authenticatorSelection.requireResidentKey,
-      residentKey: authenticatorSelection.residentKey,
-      userVerification: authenticatorSelection.userVerification,
+      authenticatorAttachment: a.authenticatorAttachment,
+      requireResidentKey: a.requireResidentKey,
+      residentKey: a.residentKey,
+      userVerification: a.userVerification,
     );
 
     final r = await _api.register(
-      challenge,
+      request.challenge,
       relyingPartyArg,
       userArg,
       authSelection,
-      pubKeyCredParams
+      request.pubKeyCredParams
           ?.map(
             (e) => PubKeyCredParam(
               alg: e.alg,
@@ -91,8 +80,8 @@ class PasskeysAndroid extends PasskeysPlatform {
             ),
           )
           .toList(),
-      timeout,
-      attestation,
+      request.timeout,
+      request.attestation,
     );
 
     return RegisterResponseType(

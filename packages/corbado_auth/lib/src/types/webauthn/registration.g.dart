@@ -6,34 +6,37 @@ part of 'registration.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-CorbadoRegisterChallenge _$CorbadoRegisterChallengeFromJson(
+StartRegisterResponse _$StartRegisterResponseFromJson(
         Map<String, dynamic> json) =>
-    CorbadoRegisterChallenge(
-      CorbadoPublicKey.fromJson(json['publicKey'] as Map<String, dynamic>),
+    StartRegisterResponse(
+      StartRegisterPublicKey.fromJson(
+          json['publicKey'] as Map<String, dynamic>),
     );
 
-Map<String, dynamic> _$CorbadoRegisterChallengeToJson(
-        CorbadoRegisterChallenge instance) =>
+Map<String, dynamic> _$StartRegisterResponseToJson(
+        StartRegisterResponse instance) =>
     <String, dynamic>{
       'publicKey': instance.publicKey,
     };
 
-CorbadoPublicKey _$CorbadoPublicKeyFromJson(Map<String, dynamic> json) =>
-    CorbadoPublicKey(
+StartRegisterPublicKey _$StartRegisterPublicKeyFromJson(
+        Map<String, dynamic> json) =>
+    StartRegisterPublicKey(
       CorbadoRelyingParty.fromJson(json['rp'] as Map<String, dynamic>),
       CorbadoUser.fromJson(json['user'] as Map<String, dynamic>),
       json['challenge'] as String,
       CorbadoAuthenticatorSelection.fromJson(
           json['authenticatorSelection'] as Map<String, dynamic>),
       pubKeyCredParams: (json['pubKeyCredParams'] as List<dynamic>?)
-          ?.map(
-              (e) => CorbadoPubKeyCredParam.fromJson(e as Map<String, dynamic>))
+          ?.map((e) =>
+              StartRegisterPubKeyCredParam.fromJson(e as Map<String, dynamic>))
           .toList(),
       timeout: json['timeout'] as int?,
       attestation: json['attestation'] as String?,
     );
 
-Map<String, dynamic> _$CorbadoPublicKeyToJson(CorbadoPublicKey instance) =>
+Map<String, dynamic> _$StartRegisterPublicKeyToJson(
+        StartRegisterPublicKey instance) =>
     <String, dynamic>{
       'rp': instance.rp,
       'user': instance.user,
@@ -44,15 +47,15 @@ Map<String, dynamic> _$CorbadoPublicKeyToJson(CorbadoPublicKey instance) =>
       'attestation': instance.attestation,
     };
 
-CorbadoPubKeyCredParam _$CorbadoPubKeyCredParamFromJson(
+StartRegisterPubKeyCredParam _$StartRegisterPubKeyCredParamFromJson(
         Map<String, dynamic> json) =>
-    CorbadoPubKeyCredParam(
+    StartRegisterPubKeyCredParam(
       json['type'] as String,
       json['alg'] as int,
     );
 
-Map<String, dynamic> _$CorbadoPubKeyCredParamToJson(
-        CorbadoPubKeyCredParam instance) =>
+Map<String, dynamic> _$StartRegisterPubKeyCredParamToJson(
+        StartRegisterPubKeyCredParam instance) =>
     <String, dynamic>{
       'type': instance.type,
       'alg': instance.alg,
@@ -102,19 +105,18 @@ Map<String, dynamic> _$CorbadoUserToJson(CorbadoUser instance) =>
       'id': instance.id,
     };
 
-CorbadoRegisterSignedChallengeRequest
-    _$CorbadoRegisterSignedChallengeRequestFromJson(
-            Map<String, dynamic> json) =>
-        CorbadoRegisterSignedChallengeRequest(
-          id: json['id'] as String,
-          rawId: json['rawId'] as String,
-          response: CorbadoRegisterSignedChallengeRequestResponse.fromJson(
-              json['response'] as Map<String, dynamic>),
-          type: json['type'] as String? ?? 'public-key',
-        );
+FinishRegisterRequest _$FinishRegisterRequestFromJson(
+        Map<String, dynamic> json) =>
+    FinishRegisterRequest(
+      id: json['id'] as String,
+      rawId: json['rawId'] as String,
+      response: FinishRegisterPlatformResponse.fromJson(
+          json['response'] as Map<String, dynamic>),
+      type: json['type'] as String? ?? 'public-key',
+    );
 
-Map<String, dynamic> _$CorbadoRegisterSignedChallengeRequestToJson(
-        CorbadoRegisterSignedChallengeRequest instance) =>
+Map<String, dynamic> _$FinishRegisterRequestToJson(
+        FinishRegisterRequest instance) =>
     <String, dynamic>{
       'id': instance.id,
       'rawId': instance.rawId,
@@ -122,20 +124,19 @@ Map<String, dynamic> _$CorbadoRegisterSignedChallengeRequestToJson(
       'type': instance.type,
     };
 
-CorbadoRegisterSignedChallengeRequestResponse
-    _$CorbadoRegisterSignedChallengeRequestResponseFromJson(
-            Map<String, dynamic> json) =>
-        CorbadoRegisterSignedChallengeRequestResponse(
-          clientDataJSON: json['clientDataJSON'] as String,
-          attestationObject: json['attestationObject'] as String,
-          transports: (json['transports'] as List<dynamic>?)
-                  ?.map((e) => e as String)
-                  .toList() ??
-              const ['internal'],
-        );
+FinishRegisterPlatformResponse _$FinishRegisterPlatformResponseFromJson(
+        Map<String, dynamic> json) =>
+    FinishRegisterPlatformResponse(
+      clientDataJSON: json['clientDataJSON'] as String,
+      attestationObject: json['attestationObject'] as String,
+      transports: (json['transports'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          const ['internal'],
+    );
 
-Map<String, dynamic> _$CorbadoRegisterSignedChallengeRequestResponseToJson(
-        CorbadoRegisterSignedChallengeRequestResponse instance) =>
+Map<String, dynamic> _$FinishRegisterPlatformResponseToJson(
+        FinishRegisterPlatformResponse instance) =>
     <String, dynamic>{
       'clientDataJSON': instance.clientDataJSON,
       'attestationObject': instance.attestationObject,

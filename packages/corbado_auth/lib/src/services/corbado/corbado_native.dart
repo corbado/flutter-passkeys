@@ -1,32 +1,38 @@
+import 'dart:convert';
+
+import 'package:corbado_auth/src/types/exceptions/exceptions.dart';
+import 'package:corbado_auth/src/types/webauthn/registration.dart';
 import 'package:corbado_auth/src/services/corbado/corbado.dart';
-import 'package:corbado_auth/src/services/storage/storage.dart';
 import 'package:corbado_auth/src/types/passkey_info.dart';
-import 'package:corbado_auth/src/types/user.dart';
 import 'package:corbado_frontend_api_client/frontendapi/lib/api.dart';
-import 'package:passkeys/passkey_auth.dart';
-import 'package:passkeys/relying_party_server/corbado/types/exceptions.dart';
+import 'package:ua_client_hints/ua_client_hints.dart';
+
+Future<CorbadoService> createClient(
+  String projectId, {
+  String? customDomain,
+}) async {
+  final basePath = CorbadoService.getFrontendAPIDomain(
+    projectId,
+    customDomain: customDomain,
+  );
+
+  final ua = await userAgent();
+
+  final apiClient = ApiClient(basePath: basePath)
+    ..addDefaultHeader('X-Corbado-ProjectID', projectId)
+    ..addDefaultHeader('User-Agent', ua);
+
+  return NativeCorbadoService(apiClient);
+}
 
 class NativeCorbadoService extends CorbadoService {
   ///
-  NativeCorbadoService(
-    StorageService storageService,
-  )   : _storageService = storageService,
-        super(storageService);
-
-  final StorageService _storageService;
+  NativeCorbadoService(ApiClient frontendAPIClient) : super(frontendAPIClient);
 
   @override
-  Future<void> deletePasskey(String credentialID) async {
-    final refreshToken = await _storageService.getRefreshToken();
+  Future<void> deletePasskey(String credentialID, {String? token}) async {
     try {
-      if (refreshToken == null) {
-        throw Exception('missing _refreshToken');
-      }
-
-      frontendAPIClient.addDefaultHeader(
-        'cookie',
-        'cbo_long_session=$refreshToken',
-      );
+      final frontendAPIClient = getClientWithHeaders(token);
       await UsersApi(frontendAPIClient).currentUserPassKeyDelete(credentialID);
     } on ApiException catch (e) {
       throw ExceptionFactory.fromBackendMessage(
@@ -37,13 +43,8 @@ class NativeCorbadoService extends CorbadoService {
   }
 
   @override
-  Future<List<PasskeyInfo>> getPasskeys() async {
-    final refreshToken = await _storageService.getRefreshToken();
-
-    frontendAPIClient.addDefaultHeader(
-      'cookie',
-      'cbo_long_session=$refreshToken',
-    );
+  Future<List<PasskeyInfo>> getPasskeys({String? token}) async {
+    final frontendAPIClient = getClientWithHeaders(token);
     final response = await UsersApi(frontendAPIClient).currentUserPassKeyGet();
     if (response == null) {
       return [];
@@ -53,51 +54,50 @@ class NativeCorbadoService extends CorbadoService {
   }
 
   @override
-  Future<User> refreshToken() async {
-    final refreshToken = await _storageService.getRefreshToken();
-
-    if (refreshToken == null) {
-      throw Exception('Stopped refreshToken: missing refresh token.');
-    }
-
-    frontendAPIClient.addDefaultHeader(
-      'cookie',
-      'cbo_long_session=$refreshToken',
-    );
-    final response =
-        await SessionsApi(frontendAPIClient).sessionRefresh(EmptyReq());
-    if (response == null || response.shortSession == null) {
-      throw Exception('Stopped refreshToken: missing token in response.');
-    }
-
-    final user = User.fromIdToken(response.shortSession!.value);
-    await _storageService.setUser(user);
-
-    return user;
-  }
-
-  @override
-  Future<String> startPasskeyAppend() async {
-    final refreshToken = await _storageService.getRefreshToken();
-    if (refreshToken == null) {
-      throw Exception('User must be logged in');
-    }
-
-    final PassKeyStartRsp? resStart;
+  Future<StartRegisterResponse> startAppendPasskey({String? token}) async {
     try {
-      frontendAPIClient.addDefaultHeader(
-        'cookie',
-        'cbo_long_session=$refreshToken',
-      );
-      resStart =
+      final frontendAPIClient = getClientWithHeaders(token);
+      final result =
           await UsersApi(frontendAPIClient).passKeyAppendStart(EmptyReq());
 
-      return resStart!.data.challenge;
+      final json = jsonDecode(result!.data.challenge) as Map<String, dynamic>;
+      return StartRegisterResponse.fromJson(json);
     } on ApiException catch (e) {
       throw ExceptionFactory.fromBackendMessage(
         'passKeyAppendStart',
         e.message ?? '',
       );
     }
+  }
+
+  @override
+  Future<void> finishAppendPasskey(
+    FinishRegisterRequest request, {
+    String? token,
+  }) async {
+    final frontendAPIClient = getClientWithHeaders(token);
+    try {
+      final reqFinish =
+          PassKeyFinishReq(signedChallenge: jsonEncode(request.toJson()));
+      await UsersApi(frontendAPIClient).passKeyAppendFinish(reqFinish);
+    } on ApiException catch (e) {
+      throw ExceptionFactory.fromBackendMessage(
+        'passKeyAppendFinish',
+        e.message ?? '',
+      );
+    }
+  }
+
+  ApiClient getClientWithHeaders(String? refreshToken) {
+    if (refreshToken == null) {
+      throw Exception('missing refreshToken');
+    }
+
+    frontendAPIClient.addDefaultHeader(
+      'cookie',
+      'cbo_long_session=$refreshToken',
+    );
+
+    return frontendAPIClient;
   }
 }

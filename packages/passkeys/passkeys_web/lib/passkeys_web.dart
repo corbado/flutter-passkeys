@@ -3,8 +3,6 @@ import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:js/js_util.dart';
 import 'package:passkeys_platform_interface/passkeys_platform_interface.dart';
-import 'package:passkeys_platform_interface/types/allow_credential.dart';
-import 'package:passkeys_platform_interface/types/pubkeycred_param.dart';
 import 'package:passkeys_platform_interface/types/types.dart';
 import 'package:passkeys_web/interop.dart';
 import 'package:passkeys_web/models/passkeyLoginRequest.dart';
@@ -26,27 +24,20 @@ class PasskeysWeb extends PasskeysPlatform {
   }
 
   @override
-  Future<RegisterResponseType> register(
-      String challenge,
-      RelyingPartyType relyingParty,
-      UserType user,
-      AuthenticatorSelectionType authenticatorSelection,
-      List<PubKeyCredParamType>? pubKeyCredParams,
-      int? timeout,
-      String? attestation) async {
-    final request = PasskeySignUpRequest(
+  Future<RegisterResponseType> register(RegisterRequestType request) async {
+    final r = PasskeySignUpRequest(
       PublicKey(
-        relyingParty,
-        user,
-        challenge,
-        pubKeyCredParams!,
-        authenticatorSelection,
-        timeout,
+        request.relyingParty,
+        request.user,
+        request.challenge,
+        request.pubKeyCredParams!,
+        request.authSelectionType,
+        request.timeout,
       ),
     );
 
     try {
-      final serializedRequest = jsonEncode(request.toJson());
+      final serializedRequest = jsonEncode(r.toJson());
       final response =
           (await promiseToFuture(authenticatorRegister(serializedRequest)))
               as String;
@@ -68,24 +59,18 @@ class PasskeysWeb extends PasskeysPlatform {
 
   @override
   Future<AuthenticateResponseType> authenticate(
-    String relyingPartyId,
-    String challenge,
-    int? timeout,
-    String? userVerification,
-    List<AllowCredentialType>? allowCredentials, {
-    MediationType mediation = MediationType.Optional,
-  }) async {
-    final request = PasskeyLoginRequest.fromPlatformType(
-      relyingPartyId,
-      challenge,
-      timeout,
-      userVerification,
-      allowCredentials,
-      mediation,
+      AuthenticateRequestType request) async {
+    final r = PasskeyLoginRequest.fromPlatformType(
+      request.relyingPartyId,
+      request.challenge,
+      request.timeout,
+      request.userVerification,
+      request.allowCredentials,
+      request.mediation,
     );
 
     try {
-      final serializedRequest = jsonEncode(request.toJson());
+      final serializedRequest = jsonEncode(r.toJson());
       final response =
           (await promiseToFuture(authenticatorLogin(serializedRequest)))
               as String;

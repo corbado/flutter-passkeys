@@ -12,7 +12,7 @@ class AuthService {
 
   Future<String?> register({required String email}) async {
     try {
-      await _auth.registerWithPasskey(email: email, fullName: email);
+      await _auth.signUpWithPasskey(email: email, fullName: email);
       return null;
     } on PasskeyAuthCancelledException {
       return null;

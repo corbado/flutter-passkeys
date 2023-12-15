@@ -1,8 +1,6 @@
 import 'package:flutter/services.dart';
 import 'package:passkeys/authenticator/exceptions.dart';
 import 'package:passkeys_platform_interface/passkeys_platform_interface.dart';
-import 'package:passkeys_platform_interface/types/allow_credential.dart';
-import 'package:passkeys_platform_interface/types/pubkeycred_param.dart';
 import 'package:passkeys_platform_interface/types/types.dart';
 
 /// Handles platform dependent parts of the registration and authentication
@@ -20,27 +18,10 @@ class PasskeyAuthenticator {
 
   /// Creates a new passkey and stores it on the device.
   /// Returns a solution to the [challenge] from [relyingParty]
-  Future<RegisterResponseType> register(
-    String challenge,
-    RelyingPartyType relyingParty,
-    UserType user,
-    AuthenticatorSelectionType authSelectionType,
-    List<PubKeyCredParamType>? pubKeyCredParams,
-    int? timeout,
-    String? attestation,
-  ) async {
+  Future<RegisterResponseType> register(RegisterRequestType request) async {
     try {
       await _platform.cancelCurrentAuthenticatorOperation();
-
-      final r = await _platform.register(
-        challenge,
-        relyingParty,
-        user,
-        authSelectionType,
-        pubKeyCredParams,
-        timeout,
-        attestation,
-      );
+      final r = await _platform.register(request);
 
       return r;
     } on PlatformException catch (e) {
@@ -59,24 +40,12 @@ class PasskeyAuthenticator {
 
   /// Returns a solution to the [challenge] from [relyingParty]
   Future<AuthenticateResponseType> authenticate(
-    String relyingPartyId,
-    String challenge,
-    int? timeout,
-    String? userVerification,
-    List<AllowCredentialType>? allowCredentials,
-    MediationType mediation,
+    AuthenticateRequestType request,
   ) async {
     try {
       await _platform.cancelCurrentAuthenticatorOperation();
 
-      final r = await _platform.authenticate(
-        relyingPartyId,
-        challenge,
-        timeout,
-        userVerification,
-        allowCredentials,
-        mediation: mediation,
-      );
+      final r = await _platform.authenticate(request);
 
       return r;
     } on PlatformException catch (e) {

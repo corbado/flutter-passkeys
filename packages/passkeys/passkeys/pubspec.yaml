@@ -23,7 +23,6 @@ dependencies:
   corbado_frontend_api_client: ^1.1.0
   flutter:
     sdk: flutter
-  http: ^1.1.0
   json_annotation: ^4.8.1
   openapi_generator_annotations: ^4.10.0
   passkeys_android: ^2.0.0-dev.1

@@ -37,27 +37,14 @@ abstract class PasskeysPlatform extends PlatformInterface {
   /// Handles the platform-specific steps for the registration flow
   /// (see https://webauthn.guide/#registration)
   /// Namely it creates a public/private key pair (only the public key will be returned)
-  Future<RegisterResponseType> register(
-    String challenge,
-    RelyingPartyType relyingParty,
-    UserType user,
-    AuthenticatorSelectionType authenticatorSelection,
-    List<PubKeyCredParamType>? pubKeyCredParams,
-    int? timeout,
-    String? attestation,
-  );
+  Future<RegisterResponseType> register(RegisterRequestType request);
 
   /// Handles the platform-specific steps for the authentication flow
   /// (see https://webauthn.guide/#authentication)
   /// Namely it creates a signature for the challenge issued by the relying party
   Future<AuthenticateResponseType> authenticate(
-    String relyingPartyId,
-    String challenge,
-    int? timeout,
-    String? userVerification,
-    List<AllowCredentialType>? allowCredentials, {
-    MediationType mediation,
-  });
+    AuthenticateRequestType request,
+  );
 
   /// Cancels the ongoing authenticator operation (if there is one).
   /// This is important for the case when conditional UI has been started but

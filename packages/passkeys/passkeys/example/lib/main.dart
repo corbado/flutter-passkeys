@@ -1,8 +1,8 @@
+import 'package:corbado_auth/corbado_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:passkeys_example/pages/loading_page.dart';
 import 'package:passkeys_example/providers.dart';
-import 'package:passkeys_example/relying_party_server.dart';
 import 'package:passkeys_example/router.dart';
 
 void main() async {
@@ -15,8 +15,10 @@ void main() async {
   runApp(const LoadingPage());
 
   // Now we do the initialization.
-  final relyingPartyServer = SharedRelyingPartyServer();
-  await relyingPartyServer.init();
+
+  final relyingPartyServer = CustomCorbadoAuth();
+  const corbadoProjectId = String.fromEnvironment('CORBADO_PROJECT_ID');
+  await relyingPartyServer.init(corbadoProjectId);
 
   runApp(
     ProviderScope(

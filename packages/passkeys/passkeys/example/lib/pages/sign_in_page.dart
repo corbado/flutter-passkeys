@@ -6,7 +6,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:passkeys/authenticator/types.dart';
 import 'package:passkeys_example/pages/base_page.dart';
 import 'package:passkeys_example/providers.dart';
-import 'package:passkeys_example/relying_party_server.dart';
 import 'package:passkeys_example/router.dart';
 
 class SignInPage extends StatefulHookConsumerWidget {
@@ -24,11 +23,11 @@ class _SignInPageState extends ConsumerState<SignInPage> {
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final passkeyAuth = ref.watch(passkeyAuthProvider);
+      final passkeyAuth = ref.watch(relyingPartyServerProvider);
 
       // As soon as the view has been loaded prepare the autocompleted passkey sign in.
       passkeyAuth
-          .authenticateWithAutocompletion(const RpRequest(email: ''))
+          .customAutocompletedLoginWithPasskey()
           .then((value) => context.go(Routes.profile))
           .onError(
         (error, stackTrace) {
@@ -47,7 +46,7 @@ class _SignInPageState extends ConsumerState<SignInPage> {
   @override
   Widget build(BuildContext context) {
     final error = useState<String?>(null);
-    final passkeyAuth = ref.watch(passkeyAuthProvider);
+    final passkeyAuth = ref.watch(relyingPartyServerProvider);
 
     return BasePage(
       child: Column(
@@ -99,8 +98,7 @@ class _SignInPageState extends ConsumerState<SignInPage> {
               onPressed: () async {
                 try {
                   final email = _emailController.value.text;
-                  await passkeyAuth
-                      .authenticateWithEmail(RpRequest(email: email));
+                  await passkeyAuth.customLoginWithPasskey(email: email);
                   context.go(Routes.profile);
                 } catch (e) {
                   if (e is PasskeyAuthCancelledException) {

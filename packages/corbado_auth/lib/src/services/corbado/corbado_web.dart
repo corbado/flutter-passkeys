@@ -1,22 +1,38 @@
+import 'dart:convert';
+
+import 'package:corbado_auth/corbado_auth.dart';
 import 'package:corbado_auth/src/services/corbado/corbado.dart';
-import 'package:corbado_auth/src/services/storage/storage.dart';
-import 'package:corbado_auth/src/types/passkey_info.dart';
-import 'package:corbado_auth/src/types/user.dart';
+import 'package:corbado_auth/src/types/exceptions/exceptions.dart';
+import 'package:corbado_auth/src/types/webauthn/registration.dart';
 import 'package:corbado_frontend_api_client/frontendapi/lib/api.dart';
-import 'package:passkeys/relying_party_server/corbado/types/exceptions.dart';
+import 'package:http/browser_client.dart';
+
+Future<CorbadoService> createClient(
+    String projectId, {
+      String? customDomain,
+    }) async {
+  final basePath = CorbadoService.getFrontendAPIDomain(
+    projectId,
+    customDomain: customDomain,
+  );
+
+  final client = BrowserClient()..withCredentials = true;
+
+  final apiClient = ApiClient(basePath: basePath)
+    ..addDefaultHeader('X-Corbado-ProjectID', projectId)
+    ..client = client;
+
+  return WebCorbadoService(apiClient);
+}
 
 class WebCorbadoService extends CorbadoService {
   ///
-  WebCorbadoService(StorageService storageService)
-      : _storageService = storageService,
-        super(storageService);
-
-  final StorageService _storageService;
+  WebCorbadoService(ApiClient frontendAPIClient) : super(frontendAPIClient);
 
   @override
-  Future<void> deletePasskey(String credentialID) async {
+  Future<void> deletePasskey(String credentialID, {String? token}) async {
     try {
-      final frontendAPIClient = await getClientWithHeaders();
+      final frontendAPIClient = getClientWithHeaders(token);
       await UsersApi(frontendAPIClient).currentUserPassKeyDelete(credentialID);
     } on ApiException catch (e) {
       throw ExceptionFactory.fromBackendMessage(
@@ -27,8 +43,8 @@ class WebCorbadoService extends CorbadoService {
   }
 
   @override
-  Future<List<PasskeyInfo>> getPasskeys() async {
-    final frontendAPIClient = await getClientWithHeaders();
+  Future<List<PasskeyInfo>> getPasskeys({String? token}) async {
+    final frontendAPIClient = getClientWithHeaders(token);
     final response = await UsersApi(frontendAPIClient).currentUserPassKeyGet();
     if (response == null) {
       return [];
@@ -38,28 +54,21 @@ class WebCorbadoService extends CorbadoService {
   }
 
   @override
-  Future<User> refreshToken() async {
-    final frontendAPIClient = await getClientWithHeaders();
-    final response =
-        await SessionsApi(frontendAPIClient).sessionRefresh(EmptyReq());
-    if (response == null || response.shortSession == null) {
-      throw Exception('Stopped refreshToken: missing token in response.');
-    }
-
-    final user = User.fromIdToken(response.shortSession!.value);
-    await _storageService.setUser(user);
-
-    return user;
-  }
-
-  @override
-  Future<String> startPasskeyAppend() async {
-    final frontendAPIClient = await getClientWithHeaders();
+  Future<StartRegisterResponse> startAppendPasskey({String? token}) async {
+    final frontendAPIClient = getClientWithHeaders(token);
     try {
-      final resStart =
+      final result =
           await UsersApi(frontendAPIClient).passKeyAppendStart(EmptyReq());
 
-      return resStart!.data.challenge;
+      if (result == null) {
+        throw UnexpectedBackendException(
+          'passKeyRegisterStart',
+          'result was null',
+        );
+      }
+
+      final json = jsonDecode(result.data.challenge) as Map<String, dynamic>;
+      return StartRegisterResponse.fromJson(json);
     } on ApiException catch (e) {
       throw ExceptionFactory.fromBackendMessage(
         'passKeyAppendStart',
@@ -68,8 +77,25 @@ class WebCorbadoService extends CorbadoService {
     }
   }
 
-  Future<ApiClient> getClientWithHeaders() async {
-    final refreshToken = await _storageService.getRefreshToken();
+  @override
+  Future<void> finishAppendPasskey(
+    FinishRegisterRequest request, {
+    String? token,
+  }) async {
+    final frontendAPIClient = getClientWithHeaders(token);
+    try {
+      final reqFinish =
+          PassKeyFinishReq(signedChallenge: jsonEncode(request.toJson()));
+      await UsersApi(frontendAPIClient).passKeyAppendFinish(reqFinish);
+    } on ApiException catch (e) {
+      throw ExceptionFactory.fromBackendMessage(
+        'passKeyAppendFinish',
+        e.message ?? '',
+      );
+    }
+  }
+
+  ApiClient getClientWithHeaders(String? refreshToken) {
     if (refreshToken != null) {
       frontendAPIClient.addDefaultHeader(
         'Authorization',

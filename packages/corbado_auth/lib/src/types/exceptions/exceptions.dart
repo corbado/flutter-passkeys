@@ -1,7 +1,7 @@
 import 'dart:convert';
 
+import 'package:corbado_auth/src/types/exceptions/field.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:passkeys/relying_party_server/corbado/types/field.dart';
 
 part 'exceptions.g.dart';
 
@@ -56,6 +56,13 @@ class InvalidOTPCodeException extends CorbadoException {
   /// Constructor
   InvalidOTPCodeException()
       : super('The 6-digit code is wrong. Please check it once again.');
+}
+
+/// Exception thrown when the submitted OTP code is wrong
+class NoOTPChallengeStartedException extends CorbadoException {
+  /// Constructor
+  NoOTPChallengeStartedException()
+      : super('No OTP challenge has been started yet.');
 }
 
 /// Exception thrown when the submitted OTP code is wrong
