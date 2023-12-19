@@ -266,5 +266,16 @@ On a simulator, this can be done under *Features* => *Face ID* by clicking on "E
 
 <img src="https://raw.githubusercontent.com/corbado/flutter-passkeys/main/packages/passkeys/passkeys/doc/ios_error_enrolled_biometrics.png" style="width: 50%" calt="ios_enrolled_biometrics">
 
+####  
+
 ### Web
 
+#### 1. Update your index.html to include our JavaScript library
+Our passkeys_web package relies on JavaScript for integrating with the browser's WebAuthn API.
+To make this work, you have to include our JavaScript library in your web/index.html file.
+
+```html
+<script src="https://github.com/corbado/flutter-passkeys/releases/download/2.0.0-dev.1/bundle.js" type="application/javascript"></script>
+```
+
+You can also take a look at this package's example to see how it is done there.
