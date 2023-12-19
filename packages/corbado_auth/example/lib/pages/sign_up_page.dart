@@ -70,8 +70,8 @@ class SignUpPage extends HookConsumerWidget {
                   final email = _emailController.value.text;
                   loading.value = true;
                   final maybeError = await authService.register(email: email);
-                  loading.value = false;
                   if (maybeError != null) {
+                    loading.value = false;
                     error.value = maybeError;
                   }
                 },

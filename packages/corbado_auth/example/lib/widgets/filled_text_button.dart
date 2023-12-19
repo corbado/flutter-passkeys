@@ -39,7 +39,9 @@ class FilledTextButton extends StatelessWidget {
           ? SizedBox(
               height: progressIndicatorSize,
               width: progressIndicatorSize,
-              child: CircularProgressIndicator())
+              child: CircularProgressIndicator(
+                color: Theme.of(context).colorScheme.onPrimary,
+              ))
           : Text(content),
     );
   }

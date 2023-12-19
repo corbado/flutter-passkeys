@@ -189,17 +189,82 @@ Auth.
 
 </details>
 
-## Troubleshooting and platform specific hints
+## Troubleshooting
 
 ### Android
 
 #### 1. Make sure that you have logged into a Google account.
+
 Google backs up all your passkeys so you need to be logged into a Google account to use passkeys.
-If you are not logged in, you will see the following error message:
+If you are not logged in, you will see the following message: "Sign in to your Google Account to
+create passkeys." and this package will throw a `SyncAccountNotAvailableException`.
+
+You can log into your Google account by opening settings, clicking on the icon in the top right and
+then on "Sign in to your Google Account".
+
+<img src="https://github.com/corbado/flutter-passkeys/blob/main/packages/passkeys/passkeys/doc/troubleshooting-sign-in-to-google-account.png?raw=true" style="width: 100%" alt="troubleshooting_google_account"/>
 
 #### 2. Make sure that you have set up a screen lock or biometrics on your device.
 
+If you run the application in an emulator and it says that you can't create a passkey, you have to
+log into your Google account and properly set up a screen lock or biometrics on the device.
+
+To set up the screen lock, open the settings, search for security settings and add a PIN
+as well as a fingerprint as shown below (PIN is required for fingerprint):
+
+<img src="https://github.com/corbado/flutter-passkeys/blob/main/packages/passkeys/passkeys/doc/troubleshooting-no-screen-lock.png?raw=true" style="width: 100%" alt="troubleshooting_screen_lock"/>
+
+#### 3. In case of using an emulator, make sure that is has Play Store support.
+
+During our implementation and testing, we detected some bugs when using specific API versions /
+devices of Android emulator (physical devices worked at any time though).
+To avoid these issues, make sure that you are using an emulator with the following traits:
+
+- API version 33 or 34
+- Play Store Support (indicated by the Google Play icon when you create a new emulator device):
+
+<img src="https://raw.githubusercontent.com/corbado/flutter-passkeys/main/packages/passkeys/passkeys/doc/play-store-support.png" style="width: 100%" alt="android-play-store-support"/>
+
+We tested this example successfully on:
+
+- Pixel 7 Pro
+- Pixel 7
+- Pixel 6a
+- Pixel 4
+
+We continuously update the package to make things work on more emulators, once there are patches by
+Google.
+
+Our recommendation if you run the example on an Android emulator is to follow these steps:
+
+1. Start your Android emulator (one of the emulators we mentioned above).
+2. Open the emulator's settings and sign into your Google account.
+
+<img src="https://raw.githubusercontent.com/corbado/flutter-passkeys/main/packages/passkeys/passkeys/doc/sign-in-to-google-account.png" style="width: 100%" alt="sign-in-to-google-account"/>
+<img src="https://raw.githubusercontent.com/corbado/flutter-passkeys/main/packages/passkeys/passkeys/doc/sign-in-to-google-account-details.png" style="width: 100%" alt="sign-in-to-google-account-details"/>
+
+3. Stay in the settings and add a screen lock (and optionally a fingerprint).
+
+<img src="https://raw.githubusercontent.com/corbado/flutter-passkeys/main/packages/passkeys/passkeys/doc/add-screen-lock.png" style="width: 100%" alt="add-screen-lock"/>
+
+4. Update Google Play (Extended Controls => Google Play => Update).
+
+<img src="https://raw.githubusercontent.com/corbado/flutter-passkeys/main/packages/passkeys/passkeys/doc/update-google-play.png" style="width: 100%" alt="update-google-play"/>
+
+5. Restart the emulator (cold boot).
+
+<img src="https://raw.githubusercontent.com/corbado/flutter-passkeys/main/packages/passkeys/passkeys/doc/restart-emulator.png" style="width: 50%" alt="restart-emulator"/>
+6. You can now run the example app on your Android emulator.
 
 ### iOS
 
+#### Make sure to enable biometrics to use passkeys
+
+If you get an error like "Simulator requires enrolled biometrics to use passkeys" during sign up or
+login, activate Face ID for your device.
+On a simulator, this can be done under *Features* => *Face ID* by clicking on "Enrolled".
+
+<img src="https://raw.githubusercontent.com/corbado/flutter-passkeys/main/packages/passkeys/passkeys/doc/ios_error_enrolled_biometrics.png" style="width: 50%" calt="ios_enrolled_biometrics">
+
 ### Web
+

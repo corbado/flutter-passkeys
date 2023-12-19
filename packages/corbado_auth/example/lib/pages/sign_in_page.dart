@@ -94,8 +94,8 @@ class _SignInPageState extends ConsumerState<SignInPage> {
                   loading.value = true;
                   final email = _emailController.value.text;
                   final maybeError = await authService.signIn(email: email);
-                  loading.value = false;
                   if (maybeError != null) {
+                    loading.value = false;
                     error.value = maybeError;
                   }
                 } catch (error) {
