@@ -36,7 +36,7 @@ class User {
   Map<String, dynamic> toJson() => _$UserToJson(this);
 
   bool hasValidToken() {
-    final t = DateTime.fromMillisecondsSinceEpoch(decoded.exp);
+    final t = DateTime.fromMillisecondsSinceEpoch(decoded.exp * 1000);
     return t.isAfter(DateTime.now());
   }
 }

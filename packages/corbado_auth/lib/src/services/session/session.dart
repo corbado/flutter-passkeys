@@ -9,18 +9,39 @@ class SessionService {
   final StorageService _storageService;
   final ApiClient frontendAPIClient;
 
-  final _preemptiveRefreshDuration = const Duration(seconds: 240);
+  Stream<User?> get userChanges => _userStreamController.stream;
+
+  Stream<AuthState> get authStateChanges => _authStateStreamController.stream;
+
+  final StreamController<User?> _userStreamController =
+      StreamController<User?>();
+
+  final StreamController<AuthState> _authStateStreamController =
+      StreamController<AuthState>();
+  final _preemptiveRefreshDuration = const Duration(seconds: 60);
   Timer? _refreshTimer;
 
   SessionService(this._storageService, this.frontendAPIClient);
 
   Future<User?> init() async {
-    final maybeUser = await _storageService.getUser();
-    if (maybeUser != null) {
-      _scheduleRefreshRoutine(maybeUser);
+    await _handleRefreshRequest();
+
+    final user = await getUser();
+    if (user == null) {
+      return null;
     }
 
-    return maybeUser;
+    // if token is invalid we try to refresh it
+    if (!user.hasValidToken()) {
+      return null;
+    }
+
+    // if token is valid we schedule a refresh
+    _scheduleRefreshRoutine(user);
+    _userStreamController.add(user);
+    _authStateStreamController.add(AuthState.SignedIn);
+
+    return user;
   }
 
   Future<String?> getRefreshToken() {
@@ -36,11 +57,16 @@ class SessionService {
   }
 
   Future<void> setUser(User value) {
+    _userStreamController.add(value);
+    _authStateStreamController.add(AuthState.SignedIn);
+
     return _storageService.setUser(value);
   }
 
-  Future<void> clear() async {
+  Future<void> signOut() async {
     _refreshTimer?.cancel();
+    _userStreamController.add(null);
+    _authStateStreamController.add(AuthState.None);
     await _storageService.clear();
   }
 
@@ -51,30 +77,31 @@ class SessionService {
       _refreshTimer!.cancel();
     }
 
-    _refreshTimer = Timer(_getWaitDurationForNextRefresh(user), () async {
-      try {
-        final user = await _refreshToken();
-        _scheduleRefreshRoutine(user);
-      } catch (e) {
-        await Future.delayed(const Duration(seconds: 10), () {});
-        debugPrint(e.toString());
-        _scheduleRefreshRoutine(user);
-      }
+    _refreshTimer = Timer.periodic(const Duration(seconds: 10), (timer) {
+      _handleRefreshRequest();
     });
   }
 
-  Duration _getWaitDurationForNextRefresh(User user) {
+  bool _isValidWithBuffer(User user, Duration buffer) {
     final now = (DateTime.now().millisecondsSinceEpoch / 1000).round();
+    final lifetime = Duration(seconds: user.decoded.exp - now);
 
-    // is token already timed out?
-    if (user.decoded.exp < now) {
-      return const Duration(seconds: 60);
+    return !(lifetime - buffer).isNegative;
+  }
+
+  Future<void> _handleRefreshRequest() async {
+    final maybeUser = await getUser();
+    if (maybeUser == null) {
+      debugPrint('Stopped token refresh: missing user.');
+      return;
     }
 
-    final lifetime = Duration(seconds: user.decoded.exp - now);
-    final wait = lifetime - _preemptiveRefreshDuration;
+    if (_isValidWithBuffer(maybeUser, _preemptiveRefreshDuration)) {
+      debugPrint('Stopped token refresh: token is still valid');
+      return;
+    }
 
-    return wait;
+    await _refreshToken();
   }
 
   Future<User> _refreshToken() async {
@@ -105,6 +132,9 @@ class SessionService {
       throw Exception('Stopped refreshToken: missing token in response.');
     }
 
-    return User.fromIdToken(response.shortSession!.value);
+    final user = User.fromIdToken(response.shortSession!.value);
+    await setUser(user);
+
+    return user;
   }
 }

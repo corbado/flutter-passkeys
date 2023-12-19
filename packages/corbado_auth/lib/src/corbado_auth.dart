@@ -19,25 +19,19 @@ class CorbadoAuth extends CustomCorbadoAuth {
   /// Should be listened to to get updates to the User object
   /// (e.g. updates to the idToken, sign in, sign out, changes to user data).
   /// userChanges fires more often than authStateChanges.
-  Stream<User?> get userChanges => _userStreamController.stream;
+  Stream<User?> get userChanges => _sessionService.userChanges;
 
   /// Should be listened to to get updates to a user's auth state
   /// (e.g. sign in, sign out).
   /// This is a subset of userChanges.
-  Stream<AuthState> get authStateChanges => _authStateStreamController.stream;
+  Stream<AuthState> get authStateChanges => _sessionService.authStateChanges;
 
   /// Should be listened to to get updates to a user's passkeys.
   Stream<List<PasskeyInfo>> get passkeysChanges =>
       _passkeysStreamController.stream;
 
   /// Returns the current value of the user object.
-  Future<User?> get currentUser => _userStreamController.stream.first;
-
-  final StreamController<User?> _userStreamController =
-      StreamController<User?>();
-
-  final StreamController<AuthState> _authStateStreamController =
-      StreamController<AuthState>();
+  Future<User?> get currentUser => _sessionService.userChanges.first;
 
   final StreamController<List<PasskeyInfo>> _passkeysStreamController =
       StreamController();
@@ -55,16 +49,14 @@ class CorbadoAuth extends CustomCorbadoAuth {
     try {
       final maybeUser = await _sessionService.init();
       if (maybeUser == null) {
-        _userStreamController.add(null);
-        _authStateStreamController.add(AuthState.None);
+        await signOut();
         return;
       }
 
-      await _postSignIn(maybeUser);
+      await _postSignIn();
     } catch (e) {
+      await signOut();
       debugPrint(e.toString());
-      _userStreamController.add(null);
-      _authStateStreamController.add(AuthState.None);
     }
   }
 
@@ -76,7 +68,7 @@ class CorbadoAuth extends CustomCorbadoAuth {
     final r = await customSignUpWithPasskey(email: email, fullName: fullName);
     final user = User.fromIdToken(r.token);
 
-    await _postSignIn(user);
+    await _postSignIn();
     await _updateSession(user, refreshToken: r.refreshToken);
   }
 
@@ -106,7 +98,7 @@ class CorbadoAuth extends CustomCorbadoAuth {
     );
 
     final user = User.fromIdToken(r.token);
-    await _postSignIn(user);
+    await _postSignIn();
     await _updateSession(user, refreshToken: r.refreshToken);
   }
 
@@ -122,6 +114,8 @@ class CorbadoAuth extends CustomCorbadoAuth {
     await corbadoService.finishAppendPasskey(req2, token: refreshToken);
 
     await _loadPasskeys();
+
+    return null;
   }
 
   /// Finish a user sign up.
@@ -129,7 +123,7 @@ class CorbadoAuth extends CustomCorbadoAuth {
   /// Usually this method is called when a user is finished with appending a
   /// passkey (either because he has completed the procedure or he skipped it).
   void finishSignUp() {
-    _authStateStreamController.add(AuthState.SignedIn);
+    // _authStateStreamController.add(AuthState.SignedIn);
   }
 
   /// Init a user sign in using email OTP.
@@ -154,7 +148,7 @@ class CorbadoAuth extends CustomCorbadoAuth {
     final r = await super.customAutocompletedLoginWithPasskey();
     final user = User.fromIdToken(r.token);
     await _updateSession(user, refreshToken: r.refreshToken);
-    await _postSignIn(user);
+    await _postSignIn();
   }
 
   /// Signs in a user relying on a passkey.
@@ -164,7 +158,7 @@ class CorbadoAuth extends CustomCorbadoAuth {
     final r = await super.customLoginWithPasskey(email: email);
     final user = User.fromIdToken(r.token);
     await _updateSession(user, refreshToken: r.refreshToken);
-    await _postSignIn(user);
+    await _postSignIn();
   }
 
   /// Deletes a passkey by its credentialID.
@@ -182,13 +176,7 @@ class CorbadoAuth extends CustomCorbadoAuth {
     _passkeysStreamController.sink.add(passkeys);
   }
 
-  Future<void> _postSignIn(
-    User user, {
-    bool publishAuthState = true,
-  }) async {
-    _userStreamController.add(user);
-    if (publishAuthState) _authStateStreamController.add(AuthState.SignedIn);
-
+  Future<void> _postSignIn() async {
     await _loadPasskeys();
   }
 
@@ -203,10 +191,8 @@ class CorbadoAuth extends CustomCorbadoAuth {
   /// Sign the user out.
   /// Removed all state from persistent storage.
   Future<void> signOut() async {
-    await _sessionService.clear();
+    await _sessionService.signOut();
 
-    _authStateStreamController.add(AuthState.None);
-    _userStreamController.add(null);
     _passkeysStreamController.add([]);
   }
 
