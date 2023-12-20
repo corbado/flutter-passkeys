@@ -4,23 +4,31 @@ import Flutter
 import Foundation
 
 @available(iOS 16.0, *)
-class AuthenticateController: NSObject, ASAuthorizationControllerDelegate, ASAuthorizationControllerPresentationContextProviding {
-    private var completion: ((Result<AuthenticateResponse, Error>) -> Void)?
-
-    func authenticate(request: ASAuthorizationPlatformPublicKeyCredentialAssertionRequest, conditionalUI: Bool, completion: @escaping ((Result<AuthenticateResponse, Error>) -> Void)) -> ASAuthorizationController {
+class AuthenticateController: NSObject, ASAuthorizationControllerDelegate, ASAuthorizationControllerPresentationContextProviding, Cancellable {
+    public var completion: ((Result<AuthenticateResponse, Error>) -> Void)?
+    private var controller: ASAuthorizationController?;
+    private var innerCancel: (() -> Void)?;
+    
+    init(completion: @escaping ((Result<AuthenticateResponse, Error>) -> Void)) {
         self.completion = completion;
-
+    }
+    
+    func run(request: ASAuthorizationPlatformPublicKeyCredentialAssertionRequest, conditionalUI: Bool) {
         let authorizationController = ASAuthorizationController(authorizationRequests: [request])
-        
         authorizationController.delegate = self
         authorizationController.presentationContextProvider = self
+        
         if (conditionalUI) {
             authorizationController.performAutoFillAssistedRequests()
         } else {
             authorizationController.performRequests()
         }
+
+        func cancel1() {
+            authorizationController.cancel();
+        }
         
-        return authorizationController
+        self.innerCancel = cancel1
     }
     
     func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
@@ -39,8 +47,8 @@ class AuthenticateController: NSObject, ASAuthorizationControllerDelegate, ASAut
             break
         default:
             completion?(.failure(FlutterError(code: CustomErrors.unexpectedAuthorizationResponse)))
+            break
         }
-
     }
 
     func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
@@ -60,5 +68,8 @@ class AuthenticateController: NSObject, ASAuthorizationControllerDelegate, ASAut
 
         return (delegate?.window!!)!
     }
-
+    
+    func cancel() {
+        innerCancel?()
+    }
 }

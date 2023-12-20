@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:corbado_auth/corbado_auth.dart';
+import 'package:corbado_auth/src/corbado_auth_config.dart';
 import 'package:corbado_auth/src/services/session/session.dart';
 import 'package:corbado_auth/src/services/storage/storage.dart';
 import 'package:corbado_auth/src/services/storage/storage_native.dart';
@@ -12,9 +13,10 @@ import 'package:flutter/foundation.dart';
 
 /// The Cobardo Auth SDK helps you with bringing passkey authentication to your
 /// app.
-class CorbadoAuth extends CustomCorbadoAuth {
+class CorbadoAuth {
   /// Constructor
-  CorbadoAuth();
+  CorbadoAuth({CorbadoAuthConfig config = DefaultCorbadoAuthConfig})
+      : _config = config;
 
   /// Should be listened to to get updates to the User object
   /// (e.g. updates to the idToken, sign in, sign out, changes to user data).
@@ -35,6 +37,8 @@ class CorbadoAuth extends CustomCorbadoAuth {
 
   final StreamController<List<PasskeyInfo>> _passkeysStreamController =
       StreamController();
+  final CustomCorbadoAuth _inner = CustomCorbadoAuth();
+  final CorbadoAuthConfig _config;
 
   late final SessionService _sessionService;
   EmailOTPState? _emailOTPState;
@@ -42,9 +46,10 @@ class CorbadoAuth extends CustomCorbadoAuth {
   /// Tries to get the user object from secure storage (this only works if
   /// the user has already signed in before and then closed the app).
   Future<void> init(String projectId, {String? customDomain}) async {
-    await super.init(projectId, customDomain: customDomain);
-    _sessionService =
-        _buildSessionService(super.corbadoService.frontendAPIClient);
+    await _inner.init(projectId, customDomain: customDomain);
+    _sessionService = _buildSessionService(
+      _inner.corbadoService.frontendAPIClient,
+    );
 
     try {
       final maybeUser = await _sessionService.init();
@@ -53,7 +58,7 @@ class CorbadoAuth extends CustomCorbadoAuth {
         return;
       }
 
-      await _postSignIn();
+      await _loadPasskeys();
     } catch (e) {
       await signOut();
       debugPrint(e.toString());
@@ -65,10 +70,9 @@ class CorbadoAuth extends CustomCorbadoAuth {
     required String email,
     String? fullName,
   }) async {
-    final r = await customSignUpWithPasskey(email: email, fullName: fullName);
+    final r = await _inner.signUpWithPasskey(email: email, fullName: fullName);
     final user = User.fromIdToken(r.token);
 
-    await _postSignIn();
     await _updateSession(user, refreshToken: r.refreshToken);
   }
 
@@ -80,7 +84,7 @@ class CorbadoAuth extends CustomCorbadoAuth {
     required String email,
     String fullName = '',
   }) async {
-    _emailOTPState = await customStartSignUpWithEmailCode(email: email);
+    _emailOTPState = await _inner.startSignUpWithEmailCode(email: email);
   }
 
   /// Completes an email OTP transaction.
@@ -92,13 +96,12 @@ class CorbadoAuth extends CustomCorbadoAuth {
       throw NoOTPChallengeStartedException();
     }
 
-    final r = await corbadoService.completeEmailCode(
+    final r = await _inner.corbadoService.completeEmailCode(
       _emailOTPState!.token,
       code,
     );
 
     final user = User.fromIdToken(r.token);
-    await _postSignIn();
     await _updateSession(user, refreshToken: r.refreshToken);
   }
 
@@ -106,24 +109,27 @@ class CorbadoAuth extends CustomCorbadoAuth {
   /// This method can be called after a user has signed up using email OTP.
   Future<String?> appendPasskey() async {
     final refreshToken = await _sessionService.getRefreshToken();
-    final res1 = await corbadoService.startAppendPasskey(token: refreshToken);
+    final res1 =
+        await _inner.corbadoService.startAppendPasskey(token: refreshToken);
     final platformReq = res1.toPlatformType();
-    final platformResponse = await passkeyAuthenticator.register(platformReq);
+    final platformResponse =
+        await _inner.passkeyAuthenticator.register(platformReq);
     final req2 =
         FinishRegisterRequest.fromRegisterCompleteRequest(platformResponse);
-    await corbadoService.finishAppendPasskey(req2, token: refreshToken);
+    await _inner.corbadoService.finishAppendPasskey(req2, token: refreshToken);
 
     await _loadPasskeys();
 
     return null;
   }
 
-  /// Finish a user sign up.
-  /// This must be called to signal that the sign up processed has been finished
-  /// Usually this method is called when a user is finished with appending a
-  /// passkey (either because he has completed the procedure or he skipped it).
-  void finishSignUp() {
-    // _authStateStreamController.add(AuthState.SignedIn);
+  /// This method should be called to abort an ongoing passkey append process.
+  void finishPasskeyAppendProcess() {
+    _sessionService.finishPasskeyAppendProcess();
+  }
+
+  Future<void> cancelAuthenticatorOperation() {
+    return _inner.passkeyAuthenticator.cancelCurrentAuthenticatorOperation();
   }
 
   /// Init a user sign in using email OTP.
@@ -132,7 +138,7 @@ class CorbadoAuth extends CustomCorbadoAuth {
   Future<void> startLoginWithEmailCode({
     required String email,
   }) async {
-    _emailOTPState = await customStartLoginWithEmailCode(email: email);
+    _emailOTPState = await _inner.startLoginWithEmailCode(email: email);
   }
 
   /// Signs in a user relying on a passkey.
@@ -145,47 +151,63 @@ class CorbadoAuth extends CustomCorbadoAuth {
   /// additional user input (e.g. iOS or web where the user needs to click the
   /// TextField).
   Future<void> autocompletedLoginWithPasskey() async {
-    final r = await super.customAutocompletedLoginWithPasskey();
+    final r = await _inner.autocompletedLoginWithPasskey();
     final user = User.fromIdToken(r.token);
     await _updateSession(user, refreshToken: r.refreshToken);
-    await _postSignIn();
   }
 
   /// Signs in a user relying on a passkey.
   /// This is an alternative to autocompletedSignInWithPasskey.
   /// It should be called when the user explicitly wants to type in a username.
   Future<void> loginWithPasskey({required String email}) async {
-    final r = await super.customLoginWithPasskey(email: email);
+    final r = await _inner.loginWithPasskey(email: email);
     final user = User.fromIdToken(r.token);
     await _updateSession(user, refreshToken: r.refreshToken);
-    await _postSignIn();
   }
 
   /// Deletes a passkey by its credentialID.
   Future<void> deletePasskey(String credentialID) async {
     final refreshToken = await _sessionService.getRefreshToken();
-    await corbadoService.deletePasskey(credentialID, token: refreshToken);
+    await _inner.corbadoService
+        .deletePasskey(credentialID, token: refreshToken);
     await _loadPasskeys();
   }
 
   /// Load all passkeys that are available to the currently logged in user.
-  Future<void> _loadPasskeys() async {
-    final refreshToken = await _sessionService.getRefreshToken();
-    final passkeys = await corbadoService.getPasskeys(token: refreshToken);
+  Future<List<PasskeyInfo>> _loadPasskeys(
+      {String? explicitRefreshToken}) async {
+    final refreshToken =
+        explicitRefreshToken ?? await _sessionService.getRefreshToken();
+    final passkeys =
+        await _inner.corbadoService.getPasskeys(token: refreshToken);
 
     _passkeysStreamController.sink.add(passkeys);
-  }
 
-  Future<void> _postSignIn() async {
-    await _loadPasskeys();
+    return passkeys;
   }
 
   Future<void> _updateSession(User user, {String? refreshToken}) async {
-    await _sessionService.setUser(user);
+    final passkeys = await _loadPasskeys(explicitRefreshToken: refreshToken);
+    var askForPasskeyAppend = false;
+    if (passkeys.isEmpty && _config.askForPasskeyAppend) {
+      askForPasskeyAppend = true;
+    }
+
+    await _sessionService.setUser(
+      user,
+      askForPasskeyAppend: askForPasskeyAppend,
+    );
 
     if (refreshToken != null) {
       await _sessionService.setRefreshToken(refreshToken);
     }
+  }
+
+  /// Explicitly trigger a token refresh.
+  /// This can be useful when there has been a change to the user's data that is
+  /// part of the idToken.
+  Future<void> refreshToken() {
+    return _sessionService.explicitlyTriggerTokenRefresh();
   }
 
   /// Sign the user out.

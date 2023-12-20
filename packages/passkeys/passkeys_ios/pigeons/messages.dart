@@ -96,7 +96,11 @@ abstract class PasskeysApi {
 
   @async
   AuthenticateResponse authenticate(
-      String relyingPartyId, String challenge, bool conditionalUI);
+    String relyingPartyId,
+    String challenge,
+    bool conditionalUI,
+    List<String> allowedCredentialIDs,
+  );
 
   @async
   void cancelCurrentAuthenticatorOperation();

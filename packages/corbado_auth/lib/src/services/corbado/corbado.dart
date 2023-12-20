@@ -115,10 +115,11 @@ abstract class CorbadoService {
 
   Future<StartLoginResponse> startLoginWithPasskey(
     String email,
+    bool conditional,
   ) async {
     try {
       String challenge;
-      if (email.isEmpty) {
+      if (conditional) {
         final result = await UsersApi(frontendAPIClient).passKeyMediationStart(
           PassKeyMediationStartReq(username: email),
         );

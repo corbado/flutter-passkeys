@@ -38,11 +38,10 @@ class PasskeysWeb extends PasskeysPlatform {
 
     try {
       final serializedRequest = jsonEncode(r.toJson());
-      final response =
-          (await promiseToFuture(authenticatorRegister(serializedRequest)))
-              as String;
-
-      final decodedResponse = jsonDecode(response) as Map<String, dynamic>;
+      final Future<String> response =
+          promiseToFuture(authenticatorRegister(serializedRequest));
+      final decodedResponse =
+          jsonDecode(await response) as Map<String, dynamic>;
       final typedResponse = PasskeySignUpResponse.fromJson(decodedResponse);
 
       return RegisterResponseType(
@@ -71,11 +70,10 @@ class PasskeysWeb extends PasskeysPlatform {
 
     try {
       final serializedRequest = jsonEncode(r.toJson());
-      final response =
-          (await promiseToFuture(authenticatorLogin(serializedRequest)))
-              as String;
-
-      final decodedResponse = jsonDecode(response) as Map<String, dynamic>;
+      final Future<String> response =
+          await promiseToFuture(authenticatorLogin(serializedRequest));
+      final decodedResponse =
+          jsonDecode(await response) as Map<String, dynamic>;
       final typedResponse = PasskeyLoginResponse.fromJson(decodedResponse);
 
       return typedResponse.toAuthenticateResponseType();

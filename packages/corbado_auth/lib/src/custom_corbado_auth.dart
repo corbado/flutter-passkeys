@@ -25,7 +25,7 @@ class CustomCorbadoAuth {
   }
 
   /// Signs up a user by registering a new passkey (using the passkeys package).
-  Future<AuthResponse> customSignUpWithPasskey({
+  Future<AuthResponse> signUpWithPasskey({
     required String email,
     String? fullName,
   }) async {
@@ -44,7 +44,7 @@ class CustomCorbadoAuth {
   /// Calling this method only initiates the OTP.
   /// When the user has provided the code he received by email completeEmailCode
   /// must be called to finish the sign up.
-  Future<EmailOTPState> customStartSignUpWithEmailCode({
+  Future<EmailOTPState> startSignUpWithEmailCode({
     required String email,
     String fullName = '',
   }) async {
@@ -56,7 +56,7 @@ class CustomCorbadoAuth {
 
   /// Completes an email OTP transaction.
   /// This can either be a sign up or a sign in.
-  Future<AuthResponse> customFinishEmailCode({
+  Future<AuthResponse> finishEmailCode({
     required String token,
     required String code,
   }) async {
@@ -69,7 +69,7 @@ class CustomCorbadoAuth {
   /// Init a user sign in using email OTP.
   /// Similarly to registerWithEmailCode a email code will be sent to the user.
   /// This code must then be provided by calling completeEmailCode.
-  Future<EmailOTPState> customStartLoginWithEmailCode({
+  Future<EmailOTPState> startLoginWithEmailCode({
     required String email,
   }) async {
     return corbadoService.startLoginWithEmailCode(email);
@@ -84,14 +84,14 @@ class CustomCorbadoAuth {
   /// immediately without any user interaction (e.g. Android) or it requires
   /// additional user input (e.g. iOS or web where the user needs to click the
   /// TextField).
-  Future<AuthResponse> customAutocompletedLoginWithPasskey() async {
+  Future<AuthResponse> autocompletedLoginWithPasskey() async {
     return _loginWithPasskey(conditional: true);
   }
 
   /// Signs in a user relying on a passkey.
   /// This is an alternative to autocompletedSignInWithPasskey.
   /// It should be called when the user explicitly wants to type in a username.
-  Future<AuthResponse> customLoginWithPasskey({required String email}) async {
+  Future<AuthResponse> loginWithPasskey({required String email}) async {
     return _loginWithPasskey(email: email, conditional: false);
   }
 
@@ -99,7 +99,7 @@ class CustomCorbadoAuth {
     required bool conditional,
     String email = '',
   }) async {
-    final res1 = await corbadoService.startLoginWithPasskey(email);
+    final res1 = await corbadoService.startLoginWithPasskey(email, conditional);
     final platformReq =
         res1.toPlatformType(conditional: conditional);
     final platformResponse =

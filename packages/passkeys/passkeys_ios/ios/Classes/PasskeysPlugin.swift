@@ -5,29 +5,24 @@ import LocalAuthentication
 import Foundation
 import Combine
 
+protocol Cancellable {
+    func cancel()
+}
+
 @available(iOS 16.0, *)
 public class PasskeysPlugin: NSObject, FlutterPlugin, PasskeysApi {
-    let registerController: RegisterController
-    let authenticateController: AuthenticateController
-    
-    var currentAuthorizationController: ASAuthorizationController?;
-    
-    init(registerController: RegisterController, authenticateController: AuthenticateController) {
-        self.registerController = registerController
-        self.authenticateController = authenticateController
-    }
+    var inFlightController: Cancellable?;
+    let lock: NSLock = NSLock();
     
     public static func register(with registrar: FlutterPluginRegistrar) {
-        let registerController = RegisterController()
-        let authenticateController = AuthenticateController()
-        let instance = PasskeysPlugin(registerController: registerController, authenticateController: authenticateController)
+        let instance = PasskeysPlugin()
         PasskeysApiSetup.setUp(binaryMessenger: registrar.messenger(), api: instance)
     }
     
     func canAuthenticate() throws -> Bool {
         return LocalAuth.shared.canAuthenticate()
     }
-    
+
     func getFacetID(completion: @escaping (Result<String, Error>) -> Void) {
         completion(.success(""))
     }
@@ -38,11 +33,14 @@ public class PasskeysPlugin: NSObject, FlutterPlugin, PasskeysApi {
         user: User,
         completion: @escaping (Result<RegisterResponse, Error>) -> Void
     ) {
+        inFlightController?.cancel()
+        lock.lock()
+        
         guard let decodedChallenge = Data.fromBase64Url(challenge) else {
             completion(.failure(CustomErrors.decodingChallenge))
             return
         }
-
+        
         let rp = relyingParty.id
         let platformProvider = ASAuthorizationPlatformPublicKeyCredentialProvider(relyingPartyIdentifier: rp)
         let request = platformProvider.createCredentialRegistrationRequest(
@@ -50,11 +48,20 @@ public class PasskeysPlugin: NSObject, FlutterPlugin, PasskeysApi {
             name: user.name,
             userID: user.id.data(using: .utf8)!
         )
-
-        currentAuthorizationController = registerController.register(request: request, completion: completion)
+        
+        func wrappedCompletion(result: Result<RegisterResponse, Error>) {
+            lock.unlock()
+            completion(result)
+        }
+        
+        let con = RegisterController(completion: completion)
+        con.run(request: request)
+        inFlightController = con
     }
 
-    func authenticate(relyingPartyId: String, challenge: String, conditionalUI: Bool, completion: @escaping (Result<AuthenticateResponse, Error>) -> Void) {
+    func authenticate(relyingPartyId: String, challenge: String, conditionalUI: Bool, allowedCredentialIDs: [String], completion: @escaping (Result<AuthenticateResponse, Error>) -> Void) {
+        inFlightController?.cancel()
+
         guard let decodedChallenge = Data.fromBase64Url(challenge) else {
             completion(.failure(CustomErrors.decodingChallenge))
             return
@@ -64,12 +71,24 @@ public class PasskeysPlugin: NSObject, FlutterPlugin, PasskeysApi {
         let request = platformProvider.createCredentialAssertionRequest(
             challenge: decodedChallenge
         )
-
-        currentAuthorizationController = authenticateController.authenticate(request: request, conditionalUI: conditionalUI, completion: completion)
+        
+        let allowedCredentials = allowedCredentialIDs.compactMap {
+            if let credentialId = Data.fromBase64Url($0) {
+                return ASAuthorizationPlatformPublicKeyCredentialDescriptor.init(credentialID: credentialId)
+            } else {
+                return nil
+            }
+        }
+        
+        request.allowedCredentials = allowedCredentials
+                
+        let con = AuthenticateController(completion: completion)
+        con.run(request: request, conditionalUI: conditionalUI)
+        inFlightController = con
     }
     
     func cancelCurrentAuthenticatorOperation(completion: @escaping (Result<Void, Error>) -> Void) {
-        currentAuthorizationController?.cancel()
+        inFlightController?.cancel()
         
         completion(.success(Void()))
     }

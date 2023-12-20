@@ -70,7 +70,7 @@ class InvalidPasskeyException extends CorbadoException {
   /// Constructor
   InvalidPasskeyException()
       : super(
-            'The passkey you used is incorrect. Please check if you used the right one.');
+            'The passkey you used has been deleted from your profile. Please enter your email and continue with manual login.');
 }
 
 /// Exception thrown when the user already has a passkey that is available

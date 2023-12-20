@@ -1,4 +1,5 @@
 enum AuthState {
   None,
-  SignedIn
+  SignedIn,
+  AskForPasskeyAppend
 }

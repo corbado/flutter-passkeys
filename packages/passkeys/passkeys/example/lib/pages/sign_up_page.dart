@@ -64,7 +64,7 @@ class SignUpPage extends HookConsumerWidget {
               onPressed: () async {
                 final email = emailController.value.text;
                 try {
-                  await passkeyAuth.customSignUpWithPasskey(email: email);
+                  await passkeyAuth.signUpWithPasskey(email: email);
                   context.go(Routes.profile);
                 } catch (e) {
                   error.value = e.toString();

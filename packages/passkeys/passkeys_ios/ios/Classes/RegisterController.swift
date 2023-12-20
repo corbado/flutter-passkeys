@@ -3,18 +3,28 @@ import LocalAuthentication
 import Flutter
 import Foundation
 
-@available(iOS 15.0, *)
-class RegisterController: NSObject, ASAuthorizationControllerDelegate, ASAuthorizationControllerPresentationContextProviding {
+@available(iOS 16.0, *)
+class RegisterController: NSObject, ASAuthorizationControllerDelegate, ASAuthorizationControllerPresentationContextProviding, Cancellable {
     private var completion: ((Result<RegisterResponse, Error>) -> Void)?
+    private var cancelAuthorization: (() -> Void)?;
 
-    func register(request: ASAuthorizationPlatformPublicKeyCredentialRegistrationRequest, completion: @escaping ((Result<RegisterResponse, Error>) -> Void)) -> ASAuthorizationController {
+    init(completion: @escaping ((Result<RegisterResponse, Error>) -> Void)) {
         self.completion = completion;
+    }
+    
+    func run(request: ASAuthorizationPlatformPublicKeyCredentialRegistrationRequest) {
+        
         let authorizationController = ASAuthorizationController(authorizationRequests: [request])
+
         authorizationController.delegate = self
         authorizationController.presentationContextProvider = self
         authorizationController.performRequests()
         
-        return authorizationController
+        func cancel() {
+            authorizationController.cancel();
+        }
+        
+        self.cancelAuthorization = cancel
     }
 
     func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
@@ -51,5 +61,9 @@ class RegisterController: NSObject, ASAuthorizationControllerDelegate, ASAuthori
         }
 
         return (delegate?.window!!)!
+    }
+    
+    func cancel() {
+        cancelAuthorization?();
     }
 }

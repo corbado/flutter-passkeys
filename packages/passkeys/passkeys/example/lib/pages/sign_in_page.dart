@@ -27,7 +27,7 @@ class _SignInPageState extends ConsumerState<SignInPage> {
 
       // As soon as the view has been loaded prepare the autocompleted passkey sign in.
       passkeyAuth
-          .customAutocompletedLoginWithPasskey()
+          .autocompletedLoginWithPasskey()
           .then((value) => context.go(Routes.profile))
           .onError(
         (error, stackTrace) {
@@ -98,7 +98,7 @@ class _SignInPageState extends ConsumerState<SignInPage> {
               onPressed: () async {
                 try {
                   final email = _emailController.value.text;
-                  await passkeyAuth.customLoginWithPasskey(email: email);
+                  await passkeyAuth.loginWithPasskey(email: email);
                   context.go(Routes.profile);
                 } catch (e) {
                   if (e is PasskeyAuthCancelledException) {

@@ -56,8 +56,11 @@ class AuthResponse {
     if (!response.headers.containsKey('set-cookie')) {
       return null;
     }
-    final setCookieString =
-        response.headers.containsKey('set-cookie') as String;
+    final setCookieString = response.headers['set-cookie'];
+    if (setCookieString == null) {
+      return null;
+    }
+
     final cookieRegex = RegExp(r'cbo_long_session=(\w+);.*');
     final match = cookieRegex.firstMatch(setCookieString);
     if (match == null) {

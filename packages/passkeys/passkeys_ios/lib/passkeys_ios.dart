@@ -50,6 +50,7 @@ class PasskeysIOS extends PasskeysPlatform {
       request.relyingPartyId,
       request.challenge,
       conditionalUI,
+      request.allowCredentials?.map((e) => e.id).toList() ?? [],
     );
 
     return AuthenticateResponseType(
@@ -63,9 +64,6 @@ class PasskeysIOS extends PasskeysPlatform {
   }
 
   @override
-  Future<void> cancelCurrentAuthenticatorOperation() async =>
+  Future<void> cancelCurrentAuthenticatorOperation() =>
       _api.cancelCurrentAuthenticatorOperation();
-
-  @override
-  Future<String> getFacetID() async => _api.getFacetID();
 }

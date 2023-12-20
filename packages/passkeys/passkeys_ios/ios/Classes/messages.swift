@@ -226,9 +226,8 @@ class PasskeysApiCodec: FlutterStandardMessageCodec {
 protocol PasskeysApi {
   func canAuthenticate() throws -> Bool
   func register(challenge: String, relyingParty: RelyingParty, user: User, completion: @escaping (Result<RegisterResponse, Error>) -> Void)
-  func authenticate(relyingPartyId: String, challenge: String, conditionalUI: Bool, completion: @escaping (Result<AuthenticateResponse, Error>) -> Void)
+  func authenticate(relyingPartyId: String, challenge: String, conditionalUI: Bool, allowedCredentialIDs: [String], completion: @escaping (Result<AuthenticateResponse, Error>) -> Void)
   func cancelCurrentAuthenticatorOperation(completion: @escaping (Result<Void, Error>) -> Void)
-  func getFacetID(completion: @escaping (Result<String, Error>) -> Void)
 }
 
 /// Generated setup class from Pigeon to handle messages through the `binaryMessenger`.
@@ -276,7 +275,8 @@ class PasskeysApiSetup {
         let relyingPartyIdArg = args[0] as! String
         let challengeArg = args[1] as! String
         let conditionalUIArg = args[2] as! Bool
-        api.authenticate(relyingPartyId: relyingPartyIdArg, challenge: challengeArg, conditionalUI: conditionalUIArg) { result in
+        let allowedCredentialIDsArg = args[3] as! [String]
+        api.authenticate(relyingPartyId: relyingPartyIdArg, challenge: challengeArg, conditionalUI: conditionalUIArg, allowedCredentialIDs: allowedCredentialIDsArg) { result in
           switch result {
             case .success(let res):
               reply(wrapResult(res))
@@ -302,21 +302,6 @@ class PasskeysApiSetup {
       }
     } else {
       cancelCurrentAuthenticatorOperationChannel.setMessageHandler(nil)
-    }
-    let getFacetIDChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.passkeys_ios.PasskeysApi.getFacetID", binaryMessenger: binaryMessenger, codec: codec)
-    if let api = api {
-      getFacetIDChannel.setMessageHandler { _, reply in
-        api.getFacetID() { result in
-          switch result {
-            case .success(let res):
-              reply(wrapResult(res))
-            case .failure(let error):
-              reply(wrapError(error))
-          }
-        }
-      }
-    } else {
-      getFacetIDChannel.setMessageHandler(nil)
     }
   }
 }

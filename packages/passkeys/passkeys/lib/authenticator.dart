@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:passkeys/exceptions.dart';
 import 'package:passkeys_platform_interface/passkeys_platform_interface.dart';
@@ -14,6 +15,10 @@ class PasskeyAuthenticator {
   /// Returns true only if passkeys are supported by the platform.
   Future<bool> canAuthenticate() {
     return _platform.canAuthenticate();
+  }
+
+  Future<void> cancelCurrentAuthenticatorOperation() {
+    return _platform.cancelCurrentAuthenticatorOperation();
   }
 
   /// Creates a new passkey and stores it on the device.

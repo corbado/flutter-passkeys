@@ -56,9 +56,14 @@ class SessionService {
     return _storageService.getUser();
   }
 
-  Future<void> setUser(User value) {
+  Future<void> setUser(User value, {bool askForPasskeyAppend = false}) {
     _userStreamController.add(value);
-    _authStateStreamController.add(AuthState.SignedIn);
+
+    final authState = askForPasskeyAppend
+        ? AuthState.AskForPasskeyAppend
+        : AuthState.SignedIn;
+
+    _authStateStreamController.add(authState);
 
     return _storageService.setUser(value);
   }
@@ -69,6 +74,8 @@ class SessionService {
     _authStateStreamController.add(AuthState.None);
     await _storageService.clear();
   }
+
+  Future<void> explicitlyTriggerTokenRefresh() => _refreshToken();
 
   void _scheduleRefreshRoutine(User user) {
     // if another refresh has already been scheduled we stop that one
@@ -136,5 +143,9 @@ class SessionService {
     await setUser(user);
 
     return user;
+  }
+
+  void finishPasskeyAppendProcess() {
+    _authStateStreamController.add(AuthState.SignedIn);
   }
 }
