@@ -92,6 +92,9 @@ final routerProvider = Provider<GoRouter>((ref) {
               return Routes.profile;
             }
             break;
+          case AuthState.AskForPasskeyAppend:
+            // we are not handling passkey append in this example (yet)
+            return Routes.signIn;
         }
 
         return null;

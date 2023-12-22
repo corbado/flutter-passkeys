@@ -52,7 +52,6 @@ class PasskeyAuthenticator {
   ) async {
     try {
       await _platform.cancelCurrentAuthenticatorOperation();
-
       final r = await _platform.authenticate(request);
 
       return r;

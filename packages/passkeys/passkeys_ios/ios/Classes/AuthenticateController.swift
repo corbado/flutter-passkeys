@@ -6,7 +6,6 @@ import Foundation
 @available(iOS 16.0, *)
 class AuthenticateController: NSObject, ASAuthorizationControllerDelegate, ASAuthorizationControllerPresentationContextProviding, Cancellable {
     public var completion: ((Result<AuthenticateResponse, Error>) -> Void)?
-    private var controller: ASAuthorizationController?;
     private var innerCancel: (() -> Void)?;
     
     init(completion: @escaping ((Result<AuthenticateResponse, Error>) -> Void)) {
@@ -24,11 +23,11 @@ class AuthenticateController: NSObject, ASAuthorizationControllerDelegate, ASAut
             authorizationController.performRequests()
         }
 
-        func cancel1() {
+        func cancel() {
             authorizationController.cancel();
         }
         
-        self.innerCancel = cancel1
+        self.innerCancel = cancel
     }
     
     func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {

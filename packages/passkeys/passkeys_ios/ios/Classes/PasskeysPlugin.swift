@@ -32,10 +32,7 @@ public class PasskeysPlugin: NSObject, FlutterPlugin, PasskeysApi {
         relyingParty: RelyingParty,
         user: User,
         completion: @escaping (Result<RegisterResponse, Error>) -> Void
-    ) {
-        inFlightController?.cancel()
-        lock.lock()
-        
+    ) {        
         guard let decodedChallenge = Data.fromBase64Url(challenge) else {
             completion(.failure(CustomErrors.decodingChallenge))
             return
@@ -60,7 +57,6 @@ public class PasskeysPlugin: NSObject, FlutterPlugin, PasskeysApi {
     }
 
     func authenticate(relyingPartyId: String, challenge: String, conditionalUI: Bool, allowedCredentialIDs: [String], completion: @escaping (Result<AuthenticateResponse, Error>) -> Void) {
-        inFlightController?.cancel()
 
         guard let decodedChallenge = Data.fromBase64Url(challenge) else {
             completion(.failure(CustomErrors.decodingChallenge))
