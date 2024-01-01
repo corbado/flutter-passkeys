@@ -1,0 +1,5714 @@
+openapi: 3.0.3
+
+###################################################################
+# General                                                         #
+###################################################################
+info:
+  version: 1.0.0
+  title: Corbado Backend API
+  description: |
+
+    # Introduction
+    This documentation gives an overview of all Corbado Backend API calls to implement passwordless authentication with Passkeys.
+
+    The Corbado Backend API is organized around REST principles. It uses resource-oriented URLs with verbs (HTTP methods) and HTTP status codes. Requests need to be valid JSON payloads. We always return JSON.
+
+    The Corbado Backend API specification is written in **OpenAPI Version 3.0.3**. You can download it via the download button at the top and use it to generate clients in languages we do not provide officially for example.
+
+    # Authentication
+    To authenticate your API requests HTTP Basic Auth is used.
+
+    You need to set the projectID as username and the API secret as password. The authorization header looks as follows:
+
+    `Basic <<projectID>:<API secret>>`
+
+    The **authorization header** needs to be **Base64 encoded** to be working. If the authorization header is missing or incorrect, the API will respond with status code 401.
+
+    # Error types
+    As mentioned above we make use of HTTP status codes. **4xx** errors indicate so called client errors, meaning the error occurred on client side and you need to fix it. **5xx** errors indicate server errors, which means the error occurred on server side and outside your control.
+
+    Besides HTTP status codes Corbado uses what we call error types which gives more details in error cases and help you to debug your request.
+
+    ## internal_error
+    The error type **internal_error** is used when some internal error occurred at Corbado. You can retry your request but usually there is nothing you can do about it. All internal errors get logged and will triggert an alert to our operations team which takes care of the situation as soon as possible.
+
+    ## not_found
+    The error type **not_found** is used when you try to get a resource which cannot be found. Most common case is that you provided a wrong ID.
+
+    ## method_not_allowed
+    The error type **method_not_allowed** is used when you use a HTTP method (GET for example) on a resource/endpoint which it not supports. 
+
+    ## validation_error
+    The error type **validation_error** is used when there is validation error on the data you provided in the request payload or path. There will be detailed information in the JSON response about the validation error like what exactly went wrong on what field. 
+
+    ## project_id_mismatch
+    The error type **project_id_mismatch** is used when there is a project ID you provided mismatch.
+
+    ## login_error
+    The error type **login_error** is used when the authentication failed. Most common case is that you provided a wrong pair of project ID and API secret. As mentioned above with use HTTP Basic Auth for authentication.
+
+    ## invalid_json
+    The error type **invalid_json** is used when you send invalid JSON as request body. There will be detailed information in the JSON response about what went wrong.
+
+    ## rate_limited
+    The error type **rate_limited** is used when ran into rate limiting of the Corbado Backend API. Right now you can do a maximum of **2000 requests** within **10 seconds** from a **single IP**. Throttle your requests and try again. If you think you need more contact support@corbado.com.
+
+    ## invalid_origin
+    The error type **invalid_origin** is used when the API has been called from a origin which is not authorized (CORS). Add the origin to your project at https://app.corbado.com/app/settings/credentials/authorized-origins.
+
+    ## already_exists
+    The error type **already_exists** is used when you try create a resource which already exists. Most common case is that there is some unique constraint on one of the fields.
+
+    # Security and privacy
+    Corbado services are designed, developed, monitored, and updated with security at our core to protect you and your customers’ data and privacy.
+
+    ## Security
+
+    ### Infrastructure security
+    Corbado leverages highly available and secure cloud infrastructure to ensure that our services are always available and securely delivered. Corbado's services are operated in uvensys GmbH's data centers in Germany and comply with ISO standard 27001. All data centers have redundant power and internet connections to avoid failure. The main location of the servers used is in Linden and offers 24/7 support. We do not use any AWS, GCP or Azure services.
+
+    Each server is monitored 24/7 and in the event of problems, automated information is sent via SMS and e-mail. The monitoring is done by the external service provider Serverguard24 GmbH. 
+
+    All Corbado hardware and networking is routinely updated and audited to ensure systems are secure and that least privileged access is followed. Additionally we implement robust logging and audit protocols that allow us high visibility into system use.
+
+    ### Responsible disclosure program
+    Here at Corbado, we take the security of our user’s data and of our services seriously. As such, we encourage responsible security research on Corbado services and products. If you believe you’ve discovered a potential vulnerability, please let us know by emailing us at [security@corbado.com](mailto:security@corbado.com). We will acknowledge your email within 2 business days. As public disclosures of a security vulnerability could put the entire Corbado community at risk, we ask that you keep such potential vulnerabilities confidential until we are able to address them. We aim to resolve critical issues within 30 days of disclosure. Please make a good faith effort to avoid violating privacy, destroying data, or interrupting or degrading the Corbado service. Please only interact with accounts you own or for which you have explicit permission from the account holder. While researching, please refrain from:
+
+    - Distributed Denial of Service (DDoS)
+    - Spamming
+    - Social engineering or phishing of Corbado employees or contractors
+    - Any attacks against Corbado's physical property or data centers
+
+    Thank you for helping to keep Corbado and our users safe!
+
+    ### Rate limiting
+    At Corbado, we apply rate limit policies on our APIs in order to protect your application and user management infrastructure, so your users will have a frictionless non-interrupted experience.
+
+    Corbado responds with HTTP status code 429 (too many requests) when the rate limits exceed.
+    Your code logic should be able to handle such cases by checking the status code on the response and recovering from such cases.
+    If a retry is needed, it is best to allow for a back-off to avoid going into an infinite retry loop.
+
+    The current rate limit for all our API endpoints is **max. 100 requests per 10 seconds**.
+
+    ## Privacy
+    Corbado is committed to protecting the personal data of our customers and their customers. Corbado has in place appropriate data security measures that meet industry standards. We regularly review and make enhancements to our processes, products, documentation, and contracts to help support ours and our customers’ compliance for the processing of personal data.
+
+    We try to minimize the usage and processing of personally identifiable information. Therefore, all our services are constructed to avoid unnecessary data consumption.
+
+    To make our services work, we only require the following data:
+    - any kind of identifier (e.g. UUID, phone number, email address)
+    - IP address (only temporarily for rate limiting aspects)
+    - User agent (for device management)
+
+  contact:
+    name: Corbado team
+    email: support@corbado.com
+    url: https://www.corbado.com
+
+servers:
+  - url: https://backendapi.corbado.io
+
+tags:
+  - name: Email magic links
+    description: All API calls to handle email magic links
+  - name: Email OTP
+    description: All API calls to handle email OTP
+  - name: SMS OTP
+    description: All API calls to handle SMS OTP
+  - name: Request logs
+    description: All API calls to manage request logs
+  - name: Validation
+    description: All API calls to handle validation
+  - name: Passkeys (Biometrics)
+    description: All API calls to handle Passkeys (Biometrics)
+  - name: User
+    description: All API calls to handle user functionality
+  - name: Email templates
+    description: All API calls to handle email templates
+  - name: SMS templates
+    description: All API calls to handle SMS templates
+  - name: API secrets
+    description: All API calls to handle API secrets
+  - name: Auth Methods
+    description: All API calls to handle authentication methods
+  - name: Analyzer
+    description: All API calls to handle tracking
+  - name: Project config
+    description: All API calls to handle project configuration
+  - name: Session config
+    description: All API calls to handle session config for Corbado session management (see https://docs.corbado.com/sessions/overview for more details)
+  - name: Long sessions
+    description: All API calls to handle long sessions for Corbado session management (see https://docs.corbado.com/sessions/overview for more details)
+  - name: Auth Tokens
+    description: All API calls to handle auth tokens for own session management (see https://docs.corbado.com/sessions/own-session-management for more details)
+  - name: Association Tokens
+    description: All API calls to handle association tokens
+  - name: Webhook logs
+    description: All API calls to manage webhook logs
+  - name: iOS App Config
+    description: All API calls to handle iOS app configurations
+  - name: Android App Config
+    description: All API calls to handle Android app configurations
+  - name: Examples
+    description: All API calls to download example projects
+
+paths:
+  ###################################################################
+  # Paths: Projects                                                 #
+  ###################################################################
+  /v1/projects/activate:
+    put:
+      description: Activates the project
+      operationId: ProjectActivate
+      tags:
+        - Project config
+      security:
+        - projectID: [ ]
+        - bearerAuth: [ ]
+        - basicAuth: [ ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/emptyReq'
+      responses:
+        '200':
+          $ref: '#/components/responses/200'
+        default:
+          $ref: '#/components/responses/error'
+
+  ###################################################################
+  # Paths: Project secrets                                          #
+  ###################################################################
+  /v1/projectSecrets:
+    post:
+      description: Creates an API secret
+      operationId: ProjectSecretCreate
+      tags:
+        - API secrets
+      security:
+        - projectID: [ ]
+        - bearerAuth: [ ]
+        - basicAuth: [ ]
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/projectSecretCreateReq'
+      responses:
+        '200':
+          description: API secret successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/projectSecretCreateRsp'
+        default:
+          $ref: '#/components/responses/error'
+
+    get:
+      description: Lists API secrets
+      operationId: ProjectSecretList
+      tags:
+        - API secrets
+      security:
+        - projectID: [ ]
+        - bearerAuth: [ ]
+        - basicAuth: [ ]
+      responses:
+        '200':
+          description: List of API secrets
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/projectSecretListRsp'
+        default:
+          $ref: '#/components/responses/error'
+
+  /v1/projectSecrets/{secretID}:
+    delete:
+      description: Deletes API secret
+      operationId: ProjectSecretDelete
+      tags:
+        - API secrets
+      security:
+        - projectID: [ ]
+        - bearerAuth: [ ]
+        - basicAuth: [ ]
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/projectSecretDeleteReq'
+      parameters:
+        - in: path
+          required: true
+          name: secretID
+          schema:
+            type: string
+          description: 'Secret ID from create'
+          example: 'pse-abc123'
+      responses:
+        '200':
+          $ref: '#/components/responses/200'
+        default:
+          $ref: '#/components/responses/error'
+
+  ###################################################################
+  # Paths: Auth methods                                             #
+  ###################################################################
+  /v1/authMethods:
+    post:
+      description: Retrieves possible authentication methods for provided username
+      operationId: AuthMethodsList
+      tags:
+        - Auth Methods
+      security:
+        - projectID: [ ]
+        - basicAuth: [ ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/authMethodsListReq'
+      responses:
+        '200':
+          description: Auth methods successfully retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/authMethodsListRsp'
+        default:
+          $ref: '#/components/responses/error'
+
+  /v1/userauthlogs:
+    get:
+      description: Lists user auth log
+      operationId: UserAuthLogList
+      tags:
+        - User
+      parameters:
+        - $ref: 'common.yml#/components/parameters/remoteAddress'
+        - $ref: 'common.yml#/components/parameters/userAgent'
+        - $ref: 'common.yml#/components/parameters/sort'
+        - $ref: 'common.yml#/components/parameters/filter'
+        - $ref: 'common.yml#/components/parameters/page'
+        - $ref: 'common.yml#/components/parameters/pageSize'
+      security:
+        - projectID: [ ]
+        - bearerAuth: [ ]
+        - basicAuth: [ ]
+      responses:
+        '200':
+          description: Auth methods successfully retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/userAuthLogListRsp'
+        default:
+          $ref: '#/components/responses/error'
+
+  ###################################################################
+  # Paths: SMS codes                                                #
+  ###################################################################
+  /v1/smsCodes:
+    post:
+      description: Creates SMS OTP and sends it to given phone number
+      operationId: SmsCodeSend
+      tags:
+        - SMS OTP
+      security:
+        - projectID: [ ]
+        - basicAuth: [ ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/smsCodeSendReq'
+      responses:
+        '200':
+          description: SMS successfully sent
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/smsCodeSendRsp'
+        default:
+          $ref: '#/components/responses/error'
+
+  /v1/smsCodes/{smsCodeID}/validate:
+    put:
+      description: Validates SMS OTP
+      operationId: SmsCodeValidate
+      tags:
+        - SMS OTP
+      security:
+        - projectID: [ ]
+        - basicAuth: [ ]
+      parameters:
+        - $ref: '#/components/parameters/smsCodeID'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/smsCodeValidateReq'
+      responses:
+        '200':
+          description: Validation was successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/smsCodeValidateRsp'
+        default:
+          $ref: '#/components/responses/error'
+
+  ###################################################################
+  # Paths: Email links                                              #
+  ###################################################################
+  /v1/emailLinks:
+    post:
+      description: Creates email magic link and sends it to given email address
+      operationId: EmailLinkSend
+      tags:
+        - Email magic links
+      security:
+        - projectID: [ ]
+        - basicAuth: [ ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/emailLinkSendReq'
+      responses:
+        '200':
+          description: Email successfully sent
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/emailLinkSendRsp'
+        default:
+          $ref: '#/components/responses/error'
+
+  /v1/emailLinks/{emailLinkID}/validate:
+    put:
+      description: Validates email magic link token
+      operationId: EmailLinkValidate
+      tags:
+        - Email magic links
+      security:
+        - projectID: [ ]
+        - basicAuth: [ ]
+      parameters:
+        - $ref: '#/components/parameters/emailLinkID'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/emailLinksValidateReq'
+      responses:
+        '200':
+          description: Validation was successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/emailLinkValidateRsp'
+        default:
+          $ref: '#/components/responses/error'
+
+  /v1/emailLinks/{emailLinkID}:
+    get:
+      description: Get an email magic link only one time after confirmed
+      operationId: EmailLinkGet
+      tags:
+        - Email magic links
+      security:
+        - projectID: [ ]
+        - basicAuth: [ ]
+      parameters:
+        - $ref: '#/components/parameters/emailLinkID'
+      responses:
+        '200':
+          description: Contains details of an email link
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/emailLinkGetRsp'
+        default:
+          $ref: '#/components/responses/error'
+    delete:
+      description: Deletes an email magic link
+      operationId: EmailLinkDelete
+      tags:
+        - Email magic links
+      security:
+        - projectID: [ ]
+        - basicAuth: [ ]
+      parameters:
+        - $ref: '#/components/parameters/emailLinkID'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/emailLinksDeleteReq'
+      responses:
+        '200':
+          description: Validation was successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/emailLinkValidateRsp'
+        default:
+          $ref: '#/components/responses/error'
+
+  ###################################################################
+  # Paths: Email Codes                                              #
+  ###################################################################
+  /v1/emailCodes:
+    post:
+      description: Creates email code and sends it to given email address
+      operationId: EmailCodeSend
+      tags:
+        - Email OTP
+      security:
+        - projectID: [ ]
+        - basicAuth: [ ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/emailCodeSendReq'
+      responses:
+        '200':
+          description: Email successfully sent
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/emailCodeSendRsp'
+        default:
+          $ref: '#/components/responses/error'
+
+  /v1/emailCodes/{emailCodeID}/validate:
+    put:
+      description: Validates email code
+      operationId: EmailCodeValidate
+      tags:
+        - Email OTP
+      security:
+        - projectID: [ ]
+        - basicAuth: [ ]
+      parameters:
+        - $ref: '#/components/parameters/emailCodeID'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/emailCodeValidateReq'
+      responses:
+        '200':
+          description: Validation was successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/emailCodeValidateRsp'
+        default:
+          $ref: '#/components/responses/error'
+
+  /v1/emailCodes/{emailCodeID}:
+    get:
+      description: Get an email OTP only one time after confirmed
+      operationId: EmailCodeGet
+      tags:
+        - Email OTP
+      security:
+        - projectID: [ ]
+        - basicAuth: [ ]
+      parameters:
+        - $ref: '#/components/parameters/emailCodeID'
+      responses:
+        '200':
+          description: Contains details of an email OTP
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/emailCodeGetRsp'
+        default:
+          $ref: '#/components/responses/error'
+
+  ###################################################################
+  # Paths: Validation                                               #
+  ###################################################################
+  /v1/validate/phoneNumber:
+    put:
+      description: Validates phone number
+      operationId: ValidatePhoneNumber
+      tags:
+        - Validation
+      security:
+        - projectID: [ ]
+        - basicAuth: [ ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/validatePhoneNumberReq'
+      responses:
+        '200':
+          description: Phone number validated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/validatePhoneNumberRsp'
+        default:
+          $ref: '#/components/responses/error'
+
+  /v1/validate/email:
+    put:
+      description: Validates email
+      operationId: ValidateEmail
+      tags:
+        - Validation
+      security:
+        - projectID: [ ]
+        - basicAuth: [ ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/validateEmailReq'
+      responses:
+        '200':
+          description: Email validated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/validateEmailRsp'
+        default:
+          $ref: '#/components/responses/error'
+
+  ###################################################################
+  # Paths: Request logs                                             #
+  ###################################################################
+  /v1/requestLogs:
+    get:
+      description: Lists request logs for given filters
+      operationId: RequestLogsList
+      tags:
+        - Request logs
+      security:
+        - projectID: [ ]
+        - basicAuth: [ ]
+        - bearerAuth: [ ]
+      parameters:
+        - $ref: 'common.yml#/components/parameters/remoteAddress'
+        - $ref: 'common.yml#/components/parameters/userAgent'
+        - $ref: 'common.yml#/components/parameters/sort'
+        - $ref: 'common.yml#/components/parameters/filter'
+        - $ref: 'common.yml#/components/parameters/page'
+        - $ref: 'common.yml#/components/parameters/pageSize'
+      responses:
+        '200':
+          description: Request logs successfully retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/requestLogsListRsp'
+        default:
+          $ref: '#/components/responses/error'
+
+  /v1/requestLogs/{requestID}:
+    get:
+      description: Retrieves request log entry by ID. If multiple requests with the same ID are found, the most recent one is returned
+      operationId: RequestLogGet
+      tags:
+        - Request logs
+      security:
+        - projectID: [ ]
+        - basicAuth: [ ]
+        - bearerAuth: [ ]
+      parameters:
+        - $ref: '#/components/parameters/remoteAddress'
+        - $ref: '#/components/parameters/userAgent'
+        - $ref: '#/components/parameters/requestID'
+      responses:
+        '200':
+          description: Request log successfully retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/requestLogGetRsp'
+        default:
+          $ref: '#/components/responses/error'
+
+  ###################################################################
+  # Paths: Webhook logs                                             #
+  ###################################################################
+  /v1/webhookLogs:
+    get:
+      description: Lists webhook logs for given filters
+      operationId: WebhookLogsList
+      tags:
+        - Webhook logs
+      security:
+        - projectID: [ ]
+        - basicAuth: [ ]
+        - bearerAuth: [ ]
+      parameters:
+        - $ref: 'common.yml#/components/parameters/remoteAddress'
+        - $ref: 'common.yml#/components/parameters/userAgent'
+        - $ref: 'common.yml#/components/parameters/sort'
+        - $ref: 'common.yml#/components/parameters/filter'
+        - $ref: 'common.yml#/components/parameters/page'
+        - $ref: 'common.yml#/components/parameters/pageSize'
+      responses:
+        '200':
+          description: Webhook logs successfully retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/webhookLogsListRsp'
+        default:
+          $ref: '#/components/responses/error'
+
+  ###################################################################
+  # Paths: Users                                                    #
+  ###################################################################
+  /v1/users:
+    post:
+      description: Creates a new user
+      operationId: UserCreate
+      tags:
+        - User
+      security:
+        - projectID: [ ]
+        - basicAuth: [ ]
+        - bearerAuth: [ ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/userCreateReq'
+      responses:
+        '200':
+          description: User successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/userCreateRsp'
+        default:
+          $ref: '#/components/responses/error'
+    get:
+      description: Lists project users
+      operationId: UserList
+      tags:
+        - User
+      security:
+        - projectID: [ ]
+        - basicAuth: [ ]
+        - bearerAuth: [ ]
+      parameters:
+        - $ref: 'common.yml#/components/parameters/remoteAddress'
+        - $ref: 'common.yml#/components/parameters/userAgent'
+        - $ref: 'common.yml#/components/parameters/sort'
+        - $ref: 'common.yml#/components/parameters/filter'
+        - $ref: 'common.yml#/components/parameters/page'
+        - $ref: 'common.yml#/components/parameters/pageSize'
+      responses:
+        '200':
+          description: Users successfully retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/userListRsp'
+        default:
+          $ref: '#/components/responses/error'
+
+  /v1/users/{userID}:
+    get:
+      description: Get a user by ID
+      operationId: UserGet
+      tags:
+        - User
+      security:
+        - projectID: [ ]
+        - basicAuth: [ ]
+        - bearerAuth: [ ]
+      parameters:
+        - $ref: '#/components/parameters/remoteAddress'
+        - $ref: '#/components/parameters/userAgent'
+        - $ref: '#/components/parameters/userID'
+      responses:
+        '200':
+          description: User successfully retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/userGetRsp'
+        default:
+          $ref: '#/components/responses/error'
+    delete:
+      description: Deletes a user
+      operationId: UserDelete
+      tags:
+        - User
+      security:
+        - projectID: [ ]
+        - basicAuth: [ ]
+        - bearerAuth: [ ]
+      parameters:
+        - $ref: '#/components/parameters/userID'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/userDeleteReq'
+      responses:
+        '200':
+          $ref: '#/components/responses/200'
+        default:
+          $ref: '#/components/responses/error'
+    put:
+      description: Updates a user
+      operationId: UserUpdate
+      tags:
+        - User
+      security:
+        - projectID: [ ]
+        - basicAuth: [ ]
+        - bearerAuth: [ ]
+      parameters:
+        - $ref: '#/components/parameters/userID'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/userUpdateReq'
+      responses:
+        '200':
+          description: User successfully updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/userUpdateRsp'
+        default:
+          $ref: '#/components/responses/error'
+
+  /v1/users/stats:
+    get:
+      description: Provides aggregated user stats for project
+      operationId: UserStatsList
+      security:
+        - projectID: [ ]
+        - bearerAuth: [ ]
+        - basicAuth: [ ]
+      tags:
+        - User
+      parameters:
+        - $ref: 'common.yml#/components/parameters/remoteAddress'
+        - $ref: 'common.yml#/components/parameters/userAgent'
+        - $ref: 'common.yml#/components/parameters/sort'
+        - $ref: 'common.yml#/components/parameters/filter'
+        - $ref: 'common.yml#/components/parameters/page'
+        - $ref: 'common.yml#/components/parameters/pageSize'
+        - $ref: '#/components/parameters/granularity'
+      responses:
+        '200':
+          description: 'Contains a list of all aggregated statistics for user data'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/userStatsListRsp'
+
+  ###################################################################
+  # Paths: User emails                                              #
+  ###################################################################
+  /v1/users/{userID}/emails:
+    post:
+      description: Add an email to an existing user
+      operationId: UserEmailCreate
+      tags:
+        - User
+      security:
+        - projectID: [ ]
+        - basicAuth: [ ]
+        - bearerAuth: [ ]
+      parameters:
+        - $ref: '#/components/parameters/userID'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/userEmailCreateReq'
+      responses:
+        '200':
+          description: User email found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/userEmailCreateRsp'
+        default:
+          $ref: '#/components/responses/error'
+
+  /v1/users/{userID}/emails/{emailID}:
+    get:
+      description: Get a user's email
+      operationId: UserEmailGet
+      tags:
+        - User
+      security:
+        - projectID: [ ]
+        - basicAuth: [ ]
+        - bearerAuth: [ ]
+      parameters:
+        - $ref: '#/components/parameters/remoteAddress'
+        - $ref: '#/components/parameters/userAgent'
+        - $ref: '#/components/parameters/userID'
+        - $ref: '#/components/parameters/emailID'
+      responses:
+        '200':
+          description: User email successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/userEmailGetRsp'
+        default:
+          $ref: '#/components/responses/error'
+    delete:
+      description: Delete a user's email
+      operationId: UserEmailDelete
+      tags:
+        - User
+      security:
+        - projectID: [ ]
+        - basicAuth: [ ]
+        - bearerAuth: [ ]
+      parameters:
+        - $ref: '#/components/parameters/userID'
+        - $ref: '#/components/parameters/emailID'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/userEmailDeleteReq'
+      responses:
+        '200':
+          $ref: '#/components/responses/200'
+        default:
+          $ref: '#/components/responses/error'
+
+  ###################################################################
+  # Paths: User phone numbers                                       #
+  ###################################################################
+  /v1/users/{userID}/phoneNumbers:
+    post:
+      description: Add a phone number to an existing user
+      operationId: UserPhoneNumberCreate
+      tags:
+        - User
+      security:
+        - projectID: [ ]
+        - basicAuth: [ ]
+        - bearerAuth: [ ]
+      parameters:
+        - $ref: '#/components/parameters/userID'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/userPhoneNumberCreateReq'
+      responses:
+        '200':
+          description: User phone number successfully added
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/userPhoneNumberCreateRsp'
+        default:
+          $ref: '#/components/responses/error'
+
+  /v1/users/{userID}/phoneNumbers/{phoneNumberID}:
+    get:
+      description: Get a user's phone number
+      operationId: UserPhoneNumberGet
+      tags:
+        - User
+      security:
+        - projectID: [ ]
+      parameters:
+        - $ref: '#/components/parameters/remoteAddress'
+        - $ref: '#/components/parameters/userAgent'
+        - $ref: '#/components/parameters/userID'
+        - $ref: '#/components/parameters/phoneNumberID'
+      responses:
+        '200':
+          description: User phone number found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/userPhoneNumberGetRsp'
+        default:
+          $ref: '#/components/responses/error'
+    delete:
+      description: Delete a user's phone number
+      operationId: UserPhoneNumberDelete
+      tags:
+        - User
+      security:
+        - projectID: [ ]
+        - basicAuth: [ ]
+        - bearerAuth: [ ]
+      parameters:
+        - $ref: '#/components/parameters/userID'
+        - $ref: '#/components/parameters/phoneNumberID'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/userPhoneNumberDeleteReq'
+      responses:
+        '200':
+          $ref: '#/components/responses/200'
+        default:
+          $ref: '#/components/responses/error'
+
+  ###################################################################
+  # Paths: User custom login identifiers                            #
+  ###################################################################
+  /v1/users/{userID}/customLoginIdentifiers:
+    post:
+      description: Add a custom login identifier to an existing user
+      operationId: UserCustomLoginIdentifierCreate
+      tags:
+        - User
+      security:
+        - projectID: [ ]
+        - basicAuth: [ ]
+        - bearerAuth: [ ]
+      parameters:
+        - $ref: '#/components/parameters/userID'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/userCustomLoginIdentifierCreateReq'
+      responses:
+        '200':
+          description: User custom login identifier created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/userCustomLoginIdentifierCreateRsp'
+        default:
+          $ref: '#/components/responses/error'
+
+  /v1/users/{userID}/customLoginIdentifiers/{customLoginIdentifierID}:
+    get:
+      description: Get a user's custom login identifier
+      operationId: UserCustomLoginIdentifierGet
+      tags:
+        - User
+      security:
+        - projectID: [ ]
+        - basicAuth: [ ]
+        - bearerAuth: [ ]
+      parameters:
+        - $ref: '#/components/parameters/remoteAddress'
+        - $ref: '#/components/parameters/userAgent'
+        - $ref: '#/components/parameters/userID'
+        - $ref: '#/components/parameters/customLoginIdentifierID'
+      responses:
+        '200':
+          description: User custom login identifier successfully retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/userCustomLoginIdentifierGetRsp'
+        default:
+          $ref: '#/components/responses/error'
+    delete:
+      description: Delete a user's custom login identifier
+      operationId: UserCustomLoginIdentifierDelete
+      tags:
+        - User
+      security:
+        - projectID: [ ]
+        - basicAuth: [ ]
+        - bearerAuth: [ ]
+      parameters:
+        - $ref: '#/components/parameters/userID'
+        - $ref: '#/components/parameters/customLoginIdentifierID'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/userCustomLoginIdentifierDeleteReq'
+      responses:
+        '200':
+          $ref: '#/components/responses/200'
+        default:
+          $ref: '#/components/responses/error'
+
+  /v1/users/{userID}/devices:
+    get:
+      description: Provides all register devices for given user
+      operationId: UserDeviceList
+      security:
+        - projectID: [ ]
+        - basicAuth: [ ]
+        - bearerAuth: [ ]
+      tags:
+        - User
+      parameters:
+        - $ref: '#/components/parameters/userID'
+        - $ref: 'common.yml#/components/parameters/remoteAddress'
+        - $ref: 'common.yml#/components/parameters/userAgent'
+        - $ref: 'common.yml#/components/parameters/sort'
+        - $ref: 'common.yml#/components/parameters/filter'
+        - $ref: 'common.yml#/components/parameters/page'
+        - $ref: 'common.yml#/components/parameters/pageSize'
+      responses:
+        '200':
+          description: 'Contains a list of all devices'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/userDeviceListRsp'
+
+  /v1/users/{userID}/credentials/{credentialID}:
+    delete:
+      description: Delete credential
+      operationId: WebAuthnCredentialDelete
+      tags:
+        - Passkeys (Biometrics)
+      security:
+        - projectID: [ ]
+        - basicAuth: [ ]
+      parameters:
+        - $ref: '#/components/parameters/userID'
+        - name: credentialID
+          in: path
+          description: ID of credential
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/emptyReq'
+      responses:
+        '200':
+          $ref: '#/components/responses/200'
+        default:
+          $ref: '#/components/responses/error'
+
+  ###################################################################
+  # Paths: Webauthn                                                 #
+  ###################################################################
+  /v1/webauthn/register/start:
+    post:
+      description: Starts registration of a user for Passkeys (Biometrics)
+      operationId: WebAuthnRegisterStart
+      tags:
+        - Passkeys (Biometrics)
+      security:
+        - projectID: [ ]
+        - basicAuth: [ ]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/webAuthnRegisterStartReq'
+      responses:
+        '200':
+          description: Passkeys (Biometrics) registration initiated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/webAuthnRegisterStartRsp'
+        default:
+          $ref: '#/components/responses/error'
+
+  /v1/webauthn/register/finish:
+    post:
+      description: Completes registration of a user for Passkeys (Biometrics)
+      operationId: WebAuthnRegisterFinish
+      tags:
+        - Passkeys (Biometrics)
+      security:
+        - projectID: [ ]
+        - basicAuth: [ ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/webAuthnFinishReq'
+      responses:
+        '200':
+          description: Passkeys (Biometrics) authentication finished successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/webAuthnRegisterFinishRsp'
+        default:
+          $ref: '#/components/responses/error'
+
+  /v1/webauthn/credential:
+    get:
+      description: Lists webauthn credentials users
+      operationId: WebAuthnCredentialList
+      tags:
+        - Passkeys (Biometrics)
+      security:
+        - projectID: [ ]
+        - basicAuth: [ ]
+        - bearerAuth: [ ]
+      parameters:
+        - $ref: 'common.yml#/components/parameters/remoteAddress'
+        - $ref: 'common.yml#/components/parameters/userAgent'
+        - $ref: 'common.yml#/components/parameters/sort'
+        - $ref: 'common.yml#/components/parameters/filter'
+        - $ref: 'common.yml#/components/parameters/page'
+        - $ref: 'common.yml#/components/parameters/pageSize'
+      responses:
+        '200':
+          description: Webauthn credential list successfully retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/webAuthnCredentialListRsp'
+        default:
+          $ref: '#/components/responses/error'
+
+  /v1/webauthn/credential/exists:
+    post:
+      description: Checks if active webauthn credential exists for provided user and device
+      operationId: WebAuthnCredentialExists
+      tags:
+        - Passkeys (Biometrics)
+      security:
+        - projectID: [ ]
+        - basicAuth: [ ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/webAuthnCredentialExistsReq'
+      responses:
+        '200':
+          description: Passkeys (Biometrics) credentials check completed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/webAuthnCredentialExistsRsp'
+        default:
+          $ref: '#/components/responses/error'
+
+  /v1/webauthn/credential/{credentialID}:
+    put:
+      description: Update credential
+      operationId: WebAuthnCredentialUpdate
+      tags:
+        - Passkeys (Biometrics)
+      security:
+        - projectID: [ ]
+        - basicAuth: [ ]
+      parameters:
+        - name: credentialID
+          in: path
+          description: ID of credential
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/webAuthnCredentialReq'
+      responses:
+        '200':
+          description: Passkeys (Biometrics) authentication started successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/webAuthnCredentialRsp'
+        default:
+          $ref: '#/components/responses/error'
+
+  /v1/webauthn/authenticator/{authenticatorID}:
+    put:
+      description: Update authenticator
+      operationId: WebAuthnAuthenticatorUpdate
+      tags:
+        - Passkeys (Biometrics)
+      security:
+        - projectID: [ ]
+        - basicAuth: [ ]
+      parameters:
+        - name: authenticatorID
+          in: path
+          description: ID of authenticator
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/webAuthnAuthenticatorUpdateReq'
+      responses:
+        '200':
+          $ref: '#/components/responses/200'
+        default:
+          $ref: '#/components/responses/error'
+
+  /v1/webauthn/authenticate/start:
+    post:
+      description: Starts authentication of a user for Passkeys (Biometrics)
+      operationId: WebAuthnAuthenticateStart
+      tags:
+        - Passkeys (Biometrics)
+      security:
+        - projectID: [ ]
+        - basicAuth: [ ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/webAuthnAuthenticateStartReq'
+      responses:
+        '200':
+          description: Passkeys (Biometrics) authentication started successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/webAuthnAuthenticateStartRsp'
+        default:
+          $ref: '#/components/responses/error'
+
+  /v1/webauthn/authenticate/finish:
+    post:
+      description: Completes authentication of a user for Passkeys (Biometrics)
+      operationId: WebAuthnAuthenticateFinish
+      tags:
+        - Passkeys (Biometrics)
+      security:
+        - projectID: [ ]
+        - basicAuth: [ ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/webAuthnFinishReq'
+      responses:
+        '200':
+          description: Passkeys (Biometrics) authentication finished successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/webAuthnAuthenticateFinishRsp'
+        default:
+          $ref: '#/components/responses/error'
+
+  /v1/webauthn/mediation/start:
+    post:
+      description: Starts mediation for Passkeys (Biometrics)
+      operationId: WebAuthnMediationStart
+      tags:
+        - Passkeys (Biometrics)
+      security:
+        - projectID: [ ]
+        - basicAuth: [ ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/webAuthnMediationStartReq'
+      responses:
+        '200':
+          description: Passkeys (Biometrics) mediation started successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/webAuthnMediationStartRsp'
+        default:
+          $ref: '#/components/responses/error'
+
+  /v1/webauthn/associate/start:
+    post:
+      description: Starts association token flow for Passkeys (Biometrics)
+      operationId: WebAuthnAssociateStart
+      tags:
+        - Passkeys (Biometrics)
+      security:
+        - projectID: [ ]
+        - basicAuth: [ ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/webAuthnAssociateStartReq'
+      responses:
+        '200':
+          description: Passkeys (Biometrics) association started successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/webAuthnAssociateStartRsp'
+        default:
+          $ref: '#/components/responses/error'
+
+  /v1/webauthn/settings:
+    get:
+      description: Lists all settings for Passkeys (Biometrics)
+      operationId: WebAuthnSettingList
+      tags:
+        - Passkeys (Biometrics)
+      security:
+        - projectID: [ ]
+        - bearerAuth: [ ]
+        - basicAuth: [ ]
+      parameters:
+        - $ref: 'common.yml#/components/parameters/remoteAddress'
+        - $ref: 'common.yml#/components/parameters/userAgent'
+        - $ref: 'common.yml#/components/parameters/sort'
+        - $ref: 'common.yml#/components/parameters/filter'
+        - $ref: 'common.yml#/components/parameters/page'
+        - $ref: 'common.yml#/components/parameters/pageSize'
+      responses:
+        '200':
+          description: 'Contains a list of all Passkeys (Biometrics) settings'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/webauthnSettingListRsp'
+        default:
+          $ref: '#/components/responses/error'
+
+    post:
+      description: Creates a new setting for Passkeys (Biometrics)
+      operationId: WebAuthnSettingCreate
+      tags:
+        - Passkeys (Biometrics)
+      security:
+        - projectID: [ ]
+        - bearerAuth: [ ]
+        - basicAuth: [ ]
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/webauthnSettingCreateReq'
+      responses:
+        '200':
+          description: Passkeys (Biometrics) setting successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/webauthnSettingCreateRsp'
+        default:
+          $ref: '#/components/responses/error'
+
+  /v1/webauthn/settings/{settingID}:
+    get:
+      description: Gets a setting by id for Passkeys (Biometrics)
+      operationId: WebAuthnSettingGet
+      tags:
+        - Passkeys (Biometrics)
+      parameters:
+        - in: path
+          required: true
+          name: settingID
+          schema:
+            type: string
+          description: 'ID from create'
+          example: 'pwa-abc123'
+      security:
+        - projectID: [ ]
+        - bearerAuth: [ ]
+        - basicAuth: [ ]
+      responses:
+        '200':
+          description: 'Contains a Passkeys (Biometrics) setting'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/webauthnSettingGetRsp'
+        default:
+          $ref: '#/components/responses/error'
+    put:
+      description: Updates a setting by id for Passkeys (Biometrics)
+      operationId: WebAuthnSettingPut
+      tags:
+        - Passkeys (Biometrics)
+      parameters:
+        - in: path
+          required: true
+          name: settingID
+          schema:
+            type: string
+          description: 'ID from create'
+          example: 'pwa-abc123'
+      security:
+        - projectID: [ ]
+        - bearerAuth: [ ]
+        - basicAuth: [ ]
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/webauthnSettingUpdateReq'
+      responses:
+        '200':
+          description: 'Contains a Passkeys (Biometrics) setting'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/webauthnSettingUpdateRsp'
+        default:
+          $ref: '#/components/responses/error'
+
+    delete:
+      description: Deletes a setting by id for Passkeys (Biometrics)
+      operationId: WebAuthnSettingDelete
+      tags:
+        - Passkeys (Biometrics)
+      parameters:
+        - in: path
+          required: true
+          name: settingID
+          schema:
+            type: string
+          description: 'ID from create'
+          example: 'pwa-abc123'
+      security:
+        - projectID: [ ]
+        - bearerAuth: [ ]
+        - basicAuth: [ ]
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/webauthnSettingDeleteReq'
+      responses:
+        '200':
+          $ref: '#/components/responses/200'
+        default:
+          $ref: '#/components/responses/error'
+
+  ###################################################################
+  # Paths: Tracking                                                 #
+  ###################################################################
+  /v1/tracking:
+    get:
+      description: Provides project's passkeys raw tracking data per visitor
+      operationId: TrackingAllRequest
+      security:
+        - projectID: [ ]
+        - bearerAuth: [ ]
+        - basicAuth: [ ]
+      tags:
+        - Analyzer
+      parameters:
+        - $ref: 'common.yml#/components/parameters/remoteAddress'
+        - $ref: 'common.yml#/components/parameters/userAgent'
+        - $ref: 'common.yml#/components/parameters/sort'
+        - $ref: 'common.yml#/components/parameters/filter'
+        - $ref: 'common.yml#/components/parameters/page'
+        - $ref: 'common.yml#/components/parameters/pageSize'
+      responses:
+        '200':
+          description: 'Contains a list of raw tracking data per vistor'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/trackingRawListRsp'
+
+  /v1/tracking/stats:
+    get:
+      description: Provides aggregated statstics for project's passkeys tracking data
+      operationId: TrackingStatsList
+      security:
+        - projectID: [ ]
+        - bearerAuth: [ ]
+        - basicAuth: [ ]
+      tags:
+        - Analyzer
+      parameters:
+        - $ref: 'common.yml#/components/parameters/remoteAddress'
+        - $ref: 'common.yml#/components/parameters/userAgent'
+        - $ref: 'common.yml#/components/parameters/sort'
+        - $ref: 'common.yml#/components/parameters/filter'
+        - $ref: 'common.yml#/components/parameters/page'
+        - $ref: 'common.yml#/components/parameters/pageSize'
+        - $ref: '#/components/parameters/granularity'
+      responses:
+        '200':
+          description: 'Contains a list of all aggregated statistics for tracking data'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/trackingStatsListRsp'
+
+  /v1/tracking/stats/detailed:
+    get:
+      description: Provides detailed tracking data
+      operationId: TrackingDetailedStatsList
+      security:
+        - projectID: [ ]
+        - bearerAuth: [ ]
+        - basicAuth: [ ]
+      tags:
+        - Analyzer
+      parameters:
+        - $ref: 'common.yml#/components/parameters/remoteAddress'
+        - $ref: 'common.yml#/components/parameters/userAgent'
+        - $ref: 'common.yml#/components/parameters/sort'
+        - $ref: 'common.yml#/components/parameters/filter'
+        - $ref: 'common.yml#/components/parameters/page'
+        - $ref: 'common.yml#/components/parameters/pageSize'
+        - $ref: '#/components/parameters/granularity'
+      responses:
+        '200':
+          description: 'Contains a list of all tracking data'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/trackingDetailedStatsListRsp'
+
+  /v1/tracking/browser/stats:
+    get:
+      description: Provides browser tracking data
+      operationId: TrackingBrowserStatsList
+      security:
+        - projectID: [ ]
+        - bearerAuth: [ ]
+        - basicAuth: [ ]
+      tags:
+        - Analyzer
+      parameters:
+        - $ref: 'common.yml#/components/parameters/remoteAddress'
+        - $ref: 'common.yml#/components/parameters/userAgent'
+        - $ref: 'common.yml#/components/parameters/sort'
+        - $ref: 'common.yml#/components/parameters/filter'
+        - $ref: 'common.yml#/components/parameters/page'
+        - $ref: 'common.yml#/components/parameters/pageSize'
+        - $ref: '#/components/parameters/granularity'
+      responses:
+        '200':
+          description: 'Contains a list of aggregated browser tracking data'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/trackingBrowserStatsListRsp'
+
+  /v1/tracking/browser/stats/detailed:
+    get:
+      description: Provides detailed browser tracking data
+      operationId: TrackingBrowserDetailedStatsList
+      security:
+        - projectID: [ ]
+        - bearerAuth: [ ]
+        - basicAuth: [ ]
+      tags:
+        - Analyzer
+      parameters:
+        - $ref: 'common.yml#/components/parameters/remoteAddress'
+        - $ref: 'common.yml#/components/parameters/userAgent'
+        - $ref: 'common.yml#/components/parameters/sort'
+        - $ref: 'common.yml#/components/parameters/filter'
+        - $ref: 'common.yml#/components/parameters/page'
+        - $ref: 'common.yml#/components/parameters/pageSize'
+        - $ref: '#/components/parameters/granularity'
+      responses:
+        '200':
+          description: 'Contains a list of all browser tracking data'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/trackingBrowserDetailedStatsListRsp'
+
+  /v1/tracking/os/stats:
+    get:
+      description: Provides os tracking data
+      operationId: TrackingOSStatsList
+      security:
+        - projectID: [ ]
+        - bearerAuth: [ ]
+        - basicAuth: [ ]
+      tags:
+        - Analyzer
+      parameters:
+        - $ref: 'common.yml#/components/parameters/remoteAddress'
+        - $ref: 'common.yml#/components/parameters/userAgent'
+        - $ref: 'common.yml#/components/parameters/sort'
+        - $ref: 'common.yml#/components/parameters/filter'
+        - $ref: 'common.yml#/components/parameters/page'
+        - $ref: 'common.yml#/components/parameters/pageSize'
+        - $ref: '#/components/parameters/granularity'
+      responses:
+        '200':
+          description: 'Contains a list of aggregated OS tracking data'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/trackingOSStatsListRsp'
+
+  /v1/tracking/os/stats/detailed:
+    get:
+      description: Provides detailed OS tracking data
+      operationId: TrackingOSDetailedStatsList
+      security:
+        - projectID: [ ]
+        - bearerAuth: [ ]
+        - basicAuth: [ ]
+      tags:
+        - Analyzer
+      parameters:
+        - $ref: 'common.yml#/components/parameters/remoteAddress'
+        - $ref: 'common.yml#/components/parameters/userAgent'
+        - $ref: 'common.yml#/components/parameters/sort'
+        - $ref: 'common.yml#/components/parameters/filter'
+        - $ref: 'common.yml#/components/parameters/page'
+        - $ref: 'common.yml#/components/parameters/pageSize'
+        - $ref: '#/components/parameters/granularity'
+      responses:
+        '200':
+          description: 'Contains a list of all OS tracking data'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/trackingOSDetailedStatsListRsp'
+
+  /v1/tracking/enums:
+    get:
+      description: Provides tracking enum values
+      operationId: TrackingEnumsGet
+      security:
+        - projectID: [ ]
+        - bearerAuth: [ ]
+        - basicAuth: [ ]
+      tags:
+        - Analyzer
+      parameters:
+        - $ref: 'common.yml#/components/parameters/remoteAddress'
+        - $ref: 'common.yml#/components/parameters/userAgent'
+      responses:
+        '200':
+          description: 'Contains tracking enum values'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/trackingEnumsGetRsp'
+
+  /v1/tracking/backupState:
+    get:
+      description: Provides tracking credential backup state data
+      operationId: TrackingBackupStateGet
+      security:
+        - projectID: [ ]
+        - bearerAuth: [ ]
+        - basicAuth: [ ]
+      tags:
+        - Analyzer
+      parameters:
+        - $ref: 'common.yml#/components/parameters/remoteAddress'
+        - $ref: 'common.yml#/components/parameters/userAgent'
+      responses:
+        '200':
+          description: 'Contains tracking credential backup state data'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/trackingBackupStateGetRsp'
+
+  ###################################################################
+  # Paths: Project config                                           #
+  ###################################################################
+  /v1/projectConfig:
+    post:
+      description: Saves project config
+      operationId: ProjectConfigSave
+      tags:
+        - Project config
+      security:
+        - projectID: [ ]
+        - basicAuth: [ ]
+        - bearerAuth: [ ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/projectConfigSaveReq'
+      responses:
+        '200':
+          description: Project config successfully saved
+          content:
+            application/json:
+              schema:
+                $ref: 'common.yml#/components/schemas/genericRsp'
+        default:
+          $ref: '#/components/responses/error'
+    get:
+      description: Retrieves project config by projectID inferred from authentication
+      operationId: ProjectConfigGet
+      tags:
+        - Project config
+      security:
+        - projectID: [ ]
+        - basicAuth: [ ]
+        - bearerAuth: [ ]
+      responses:
+        '200':
+          description: Project config successfully retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/projectConfigGetRsp'
+        default:
+          $ref: '#/components/responses/error'
+
+  /v1/projectConfig/testWebhook:
+    put:
+      description: Tests webhook backend
+      operationId: ProjectConfigWebhookTest
+      tags:
+        - Project config
+      security:
+        - projectID: [ ]
+        - basicAuth: [ ]
+        - bearerAuth: [ ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/projectConfigWebhookTestReq'
+      responses:
+        '200':
+          description: Validation result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/projectConfigWebhookTestRsp'
+        default:
+          $ref: '#/components/responses/error'
+
+  ###################################################################
+  # Paths: Email templates                                          #
+  ###################################################################
+  /v1/emailTemplates:
+    post:
+      description: Creates a new email template
+      operationId: EmailTemplateCreate
+      tags:
+        - Email templates
+      security:
+        - projectID: [ ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/emailTemplateCreateReq'
+      responses:
+        '200':
+          description: Email template successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/emailTemplateCreateRsp'
+        default:
+          $ref: '#/components/responses/error'
+
+  /v1/emailTemplates/{emailTemplateID}:
+    delete:
+      description: Deletes an email template
+      operationId: EmailTemplateDelete
+      tags:
+        - Email templates
+      security:
+        - projectID: [ ]
+      parameters:
+        - $ref: '#/components/parameters/emailTemplateID'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/emailTemplateDeleteReq'
+      responses:
+        '200':
+          $ref: '#/components/responses/200'
+        default:
+          $ref: '#/components/responses/error'
+
+  ###################################################################
+  # Paths: Examples                                                 #
+  ###################################################################
+  /v1/examples/{fileName}:
+    get:
+      description: Retrieves file containing the named example project
+      operationId: ExampleGet
+      parameters:
+        - name: fileName
+          in: path
+          description: Name of the example to get
+          required: true
+          schema:
+            type: string
+            enum:
+              [
+                'webcomponent-php-symfony.zip',
+                'webcomponent-php-symfony.tar.gz',
+              ]
+      tags:
+        - Examples
+      security:
+        - projectID: [ ]
+        - basicAuth: [ ]
+        - bearerAuth: [ ]
+      responses:
+        '200':
+          description: Example project successfully retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/exampleGetRsp'
+        default:
+          $ref: '#/components/responses/error'
+
+  ###################################################################
+  # Paths: SMS templates                                          #
+  ###################################################################
+  /v1/smsTemplates:
+    post:
+      description: Creates a new SMS template
+      operationId: SmsTemplateCreate
+      tags:
+        - SMS templates
+      security:
+        - projectID: [ ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/smsTemplateCreateReq'
+      responses:
+        '200':
+          description: SMS template successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/smsTemplateCreateRsp'
+        default:
+          $ref: '#/components/responses/error'
+
+  /v1/smsTemplates/{smsTemplateID}:
+    delete:
+      description: Deletes an SMS template
+      operationId: SmsTemplateDelete
+      tags:
+        - SMS templates
+      security:
+        - projectID: [ ]
+      parameters:
+        - $ref: '#/components/parameters/smsTemplateID'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/smsTemplateDeleteReq'
+      responses:
+        '200':
+          $ref: '#/components/responses/200'
+        default:
+          $ref: '#/components/responses/error'
+
+  ###################################################################
+  # Paths: iOS App                                                  #
+  ###################################################################
+  /v1/iosappconfig:
+    get:
+      description: Lists iOS App Configs for a project
+      operationId: iOSAppConfigGet
+      tags:
+        - iOS App Config
+      security:
+        - projectID: [ ]
+        - bearerAuth: [ ]
+        - basicAuth: [ ]
+      responses:
+        '200':
+          description: iOS App Config List successfully retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/iOSAppConfigListRsp'
+        default:
+          $ref: '#/components/responses/error'
+
+    post:
+      description: Creates a new iOS App Config
+      operationId: iOSAppConfigCreate
+      tags:
+        - iOS App Config
+      security:
+        - projectID: [ ]
+        - bearerAuth: [ ]
+        - basicAuth: [ ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/iOSAppConfigSaveReq'
+      responses:
+        '200':
+          description: iOS App successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/iOSAppConfigSaveRsp'
+        default:
+          $ref: '#/components/responses/error'
+
+  /v1/iosappconfig/{iosAppConfigID}:
+    put:
+      description: Updates an iOS app config by id
+      operationId: IOSAppConfigPut
+      tags:
+        - iOS App Config
+      parameters:
+        - in: path
+          required: true
+          name: iosAppConfigID
+          schema:
+            type: string
+          description: 'ID from iOS config create'
+          example: 'ios-abc123'
+      security:
+        - projectID: [ ]
+        - bearerAuth: [ ]
+        - basicAuth: [ ]
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/iOSAppConfigUpdateReq'
+      responses:
+        '200':
+          description: 'Contains iOS app config'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/iOSAppConfigUpdateRsp'
+        default:
+          $ref: '#/components/responses/error'
+    delete:
+      description: Deletes an iOS App Config
+      operationId: iOSAppConfigDelete
+      tags:
+        - iOS App Config
+      security:
+        - projectID: [ ]
+        - bearerAuth: [ ]
+        - basicAuth: [ ]
+      parameters:
+        - in: path
+          required: true
+          name: iosAppConfigID
+          schema:
+            type: string
+          description: 'iOS App Config ID from create'
+          example: 'ios-abc123'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/iOSAppConfigDeleteReq'
+      responses:
+        '200':
+          $ref: '#/components/responses/200'
+        default:
+          $ref: '#/components/responses/error'
+
+  ###################################################################
+  # Paths: Android App                                              #
+  ###################################################################
+  /v1/androidappconfig:
+    get:
+      description: Lists Android App Configurations for a project
+      operationId: AndroidAppConfigGet
+      tags:
+        - Android App Config
+      security:
+        - projectID: [ ]
+        - bearerAuth: [ ]
+        - basicAuth: [ ]
+      responses:
+        '200':
+          description: Android App Config List successfully retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/androidAppConfigListRsp'
+        default:
+          $ref: '#/components/responses/error'
+
+    post:
+      description: Creates a new Android App Configuration
+      operationId: AndroidAppConfigCreate
+      tags:
+        - Android App Config
+      security:
+        - projectID: [ ]
+        - bearerAuth: [ ]
+        - basicAuth: [ ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/androidAppConfigSaveReq'
+      responses:
+        '200':
+          description: Android App Config successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/androidAppConfigSaveRsp'
+        default:
+          $ref: '#/components/responses/error'
+
+  /v1/androidappconfig/{androidAppConfigID}:
+    put:
+      description: Updates an Android app config by id
+      operationId: AndroidAppConfigPut
+      tags:
+        - Android App Config
+      parameters:
+        - in: path
+          required: true
+          name: androidAppConfigID
+          schema:
+            type: string
+          description: 'ID from Android config create'
+          example: 'and-abc123'
+      security:
+        - projectID: [ ]
+        - bearerAuth: [ ]
+        - basicAuth: [ ]
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/androidAppConfigUpdateReq'
+      responses:
+        '200':
+          description: 'Contains Android app config'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/androidAppConfigUpdateRsp'
+        default:
+          $ref: '#/components/responses/error'
+    delete:
+      description: Deletes an Android App Config
+      operationId: AndroidAppConfigDelete
+      tags:
+        - Android App Config
+      security:
+        - projectID: [ ]
+        - bearerAuth: [ ]
+        - basicAuth: [ ]
+      parameters:
+        - in: path
+          required: true
+          name: androidAppConfigID
+          schema:
+            type: string
+          description: 'Android App Config ID from create'
+          example: 'and-abc123'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/androidAppConfigDeleteReq'
+      responses:
+        '200':
+          $ref: '#/components/responses/200'
+        default:
+          $ref: '#/components/responses/error'
+
+  ###################################################################
+  # Paths: Sessions (version "v1")                                  #
+  ###################################################################
+  /v1/sessions:
+    post:
+      x-internal: true
+      description: Creates a new session token for provided user data
+      operationId: SessionTokenCreate
+      tags:
+        - Auth Tokens
+      security:
+        - projectID: [ ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/sessionTokenCreateReq'
+      responses:
+        '200':
+          description: Session token successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/sessionTokenCreateRsp'
+        default:
+          $ref: '#/components/responses/error'
+
+  /v1/sessions/verify:
+    post:
+      x-internal: true
+      description: Verifies session token and returns attached user data
+      operationId: SessionTokenVerify
+      tags:
+        - Auth Tokens
+      security:
+        - projectID: [ ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/sessionTokenVerifyReq'
+      responses:
+        '200':
+          description: Session token successfully verified
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/sessionTokenVerifyRsp'
+        default:
+          $ref: '#/components/responses/error'
+
+  ###################################################################
+  # Paths: Auth token (Own session management)                      #
+  ###################################################################
+  /v1/authTokens/validate:
+    post:
+      description: Validates auth token and returns attached user data
+      operationId: AuthTokenValidate
+      tags:
+        - Auth Tokens
+      security:
+        - projectID: [ ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/authTokenValidateReq'
+      responses:
+        '200':
+          description: Auth token successfully validated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/authTokenValidateRsp'
+        default:
+          $ref: '#/components/responses/error'
+
+  ###################################################################
+  # Paths: Session config (Corbado session management)              #
+  ###################################################################
+  /v1/sessionConfig:
+    put:
+      description: Updates session config
+      operationId: SessionConfigUpdate
+      tags:
+        - Session config
+      security:
+        - projectID: [ ]
+        - basicAuth: [ ]
+        - bearerAuth: [ ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/sessionConfigUpdateReq'
+      responses:
+        '200':
+          description: Session config successfully saved
+          content:
+            application/json:
+              schema:
+                $ref: 'common.yml#/components/schemas/genericRsp'
+        default:
+          $ref: '#/components/responses/error'
+    get:
+      description: Retrieves session config by projectID inferred from authentication
+      operationId: SessionConfigGet
+      tags:
+        - Session config
+      security:
+        - projectID: [ ]
+        - basicAuth: [ ]
+        - bearerAuth: [ ]
+      parameters:
+        - $ref: '#/components/parameters/appType'
+      responses:
+        '200':
+          description: Session config successfully retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/sessionConfigGetRsp'
+        default:
+          $ref: '#/components/responses/error'
+
+  ###################################################################
+  # Paths: Long sessions (Corbado session management)               #
+  ###################################################################
+  /v1/longSessions:
+    get:
+      description: Lists long sessions by provided filters
+      operationId: LongSessionList
+      security:
+        - projectID: [ ]
+        - bearerAuth: [ ]
+        - basicAuth: [ ]
+      tags:
+        - Long sessions
+      parameters:
+        - $ref: 'common.yml#/components/parameters/remoteAddress'
+        - $ref: 'common.yml#/components/parameters/userAgent'
+        - $ref: 'common.yml#/components/parameters/sort'
+        - $ref: 'common.yml#/components/parameters/filter'
+        - $ref: 'common.yml#/components/parameters/page'
+        - $ref: 'common.yml#/components/parameters/pageSize'
+      responses:
+        '200':
+          description: 'Contains a list of long sessions'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/longSessionListRsp'
+
+  /v1/longSessions/{sessionID}:
+    get:
+      description: Get a long session by sessionID
+      operationId: LongSessionGet
+      tags:
+        - Long sessions
+      security:
+        - projectID: [ ]
+        - basicAuth: [ ]
+      parameters:
+        - $ref: 'common.yml#/components/parameters/sessionID'
+      responses:
+        '200':
+          description: Contains details of a long session
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/longSessionGetRsp'
+        default:
+          $ref: '#/components/responses/error'
+
+  /v1/longSessions/{sessionID}/revoke:
+    put:
+      description: Revokes an active long session by sessionID
+      operationId: LongSessionRevoke
+      tags:
+        - Long sessions
+      security:
+        - projectID: [ ]
+        - basicAuth: [ ]
+      parameters:
+        - $ref: 'common.yml#/components/parameters/sessionID'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/longSessionRevokeReq'
+      responses:
+        '200':
+          $ref: '#/components/responses/200'
+        default:
+          $ref: '#/components/responses/error'
+
+  ###################################################################
+  # Paths: Association Tokens                                       #
+  ###################################################################
+  /v1/associationTokens:
+    post:
+      description: Creates a new association token
+      operationId: AssociationTokenCreate
+      tags:
+        - Association Tokens
+      security:
+        - projectID: [ ]
+        - bearerAuth: [ ]
+        - basicAuth: [ ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/associationTokenCreateReq'
+      responses:
+        '200':
+          description: Association token successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/associationTokenCreateRsp'
+        default:
+          $ref: '#/components/responses/error'
+
+components:
+  ###################################################################
+  # Security schemes                                                #
+  ###################################################################
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+    projectID:
+      in: header
+      name: X-Corbado-ProjectID
+      type: apiKey
+  ###################################################################
+  # Parameters                                                      #
+  ###################################################################
+  parameters:
+    emailLinkID:
+      name: emailLinkID
+      in: path
+      description: ID of email magic link
+      required: true
+      schema:
+        type: string
+
+    emailCodeID:
+      name: emailCodeID
+      in: path
+      description: ID of email OTP
+      required: true
+      schema:
+        type: string
+
+    smsCodeID:
+      name: smsCodeID
+      in: path
+      description: ID of SMS OTP
+      required: true
+      schema:
+        type: string
+
+    requestID:
+      name: requestID
+      in: path
+      description: ID of request
+      required: true
+      schema:
+        type: string
+
+    remoteAddress:
+      name: remoteAddress
+      in: query
+      description: Client's remote address
+      required: false
+      schema:
+        type: string
+
+    userAgent:
+      name: userAgent
+      in: query
+      description: Client's user agent
+      required: false
+      schema:
+        type: string
+
+    userID:
+      name: userID
+      in: path
+      description: ID of user
+      required: true
+      schema:
+        type: string
+
+    emailID:
+      name: emailID
+      in: path
+      description: ID of email
+      required: true
+      schema:
+        type: string
+
+    phoneNumberID:
+      name: phoneNumberID
+      in: path
+      description: ID of phone number
+      required: true
+      schema:
+        type: string
+
+    customLoginIdentifierID:
+      name: customLoginIdentifierID
+      in: path
+      description: ID of custom login identifier
+      required: true
+      schema:
+        type: string
+
+    emailTemplateID:
+      name: emailTemplateID
+      in: path
+      description: ID of email template
+      required: true
+      schema:
+        type: string
+
+    smsTemplateID:
+      name: smsTemplateID
+      in: path
+      description: ID of SMS template
+      required: true
+      schema:
+        type: string
+
+    granularity:
+      name: granularity
+      in: query
+      description: Data granularity
+      required: true
+      schema:
+        type: string
+
+    appType:
+      name: appType
+      in: query
+      description: Application type
+      required: false
+      schema:
+        $ref: 'common.yml#/components/schemas/appType'
+
+  schemas:
+    ###################################################################
+    # Schemas: Frequent used                                          #
+    ###################################################################
+    webhookID:
+      description: Unique ID of webhook request which will be randomly generated on server side
+      type: string
+      example: 'Zwho-557...663'
+
+    ###################################################################
+    # Schemas: Project secrets                                        #
+    ###################################################################
+    projectSecretCreateReq:
+      type: object
+      properties:
+        requestID:
+          $ref: 'common.yml#/components/schemas/requestID'
+        clientInfo:
+          $ref: 'common.yml#/components/schemas/clientInfo'
+
+    projectSecretCreateRsp:
+      allOf:
+        - $ref: 'common.yml#/components/schemas/genericRsp'
+        - $ref: '#/components/schemas/projectSecretItem'
+
+    projectSecretListRsp:
+      allOf:
+        - $ref: 'common.yml#/components/schemas/genericRsp'
+        - type: object
+          # TODO this response isn't our "conventional" response. Need to refactor it. Backward incompatible change
+          required:
+            - paging
+            - rows
+          properties:
+            rows:
+              type: array
+              items:
+                $ref: '#/components/schemas/projectSecretItem'
+            paging:
+              $ref: 'common.yml#/components/schemas/paging'
+
+    projectSecretDeleteReq:
+      type: object
+      properties:
+        requestID:
+          $ref: 'common.yml#/components/schemas/requestID'
+        clientInfo:
+          $ref: 'common.yml#/components/schemas/clientInfo'
+
+    projectSecretItem:
+      type: object
+      required:
+        - id
+        - hint
+        - created
+      properties:
+        id:
+          type: string
+          description: 'ID of project secret'
+          example: 'pse-abc123'
+        secret:
+          type: string
+          description: 'Server-side generated secret. Only filled on create'
+          example: 'asdasd!§"8787.!'
+        hint:
+          type: string
+          description: 'Hint of the server-side generated secret. First 3 characters and last 3 characters'
+          example: 'asd....7.!'
+        created:
+          $ref: 'common.yml#/components/schemas/created'
+
+    ###################################################################
+    # Schemas: Auth Methods                                           #
+    ###################################################################
+    authMethodsListReq:
+      type: object
+      required:
+        - clientInfo
+        - username
+      properties:
+        username:
+          description: Client's username
+          type: string
+        requestID:
+          $ref: 'common.yml#/components/schemas/requestID'
+        clientInfo:
+          $ref: 'common.yml#/components/schemas/clientInfo'
+
+    authMethodsListRsp:
+      allOf:
+        - $ref: 'common.yml#/components/schemas/genericRsp'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              type: object
+              required:
+                - selectMethods
+                - possibleMethods
+                - paging
+              properties:
+                selectMethods:
+                  $ref: 'common.yml#/components/schemas/authMethods'
+                possibleMethods:
+                  $ref: 'common.yml#/components/schemas/authMethods'
+                paging:
+                  $ref: 'common.yml#/components/schemas/paging'
+
+    userAuthLogListRsp:
+      allOf:
+        - $ref: 'common.yml#/components/schemas/genericRsp'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              type: object
+              required:
+                - rows
+                - paging
+              properties:
+                rows:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/userAuthLog'
+                paging:
+                  $ref: 'common.yml#/components/schemas/paging'
+
+    userAuthLog:
+      type: object
+      required:
+        - userID
+        - userName
+        - method
+        - eventType
+        - status
+        - created
+      properties:
+        userID:
+          $ref: 'common.yml#/components/schemas/userID'
+        userName:
+          type: string
+        method:
+          type: string
+        eventType:
+          type: string
+        status:
+          type: string
+        created:
+          $ref: 'common.yml#/components/schemas/created'
+
+    ###################################################################
+    # Schemas: Examples                                      #
+    ###################################################################
+    exampleGetRsp:
+      allOf:
+        - $ref: 'common.yml#/components/schemas/genericRsp'
+        - type: object
+          required:
+            - data
+            - extension
+          properties:
+            data:
+              type: string
+              description: Base64 encoded data containing the compressed example file
+            extension:
+              type: string
+              description: The extension of the compressed example file
+              enum: [ 'zip', 'tar.gz' ]
+
+    ###################################################################
+    # Schemas: SMS codes                                              #
+    ###################################################################
+    smsCodeSendReq:
+      type: object
+      required:
+        - phoneNumber
+        - create
+      properties:
+        phoneNumber:
+          description: Recipient phone number
+          type: string
+          example: '017612345678'
+        create:
+          description: Defines if user phone number should be created if not found
+          type: boolean
+        userFullName:
+          description: Optional user's full name to be used if the user wasn't found and needs to be created first
+          type: string
+        templateName:
+          description: Template name of SMS to send
+          type: string
+          example: 'true'
+        requestID:
+          $ref: 'common.yml#/components/schemas/requestID'
+        clientInfo:
+          $ref: 'common.yml#/components/schemas/clientInfo'
+
+    smsCodeSendRsp:
+      allOf:
+        - $ref: 'common.yml#/components/schemas/genericRsp'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              type: object
+              required:
+                - smsCodeID
+              properties:
+                smsCodeID:
+                  type: string
+                  example: 'sms-162...843'
+
+    smsCodeValidateReq:
+      type: object
+      required:
+        - smsCode
+      properties:
+        smsCode:
+          type: string
+          description: SMS OTP to validate
+          example: '123456'
+        createLoginToken:
+          type: boolean
+        requestID:
+          $ref: 'common.yml#/components/schemas/requestID'
+        clientInfo:
+          $ref: 'common.yml#/components/schemas/clientInfo'
+
+    smsCodeValidateRsp:
+      allOf:
+        - $ref: 'common.yml#/components/schemas/genericRsp'
+        - type: object
+          properties:
+            loginToken:
+              type: string
+
+    ###################################################################
+    # Schemas: Email links                                            #
+    ###################################################################
+    emailLinkSendReq:
+      type: object
+      required:
+        - email
+        - create
+        - redirect
+      properties:
+        email:
+          description: Recipient email address
+          type: string
+          example: 'example@mail.com'
+        create:
+          description: Defines if user email should be created if not found
+          type: boolean
+        tokenLifetime:
+          description: Defines the lifetime of the token that needs to be validated
+          type: string
+          example: '5m'
+        userFullName:
+          description: Optional user's full name to be used if the user wasn't found and needs to be created first
+          type: string
+        templateName:
+          description: Template name of email to send
+          type: string
+          example: 'email_login_user'
+        purpose:
+          type: string
+          enum: [ 'authentication', 'confirmation', 'invitation' ]
+          default: 'authentication'
+          description: Purpose of the email link
+        redirect:
+          description: Redirect target after user clicks on email magic link
+          type: string
+          format: uri
+        additionalPayload:
+          $ref: 'common.yml#/components/schemas/additionalPayload'
+        requestID:
+          $ref: 'common.yml#/components/schemas/requestID'
+        clientInfo:
+          $ref: 'common.yml#/components/schemas/clientInfo'
+
+    emailLinkSendRsp:
+      allOf:
+        - $ref: 'common.yml#/components/schemas/genericRsp'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              type: object
+              required:
+                - emailLinkID
+              properties:
+                emailLinkID:
+                  type: string
+                  example: 'eml-146...452'
+
+    emailLinksValidateReq:
+      type: object
+      required:
+        - token
+      properties:
+        token:
+          type: string
+          description: Token to validate
+          example: 'fFw...Akl'
+        createLoginToken:
+          type: boolean
+        requestID:
+          $ref: 'common.yml#/components/schemas/requestID'
+        clientInfo:
+          $ref: 'common.yml#/components/schemas/clientInfo'
+
+    emailLinkGetRsp:
+      allOf:
+        - $ref: 'common.yml#/components/schemas/genericRsp'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              type: object
+              required:
+                - emailLink
+              properties:
+                emailLink:
+                  $ref: '#/components/schemas/emailLink'
+
+    emailLinkValidateRsp:
+      allOf:
+        - $ref: 'common.yml#/components/schemas/genericRsp'
+        - type: object
+          required:
+            - userID
+            - userFullName
+            - userEmail
+          properties:
+            additionalPayload:
+              $ref: 'common.yml#/components/schemas/additionalPayload'
+            userID:
+              $ref: 'common.yml#/components/schemas/userID'
+            userFullName:
+              type: string
+            userEmail:
+              type: string
+            loginToken:
+              type: string
+
+    emailLinksDeleteReq:
+      type: object
+      required:
+        - requestID
+      properties:
+        requestID:
+          $ref: 'common.yml#/components/schemas/requestID'
+        clientInfo:
+          $ref: 'common.yml#/components/schemas/clientInfo'
+
+    emailLink:
+      type: object
+      required:
+        - ID
+        - userID
+        - email
+        - created
+        - updated
+        - status
+        - additionalPayload
+      properties:
+        ID:
+          $ref: 'common.yml#/components/schemas/emailLinkID'
+        userID:
+          $ref: 'common.yml#/components/schemas/userID'
+        email:
+          type: string
+        userFullName:
+          type: string
+        purpose:
+          type: string
+        created:
+          $ref: 'common.yml#/components/schemas/created'
+        updated:
+          $ref: 'common.yml#/components/schemas/updated'
+        status:
+          description: status values of an email link
+          type: string
+          enum: [ 'active', 'confirmed' ]
+        additionalPayload:
+          $ref: 'common.yml#/components/schemas/additionalPayload'
+
+    ###################################################################
+    # Schemas: Email codes                                            #
+    ###################################################################
+    emailCodeSendReq:
+      type: object
+      required:
+        - email
+        - create
+      properties:
+        email:
+          description: Recipient email address
+          type: string
+          example: 'example@mail.com'
+        create:
+          description: Defines if user email should be created if not found
+          type: boolean
+        tokenLifetime:
+          description: Defines the lifetime of the token that needs to be validated
+          type: string
+          example: '5m'
+        userFullName:
+          description: Optional user's full name to be used if the user wasn't found and needs to be created first
+          type: string
+        templateName:
+          description: Template name of email to send
+          type: string
+          example: 'email_login_user'
+        additionalPayload:
+          $ref: 'common.yml#/components/schemas/additionalPayload'
+        requestID:
+          $ref: 'common.yml#/components/schemas/requestID'
+        clientInfo:
+          $ref: 'common.yml#/components/schemas/clientInfo'
+
+    emailCodeSendRsp:
+      allOf:
+        - $ref: 'common.yml#/components/schemas/genericRsp'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              type: object
+              required:
+                - emailCodeID
+              properties:
+                emailCodeID:
+                  type: string
+                  example: 'emc-146...452'
+
+    emailCodeValidateReq:
+      type: object
+      required:
+        - code
+      properties:
+        code:
+          type: string
+          description: Email OTP to validate
+          example: '123456'
+        createLoginToken:
+          type: boolean
+        requestID:
+          $ref: 'common.yml#/components/schemas/requestID'
+        clientInfo:
+          $ref: 'common.yml#/components/schemas/clientInfo'
+
+    emailCodeValidateRsp:
+      allOf:
+        - $ref: 'common.yml#/components/schemas/genericRsp'
+        - type: object
+          required:
+            - userID
+            - userFullName
+            - userEmail
+          properties:
+            additionalPayload:
+              $ref: 'common.yml#/components/schemas/additionalPayload'
+            userID:
+              $ref: 'common.yml#/components/schemas/userID'
+            userFullName:
+              type: string
+            userEmail:
+              type: string
+            loginToken:
+              type: string
+
+    emailCodeGetRsp:
+      allOf:
+        - $ref: 'common.yml#/components/schemas/genericRsp'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              type: object
+              required:
+                - emailCode
+              properties:
+                emailCode:
+                  $ref: '#/components/schemas/emailCode'
+
+    emailCode:
+      type: object
+      required:
+        - ID
+        - userID
+        - email
+        - additionalPayload
+        - created
+        - updated
+        - status
+      properties:
+        ID:
+          $ref: 'common.yml#/components/schemas/emailCodeID'
+        userID:
+          $ref: 'common.yml#/components/schemas/userID'
+        email:
+          type: string
+        userFullName:
+          type: string
+        additionalPayload:
+          $ref: 'common.yml#/components/schemas/additionalPayload'
+        created:
+          $ref: 'common.yml#/components/schemas/created'
+        updated:
+          $ref: 'common.yml#/components/schemas/updated'
+        status:
+          description: status values of an email OTP
+          type: string
+          enum: [ 'active', 'confirmed' ]
+
+    ###################################################################
+    # Schemas: Phone number validation                                #
+    ###################################################################
+    validatePhoneNumberReq:
+      type: object
+      required:
+        - phoneNumber
+      properties:
+        regionCode:
+          type: string
+          description: ISO country or region code
+        phoneNumber:
+          type: string
+          description: Phone number to validate
+        requestID:
+          $ref: 'common.yml#/components/schemas/requestID'
+        clientInfo:
+          $ref: 'common.yml#/components/schemas/clientInfo'
+
+    validatePhoneNumberRsp:
+      allOf:
+        - $ref: 'common.yml#/components/schemas/genericRsp'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: '#/components/schemas/phoneNumberValidationResult'
+
+    phoneNumberValidationResult:
+      type: object
+      required:
+        - isValid
+        - validationCode
+      properties:
+        isValid:
+          type: boolean
+        validationCode:
+          type: string
+          enum: [ 'valid', 'invalid_country_code', 'invalid_number', 'too_long' ]
+        phoneNumber:
+          $ref: '#/components/schemas/validationPhoneNumber'
+
+    validationPhoneNumber:
+      type: object
+      required:
+        - nationalNumber
+        - countryCode
+        - regionCode
+        - nationalFormatted
+        - internationalFormatted
+      properties:
+        nationalNumber:
+          type: integer
+        countryCode:
+          type: integer
+        regionCode:
+          type: string
+        nationalFormatted:
+          type: string
+        internationalFormatted:
+          type: string
+
+    ###################################################################
+    # Schemas: Email validation                                       #
+    ###################################################################
+    validateEmailReq:
+      type: object
+      required:
+        - email
+      properties:
+        email:
+          type: string
+          description: Email to validate
+        smtpCheck:
+          type: boolean
+          description: perform SMTP check for domain
+        suggestDomain:
+          type: boolean
+          description: enables domain suggestion for misspelled domains
+        requestID:
+          $ref: 'common.yml#/components/schemas/requestID'
+        clientInfo:
+          $ref: 'common.yml#/components/schemas/clientInfo'
+
+    validateEmailRsp:
+      allOf:
+        - $ref: 'common.yml#/components/schemas/genericRsp'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: '#/components/schemas/emailValidationResult'
+
+    emailValidationResult:
+      type: object
+      required:
+        - isValid
+        - validationCode
+      properties:
+        isValid:
+          type: boolean
+        validationCode:
+          type: string
+          enum:
+            [
+              'valid',
+              'invalid_syntax',
+              'no_such_host',
+              'not_allowed',
+              'unknown',
+            ]
+        suggestion:
+          type: string
+        email:
+          $ref: '#/components/schemas/validationEmail'
+
+    validationEmail:
+      type: object
+      required:
+        - username
+        - domain
+        - reachable
+        - disposable
+        - free
+        - hasMxRecords
+      properties:
+        username:
+          type: string
+        domain:
+          type: string
+        reachable:
+          type: string
+        disposable:
+          type: boolean
+        free:
+          type: boolean
+        hasMxRecords:
+          type: boolean
+
+    ###################################################################
+    # Schemas: User                                                   #
+    ###################################################################
+    userCreateReq:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+        fullName:
+          type: string
+        email:
+          type: string
+        phoneNumber:
+          type: string
+        requestID:
+          $ref: 'common.yml#/components/schemas/requestID'
+        clientInfo:
+          $ref: 'common.yml#/components/schemas/clientInfo'
+
+    userCreateRsp:
+      allOf:
+        - $ref: 'common.yml#/components/schemas/genericRsp'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              type: object
+              required:
+                - userID
+                - emailID
+                - phoneNumberID
+              properties:
+                userID:
+                  type: string
+                emailID:
+                  type: string
+                phoneNumberID:
+                  type: string
+
+    userGetRsp:
+      allOf:
+        - $ref: 'common.yml#/components/schemas/genericRsp'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: 'common.yml#/components/schemas/fullUser'
+
+    userListRsp:
+      allOf:
+        - $ref: 'common.yml#/components/schemas/genericRsp'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              type: object
+              required:
+                - users
+                - paging
+              properties:
+                users:
+                  type: array
+                  items:
+                    $ref: 'common.yml#/components/schemas/fullUser'
+                paging:
+                  $ref: 'common.yml#/components/schemas/paging'
+
+    userStatsListRsp:
+      allOf:
+        - $ref: 'common.yml#/components/schemas/genericRsp'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              type: object
+              required:
+                - stats
+                - paging
+              properties:
+                stats:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/userStats'
+                paging:
+                  $ref: 'common.yml#/components/schemas/paging'
+
+    userStats:
+      type: object
+      required:
+        - timePoint
+        - totalUsers
+        - signUps
+        - activeUsers
+        - countPasskeyLogin
+        - countEmailLogin
+        - countPasswordLogin
+        - successfulLogins
+        - failedLogins
+      properties:
+        timePoint:
+          type: string
+          format: yyyy-MM-dd
+        totalUsers:
+          type: integer
+        signUps:
+          type: integer
+        activeUsers:
+          type: integer
+        countPasskeyLogin:
+          type: integer
+        countEmailLogin:
+          type: integer
+        countPasswordLogin:
+          type: integer
+        successfulLogins:
+          type: integer
+        failedLogins:
+          type: integer
+
+    userDeleteReq:
+      type: object
+      properties:
+        requestID:
+          $ref: 'common.yml#/components/schemas/requestID'
+        clientInfo:
+          $ref: 'common.yml#/components/schemas/clientInfo'
+
+    userUpdateReq:
+      type: object
+      properties:
+        name:
+          type: string
+        fullName:
+          type: string
+        status:
+          type: string
+          enum: [ 'active', 'disabled' ]
+        requestID:
+          $ref: 'common.yml#/components/schemas/requestID'
+        clientInfo:
+          $ref: 'common.yml#/components/schemas/clientInfo'
+
+    userUpdateRsp:
+      allOf:
+        - $ref: 'common.yml#/components/schemas/genericRsp'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: '#/components/schemas/user'
+
+    user:
+      type: object
+      description: User entry
+      required:
+        - ID
+        - name
+        - fullName
+        - created
+        - updated
+        - status
+      properties:
+        ID:
+          $ref: 'common.yml#/components/schemas/userID'
+        name:
+          type: string
+        fullName:
+          type: string
+        created:
+          $ref: 'common.yml#/components/schemas/created'
+        updated:
+          $ref: 'common.yml#/components/schemas/updated'
+        status:
+          type: string
+
+    ###################################################################
+    # Schemas: User email                                             #
+    ###################################################################
+    userEmailCreateReq:
+      type: object
+      required:
+        - email
+      properties:
+        email:
+          type: string
+        requestID:
+          $ref: 'common.yml#/components/schemas/requestID'
+        clientInfo:
+          $ref: 'common.yml#/components/schemas/clientInfo'
+
+    userEmailCreateRsp:
+      allOf:
+        - $ref: 'common.yml#/components/schemas/genericRsp'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              type: object
+              required:
+                - emailID
+              properties:
+                emailID:
+                  type: string
+
+    userEmailGetRsp:
+      allOf:
+        - $ref: 'common.yml#/components/schemas/genericRsp'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              type: object
+              required:
+                - email
+              properties:
+                email:
+                  $ref: '#/components/schemas/email'
+
+    userEmailDeleteReq:
+      type: object
+      properties:
+        requestID:
+          $ref: 'common.yml#/components/schemas/requestID'
+        clientInfo:
+          $ref: 'common.yml#/components/schemas/clientInfo'
+
+    email:
+      type: object
+      required:
+        - ID
+        - email
+        - created
+        - updated
+        - status
+      properties:
+        ID:
+          $ref: 'common.yml#/components/schemas/emailID'
+        email:
+          type: string
+        created:
+          $ref: 'common.yml#/components/schemas/created'
+        updated:
+          $ref: 'common.yml#/components/schemas/updated'
+        deleted:
+          $ref: 'common.yml#/components/schemas/deleted'
+        status:
+          $ref: 'common.yml#/components/schemas/status'
+
+    ###################################################################
+    # Schemas: User phone number                                      #
+    ###################################################################
+    userPhoneNumberCreateReq:
+      type: object
+      required:
+        - phoneNumber
+      properties:
+        phoneNumber:
+          type: string
+        requestID:
+          $ref: 'common.yml#/components/schemas/requestID'
+        clientInfo:
+          $ref: 'common.yml#/components/schemas/clientInfo'
+
+    userPhoneNumberCreateRsp:
+      allOf:
+        - $ref: 'common.yml#/components/schemas/genericRsp'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              type: object
+              required:
+                - phoneNumberID
+              properties:
+                phoneNumberID:
+                  type: string
+
+    userPhoneNumberGetRsp:
+      allOf:
+        - $ref: 'common.yml#/components/schemas/genericRsp'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              type: object
+              required:
+                - phoneNumber
+              properties:
+                phoneNumber:
+                  $ref: '#/components/schemas/phoneNumber'
+
+    userPhoneNumberDeleteReq:
+      type: object
+      properties:
+        requestID:
+          $ref: 'common.yml#/components/schemas/requestID'
+        clientInfo:
+          $ref: 'common.yml#/components/schemas/clientInfo'
+
+    phoneNumber:
+      type: object
+      required:
+        - ID
+        - phoneNumber
+        - created
+        - updated
+        - status
+      properties:
+        ID:
+          $ref: 'common.yml#/components/schemas/phoneNumberID'
+        phoneNumber:
+          type: string
+        created:
+          $ref: 'common.yml#/components/schemas/created'
+        updated:
+          $ref: 'common.yml#/components/schemas/updated'
+        status:
+          $ref: 'common.yml#/components/schemas/status'
+
+    ###################################################################
+    # Schemas: User custom login identifiers                          #
+    ###################################################################
+    userCustomLoginIdentifierCreateReq:
+      type: object
+      required:
+        - customLoginIdentifier
+      properties:
+        customLoginIdentifier:
+          type: string
+        additionalData:
+          type: string
+          example: '{"key":"value"}'
+        requestID:
+          $ref: 'common.yml#/components/schemas/requestID'
+        clientInfo:
+          $ref: 'common.yml#/components/schemas/clientInfo'
+
+    userCustomLoginIdentifierCreateRsp:
+      allOf:
+        - $ref: 'common.yml#/components/schemas/genericRsp'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              type: object
+              required:
+                - customLoginIdentifierID
+              properties:
+                customLoginIdentifierID:
+                  type: string
+
+    userCustomLoginIdentifierGetRsp:
+      allOf:
+        - $ref: 'common.yml#/components/schemas/genericRsp'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              type: object
+              required:
+                - customLoginIdentifier
+              properties:
+                customLoginIdentifier:
+                  $ref: '#/components/schemas/customLoginIdentifier'
+
+    userCustomLoginIdentifierDeleteReq:
+      type: object
+      properties:
+        requestID:
+          $ref: 'common.yml#/components/schemas/requestID'
+        clientInfo:
+          $ref: 'common.yml#/components/schemas/clientInfo'
+
+    customLoginIdentifier:
+      type: object
+      required:
+        - ID
+        - identifier
+        - created
+        - updated
+      properties:
+        ID:
+          $ref: 'common.yml#/components/schemas/phoneNumberID'
+        identifier:
+          type: string
+        additionalData:
+          type: string
+        created:
+          $ref: 'common.yml#/components/schemas/created'
+        updated:
+          $ref: 'common.yml#/components/schemas/updated'
+
+    userDeviceListRsp:
+      allOf:
+        - $ref: 'common.yml#/components/schemas/genericRsp'
+        - type: object
+          required:
+            - devices
+            - paging
+          properties:
+            devices:
+              type: array
+              items:
+                $ref: '#/components/schemas/userDevice'
+            paging:
+              $ref: 'common.yml#/components/schemas/paging'
+
+    userDevice:
+      type: object
+      required:
+        - name
+        - fingerprint
+        - status
+        - device
+        - created
+        - browserName
+        - browserVersion
+        - osName
+        - osVersion
+      properties:
+        name:
+          type: string
+        fingerprint:
+          type: string
+        status:
+          type: string
+        device:
+          type: string
+        created:
+          type: string
+        browserName:
+          type: string
+        browserVersion:
+          type: string
+        osName:
+          type: string
+        osVersion:
+          type: string
+
+    ###################################################################
+    # Schemas: Request logs                                           #
+    ###################################################################
+    requestLog:
+      description: Request log entry
+      type: object
+      required:
+        - requestID
+        - projectID
+        - userID
+        - application
+        - method
+        - endpoint
+        - source
+        - request
+        - requestHeaders
+        - queryParams
+        - responseStatus
+        - response
+        - runtime
+        - remoteAddress
+        - created
+        - tags
+        - details
+      properties:
+        requestID:
+          $ref: 'common.yml#/components/schemas/requestID'
+        projectID:
+          $ref: 'common.yml#/components/schemas/projectID'
+        userID:
+          $ref: 'common.yml#/components/schemas/userID'
+        application:
+          description: Application this request was processed with
+          type: string
+        method:
+          description: HTTP method (such as GET and POST)
+          type: string
+        endpoint:
+          description: Endpoint that was requested
+          type: string
+        source:
+          description: Request source
+          type: string
+        request:
+          description: Request JSON data
+          type: string
+        requestHeaders:
+          description: Request headers
+          type: object
+          additionalProperties:
+            type: string
+        queryParams:
+          description: Request query parameters
+          type: string
+        responseStatus:
+          description: Response HTTP status
+          type: number
+        response:
+          description: Response JSON data
+          type: string
+        runtime:
+          description: Runtime in seconds for this request
+          type: number
+          format: float
+        remoteAddress:
+          description: Caller remote address
+          type: string
+        created:
+          description: Timestamp of when the request was performed in RFC3339 format
+          type: string
+        tags:
+          description: Arbitrary tags attached to this request
+          type: object
+        details:
+          description: Any freetext additional information attached to this request. Additional logs, errors, etc.
+          type: array
+          items:
+            type: string
+
+    requestLogsListRsp:
+      allOf:
+        - $ref: 'common.yml#/components/schemas/genericRsp'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              type: object
+              required:
+                - logs
+                - paging
+              properties:
+                logs:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/requestLog'
+                paging:
+                  $ref: 'common.yml#/components/schemas/paging'
+
+    requestLogGetRsp:
+      allOf:
+        - $ref: 'common.yml#/components/schemas/genericRsp'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: '#/components/schemas/requestLog'
+
+    ###################################################################
+    # Schemas: Webhook log                                            #
+    ###################################################################
+    webhookLog:
+      description: Webhook log entry
+      type: object
+      required:
+        - webhookID
+        - projectID
+        - action
+        - responseID
+        - requestURL
+        - requestBody
+        - responseStatus
+        - responseHeaders
+        - responseBody
+        - responseError
+        - runtime
+        - created
+      properties:
+        webhookID:
+          $ref: '#/components/schemas/webhookID'
+        projectID:
+          $ref: 'common.yml#/components/schemas/projectID'
+        action:
+          description: Webhook action
+          type: string
+          example: 'passwordVerify'
+        responseID:
+          description: |
+            Unique ID of response, you can provide your own while responding to the webhook, if not the ID will be randomly generated on server side.
+            This has the same meaning as overriding requestID for API requests.
+          type: string
+        requestURL:
+          description: Absolute request URL of webhook backend
+          type: string
+        requestBody:
+          description: Request contents that were sent to webhook backend
+          type: string
+        responseStatus:
+          description: Response HTTP status that was returned by webhook backend
+          type: integer
+        responseHeaders:
+          description: Response HTTP headers that were returned by webhook backend
+          type: object
+        responseBody:
+          description: Response body JSON data that was returned by webhook backend
+          type: string
+        responseError:
+          description: Response error if present
+          type: string
+        runtime:
+          description: Runtime in seconds for this request
+          type: number
+          format: float
+        created:
+          description: Timestamp of when the request was performed in RFC3339 format
+          type: string
+
+    webhookLogsListRsp:
+      allOf:
+        - $ref: 'common.yml#/components/schemas/genericRsp'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              type: object
+              required:
+                - logs
+                - paging
+              properties:
+                logs:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/webhookLog'
+                paging:
+                  $ref: 'common.yml#/components/schemas/paging'
+
+    ###################################################################
+    # Schemas: Webauthn                                               #
+    ###################################################################
+    webAuthnRegisterStartReq:
+      type: object
+      required:
+        - username
+        - clientInfo
+      properties:
+        username:
+          type: string
+          example: 'example@mail.com'
+        userFullName:
+          description: Optional user's full name to be used if the user wasn't found and needs to be created first
+          type: string
+        requestID:
+          $ref: 'common.yml#/components/schemas/requestID'
+        clientInfo:
+          $ref: 'common.yml#/components/schemas/clientInfo'
+        credentialStatus:
+          type: string
+          default: 'pending'
+          description: 'Sets credential status into active and pending. Pending status dont allow a login until the credential gets confirmed by an api call.'
+          enum:
+            - active
+            - pending
+
+    webAuthnRegisterStartRsp:
+      allOf:
+        - $ref: 'common.yml#/components/schemas/genericRsp'
+        - type: object
+          required:
+            - publicKeyCredentialCreationOptions
+            - status
+          properties:
+            status:
+              type: string
+              enum: [ 'success', 'duplicate' ]
+              description: 'Status represents information if user signup was successful or the user with its credentials already exists'
+            publicKeyCredentialCreationOptions:
+              type: string
+              description: Contains JSON payload data to start Passkeys (Biometrics) sign up challenge
+              example: '{"publicKey":{"challenge":"2m6...0w9/MgW...KE=","rp":{"name":"demo","id":"localhost"},"user":{"name":"example@mail.com","id":"dXN...zk5"},"pubKeyCredParams":[{"type":"public-key","alg":-7},{"type":"public-key","alg":-35},{"type":"public-key","alg":-36},{"type":"public-key","alg":-257},{"type":"public-key","alg":-258},{"type":"public-key","alg":-259},{"type":"public-key","alg":-37},{"type":"public-key","alg":-38},{"type":"public-key","alg":-39},{"type":"public-key","alg":-8}],"authenticatorSelection":{"authenticatorAttachment":"platform","requireResidentKey":false,"userVerification":"required"},"timeout":60000,"attestation":"none"}}'
+
+    webAuthnRegisterFinishRsp:
+      allOf:
+        - $ref: '#/components/schemas/webAuthnAuthenticateSuccess'
+        - type: object
+          required:
+            - status
+          properties:
+            status:
+              type: string
+              enum: [ 'success', 'duplicate' ]
+              description: 'Status represents information if user sign up was successful or if the user with provided credentials already exists'
+
+    webAuthnAuthenticateStartReq:
+      type: object
+      required:
+        - username
+        - clientInfo
+      properties:
+        username:
+          type: string
+          example: 'example@mail.com'
+        requestID:
+          $ref: 'common.yml#/components/schemas/requestID'
+        clientInfo:
+          $ref: 'common.yml#/components/schemas/clientInfo'
+
+    webAuthnAuthenticateStartRsp:
+      allOf:
+        - $ref: 'common.yml#/components/schemas/genericRsp'
+        - type: object
+          required:
+            - publicKeyCredentialRequestOptions
+            - status
+          properties:
+            publicKeyCredentialRequestOptions:
+              type: string
+              description: Contains JSON payload data to start Passkeys (Biometrics) login challenge
+              example: '{"publicKey":{"challenge":"MjQ...8s=","timeout":60000,"rpId":"localhost","allowCredentials":[{"type":"public-key","id":"JM6.../Q="}],"userVerification":"preferred"}}'
+            status:
+              type: string
+              enum: [ 'success', 'unknownDevice', 'unconfirmedDevice' ]
+              description: 'Status represents information if authenticate start was successful or device is unknown'
+
+    webAuthnMediationStartReq:
+      type: object
+      required:
+        - clientInfo
+      properties:
+        username:
+          type: string
+          description: Optional limits possible credentials matching to username
+        requestID:
+          $ref: 'common.yml#/components/schemas/requestID'
+        clientInfo:
+          $ref: 'common.yml#/components/schemas/clientInfo'
+
+    webAuthnMediationStartRsp:
+      allOf:
+        - $ref: 'common.yml#/components/schemas/genericRsp'
+        - type: object
+          required:
+            - challenge
+          properties:
+            challenge:
+              type: string
+              description: Contains JSON payload data to start Passkeys (Biometrics) login challenge
+              example: '{"publicKey":{"challenge":"MjQ...8s=","timeout":60000,"rpId":"localhost","allowCredentials":[{"type":"public-key","id":"JM6.../Q="}],"userVerification":"preferred"}}'
+
+    webAuthnAssociateStartReq:
+      type: object
+      required:
+        - associationToken
+      properties:
+        associationToken:
+          type: string
+        requestID:
+          $ref: 'common.yml#/components/schemas/requestID'
+        clientInfo:
+          $ref: 'common.yml#/components/schemas/clientInfo'
+
+    webAuthnAssociateStartRsp:
+      allOf:
+        - $ref: 'common.yml#/components/schemas/genericRsp'
+        - type: object
+          required:
+            - publicKeyCredentialCreationOptions
+            - status
+          properties:
+            status:
+              type: string
+              enum: [ 'success', 'duplicate' ]
+              description: 'Status represents information if user signup was successful or the user with its credentials already exists'
+            publicKeyCredentialCreationOptions:
+              type: string
+              description: Contains JSON payload data to start Passkeys (Biometrics) sign up challenge
+              example: '{"publicKey":{"challenge":"2m6...0w9/MgW...KE=","rp":{"name":"demo","id":"localhost"},"user":{"name":"example@mail.com","id":"dXN...zk5"},"pubKeyCredParams":[{"type":"public-key","alg":-7},{"type":"public-key","alg":-35},{"type":"public-key","alg":-36},{"type":"public-key","alg":-257},{"type":"public-key","alg":-258},{"type":"public-key","alg":-259},{"type":"public-key","alg":-37},{"type":"public-key","alg":-38},{"type":"public-key","alg":-39},{"type":"public-key","alg":-8}],"authenticatorSelection":{"authenticatorAttachment":"platform","requireResidentKey":false,"userVerification":"required"},"timeout":60000,"attestation":"none"}}'
+
+    webAuthnFinishReq:
+      type: object
+      required:
+        - publicKeyCredential
+        - clientInfo
+      properties:
+        publicKeyCredential:
+          type: string
+          description: Contains JSON payload data for Passkeys (Biometrics) login finish challenge
+          example: '{"type":"public-key","id":"JM6...J_Q","rawId":"JM6...J_Q","authenticatorAttachment":null,"response":{"clientDataJSON":"eyJ...ZX0","authenticatorData":"SZY...AAQ","signature":"Ni7...YAg","userHandle":"dXN...zk5"},"clientExtensionResults":{}}'
+        requestID:
+          $ref: 'common.yml#/components/schemas/requestID'
+        clientInfo:
+          $ref: 'common.yml#/components/schemas/clientInfo'
+
+    webAuthnAuthenticateFinishRsp:
+      allOf:
+        - $ref: '#/components/schemas/webAuthnAuthenticateSuccess'
+        - type: object
+          required:
+            - status
+          properties:
+            status:
+              type: string
+              enum: [ 'success', 'unconfirmedCredential' ]
+              description: 'Status represents information if user signup was successful or the user with its credentials already exists'
+
+    webAuthnAuthenticateSuccess:
+      allOf:
+        - $ref: 'common.yml#/components/schemas/genericRsp'
+        - type: object
+          required:
+            - userID
+            - username
+            - credentialID
+          properties:
+            userID:
+              $ref: 'common.yml#/components/schemas/userID'
+            username:
+              type: string
+              description: Username of current challenge
+              example: 'example@mail.com'
+            credentialID:
+              type: string
+              description: Used credential ID
+              example: '139...935'
+            userFullName:
+              description: Optional user's full name to be used if the user wasn't found and needs to be created first
+              type: string
+
+    webAuthnCredentialExistsReq:
+      type: object
+      required:
+        - loginIdentifier
+        - loginIdentifierType
+        - clientInfo
+      properties:
+        loginIdentifier:
+          type: string
+        loginIdentifierType:
+          $ref: 'common.yml#/components/schemas/loginIdentifierType'
+        requestID:
+          $ref: 'common.yml#/components/schemas/requestID'
+        clientInfo:
+          $ref: 'common.yml#/components/schemas/clientInfo'
+
+    webAuthnCredentialExistsRsp:
+      allOf:
+        - $ref: 'common.yml#/components/schemas/genericRsp'
+        - type: object
+          required:
+            - exists
+          properties:
+            exists:
+              type: boolean
+
+    webAuthnCredentialReq:
+      type: object
+      required:
+        - status
+      properties:
+        status:
+          type: string
+          enum: [ 'pending', 'active', 'deleted' ]
+        requestID:
+          $ref: 'common.yml#/components/schemas/requestID'
+        clientInfo:
+          $ref: 'common.yml#/components/schemas/clientInfo'
+
+    webAuthnAuthenticatorUpdateReq:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+        requestID:
+          $ref: 'common.yml#/components/schemas/requestID'
+        clientInfo:
+          $ref: 'common.yml#/components/schemas/clientInfo'
+
+    webAuthnCredentialRsp:
+      allOf:
+        - $ref: 'common.yml#/components/schemas/genericRsp'
+        - type: object
+          required:
+            - status
+          properties:
+            status:
+              type: string
+              enum: [ 'pending', 'active', 'deleted' ]
+              description: 'Status'
+
+    webAuthnCredentialListRsp:
+      allOf:
+        - $ref: 'common.yml#/components/schemas/genericRsp'
+        - type: object
+          required:
+            - rows
+            - paging
+          properties:
+            rows:
+              type: array
+              items:
+                $ref: '#/components/schemas/webAuthnCredentialItemRsp'
+            paging:
+              $ref: 'common.yml#/components/schemas/paging'
+
+    webAuthnCredentialItemRsp:
+      allOf:
+        - $ref: 'common.yml#/components/schemas/genericRsp'
+        - type: object
+          required:
+            - id
+            - credentialHash
+            - backupStatus
+            - backupEligible
+            - transport
+            - status
+            - aaguid
+            - attestationType
+            - userAgent
+            - created
+            - authenticatorID
+            - authenticatorName
+            - lastUsed
+            - lastUsedDeviceName
+          properties:
+            id:
+              type: string
+              description: 'Credential ID'
+              example: "cre-12345"
+            credentialHash:
+              type: string
+            aaguid:
+              type: string
+            attestationType:
+              type: string
+            backupState:
+              type: boolean
+              description: 'Backup state'
+            backupEligible:
+              type: boolean
+              description: 'Backup eligible'
+            transport:
+              type: array
+              description: 'Transport'
+              items:
+                type: string
+                enum: [ 'usb', 'nfc', 'ble', 'internal', 'hybrid', 'smart-card' ]
+            status:
+              type: string
+              enum: [ 'pending', 'active' ]
+              description: "Status"
+            userAgent:
+              type: string
+              description: "User agent"
+            created:
+              $ref: 'common.yml#/components/schemas/created'
+            authenticatorID:
+              type: string
+              description: 'Authenticator ID'
+              example: "ath-12345"
+            authenticatorName:
+              type: string
+            lastUsed:
+              description: Timestamp of when the passkey was last used in yyyy-MM-dd'T'HH:mm:ss format
+              type: string
+            lastUsedDeviceName:
+              type: string
+
+    # TODO this is not our "conventional" response. Requires backward incompatible change
+    webauthnSettingListRsp:
+      allOf:
+        - $ref: 'common.yml#/components/schemas/genericRsp'
+        - type: object
+          required:
+            - rows
+            - paging
+          properties:
+            rows:
+              type: array
+              items:
+                $ref: '#/components/schemas/webauthnSettingItem'
+            paging:
+              $ref: 'common.yml#/components/schemas/paging'
+
+    webauthnSettingItem:
+      allOf:
+        - $ref: '#/components/schemas/webauthnSettingCreate'
+        - type: object
+          properties:
+            id:
+              type: string
+              description: ID of WebAuthn setting
+              example: 'pwa-abc123'
+            created:
+              $ref: 'common.yml#/components/schemas/created'
+            updated:
+              $ref: 'common.yml#/components/schemas/updated'
+          required:
+            - id
+            - created
+            - updated
+
+    webauthnSettingCreate:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of this setting
+          example: 'Prod. Developer Panel'
+        origin:
+          type: string
+          description: 'Define here either a url incl. schema or an android-apk-key-hash'
+          example: 'https://app.corbado.com:5012 or android-apk-key-hash:hsnvseDsd...'
+      required:
+        - name
+        - origin
+
+    webauthnSettingCreateReq:
+      allOf:
+        - $ref: '#/components/schemas/webauthnSettingCreate'
+        - type: object
+          properties:
+            requestID:
+              $ref: 'common.yml#/components/schemas/requestID'
+            clientInfo:
+              $ref: 'common.yml#/components/schemas/clientInfo'
+
+    webauthnSettingUpdateReq:
+      allOf:
+        - $ref: '#/components/schemas/webauthnSettingCreate'
+        - type: object
+          properties:
+            requestID:
+              $ref: 'common.yml#/components/schemas/requestID'
+            clientInfo:
+              $ref: 'common.yml#/components/schemas/clientInfo'
+
+    webauthnSettingCreateRsp:
+      allOf:
+        - $ref: 'common.yml#/components/schemas/genericRsp'
+        - $ref: '#/components/schemas/webauthnSettingItem'
+
+    webauthnSettingGetRsp:
+      allOf:
+        - $ref: 'common.yml#/components/schemas/genericRsp'
+        - $ref: '#/components/schemas/webauthnSettingItem'
+
+    webauthnSettingUpdateRsp:
+      allOf:
+        - $ref: 'common.yml#/components/schemas/genericRsp'
+        - $ref: '#/components/schemas/webauthnSettingItem'
+
+    webauthnSettingDeleteReq:
+      properties:
+        requestID:
+          $ref: 'common.yml#/components/schemas/requestID'
+        clientInfo:
+          $ref: 'common.yml#/components/schemas/clientInfo'
+
+    ###################################################################
+    # Schemas: Tracking                                               #
+    ###################################################################
+    # TODO also not conventional response
+    trackingRawListRsp:
+      allOf:
+        - $ref: 'common.yml#/components/schemas/genericRsp'
+        - type: object
+          required:
+            - rows
+            - paging
+          properties:
+            rows:
+              type: array
+              items:
+                $ref: '#/components/schemas/trackingRawListRow'
+            paging:
+              $ref: 'common.yml#/components/schemas/paging'
+
+    trackingRawListRow:
+      type: object
+      properties:
+        timePoint:
+          type: string
+          format: yyyy-MM-dd
+        hasWebauthn:
+          type: boolean
+        hasPlatformAuth:
+          type: boolean
+        hasConditionalUi:
+          type: boolean
+        osId:
+          type: string
+        browserId:
+          type: string
+      required:
+        - timePoint
+        - hasWebauthn
+        - hasPlatformAuth
+        - hasConditionalUi
+        - osId
+        - browserId
+
+    trackingStatsListRsp:
+      allOf:
+        - $ref: 'common.yml#/components/schemas/genericRsp'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              type: object
+              required:
+                - stats
+                - paging
+              properties:
+                stats:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/trackingStats'
+                paging:
+                  $ref: 'common.yml#/components/schemas/paging'
+
+    trackingStats:
+      type: object
+      required:
+        - timePoint
+        - aggregateVisits
+        - aggregateWebauthn
+        - aggregatePlatform
+        - aggregateConditionalUi
+      properties:
+        timePoint:
+          type: string
+          format: yyyy-MM-dd
+        aggregateVisits:
+          type: integer
+        aggregateWebauthn:
+          type: integer
+        aggregatePlatform:
+          type: integer
+        aggregateConditionalUi:
+          type: integer
+
+    trackingDetailedStatsListRsp:
+      allOf:
+        - $ref: 'common.yml#/components/schemas/genericRsp'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              type: object
+              required:
+                - stats
+                - paging
+              properties:
+                stats:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/trackingDetailedStats'
+                paging:
+                  $ref: 'common.yml#/components/schemas/paging'
+
+    trackingDetailedStats:
+      type: object
+      properties:
+        timePoint:
+          type: string
+          format: yyyy-MM-dd
+        visits:
+          type: integer
+          example: 100
+        webauthn:
+          type: integer
+          example: 100
+        platform:
+          type: integer
+          example: 100
+        conditionalUi:
+          type: integer
+          example: 100
+      required:
+        - timePoint
+        - visits
+        - webauthn
+        - platform
+        - conditionalUi
+
+    trackingOSStatsListRsp:
+      allOf:
+        - $ref: 'common.yml#/components/schemas/genericRsp'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              type: object
+              required:
+                - stats
+                - paging
+              properties:
+                stats:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/trackingOSStats'
+                paging:
+                  $ref: 'common.yml#/components/schemas/paging'
+
+    trackingOSDetailedStatsListRsp:
+      allOf:
+        - $ref: 'common.yml#/components/schemas/genericRsp'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              type: object
+              required:
+                - stats
+                - paging
+              properties:
+                stats:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/trackingOSDetailedStats'
+                paging:
+                  $ref: 'common.yml#/components/schemas/paging'
+
+    trackingOSStats:
+      type: object
+      properties:
+        timePoint:
+          type: string
+          format: yyyy-MM-dd
+        macos:
+          type: integer
+          example: 100
+        windows:
+          type: integer
+          example: 100
+        ios:
+          type: integer
+          example: 100
+        android:
+          type: integer
+          example: 100
+        other:
+          type: integer
+          example: 100
+      required:
+        - timePoint
+        - macos
+        - windows
+        - ios
+        - android
+        - other
+
+    trackingOSDetailedStats:
+      type: object
+      properties:
+        timePoint:
+          type: string
+          format: yyyy-MM-dd
+        osName:
+          type: string
+          example: 'iOS'
+        osVersion:
+          type: string
+          example: '15.6'
+        osPlatform:
+          type: string
+          enum:
+            - desktop
+            - mobile
+            - unknown
+        cnt:
+          type: integer
+          example: 100
+        webauthn:
+          type: integer
+          example: 100
+        platform:
+          type: integer
+          example: 100
+        conditional_ui:
+          type: integer
+          example: 100
+      required:
+        - timePoint
+        - osName
+        - osVersion
+        - osPlatform
+        - cnt
+        - webauthn
+        - platform
+        - conditional_ui
+
+    trackingBrowserStatsListRsp:
+      allOf:
+        - $ref: 'common.yml#/components/schemas/genericRsp'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              type: object
+              required:
+                - stats
+                - paging
+              properties:
+                stats:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/trackingBrowserStats'
+                paging:
+                  $ref: 'common.yml#/components/schemas/paging'
+
+    trackingBrowserDetailedStatsListRsp:
+      allOf:
+        - $ref: 'common.yml#/components/schemas/genericRsp'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              type: object
+              required:
+                - stats
+                - paging
+              properties:
+                stats:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/trackingBrowserDetailedStats'
+                paging:
+                  $ref: 'common.yml#/components/schemas/paging'
+
+    trackingBrowserStats:
+      type: object
+      properties:
+        timePoint:
+          type: string
+          format: yyyy-MM-dd
+        chrome:
+          type: integer
+          example: 100
+        safari:
+          type: integer
+          example: 100
+        edge:
+          type: integer
+          example: 100
+        firefox:
+          type: integer
+          example: 100
+        other:
+          type: integer
+          example: 100
+      required:
+        - timePoint
+        - chrome
+        - safari
+        - edge
+        - firefox
+        - other
+
+    trackingBrowserDetailedStats:
+      type: object
+      properties:
+        timePoint:
+          type: string
+          format: yyyy-MM-dd
+        browserName:
+          type: string
+          example: 'Chrome'
+        browserVersion:
+          type: string
+          example: '103'
+        cnt:
+          type: integer
+          example: 100
+        webauthn:
+          type: integer
+          example: 100
+        platform:
+          type: integer
+          example: 100
+        conditional_ui:
+          type: integer
+          example: 100
+      required:
+        - timePoint
+        - browserName
+        - browserVersion
+        - cnt
+        - webauthn
+        - platform
+        - conditional_ui
+
+    trackingEnumsGetRsp:
+      allOf:
+        - $ref: 'common.yml#/components/schemas/genericRsp'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: '#/components/schemas/trackingEnums'
+
+    trackingEnums:
+      type: object
+      required:
+        - browserNames
+        - osNames
+        - osPlatforms
+      properties:
+        browserNames:
+          type: array
+          items:
+            type: string
+        osNames:
+          type: array
+          items:
+            type: string
+        osPlatforms:
+          type: array
+          items:
+            type: string
+
+    trackingBackupStateGetRsp:
+      allOf:
+        - $ref: 'common.yml#/components/schemas/genericRsp'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: '#/components/schemas/trackingBackupState'
+
+    trackingBackupState:
+      type: object
+      required:
+        - backedUp
+        - notBackedUp
+      properties:
+        backedUp:
+          type: integer
+        notBackedUp:
+          type: integer
+
+    ###################################################################
+    # Schemas: iOS App                                                #
+    ###################################################################
+    iOSAppConfigSaveReq:
+      type: object
+      required:
+        - bundleID
+        - appIDPrefix
+      properties:
+        appIDPrefix:
+          type: string
+        bundleID:
+          type: string
+        requestID:
+          $ref: 'common.yml#/components/schemas/requestID'
+        clientInfo:
+          $ref: 'common.yml#/components/schemas/clientInfo'
+
+    iOSAppConfigSaveRsp:
+      allOf:
+        - $ref: 'common.yml#/components/schemas/genericRsp'
+        - $ref: '#/components/schemas/iOSAppConfigItem'
+
+    iOSAppConfigListRsp:
+      allOf:
+        - $ref: 'common.yml#/components/schemas/genericRsp'
+        - type: object
+          required:
+            - rows
+            - paging
+          properties:
+            rows:
+              type: array
+              items:
+                $ref: '#/components/schemas/iOSAppConfigItem'
+            paging:
+              $ref: 'common.yml#/components/schemas/paging'
+
+    iOSAppConfigUpdateReq:
+      type: object
+      required:
+        - appIDPrefix
+        - bundleID
+      properties:
+        appIDPrefix:
+          type: string
+        bundleID:
+          type: string
+        requestID:
+          $ref: 'common.yml#/components/schemas/requestID'
+        clientInfo:
+          $ref: 'common.yml#/components/schemas/clientInfo'
+
+    iOSAppConfigUpdateRsp:
+      allOf:
+        - $ref: 'common.yml#/components/schemas/genericRsp'
+        - $ref: '#/components/schemas/iOSAppConfigItem'
+
+    iOSAppConfigDeleteReq:
+      type: object
+      properties:
+        requestID:
+          $ref: 'common.yml#/components/schemas/requestID'
+        clientInfo:
+          $ref: 'common.yml#/components/schemas/clientInfo'
+
+    iOSAppConfigItem:
+      type: object
+      required:
+        - id
+        - projectID
+        - appIDPrefix
+        - bundleID
+        - created
+        - updated
+      properties:
+        id:
+          type: string
+          description: 'ID of iOS app'
+          example: 'ios-abc123'
+        projectID:
+          $ref: 'common.yml#/components/schemas/projectID'
+        appIDPrefix:
+          type: string
+        bundleID:
+          type: string
+        created:
+          $ref: 'common.yml#/components/schemas/created'
+        updated:
+          $ref: 'common.yml#/components/schemas/updated'
+
+    ###################################################################
+    # Schemas: Android App                                            #
+    ###################################################################
+    androidAppConfigSaveReq:
+      type: object
+      required:
+        - packageName
+        - fingerprint
+      properties:
+        packageName:
+          type: string
+        fingerprint:
+          type: string
+        requestID:
+          $ref: 'common.yml#/components/schemas/requestID'
+        clientInfo:
+          $ref: 'common.yml#/components/schemas/clientInfo'
+
+    androidAppConfigSaveRsp:
+      allOf:
+        - $ref: 'common.yml#/components/schemas/genericRsp'
+        - $ref: '#/components/schemas/androidAppConfigItem'
+
+    androidAppConfigListRsp:
+      allOf:
+        - $ref: 'common.yml#/components/schemas/genericRsp'
+        - type: object
+          required:
+            - rows
+            - paging
+          properties:
+            rows:
+              type: array
+              items:
+                $ref: '#/components/schemas/androidAppConfigItem'
+            paging:
+              $ref: 'common.yml#/components/schemas/paging'
+
+    androidAppConfigUpdateReq:
+      type: object
+      required:
+        - packageName
+        - fingerprint
+      properties:
+        packageName:
+          type: string
+        fingerprint:
+          type: string
+        requestID:
+          $ref: 'common.yml#/components/schemas/requestID'
+        clientInfo:
+          $ref: 'common.yml#/components/schemas/clientInfo'
+
+    androidAppConfigUpdateRsp:
+      allOf:
+        - $ref: 'common.yml#/components/schemas/genericRsp'
+        - $ref: '#/components/schemas/androidAppConfigItem'
+
+    androidAppConfigDeleteReq:
+      type: object
+      properties:
+        requestID:
+          $ref: 'common.yml#/components/schemas/requestID'
+        clientInfo:
+          $ref: 'common.yml#/components/schemas/clientInfo'
+
+    androidAppConfigItem:
+      type: object
+      required:
+        - id
+        - projectID
+        - packageName
+        - fingerprint
+        - base64URL
+        - created
+        - updated
+      properties:
+        id:
+          type: string
+          description: 'ID of Android app configuration'
+          example: 'and-abc123'
+        projectID:
+          $ref: 'common.yml#/components/schemas/projectID'
+        packageName:
+          type: string
+        fingerprint:
+          type: string
+        base64URL:
+          type: string
+        created:
+          $ref: 'common.yml#/components/schemas/created'
+        updated:
+          $ref: 'common.yml#/components/schemas/updated'
+
+    ###################################################################
+    # Schemas: Project config                                         #
+    ###################################################################
+    projectConfigSaveReq:
+      type: object
+      properties:
+        wizard:
+          x-internal: true
+          type: boolean
+        externalName:
+          type: string
+        appType:
+          $ref: 'common.yml#/components/schemas/appType'
+        productKey:
+          type: string
+        emailFrom:
+          type: string
+        smsFrom:
+          type: string
+        externalApplicationProtocolVersion:
+          type: string
+          enum:
+            - v1
+            - v2
+          description: Defines which version of webhook is used
+        webhookURL:
+          type: string
+        webhookActions:
+          type: array
+          items:
+            type: string
+        webhookUsername:
+          type: string
+        webhookPassword:
+          type: string
+        webhookTestInvalidUsername:
+          type: string
+        webhookTestValidUsername:
+          type: string
+        webhookTestValidPassword:
+          type: string
+        externalApplicationUsername:
+          type: string
+        externalApplicationPassword:
+          type: string
+        legacyAuthMethodsUrl:
+          type: string
+        passwordVerifyUrl:
+          type: string
+        authSuccessRedirectUrl:
+          type: string
+        passwordResetUrl:
+          type: string
+        allowUserRegistration:
+          type: boolean
+        allowIPStickiness:
+          type: boolean
+        passkeyAppendInterval:
+          type: string
+          enum: [ '0d', '1d', '3d', '1w', '3w', '1m', '3m' ]
+        fallbackLanguage:
+          type: string
+        autoDetectLanguage:
+          type: boolean
+        integrationModeHosted:
+          type: boolean
+        integrationModeAPI:
+          type: boolean
+        integrationModeWebComponent:
+          type: boolean
+        hasExistingUsers:
+          type: boolean
+        hasVerifiedSession:
+          type: boolean
+        hasGeneratedSession:
+          type: boolean
+        hasStartedUsingPasskeys:
+          type: boolean
+        hasStartedUsingSessions:
+          type: boolean
+        applicationUrl:
+          type: string
+        useCli:
+          type: boolean
+        doubleOptIn:
+          type: boolean
+        userFullNameRequired:
+          type: boolean
+        webauthnRPID:
+          type: string
+        domain:
+          type: string
+        environment:
+          type: string
+          enum: [ 'dev', 'prod' ]
+        frontendFramework:
+          type: string
+          enum: [ 'react', 'vuejs', 'vanillajs' ]
+        backendLanguage:
+          type: string
+          enum: [ 'javascript', 'php', 'go' ]
+        webComponentDebug:
+          type: boolean
+        smtpUseCustom:
+          type: boolean
+        smtpHost:
+          type: string
+        smtpPort:
+          type: integer
+        smtpUsername:
+          type: string
+        smtpPassword:
+          type: string
+        supportEmail:
+          type: string
+        signupFlow:
+          type: string
+          enum: [ 'PasskeyWithEmailOTPFallback', 'EmailOTPSignup' ]
+        signupFlowOptions:
+          type: object
+        loginFlow:
+          type: string
+          enum: [ 'PasskeyWithEmailOTPFallback' ]
+        loginFlowOptions:
+          type: object
+        requestID:
+          $ref: 'common.yml#/components/schemas/requestID'
+        clientInfo:
+          $ref: 'common.yml#/components/schemas/clientInfo'
+
+    projectConfigGetRsp:
+      allOf:
+        - $ref: 'common.yml#/components/schemas/genericRsp'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: '#/components/schemas/projectConfig'
+
+    projectConfig:
+      type: object
+      required:
+        - projectID
+        - externalName
+        - appType
+        - productKey
+        - emailFrom
+        - smsFrom
+        - externalApplicationProtocolVersion
+        - webhookURL
+        - webhookUsername
+        - webhookPassword
+        - webhookTestInvalidUsername
+        - webhookTestValidUsername
+        - webhookTestValidPassword
+        - externalApplicationUsername
+        - externalApplicationPassword
+        - legacyAuthMethodsUrl
+        - passwordVerifyUrl
+        - authSuccessRedirectUrl
+        - passwordResetUrl
+        - allowUserRegistration
+        - allowIPStickiness
+        - passkeyAppendInterval
+        - cliSecret
+        - fallbackLanguage
+        - autoDetectLanguage
+        - integrationModeHosted
+        - integrationModeAPI
+        - integrationModeWebComponent
+        - hasExistingUsers
+        - hasVerifiedSession
+        - hasGeneratedSession
+        - hasStartedUsingPasskeys
+        - hasStartedUsingSessions
+        - environment
+        - frontendFramework
+        - backendLanguage
+        - applicationUrl
+        - backendAPIUrl
+        - frontendAPIUrl
+        - useCli
+        - doubleOptIn
+        - userFullNameRequired
+        - webauthnRPID
+        - domain
+        - webComponentDebug
+        - smtpUseCustom
+        - smtpHost
+        - smtpPort
+        - smtpUsername
+        - smtpPassword
+        - supportEmail
+        - webhookActions
+        - signupFlow
+        - signupFlowOptions
+        - loginFlow
+        - loginFlowOptions
+        - created
+        - updated
+        - status
+      properties:
+        projectID:
+          $ref: 'common.yml#/components/schemas/projectID'
+        externalName:
+          type: string
+        appType:
+          $ref: 'common.yml#/components/schemas/appType'
+        productKey:
+          type: string
+        emailFrom:
+          type: string
+        smsFrom:
+          type: string
+        externalApplicationProtocolVersion:
+          type: string
+        webhookURL:
+          type: string
+        webhookUsername:
+          type: string
+        webhookPassword:
+          type: string
+        webhookTestInvalidUsername:
+          type: string
+        webhookTestValidUsername:
+          type: string
+        webhookTestValidPassword:
+          type: string
+        externalApplicationUsername:
+          type: string
+        externalApplicationPassword:
+          type: string
+        legacyAuthMethodsUrl:
+          type: string
+        passwordVerifyUrl:
+          type: string
+        authSuccessRedirectUrl:
+          type: string
+        passwordResetUrl:
+          type: string
+        allowUserRegistration:
+          type: boolean
+        allowIPStickiness:
+          type: boolean
+        passkeyAppendInterval:
+          type: string
+          enum: [ 'not_specified', '0d', '1d', '3d', '1w', '3w', '1m', '3m' ]
+        cliSecret:
+          type: string
+        fallbackLanguage:
+          type: string
+        autoDetectLanguage:
+          type: boolean
+        integrationModeHosted:
+          type: boolean
+        integrationModeAPI:
+          type: boolean
+        integrationModeWebComponent:
+          type: boolean
+        hasExistingUsers:
+          type: boolean
+        hasVerifiedSession:
+          type: boolean
+        hasGeneratedSession:
+          type: boolean
+        hasStartedUsingPasskeys:
+          type: boolean
+        hasStartedUsingSessions:
+          type: boolean
+        environment:
+          type: string
+          enum: [ 'dev', 'prod' ]
+        frontendFramework:
+          type: string
+          enum: [ 'not_specified', 'react', 'vuejs', 'vanillajs' ]
+        backendLanguage:
+          type: string
+          enum: [ 'not_specified', 'javascript', 'php', 'go' ]
+        backendAPIUrl:
+          type: string
+        frontendAPIUrl:
+          type: string
+        applicationUrl:
+          type: string
+        useCli:
+          type: boolean
+        doubleOptIn:
+          type: boolean
+        userFullNameRequired:
+          type: boolean
+        webauthnRPID:
+          type: string
+        domain:
+          type: string
+        webComponentDebug:
+          type: boolean
+        smtpUseCustom:
+          type: boolean
+        smtpHost:
+          type: string
+        smtpPort:
+          type: integer
+        smtpUsername:
+          type: string
+        smtpPassword:
+          type: string
+        supportEmail:
+          type: string
+        webhookActions:
+          type: array
+          items:
+            type: string
+        signupFlow:
+          type: string
+          enum: [ 'PasskeyWithEmailOTPFallback', 'EmailOTPSignup' ]
+        signupFlowOptions:
+          type: object
+        loginFlow:
+          type: string
+          enum: [ 'PasskeyWithEmailOTPFallback' ]
+        loginFlowOptions:
+          type: object
+        created:
+          $ref: 'common.yml#/components/schemas/created'
+        updated:
+          $ref: 'common.yml#/components/schemas/updated'
+        status:
+          type: string
+          enum:
+            - active
+            - configuring
+
+    projectConfigWebhookTestReq:
+      type: object
+      required:
+        - action
+      properties:
+        action:
+          type: string
+          enum:
+            - authMethods
+            - passwordVerify
+        requestID:
+          $ref: 'common.yml#/components/schemas/requestID'
+        clientInfo:
+          $ref: 'common.yml#/components/schemas/clientInfo'
+
+    projectConfigWebhookTestRsp:
+      allOf:
+        - $ref: 'common.yml#/components/schemas/genericRsp'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              type: object
+              required:
+                - code
+                - details
+                - runtime
+              properties:
+                code:
+                  type: string
+                details:
+                  type: string
+                runtime:
+                  type: number
+
+    ###################################################################
+    # Schemas: Email template                                         #
+    ###################################################################
+    emailTemplateCreateReq:
+      type: object
+      required:
+        - lang
+        - type
+        - name
+        - subject
+        - plainTextBody
+        - htmlTextTitle
+        - htmlTextBody
+        - htmlTextButton
+        - htmlColorFont
+        - htmlColorBackgroundOuter
+        - htmlColorBackgroundInner
+        - htmlColorButton
+        - htmlColorButtonFont
+        - isDefault
+      properties:
+        lang:
+          type: string
+          enum: [ 'en', 'de', 'fr' ]
+        type:
+          type: string
+          enum: [ 'email_link', 'email_link_login', 'login_notification', 'passkey_notification', 'email_code' ]
+        name:
+          type: string
+        subject:
+          type: string
+        action:
+          type: string
+        plainTextBody:
+          type: string
+        htmlTextTitle:
+          type: string
+        htmlTextBody:
+          type: string
+        htmlTextButton:
+          type: string
+        htmlColorFont:
+          type: string
+        htmlColorBackgroundOuter:
+          type: string
+        htmlColorBackgroundInner:
+          type: string
+        htmlColorButton:
+          type: string
+        htmlColorButtonFont:
+          type: string
+        isDefault:
+          type: boolean
+        requestID:
+          $ref: 'common.yml#/components/schemas/requestID'
+        clientInfo:
+          $ref: 'common.yml#/components/schemas/clientInfo'
+
+    emailTemplateCreateRsp:
+      allOf:
+        - $ref: 'common.yml#/components/schemas/genericRsp'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              type: object
+              required:
+                - emailTemplateID
+              properties:
+                emailTemplateID:
+                  type: string
+
+    emailTemplateDeleteReq:
+      type: object
+      properties:
+        requestID:
+          $ref: 'common.yml#/components/schemas/requestID'
+        clientInfo:
+          $ref: 'common.yml#/components/schemas/clientInfo'
+
+    ###################################################################
+    # Schemas: SMS template                                           #
+    ###################################################################
+    smsTemplateCreateReq:
+      type: object
+      required:
+        - type
+        - name
+        - textPlain
+        - isDefault
+      properties:
+        type:
+          type: string
+          enum: [ 'sms_code', 'passkey_notification' ]
+        name:
+          type: string
+        textPlain:
+          type: string
+        isDefault:
+          type: boolean
+        requestID:
+          $ref: 'common.yml#/components/schemas/requestID'
+        clientInfo:
+          $ref: 'common.yml#/components/schemas/clientInfo'
+
+    smsTemplateCreateRsp:
+      allOf:
+        - $ref: 'common.yml#/components/schemas/genericRsp'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              type: object
+              required:
+                - smsTemplateID
+              properties:
+                smsTemplateID:
+                  type: string
+
+    smsTemplateDeleteReq:
+      type: object
+      properties:
+        requestID:
+          $ref: 'common.yml#/components/schemas/requestID'
+        clientInfo:
+          $ref: 'common.yml#/components/schemas/clientInfo'
+
+    ###################################################################
+    # Schemas: Session (version "v1")                                 #
+    ###################################################################
+    sessionTokenCreateReq:
+      type: object
+      required:
+        - userID
+        - userData
+        - clientInfo
+      properties:
+        userID:
+          $ref: 'common.yml#/components/schemas/userID'
+        userData:
+          description: Additional user data in JSON format
+          type: string
+          example: '{"user_id":123}'
+        requestID:
+          $ref: 'common.yml#/components/schemas/requestID'
+        clientInfo:
+          $ref: 'common.yml#/components/schemas/clientInfo'
+
+    sessionTokenCreateRsp:
+      allOf:
+        - $ref: 'common.yml#/components/schemas/genericRsp'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              type: object
+              required:
+                - token
+              properties:
+                token:
+                  type: string
+
+    sessionTokenVerifyReq:
+      type: object
+      required:
+        - token
+        - clientInfo
+      properties:
+        token:
+          type: string
+          example: '6GQd8ZgoCLlWld5lY25Dc8wYGLksvvRyaoxYrStX3o4WvKwcKGXWHiHtziTrEYss'
+        requestID:
+          $ref: 'common.yml#/components/schemas/requestID'
+        clientInfo:
+          $ref: 'common.yml#/components/schemas/clientInfo'
+
+    sessionTokenVerifyRsp:
+      allOf:
+        - $ref: 'common.yml#/components/schemas/genericRsp'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              type: object
+              required:
+                - userID
+                - user
+                - userData
+              properties:
+                userID:
+                  $ref: 'common.yml#/components/schemas/userID'
+                user:
+                  $ref: 'common.yml#/components/schemas/fullUser'
+                userData:
+                  type: string
+
+    ###################################################################
+    # Schemas: Auth token (Own session management)                    #
+    ###################################################################
+    authTokenValidateReq:
+      type: object
+      required:
+        - token
+        - clientInfo
+      properties:
+        token:
+          type: string
+          example: '6GQd8ZgoCLlWld5lY25Dc8wYGLksvvRyaoxYrStX3o4WvKwcKGXWHiHtziTrEYss'
+        requestID:
+          $ref: 'common.yml#/components/schemas/requestID'
+        clientInfo:
+          $ref: 'common.yml#/components/schemas/clientInfo'
+
+    authTokenValidateRsp:
+      allOf:
+        - $ref: 'common.yml#/components/schemas/genericRsp'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              type: object
+              required:
+                - userID
+                - user
+                - userData
+              properties:
+                userID:
+                  $ref: 'common.yml#/components/schemas/userID'
+                user:
+                  $ref: 'common.yml#/components/schemas/fullUser'
+                userData:
+                  type: string
+
+    ###################################################################
+    # Schemas: Session config (Corbado session management)            #
+    ###################################################################
+    sessionConfigUpdateReq:
+      type: object
+      required:
+        - appType
+      properties:
+        appType:
+          $ref: 'common.yml#/components/schemas/appType'
+        active:
+          type: boolean
+        shortLifetimeMinutes:
+          type: integer
+        shortCookieDomain:
+          type: string
+        shortCookieSecure:
+          type: boolean
+        shortCookieSameSite:
+          type: string
+          enum: [ 'lax', 'strict', 'none' ]
+        longLifetimeValue:
+          type: integer
+        longLifetimeUnit:
+          type: string
+          enum: [ 'min', 'hour' ]
+        longInactivityValue:
+          type: integer
+        longInactivityUnit:
+          type: string
+          enum: [ 'min', 'hour' ]
+        requestID:
+          $ref: 'common.yml#/components/schemas/requestID'
+        clientInfo:
+          $ref: 'common.yml#/components/schemas/clientInfo'
+
+    sessionConfigGetRsp:
+      allOf:
+        - $ref: 'common.yml#/components/schemas/genericRsp'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: '#/components/schemas/sessionConfig'
+
+    sessionConfig:
+      type: object
+      required:
+        - projectID
+        - appType
+        - shortLifetimeMinutes
+        - shortCookieDomain
+        - shortCookieSecure
+        - shortCookieSameSite
+        - longLifetimeValue
+        - longLifetimeUnit
+        - longInactivityValue
+        - longInactivityUnit
+        - jwtAudience
+        - created
+        - updated
+      properties:
+        projectID:
+          $ref: 'common.yml#/components/schemas/projectID'
+        appType:
+          $ref: 'common.yml#/components/schemas/appType'
+        active:
+          type: boolean
+        shortLifetimeMinutes:
+          type: integer
+        shortCookieDomain:
+          type: string
+        shortCookieSecure:
+          type: boolean
+        shortCookieSameSite:
+          type: string
+          enum: [ 'lax', 'strict', 'none' ]
+        longLifetimeValue:
+          type: integer
+        longLifetimeUnit:
+          type: string
+          enum: [ 'min', 'hour', 'day' ]
+        longInactivityValue:
+          type: integer
+        longInactivityUnit:
+          type: string
+          enum: [ 'min', 'hour', 'day' ]
+        jwtAudience:
+          type: string
+        created:
+          $ref: 'common.yml#/components/schemas/created'
+        updated:
+          $ref: 'common.yml#/components/schemas/updated'
+
+    ###################################################################
+    # Schemas: Long session (Corbado session management)              #
+    ###################################################################
+    longSessionListRsp:
+      allOf:
+        - $ref: 'common.yml#/components/schemas/genericRsp'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              type: object
+              required:
+                - longSessions
+                - paging
+              properties:
+                longSessions:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/longSession'
+                paging:
+                  $ref: 'common.yml#/components/schemas/paging'
+
+    longSessionGetRsp:
+      allOf:
+        - $ref: 'common.yml#/components/schemas/genericRsp'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              type: object
+              required:
+                - longSession
+              properties:
+                longSession:
+                  $ref: '#/components/schemas/longSession'
+
+    longSession:
+      type: object
+      required:
+        - ID
+        - userID
+        - userIdentifier
+        - userFullName
+        - deviceID
+        - browserName
+        - browserVersion
+        - osName
+        - osVersion
+        - expires
+        - lastAction
+        - created
+        - updated
+        - status
+      properties:
+        ID:
+          type: string
+        userID:
+          $ref: 'common.yml#/components/schemas/userID'
+        userIdentifier:
+          type: string
+        userFullName:
+          type: string
+        deviceID:
+          $ref: 'common.yml#/components/schemas/deviceID'
+        browserName:
+          type: string
+        browserVersion:
+          type: string
+        osName:
+          type: string
+        osVersion:
+          type: string
+        expires:
+          description: Timestamp of when long session expires in yyyy-MM-dd'T'HH:mm:ss format
+          type: string
+        lastAction:
+          description: Timestamp of when last action was done on long session in yyyy-MM-dd'T'HH:mm:ss format
+          type: string
+        created:
+          $ref: 'common.yml#/components/schemas/created'
+        updated:
+          $ref: 'common.yml#/components/schemas/updated'
+        status:
+          description: status values of a long session
+          type: string
+          enum: [ 'active', 'logged_out', 'expired', 'inactivity_reached', 'revoked' ]
+
+    longSessionRevokeReq:
+      properties:
+        requestID:
+          $ref: 'common.yml#/components/schemas/requestID'
+        clientInfo:
+          $ref: 'common.yml#/components/schemas/clientInfo'
+
+    ###################################################################
+    # Schemas: Association token                                      #
+    ###################################################################
+    associationTokenCreateReq:
+      type: object
+      required:
+        - loginIdentifier
+        - loginIdentifierType
+        - clientInfo
+      properties:
+        loginIdentifier:
+          type: string
+        loginIdentifierType:
+          $ref: 'common.yml#/components/schemas/loginIdentifierType'
+        requestID:
+          $ref: 'common.yml#/components/schemas/requestID'
+        clientInfo:
+          $ref: 'common.yml#/components/schemas/clientInfo'
+
+    associationTokenCreateRsp:
+      allOf:
+        - $ref: 'common.yml#/components/schemas/genericRsp'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              type: object
+              properties:
+                token:
+                  type: string
+                rejectionReason:
+                  type: string
+
+    emptyReq:
+      properties:
+        requestID:
+          $ref: 'common.yml#/components/schemas/requestID'
+        clientInfo:
+          $ref: 'common.yml#/components/schemas/clientInfo'
+
+  responses:
+    ###################################################################
+    # Responses: Error                                                #
+    ###################################################################
+    error:
+      description: Error
+      content:
+        application/json:
+          schema:
+            $ref: 'common.yml#/components/schemas/errorRsp'
+
+    ###################################################################
+    # Responses: 200                                                  #
+    ###################################################################
+    '200':
+      description: Operation succeeded
+      content:
+        application/json:
+          schema:
+            $ref: 'common.yml#/components/schemas/genericRsp'
+
+###################################################################
+# Security                                                        #
+###################################################################
+security:
+  - basicAuth: [ ]
+  - bearerAuth: [ ]

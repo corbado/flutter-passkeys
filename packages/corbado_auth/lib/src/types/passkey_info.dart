@@ -1,5 +1,9 @@
 import 'package:corbado_frontend_api_client/frontendapi/lib/api.dart';
+import 'package:json_annotation/json_annotation.dart';
 
+part 'passkey_info.g.dart';
+
+@JsonSerializable(explicitToJson: true)
 class PasskeyInfo {
   factory PasskeyInfo.fromResponse(PassKeyItem p) {
     return PasskeyInfo(
@@ -13,6 +17,8 @@ class PasskeyInfo {
       p.created,
     );
   }
+
+  factory PasskeyInfo.fromJson(Map<String, dynamic> json) => _$PasskeyInfoFromJson(json);
 
   PasskeyInfo(
     this.id,

@@ -5,4 +5,4 @@ export 'exceptions/exceptions.dart';
 export 'exceptions/field.dart';
 export 'passkey_info.dart';
 export 'user.dart';
-export 'email_otp_state.dart';
+export 'webauthn/types.dart';

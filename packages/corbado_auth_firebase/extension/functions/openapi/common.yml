@@ -25,7 +25,7 @@ paths:
       tags:
         - Common
       security:
-        - projectID: []
+        - projectID: [ ]
       parameters:
         - $ref: '#/components/parameters/remoteAddress'
         - $ref: '#/components/parameters/userAgent'
@@ -159,7 +159,7 @@ components:
 
     status:
       type: string
-      enum: ['active', 'pending', 'deleted']
+      enum: [ 'active', 'pending', 'deleted' ]
       description: Generic status that can describe Corbado entities
 
     authMethods:
@@ -169,7 +169,7 @@ components:
 
     authMethod:
       type: string
-      enum: ['email', 'phone_number', 'webauthn', 'password']
+      enum: [ 'email', 'phone_number', 'webauthn', 'password' ]
       description: Authentication methods
 
     fullUser:
@@ -305,7 +305,12 @@ components:
     loginIdentifierType:
       description: Login Identifier type
       type: string
-      enum: ['email', 'phone_number', 'custom']
+      enum: [ 'email', 'phone_number', 'custom' ]
+
+    appType:
+      description: Application type
+      type: string
+      enum: [ 'empty', 'web', 'native' ]
 
     requestData:
       description: Data about the request itself, can be used for debugging
@@ -365,6 +370,8 @@ components:
           $ref: '#/components/schemas/loginIdentifierType'
         p20:
           $ref: '#/components/schemas/emailCodeID'
+        p21:
+          $ref: '#/components/schemas/appType'
 
     genericRsp:
       type: object
@@ -398,6 +405,8 @@ components:
           required:
             - error
           properties:
+            data:
+              type: object
             error:
               type: object
               required:

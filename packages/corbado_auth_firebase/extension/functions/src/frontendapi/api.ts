@@ -888,6 +888,12 @@ export interface ErrorRsp {
     'runtime': number;
     /**
      * 
+     * @type {object}
+     * @memberof ErrorRsp
+     */
+    'data'?: object;
+    /**
+     * 
      * @type {ErrorRspAllOfError}
      * @memberof ErrorRsp
      */

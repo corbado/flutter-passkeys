@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "696582919492",
+    "project_id": "corbado",
+    "storage_bucket": "corbado.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:696582919492:android:c64c8ab920ddb3ee4a3311",
+        "android_client_info": {
+          "package_name": "com.example.example"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDEYEfdG6xZ5YcoKqxsD86SueycNIC1IdA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
