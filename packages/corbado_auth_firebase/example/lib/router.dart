@@ -1,4 +1,5 @@
 import 'package:example/auth_provider.dart';
+import 'package:example/pages/email_otp_page.dart';
 import 'package:example/pages/loading_page.dart';
 import 'package:example/pages/profile_page.dart';
 import 'package:example/pages/sign_in_page.dart';
@@ -10,8 +11,11 @@ import 'package:go_router/go_router.dart';
 class Routes {
   static const signUp = '/sign-up';
   static const signIn = '/sign-in';
+  static const emailOtp = '/email-otp/:email';
   static const profile = '/profile';
   static const loading = '/loading';
+
+  static String buildEmailOtp(String email) => '/email-otp/$email';
 }
 
 GoRoute _defaultTransitionGoRoute({
@@ -46,7 +50,7 @@ Page<dynamic> _customPageBuilder(
 final routerProvider = Provider<GoRouter>((ref) {
   final authState = ref.watch(authStateProvider);
   return GoRouter(
-      initialLocation: Routes.signUp,
+      initialLocation: Routes.signIn,
       routes: [
         _defaultTransitionGoRoute(
           path: Routes.signUp,
@@ -64,11 +68,25 @@ final routerProvider = Provider<GoRouter>((ref) {
           path: Routes.loading,
           builder: (context, state) => const LoadingPage(),
         ),
+        GoRoute(
+            path: Routes.emailOtp,
+            pageBuilder: (context, state) {
+              final email = state.pathParameters['email'];
+              if (email == null) {
+                throw Exception();
+              }
+
+              return _customPageBuilder(
+                  (context, state) => EmailOTPPage(email: email),
+                  context,
+                  state);
+            }),
       ],
       redirect: (BuildContext context, GoRouterState state) {
         final onLoggedOutRoutes = [
           Routes.signIn,
           Routes.signUp,
+          Routes.emailOtp,
         ].contains(state.fullPath);
 
         if (authState.isLoading) {

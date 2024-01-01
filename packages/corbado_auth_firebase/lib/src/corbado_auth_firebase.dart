@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:cloud_functions/cloud_functions.dart';
 import 'package:corbado_auth/corbado_auth.dart';
 import 'package:corbado_auth_firebase/src/services/corbado.dart';
 import 'package:passkeys/authenticator.dart';
@@ -21,8 +20,8 @@ class CorbadoAuthFirebase {
     String? fullName,
   }) async {
     try {
-      final challenge =
-      await _corbadoService.startSignUpWithPasskey(email, fullName ?? email);
+      final challenge = await _corbadoService.startSignUpWithPasskey(
+          email, fullName ?? email);
       final platformResponse = await _authenticator.register(challenge);
 
       return await _corbadoService.finishSignUpWithPasskey(platformResponse);
@@ -31,10 +30,8 @@ class CorbadoAuthFirebase {
     }
   }
 
-
-  Future<void> appendPasskey(String firebaseToken) async {
-    final challenge =
-    await _corbadoService.startPasskeyAppend(firebaseToken);
+  Future<bool> appendPasskey(String firebaseToken) async {
+    final challenge = await _corbadoService.startPasskeyAppend(firebaseToken);
     final platformResponse = await _authenticator.register(challenge);
 
     return _corbadoService.finishPasskeyAppend(firebaseToken, platformResponse);
@@ -62,10 +59,28 @@ class CorbadoAuthFirebase {
   /// This is an alternative to autocompletedSignInWithPasskey.
   /// It should be called when the user explicitly wants to type in a username.
   Future<String> loginWithPasskey({required String email}) async {
+    return _loginWithPasskey(email);
+  }
+
+  Future<void> startLoginWithEmailOTP(String email) async {
+    return _corbadoService.startLoginWithEmailOTP(email);
+  }
+
+  Future<String> finishLoginWithEmailOTP(String code) async {
+    return _corbadoService.finishLoginWithEmailOTP(code);
+  }
+
+  Future<List<PasskeyInfo>> getPasskeys(String firebaseToken) async {
+    return _corbadoService.getPasskeys(firebaseToken);
+  }
+
+  Future<void> deletePasskey(String firebaseToken, String passkeyId) async {
+    return _corbadoService.deletePasskey(firebaseToken, passkeyId);
+  }
+
+  Future<void> deleteUser(String firebaseToken) async {
     try {
-      return await _loginWithPasskey(email);
-    } on FirebaseFunctionsException catch (e) {
-      throw _convertFirebaseFunctionsException(e);
+      return await _corbadoService.deleteUser(firebaseToken);
     } catch (e) {
       rethrow;
     }
@@ -76,28 +91,5 @@ class CorbadoAuthFirebase {
     final platformResponse = await _authenticator.authenticate(challenge);
 
     return _corbadoService.finishLoginWithPasskey(platformResponse);
-  }
-
-  Future<List<PasskeyInfo>> getPasskeys(String firebaseToken) async {
-    return _corbadoService.getPasskeys(firebaseToken);
-  }
-
-  Future<void> deletePasskey(String firebaseToken, String passkeyId) async {
-    return _corbadoService.deletePasskey(firebaseToken, passkeyId);
-}
-
-  Future<void> deleteUser(String firebaseToken) async {
-    return _corbadoService.deleteUser(firebaseToken);
-  }
-
-  Exception _convertFirebaseFunctionsException(FirebaseFunctionsException e) {
-    switch (e.message) {
-      case 'UNKNOWN_USER':
-        return UnknownUserException('');
-      case 'NO_PASSKEY_AVAILABLE':
-        return NoPasskeyForDeviceException();
-    }
-
-    return UnexpectedBackendException(e.code, e.message ?? '');
   }
 }

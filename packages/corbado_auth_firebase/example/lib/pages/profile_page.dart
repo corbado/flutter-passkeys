@@ -1,6 +1,8 @@
 import 'package:corbado_auth_firebase/corbado_auth_firebase.dart';
 import 'package:example/auth_provider.dart';
 import 'package:example/pages/base_page.dart';
+import 'package:example/widgets/filled_text_button.dart';
+import 'package:example/widgets/maybe_error.dart';
 import 'package:example/widgets/outlined_text_button.dart';
 import 'package:example/widgets/passkey_list_item.dart';
 import 'package:flutter/material.dart';
@@ -14,10 +16,17 @@ class ProfilePage extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final authService = ref.watch(authServiceProvider);
     final user = ref.watch(userProvider);
+    final passkeyAppendError = useState<String?>(null);
     final passkeys = useState<List<PasskeyInfo>>([]);
+    final passkeyAddIsLoading = useState(false);
+
     useEffect(() {
       authService.getPasskeys().then((value) => passkeys.value = value);
     }, [authService]);
+
+    clearErrors() {
+      passkeyAppendError.value = null;
+    }
 
     return BasePage(
         child: Column(
@@ -53,35 +62,49 @@ class ProfilePage extends HookConsumerWidget {
             style: TextStyle(fontSize: 20),
           ),
           const SizedBox(height: 5),
-          Container(
-            constraints: const BoxConstraints(maxHeight: 300),
-            child: ListView(
-              shrinkWrap: true,
-              children: passkeys.value
-                  .map((e) => PasskeyListItem(e, (String passkeyId) async {
+          Column(
+            children: passkeys.value
+                .map((e) => Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      child: PasskeyListItem(e, (String passkeyId) async {
+                        clearErrors();
                         await authService.deletePasskey(passkeyId);
                         passkeys.value = await authService.getPasskeys();
-                      }))
-                  .toList(),
-            ),
+                      }),
+                    ))
+                .toList(),
           ),
           SizedBox(
             width: double.infinity,
             height: 50,
-            child: OutlinedTextButton(
+            child: FilledTextButton(
               onTap: () async {
-                await authService.appendPasskey();
+                clearErrors();
+                passkeyAddIsLoading.value = true;
+                final maybeError = await authService.appendPasskey();
+                if (maybeError != null) {
+                  passkeyAddIsLoading.value = false;
+                  passkeyAppendError.value = maybeError;
+                  return;
+                }
                 passkeys.value = await authService.getPasskeys();
+                passkeyAddIsLoading.value = false;
               },
+              isLoading: passkeyAddIsLoading.value,
               content: 'add new passkey',
             ),
           ),
+          const SizedBox(height: 5),
+          MaybeError(passkeyAppendError.value),
           const SizedBox(height: 10),
           SizedBox(
             width: double.infinity,
             height: 50,
             child: OutlinedTextButton(
-              onTap: () => authService.deleteAccount(),
+              onTap: () {
+                clearErrors();
+                authService.deleteAccount();
+              },
               content: 'delete account',
             ),
           ),
@@ -90,7 +113,10 @@ class ProfilePage extends HookConsumerWidget {
             width: double.infinity,
             height: 50,
             child: OutlinedTextButton(
-              onTap: () => authService.signOut(),
+              onTap: () {
+                clearErrors();
+                authService.signOut();
+              },
               content: 'sign out',
             ),
           ),

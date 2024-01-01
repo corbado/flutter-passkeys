@@ -1,5 +1,6 @@
-import type { AxiosError } from 'axios';
+import type {AxiosError} from 'axios';
 import {ErrorRsp} from "./frontendapi";
+import * as logger from "firebase-functions/logger";
 
 export class CorbadoError extends Error {
     recoverable: boolean;
@@ -15,6 +16,7 @@ export class CorbadoError extends Error {
             return NonRecoverableError.unknown();
         }
 
+        logger.info("Axios error", error.response);
         if (error.response.status >= 500 || error.response.status === 422) {
             try {
                 const errorRespRaw = error.response.data as ErrorRsp;
@@ -53,6 +55,13 @@ export class CorbadoError extends Error {
                         case 'Invalid email address':
                         case 'Invalid / unreachable email address':
                             return new InvalidEmailError();
+                    }
+                }
+
+                if (firstError.field === 'code') {
+                    switch (firstError.message) {
+                        case 'cannot be blank':
+                            return new InvalidOtpInputError();
                     }
                 }
 
@@ -231,5 +240,12 @@ export class UnknownError extends RecoverableError {
     constructor() {
         super('An unknown error occurred');
         this.name = 'errors.unknownError';
+    }
+}
+
+export class PasskeyAlreadyExists extends RecoverableError {
+    constructor() {
+        super('Passkey already exists');
+        this.name = 'errors.passkeyAlreadyExists';
     }
 }

@@ -1,11 +1,9 @@
 import 'package:corbado_auth_firebase/corbado_auth_firebase.dart';
 import 'package:example/auth_provider.dart';
-import 'package:example/auth_service.dart';
 import 'package:example/pages/base_page.dart';
 import 'package:example/router.dart';
 import 'package:example/widgets/filled_text_button.dart';
 import 'package:example/widgets/outlined_text_button.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
@@ -51,7 +49,7 @@ class SignInPage extends HookConsumerWidget {
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 4),
             child: TextField(
-              autofillHints: [_getAutofillHint()],
+              autofillHints: const [AutofillHints.username],
               controller: _emailController,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
@@ -62,15 +60,16 @@ class SignInPage extends HookConsumerWidget {
           usePasskeys.value
               ? Container()
               : Padding(
-            padding: const EdgeInsets.symmetric(vertical: 4),
-            child: TextField(
-              controller: _passwordController,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: 'password',
-              ),
-            ),
-          ),
+                  padding: const EdgeInsets.symmetric(vertical: 4),
+                  child: TextField(
+                    controller: _passwordController,
+                    obscureText: true,
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: 'password',
+                    ),
+                  ),
+                ),
           error.value != null
               ? Text(
                   error.value!,
@@ -83,27 +82,38 @@ class SignInPage extends HookConsumerWidget {
             height: 50,
             child: FilledTextButton(
               onTap: () async {
+                final email = _emailController.value.text;
                 if (usePasskeys.value) {
                   try {
                     loading.value = true;
-                    final email = _emailController.value.text;
                     await authService.signIn(email: email);
                   } on UnknownUserException {
                     loading.value = false;
                     usePasskeys.value = false;
+                  } on NoPasskeyForDeviceException {
+                    try {
+                      await authService.startLoginWithEmailOTP(email);
+                      if (!context.mounted) return;
+
+                      loading.value = false;
+                      context.push(Routes.buildEmailOtp(email));
+                    } catch (error) {
+                      loading.value = false;
+                      debugPrint('error: $error');
+                    }
                   } catch (error) {
                     loading.value = false;
                     debugPrint('error: $error');
                   }
                 } else {
-                  try {
-                    loading.value = true;
-                    final email = _emailController.value.text;
-                    final password = _passwordController.value.text;
-                    await authService.signInWithEmailAndPassword(email, password);
-                  } catch (error) {
+                  loading.value = true;
+                  final password = _passwordController.value.text;
+                  final maybeError = await authService
+                      .signInWithEmailAndPassword(email, password);
+                  if (maybeError != null) {
                     loading.value = false;
-                    debugPrint('error: $error');
+                    error.value = maybeError;
+                    return;
                   }
                 }
               },
@@ -123,13 +133,5 @@ class SignInPage extends HookConsumerWidget {
         ],
       ),
     ));
-  }
-
-  String _getAutofillHint() {
-    if (kIsWeb) {
-      return 'webauthn';
-    } else {
-      return AutofillHints.username;
-    }
   }
 }

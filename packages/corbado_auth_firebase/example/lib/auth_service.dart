@@ -3,6 +3,15 @@ import 'dart:async';
 import 'package:corbado_auth_firebase/corbado_auth_firebase.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+class UserNotLoggedInException implements Exception {
+  UserNotLoggedInException();
+
+  @override
+  String toString() {
+    return 'User is not logged in';
+  }
+}
+
 // This service encapsulates all authentication functionality.
 // It makes use of the corbado SDK through CorbadoAuth.
 class AuthService {
@@ -47,6 +56,13 @@ class AuthService {
       );
 
       return null;
+    } on FirebaseAuthException catch (e) {
+      switch (e.code) {
+        case 'INVALID_LOGIN_CREDENTIALS':
+          return 'Either no such user exists or the password is wrong. Please try again.';
+        default:
+          return e.toString();
+      }
     } catch (e) {
       return e.toString();
     }
@@ -54,7 +70,7 @@ class AuthService {
 
   Future<void> signIn({required String email}) async {
     final passkeyToken = await _corbadoAuth.loginWithPasskey(email: email);
-    final credential = await _firebaseAuth.signInWithCustomToken(passkeyToken);
+    await _firebaseAuth.signInWithCustomToken(passkeyToken);
 
     return;
   }
@@ -64,64 +80,66 @@ class AuthService {
     return;
   }
 
+  Future<void> startLoginWithEmailOTP(String email) async {
+    return _corbadoAuth.startLoginWithEmailOTP(email);
+  }
+
+  Future<String?> finishLoginWithEmailOTP(String code) async {
+    try {
+      final passkeyToken = await _corbadoAuth.finishLoginWithEmailOTP(code);
+      await _firebaseAuth.signInWithCustomToken(passkeyToken);
+
+      return null;
+    } catch (e) {
+      return e.toString();
+    }
+  }
+
   Future<void> signOut() async {
     return _firebaseAuth.signOut();
   }
 
   deleteAccount() async {
-    final currentFirebaseUser = _user;
-    if (currentFirebaseUser == null) {
-      return;
-    }
-
-    final firebaseToken = await currentFirebaseUser.getIdToken();
-    if (firebaseToken == null) {
-      return;
-    }
-
+    final firebaseToken = await getFirebaseToken();
     await _corbadoAuth.deleteUser(firebaseToken);
-    await currentFirebaseUser.delete();
+
+    await _user?.delete();
   }
 
   Future<List<PasskeyInfo>> getPasskeys() async {
-    final currentFirebaseUser = _user;
-    if (currentFirebaseUser == null) {
-      return [];
-    }
-
-    final firebaseToken = await currentFirebaseUser.getIdToken();
-    if (firebaseToken == null) {
-      return [];
-    }
-
+    final firebaseToken = await getFirebaseToken();
     return await _corbadoAuth.getPasskeys(firebaseToken);
   }
 
   deletePasskey(String passkeyId) async {
-    final currentFirebaseUser = _user;
-    if (currentFirebaseUser == null) {
-      return;
-    }
-
-    final firebaseToken = await currentFirebaseUser.getIdToken();
-    if (firebaseToken == null) {
-      return;
-    }
-
+    final firebaseToken = await getFirebaseToken();
     await _corbadoAuth.deletePasskey(firebaseToken, passkeyId);
   }
 
-  appendPasskey() async {
-    final currentFirebaseUser = _user;
-    if (currentFirebaseUser == null) {
-      return;
+  Future<String?> appendPasskey() async {
+    try {
+      final firebaseToken = await getFirebaseToken();
+      final mustReload = await _corbadoAuth.appendPasskey(firebaseToken);
+      if (mustReload) {
+        await _user?.getIdToken(true);
+      }
+
+      return null;
+    } catch (e) {
+      return e.toString();
+    }
+  }
+
+  Future<String> getFirebaseToken() async {
+    if (_user == null) {
+      return throw UserNotLoggedInException();
     }
 
-    final firebaseToken = await currentFirebaseUser.getIdToken();
+    final firebaseToken = await _user.getIdToken();
     if (firebaseToken == null) {
-      return;
+      return throw UserNotLoggedInException();
     }
 
-    await _corbadoAuth.appendPasskey(firebaseToken);
+    return firebaseToken;
   }
 }

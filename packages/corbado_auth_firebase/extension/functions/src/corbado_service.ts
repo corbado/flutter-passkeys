@@ -2,7 +2,8 @@ import {UsersApi} from "./frontendapi";
 import {Configuration, PasskeysBiometricsApi, UserApi, WebAuthnCredentialItemRsp} from "./backendapi";
 import axios, {AxiosError} from "axios";
 import {CorbadoError} from "./exceptions";
-import {RequestMetadata} from "./index";
+import {RequestMetadata} from "./types";
+import {BASE_PATH} from "./backendapi/base";
 
 type User = {
     email: string;
@@ -40,12 +41,12 @@ export class CorbadoService {
             username: projectId,
             password: apiSecret,
         });
-        this.#userApi = new UserApi(backendApiConfig);
-        this.#passkeyApi = new PasskeysBiometricsApi(backendApiConfig);
+        this.#userApi = new UserApi(backendApiConfig, BASE_PATH, axiosInstance);
+        this.#passkeyApi = new PasskeysBiometricsApi(backendApiConfig, BASE_PATH, axiosInstance);
     }
 
 
-    async passkeyRegisterStart(email: string, fullName: string, metadata: RequestMetadata): Promise<string> {
+    async startSignUpWithPasskey(email: string, fullName: string, metadata: RequestMetadata): Promise<string> {
         try {
             const res = await this.#usersApi.passKeyRegisterStart({username: email, fullName: fullName}, metadata.toRawAxiosRequestConfig());
 
@@ -56,7 +57,7 @@ export class CorbadoService {
         }
     }
 
-    async passkeyRegisterFinish(signedChallenge: string, metadata: RequestMetadata): Promise<User> {
+    async finishSignUpWithPasskey(signedChallenge: string, metadata: RequestMetadata): Promise<User> {
         const res = await this.#usersApi.passKeyRegisterFinish({signedChallenge: signedChallenge}, metadata.toRawAxiosRequestConfig());
         const shortSession = res.data.data.shortSession;
         const splits = shortSession!.value.split('.');
@@ -64,7 +65,7 @@ export class CorbadoService {
         return JSON.parse(atob(splits[1]));
     }
 
-    async passkeyAppendStart(username: string, metadata: RequestMetadata) {
+    async startPasskeyAppend(username: string, metadata: RequestMetadata) {
         const res = await this.#passkeyApi.webAuthnRegisterStart({
             clientInfo: metadata.toClientInfo(),
             username: username,
@@ -74,7 +75,7 @@ export class CorbadoService {
         return res.data.publicKeyCredentialCreationOptions;
     }
 
-    async passkeyAppendFinish(signedChallenge: string, metadata: RequestMetadata): Promise<string> {
+    async finishPasskeyAppend(signedChallenge: string, metadata: RequestMetadata): Promise<string> {
         const res = await this.#passkeyApi.webAuthnRegisterFinish({
             publicKeyCredential: signedChallenge,
             clientInfo: metadata.toClientInfo(),
@@ -83,27 +84,16 @@ export class CorbadoService {
         return res.data.userID;
     }
 
-    async passkeyLoginStart(email: string, metadata: RequestMetadata): Promise<string> {
-        try {
-            const res = await this.#usersApi.passKeyLoginStart({username: email}, metadata.toRawAxiosRequestConfig());
-
-            return res.data.data.challenge;
-        } catch (e) {
-            // user has not been registered with Corbado yet => he must sign in with firebase
-            // if (e instanceof UnknownUserError) {
-            //     throw e;
-            // }
-
-            // user is known to Corbado, but he has not set up a passkey yet => he should sign in with email OTP
-            // if (e instanceof NoPasskeyAvailableError) {
-            //
-            // }
-
-            throw e;
+    async startLoginWithPasskey(email: string, metadata: RequestMetadata): Promise<string> {
+        const res = await this.#usersApi.passKeyLoginStart({username: email}, metadata.toRawAxiosRequestConfig());
+        if (res.data.data.challenge.length === 0) {
+            throw CorbadoError.noPasskeyAvailable();
         }
+
+        return res.data.data.challenge;
     }
 
-    async passkeyLoginFinish(signedChallenge: string, metadata: RequestMetadata): Promise<User> {
+    async finishLoginWithPasskey(signedChallenge: string, metadata: RequestMetadata): Promise<User> {
         const res = await this.#usersApi.passKeyLoginFinish({signedChallenge: signedChallenge}, metadata.toRawAxiosRequestConfig());
         const shortSession = res.data.data.shortSession;
         const splits = shortSession!.value.split('.');
@@ -111,20 +101,30 @@ export class CorbadoService {
         return JSON.parse(atob(splits[1]));
     }
 
-    async userDelete(userId: string): Promise<void> {
+    async startLoginWithEmailOTP(email: string, metadata: RequestMetadata): Promise<string> {
+        const res = await this.#usersApi.emailCodeLoginStart({username: email}, metadata.toRawAxiosRequestConfig());
+
+        return res.data.data.emailCodeID;
+    }
+
+    async finishLoginWithEmailOTP(emailCodeID: string, code: string, metadata: RequestMetadata): Promise<User> {
+        const res = await this.#usersApi.emailCodeConfirm({emailCodeID: emailCodeID, code: code}, metadata.toRawAxiosRequestConfig());
+        const shortSession = res.data.data.shortSession;
+        const splits = shortSession!.value.split('.');
+
+        return JSON.parse(atob(splits[1]));
+    }
+
+    async deleteUser(userId: string): Promise<void> {
         await this.#userApi.userDelete(userId, {});
     }
 
-    async passkeyList(userId: string): Promise<Array<WebAuthnCredentialItemRsp>> {
+    async getPasskeys(userId: string): Promise<Array<WebAuthnCredentialItemRsp>> {
         const res = await this.#passkeyApi.webAuthnCredentialList(undefined, undefined, undefined, [`userID:eq:${userId}`]);
         return res.data.rows;
     }
 
-    async passkeyDelete(userId: string, passkeyId: string): Promise<void> {
+    async deletePasskey(userId: string, passkeyId: string): Promise<void> {
         await this.#passkeyApi.webAuthnCredentialDelete(userId, passkeyId, {});
-    }
-
-    async userExists(): Promise<boolean> {
-        return false;
     }
 }

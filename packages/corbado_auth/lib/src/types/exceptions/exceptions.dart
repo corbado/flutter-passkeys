@@ -16,8 +16,7 @@ class CorbadoException implements Exception {
 /// Exception thrown when the user already exists
 class UserAlreadyExistsException extends CorbadoException {
   /// Constructor
-  UserAlreadyExistsException(String username)
-      : super('User with name "$username" already exists.');
+  UserAlreadyExistsException() : super('A user with this name already exists.');
 }
 
 /// Exception thrown when the user is unknown
@@ -27,6 +26,14 @@ class UnknownUserException implements Exception {
 
   /// The message
   final String message;
+}
+
+/// Exception thrown when the username (usually an email address) is invalid
+class InvalidUsernameException extends CorbadoException {
+  /// Constructor
+  InvalidUsernameException()
+      : super(
+            'The username you entered is invalid. Please check it once again.');
 }
 
 /// Exception thrown when one of the required fields is empty
@@ -156,7 +163,7 @@ class ExceptionFactory {
     switch (e.first.field) {
       case 'username':
         if (e.first.message == 'user already exists') {
-          return UserAlreadyExistsException(message);
+          return UserAlreadyExistsException();
         }
       case 'email':
         break;
