@@ -1,0 +1,11 @@
+{
+  "projects": {},
+  "targets": {},
+  "etags": {
+    "corbado": {
+      "extensionInstances": {
+        "functions-corbado-auth": "d814172e969a84a406076c3239bd556588aaf5d41d4373445b470c47f77b8ac5"
+      }
+    }
+  }
+}

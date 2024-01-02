@@ -2,7 +2,6 @@ import {RawAxiosRequestConfig} from "axios";
 
 export type PasskeyRegisterStart = {
     username: string,
-    fullName: string,
 }
 
 export type PasskeyRegisterFinish = {

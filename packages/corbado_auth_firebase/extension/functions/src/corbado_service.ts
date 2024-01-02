@@ -1,5 +1,5 @@
 import {UsersApi} from "./frontendapi";
-import {Configuration, PasskeysBiometricsApi, UserApi, WebAuthnCredentialItemRsp} from "./backendapi";
+import {Configuration, FullUser, PasskeysBiometricsApi, UserApi, WebAuthnCredentialItemRsp} from "./backendapi";
 import axios, {AxiosError} from "axios";
 import {CorbadoError} from "./exceptions";
 import {RequestMetadata} from "./types";
@@ -12,6 +12,8 @@ type User = {
     sub: string;
     exp: number;
 }
+
+export const RESERVED = "RESERVED";
 
 export class CorbadoService {
     #usersApi: UsersApi;
@@ -46,9 +48,9 @@ export class CorbadoService {
     }
 
 
-    async startSignUpWithPasskey(email: string, fullName: string, metadata: RequestMetadata): Promise<string> {
+    async startSignUpWithPasskey(email: string, metadata: RequestMetadata): Promise<string> {
         try {
-            const res = await this.#usersApi.passKeyRegisterStart({username: email, fullName: fullName}, metadata.toRawAxiosRequestConfig());
+            const res = await this.#usersApi.passKeyRegisterStart({username: email, fullName: RESERVED}, metadata.toRawAxiosRequestConfig());
 
             return res.data.data.challenge;
         } catch (e) {
@@ -65,10 +67,11 @@ export class CorbadoService {
         return JSON.parse(atob(splits[1]));
     }
 
-    async startPasskeyAppend(username: string, metadata: RequestMetadata) {
+    async startPasskeyAppend(username: string, fullname: string, metadata: RequestMetadata) {
         const res = await this.#passkeyApi.webAuthnRegisterStart({
             clientInfo: metadata.toClientInfo(),
             username: username,
+            userFullName: fullname,
             credentialStatus: "active",
         });
 
@@ -119,6 +122,11 @@ export class CorbadoService {
         await this.#userApi.userDelete(userId, {});
     }
 
+    async getFullUser(userId: string, metadata: RequestMetadata): Promise<FullUser> {
+        const res = await this.#userApi.userGet(userId, metadata.remoteAddress, metadata.userAgent);
+        return res.data.data;
+    }
+
     async getPasskeys(userId: string): Promise<Array<WebAuthnCredentialItemRsp>> {
         const res = await this.#passkeyApi.webAuthnCredentialList(undefined, undefined, undefined, [`userID:eq:${userId}`]);
         return res.data.rows;
@@ -126,5 +134,10 @@ export class CorbadoService {
 
     async deletePasskey(userId: string, passkeyId: string): Promise<void> {
         await this.#passkeyApi.webAuthnCredentialDelete(userId, passkeyId, {});
+    }
+
+    async updateUserWithFullName(uid: string, fullName: string, metadata: RequestMetadata) {
+        await this.#userApi.userUpdate(uid, {fullName: fullName}, metadata.toRawAxiosRequestConfig());
+        return;
     }
 }

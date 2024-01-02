@@ -11,7 +11,7 @@ import {CallableRequest, HttpsError, onCall} from "firebase-functions/v2/https";
 import * as logger from "firebase-functions/logger";
 import {initializeApp} from "firebase-admin/app";
 import {DecodedIdToken, getAuth} from "firebase-admin/auth";
-import {CorbadoService} from "./corbado_service";
+import {CorbadoService, RESERVED} from "./corbado_service";
 import {
     InvalidEmailError,
     InvalidOtpInputError,
@@ -31,8 +31,8 @@ import {
 const app = initializeApp();
 const auth = getAuth(app);
 
-const CORBADO_PROJECT_ID = "pro-4268394291597054564";
-const CORBADO_API_SECREET = "corbado1_UJ6igcNQWH5se5SwjZFMP2J2bBT7wo";
+const CORBADO_PROJECT_ID = process.env.CORBADO_PROJECT_ID;
+const CORBADO_API_SECREET = process.env.CORBADO_API_SECREET;
 const baseUrl = `https://${CORBADO_PROJECT_ID}.frontendapi.corbado.io`;
 
 const corbadoService = new CorbadoService(baseUrl, CORBADO_PROJECT_ID, CORBADO_API_SECREET);
@@ -50,16 +50,18 @@ enum ErrorCodes {
 
 const parseRequestMetadata = (callableRequest: CallableRequest): RequestMetadata => {
     const userAgent = callableRequest.rawRequest.headers["user-agent"] as string;
-    const remoteAddress = callableRequest.rawRequest.headers["x-forwarded-for"] as string;
+    const remoteAddress = callableRequest.rawRequest.headers["x-forwarded-for"] as string|undefined;
+    logger.info(`User agent: ${userAgent}`);
+    logger.info(`Remote address1: ${remoteAddress}`);
 
-    return new RequestMetadata(userAgent, remoteAddress);
+    return new RequestMetadata(userAgent, remoteAddress ?? '127.0.0.1');
 }
 
 export const startSignUpWithPasskey = onCall(async (callableRequest: CallableRequest) => {
     try {
         const params = callableRequest.data as PasskeyRegisterStart;
         const metadata = parseRequestMetadata(callableRequest);
-        return await corbadoService.startSignUpWithPasskey(params.username, params.fullName, metadata);
+        return await corbadoService.startSignUpWithPasskey(params.username, metadata);
     } catch (e) {
         if (e instanceof UserAlreadyExistsError) {
             throw new HttpsError("unknown", ErrorCodes.USER_ALREADY_EXISTS);
@@ -77,13 +79,24 @@ export const finishSignUpWithPasskey = onCall(async (callableRequest: CallableRe
     const params = callableRequest.data as PasskeyRegisterFinish;
     const metadata = parseRequestMetadata(callableRequest);
 
+    logger.info("starting finishSignUpWithPasskey");
     try {
-        const corbadoUser = await corbadoService.finishSignUpWithPasskey(params.signedChallenge, metadata)
+        const corbadoUser = await corbadoService.finishSignUpWithPasskey(params.signedChallenge, metadata);
+        const corbadoFullUser = await corbadoService.getFullUser(corbadoUser.sub, metadata);
+        logger.info(`Input: ${JSON.stringify(corbadoUser)}, ${JSON.stringify(corbadoFullUser)}`);
 
-        return await auth.createCustomToken(corbadoUser.name, {
-            corbadoUserId: corbadoUser.sub,
-            email: corbadoUser.name,
+        // remove the "usr-" prefix from the corbadoUserId
+        const userId = corbadoUser.sub.substring(4);
+        await auth.createUser({
+            uid: userId,
+            email: corbadoFullUser.name,
         });
+
+        await auth.setCustomUserClaims(userId, {
+            corbadoUserId: corbadoUser.sub,
+        });
+
+        return await auth.createCustomToken(userId);
     } catch (e) {
         throw handleUnknownError(e);
     }
@@ -119,10 +132,8 @@ export const finishLoginWithPasskey = onCall(async (callableRequest: CallableReq
         const metadata = parseRequestMetadata(callableRequest);
         const corbadoUser = await corbadoService.finishLoginWithPasskey(params.signedChallenge, metadata)
 
-        return await auth.createCustomToken(corbadoUser.name, {
-            corbadoUserId: corbadoUser.sub,
-            email: corbadoUser.name,
-        });
+        const userId = corbadoUser.name === RESERVED ? corbadoUser.sub.substring(4) : corbadoUser.name;
+        return await auth.createCustomToken(userId);
     } catch (e) {
         throw handleUnknownError(e);
     }
@@ -152,10 +163,8 @@ export const finishLoginWithEmailOTP = onCall(async (callableRequest: CallableRe
         const metadata = parseRequestMetadata(callableRequest);
         const corbadoUser = await corbadoService.finishLoginWithEmailOTP(params.emailCodeID, params.code, metadata)
 
-        return await auth.createCustomToken(corbadoUser.name, {
-            corbadoUserId: corbadoUser.sub,
-            email: corbadoUser.name,
-        });
+        const userId = corbadoUser.name === RESERVED ? corbadoUser.sub.substring(4) : corbadoUser.name;
+        return await auth.createCustomToken(userId);
     } catch (e) {
         if (e instanceof InvalidOtpInputError) {
             throw new HttpsError("unknown", ErrorCodes.INVALID_OTP_CODE);
@@ -170,8 +179,12 @@ export const startPasskeyAppend = onCall(async (callableRequest: CallableRequest
         const params = callableRequest.data as WithFirebaseToken
         const metadata = parseRequestMetadata(callableRequest);
 
-        const emailFromToken = await verifyIdTokenAndGetEmail(params.firebaseToken);
-        const res = await corbadoService.startPasskeyAppend(emailFromToken, metadata);
+        const verifiedToken = await verifyIdToken(params.firebaseToken);
+        if (!verifiedToken.email) {
+            throw new HttpsError("unknown", ErrorCodes.UNKNOWN_ERROR, "No email in token");
+        }
+
+        const res = await corbadoService.startPasskeyAppend(verifiedToken.email, verifiedToken.uid, metadata);
         if (res == "") {
             throw new PasskeyAlreadyExists();
         }
@@ -193,9 +206,21 @@ export const finishPasskeyAppend = onCall(async (callableRequest: CallableReques
         const verifiedToken = await verifyIdToken(params.firebaseToken);
         const corbadoUserId = await corbadoService.finishPasskeyAppend(params.signedChallenge, metadata);
 
+        try {
+            await auth.getUser(verifiedToken.uid);
+            // update corbado user with firebase user id
+            await corbadoService.updateUserWithFullName(corbadoUserId, verifiedToken.uid, metadata);
+        } catch (e) {
+            // firebase base user does not exist => we must create it
+            await auth.createUser({
+                uid: verifiedToken.uid,
+                email: verifiedToken.email,
+            });
+        }
+
         // we now must update the firebase user to include the corabdoUserId
         await auth.setCustomUserClaims(verifiedToken.uid, {
-            corbadoUserId: corbadoUserId
+            corbadoUserId: corbadoUserId,
         });
 
         // for now, we just always force a refresh
@@ -257,15 +282,6 @@ const verifyIdToken = async (token: string): Promise<DecodedIdToken> => {
         logger.error(e);
         throw new HttpsError("unknown", ErrorCodes.INVALID_AUTH_TOKEN);
     }
-}
-
-const verifyIdTokenAndGetEmail = async (token: string): Promise<string> => {
-    const verifiedToken = await verifyIdToken(token);
-    if (!verifiedToken.email) {
-        throw new HttpsError("unknown", ErrorCodes.UNKNOWN_ERROR, "No email in token");
-    }
-
-    return verifiedToken.email;
 }
 
 const verifyIdTokenAndGetCorbadoUserId = async (token: string): Promise<string> => {

@@ -24,12 +24,11 @@ class CorbadoService {
 
   Future<RegisterRequestType> startSignUpWithPasskey(
     String email,
-    String fullName,
   ) async {
     try {
       final startResponse = await _functions
-          .httpsCallable('startSignUpWithPasskey', options: _functionOptions)
-          .call<String>({'username': email, 'fullName': fullName});
+          .httpsCallable('ext-functions-corbado-auth-startSignUpWithPasskey', options: _functionOptions)
+          .call<String>({'username': email});
       final json = jsonDecode(startResponse.data) as Map<String, dynamic>;
 
       return StartRegisterResponse.fromJson(json).toPlatformType();
@@ -49,7 +48,7 @@ class CorbadoService {
 
       final signedChallenge = jsonEncode(finishRequest.toJson());
       final finishResponse = await _functions
-          .httpsCallable('finishSignUpWithPasskey', options: _functionOptions)
+          .httpsCallable('ext-functions-corbado-auth-finishSignUpWithPasskey', options: _functionOptions)
           .call<String>({'signedChallenge': signedChallenge});
 
       return finishResponse.data;
@@ -66,7 +65,7 @@ class CorbadoService {
   }) async {
     try {
       final startResponse = await _functions
-          .httpsCallable('startLoginWithPasskey', options: _functionOptions)
+          .httpsCallable('ext-functions-corbado-auth-startLoginWithPasskey', options: _functionOptions)
           .call<String>({'username': email});
       final json = jsonDecode(startResponse.data) as Map<String, dynamic>;
 
@@ -89,7 +88,7 @@ class CorbadoService {
       );
       final signedChallenge = jsonEncode(finishRequest.toJson());
       final finishResponse = await _functions
-          .httpsCallable('finishLoginWithPasskey', options: _functionOptions)
+          .httpsCallable('ext-functions-corbado-auth-finishLoginWithPasskey', options: _functionOptions)
           .call<String>({'signedChallenge': signedChallenge});
 
       return finishResponse.data;
@@ -103,7 +102,7 @@ class CorbadoService {
   Future<void> startLoginWithEmailOTP(String email) async {
     try {
       final startResponse = await _functions
-          .httpsCallable('startLoginWithEmailOTP', options: _functionOptions)
+          .httpsCallable('ext-functions-corbado-auth-startLoginWithEmailOTP', options: _functionOptions)
           .call<String>({'username': email});
 
       _ongoingEmailOTPCodeID = startResponse.data;
@@ -119,7 +118,7 @@ class CorbadoService {
   Future<String> finishLoginWithEmailOTP(String code) async {
     try {
       final finishResponse = await _functions
-          .httpsCallable('finishLoginWithEmailOTP', options: _functionOptions)
+          .httpsCallable('ext-functions-corbado-auth-finishLoginWithEmailOTP', options: _functionOptions)
           .call<String>({'emailCodeID': _ongoingEmailOTPCodeID, 'code': code});
 
       return finishResponse.data;
@@ -135,7 +134,7 @@ class CorbadoService {
   ) async {
     try {
       final startResponse = await _functions
-          .httpsCallable('startPasskeyAppend', options: _functionOptions)
+          .httpsCallable('ext-functions-corbado-auth-startPasskeyAppend', options: _functionOptions)
           .call<String>({'firebaseToken': firebaseToken});
       final json = jsonDecode(startResponse.data) as Map<String, dynamic>;
 
@@ -157,7 +156,7 @@ class CorbadoService {
 
       final signedChallenge = jsonEncode(finishRequest.toJson());
       final res = await _functions
-          .httpsCallable('finishPasskeyAppend', options: _functionOptions)
+          .httpsCallable('ext-functions-corbado-auth-finishPasskeyAppend', options: _functionOptions)
           .call<bool>({
         'firebaseToken': firebaseToken,
         'signedChallenge': signedChallenge,
@@ -174,7 +173,7 @@ class CorbadoService {
   Future<List<PasskeyInfo>> getPasskeys(String firebaseToken) async {
     try {
       final res = await _functions
-          .httpsCallable('getPasskeys', options: _functionOptions)
+          .httpsCallable('ext-functions-corbado-auth-getPasskeys', options: _functionOptions)
           .call<String>({'firebaseToken': firebaseToken});
 
       final json = jsonDecode(res.data) as List<dynamic>;
@@ -191,7 +190,7 @@ class CorbadoService {
   Future<void> deletePasskey(String firebaseToken, String passkeyId) async {
     try {
       await _functions
-          .httpsCallable('deletePasskey', options: _functionOptions)
+          .httpsCallable('ext-functions-corbado-auth-deletePasskey', options: _functionOptions)
           .call<void>({'firebaseToken': firebaseToken, 'passkeyId': passkeyId});
 
       return;
@@ -205,7 +204,7 @@ class CorbadoService {
   Future<void> deleteUser(String firebaseToken) async {
     try {
       await _functions
-          .httpsCallable('deleteUser', options: _functionOptions)
+          .httpsCallable('ext-functions-corbado-auth-deleteUser', options: _functionOptions)
           .call<void>({'firebaseToken': firebaseToken});
 
       return;

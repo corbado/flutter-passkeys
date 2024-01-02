@@ -25,8 +25,7 @@ class AuthService {
     try {
       final passkeyToken =
           await _corbadoAuth.signUpWithPasskey(email: email, fullName: email);
-      final credential =
-          await _firebaseAuth.signInWithCustomToken(passkeyToken);
+      await _firebaseAuth.signInWithCustomToken(passkeyToken);
 
       return null;
     } catch (e) {
@@ -48,7 +47,8 @@ class AuthService {
     }
   }
 
-  Future<String?> signInWithEmailAndPassword(String email, String password) async {
+  Future<String?> signInWithEmailAndPassword(
+      String email, String password) async {
     try {
       await _firebaseAuth.signInWithEmailAndPassword(
         email: email,

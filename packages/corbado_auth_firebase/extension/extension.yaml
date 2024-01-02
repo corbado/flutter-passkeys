@@ -1,0 +1,98 @@
+name: functions-corbado-auth
+version: 0.0.1
+specVersion: v1beta
+
+displayName: Passkeys for Firebase
+
+description: >-
+  Allows you to use Firebase with CorbadoAuth and thus to support passkeys in your application.
+
+author:
+  authorName: Corbado GmbH
+  url: https://corbado.com
+
+license: Apache-2.0
+
+sourceUrl: https://github.com/corbado/flutter-passkeys/tree/feature/flutter-web/packages/corbado_auth_firebase
+
+resources:
+  - name: startSignUpWithPasskey
+    type: firebaseextensions.v1beta.function
+    properties:
+      runtime: nodejs20
+      httpsTrigger: {}
+  - name: finishSignUpWithPasskey
+    type: firebaseextensions.v1beta.function
+    properties:
+      runtime: nodejs20
+      httpsTrigger: {}
+  - name: startLoginWithPasskey
+    type: firebaseextensions.v1beta.function
+    properties:
+      runtime: nodejs20
+      httpsTrigger: {}
+  - name: finishLoginWithPasskey
+    type: firebaseextensions.v1beta.function
+    properties:
+      runtime: nodejs20
+      httpsTrigger: {}
+  - name: startLoginWithEmailOTP
+    type: firebaseextensions.v1beta.function
+    properties:
+      runtime: nodejs20
+      httpsTrigger: {}
+  - name: finishLoginWithEmailOTP
+    type: firebaseextensions.v1beta.function
+    properties:
+      runtime: nodejs20
+      httpsTrigger: {}
+  - name: startPasskeyAppend
+    type: firebaseextensions.v1beta.function
+    properties:
+      runtime: nodejs20
+      httpsTrigger: {}
+  - name: finishPasskeyAppend
+    type: firebaseextensions.v1beta.function
+    properties:
+      runtime: nodejs20
+      httpsTrigger: {}
+  - name: getPasskeys
+    type: firebaseextensions.v1beta.function
+    properties:
+      runtime: nodejs20
+      httpsTrigger: {}
+  - name: deletePasskey
+    type: firebaseextensions.v1beta.function
+    properties:
+      runtime: nodejs20
+      httpsTrigger: {}
+  - name: deleteUser
+    type: firebaseextensions.v1beta.function
+    properties:
+      runtime: nodejs20
+      httpsTrigger: {}
+
+roles:
+  - role: firebaseauth.admin
+    reason: Required to access the authentication API of Firebase and to keep user data in sync.
+
+params:
+  - param: CORBADO_PROJECT_ID
+    label: Your Corbado project ID
+    description: >-
+      The ID of your Corbado project. You can find it in the Corbado console. 
+      Create a free project if you don't have one yet.
+    type: string
+    default: pro-XXX
+    required: true
+    immutable: false
+  - param: CORBADO_API_SECRET
+    label: Your Corbado API secret
+    description: >-
+      The API secret of your Corbado project. You can find it in the Corbado console. 
+      Create a free project if you don't have one yet.
+      This secret will be used by the extension to authenticate with Corbado.
+    type: string
+    default: corbado1_XXX
+    required: true
+    immutable: false

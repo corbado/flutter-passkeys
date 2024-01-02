@@ -3,13 +3,19 @@ import 'package:example/auth_provider.dart';
 import 'package:example/firebase_options.dart';
 import 'package:example/pages/loading_page.dart';
 import 'package:example/router.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_functions/cloud_functions.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  await Firebase.initializeApp(name: 'corbado_auth_example', options: DefaultFirebaseOptions.currentPlatform);
+
+  // FirebaseFunctions.instance.useFunctionsEmulator('localhost', 5001);
+  // await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
 
   // This is a nice pattern if you need to initialize some of your services
   // before the app starts.

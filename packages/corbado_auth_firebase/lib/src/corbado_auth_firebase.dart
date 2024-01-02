@@ -20,8 +20,7 @@ class CorbadoAuthFirebase {
     String? fullName,
   }) async {
     try {
-      final challenge = await _corbadoService.startSignUpWithPasskey(
-          email, fullName ?? email);
+      final challenge = await _corbadoService.startSignUpWithPasskey(email);
       final platformResponse = await _authenticator.register(challenge);
 
       return await _corbadoService.finishSignUpWithPasskey(platformResponse);

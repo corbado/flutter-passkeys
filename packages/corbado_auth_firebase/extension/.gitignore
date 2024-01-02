@@ -63,4 +63,4 @@ node_modules/
 .yarn-integrity
 
 # dotenv environment variables file
-.env
+functions-corbado-auth.env
