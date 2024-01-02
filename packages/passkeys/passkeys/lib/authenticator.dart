@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:passkeys/exceptions.dart';
 import 'package:passkeys_platform_interface/passkeys_platform_interface.dart';

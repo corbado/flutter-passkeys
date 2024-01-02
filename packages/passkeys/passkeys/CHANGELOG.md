@@ -1,3 +1,6 @@
+## 2.0.0-dev.2
+* Bump version of passkey_ios
+
 ## 2.0.0-dev.1
 
 * Added flutter_web support

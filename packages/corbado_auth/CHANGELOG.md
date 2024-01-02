@@ -1,3 +1,6 @@
+## 2.0.0-dev.2
+* Various fixes to corbado_auth
+
 ## 2.0.0-dev.1
 * Added support for flutter web
 * Added CustomCorbadoAuth for developers who want to use their own session management

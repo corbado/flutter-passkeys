@@ -47,6 +47,12 @@ scripts:
       cd packages/corbado_auth/example
       flutter run lib/main.dart --dart-define=CORBADO_PROJECT_ID=pro-4268394291597054564
 
+  example-corbado_auth_firebase-native:
+    description: Run corbado_auth_firebase example on iOS or Android (you should start the emulator/simulator before you run this command).
+    run: |
+      cd packages/corbado_auth_firebase/example
+      flutter run lib/main.dart --dart-define=CORBADO_PROJECT_ID=pro-4268394291597054564
+
   build-passkeys-web-javascript:
     description: Build passkeys_web's javascript code and copy it to the example.
     run: |
@@ -54,14 +60,7 @@ scripts:
       npm run build
       cp javascript/dist/bundle.js ../passkeys/example/web/bundle.js
 
-  publish-passkeys-web-javascript:
-    description: Publish passkeys_web's javascript code.
-    run: |
-      cd packages/passkeys/passkeys_web
-      npm run build
-      cp javascript/dist/bundle.js ../passkeys/example/web/bundle.js
-
-  deploy-corbado_auth-web:
+  deploy-example-corbado_auth-web:
     description: Deploy corbado_auth example to Vercel.
     run: |
       cd packages/corbado_auth/example

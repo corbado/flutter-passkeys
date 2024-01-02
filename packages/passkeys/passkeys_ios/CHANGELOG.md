@@ -1,3 +1,6 @@
+## 2.0.0-dev.2
+* Fixes to conditionalUI on iOS
+
 ## 2.0.0-dev.1
 
 * Changed conditional UI (use performAutoFillAssistedRequests)
