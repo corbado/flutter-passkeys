@@ -64,7 +64,7 @@ For this package to work you need to do two things:
 We will now describe these steps in more detail.
 
 ### Deploy the Firebase extension
-1. Go to the [Firebase extension hub](https://extensions.dev/extensions/firebase/functions-corbado-auth) and install the extension by clicking on "Install in Firebase console". Make sure that you select the correct Firebase project (the one you want to use with your Flutter app).
+1. Go to the [Firebase extension hub](https://extensions.dev/extensions/firebase/authentication-corbado) and install the extension by clicking on "Install in Firebase console". Make sure that you select the correct Firebase project (the one you want to use with your Flutter app).
 2. After the installation you have to append the "Service Account Token Creator" to your service account. This is required so that the extension can generate custom firebase tokens. To do this, follow the instructions in the POSTINSTALL.md.
 
 ### Add this package to your Flutter app

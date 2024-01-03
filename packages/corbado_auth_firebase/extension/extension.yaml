@@ -1,9 +1,8 @@
-name: functions-corbado-auth
+name: authentication-corbado
 version: 0.0.1
 specVersion: v1beta
 
 displayName: Passkeys for Firebase
-
 description: >-
   Allows you to use Firebase with CorbadoAuth and thus to support passkeys in your application.
 
@@ -14,6 +13,12 @@ author:
 license: Apache-2.0
 
 sourceUrl: https://github.com/corbado/flutter-passkeys/tree/feature/flutter-web/packages/corbado_auth_firebase
+
+billingRequired: true
+
+externalServices:
+  - name: Corbado
+    pricingUri: https://corbado.com/pricing
 
 resources:
   - name: startSignUpWithPasskey
