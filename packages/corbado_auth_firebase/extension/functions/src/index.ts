@@ -32,10 +32,14 @@ const app = initializeApp();
 const auth = getAuth(app);
 
 const CORBADO_PROJECT_ID = process.env.CORBADO_PROJECT_ID;
-const CORBADO_API_SECREET = process.env.CORBADO_API_SECREET;
+const CORBADO_API_SECRET = process.env.CORBADO_API_SECRET;
 const baseUrl = `https://${CORBADO_PROJECT_ID}.frontendapi.corbado.io`;
 
-const corbadoService = new CorbadoService(baseUrl, CORBADO_PROJECT_ID, CORBADO_API_SECREET);
+if (!CORBADO_PROJECT_ID || !CORBADO_API_SECRET) {
+    throw new Error("Missing environment variables. You must set CORBADO_PROJECT_ID and CORBADO_API_SECRET");
+}
+
+const corbadoService = new CorbadoService(baseUrl, CORBADO_PROJECT_ID, CORBADO_API_SECRET);
 
 enum ErrorCodes {
     NO_PASSKEY_AVAILABLE = "NO_PASSKEY_AVAILABLE",

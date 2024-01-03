@@ -88,12 +88,20 @@ export class CorbadoService {
     }
 
     async startLoginWithPasskey(email: string, metadata: RequestMetadata): Promise<string> {
-        const res = await this.#usersApi.passKeyLoginStart({username: email}, metadata.toRawAxiosRequestConfig());
-        if (res.data.data.challenge.length === 0) {
+        let challenge;
+        if (email.length === 0) {
+            const res = await this.#usersApi.passKeyMediationStart({}, metadata.toRawAxiosRequestConfig());
+            challenge = res.data.data.challenge;
+        } else {
+            const res = await this.#usersApi.passKeyLoginStart({username: email}, metadata.toRawAxiosRequestConfig());
+            challenge = res.data.data.challenge;
+        }
+
+        if (challenge.length === 0) {
             throw CorbadoError.noPasskeyAvailable();
         }
 
-        return res.data.data.challenge;
+        return challenge;
     }
 
     async finishLoginWithPasskey(signedChallenge: string, metadata: RequestMetadata): Promise<User> {

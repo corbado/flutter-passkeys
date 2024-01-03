@@ -47,28 +47,28 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyBUXToLab53kDIQHMQYK40I-X_i1PntDtI',
-    appId: '1:696582919492:web:b9707a7c73875c9f4a3311',
-    messagingSenderId: '696582919492',
-    projectId: 'corbado',
-    authDomain: 'corbado.firebaseapp.com',
-    storageBucket: 'corbado.appspot.com',
+    apiKey: 'AIzaSyDW5L6chVyqM8SMgBpjgio2MhvIsKV8OJU',
+    appId: '1:734610402726:web:31c45d25a0713c82427367',
+    messagingSenderId: '734610402726',
+    projectId: 'example-corbado-auth',
+    authDomain: 'example-corbado-auth.firebaseapp.com',
+    storageBucket: 'example-corbado-auth.appspot.com',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDbs96K5pV6oIFan-osmo576eC8Jq5HJKE',
-    appId: '1:696582919492:android:c64c8ab920ddb3ee4a3311',
-    messagingSenderId: '696582919492',
-    projectId: 'corbado',
-    storageBucket: 'corbado.appspot.com',
+    apiKey: 'AIzaSyD-R8uiOLF-4qdEWw7nRc3LqLpsPYgi0sU',
+    appId: '1:734610402726:android:9e82ce9c8f6a013d427367',
+    messagingSenderId: '734610402726',
+    projectId: 'example-corbado-auth',
+    storageBucket: 'example-corbado-auth.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyBAOsjrXDUETBKxpA9VhEdThQqwAFD9lfo',
-    appId: '1:696582919492:ios:84e8224959db48944a3311',
-    messagingSenderId: '696582919492',
-    projectId: 'corbado',
-    storageBucket: 'corbado.appspot.com',
+    apiKey: 'AIzaSyCd4xUQkD3QnIy3txwIDUC__yVFoQfZzW4',
+    appId: '1:734610402726:ios:3883450c3d23dac3427367',
+    messagingSenderId: '734610402726',
+    projectId: 'example-corbado-auth',
+    storageBucket: 'example-corbado-auth.appspot.com',
     iosBundleId: 'com.corbado.corbadoauthfirebase.example',
   );
 }
