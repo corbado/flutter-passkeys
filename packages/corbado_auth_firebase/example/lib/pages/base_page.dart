@@ -8,7 +8,7 @@ class BasePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Corbado authentication')),
+      appBar: AppBar(title: const Text('Firebase + Corbado authentication')),
       body: Center(
         child: Container(
           constraints: const BoxConstraints(maxWidth: 500),
