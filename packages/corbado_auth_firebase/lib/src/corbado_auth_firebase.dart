@@ -36,10 +36,9 @@ class CorbadoAuthFirebase {
     return _corbadoService.finishPasskeyAppend(firebaseToken, platformResponse);
   }
 
-  /*
   Future<void> cancelAuthenticatorOperation() {
-    return _inner.passkeyAuthenticator.cancelCurrentAuthenticatorOperation();
-  }*/
+    return _authenticator.cancelCurrentAuthenticatorOperation();
+  }
 
   /// Signs in a user relying on a passkey.
   /// This is the recommended way to do sign in with passkeys as the user does
@@ -51,7 +50,7 @@ class CorbadoAuthFirebase {
   /// additional user input (e.g. iOS or web where the user needs to click the
   /// TextField).
   Future<String> autocompletedLoginWithPasskey() {
-    return _loginWithPasskey("");
+    return _loginWithPasskey('');
   }
 
   /// Signs in a user relying on a passkey.
@@ -86,7 +85,11 @@ class CorbadoAuthFirebase {
   }
 
   Future<String> _loginWithPasskey(String email) async {
-    final challenge = await _corbadoService.startLoginWithPasskey(email);
+    final isConditionalUI = email.isEmpty;
+    final challenge = await _corbadoService.startLoginWithPasskey(
+      email,
+      conditional: isConditionalUI,
+    );
     final platformResponse = await _authenticator.authenticate(challenge);
 
     return _corbadoService.finishLoginWithPasskey(platformResponse);

@@ -22,6 +22,10 @@ class SignInPage extends HookConsumerWidget {
     final usePasskeys = useState<bool>(true);
     final authService = ref.watch(authServiceProvider);
 
+    useEffect(() {
+      authService.signInWithAutocomplete();
+    }, []);
+
     return BasePage(
         child: SingleChildScrollView(
       child: Column(

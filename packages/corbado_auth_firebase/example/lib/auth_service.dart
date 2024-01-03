@@ -13,7 +13,7 @@ class UserNotLoggedInException implements Exception {
 }
 
 // This service encapsulates all authentication functionality.
-// It makes use of the corbado SDK through CorbadoAuth.
+// It makes use of the Corbado SDK through CorbadoAuthFirebase and for firebase_auth.
 class AuthService {
   final CorbadoAuthFirebase _corbadoAuth;
   final FirebaseAuth _firebaseAuth;
@@ -76,7 +76,9 @@ class AuthService {
   }
 
   Future<void> signInWithAutocomplete() async {
-    // return await _auth.autocompletedLoginWithPasskey();
+    final passkeyToken = await _corbadoAuth.autocompletedLoginWithPasskey();
+    await _firebaseAuth.signInWithCustomToken(passkeyToken);
+
     return;
   }
 
