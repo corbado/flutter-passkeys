@@ -82,7 +82,10 @@ class CorbadoAuth {
     required String email,
     String fullName = '',
   }) async {
-    _emailOTPState = await _inner.startSignUpWithEmailCode(email: email);
+    _emailOTPState = await _inner.startSignUpWithEmailCode(
+      email: email,
+      fullName: fullName,
+    );
   }
 
   /// Completes an email OTP transaction.

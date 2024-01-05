@@ -1,3 +1,6 @@
+## 2.0.0-dev.3
+* Fixed issue with userHandle that was preventing synced passkeys from working in some situations.
+
 ## 2.0.0-dev.2
 * Fixes to conditionalUI on iOS
 

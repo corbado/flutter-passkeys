@@ -1,3 +1,6 @@
+## 2.0.0-dev.3
+* Bump version of passkey_ios (fix userHandle issue)
+
 ## 2.0.0-dev.2
 * Bump version of passkey_ios
 

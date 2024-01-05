@@ -39,7 +39,7 @@ class AuthenticateController: NSObject, ASAuthorizationControllerDelegate, ASAut
                 clientDataJSON: r.rawClientDataJSON.toBase64URL(),
                 authenticatorData: r.rawAuthenticatorData.toBase64URL(),
                 signature: r.signature.toBase64URL(),
-                userHandle: String(decoding: r.userID, as: UTF8.self)
+                userHandle: r.userID.toBase64URL()
             )
 
             completion?(.success(response))

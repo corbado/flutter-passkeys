@@ -38,12 +38,17 @@ public class PasskeysPlugin: NSObject, FlutterPlugin, PasskeysApi {
             return
         }
         
+        guard let decodedUserId = Data.fromBase64(user.id) else {
+            completion(.failure(CustomErrors.decodingChallenge))
+            return
+        }
+        
         let rp = relyingParty.id
         let platformProvider = ASAuthorizationPlatformPublicKeyCredentialProvider(relyingPartyIdentifier: rp)
         let request = platformProvider.createCredentialRegistrationRequest(
             challenge: decodedChallenge,
             name: user.name,
-            userID: user.id.data(using: .utf8)!
+            userID: decodedUserId
         )
         
         func wrappedCompletion(result: Result<RegisterResponse, Error>) {

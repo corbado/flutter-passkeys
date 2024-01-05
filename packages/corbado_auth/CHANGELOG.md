@@ -1,3 +1,8 @@
+## 2.0.0-dev.3
+* Bump passkeys + corbado_auth version
+* Feat: Change customDomain parameter (now allows specifying the protocol also)
+* Fix: startSignUpWithEmailCode now accepts the fullName parameter
+
 ## 2.0.0-dev.2
 * Various fixes to corbado_auth
 

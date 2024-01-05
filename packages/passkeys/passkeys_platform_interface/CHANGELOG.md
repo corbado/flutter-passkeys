@@ -1,3 +1,6 @@
+## 2.0.0-dev.2
+* Version bump
+
 ## 2.0.0-dev.1
 
 * Removed getFacetID (no longer needed)
