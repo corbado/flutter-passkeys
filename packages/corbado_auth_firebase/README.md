@@ -1,4 +1,4 @@
-<img width="1070" alt="GitHub Repo Cover" src="https://github.com/corbado/flutter-passkeys/blob/feature/flutter-web/.github/images/root_headline.png">
+<img width="1070" alt="GitHub Repo Cover" src="https://raw.githubusercontent.com/corbado/flutter-passkeys/main/.github/images/root_headline.png">
 
 # Corbado Auth Firebase for Flutter
 
@@ -6,7 +6,7 @@ A Flutter package that allows you to make use of passkeys together with Firebase
 This package should be used in addition to [firebase_auth](https://pub.dev/packages/firebase_auth).
 It can be used to add passkeys support to an existing Firebase project (with already existing users)
 or to create a completely new project.
-As a relying party server solution this package makes use of [Corbado](app.corbado.com).
+As a relying party server solution this package makes use of [Corbado](https://app.corbado.com).
 
 If you want to understand how this package can be used in your app, take a look at this package's
 example.
@@ -27,7 +27,7 @@ example.
 
 The following picture shows the four important parts of our system:
 
-![architecture.png](./doc/architecture.png)
+![architecture.png](https://raw.githubusercontent.com/corbado/flutter-passkeys/main/packages/corbado_auth_firebase/doc/architecture.png)
 
 ### Flutter app
 

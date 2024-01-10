@@ -1,10 +1,10 @@
-<img width="1070" alt="GitHub Repo Cover" src="https://github.com/corbado/flutter-passkeys/blob/feature/flutter-web/.github/images/root_headline.png">
+<img width="1070" alt="GitHub Repo Cover" src="https://raw.githubusercontent.com/corbado/flutter-passkeys/main/.github/images/root_headline.png">
 
 # Corbado Auth for Flutter
 
 An authentication SDK to enable authentication through passkeys (based on WebAuthn / FIDO2).
 
-Take a look at https://corbadoauth.demo.corbado.io for a live demo (this is a Flutter web deployment of the example on Vercel).
+Take a look at https://corbadoauth.demo.corbado.io for a *live demo* (this is a Flutter web deployment of the example on Vercel).
 
 |             | Android            | iOS                | Linux | macOS | Web                | Windows |
 |-------------|--------------------|--------------------|-------|-------|--------------------|---------|

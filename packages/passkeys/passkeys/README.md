@@ -1,10 +1,10 @@
-<img width="1070" alt="GitHub Repo Cover" src="https://github.com/corbado/flutter-passkeys/blob/feature/flutter-web/.github/images/root_headline.png">
+<img width="1070" alt="GitHub Repo Cover" src="https://raw.githubusercontent.com/corbado/flutter-passkeys/main/.github/images/root_headline.png">
 
 # passkeys
 
 A Flutter package to enable authentication through passkeys (based on WebAuthn / FIDO2).
 
-Take a look at https://passkeys.demo.corbado.io for a live demo (this is a Flutter web deployment of the example on Vercel).
+Take a look at https://passkeys.demo.corbado.io for a *live demo* (this is a Flutter web deployment of the example on Vercel).
 
 |             | Android            | iOS                | Linux | macOS | Web                | Windows |
 |-------------|--------------------|--------------------|-------|-------|--------------------|---------|
@@ -40,7 +40,7 @@ The flow is shown in the image below.
 At first, the user will provide his email address or a username to your app.
 This email address will be sent to the relying party server.
 You can implement that server yourself, or you can rely on prebuilt ones (e.g. provided
-by [Corbado](https://corbado.com)).
+by [Corbado](https://app.corbado.com)).
 The relying party server's response will contain *publicKeyCredentialCreationOptions*.
 It contains all information required by the user's device to set up a passkey.
 
@@ -77,14 +77,13 @@ follow these steps:
 1. Clone the GitHub repo `git clone git@github.com:corbado/flutter-passkeys.git`
 2. If you want to run the example on an iOS Simulator or an Android emulator, start one now (skip
    this step if you want to start the example in a browser).
-3. Run `melos run example-passkeys-native` to start the example on iOS/Android (
-   use `melos run example-passkeys-web` to run it inside a browser).
+3. Run `melos run example-passkeys-native` to start the example on iOS/Android.
 4. Sign up a new user by providing an email address and clicking *sign up*.
 5. After logging out, you can login by providing the exact same email address again or sign up
    another user by providing a new one.
 
 Find more explanations to this example and troubleshooting in the
-example's [readme](https://github.com/corbado/flutter-passkeys/blob/main/packages/passkeys/passkeys/example/README.md).
+example's [README](https://github.com/corbado/flutter-passkeys/blob/main/packages/passkeys/passkeys/example/README.md).
 
 ## Usage
 
@@ -168,7 +167,7 @@ If you don't want to build one, you can use already existing solutions.
 To save time and effort, you can use [Corbado](https://app.corbado.com) as a relying party server.
 If you want to try it out, use [corbado_auth](https://pub.dev/packages/corbado_auth).
 Find an example how to do this including a step by step
-guide [here](https://github.com/corbado/example-passkeys-api-flutter).
+guide [here](https://github.com/corbado/example-passkeys-flutter).
 
 FYI: You can use this approach in two variations:
 
@@ -186,8 +185,7 @@ FYI: You can use this approach in two variations:
 <summary>4. Use case: You want to use Firebase together with passkeys</summary>
 
 Firebase is a great technology that helps you with building your app.
-We are currently working on a solution that enables this package to be used together with Firebase
-Auth.
+To use passkeys together with Firebase you can use [corbado_auth_firebase](https://pub.dev/packages/corbado_auth_firebase).
 
 </details>
 
@@ -195,7 +193,8 @@ Auth.
 
 ### Android
 
-#### 1. Make sure that you have logged into a Google account.
+<details>
+<summary>1. Make sure that you have logged into a Google account.</summary>
 
 Google backs up all your passkeys so you need to be logged into a Google account to use passkeys.
 If you are not logged in, you will see the following message: "Sign in to your Google Account to
@@ -205,8 +204,10 @@ You can log into your Google account by opening settings, clicking on the icon i
 then on "Sign in to your Google Account".
 
 <img src="https://github.com/corbado/flutter-passkeys/blob/main/packages/passkeys/passkeys/doc/troubleshooting-sign-in-to-google-account.png?raw=true" style="width: 100%" alt="troubleshooting_google_account"/>
+</details>
 
-#### 2. Make sure that you have set up a screen lock or biometrics on your device.
+<details>
+<summary>2. Make sure that you have set up a screen lock or biometrics on your device.</summary>
 
 If you run the application in an emulator and it says that you can't create a passkey, you have to
 log into your Google account and properly set up a screen lock or biometrics on the device.
@@ -215,8 +216,10 @@ To set up the screen lock, open the settings, search for security settings and a
 as well as a fingerprint as shown below (PIN is required for fingerprint):
 
 <img src="https://github.com/corbado/flutter-passkeys/blob/main/packages/passkeys/passkeys/doc/troubleshooting-no-screen-lock.png?raw=true" style="width: 100%" alt="troubleshooting_screen_lock"/>
+</details>
 
-#### 3. In case of using an emulator, make sure that is has Play Store support.
+<details>
+<summary>3. In case of using an emulator, make sure that is has Play Store support.</summary>
 
 During our implementation and testing, we detected some bugs when using specific API versions /
 devices of Android emulator (physical devices worked at any time though).
@@ -242,7 +245,7 @@ Our recommendation if you run the example on an Android emulator is to follow th
 1. Start your Android emulator (one of the emulators we mentioned above).
 2. Open the emulator's settings and sign into your Google account.
 
-<img src="https://raw.githubusercontent.com/corbado/flutter-passkeys/main/packages/passkeys/passkeys/doc/sign-in-to-google-account.png" style="width: 100%" alt="sign-in-to-google-account"/>
+<img src="https://raw.githubusercontent.com/corbado/flutter-passkeys/main/packages/passkeys/passkeys/doc/sign-in-to-google-account.png" style="width: 800px" alt="sign-in-to-google-account"/>
 <img src="https://raw.githubusercontent.com/corbado/flutter-passkeys/main/packages/passkeys/passkeys/doc/sign-in-to-google-account-details.png" style="width: 100%" alt="sign-in-to-google-account-details"/>
 
 3. Stay in the settings and add a screen lock (and optionally a fingerprint).
@@ -255,24 +258,28 @@ Our recommendation if you run the example on an Android emulator is to follow th
 
 5. Restart the emulator (cold boot).
 
-<img src="https://raw.githubusercontent.com/corbado/flutter-passkeys/main/packages/passkeys/passkeys/doc/restart-emulator.png" style="width: 50%" alt="restart-emulator"/>
+<img src="https://raw.githubusercontent.com/corbado/flutter-passkeys/main/packages/passkeys/passkeys/doc/restart-emulator.png" style="width: 200px" alt="restart-emulator"/>
+
 6. You can now run the example app on your Android emulator.
+
+</details>
 
 ### iOS
 
-#### Make sure to enable biometrics to use passkeys
+<details>
+<summary>1. Make sure to enable biometrics to use passkeys</summary>
 
 If you get an error like "Simulator requires enrolled biometrics to use passkeys" during sign up or
 login, activate Face ID for your device.
 On a simulator, this can be done under *Features* => *Face ID* by clicking on "Enrolled".
 
-<img src="https://raw.githubusercontent.com/corbado/flutter-passkeys/main/packages/passkeys/passkeys/doc/ios_error_enrolled_biometrics.png" style="width: 50%" calt="ios_enrolled_biometrics">
-
-####  
+<img src="https://raw.githubusercontent.com/corbado/flutter-passkeys/main/packages/passkeys/passkeys/doc/ios_error_enrolled_biometrics.png" style="width: 200px" calt="ios_enrolled_biometrics">
+</details> 
 
 ### Web
 
-#### 1. Update your index.html to include our JavaScript library
+<details>
+<summary>1. Update your index.html to include our JavaScript library</summary>
 Our passkeys_web package relies on JavaScript for integrating with the browser's WebAuthn API.
 To make this work, you have to include our JavaScript library in your web/index.html file.
 
@@ -281,3 +288,4 @@ To make this work, you have to include our JavaScript library in your web/index.
 ```
 
 You can also take a look at this package's example to see how it is done there.
+</details>

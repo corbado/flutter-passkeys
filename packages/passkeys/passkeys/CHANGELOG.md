@@ -1,3 +1,6 @@
+## 2.0.1
+* Update docs
+
 ## 2.0.0
 * Stable release for v2
 * Added flutter_web support

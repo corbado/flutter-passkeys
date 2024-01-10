@@ -1,4 +1,4 @@
-<img width="1070" alt="GitHub Repo Cover" src="https://github.com/corbado/flutter-passkeys/blob/feature/flutter-web/.github/images/root_headline.png">
+<img width="1070" alt="GitHub Repo Cover" src="https://raw.githubusercontent.com/corbado/flutter-passkeys/main/.github/images/root_headline.png">
 
 # Flutter passkeys
 
