@@ -4,7 +4,7 @@ A Flutter package that allows you to make use of passkeys together with Firebase
 This package should be used in addition to [firebase_auth](https://pub.dev/packages/firebase_auth).
 It can be used to add passkeys support to an existing Firebase project (with already existing users)
 or to create a completely new project.
-As a relying party server solution this package makes use of [Corabdo](app.corbado.com).
+As a relying party server solution this package makes use of [Corbado](app.corbado.com).
 
 If you want to understand how this package can be used in your app, take a look at this package's example.
 
@@ -16,7 +16,7 @@ If you want to understand how this package can be used in your app, take a look 
 
 * allow new users to sign up and log in using passkeys 
 * allow existing users (that you created with Firebase authentication) to setup a passkey and then log in with it
-* emailOTP codes as fallback mechanism for situations when passkeys can not be used (e.g. when a user logs in to a device where none of his passkeys is available)
+* email OTP codes as fallback mechanism for situations when passkeys can not be used (e.g. when a user logs in to a device where none of his passkeys is available)
 
 ## Architecture
 

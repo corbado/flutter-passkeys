@@ -15,7 +15,7 @@ Have a look at https://app.flutter-corbadoauth-example.korbado.com for a demo.
   server
 * login users with conditional UI
 * emailOTP codes as fallback mechanism for situations when passkeys can not be used
-* use Corabdo's session management (keep user logged in even if he closes the app, automatic token
+* use Corbado's session management (keep user logged in even if he closes the app, automatic token
   refresh)
 
 ## Getting started

@@ -215,7 +215,7 @@ abstract class CorbadoService {
   static String getFrontendAPIDomain(String projectId, {String? customDomain}) {
     var frontendAPIDomain = 'https://$projectId.frontendapi.corbado.io';
     if (customDomain != null && customDomain.isNotEmpty) {
-      frontendAPIDomain = '$customDomain';
+      frontendAPIDomain = customDomain;
     }
 
     return frontendAPIDomain;

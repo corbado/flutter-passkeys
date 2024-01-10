@@ -4,6 +4,7 @@ import 'package:corbado_auth/corbado_auth.dart';
 import 'package:corbado_auth/src/services/storage/storage.dart';
 import 'package:corbado_frontend_api_client/frontendapi/lib/api.dart';
 import 'package:flutter/foundation.dart';
+import 'package:rxdart/rxdart.dart';
 
 class SessionService {
   final StorageService _storageService;
@@ -48,8 +49,9 @@ class SessionService {
     return _storageService.getRefreshToken();
   }
 
-  Future<void> setRefreshToken(String value) {
-    return _storageService.setRefreshToken(value);
+  Future<void> setRefreshToken(User user, String value) async {
+    await _storageService.setRefreshToken(value);
+    _scheduleRefreshRoutine(user);
   }
 
   Future<User?> getUser() {
@@ -108,6 +110,7 @@ class SessionService {
       return;
     }
 
+    debugPrint('refreshed token');
     await _refreshToken();
   }
 
@@ -128,8 +131,8 @@ class SessionService {
       }
 
       frontendAPIClient.addDefaultHeader(
-        'Authorization',
-        'Bearer $refreshToken',
+        'cookie',
+        'cbo_long_session=$refreshToken',
       );
     }
 

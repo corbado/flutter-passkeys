@@ -29,11 +29,18 @@ It adds additional functionalities to make it simpler to use passkey authenticat
 #### Features
 * sign up and login users with passkeys
 * connect Corbado as pre-implemented relying party server
-* keeping users logged in even if they close the app
-* continuously updating a user's tokens (by default their lifetime is limited to 5 minutes)
+* keep users logged in even if they close the app (automatic session refresh)
 
 [Read more](./packages/corbado_auth/README.md)
 
+### 3. Corbado Auth Firebase
+A Flutter package that builds on the corbado_auth and the passkeys package.
+It helps you to integrate passkey authentication into your Flutter app that uses Firebase as a backend.
+
+#### Features
+* allow new users to sign up and log in using passkeys
+* allow existing users (that you created with Firebase authentication) to setup a passkey and then log in with it
+* email OTP codes as fallback mechanism for situations when passkeys can not be used (e.g. when a user logs in to a device where none of his passkeys is available)
 
 ## Contributing
 We're happy to receive your pull requests. For major changes, please open an issue first to discuss what you would like to change.

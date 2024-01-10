@@ -60,9 +60,18 @@ scripts:
       npm run build
       cp javascript/dist/bundle.js ../passkeys/example/web/bundle.js
 
+  deploy-example-passkeys-web:
+    description: Deploy passkeys example to Vercel.
+    run: |
+      cd packages/passkeys/passkeys/example
+      vercel pull
+      vercel build --prod
+      vercel deploy --prebuilt --prod
+
   deploy-example-corbado_auth-web:
     description: Deploy corbado_auth example to Vercel.
     run: |
       cd packages/corbado_auth/example
+      vercel pull
       vercel build --prod
       vercel deploy --prebuilt --prod

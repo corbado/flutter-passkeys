@@ -19,16 +19,17 @@ class CorbadoAuth {
   /// Should be listened to to get updates to the User object
   /// (e.g. updates to the idToken, sign in, sign out, changes to user data).
   /// userChanges fires more often than authStateChanges.
-  Stream<User?> get userChanges => _sessionService.userChanges;
+  Stream<User?> get userChanges => _sessionService.userChanges.distinct();
 
   /// Should be listened to to get updates to a user's auth state
   /// (e.g. sign in, sign out).
   /// This is a subset of userChanges.
-  Stream<AuthState> get authStateChanges => _sessionService.authStateChanges;
+  Stream<AuthState> get authStateChanges =>
+      _sessionService.authStateChanges.distinct();
 
   /// Should be listened to to get updates to a user's passkeys.
   Stream<List<PasskeyInfo>> get passkeysChanges =>
-      _passkeysStreamController.stream;
+      _passkeysStreamController.stream.distinct();
 
   /// Returns the current value of the user object.
   Future<User?> get currentUser => _sessionService.userChanges.first;
@@ -119,6 +120,8 @@ class CorbadoAuth {
         FinishRegisterRequest.fromRegisterCompleteRequest(platformResponse);
     await _inner.corbadoService.finishAppendPasskey(req2, token: refreshToken);
 
+    finishPasskeyAppendProcess();
+
     await _loadPasskeys();
 
     return null;
@@ -200,7 +203,7 @@ class CorbadoAuth {
     );
 
     if (refreshToken != null) {
-      await _sessionService.setRefreshToken(refreshToken);
+      await _sessionService.setRefreshToken(user, refreshToken);
     }
   }
 
