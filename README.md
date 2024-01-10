@@ -1,10 +1,12 @@
+<img width="1070" alt="GitHub Repo Cover" src="https://github.com/corbado/flutter-passkeys/blob/feature/flutter-web/.github/images/root_headline.png">
+
 # Flutter passkeys
 
 Flutter packages to enable passkey authentication (based on WebAuthn / FIDO2).
 
-|             | Android | iOS | Linux | macOS | Web | Windows |
-|-------------|---------|-----|-------|-------|-----|---------|
-| **Support** | yes     | yes | no    | no    | no  | no      |
+|             | Android            | iOS                | Linux | macOS | Web                | Windows |
+|-------------|--------------------|--------------------|-------|-------|--------------------|---------|
+| **Support** | :white_check_mark: | :white_check_mark: | :x:   | :x:   | :white_check_mark: | :x:     |
 
 <img src="https://raw.githubusercontent.com/corbado/flutter-passkeys/main/packages/passkeys/passkeys/doc/ios_sign_up.gif" alt="passkey-signup" height="500">
 
@@ -41,6 +43,8 @@ It helps you to integrate passkey authentication into your Flutter app that uses
 * allow new users to sign up and log in using passkeys
 * allow existing users (that you created with Firebase authentication) to setup a passkey and then log in with it
 * email OTP codes as fallback mechanism for situations when passkeys can not be used (e.g. when a user logs in to a device where none of his passkeys is available)
+
+[Read more](./packages/corbado_auth_firebase/README.md)
 
 ## Contributing
 We're happy to receive your pull requests. For major changes, please open an issue first to discuss what you would like to change.

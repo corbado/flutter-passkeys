@@ -1,13 +1,14 @@
+<img width="1070" alt="GitHub Repo Cover" src="https://github.com/corbado/flutter-passkeys/blob/feature/flutter-web/.github/images/root_headline.png">
+
 # Corbado Auth for Flutter
 
-A authentication SDK to enable authentication through passkeys (based on WebAuthn / FIDO2).
-Have a look at https://app.flutter-corbadoauth-example.korbado.com for a demo.
+An authentication SDK to enable authentication through passkeys (based on WebAuthn / FIDO2).
 
-|             | Android | iOS | Linux | macOS | Web | Windows |
-|-------------|---------|-----|-------|-------|-----|---------|
-| **Support** | yes     | yes | no    | no    | yes | no      |
+Take a look at https://corbadoauth.demo.corbado.io for a live demo (this is a Flutter web deployment of the example on Vercel).
 
-<img src="https://raw.githubusercontent.com/corbado/flutter-passkeys/main/packages/passkeys/passkeys/doc/ios_sign_up.gif" alt="signup" height="500">
+|             | Android            | iOS                | Linux | macOS | Web                | Windows |
+|-------------|--------------------|--------------------|-------|-------|--------------------|---------|
+| **Support** | :white_check_mark: | :white_check_mark: | :x:   | :x:   | :white_check_mark: | :x:     |
 
 ## Features
 
@@ -42,7 +43,7 @@ These steps are required to run the example but you also need to follow them to 
 
 ### iOS
 
-#### 1. Create an iOS app and configure the example in XCode
+#### 1. Create an iOS app 
 
 We need to establish trust between your iOS app and the relying party server.
 Your app will be identified through your **Application Identifier Prefix** (e.g. `9RF9KY77B2`) and
@@ -59,7 +60,7 @@ Open the example in Xcode now by opening `packages/passkeys/passkeys/example/ios
 In *Runner* -> *Signing & Capabilites* enter your *Application Identifier Prefix* and your *Bundle
 Identifier*.
 
-#### 2. Set up Corbado project
+#### 2. Set up your Corbado project
 
 Create a free Corbado project at
 the [Corbado developer panel](https://app.corbado.com/signin#register) if you haven't got one yet.
@@ -68,7 +69,7 @@ It will act as your relying party server.
 After successful sign up, in the wizard, select 'Integration guide', 'Native / mobile app' and 'No
 existing users'.
 
-#### 3. Set up an iOS app in Corbado
+#### 3. Configure your iOS app in Corbado
 
 Make sure that under [*Settings* -> *User interface* -> *Identity
 verification*](https://app.corbado.com/app/settings/userinterface) "Option 2: No verification
@@ -99,7 +100,7 @@ your own Corbado project ID and a different Bundle Identifier).
 
 <img src="https://raw.githubusercontent.com/corbado/flutter-passkeys/main/packages/corbado_auth/doc/img/passkeys_example_ios_associated_domains.png" height="250" alt="xcode-associated-domains">
 
-#### 5. Start the example
+#### 5. Start your example
 
 `flutter run --dart-define=CORBADO_PROJECT_ID=<your-corbado-project-id> lib/main.dart`
 

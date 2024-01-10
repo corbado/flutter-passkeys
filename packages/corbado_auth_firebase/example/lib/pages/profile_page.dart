@@ -21,6 +21,10 @@ class ProfilePage extends HookConsumerWidget {
     final passkeyAddIsLoading = useState(false);
 
     useEffect(() {
+      if (authService.isLoading) {
+        return;
+      }
+
       authService.getPasskeys().then((value) => passkeys.value = value);
     }, [authService]);
 

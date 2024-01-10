@@ -21,6 +21,8 @@ class AuthService {
 
   AuthService(this._corbadoAuth, this._firebaseAuth, this._user);
 
+  get isLoading => _user == null;
+
   Future<String?> register({required String email}) async {
     try {
       final passkeyToken =

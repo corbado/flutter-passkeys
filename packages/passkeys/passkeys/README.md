@@ -1,12 +1,14 @@
+<img width="1070" alt="GitHub Repo Cover" src="https://github.com/corbado/flutter-passkeys/blob/feature/flutter-web/.github/images/root_headline.png">
+
 # passkeys
 
 A Flutter package to enable authentication through passkeys (based on WebAuthn / FIDO2).
 
-|             | Android | iOS | Linux | macOS | Web | Windows |
-|-------------|---------|-----|-------|-------|-----|---------|
-| **Support** | yes     | yes | no    | no    | yes | no      |
+Take a look at https://passkeys.demo.corbado.io for a live demo (this is a Flutter web deployment of the example on Vercel).
 
-<img src="https://raw.githubusercontent.com/corbado/flutter-passkeys/main/packages/passkeys/passkeys/doc/ios_sign_up.gif" alt="signup" height="500">
+|             | Android            | iOS                | Linux | macOS | Web                | Windows |
+|-------------|--------------------|--------------------|-------|-------|--------------------|---------|
+| **Support** | :white_check_mark: | :white_check_mark: | :x:   | :x:   | :white_check_mark: | :x:     |
 
 ## Features
 
