@@ -1,3 +1,9 @@
+## 2.0.0
+
+* Removed getFacetID (no longer needed)
+* Added cancelCurrentAuthenticatorOperation
+* Adapted to new passkeys_platform_interface
+
 ## 2.0.0-dev.1
 
 * Removed getFacetID (no longer needed)
@@ -31,4 +37,4 @@
 
 ## 0.1.0
 
-* Initial Open Source release.
+* Initial open source release.

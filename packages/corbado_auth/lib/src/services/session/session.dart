@@ -4,7 +4,6 @@ import 'package:corbado_auth/corbado_auth.dart';
 import 'package:corbado_auth/src/services/storage/storage.dart';
 import 'package:corbado_frontend_api_client/frontendapi/lib/api.dart';
 import 'package:flutter/foundation.dart';
-import 'package:rxdart/rxdart.dart';
 
 class SessionService {
   final StorageService _storageService;

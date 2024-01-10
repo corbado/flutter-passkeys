@@ -1,3 +1,10 @@
+## 2.0.0
+* Stable release for v2
+* Removed getFacetID (no longer needed)
+* Added cancelCurrentAuthenticatorOperation
+* Grouped parameters of register and authenticate methods (RegisterRequestType and
+  AuthenticateRequestType)
+
 ## 2.0.0-dev.2
 * Version bump
 
@@ -26,4 +33,4 @@
 
 ## 0.1.0
 
-* Initial Open Source release.
+* Initial open source release.

@@ -1,3 +1,9 @@
+## 2.0.0
+* Stable release for v2
+* Added support for flutter web
+* Added CustomCorbadoAuth for developers who want to use their own session management
+* BREAKING CHANGE: Renamed CorbadoAuth's methods to be consistent with our other SDKs
+
 ## 2.0.0-dev.3
 * Bump passkeys + corbado_auth version
 * Feat: Change customDomain parameter (now allows specifying the protocol also)

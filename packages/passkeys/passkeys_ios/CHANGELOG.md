@@ -1,5 +1,12 @@
+## 2.0.0
+* Fixed issue with userHandle that prevented synced passkeys from working in some situations.
+* Changed conditional UI (use performAutoFillAssistedRequests)
+* Removed getFacetID (no longer needed)
+* Added cancelCurrentAuthenticatorOperation
+* Adapted to new passkeys_platform_interface
+
 ## 2.0.0-dev.3
-* Fixed issue with userHandle that was preventing synced passkeys from working in some situations.
+* Fixed issue with userHandle that prevented synced passkeys from working in some situations.
 
 ## 2.0.0-dev.2
 * Fixes to conditionalUI on iOS
@@ -37,4 +44,4 @@
 
 ## 0.1.0
 
-* Initial Open Source release.
+* Initial open source release.
