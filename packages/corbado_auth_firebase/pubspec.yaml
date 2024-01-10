@@ -2,7 +2,7 @@ name: corbado_auth_firebase
 description: TODO
 homepage: https://docs.corbado.com/overview/welcome
 repository: https://github.com/corbado/flutter-passkeys/tree/main/packages/corbado_auth_firebase
-version: 2.0.0
+version: 2.0.1
 
 environment:
   sdk: ">=3.0.0 <4.0.0"

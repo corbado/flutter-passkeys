@@ -4,7 +4,7 @@
 
 A Flutter package to enable authentication through passkeys (based on WebAuthn / FIDO2).
 
-Take a look at https://passkeys.demo.corbado.io for a *live demo* (this is a Flutter web deployment of the example on Vercel).
+Take a look at https://passkeys.demo.corbado.io for a **live demo** (this is a Flutter web deployment of the example on Vercel).
 
 |             | Android            | iOS                | Linux | macOS | Web                | Windows |
 |-------------|--------------------|--------------------|-------|-------|--------------------|---------|
