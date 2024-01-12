@@ -1,3 +1,7 @@
+## 2.0.2
+* Updated docs
+* Make Firebase region configurable
+
 ## 2.0.1
 * Update docs
 

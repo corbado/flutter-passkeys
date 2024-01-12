@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:corbado_auth/corbado_auth.dart';
 import 'package:corbado_auth_firebase/src/services/corbado.dart';
 import 'package:passkeys/authenticator.dart';
@@ -8,12 +9,15 @@ class CorbadoAuthFirebase {
   /// Constructor
   CorbadoAuthFirebase();
 
-  final CorbadoService _corbadoService = CorbadoService.getInstance();
+  late CorbadoService _corbadoService;
   final PasskeyAuthenticator _authenticator = PasskeyAuthenticator();
 
   /// Tries to get the user object from secure storage (this only works if
   /// the user has already signed in before and then closed the app).
-  Future<void> init(String projectId, {String? customDomain}) async {}
+  Future<void> init(String firebaseRegion) async {
+    final functions = FirebaseFunctions.instanceFor(region: firebaseRegion);
+    _corbadoService = CorbadoService(functions);
+  }
 
   Future<String> signUpWithPasskey({
     required String email,

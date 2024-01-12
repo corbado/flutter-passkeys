@@ -24,9 +24,8 @@ void main() async {
   runApp(const LoadingPage());
 
   // Now we do the initialization.
-  const projectId = String.fromEnvironment('CORBADO_PROJECT_ID');
   final corbadoAuth = CorbadoAuthFirebase();
-  await corbadoAuth.init(projectId);
+  await corbadoAuth.init('europe-west3');
 
   // Finally we override the providers that needed initialization.
   // Now the real app can be loaded.
