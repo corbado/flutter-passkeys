@@ -12,7 +12,7 @@ author:
 
 license: Apache-2.0
 
-sourceUrl: https://github.com/corbado/flutter-passkeys/tree/feature/flutter-web/packages/corbado_auth_firebase
+sourceUrl: https://github.com/corbado/flutter-passkeys/tree/main/packages/corbado_auth_firebase/extension
 
 billingRequired: true
 
