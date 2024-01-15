@@ -1,3 +1,6 @@
+## 0.1.2
+Respect ENV variables.
+
 ## 0.1.1
 Minor fixes.
 
