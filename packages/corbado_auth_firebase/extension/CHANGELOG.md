@@ -1,3 +1,6 @@
+## 0.1.3
+Make CORBADO_API_SECRET a secret.
+
 ## 0.1.2
 Respect ENV variables.
 

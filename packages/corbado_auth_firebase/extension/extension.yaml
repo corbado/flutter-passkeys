@@ -1,5 +1,5 @@
 name: authentication-corbado
-version: 0.1.2
+version: 0.1.3
 specVersion: v1beta
 
 displayName: Passkeys for Firebase
@@ -98,7 +98,7 @@ params:
       The API secret of your Corbado project. You can find it in the Corbado console. 
       Create a free project if you don't have one yet.
       This secret will be used by the extension to authenticate with Corbado.
-    type: string
+    type: secret
     default: corbado1_XXX
     required: true
     immutable: false
