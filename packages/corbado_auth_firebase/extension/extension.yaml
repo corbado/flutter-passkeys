@@ -5,6 +5,7 @@ specVersion: v1beta
 displayName: Passkeys for Firebase
 description: >-
   Allows you to use Firebase with CorbadoAuth and thus to support passkeys in your application.
+icon: corbado_icon.png
 
 author:
   authorName: Corbado GmbH
