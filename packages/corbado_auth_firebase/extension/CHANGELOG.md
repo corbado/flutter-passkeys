@@ -1,3 +1,6 @@
+## 0.1.4
+Add function descriptions.
+
 ## 0.1.3
 Make CORBADO_API_SECRET a secret.
 

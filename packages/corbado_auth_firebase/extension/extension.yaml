@@ -1,5 +1,5 @@
 name: authentication-corbado
-version: 0.1.3
+version: 0.1.4
 specVersion: v1beta
 
 displayName: Passkeys for Firebase
@@ -24,56 +24,92 @@ externalServices:
 resources:
   - name: startSignUpWithPasskey
     type: firebaseextensions.v1beta.function
+    description: >-
+      This function can be called to start a user's sign up with a passkey.
+      If will call Corbado's API to generate a passkey challenge and return it to the user.
     properties:
       runtime: nodejs20
       httpsTrigger: {}
   - name: finishSignUpWithPasskey
     type: firebaseextensions.v1beta.function
+    description: >-
+      This function can be called to finish a user's sign up with a passkey.
+      It will call Corbado's API to verify the challenge and create a new user. 
+      Finally it returns a custom Firebase token that allows the client to sign in the user.
     properties:
       runtime: nodejs20
       httpsTrigger: {}
   - name: startLoginWithPasskey
     type: firebaseextensions.v1beta.function
+    description: >-
+      This function can be called to finish a user's login with a passkey.
+      It will call Corbado's API to generate a passkey challenge and return it to the user.
     properties:
       runtime: nodejs20
       httpsTrigger: {}
   - name: finishLoginWithPasskey
     type: firebaseextensions.v1beta.function
+    description: >-
+      This function can be called to finish a user's login with a passkey.
+      It will call Corbado's API to verify the challenge and return a custom Firebase token that allows the client to sign in the user.
     properties:
       runtime: nodejs20
       httpsTrigger: {}
   - name: startLoginWithEmailOTP
     type: firebaseextensions.v1beta.function
+    description: >-
+      This function can be called to start a user's login with an email OTP (this makes sense in case no passkeys are available).
+      It will call Corbado's API to send out an email OTP challenge.
     properties:
       runtime: nodejs20
       httpsTrigger: {}
   - name: finishLoginWithEmailOTP
     type: firebaseextensions.v1beta.function
+    description: >-
+      This function can be called to finish a user's login with an email OTP.
+      It will call Corbado's API to verify the challenge and return a custom Firebase token that allows the client to sign in the user.
     properties:
       runtime: nodejs20
       httpsTrigger: {}
   - name: startPasskeyAppend
     type: firebaseextensions.v1beta.function
+    description: >-
+      This function can be called to start a user's passkey append process.
+      It will call Corbado's API to generate a passkey challenge and return it to the user.
+      It is only available to authenticated users, so a valid firebase token must be included in the request.
     properties:
       runtime: nodejs20
       httpsTrigger: {}
   - name: finishPasskeyAppend
     type: firebaseextensions.v1beta.function
+    description: >-
+      This function can be called to finish a user's passkey append process.
+      It will call Corbado's API to verify the challenge and append the passkey to the user's account.
+      It is only available to authenticated users, so a valid firebase token must be included in the request.
     properties:
       runtime: nodejs20
       httpsTrigger: {}
   - name: getPasskeys
     type: firebaseextensions.v1beta.function
+    description: >-
+      This function can be called to get all passkeys of a user.
+      It is only available to authenticated users, so a valid firebase token must be included in the request.
     properties:
       runtime: nodejs20
       httpsTrigger: {}
   - name: deletePasskey
     type: firebaseextensions.v1beta.function
+    description: >-
+      This function can be called to delete a passkey of a user.
+      It is only available to authenticated users, so a valid firebase token must be included in the request.
     properties:
       runtime: nodejs20
       httpsTrigger: {}
   - name: deleteUser
     type: firebaseextensions.v1beta.function
+    description: >-
+      This function can be called to delete a user.
+      It is only available to authenticated users, so a valid firebase token must be included in the request.
     properties:
       runtime: nodejs20
       httpsTrigger: {}
