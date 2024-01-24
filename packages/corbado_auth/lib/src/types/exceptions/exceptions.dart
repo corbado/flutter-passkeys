@@ -89,6 +89,15 @@ class PasskeyAlreadyExistsException extends CorbadoException {
             'You have already set up a passkey that can be used on this device.');
 }
 
+/// Exception thrown when a user that has not yet confirmed his account wants
+/// to use a passkey for login.
+class ConditionalUiUnconfirmedCredential extends CorbadoException {
+  /// Constructor
+  ConditionalUiUnconfirmedCredential()
+      : super(
+            'You can only use passkeys after you have confirmed your account.');
+}
+
 /// Exception thrown when the backend returns an unexpected response
 class UnexpectedBackendException implements Exception {
   /// Constructor
@@ -137,6 +146,12 @@ class ExceptionFactory {
 
         if (backendMessage.details == 'Used invalid credentials') {
           return InvalidPasskeyException();
+        }
+
+        return UnexpectedBackendException(operation, message);
+      case 'client_error':
+        if (backendMessage.details == 'Unconfirmed credential') {
+          return ConditionalUiUnconfirmedCredential();
         }
 
         return UnexpectedBackendException(operation, message);

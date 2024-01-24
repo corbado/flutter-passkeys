@@ -1,3 +1,6 @@
+## 2.0.2
+* Added ConditionalUiUnconfirmedCredential to handle unconfirmed accounts during conditional UI.
+
 ## 2.0.1
 * Update docs
 
