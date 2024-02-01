@@ -445,6 +445,81 @@ public class Messages {
     }
   }
 
+  /** Generated class from Pigeon that represents data sent in messages. */
+  public static final class ExcludeCredential {
+    /** The type */
+    private @NonNull String type;
+
+    public @NonNull String getType() {
+      return type;
+    }
+
+    public void setType(@NonNull String setterArg) {
+      if (setterArg == null) {
+        throw new IllegalStateException("Nonnull field \"type\" is null.");
+      }
+      this.type = setterArg;
+    }
+
+    /** The ID */
+    private @NonNull String id;
+
+    public @NonNull String getId() {
+      return id;
+    }
+
+    public void setId(@NonNull String setterArg) {
+      if (setterArg == null) {
+        throw new IllegalStateException("Nonnull field \"id\" is null.");
+      }
+      this.id = setterArg;
+    }
+
+    /** Constructor is non-public to enforce null safety; use Builder. */
+    ExcludeCredential() {}
+
+    public static final class Builder {
+
+      private @Nullable String type;
+
+      public @NonNull Builder setType(@NonNull String setterArg) {
+        this.type = setterArg;
+        return this;
+      }
+
+      private @Nullable String id;
+
+      public @NonNull Builder setId(@NonNull String setterArg) {
+        this.id = setterArg;
+        return this;
+      }
+
+      public @NonNull ExcludeCredential build() {
+        ExcludeCredential pigeonReturn = new ExcludeCredential();
+        pigeonReturn.setType(type);
+        pigeonReturn.setId(id);
+        return pigeonReturn;
+      }
+    }
+
+    @NonNull
+    ArrayList<Object> toList() {
+      ArrayList<Object> toListResult = new ArrayList<Object>(2);
+      toListResult.add(type);
+      toListResult.add(id);
+      return toListResult;
+    }
+
+    static @NonNull ExcludeCredential fromList(@NonNull ArrayList<Object> list) {
+      ExcludeCredential pigeonResult = new ExcludeCredential();
+      Object type = list.get(0);
+      pigeonResult.setType((String) type);
+      Object id = list.get(1);
+      pigeonResult.setId((String) id);
+      return pigeonResult;
+    }
+  }
+
   /**
    * Represents an authenticator selection
    *
@@ -903,12 +978,14 @@ public class Messages {
         case (byte) 130:
           return AuthenticatorSelection.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 131:
-          return PubKeyCredParam.fromList((ArrayList<Object>) readValue(buffer));
+          return ExcludeCredential.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 132:
-          return RegisterResponse.fromList((ArrayList<Object>) readValue(buffer));
+          return PubKeyCredParam.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 133:
-          return RelyingParty.fromList((ArrayList<Object>) readValue(buffer));
+          return RegisterResponse.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 134:
+          return RelyingParty.fromList((ArrayList<Object>) readValue(buffer));
+        case (byte) 135:
           return User.fromList((ArrayList<Object>) readValue(buffer));
         default:
           return super.readValueOfType(type, buffer);
@@ -926,17 +1003,20 @@ public class Messages {
       } else if (value instanceof AuthenticatorSelection) {
         stream.write(130);
         writeValue(stream, ((AuthenticatorSelection) value).toList());
-      } else if (value instanceof PubKeyCredParam) {
+      } else if (value instanceof ExcludeCredential) {
         stream.write(131);
+        writeValue(stream, ((ExcludeCredential) value).toList());
+      } else if (value instanceof PubKeyCredParam) {
+        stream.write(132);
         writeValue(stream, ((PubKeyCredParam) value).toList());
       } else if (value instanceof RegisterResponse) {
-        stream.write(132);
+        stream.write(133);
         writeValue(stream, ((RegisterResponse) value).toList());
       } else if (value instanceof RelyingParty) {
-        stream.write(133);
+        stream.write(134);
         writeValue(stream, ((RelyingParty) value).toList());
       } else if (value instanceof User) {
-        stream.write(134);
+        stream.write(135);
         writeValue(stream, ((User) value).toList());
       } else {
         super.writeValue(stream, value);
@@ -949,7 +1029,7 @@ public class Messages {
 
     void canAuthenticate(@NonNull Result<Boolean> result);
 
-    void register(@NonNull String challenge, @NonNull RelyingParty relyingParty, @NonNull User user, @NonNull AuthenticatorSelection authenticatorSelection, @Nullable List<PubKeyCredParam> pubKeyCredParams, @Nullable Long timeout, @Nullable String attestation, @NonNull Result<RegisterResponse> result);
+    void register(@NonNull String challenge, @NonNull RelyingParty relyingParty, @NonNull User user, @NonNull AuthenticatorSelection authenticatorSelection, @Nullable List<PubKeyCredParam> pubKeyCredParams, @Nullable Long timeout, @Nullable String attestation, @NonNull List<ExcludeCredential> excludeCredentials, @NonNull Result<RegisterResponse> result);
 
     void authenticate(@NonNull String relyingPartyId, @NonNull String challenge, @Nullable Long timeout, @Nullable String userVerification, @Nullable List<AllowCredential> allowCredentials, @NonNull Result<AuthenticateResponse> result);
 
@@ -1004,6 +1084,7 @@ public class Messages {
                 List<PubKeyCredParam> pubKeyCredParamsArg = (List<PubKeyCredParam>) args.get(4);
                 Number timeoutArg = (Number) args.get(5);
                 String attestationArg = (String) args.get(6);
+                List<ExcludeCredential> excludeCredentialsArg = (List<ExcludeCredential>) args.get(7);
                 Result<RegisterResponse> resultCallback =
                     new Result<RegisterResponse>() {
                       public void success(RegisterResponse result) {
@@ -1017,7 +1098,7 @@ public class Messages {
                       }
                     };
 
-                api.register(challengeArg, relyingPartyArg, userArg, authenticatorSelectionArg, pubKeyCredParamsArg, (timeoutArg == null) ? null : timeoutArg.longValue(), attestationArg, resultCallback);
+                api.register(challengeArg, relyingPartyArg, userArg, authenticatorSelectionArg, pubKeyCredParamsArg, (timeoutArg == null) ? null : timeoutArg.longValue(), attestationArg, excludeCredentialsArg, resultCallback);
               });
         } else {
           channel.setMessageHandler(null);

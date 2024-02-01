@@ -28,7 +28,13 @@ class PasskeysIOS extends PasskeysPlatform {
       id: request.relyingParty.id,
     );
 
-    final r = await _api.register(request.challenge, relyingPartyArg, userArg);
+    final r = await _api.register(
+      request.challenge,
+      relyingPartyArg,
+      userArg,
+      request.excludeCredentials.map((e) => e.id).toList(),
+    );
+
     return RegisterResponseType(
       id: r.id,
       rawId: r.rawId,

@@ -92,6 +92,7 @@ abstract class PasskeysApi {
     String challenge,
     RelyingParty relyingParty,
     User user,
+    List<String> excludeCredentialIDs,
   );
 
   @async

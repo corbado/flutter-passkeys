@@ -1,3 +1,6 @@
+## 2.0.1 
+* Added excludeCredentials support
+
 ## 2.0.0 
 * Stable open source release.
 

@@ -32,6 +32,7 @@ class PasskeysWeb extends PasskeysPlatform {
         request.challenge,
         request.pubKeyCredParams!,
         request.authSelectionType,
+        request.excludeCredentials,
         request.timeout,
       ),
     );

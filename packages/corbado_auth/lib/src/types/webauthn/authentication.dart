@@ -24,7 +24,7 @@ class StartLoginResponse {
       userVerification: publicKey.userVerification,
       allowCredentials: publicKey.allowCredentials
           ?.map(
-            (e) => AllowCredentialType(
+            (e) => CredentialType(
               type: e.type,
               id: e.id,
               transports: e.transports,

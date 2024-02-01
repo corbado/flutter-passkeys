@@ -73,15 +73,13 @@ class PasskeysAndroid extends PasskeysPlatform {
       userArg,
       authSelection,
       request.pubKeyCredParams
-          ?.map(
-            (e) => PubKeyCredParam(
-              alg: e.alg,
-              type: e.type,
-            ),
-          )
+          ?.map((e) => PubKeyCredParam(alg: e.alg, type: e.type))
           .toList(),
       request.timeout,
       request.attestation,
+      request.excludeCredentials
+          .map((e) => ExcludeCredential(id: e.id, type: e.type))
+          .toList(),
     );
 
     return RegisterResponseType(

@@ -234,12 +234,12 @@ class PasskeysApi {
     }
   }
 
-  Future<RegisterResponse> register(String arg_challenge, RelyingParty arg_relyingParty, User arg_user) async {
+  Future<RegisterResponse> register(String arg_challenge, RelyingParty arg_relyingParty, User arg_user, List<String?> arg_excludeCredentialIDs) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
         'dev.flutter.pigeon.passkeys_ios.PasskeysApi.register', codec,
         binaryMessenger: _binaryMessenger);
     final List<Object?>? replyList =
-        await channel.send(<Object?>[arg_challenge, arg_relyingParty, arg_user]) as List<Object?>?;
+        await channel.send(<Object?>[arg_challenge, arg_relyingParty, arg_user, arg_excludeCredentialIDs]) as List<Object?>?;
     if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',

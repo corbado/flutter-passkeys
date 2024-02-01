@@ -36,6 +36,7 @@ class StartRegisterResponse {
       pubKeyCredParams: publicKey.pubKeyCredParams
           ?.map((e) => PubKeyCredParamType(alg: e.alg, type: e.type))
           .toList(),
+      excludeCredentials: [],
     );
   }
 

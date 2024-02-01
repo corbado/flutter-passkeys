@@ -142,6 +142,34 @@ class AllowCredential {
   }
 }
 
+class ExcludeCredential {
+  ExcludeCredential({
+    required this.type,
+    required this.id,
+  });
+
+  /// The type
+  String type;
+
+  /// The ID
+  String id;
+
+  Object encode() {
+    return <Object?>[
+      type,
+      id,
+    ];
+  }
+
+  static ExcludeCredential decode(Object result) {
+    result as List<Object?>;
+    return ExcludeCredential(
+      type: result[0]! as String,
+      id: result[1]! as String,
+    );
+  }
+}
+
 /// Represents an authenticator selection
 class AuthenticatorSelection {
   AuthenticatorSelection({
@@ -289,17 +317,20 @@ class _PasskeysApiCodec extends StandardMessageCodec {
     } else if (value is AuthenticatorSelection) {
       buffer.putUint8(130);
       writeValue(buffer, value.encode());
-    } else if (value is PubKeyCredParam) {
+    } else if (value is ExcludeCredential) {
       buffer.putUint8(131);
       writeValue(buffer, value.encode());
-    } else if (value is RegisterResponse) {
+    } else if (value is PubKeyCredParam) {
       buffer.putUint8(132);
       writeValue(buffer, value.encode());
-    } else if (value is RelyingParty) {
+    } else if (value is RegisterResponse) {
       buffer.putUint8(133);
       writeValue(buffer, value.encode());
-    } else if (value is User) {
+    } else if (value is RelyingParty) {
       buffer.putUint8(134);
+      writeValue(buffer, value.encode());
+    } else if (value is User) {
+      buffer.putUint8(135);
       writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
@@ -316,12 +347,14 @@ class _PasskeysApiCodec extends StandardMessageCodec {
       case 130: 
         return AuthenticatorSelection.decode(readValue(buffer)!);
       case 131: 
-        return PubKeyCredParam.decode(readValue(buffer)!);
+        return ExcludeCredential.decode(readValue(buffer)!);
       case 132: 
-        return RegisterResponse.decode(readValue(buffer)!);
+        return PubKeyCredParam.decode(readValue(buffer)!);
       case 133: 
-        return RelyingParty.decode(readValue(buffer)!);
+        return RegisterResponse.decode(readValue(buffer)!);
       case 134: 
+        return RelyingParty.decode(readValue(buffer)!);
+      case 135: 
         return User.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
@@ -366,12 +399,12 @@ class PasskeysApi {
     }
   }
 
-  Future<RegisterResponse> register(String arg_challenge, RelyingParty arg_relyingParty, User arg_user, AuthenticatorSelection arg_authenticatorSelection, List<PubKeyCredParam?>? arg_pubKeyCredParams, int? arg_timeout, String? arg_attestation) async {
+  Future<RegisterResponse> register(String arg_challenge, RelyingParty arg_relyingParty, User arg_user, AuthenticatorSelection arg_authenticatorSelection, List<PubKeyCredParam?>? arg_pubKeyCredParams, int? arg_timeout, String? arg_attestation, List<ExcludeCredential?> arg_excludeCredentials) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
         'dev.flutter.pigeon.passkeys_android.PasskeysApi.register', codec,
         binaryMessenger: _binaryMessenger);
     final List<Object?>? replyList =
-        await channel.send(<Object?>[arg_challenge, arg_relyingParty, arg_user, arg_authenticatorSelection, arg_pubKeyCredParams, arg_timeout, arg_attestation]) as List<Object?>?;
+        await channel.send(<Object?>[arg_challenge, arg_relyingParty, arg_user, arg_authenticatorSelection, arg_pubKeyCredParams, arg_timeout, arg_attestation, arg_excludeCredentials]) as List<Object?>?;
     if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',

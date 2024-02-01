@@ -1,3 +1,6 @@
+## 2.0.1
+* Added excludeCredentials support
+
 ## 2.0.0
 * Fixed issue with userHandle that prevented synced passkeys from working in some situations.
 * Changed conditional UI (use performAutoFillAssistedRequests)

@@ -1,4 +1,4 @@
-import 'package:passkeys_platform_interface/types/allow_credential.dart';
+import 'package:passkeys_platform_interface/types/credential.dart';
 import 'package:passkeys_platform_interface/types/mediation.dart';
 
 class AuthenticateRequestType {
@@ -16,6 +16,6 @@ class AuthenticateRequestType {
   final String challenge;
   final int? timeout;
   final String? userVerification;
-  final List<AllowCredentialType>? allowCredentials;
+  final List<CredentialType>? allowCredentials;
   final MediationType mediation;
 }

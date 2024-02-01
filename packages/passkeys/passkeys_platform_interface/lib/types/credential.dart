@@ -1,20 +1,20 @@
 import 'package:json_annotation/json_annotation.dart';
 
-part 'allow_credential.g.dart';
+part 'credential.g.dart';
 
-/// The [AllowCredentialType] class wraps the data of a credential.
+/// The [CredentialType] class wraps the data of a credential it can be used to explicitly exclude or allow credentials.
 @JsonSerializable()
-class AllowCredentialType {
+class CredentialType {
   /// Constructs a new instance.
-  AllowCredentialType({
+  CredentialType({
     required this.type,
     required this.id,
     required this.transports,
   });
 
   /// Constructs a new instance from a JSON map.
-  factory AllowCredentialType.fromJson(Map<String, dynamic> json) =>
-      _$AllowCredentialTypeFromJson(json);
+  factory CredentialType.fromJson(Map<String, dynamic> json) =>
+      _$CredentialTypeFromJson(json);
 
   /// The type of the credential.
   final String type;
@@ -26,5 +26,5 @@ class AllowCredentialType {
   final List<String> transports;
 
   /// Converts this instance to a JSON map.
-  Map<String, dynamic> toJson() => _$AllowCredentialTypeToJson(this);
+  Map<String, dynamic> toJson() => _$CredentialTypeToJson(this);
 }

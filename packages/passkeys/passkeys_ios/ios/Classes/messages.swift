@@ -225,7 +225,7 @@ class PasskeysApiCodec: FlutterStandardMessageCodec {
 /// Generated protocol from Pigeon that represents a handler of messages from Flutter.
 protocol PasskeysApi {
   func canAuthenticate() throws -> Bool
-  func register(challenge: String, relyingParty: RelyingParty, user: User, completion: @escaping (Result<RegisterResponse, Error>) -> Void)
+  func register(challenge: String, relyingParty: RelyingParty, user: User, excludeCredentialIDs: [String], completion: @escaping (Result<RegisterResponse, Error>) -> Void)
   func authenticate(relyingPartyId: String, challenge: String, conditionalUI: Bool, allowedCredentialIDs: [String], completion: @escaping (Result<AuthenticateResponse, Error>) -> Void)
   func cancelCurrentAuthenticatorOperation(completion: @escaping (Result<Void, Error>) -> Void)
 }
@@ -256,7 +256,8 @@ class PasskeysApiSetup {
         let challengeArg = args[0] as! String
         let relyingPartyArg = args[1] as! RelyingParty
         let userArg = args[2] as! User
-        api.register(challenge: challengeArg, relyingParty: relyingPartyArg, user: userArg) { result in
+        let excludeCredentialIDsArg = args[3] as! [String]
+        api.register(challenge: challengeArg, relyingParty: relyingPartyArg, user: userArg, excludeCredentialIDs: excludeCredentialIDsArg) { result in
           switch result {
             case .success(let res):
               reply(wrapResult(res))

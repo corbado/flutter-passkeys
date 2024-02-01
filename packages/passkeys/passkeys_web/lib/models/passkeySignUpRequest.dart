@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:passkeys_platform_interface/types/credential.dart';
 import 'package:passkeys_platform_interface/types/pubkeycred_param.dart';
 import 'package:passkeys_platform_interface/types/types.dart';
 
@@ -21,6 +22,7 @@ class PublicKey {
     this.challenge,
     this.pubKeyCredParams,
     this.authenticatorSelection,
+    this.excludeCredentials,
     this.timeout,
   );
 
@@ -29,6 +31,7 @@ class PublicKey {
   final String challenge;
   final List<PubKeyCredParamType> pubKeyCredParams;
   final AuthenticatorSelectionType authenticatorSelection;
+  final List<CredentialType> excludeCredentials;
   final int? timeout;
 
   Map<String, dynamic> toJson() => _$PublicKeyToJson(this);

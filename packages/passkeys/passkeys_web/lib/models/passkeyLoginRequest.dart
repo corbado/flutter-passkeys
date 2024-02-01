@@ -1,5 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:passkeys_platform_interface/types/allow_credential.dart';
+import 'package:passkeys_platform_interface/types/credential.dart';
 import 'package:passkeys_platform_interface/types/types.dart';
 
 part 'passkeyLoginRequest.g.dart';
@@ -16,7 +16,7 @@ class PasskeyLoginRequest {
     String challenge,
     int? timeout,
     String? platformUserVerification,
-    List<AllowCredentialType>? platformAllowCredentials,
+    List<CredentialType>? platformAllowCredentials,
     MediationType platformMediation,
   ) {
     final allowCredentials = platformAllowCredentials?.map((e) {

@@ -19,5 +19,7 @@ Map<String, dynamic> _$PublicKeyToJson(PublicKey instance) => <String, dynamic>{
       'pubKeyCredParams':
           instance.pubKeyCredParams.map((e) => e.toJson()).toList(),
       'authenticatorSelection': instance.authenticatorSelection.toJson(),
+      'excludeCredentials':
+          instance.excludeCredentials.map((e) => e.toJson()).toList(),
       'timeout': instance.timeout,
     };
