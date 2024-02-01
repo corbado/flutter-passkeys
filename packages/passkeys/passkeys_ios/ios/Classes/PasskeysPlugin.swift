@@ -31,6 +31,7 @@ public class PasskeysPlugin: NSObject, FlutterPlugin, PasskeysApi {
         challenge: String,
         relyingParty: RelyingParty,
         user: User,
+        excludeCredentialIDs: [String],
         completion: @escaping (Result<RegisterResponse, Error>) -> Void
     ) {        
         guard let decodedChallenge = Data.fromBase64Url(challenge) else {
@@ -43,6 +44,7 @@ public class PasskeysPlugin: NSObject, FlutterPlugin, PasskeysApi {
             return
         }
         
+        
         let rp = relyingParty.id
         let platformProvider = ASAuthorizationPlatformPublicKeyCredentialProvider(relyingPartyIdentifier: rp)
         let request = platformProvider.createCredentialRegistrationRequest(
@@ -50,7 +52,9 @@ public class PasskeysPlugin: NSObject, FlutterPlugin, PasskeysApi {
             name: user.name,
             userID: decodedUserId
         )
-        
+                
+        request.excludedCredentials = parseCredentials(credentialIDs: excludeCredentialIDs)
+
         func wrappedCompletion(result: Result<RegisterResponse, Error>) {
             lock.unlock()
             completion(result)
@@ -72,16 +76,8 @@ public class PasskeysPlugin: NSObject, FlutterPlugin, PasskeysApi {
         let request = platformProvider.createCredentialAssertionRequest(
             challenge: decodedChallenge
         )
-        
-        let allowedCredentials = allowedCredentialIDs.compactMap {
-            if let credentialId = Data.fromBase64Url($0) {
-                return ASAuthorizationPlatformPublicKeyCredentialDescriptor.init(credentialID: credentialId)
-            } else {
-                return nil
-            }
-        }
-        
-        request.allowedCredentials = allowedCredentials
+                
+        request.allowedCredentials = parseCredentials(credentialIDs: allowedCredentialIDs)
                 
         let con = AuthenticateController(completion: completion)
         con.run(request: request, conditionalUI: conditionalUI)
@@ -92,6 +88,16 @@ public class PasskeysPlugin: NSObject, FlutterPlugin, PasskeysApi {
         inFlightController?.cancel()
         
         completion(.success(Void()))
+    }
+    
+    private func parseCredentials(credentialIDs: [String]) -> [ASAuthorizationPlatformPublicKeyCredentialDescriptor] {
+        return credentialIDs.compactMap {
+            if let credentialId = Data.fromBase64Url($0) {
+                return ASAuthorizationPlatformPublicKeyCredentialDescriptor.init(credentialID: credentialId)
+            } else {
+                return nil
+            }
+        }
     }
 }
 

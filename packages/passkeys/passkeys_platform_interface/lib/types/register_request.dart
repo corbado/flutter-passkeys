@@ -1,4 +1,5 @@
 import 'package:passkeys_platform_interface/types/authenticator_selection.dart';
+import 'package:passkeys_platform_interface/types/credential.dart';
 import 'package:passkeys_platform_interface/types/pubkeycred_param.dart';
 import 'package:passkeys_platform_interface/types/relying_party.dart';
 import 'package:passkeys_platform_interface/types/user.dart';
@@ -11,13 +12,15 @@ class RegisterRequestType {
       required this.authSelectionType,
       required this.pubKeyCredParams,
       required this.timeout,
-      required this.attestation});
+      required this.attestation,
+      required this.excludeCredentials});
 
   final String challenge;
   final RelyingPartyType relyingParty;
   final UserType user;
   final AuthenticatorSelectionType authSelectionType;
   final List<PubKeyCredParamType>? pubKeyCredParams;
+  final List<CredentialType> excludeCredentials;
   final int? timeout;
   final String? attestation;
 }

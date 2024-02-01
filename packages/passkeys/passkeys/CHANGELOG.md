@@ -1,3 +1,6 @@
+## 2.0.3
+* Added excludeCredentials support
+
 ## 2.0.2
 * Update docs
 

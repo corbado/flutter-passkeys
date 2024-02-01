@@ -1,13 +1,13 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'allow_credential.dart';
+part of 'credential.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-AllowCredentialType _$AllowCredentialTypeFromJson(Map<String, dynamic> json) =>
-    AllowCredentialType(
+CredentialType _$CredentialTypeFromJson(Map<String, dynamic> json) =>
+    CredentialType(
       type: json['type'] as String,
       id: json['id'] as String,
       transports: (json['transports'] as List<dynamic>)
@@ -15,8 +15,7 @@ AllowCredentialType _$AllowCredentialTypeFromJson(Map<String, dynamic> json) =>
           .toList(),
     );
 
-Map<String, dynamic> _$AllowCredentialTypeToJson(
-        AllowCredentialType instance) =>
+Map<String, dynamic> _$CredentialTypeToJson(CredentialType instance) =>
     <String, dynamic>{
       'type': instance.type,
       'id': instance.id,

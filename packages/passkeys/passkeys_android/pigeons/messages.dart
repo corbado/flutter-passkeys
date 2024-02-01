@@ -66,6 +66,17 @@ class AllowCredential {
   final List<String?> transports;
 }
 
+class ExcludeCredential {
+  /// Constructor
+  const ExcludeCredential(this.type, this.id);
+
+  /// The type
+  final String type;
+
+  /// The ID
+  final String id;
+}
+
 /// Represents an authenticator selection
 class AuthenticatorSelection {
   /// Constructor
@@ -152,6 +163,7 @@ abstract class PasskeysApi {
     List<PubKeyCredParam>? pubKeyCredParams,
     int? timeout,
     String? attestation,
+    List<ExcludeCredential> excludeCredentials,
   );
 
   @async

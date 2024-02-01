@@ -1,3 +1,6 @@
+## 2.0.1
+* Added excludeCredentials to RegisterRequestType
+
 ## 2.0.0
 * Stable release for v2
 * Removed getFacetID (no longer needed)

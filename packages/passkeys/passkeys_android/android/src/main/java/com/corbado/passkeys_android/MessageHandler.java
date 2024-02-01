@@ -31,6 +31,7 @@ import com.corbado.passkeys_android.models.login.AllowCredentialType;
 import com.corbado.passkeys_android.models.signup.AuthenticatorSelectionType;
 import com.corbado.passkeys_android.models.signup.CreateCredentialOptions;
 import com.corbado.passkeys_android.models.login.GetCredentialOptions;
+import com.corbado.passkeys_android.models.signup.ExcludeCredentialType;
 import com.corbado.passkeys_android.models.signup.PubKeyCredParamType;
 import com.corbado.passkeys_android.models.signup.RelyingPartyType;
 import com.corbado.passkeys_android.models.signup.UserType;
@@ -74,7 +75,17 @@ public class MessageHandler implements Messages.PasskeysApi {
     }
 
     @Override
-    public void register(@NonNull String challenge, @NonNull Messages.RelyingParty relyingParty, @NonNull Messages.User user, @NonNull Messages.AuthenticatorSelection authenticatorSelection, @Nullable List<Messages.PubKeyCredParam> pubKeyCredParams, @Nullable Long timeout, @Nullable String attestation, @NonNull Messages.Result<Messages.RegisterResponse> result) {
+    public void register(
+            @NonNull String challenge,
+            @NonNull Messages.RelyingParty relyingParty,
+            @NonNull Messages.User user,
+            @NonNull Messages.AuthenticatorSelection authenticatorSelection,
+            @Nullable List<Messages.PubKeyCredParam> pubKeyCredParams,
+            @Nullable Long timeout,
+            @Nullable String attestation,
+            @NonNull List<Messages.ExcludeCredential> excludeCredentials,
+            @NonNull Messages.Result<Messages.RegisterResponse> result
+    ) {
 
         UserType userType = new UserType(user.getName(), user.getDisplayName(), user.getId(), user.getIcon());
         RelyingPartyType relyingPartyType = new RelyingPartyType(relyingParty.getId(), relyingParty.getName());
@@ -83,7 +94,19 @@ public class MessageHandler implements Messages.PasskeysApi {
         if (pubKeyCredParams != null) {
             pubKeyCredParamsType = pubKeyCredParams.stream().map(p -> new PubKeyCredParamType(p.getType(), p.getAlg())).collect(Collectors.toList());
         }
-        CreateCredentialOptions createCredentialOptions = new CreateCredentialOptions(challenge, relyingPartyType, userType, pubKeyCredParamsType, timeout, authSelectionType, attestation);
+        final List<ExcludeCredentialType> excludeCredentialsType = excludeCredentials.stream().map(c -> new ExcludeCredentialType(c.getType(), c.getId())).collect(Collectors.toList());
+
+        CreateCredentialOptions createCredentialOptions = new CreateCredentialOptions(
+                challenge,
+                relyingPartyType,
+                userType,
+                pubKeyCredParamsType,
+                timeout,
+                authSelectionType,
+                attestation,
+                excludeCredentialsType
+        );
+
         try {
             String options = createCredentialOptions.toJSON().toString();
 
