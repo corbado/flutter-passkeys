@@ -1,5 +1,7 @@
 import 'package:flutter/services.dart';
 import 'package:passkeys/exceptions.dart';
+import 'package:passkeys/types.dart';
+import 'package:passkeys_android/messages.g.dart';
 import 'package:passkeys_platform_interface/passkeys_platform_interface.dart';
 import 'package:passkeys_platform_interface/types/types.dart';
 
@@ -33,6 +35,8 @@ class PasskeyAuthenticator {
       switch (e.code) {
         case 'cancelled':
           throw PasskeyAuthCancelledException();
+        case 'exclude-credentials-match':
+          throw ExcludeCredentialsCanNotBeRegisteredException();
         case 'android-missing-google-sign-in':
           throw MissingGoogleSignInException();
         case 'android-sync-account-not-available':

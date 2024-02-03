@@ -33,6 +33,17 @@ extension FlutterError: Error {
 
         self.init(code: code, message: error.localizedDescription, details: "")
     }
+    
+    convenience init(fromNSError error: NSError) {
+        var code = ""
+        if (error.domain == "WKErrorDomain" && error.code == 8) {
+            code = "exclude-credentials-match"
+        } else {
+            code = "ios-unhandled-" + error.domain
+        }
+ 
+        self.init(code: code, message: error.localizedDescription, details: "")
+    }
 
     convenience init(code: CustomErrors, message: String = "") {
         self.init(code: String(describing: code), message: message, details: "")

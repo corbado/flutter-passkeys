@@ -48,9 +48,12 @@ class RegisterController: NSObject, ASAuthorizationControllerDelegate, ASAuthori
     func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
         if let err = error as? ASAuthorizationError {
             completion?(.failure(FlutterError(from: err)))
+            return
         }
-
-        completion?(.failure(FlutterError(code: CustomErrors.unknown)))
+        
+        let nsErr = error as NSError
+        completion?(.failure(FlutterError(fromNSError: nsErr)))
+        return
     }
 
     func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {

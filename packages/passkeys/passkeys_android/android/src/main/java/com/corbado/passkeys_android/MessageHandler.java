@@ -54,6 +54,7 @@ public class MessageHandler implements Messages.PasskeysApi {
     private static final String TAG = "MessageHandler";
     private static final String SYNC_ACCOUNT_NOT_AVAILABLE_ERROR = "Sync account could not be accessed. If you are running on an emulator, please restart that device (select 'Could boot now').";
     private static final String MISSING_GOOGLE_SIGN_IN_ERROR = "Please sign in with a Google account first to create a new passkey.";
+    private static final String EXCLUDE_CREDENTIALS_MATCH_ERROR = "You can not create a credential on this device because one of the excluded credentials exists on the local device.";
 
     private final FlutterPasskeysPlugin plugin;
 
@@ -142,6 +143,8 @@ public class MessageHandler implements Messages.PasskeysApi {
                             platformException = new Messages.FlutterError("android-missing-google-sign-in", e.getMessage(), MISSING_GOOGLE_SIGN_IN_ERROR);
                         } else if (Objects.equals(e.getMessage(), "Unable to get sync account.")) {
                             platformException = new Messages.FlutterError("android-sync-account-not-available", e.getMessage(), SYNC_ACCOUNT_NOT_AVAILABLE_ERROR);
+                        } else if (Objects.equals(e.getMessage(), "One of the excluded credentials exists on the local device")) {
+                            platformException = new Messages.FlutterError("exclude-credentials-match", e.getMessage(), EXCLUDE_CREDENTIALS_MATCH_ERROR);
                         } else {
                             platformException = new Messages.FlutterError("android-unhandled: " + e.getType(), e.getMessage(), e.getErrorMessage());
                         }
