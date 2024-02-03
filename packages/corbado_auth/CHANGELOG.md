@@ -1,3 +1,6 @@
+## 2.0.4
+* Map excludeCredentials error to typed exception
+
 ## 2.0.3
 * Added excludeCredentials support
 
