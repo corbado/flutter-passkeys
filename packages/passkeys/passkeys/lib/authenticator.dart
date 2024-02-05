@@ -1,9 +1,6 @@
 import 'package:flutter/services.dart';
-import 'package:passkeys/exceptions.dart';
 import 'package:passkeys/types.dart';
-import 'package:passkeys_android/messages.g.dart';
 import 'package:passkeys_platform_interface/passkeys_platform_interface.dart';
-import 'package:passkeys_platform_interface/types/types.dart';
 
 /// Handles platform dependent parts of the registration and authentication
 /// flow.
