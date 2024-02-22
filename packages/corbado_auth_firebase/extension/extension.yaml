@@ -1,5 +1,5 @@
 name: authentication-corbado
-version: 0.1.4
+version: 0.1.5
 specVersion: v1beta
 
 displayName: Passkeys for Firebase

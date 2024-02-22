@@ -25,7 +25,7 @@ void main() async {
 
   // Now we do the initialization.
   final corbadoAuth = CorbadoAuthFirebase();
-  await corbadoAuth.init('europe-west3');
+  await corbadoAuth.init('us-central1');
 
   // Finally we override the providers that needed initialization.
   // Now the real app can be loaded.

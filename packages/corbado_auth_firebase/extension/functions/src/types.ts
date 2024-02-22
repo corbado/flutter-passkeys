@@ -2,19 +2,19 @@ import {RawAxiosRequestConfig} from "axios";
 
 export type PasskeyRegisterStart = {
     username: string,
-}
+} & WithUserAgent;
 
 export type PasskeyRegisterFinish = {
     signedChallenge: string,
-}
+} & WithUserAgent;
 
 export type PasskeyLoginStart = {
     username: string,
-}
+} & WithUserAgent;
 
 export type PasskeyLoginFinish = {
     signedChallenge: string,
-}
+} & WithUserAgent;
 
 export type EmailOTPLoginStart = {
     username: string,
@@ -29,13 +29,17 @@ export type WithFirebaseToken = {
     firebaseToken: string,
 }
 
+export type WithUserAgent = {
+    userAgent: string,
+}
+
 export type PasskeyAppendFinish = {
     signedChallenge: string,
-} & WithFirebaseToken;
+} & WithFirebaseToken & WithUserAgent;
 
 export type PasskeyDelete = {
     passkeyId: string,
-} & WithFirebaseToken;
+} & WithFirebaseToken & WithUserAgent;
 
 export class RequestMetadata {
     userAgent: string;

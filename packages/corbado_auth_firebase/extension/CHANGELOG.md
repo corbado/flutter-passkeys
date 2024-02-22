@@ -1,3 +1,6 @@
+## 0.1.5
+Add support for users that have been created by other Corbado SDKs.
+
 ## 0.1.4
 Add function descriptions.
 

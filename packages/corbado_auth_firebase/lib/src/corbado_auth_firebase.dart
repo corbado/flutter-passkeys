@@ -4,6 +4,7 @@ import 'package:cloud_functions/cloud_functions.dart';
 import 'package:corbado_auth/corbado_auth.dart';
 import 'package:corbado_auth_firebase/src/services/corbado.dart';
 import 'package:passkeys/authenticator.dart';
+import 'package:ua_client_hints/ua_client_hints.dart';
 
 class CorbadoAuthFirebase {
   /// Constructor
@@ -24,20 +25,25 @@ class CorbadoAuthFirebase {
     String? fullName,
   }) async {
     try {
-      final challenge = await _corbadoService.startSignUpWithPasskey(email);
+      final ua = await userAgent();
+      final challenge = await _corbadoService.startSignUpWithPasskey(email, ua);
       final platformResponse = await _authenticator.register(challenge);
 
-      return await _corbadoService.finishSignUpWithPasskey(platformResponse);
+      return await _corbadoService.finishSignUpWithPasskey(
+          platformResponse, ua);
     } catch (e) {
       throw e;
     }
   }
 
   Future<bool> appendPasskey(String firebaseToken) async {
-    final challenge = await _corbadoService.startPasskeyAppend(firebaseToken);
+    final ua = await userAgent();
+    final challenge =
+        await _corbadoService.startPasskeyAppend(firebaseToken, ua);
     final platformResponse = await _authenticator.register(challenge);
 
-    return _corbadoService.finishPasskeyAppend(firebaseToken, platformResponse);
+    return _corbadoService.finishPasskeyAppend(
+        firebaseToken, platformResponse, ua);
   }
 
   Future<void> cancelAuthenticatorOperation() {
@@ -90,12 +96,14 @@ class CorbadoAuthFirebase {
 
   Future<String> _loginWithPasskey(String email) async {
     final isConditionalUI = email.isEmpty;
+    final ua = await userAgent();
     final challenge = await _corbadoService.startLoginWithPasskey(
       email,
+      ua,
       conditional: isConditionalUI,
     );
     final platformResponse = await _authenticator.authenticate(challenge);
 
-    return _corbadoService.finishLoginWithPasskey(platformResponse);
+    return _corbadoService.finishLoginWithPasskey(platformResponse, ua);
   }
 }

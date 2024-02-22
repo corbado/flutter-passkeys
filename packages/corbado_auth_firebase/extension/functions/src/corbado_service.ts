@@ -5,15 +5,13 @@ import {CorbadoError} from "./exceptions";
 import {RequestMetadata} from "./types";
 import {BASE_PATH} from "./backendapi/base";
 
-type User = {
+export type User = {
     email: string;
     name: string;
     orig: string;
     sub: string;
     exp: number;
 }
-
-export const RESERVED = "RESERVED";
 
 export class CorbadoService {
     #usersApi: UsersApi;
@@ -50,7 +48,7 @@ export class CorbadoService {
 
     async startSignUpWithPasskey(email: string, metadata: RequestMetadata): Promise<string> {
         try {
-            const res = await this.#usersApi.passKeyRegisterStart({username: email, fullName: RESERVED}, metadata.toRawAxiosRequestConfig());
+            const res = await this.#usersApi.passKeyRegisterStart({username: email, fullName: email}, metadata.toRawAxiosRequestConfig());
 
             return res.data.data.challenge;
         } catch (e) {
