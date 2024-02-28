@@ -1,3 +1,6 @@
+## 2.0.4
+* Pass correct userAgent to passkey related firebase functions
+
 ## 2.0.3
 * Added excludeCredentials support
 
