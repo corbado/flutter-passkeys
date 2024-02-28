@@ -4,7 +4,8 @@
 <dict>
 	<key>com.apple.developer.associated-domains</key>
 	<array>
-		<string>webcredentials:pro-6244024196016258271.frontendapi.corbado.io?mode=developer</string>
+		<string>webcredentials:flutter.corbado.io?mode=developer</string>
+		<string>webcredentials:flutter.corbado.io</string>
 	</array>
 </dict>
 </plist>
