@@ -7,11 +7,10 @@ environment:
   sdk: ">=3.0.0 <4.0.0"
 
 dependencies:
-  corbado_auth: ^1.2.1
+  corbado_auth: ^2.0.4
   flutter:
     sdk: flutter
-  passkeys:
-    path: ../
+  passkeys: ^2.0.4
   go_router: ^10.1.2
   flutter_hooks: ^0.20.3
   riverpod: ^2.3.10
