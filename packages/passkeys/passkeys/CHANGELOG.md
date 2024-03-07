@@ -1,3 +1,6 @@
+## 2.0.5
+* Bump version of passkeys_android (proguard file is no longer needed)
+
 ## 2.0.4
 * Map excludeCredentials error to typed exception
 

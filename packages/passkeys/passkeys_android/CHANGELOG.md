@@ -1,3 +1,6 @@
+## 2.0.3
+* Bump androidx.credentials:credentials to 1.2.0 => release builds will no work on Android 13 and below without custom proguard rules
+
 ## 2.0.2
 * Map excludeCredentials error to typed exception
 

@@ -2,7 +2,7 @@ name: passkeys
 description: Flutter plugin enabling simple passkey authentication. Can be either used with a ready-to-use relying party server (Corbado) or with your custom relying party.
 homepage: https://docs.corbado.com/overview/welcome
 repository: https://github.com/corbado/flutter-passkeys/tree/main/packages/passkeys/passkeys
-version: 2.0.4
+version: 2.0.5
 
 environment:
   sdk: ">=3.0.0 <4.0.0"
@@ -25,7 +25,7 @@ dependencies:
     sdk: flutter
   json_annotation: ^4.8.1
   openapi_generator_annotations: ^4.10.0
-  passkeys_android: ^2.0.2
+  passkeys_android: ^2.0.3
   passkeys_ios: ^2.0.2
   passkeys_platform_interface: ^2.0.1
   passkeys_web: ^2.0.1
