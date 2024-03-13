@@ -130,7 +130,7 @@ class _SignInPageState extends ConsumerState<SignInPage> {
 
   String _getAutofillHint() {
     if (kIsWeb) {
-      return 'webauthn';
+      return 'username webauthn';
     } else {
       return AutofillHints.username;
     }

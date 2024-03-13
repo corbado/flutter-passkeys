@@ -142,7 +142,9 @@ class _SignInPageState extends ConsumerState<SignInPage> {
 
   String _getAutofillHint() {
     if (kIsWeb) {
-      return 'webauthn';
+      // On web, only the first hint will be included in autocomplete
+      // See: https://api.flutter.dev/flutter/widgets/EditableText/autofillHints.html
+      return 'username webauthn';
     } else {
       return AutofillHints.username;
     }
