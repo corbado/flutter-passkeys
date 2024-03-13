@@ -52,8 +52,10 @@ public class PasskeysPlugin: NSObject, FlutterPlugin, PasskeysApi {
             name: user.name,
             userID: decodedUserId
         )
-                
-        request.excludedCredentials = parseCredentials(credentialIDs: excludeCredentialIDs)
+
+        if #available(iOS 17.4, *) {
+            request.excludedCredentials = parseCredentials(credentialIDs: excludeCredentialIDs)
+        }
 
         func wrappedCompletion(result: Result<RegisterResponse, Error>) {
             lock.unlock()
