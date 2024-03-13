@@ -1,3 +1,6 @@
+## 2.0.3
+* Make excludeCredentials only available for iOS 17.4 and above  
+
 ## 2.0.2
 * Map excludeCredentials error to typed exception
 
