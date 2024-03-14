@@ -1,3 +1,6 @@
+## 2.0.7
+* Bump version of passkeys
+
 ## 2.0.6
 * Bump version of passkeys_ios (make excludeCredentials only available for iOS 17.4 and above)
 
