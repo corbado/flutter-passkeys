@@ -1,6 +1,7 @@
 import 'package:corbado_auth/corbado_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:passkeys_example/pages/error_page.dart';
 import 'package:passkeys_example/pages/loading_page.dart';
 import 'package:passkeys_example/providers.dart';
 import 'package:passkeys_example/router.dart';
@@ -18,6 +19,16 @@ void main() async {
 
   final relyingPartyServer = CustomCorbadoAuth();
   const corbadoProjectId = String.fromEnvironment('CORBADO_PROJECT_ID');
+
+  if (corbadoProjectId.isEmpty) {
+    runApp(const ErrorPage(
+      error: 'CORBADO_PROJECT_ID is not set',
+      hint:
+          'Please add this at the end of your flutter run command: \n--dart-define=CORBADO_PROJECT_ID=pro-8751299119685489253',
+    ));
+    return;
+  }
+
   await relyingPartyServer.init(corbadoProjectId);
 
   runApp(
