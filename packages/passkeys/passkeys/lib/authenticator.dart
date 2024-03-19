@@ -60,7 +60,7 @@ class PasskeyAuthenticator {
         case 'cancelled':
           throw PasskeyAuthCancelledException();
         case 'android-no-credential':
-          throw MissingGoogleSignInException();
+          throw NoCredentialsAvailableException();
         default:
           if (e.code.startsWith('android-unhandled')) {
             throw UnhandledAuthenticatorException(e.code, e.message, e.details);

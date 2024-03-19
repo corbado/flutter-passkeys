@@ -45,7 +45,7 @@ class SyncAccountNotAvailableException implements AuthenticatorException {
 /// to a Google account on his device. Being logged in to a Google account is
 /// mandatory for passkeys to work on Android devices.
 ///
-/// Platforms: Android, iOS
+/// Platforms: Android
 ///
 /// Suggestions:
 /// - ask the user to sign in to his Google account first.
@@ -53,6 +53,18 @@ class SyncAccountNotAvailableException implements AuthenticatorException {
 class ExcludeCredentialsCanNotBeRegisteredException implements AuthenticatorException {
   /// Constructor
   ExcludeCredentialsCanNotBeRegisteredException();
+}
+
+/// This exception is thrown when the user tries to login but does not have any
+/// credentials available for the authenticator.
+///
+/// Platforms: Android, iOS
+///
+/// Suggestions:
+/// - use a fallback method (e.g. login via email OTP)
+class NoCredentialsAvailableException implements AuthenticatorException {
+  /// Constructor
+  NoCredentialsAvailableException();
 }
 
 /// This exception is thrown when an exception is thrown by the authenticator
