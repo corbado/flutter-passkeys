@@ -1,3 +1,6 @@
+## 2.0.4
+* Added NoCredentialsAvailableException to indicate that no credentials are available during a login
+
 ## 2.0.3
 * Bump androidx.credentials:credentials to 1.2.0 => release builds will no work on Android 13 and below without custom proguard rules
 

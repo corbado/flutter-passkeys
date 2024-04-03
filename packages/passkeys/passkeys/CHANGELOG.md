@@ -1,3 +1,6 @@
+## 2.0.8
+* Added NoCredentialsAvailableException to indicate that no credentials are available during a login (android)
+
 ## 2.0.7
 * Bump version of passkeys_ios
 
