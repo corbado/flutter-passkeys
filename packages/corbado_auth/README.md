@@ -156,13 +156,14 @@ Now, you are fully set and you can start signing up with your first passkey in t
 ## A closer look at the example
 
 After following the configuration steps above, you can run the app.
-The first screen you will see is the login page.
+The first screen you will see is the login/ signup page.
 Here, you can create a new user account by providing an email address and clicking on 'sign up'.
 After providing your fingerprint / face scan, a new passkey is created and stored on your device.
 
-You will now be logged into the app and see the home page.
-Your user info is represented by an id token that has been retrieved from Corbado during the sign up
-process.
+
+You will now be logged into the app and see the profile page.
+Your user info is represented by a jwt token that has been retrieved from Corbado during the sign up / sign in
+process and is automatically refreshed when expired.
 You can view that token by clicking on "token details".
 Here, you can observe how the token is refreshed automatically (its lifetime will increase once in a
 while).
@@ -171,8 +172,14 @@ You can also close and reopen the app.
 You should still be logged in.
 
 <p float="left">
-    <img src="https://raw.githubusercontent.com/corbado/flutter-passkeys/main/packages/corbado_auth/doc/img/signup.jpeg" height="500" alt="signup">
-    <img src="https://raw.githubusercontent.com/corbado/flutter-passkeys/main/packages/corbado_auth/doc/img/signup_fingerprint.jpeg" height="500" alt="signup fingerpring">
-    <img src="https://raw.githubusercontent.com/corbado/flutter-passkeys/main/packages/corbado_auth/doc/img/home.jpeg" height="500" alt="home">
-    <img src="https://raw.githubusercontent.com/corbado/flutter-passkeys/main/packages/corbado_auth/doc/img/idtoken.jpeg" height="500" alt="id token">
+    <img src="https://raw.githubusercontent.com/corbado/flutter-passkeys/main/packages/corbado_auth/doc/img/signin-signup-image.jpg" height="500" alt="signup">
+    <img src="https://raw.githubusercontent.com/corbado/flutter-passkeys/main/packages/corbado_auth/doc/img/profile-token-details-image.jpg" height="500" alt="signup fingerpring">
 </p>
+
+## Troubleshooting
+
+| Type                            | Issue                     | Note                                                                                                                             |
+|---------------------------------|---------------------------|----------------------------------------------------------------------------------------------------------------------------------|
+| iOS Sim                         | Localizd string not found | For passkeys to work in the iOS simulator, you need to enable faceID first in the top menu bar under features > faceID > enrolled |
+| iOS physical device             | Passkeys not working      | Passkeys do not work when running your flutter application on your physical iOS device. This has to do with the signing of your app. Rather test on a virtual iOS device or virtual/ physical Android device.                                                                                                                                 |
+
