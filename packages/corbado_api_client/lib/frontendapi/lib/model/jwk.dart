@@ -40,35 +40,38 @@ class Jwk {
   String kid;
 
   @override
-  bool operator ==(Object other) => identical(this, other) || other is Jwk &&
-     other.alg == alg &&
-     other.kty == kty &&
-     other.use == use &&
-     other.n == n &&
-     other.e == e &&
-     other.kid == kid;
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Jwk &&
+          other.alg == alg &&
+          other.kty == kty &&
+          other.use == use &&
+          other.n == n &&
+          other.e == e &&
+          other.kid == kid;
 
   @override
   int get hashCode =>
-    // ignore: unnecessary_parenthesis
-    (alg.hashCode) +
-    (kty.hashCode) +
-    (use.hashCode) +
-    (n.hashCode) +
-    (e.hashCode) +
-    (kid.hashCode);
+      // ignore: unnecessary_parenthesis
+      (alg.hashCode) +
+      (kty.hashCode) +
+      (use.hashCode) +
+      (n.hashCode) +
+      (e.hashCode) +
+      (kid.hashCode);
 
   @override
-  String toString() => 'Jwk[alg=$alg, kty=$kty, use=$use, n=$n, e=$e, kid=$kid]';
+  String toString() =>
+      'Jwk[alg=$alg, kty=$kty, use=$use, n=$n, e=$e, kid=$kid]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-      json[r'alg'] = this.alg;
-      json[r'kty'] = this.kty;
-      json[r'use'] = this.use;
-      json[r'n'] = this.n;
-      json[r'e'] = this.e;
-      json[r'kid'] = this.kid;
+    json[r'alg'] = this.alg;
+    json[r'kty'] = this.kty;
+    json[r'use'] = this.use;
+    json[r'n'] = this.n;
+    json[r'e'] = this.e;
+    json[r'kid'] = this.kid;
     return json;
   }
 
@@ -84,8 +87,10 @@ class Jwk {
       // Note 2: this code is stripped in release mode!
       assert(() {
         requiredKeys.forEach((key) {
-          assert(json.containsKey(key), 'Required key "Jwk[$key]" is missing from JSON.');
-          assert(json[key] != null, 'Required key "Jwk[$key]" has a null value in JSON.');
+          assert(json.containsKey(key),
+              'Required key "Jwk[$key]" is missing from JSON.');
+          assert(json[key] != null,
+              'Required key "Jwk[$key]" has a null value in JSON.');
         });
         return true;
       }());
@@ -102,7 +107,10 @@ class Jwk {
     return null;
   }
 
-  static List<Jwk> listFromJson(dynamic json, {bool growable = false,}) {
+  static List<Jwk> listFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
     final result = <Jwk>[];
     if (json is List && json.isNotEmpty) {
       for (final row in json) {
@@ -130,13 +138,19 @@ class Jwk {
   }
 
   // maps a json object with a list of Jwk-objects as value to a dart map
-  static Map<String, List<Jwk>> mapListFromJson(dynamic json, {bool growable = false,}) {
+  static Map<String, List<Jwk>> mapListFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
     final map = <String, List<Jwk>>{};
     if (json is Map && json.isNotEmpty) {
       // ignore: parameter_assignments
       json = json.cast<String, dynamic>();
       for (final entry in json.entries) {
-        map[entry.key] = Jwk.listFromJson(entry.value, growable: growable,);
+        map[entry.key] = Jwk.listFromJson(
+          entry.value,
+          growable: growable,
+        );
       }
     }
     return map;
@@ -152,4 +166,3 @@ class Jwk {
     'kid',
   };
 }
-

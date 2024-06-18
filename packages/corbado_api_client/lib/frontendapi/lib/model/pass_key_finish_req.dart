@@ -29,22 +29,25 @@ class PassKeyFinishReq {
   String? requestID;
 
   @override
-  bool operator ==(Object other) => identical(this, other) || other is PassKeyFinishReq &&
-     other.signedChallenge == signedChallenge &&
-     other.requestID == requestID;
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is PassKeyFinishReq &&
+          other.signedChallenge == signedChallenge &&
+          other.requestID == requestID;
 
   @override
   int get hashCode =>
-    // ignore: unnecessary_parenthesis
-    (signedChallenge.hashCode) +
-    (requestID == null ? 0 : requestID!.hashCode);
+      // ignore: unnecessary_parenthesis
+      (signedChallenge.hashCode) +
+      (requestID == null ? 0 : requestID!.hashCode);
 
   @override
-  String toString() => 'PassKeyFinishReq[signedChallenge=$signedChallenge, requestID=$requestID]';
+  String toString() =>
+      'PassKeyFinishReq[signedChallenge=$signedChallenge, requestID=$requestID]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-      json[r'signedChallenge'] = this.signedChallenge;
+    json[r'signedChallenge'] = this.signedChallenge;
     if (this.requestID != null) {
       json[r'requestID'] = this.requestID;
     } else {
@@ -65,8 +68,10 @@ class PassKeyFinishReq {
       // Note 2: this code is stripped in release mode!
       assert(() {
         requiredKeys.forEach((key) {
-          assert(json.containsKey(key), 'Required key "PassKeyFinishReq[$key]" is missing from JSON.');
-          assert(json[key] != null, 'Required key "PassKeyFinishReq[$key]" has a null value in JSON.');
+          assert(json.containsKey(key),
+              'Required key "PassKeyFinishReq[$key]" is missing from JSON.');
+          assert(json[key] != null,
+              'Required key "PassKeyFinishReq[$key]" has a null value in JSON.');
         });
         return true;
       }());
@@ -79,7 +84,10 @@ class PassKeyFinishReq {
     return null;
   }
 
-  static List<PassKeyFinishReq> listFromJson(dynamic json, {bool growable = false,}) {
+  static List<PassKeyFinishReq> listFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
     final result = <PassKeyFinishReq>[];
     if (json is List && json.isNotEmpty) {
       for (final row in json) {
@@ -107,13 +115,19 @@ class PassKeyFinishReq {
   }
 
   // maps a json object with a list of PassKeyFinishReq-objects as value to a dart map
-  static Map<String, List<PassKeyFinishReq>> mapListFromJson(dynamic json, {bool growable = false,}) {
+  static Map<String, List<PassKeyFinishReq>> mapListFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
     final map = <String, List<PassKeyFinishReq>>{};
     if (json is Map && json.isNotEmpty) {
       // ignore: parameter_assignments
       json = json.cast<String, dynamic>();
       for (final entry in json.entries) {
-        map[entry.key] = PassKeyFinishReq.listFromJson(entry.value, growable: growable,);
+        map[entry.key] = PassKeyFinishReq.listFromJson(
+          entry.value,
+          growable: growable,
+        );
       }
     }
     return map;
@@ -124,4 +138,3 @@ class PassKeyFinishReq {
     'signedChallenge',
   };
 }
-

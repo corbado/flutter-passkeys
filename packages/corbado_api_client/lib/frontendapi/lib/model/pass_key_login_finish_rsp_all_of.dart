@@ -19,20 +19,21 @@ class PassKeyLoginFinishRspAllOf {
   PassKeyLoginFinishRspAllOfData data;
 
   @override
-  bool operator ==(Object other) => identical(this, other) || other is PassKeyLoginFinishRspAllOf &&
-     other.data == data;
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is PassKeyLoginFinishRspAllOf && other.data == data;
 
   @override
   int get hashCode =>
-    // ignore: unnecessary_parenthesis
-    (data.hashCode);
+      // ignore: unnecessary_parenthesis
+      (data.hashCode);
 
   @override
   String toString() => 'PassKeyLoginFinishRspAllOf[data=$data]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-      json[r'data'] = this.data;
+    json[r'data'] = this.data;
     return json;
   }
 
@@ -48,8 +49,10 @@ class PassKeyLoginFinishRspAllOf {
       // Note 2: this code is stripped in release mode!
       assert(() {
         requiredKeys.forEach((key) {
-          assert(json.containsKey(key), 'Required key "PassKeyLoginFinishRspAllOf[$key]" is missing from JSON.');
-          assert(json[key] != null, 'Required key "PassKeyLoginFinishRspAllOf[$key]" has a null value in JSON.');
+          assert(json.containsKey(key),
+              'Required key "PassKeyLoginFinishRspAllOf[$key]" is missing from JSON.');
+          assert(json[key] != null,
+              'Required key "PassKeyLoginFinishRspAllOf[$key]" has a null value in JSON.');
         });
         return true;
       }());
@@ -61,7 +64,10 @@ class PassKeyLoginFinishRspAllOf {
     return null;
   }
 
-  static List<PassKeyLoginFinishRspAllOf> listFromJson(dynamic json, {bool growable = false,}) {
+  static List<PassKeyLoginFinishRspAllOf> listFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
     final result = <PassKeyLoginFinishRspAllOf>[];
     if (json is List && json.isNotEmpty) {
       for (final row in json) {
@@ -89,13 +95,19 @@ class PassKeyLoginFinishRspAllOf {
   }
 
   // maps a json object with a list of PassKeyLoginFinishRspAllOf-objects as value to a dart map
-  static Map<String, List<PassKeyLoginFinishRspAllOf>> mapListFromJson(dynamic json, {bool growable = false,}) {
+  static Map<String, List<PassKeyLoginFinishRspAllOf>> mapListFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
     final map = <String, List<PassKeyLoginFinishRspAllOf>>{};
     if (json is Map && json.isNotEmpty) {
       // ignore: parameter_assignments
       json = json.cast<String, dynamic>();
       for (final entry in json.entries) {
-        map[entry.key] = PassKeyLoginFinishRspAllOf.listFromJson(entry.value, growable: growable,);
+        map[entry.key] = PassKeyLoginFinishRspAllOf.listFromJson(
+          entry.value,
+          growable: growable,
+        );
       }
     }
     return map;
@@ -106,4 +118,3 @@ class PassKeyLoginFinishRspAllOf {
     'data',
   };
 }
-

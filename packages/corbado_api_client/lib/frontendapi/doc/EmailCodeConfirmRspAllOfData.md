@@ -1,4 +1,4 @@
-# corbado_api.model.EmailLinkConfirmRspAllOfData
+# corbado_api.model.EmailCodeConfirmRspAllOfData
 
 ## Load the model package
 ```dart

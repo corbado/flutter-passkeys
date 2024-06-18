@@ -29,22 +29,24 @@ class EmailLinkStatusReq {
   String? requestID;
 
   @override
-  bool operator ==(Object other) => identical(this, other) || other is EmailLinkStatusReq &&
-     other.emailLinkID == emailLinkID &&
-     other.requestID == requestID;
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is EmailLinkStatusReq &&
+          other.emailLinkID == emailLinkID &&
+          other.requestID == requestID;
 
   @override
   int get hashCode =>
-    // ignore: unnecessary_parenthesis
-    (emailLinkID.hashCode) +
-    (requestID == null ? 0 : requestID!.hashCode);
+      // ignore: unnecessary_parenthesis
+      (emailLinkID.hashCode) + (requestID == null ? 0 : requestID!.hashCode);
 
   @override
-  String toString() => 'EmailLinkStatusReq[emailLinkID=$emailLinkID, requestID=$requestID]';
+  String toString() =>
+      'EmailLinkStatusReq[emailLinkID=$emailLinkID, requestID=$requestID]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-      json[r'emailLinkID'] = this.emailLinkID;
+    json[r'emailLinkID'] = this.emailLinkID;
     if (this.requestID != null) {
       json[r'requestID'] = this.requestID;
     } else {
@@ -65,8 +67,10 @@ class EmailLinkStatusReq {
       // Note 2: this code is stripped in release mode!
       assert(() {
         requiredKeys.forEach((key) {
-          assert(json.containsKey(key), 'Required key "EmailLinkStatusReq[$key]" is missing from JSON.');
-          assert(json[key] != null, 'Required key "EmailLinkStatusReq[$key]" has a null value in JSON.');
+          assert(json.containsKey(key),
+              'Required key "EmailLinkStatusReq[$key]" is missing from JSON.');
+          assert(json[key] != null,
+              'Required key "EmailLinkStatusReq[$key]" has a null value in JSON.');
         });
         return true;
       }());
@@ -79,7 +83,10 @@ class EmailLinkStatusReq {
     return null;
   }
 
-  static List<EmailLinkStatusReq> listFromJson(dynamic json, {bool growable = false,}) {
+  static List<EmailLinkStatusReq> listFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
     final result = <EmailLinkStatusReq>[];
     if (json is List && json.isNotEmpty) {
       for (final row in json) {
@@ -107,13 +114,19 @@ class EmailLinkStatusReq {
   }
 
   // maps a json object with a list of EmailLinkStatusReq-objects as value to a dart map
-  static Map<String, List<EmailLinkStatusReq>> mapListFromJson(dynamic json, {bool growable = false,}) {
+  static Map<String, List<EmailLinkStatusReq>> mapListFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
     final map = <String, List<EmailLinkStatusReq>>{};
     if (json is Map && json.isNotEmpty) {
       // ignore: parameter_assignments
       json = json.cast<String, dynamic>();
       for (final entry in json.entries) {
-        map[entry.key] = EmailLinkStatusReq.listFromJson(entry.value, growable: growable,);
+        map[entry.key] = EmailLinkStatusReq.listFromJson(
+          entry.value,
+          growable: growable,
+        );
       }
     }
     return map;
@@ -124,4 +137,3 @@ class EmailLinkStatusReq {
     'emailLinkID',
   };
 }
-

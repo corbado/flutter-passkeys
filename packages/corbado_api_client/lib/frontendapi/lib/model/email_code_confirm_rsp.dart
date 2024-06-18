@@ -33,35 +33,38 @@ class EmailCodeConfirmRsp {
   /// Runtime in seconds for this request
   double runtime;
 
-  EmailLinkConfirmRspAllOfData data;
+  EmailCodeConfirmRspAllOfData data;
 
   @override
-  bool operator ==(Object other) => identical(this, other) || other is EmailCodeConfirmRsp &&
-     other.httpStatusCode == httpStatusCode &&
-     other.message == message &&
-     other.requestData == requestData &&
-     other.runtime == runtime &&
-     other.data == data;
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is EmailCodeConfirmRsp &&
+          other.httpStatusCode == httpStatusCode &&
+          other.message == message &&
+          other.requestData == requestData &&
+          other.runtime == runtime &&
+          other.data == data;
 
   @override
   int get hashCode =>
-    // ignore: unnecessary_parenthesis
-    (httpStatusCode.hashCode) +
-    (message.hashCode) +
-    (requestData.hashCode) +
-    (runtime.hashCode) +
-    (data.hashCode);
+      // ignore: unnecessary_parenthesis
+      (httpStatusCode.hashCode) +
+      (message.hashCode) +
+      (requestData.hashCode) +
+      (runtime.hashCode) +
+      (data.hashCode);
 
   @override
-  String toString() => 'EmailCodeConfirmRsp[httpStatusCode=$httpStatusCode, message=$message, requestData=$requestData, runtime=$runtime, data=$data]';
+  String toString() =>
+      'EmailCodeConfirmRsp[httpStatusCode=$httpStatusCode, message=$message, requestData=$requestData, runtime=$runtime, data=$data]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-      json[r'httpStatusCode'] = this.httpStatusCode;
-      json[r'message'] = this.message;
-      json[r'requestData'] = this.requestData;
-      json[r'runtime'] = this.runtime;
-      json[r'data'] = this.data;
+    json[r'httpStatusCode'] = this.httpStatusCode;
+    json[r'message'] = this.message;
+    json[r'requestData'] = this.requestData;
+    json[r'runtime'] = this.runtime;
+    json[r'data'] = this.data;
     return json;
   }
 
@@ -77,8 +80,10 @@ class EmailCodeConfirmRsp {
       // Note 2: this code is stripped in release mode!
       assert(() {
         requiredKeys.forEach((key) {
-          assert(json.containsKey(key), 'Required key "EmailCodeConfirmRsp[$key]" is missing from JSON.');
-          assert(json[key] != null, 'Required key "EmailCodeConfirmRsp[$key]" has a null value in JSON.');
+          assert(json.containsKey(key),
+              'Required key "EmailCodeConfirmRsp[$key]" is missing from JSON.');
+          assert(json[key] != null,
+              'Required key "EmailCodeConfirmRsp[$key]" has a null value in JSON.');
         });
         return true;
       }());
@@ -88,13 +93,16 @@ class EmailCodeConfirmRsp {
         message: mapValueOfType<String>(json, r'message')!,
         requestData: RequestData.fromJson(json[r'requestData'])!,
         runtime: mapValueOfType<double>(json, r'runtime')!,
-        data: EmailLinkConfirmRspAllOfData.fromJson(json[r'data'])!,
+        data: EmailCodeConfirmRspAllOfData.fromJson(json[r'data'])!,
       );
     }
     return null;
   }
 
-  static List<EmailCodeConfirmRsp> listFromJson(dynamic json, {bool growable = false,}) {
+  static List<EmailCodeConfirmRsp> listFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
     final result = <EmailCodeConfirmRsp>[];
     if (json is List && json.isNotEmpty) {
       for (final row in json) {
@@ -122,13 +130,19 @@ class EmailCodeConfirmRsp {
   }
 
   // maps a json object with a list of EmailCodeConfirmRsp-objects as value to a dart map
-  static Map<String, List<EmailCodeConfirmRsp>> mapListFromJson(dynamic json, {bool growable = false,}) {
+  static Map<String, List<EmailCodeConfirmRsp>> mapListFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
     final map = <String, List<EmailCodeConfirmRsp>>{};
     if (json is Map && json.isNotEmpty) {
       // ignore: parameter_assignments
       json = json.cast<String, dynamic>();
       for (final entry in json.entries) {
-        map[entry.key] = EmailCodeConfirmRsp.listFromJson(entry.value, growable: growable,);
+        map[entry.key] = EmailCodeConfirmRsp.listFromJson(
+          entry.value,
+          growable: growable,
+        );
       }
     }
     return map;
@@ -143,4 +157,3 @@ class EmailCodeConfirmRsp {
     'data',
   };
 }
-

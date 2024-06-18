@@ -12,7 +12,7 @@ Name | Type | Description | Notes
 **message** | **String** |  | 
 **requestData** | [**RequestData**](RequestData.md) |  | 
 **runtime** | **double** | Runtime in seconds for this request | 
-**data** | [**EmailLinkConfirmRspAllOfData**](EmailLinkConfirmRspAllOfData.md) |  | 
+**data** | [**EmailCodeConfirmRspAllOfData**](EmailCodeConfirmRspAllOfData.md) |  | 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

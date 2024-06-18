@@ -22,23 +22,24 @@ class AssetLink {
   AssetLinkTarget target;
 
   @override
-  bool operator ==(Object other) => identical(this, other) || other is AssetLink &&
-     other.relation == relation &&
-     other.target == target;
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is AssetLink &&
+          _deepEquality.equals(other.relation, relation) &&
+          other.target == target;
 
   @override
   int get hashCode =>
-    // ignore: unnecessary_parenthesis
-    (relation.hashCode) +
-    (target.hashCode);
+      // ignore: unnecessary_parenthesis
+      (relation.hashCode) + (target.hashCode);
 
   @override
   String toString() => 'AssetLink[relation=$relation, target=$target]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-      json[r'relation'] = this.relation;
-      json[r'target'] = this.target;
+    json[r'relation'] = this.relation;
+    json[r'target'] = this.target;
     return json;
   }
 
@@ -54,15 +55,19 @@ class AssetLink {
       // Note 2: this code is stripped in release mode!
       assert(() {
         requiredKeys.forEach((key) {
-          assert(json.containsKey(key), 'Required key "AssetLink[$key]" is missing from JSON.');
-          assert(json[key] != null, 'Required key "AssetLink[$key]" has a null value in JSON.');
+          assert(json.containsKey(key),
+              'Required key "AssetLink[$key]" is missing from JSON.');
+          assert(json[key] != null,
+              'Required key "AssetLink[$key]" has a null value in JSON.');
         });
         return true;
       }());
 
       return AssetLink(
-        relation: json[r'relation'] is List
-            ? (json[r'relation'] as List).cast<String>()
+        relation: json[r'relation'] is Iterable
+            ? (json[r'relation'] as Iterable)
+                .cast<String>()
+                .toList(growable: false)
             : const [],
         target: AssetLinkTarget.fromJson(json[r'target'])!,
       );
@@ -70,7 +75,10 @@ class AssetLink {
     return null;
   }
 
-  static List<AssetLink> listFromJson(dynamic json, {bool growable = false,}) {
+  static List<AssetLink> listFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
     final result = <AssetLink>[];
     if (json is List && json.isNotEmpty) {
       for (final row in json) {
@@ -98,13 +106,19 @@ class AssetLink {
   }
 
   // maps a json object with a list of AssetLink-objects as value to a dart map
-  static Map<String, List<AssetLink>> mapListFromJson(dynamic json, {bool growable = false,}) {
+  static Map<String, List<AssetLink>> mapListFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
     final map = <String, List<AssetLink>>{};
     if (json is Map && json.isNotEmpty) {
       // ignore: parameter_assignments
       json = json.cast<String, dynamic>();
       for (final entry in json.entries) {
-        map[entry.key] = AssetLink.listFromJson(entry.value, growable: growable,);
+        map[entry.key] = AssetLink.listFromJson(
+          entry.value,
+          growable: growable,
+        );
       }
     }
     return map;
@@ -116,4 +130,3 @@ class AssetLink {
     'target',
   };
 }
-

@@ -22,23 +22,25 @@ class PassKeyLoginFinishRspAllOfDataAllOf {
   bool confirmedCredential;
 
   @override
-  bool operator ==(Object other) => identical(this, other) || other is PassKeyLoginFinishRspAllOfDataAllOf &&
-     other.username == username &&
-     other.confirmedCredential == confirmedCredential;
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is PassKeyLoginFinishRspAllOfDataAllOf &&
+          other.username == username &&
+          other.confirmedCredential == confirmedCredential;
 
   @override
   int get hashCode =>
-    // ignore: unnecessary_parenthesis
-    (username.hashCode) +
-    (confirmedCredential.hashCode);
+      // ignore: unnecessary_parenthesis
+      (username.hashCode) + (confirmedCredential.hashCode);
 
   @override
-  String toString() => 'PassKeyLoginFinishRspAllOfDataAllOf[username=$username, confirmedCredential=$confirmedCredential]';
+  String toString() =>
+      'PassKeyLoginFinishRspAllOfDataAllOf[username=$username, confirmedCredential=$confirmedCredential]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-      json[r'username'] = this.username;
-      json[r'confirmedCredential'] = this.confirmedCredential;
+    json[r'username'] = this.username;
+    json[r'confirmedCredential'] = this.confirmedCredential;
     return json;
   }
 
@@ -54,21 +56,27 @@ class PassKeyLoginFinishRspAllOfDataAllOf {
       // Note 2: this code is stripped in release mode!
       assert(() {
         requiredKeys.forEach((key) {
-          assert(json.containsKey(key), 'Required key "PassKeyLoginFinishRspAllOfDataAllOf[$key]" is missing from JSON.');
-          assert(json[key] != null, 'Required key "PassKeyLoginFinishRspAllOfDataAllOf[$key]" has a null value in JSON.');
+          assert(json.containsKey(key),
+              'Required key "PassKeyLoginFinishRspAllOfDataAllOf[$key]" is missing from JSON.');
+          assert(json[key] != null,
+              'Required key "PassKeyLoginFinishRspAllOfDataAllOf[$key]" has a null value in JSON.');
         });
         return true;
       }());
 
       return PassKeyLoginFinishRspAllOfDataAllOf(
         username: mapValueOfType<String>(json, r'username')!,
-        confirmedCredential: mapValueOfType<bool>(json, r'confirmedCredential')!,
+        confirmedCredential:
+            mapValueOfType<bool>(json, r'confirmedCredential')!,
       );
     }
     return null;
   }
 
-  static List<PassKeyLoginFinishRspAllOfDataAllOf> listFromJson(dynamic json, {bool growable = false,}) {
+  static List<PassKeyLoginFinishRspAllOfDataAllOf> listFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
     final result = <PassKeyLoginFinishRspAllOfDataAllOf>[];
     if (json is List && json.isNotEmpty) {
       for (final row in json) {
@@ -81,7 +89,8 @@ class PassKeyLoginFinishRspAllOfDataAllOf {
     return result.toList(growable: growable);
   }
 
-  static Map<String, PassKeyLoginFinishRspAllOfDataAllOf> mapFromJson(dynamic json) {
+  static Map<String, PassKeyLoginFinishRspAllOfDataAllOf> mapFromJson(
+      dynamic json) {
     final map = <String, PassKeyLoginFinishRspAllOfDataAllOf>{};
     if (json is Map && json.isNotEmpty) {
       json = json.cast<String, dynamic>(); // ignore: parameter_assignments
@@ -96,13 +105,19 @@ class PassKeyLoginFinishRspAllOfDataAllOf {
   }
 
   // maps a json object with a list of PassKeyLoginFinishRspAllOfDataAllOf-objects as value to a dart map
-  static Map<String, List<PassKeyLoginFinishRspAllOfDataAllOf>> mapListFromJson(dynamic json, {bool growable = false,}) {
+  static Map<String, List<PassKeyLoginFinishRspAllOfDataAllOf>> mapListFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
     final map = <String, List<PassKeyLoginFinishRspAllOfDataAllOf>>{};
     if (json is Map && json.isNotEmpty) {
       // ignore: parameter_assignments
       json = json.cast<String, dynamic>();
       for (final entry in json.entries) {
-        map[entry.key] = PassKeyLoginFinishRspAllOfDataAllOf.listFromJson(entry.value, growable: growable,);
+        map[entry.key] = PassKeyLoginFinishRspAllOfDataAllOf.listFromJson(
+          entry.value,
+          growable: growable,
+        );
       }
     }
     return map;
@@ -114,4 +129,3 @@ class PassKeyLoginFinishRspAllOfDataAllOf {
     'confirmedCredential',
   };
 }
-

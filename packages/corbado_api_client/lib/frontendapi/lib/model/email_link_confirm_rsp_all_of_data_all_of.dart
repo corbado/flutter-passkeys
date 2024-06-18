@@ -19,20 +19,23 @@ class EmailLinkConfirmRspAllOfDataAllOf {
   List<AuthMethod> authMethods;
 
   @override
-  bool operator ==(Object other) => identical(this, other) || other is EmailLinkConfirmRspAllOfDataAllOf &&
-     other.authMethods == authMethods;
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is EmailLinkConfirmRspAllOfDataAllOf &&
+          other.authMethods == authMethods;
 
   @override
   int get hashCode =>
-    // ignore: unnecessary_parenthesis
-    (authMethods.hashCode);
+      // ignore: unnecessary_parenthesis
+      (authMethods.hashCode);
 
   @override
-  String toString() => 'EmailLinkConfirmRspAllOfDataAllOf[authMethods=$authMethods]';
+  String toString() =>
+      'EmailLinkConfirmRspAllOfDataAllOf[authMethods=$authMethods]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-      json[r'authMethods'] = this.authMethods;
+    json[r'authMethods'] = this.authMethods;
     return json;
   }
 
@@ -48,8 +51,10 @@ class EmailLinkConfirmRspAllOfDataAllOf {
       // Note 2: this code is stripped in release mode!
       assert(() {
         requiredKeys.forEach((key) {
-          assert(json.containsKey(key), 'Required key "EmailLinkConfirmRspAllOfDataAllOf[$key]" is missing from JSON.');
-          assert(json[key] != null, 'Required key "EmailLinkConfirmRspAllOfDataAllOf[$key]" has a null value in JSON.');
+          assert(json.containsKey(key),
+              'Required key "EmailLinkConfirmRspAllOfDataAllOf[$key]" is missing from JSON.');
+          assert(json[key] != null,
+              'Required key "EmailLinkConfirmRspAllOfDataAllOf[$key]" has a null value in JSON.');
         });
         return true;
       }());
@@ -61,7 +66,10 @@ class EmailLinkConfirmRspAllOfDataAllOf {
     return null;
   }
 
-  static List<EmailLinkConfirmRspAllOfDataAllOf> listFromJson(dynamic json, {bool growable = false,}) {
+  static List<EmailLinkConfirmRspAllOfDataAllOf> listFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
     final result = <EmailLinkConfirmRspAllOfDataAllOf>[];
     if (json is List && json.isNotEmpty) {
       for (final row in json) {
@@ -74,7 +82,8 @@ class EmailLinkConfirmRspAllOfDataAllOf {
     return result.toList(growable: growable);
   }
 
-  static Map<String, EmailLinkConfirmRspAllOfDataAllOf> mapFromJson(dynamic json) {
+  static Map<String, EmailLinkConfirmRspAllOfDataAllOf> mapFromJson(
+      dynamic json) {
     final map = <String, EmailLinkConfirmRspAllOfDataAllOf>{};
     if (json is Map && json.isNotEmpty) {
       json = json.cast<String, dynamic>(); // ignore: parameter_assignments
@@ -89,13 +98,19 @@ class EmailLinkConfirmRspAllOfDataAllOf {
   }
 
   // maps a json object with a list of EmailLinkConfirmRspAllOfDataAllOf-objects as value to a dart map
-  static Map<String, List<EmailLinkConfirmRspAllOfDataAllOf>> mapListFromJson(dynamic json, {bool growable = false,}) {
+  static Map<String, List<EmailLinkConfirmRspAllOfDataAllOf>> mapListFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
     final map = <String, List<EmailLinkConfirmRspAllOfDataAllOf>>{};
     if (json is Map && json.isNotEmpty) {
       // ignore: parameter_assignments
       json = json.cast<String, dynamic>();
       for (final entry in json.entries) {
-        map[entry.key] = EmailLinkConfirmRspAllOfDataAllOf.listFromJson(entry.value, growable: growable,);
+        map[entry.key] = EmailLinkConfirmRspAllOfDataAllOf.listFromJson(
+          entry.value,
+          growable: growable,
+        );
       }
     }
     return map;
@@ -106,4 +121,3 @@ class EmailLinkConfirmRspAllOfDataAllOf {
     'authMethods',
   };
 }
-

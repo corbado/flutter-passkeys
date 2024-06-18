@@ -13,10 +13,12 @@ part of openapi.api;
 class EmailLinkRegisterStartReq {
   /// Returns a new [EmailLinkRegisterStartReq] instance.
   EmailLinkRegisterStartReq({
-    this.username,
     required this.email,
+    this.username,
     this.requestID,
   });
+
+  String email;
 
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
@@ -25,8 +27,6 @@ class EmailLinkRegisterStartReq {
   /// Consider adding a "default:" property in the specification file to hide this note.
   ///
   String? username;
-
-  String email;
 
   /// Unique ID of request, you can provide your own while making the request, if not the ID will be randomly generated on server side
   ///
@@ -38,29 +38,32 @@ class EmailLinkRegisterStartReq {
   String? requestID;
 
   @override
-  bool operator ==(Object other) => identical(this, other) || other is EmailLinkRegisterStartReq &&
-     other.username == username &&
-     other.email == email &&
-     other.requestID == requestID;
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is EmailLinkRegisterStartReq &&
+          other.email == email &&
+          other.username == username &&
+          other.requestID == requestID;
 
   @override
   int get hashCode =>
-    // ignore: unnecessary_parenthesis
-    (username == null ? 0 : username!.hashCode) +
-    (email.hashCode) +
-    (requestID == null ? 0 : requestID!.hashCode);
+      // ignore: unnecessary_parenthesis
+      (email.hashCode) +
+      (username == null ? 0 : username!.hashCode) +
+      (requestID == null ? 0 : requestID!.hashCode);
 
   @override
-  String toString() => 'EmailLinkRegisterStartReq[username=$username, email=$email, requestID=$requestID]';
+  String toString() =>
+      'EmailLinkRegisterStartReq[email=$email, username=$username, requestID=$requestID]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
+    json[r'email'] = this.email;
     if (this.username != null) {
       json[r'username'] = this.username;
     } else {
       json[r'username'] = null;
     }
-      json[r'email'] = this.email;
     if (this.requestID != null) {
       json[r'requestID'] = this.requestID;
     } else {
@@ -81,22 +84,27 @@ class EmailLinkRegisterStartReq {
       // Note 2: this code is stripped in release mode!
       assert(() {
         requiredKeys.forEach((key) {
-          assert(json.containsKey(key), 'Required key "EmailLinkRegisterStartReq[$key]" is missing from JSON.');
-          assert(json[key] != null, 'Required key "EmailLinkRegisterStartReq[$key]" has a null value in JSON.');
+          assert(json.containsKey(key),
+              'Required key "EmailLinkRegisterStartReq[$key]" is missing from JSON.');
+          assert(json[key] != null,
+              'Required key "EmailLinkRegisterStartReq[$key]" has a null value in JSON.');
         });
         return true;
       }());
 
       return EmailLinkRegisterStartReq(
-        username: mapValueOfType<String>(json, r'username'),
         email: mapValueOfType<String>(json, r'email')!,
+        username: mapValueOfType<String>(json, r'username'),
         requestID: mapValueOfType<String>(json, r'requestID'),
       );
     }
     return null;
   }
 
-  static List<EmailLinkRegisterStartReq> listFromJson(dynamic json, {bool growable = false,}) {
+  static List<EmailLinkRegisterStartReq> listFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
     final result = <EmailLinkRegisterStartReq>[];
     if (json is List && json.isNotEmpty) {
       for (final row in json) {
@@ -124,13 +132,19 @@ class EmailLinkRegisterStartReq {
   }
 
   // maps a json object with a list of EmailLinkRegisterStartReq-objects as value to a dart map
-  static Map<String, List<EmailLinkRegisterStartReq>> mapListFromJson(dynamic json, {bool growable = false,}) {
+  static Map<String, List<EmailLinkRegisterStartReq>> mapListFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
     final map = <String, List<EmailLinkRegisterStartReq>>{};
     if (json is Map && json.isNotEmpty) {
       // ignore: parameter_assignments
       json = json.cast<String, dynamic>();
       for (final entry in json.entries) {
-        map[entry.key] = EmailLinkRegisterStartReq.listFromJson(entry.value, growable: growable,);
+        map[entry.key] = EmailLinkRegisterStartReq.listFromJson(
+          entry.value,
+          growable: growable,
+        );
       }
     }
     return map;
@@ -141,4 +155,3 @@ class EmailLinkRegisterStartReq {
     'email',
   };
 }
-

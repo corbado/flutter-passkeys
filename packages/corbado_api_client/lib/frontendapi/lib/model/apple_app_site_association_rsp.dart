@@ -25,26 +25,27 @@ class AppleAppSiteAssociationRsp {
   AppleAppSiteAssociationRspWebcredentials appclips;
 
   @override
-  bool operator ==(Object other) => identical(this, other) || other is AppleAppSiteAssociationRsp &&
-     other.applinks == applinks &&
-     other.webcredentials == webcredentials &&
-     other.appclips == appclips;
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is AppleAppSiteAssociationRsp &&
+          other.applinks == applinks &&
+          other.webcredentials == webcredentials &&
+          other.appclips == appclips;
 
   @override
   int get hashCode =>
-    // ignore: unnecessary_parenthesis
-    (applinks.hashCode) +
-    (webcredentials.hashCode) +
-    (appclips.hashCode);
+      // ignore: unnecessary_parenthesis
+      (applinks.hashCode) + (webcredentials.hashCode) + (appclips.hashCode);
 
   @override
-  String toString() => 'AppleAppSiteAssociationRsp[applinks=$applinks, webcredentials=$webcredentials, appclips=$appclips]';
+  String toString() =>
+      'AppleAppSiteAssociationRsp[applinks=$applinks, webcredentials=$webcredentials, appclips=$appclips]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-      json[r'applinks'] = this.applinks;
-      json[r'webcredentials'] = this.webcredentials;
-      json[r'appclips'] = this.appclips;
+    json[r'applinks'] = this.applinks;
+    json[r'webcredentials'] = this.webcredentials;
+    json[r'appclips'] = this.appclips;
     return json;
   }
 
@@ -60,22 +61,30 @@ class AppleAppSiteAssociationRsp {
       // Note 2: this code is stripped in release mode!
       assert(() {
         requiredKeys.forEach((key) {
-          assert(json.containsKey(key), 'Required key "AppleAppSiteAssociationRsp[$key]" is missing from JSON.');
-          assert(json[key] != null, 'Required key "AppleAppSiteAssociationRsp[$key]" has a null value in JSON.');
+          assert(json.containsKey(key),
+              'Required key "AppleAppSiteAssociationRsp[$key]" is missing from JSON.');
+          assert(json[key] != null,
+              'Required key "AppleAppSiteAssociationRsp[$key]" has a null value in JSON.');
         });
         return true;
       }());
 
       return AppleAppSiteAssociationRsp(
-        applinks: AppleAppSiteAssociationRspApplinks.fromJson(json[r'applinks'])!,
-        webcredentials: AppleAppSiteAssociationRspWebcredentials.fromJson(json[r'webcredentials'])!,
-        appclips: AppleAppSiteAssociationRspWebcredentials.fromJson(json[r'appclips'])!,
+        applinks:
+            AppleAppSiteAssociationRspApplinks.fromJson(json[r'applinks'])!,
+        webcredentials: AppleAppSiteAssociationRspWebcredentials.fromJson(
+            json[r'webcredentials'])!,
+        appclips: AppleAppSiteAssociationRspWebcredentials.fromJson(
+            json[r'appclips'])!,
       );
     }
     return null;
   }
 
-  static List<AppleAppSiteAssociationRsp> listFromJson(dynamic json, {bool growable = false,}) {
+  static List<AppleAppSiteAssociationRsp> listFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
     final result = <AppleAppSiteAssociationRsp>[];
     if (json is List && json.isNotEmpty) {
       for (final row in json) {
@@ -103,13 +112,19 @@ class AppleAppSiteAssociationRsp {
   }
 
   // maps a json object with a list of AppleAppSiteAssociationRsp-objects as value to a dart map
-  static Map<String, List<AppleAppSiteAssociationRsp>> mapListFromJson(dynamic json, {bool growable = false,}) {
+  static Map<String, List<AppleAppSiteAssociationRsp>> mapListFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
     final map = <String, List<AppleAppSiteAssociationRsp>>{};
     if (json is Map && json.isNotEmpty) {
       // ignore: parameter_assignments
       json = json.cast<String, dynamic>();
       for (final entry in json.entries) {
-        map[entry.key] = AppleAppSiteAssociationRsp.listFromJson(entry.value, growable: growable,);
+        map[entry.key] = AppleAppSiteAssociationRsp.listFromJson(
+          entry.value,
+          growable: growable,
+        );
       }
     }
     return map;
@@ -122,4 +137,3 @@ class AppleAppSiteAssociationRsp {
     'appclips',
   };
 }
-

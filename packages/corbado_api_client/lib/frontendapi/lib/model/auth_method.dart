@@ -36,9 +36,13 @@ class AuthMethod {
     password,
   ];
 
-  static AuthMethod? fromJson(dynamic value) => AuthMethodTypeTransformer().decode(value);
+  static AuthMethod? fromJson(dynamic value) =>
+      AuthMethodTypeTransformer().decode(value);
 
-  static List<AuthMethod> listFromJson(dynamic json, {bool growable = false,}) {
+  static List<AuthMethod> listFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
     final result = <AuthMethod>[];
     if (json is List && json.isNotEmpty) {
       for (final row in json) {
@@ -55,7 +59,8 @@ class AuthMethod {
 /// Transformation class that can [encode] an instance of [AuthMethod] to String,
 /// and [decode] dynamic data back to [AuthMethod].
 class AuthMethodTypeTransformer {
-  factory AuthMethodTypeTransformer() => _instance ??= const AuthMethodTypeTransformer._();
+  factory AuthMethodTypeTransformer() =>
+      _instance ??= const AuthMethodTypeTransformer._();
 
   const AuthMethodTypeTransformer._();
 
@@ -72,10 +77,14 @@ class AuthMethodTypeTransformer {
   AuthMethod? decode(dynamic data, {bool allowNull = true}) {
     if (data != null) {
       switch (data) {
-        case r'email': return AuthMethod.email;
-        case r'phone_number': return AuthMethod.phoneNumber;
-        case r'webauthn': return AuthMethod.webauthn;
-        case r'password': return AuthMethod.password;
+        case r'email':
+          return AuthMethod.email;
+        case r'phone_number':
+          return AuthMethod.phoneNumber;
+        case r'webauthn':
+          return AuthMethod.webauthn;
+        case r'password':
+          return AuthMethod.password;
         default:
           if (!allowNull) {
             throw ArgumentError('Unknown enum value to decode: $data');
@@ -88,4 +97,3 @@ class AuthMethodTypeTransformer {
   /// Singleton [AuthMethodTypeTransformer] instance.
   static AuthMethodTypeTransformer? _instance;
 }
-

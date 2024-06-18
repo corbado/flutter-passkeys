@@ -34,9 +34,13 @@ class Status {
     deleted,
   ];
 
-  static Status? fromJson(dynamic value) => StatusTypeTransformer().decode(value);
+  static Status? fromJson(dynamic value) =>
+      StatusTypeTransformer().decode(value);
 
-  static List<Status> listFromJson(dynamic json, {bool growable = false,}) {
+  static List<Status> listFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
     final result = <Status>[];
     if (json is List && json.isNotEmpty) {
       for (final row in json) {
@@ -53,7 +57,8 @@ class Status {
 /// Transformation class that can [encode] an instance of [Status] to String,
 /// and [decode] dynamic data back to [Status].
 class StatusTypeTransformer {
-  factory StatusTypeTransformer() => _instance ??= const StatusTypeTransformer._();
+  factory StatusTypeTransformer() =>
+      _instance ??= const StatusTypeTransformer._();
 
   const StatusTypeTransformer._();
 
@@ -70,9 +75,12 @@ class StatusTypeTransformer {
   Status? decode(dynamic data, {bool allowNull = true}) {
     if (data != null) {
       switch (data) {
-        case r'active': return Status.active;
-        case r'pending': return Status.pending;
-        case r'deleted': return Status.deleted;
+        case r'active':
+          return Status.active;
+        case r'pending':
+          return Status.pending;
+        case r'deleted':
+          return Status.deleted;
         default:
           if (!allowNull) {
             throw ArgumentError('Unknown enum value to decode: $data');
@@ -85,4 +93,3 @@ class StatusTypeTransformer {
   /// Singleton [StatusTypeTransformer] instance.
   static StatusTypeTransformer? _instance;
 }
-

@@ -24,7 +24,6 @@ dependencies:
   flutter:
     sdk: flutter
   json_annotation: ^4.8.1
-  openapi_generator_annotations: ^4.10.0
   passkeys_android: ^2.0.4
   passkeys_ios: ^2.0.3
   passkeys_platform_interface: ^2.0.1
@@ -37,7 +36,6 @@ dev_dependencies:
     sdk: flutter
   json_serializable: ^6.7.0
   mocktail: ^1.0.0
-  openapi_generator: ^4.10.0
   plugin_platform_interface: ^2.0.0
   very_good_analysis: ^5.0.0
 

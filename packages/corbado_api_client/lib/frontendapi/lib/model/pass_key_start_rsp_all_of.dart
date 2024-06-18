@@ -19,20 +19,21 @@ class PassKeyStartRspAllOf {
   PassKeyStartRspAllOfData data;
 
   @override
-  bool operator ==(Object other) => identical(this, other) || other is PassKeyStartRspAllOf &&
-     other.data == data;
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is PassKeyStartRspAllOf && other.data == data;
 
   @override
   int get hashCode =>
-    // ignore: unnecessary_parenthesis
-    (data.hashCode);
+      // ignore: unnecessary_parenthesis
+      (data.hashCode);
 
   @override
   String toString() => 'PassKeyStartRspAllOf[data=$data]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-      json[r'data'] = this.data;
+    json[r'data'] = this.data;
     return json;
   }
 
@@ -48,8 +49,10 @@ class PassKeyStartRspAllOf {
       // Note 2: this code is stripped in release mode!
       assert(() {
         requiredKeys.forEach((key) {
-          assert(json.containsKey(key), 'Required key "PassKeyStartRspAllOf[$key]" is missing from JSON.');
-          assert(json[key] != null, 'Required key "PassKeyStartRspAllOf[$key]" has a null value in JSON.');
+          assert(json.containsKey(key),
+              'Required key "PassKeyStartRspAllOf[$key]" is missing from JSON.');
+          assert(json[key] != null,
+              'Required key "PassKeyStartRspAllOf[$key]" has a null value in JSON.');
         });
         return true;
       }());
@@ -61,7 +64,10 @@ class PassKeyStartRspAllOf {
     return null;
   }
 
-  static List<PassKeyStartRspAllOf> listFromJson(dynamic json, {bool growable = false,}) {
+  static List<PassKeyStartRspAllOf> listFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
     final result = <PassKeyStartRspAllOf>[];
     if (json is List && json.isNotEmpty) {
       for (final row in json) {
@@ -89,13 +95,19 @@ class PassKeyStartRspAllOf {
   }
 
   // maps a json object with a list of PassKeyStartRspAllOf-objects as value to a dart map
-  static Map<String, List<PassKeyStartRspAllOf>> mapListFromJson(dynamic json, {bool growable = false,}) {
+  static Map<String, List<PassKeyStartRspAllOf>> mapListFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
     final map = <String, List<PassKeyStartRspAllOf>>{};
     if (json is Map && json.isNotEmpty) {
       // ignore: parameter_assignments
       json = json.cast<String, dynamic>();
       for (final entry in json.entries) {
-        map[entry.key] = PassKeyStartRspAllOf.listFromJson(entry.value, growable: growable,);
+        map[entry.key] = PassKeyStartRspAllOf.listFromJson(
+          entry.value,
+          growable: growable,
+        );
       }
     }
     return map;
@@ -106,4 +118,3 @@ class PassKeyStartRspAllOf {
     'data',
   };
 }
-

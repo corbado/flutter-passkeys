@@ -29,22 +29,23 @@ class LoginTokenReq {
   String? requestID;
 
   @override
-  bool operator ==(Object other) => identical(this, other) || other is LoginTokenReq &&
-     other.token == token &&
-     other.requestID == requestID;
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is LoginTokenReq &&
+          other.token == token &&
+          other.requestID == requestID;
 
   @override
   int get hashCode =>
-    // ignore: unnecessary_parenthesis
-    (token.hashCode) +
-    (requestID == null ? 0 : requestID!.hashCode);
+      // ignore: unnecessary_parenthesis
+      (token.hashCode) + (requestID == null ? 0 : requestID!.hashCode);
 
   @override
   String toString() => 'LoginTokenReq[token=$token, requestID=$requestID]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-      json[r'token'] = this.token;
+    json[r'token'] = this.token;
     if (this.requestID != null) {
       json[r'requestID'] = this.requestID;
     } else {
@@ -65,8 +66,10 @@ class LoginTokenReq {
       // Note 2: this code is stripped in release mode!
       assert(() {
         requiredKeys.forEach((key) {
-          assert(json.containsKey(key), 'Required key "LoginTokenReq[$key]" is missing from JSON.');
-          assert(json[key] != null, 'Required key "LoginTokenReq[$key]" has a null value in JSON.');
+          assert(json.containsKey(key),
+              'Required key "LoginTokenReq[$key]" is missing from JSON.');
+          assert(json[key] != null,
+              'Required key "LoginTokenReq[$key]" has a null value in JSON.');
         });
         return true;
       }());
@@ -79,7 +82,10 @@ class LoginTokenReq {
     return null;
   }
 
-  static List<LoginTokenReq> listFromJson(dynamic json, {bool growable = false,}) {
+  static List<LoginTokenReq> listFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
     final result = <LoginTokenReq>[];
     if (json is List && json.isNotEmpty) {
       for (final row in json) {
@@ -107,13 +113,19 @@ class LoginTokenReq {
   }
 
   // maps a json object with a list of LoginTokenReq-objects as value to a dart map
-  static Map<String, List<LoginTokenReq>> mapListFromJson(dynamic json, {bool growable = false,}) {
+  static Map<String, List<LoginTokenReq>> mapListFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
     final map = <String, List<LoginTokenReq>>{};
     if (json is Map && json.isNotEmpty) {
       // ignore: parameter_assignments
       json = json.cast<String, dynamic>();
       for (final entry in json.entries) {
-        map[entry.key] = LoginTokenReq.listFromJson(entry.value, growable: growable,);
+        map[entry.key] = LoginTokenReq.listFromJson(
+          entry.value,
+          growable: growable,
+        );
       }
     }
     return map;
@@ -124,4 +136,3 @@ class LoginTokenReq {
     'token',
   };
 }
-

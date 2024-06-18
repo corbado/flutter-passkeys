@@ -45,44 +45,47 @@ class PassKeyItem {
   String created;
 
   @override
-  bool operator ==(Object other) => identical(this, other) || other is PassKeyItem &&
-     other.id == id &&
-     other.aaguid == aaguid &&
-     other.userAgent == userAgent &&
-     other.attestationType == attestationType &&
-     other.transport == transport &&
-     other.backupEligible == backupEligible &&
-     other.backupState == backupState &&
-     other.status == status &&
-     other.created == created;
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is PassKeyItem &&
+          other.id == id &&
+          other.aaguid == aaguid &&
+          other.userAgent == userAgent &&
+          other.attestationType == attestationType &&
+          _deepEquality.equals(other.transport, transport) &&
+          other.backupEligible == backupEligible &&
+          other.backupState == backupState &&
+          other.status == status &&
+          other.created == created;
 
   @override
   int get hashCode =>
-    // ignore: unnecessary_parenthesis
-    (id.hashCode) +
-    (aaguid.hashCode) +
-    (userAgent.hashCode) +
-    (attestationType.hashCode) +
-    (transport.hashCode) +
-    (backupEligible.hashCode) +
-    (backupState.hashCode) +
-    (status.hashCode) +
-    (created.hashCode);
+      // ignore: unnecessary_parenthesis
+      (id.hashCode) +
+      (aaguid.hashCode) +
+      (userAgent.hashCode) +
+      (attestationType.hashCode) +
+      (transport.hashCode) +
+      (backupEligible.hashCode) +
+      (backupState.hashCode) +
+      (status.hashCode) +
+      (created.hashCode);
 
   @override
-  String toString() => 'PassKeyItem[id=$id, aaguid=$aaguid, userAgent=$userAgent, attestationType=$attestationType, transport=$transport, backupEligible=$backupEligible, backupState=$backupState, status=$status, created=$created]';
+  String toString() =>
+      'PassKeyItem[id=$id, aaguid=$aaguid, userAgent=$userAgent, attestationType=$attestationType, transport=$transport, backupEligible=$backupEligible, backupState=$backupState, status=$status, created=$created]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-      json[r'id'] = this.id;
-      json[r'aaguid'] = this.aaguid;
-      json[r'userAgent'] = this.userAgent;
-      json[r'attestationType'] = this.attestationType;
-      json[r'transport'] = this.transport;
-      json[r'backupEligible'] = this.backupEligible;
-      json[r'backupState'] = this.backupState;
-      json[r'status'] = this.status;
-      json[r'created'] = this.created;
+    json[r'id'] = this.id;
+    json[r'aaguid'] = this.aaguid;
+    json[r'userAgent'] = this.userAgent;
+    json[r'attestationType'] = this.attestationType;
+    json[r'transport'] = this.transport;
+    json[r'backupEligible'] = this.backupEligible;
+    json[r'backupState'] = this.backupState;
+    json[r'status'] = this.status;
+    json[r'created'] = this.created;
     return json;
   }
 
@@ -98,8 +101,10 @@ class PassKeyItem {
       // Note 2: this code is stripped in release mode!
       assert(() {
         requiredKeys.forEach((key) {
-          assert(json.containsKey(key), 'Required key "PassKeyItem[$key]" is missing from JSON.');
-          assert(json[key] != null, 'Required key "PassKeyItem[$key]" has a null value in JSON.');
+          assert(json.containsKey(key),
+              'Required key "PassKeyItem[$key]" is missing from JSON.');
+          assert(json[key] != null,
+              'Required key "PassKeyItem[$key]" has a null value in JSON.');
         });
         return true;
       }());
@@ -109,8 +114,10 @@ class PassKeyItem {
         aaguid: mapValueOfType<String>(json, r'aaguid')!,
         userAgent: mapValueOfType<String>(json, r'userAgent')!,
         attestationType: mapValueOfType<String>(json, r'attestationType')!,
-        transport: json[r'transport'] is List
-            ? (json[r'transport'] as List).cast<String>()
+        transport: json[r'transport'] is Iterable
+            ? (json[r'transport'] as Iterable)
+                .cast<String>()
+                .toList(growable: false)
             : const [],
         backupEligible: mapValueOfType<bool>(json, r'backupEligible')!,
         backupState: mapValueOfType<bool>(json, r'backupState')!,
@@ -121,7 +128,10 @@ class PassKeyItem {
     return null;
   }
 
-  static List<PassKeyItem> listFromJson(dynamic json, {bool growable = false,}) {
+  static List<PassKeyItem> listFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
     final result = <PassKeyItem>[];
     if (json is List && json.isNotEmpty) {
       for (final row in json) {
@@ -149,13 +159,19 @@ class PassKeyItem {
   }
 
   // maps a json object with a list of PassKeyItem-objects as value to a dart map
-  static Map<String, List<PassKeyItem>> mapListFromJson(dynamic json, {bool growable = false,}) {
+  static Map<String, List<PassKeyItem>> mapListFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
     final map = <String, List<PassKeyItem>>{};
     if (json is Map && json.isNotEmpty) {
       // ignore: parameter_assignments
       json = json.cast<String, dynamic>();
       for (final entry in json.entries) {
-        map[entry.key] = PassKeyItem.listFromJson(entry.value, growable: growable,);
+        map[entry.key] = PassKeyItem.listFromJson(
+          entry.value,
+          growable: growable,
+        );
       }
     }
     return map;
@@ -197,9 +213,13 @@ class PassKeyItemStatusEnum {
     active,
   ];
 
-  static PassKeyItemStatusEnum? fromJson(dynamic value) => PassKeyItemStatusEnumTypeTransformer().decode(value);
+  static PassKeyItemStatusEnum? fromJson(dynamic value) =>
+      PassKeyItemStatusEnumTypeTransformer().decode(value);
 
-  static List<PassKeyItemStatusEnum> listFromJson(dynamic json, {bool growable = false,}) {
+  static List<PassKeyItemStatusEnum> listFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
     final result = <PassKeyItemStatusEnum>[];
     if (json is List && json.isNotEmpty) {
       for (final row in json) {
@@ -216,7 +236,8 @@ class PassKeyItemStatusEnum {
 /// Transformation class that can [encode] an instance of [PassKeyItemStatusEnum] to String,
 /// and [decode] dynamic data back to [PassKeyItemStatusEnum].
 class PassKeyItemStatusEnumTypeTransformer {
-  factory PassKeyItemStatusEnumTypeTransformer() => _instance ??= const PassKeyItemStatusEnumTypeTransformer._();
+  factory PassKeyItemStatusEnumTypeTransformer() =>
+      _instance ??= const PassKeyItemStatusEnumTypeTransformer._();
 
   const PassKeyItemStatusEnumTypeTransformer._();
 
@@ -233,8 +254,10 @@ class PassKeyItemStatusEnumTypeTransformer {
   PassKeyItemStatusEnum? decode(dynamic data, {bool allowNull = true}) {
     if (data != null) {
       switch (data) {
-        case r'pending': return PassKeyItemStatusEnum.pending;
-        case r'active': return PassKeyItemStatusEnum.active;
+        case r'pending':
+          return PassKeyItemStatusEnum.pending;
+        case r'active':
+          return PassKeyItemStatusEnum.active;
         default:
           if (!allowNull) {
             throw ArgumentError('Unknown enum value to decode: $data');
@@ -247,5 +270,3 @@ class PassKeyItemStatusEnumTypeTransformer {
   /// Singleton [PassKeyItemStatusEnumTypeTransformer] instance.
   static PassKeyItemStatusEnumTypeTransformer? _instance;
 }
-
-

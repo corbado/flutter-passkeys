@@ -22,23 +22,25 @@ class AuthMethodsListRspAllOfData {
   List<AuthMethod> possibleMethods;
 
   @override
-  bool operator ==(Object other) => identical(this, other) || other is AuthMethodsListRspAllOfData &&
-     other.selectedMethods == selectedMethods &&
-     other.possibleMethods == possibleMethods;
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is AuthMethodsListRspAllOfData &&
+          _deepEquality.equals(other.selectedMethods, selectedMethods) &&
+          _deepEquality.equals(other.possibleMethods, possibleMethods);
 
   @override
   int get hashCode =>
-    // ignore: unnecessary_parenthesis
-    (selectedMethods.hashCode) +
-    (possibleMethods.hashCode);
+      // ignore: unnecessary_parenthesis
+      (selectedMethods.hashCode) + (possibleMethods.hashCode);
 
   @override
-  String toString() => 'AuthMethodsListRspAllOfData[selectedMethods=$selectedMethods, possibleMethods=$possibleMethods]';
+  String toString() =>
+      'AuthMethodsListRspAllOfData[selectedMethods=$selectedMethods, possibleMethods=$possibleMethods]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-      json[r'selectedMethods'] = this.selectedMethods;
-      json[r'possibleMethods'] = this.possibleMethods;
+    json[r'selectedMethods'] = this.selectedMethods;
+    json[r'possibleMethods'] = this.possibleMethods;
     return json;
   }
 
@@ -54,8 +56,10 @@ class AuthMethodsListRspAllOfData {
       // Note 2: this code is stripped in release mode!
       assert(() {
         requiredKeys.forEach((key) {
-          assert(json.containsKey(key), 'Required key "AuthMethodsListRspAllOfData[$key]" is missing from JSON.');
-          assert(json[key] != null, 'Required key "AuthMethodsListRspAllOfData[$key]" has a null value in JSON.');
+          assert(json.containsKey(key),
+              'Required key "AuthMethodsListRspAllOfData[$key]" is missing from JSON.');
+          assert(json[key] != null,
+              'Required key "AuthMethodsListRspAllOfData[$key]" has a null value in JSON.');
         });
         return true;
       }());
@@ -68,7 +72,10 @@ class AuthMethodsListRspAllOfData {
     return null;
   }
 
-  static List<AuthMethodsListRspAllOfData> listFromJson(dynamic json, {bool growable = false,}) {
+  static List<AuthMethodsListRspAllOfData> listFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
     final result = <AuthMethodsListRspAllOfData>[];
     if (json is List && json.isNotEmpty) {
       for (final row in json) {
@@ -96,13 +103,19 @@ class AuthMethodsListRspAllOfData {
   }
 
   // maps a json object with a list of AuthMethodsListRspAllOfData-objects as value to a dart map
-  static Map<String, List<AuthMethodsListRspAllOfData>> mapListFromJson(dynamic json, {bool growable = false,}) {
+  static Map<String, List<AuthMethodsListRspAllOfData>> mapListFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
     final map = <String, List<AuthMethodsListRspAllOfData>>{};
     if (json is Map && json.isNotEmpty) {
       // ignore: parameter_assignments
       json = json.cast<String, dynamic>();
       for (final entry in json.entries) {
-        map[entry.key] = AuthMethodsListRspAllOfData.listFromJson(entry.value, growable: growable,);
+        map[entry.key] = AuthMethodsListRspAllOfData.listFromJson(
+          entry.value,
+          growable: growable,
+        );
       }
     }
     return map;
@@ -114,4 +127,3 @@ class AuthMethodsListRspAllOfData {
     'possibleMethods',
   };
 }
-

@@ -40,26 +40,30 @@ class AssetLinkTarget {
   List<String> sha256CertFingerprints;
 
   @override
-  bool operator ==(Object other) => identical(this, other) || other is AssetLinkTarget &&
-     other.namespace == namespace &&
-     other.packageName == packageName &&
-     other.site == site &&
-     other.sha256CertFingerprints == sha256CertFingerprints;
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is AssetLinkTarget &&
+          other.namespace == namespace &&
+          other.packageName == packageName &&
+          other.site == site &&
+          _deepEquality.equals(
+              other.sha256CertFingerprints, sha256CertFingerprints);
 
   @override
   int get hashCode =>
-    // ignore: unnecessary_parenthesis
-    (namespace.hashCode) +
-    (packageName == null ? 0 : packageName!.hashCode) +
-    (site == null ? 0 : site!.hashCode) +
-    (sha256CertFingerprints.hashCode);
+      // ignore: unnecessary_parenthesis
+      (namespace.hashCode) +
+      (packageName == null ? 0 : packageName!.hashCode) +
+      (site == null ? 0 : site!.hashCode) +
+      (sha256CertFingerprints.hashCode);
 
   @override
-  String toString() => 'AssetLinkTarget[namespace=$namespace, packageName=$packageName, site=$site, sha256CertFingerprints=$sha256CertFingerprints]';
+  String toString() =>
+      'AssetLinkTarget[namespace=$namespace, packageName=$packageName, site=$site, sha256CertFingerprints=$sha256CertFingerprints]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-      json[r'namespace'] = this.namespace;
+    json[r'namespace'] = this.namespace;
     if (this.packageName != null) {
       json[r'package_name'] = this.packageName;
     } else {
@@ -70,7 +74,7 @@ class AssetLinkTarget {
     } else {
       json[r'site'] = null;
     }
-      json[r'sha256_cert_fingerprints'] = this.sha256CertFingerprints;
+    json[r'sha256_cert_fingerprints'] = this.sha256CertFingerprints;
     return json;
   }
 
@@ -86,8 +90,10 @@ class AssetLinkTarget {
       // Note 2: this code is stripped in release mode!
       assert(() {
         requiredKeys.forEach((key) {
-          assert(json.containsKey(key), 'Required key "AssetLinkTarget[$key]" is missing from JSON.');
-          assert(json[key] != null, 'Required key "AssetLinkTarget[$key]" has a null value in JSON.');
+          assert(json.containsKey(key),
+              'Required key "AssetLinkTarget[$key]" is missing from JSON.');
+          assert(json[key] != null,
+              'Required key "AssetLinkTarget[$key]" has a null value in JSON.');
         });
         return true;
       }());
@@ -96,15 +102,20 @@ class AssetLinkTarget {
         namespace: mapValueOfType<String>(json, r'namespace')!,
         packageName: mapValueOfType<String>(json, r'package_name'),
         site: mapValueOfType<String>(json, r'site'),
-        sha256CertFingerprints: json[r'sha256_cert_fingerprints'] is List
-            ? (json[r'sha256_cert_fingerprints'] as List).cast<String>()
+        sha256CertFingerprints: json[r'sha256_cert_fingerprints'] is Iterable
+            ? (json[r'sha256_cert_fingerprints'] as Iterable)
+                .cast<String>()
+                .toList(growable: false)
             : const [],
       );
     }
     return null;
   }
 
-  static List<AssetLinkTarget> listFromJson(dynamic json, {bool growable = false,}) {
+  static List<AssetLinkTarget> listFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
     final result = <AssetLinkTarget>[];
     if (json is List && json.isNotEmpty) {
       for (final row in json) {
@@ -132,13 +143,19 @@ class AssetLinkTarget {
   }
 
   // maps a json object with a list of AssetLinkTarget-objects as value to a dart map
-  static Map<String, List<AssetLinkTarget>> mapListFromJson(dynamic json, {bool growable = false,}) {
+  static Map<String, List<AssetLinkTarget>> mapListFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
     final map = <String, List<AssetLinkTarget>>{};
     if (json is Map && json.isNotEmpty) {
       // ignore: parameter_assignments
       json = json.cast<String, dynamic>();
       for (final entry in json.entries) {
-        map[entry.key] = AssetLinkTarget.listFromJson(entry.value, growable: growable,);
+        map[entry.key] = AssetLinkTarget.listFromJson(
+          entry.value,
+          growable: growable,
+        );
       }
     }
     return map;
@@ -149,4 +166,3 @@ class AssetLinkTarget {
     'namespace',
   };
 }
-

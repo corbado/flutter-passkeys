@@ -42,31 +42,34 @@ class LogoutRsp {
   ShortSession? shortSession;
 
   @override
-  bool operator ==(Object other) => identical(this, other) || other is LogoutRsp &&
-     other.httpStatusCode == httpStatusCode &&
-     other.message == message &&
-     other.requestData == requestData &&
-     other.runtime == runtime &&
-     other.shortSession == shortSession;
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is LogoutRsp &&
+          other.httpStatusCode == httpStatusCode &&
+          other.message == message &&
+          other.requestData == requestData &&
+          other.runtime == runtime &&
+          other.shortSession == shortSession;
 
   @override
   int get hashCode =>
-    // ignore: unnecessary_parenthesis
-    (httpStatusCode.hashCode) +
-    (message.hashCode) +
-    (requestData.hashCode) +
-    (runtime.hashCode) +
-    (shortSession == null ? 0 : shortSession!.hashCode);
+      // ignore: unnecessary_parenthesis
+      (httpStatusCode.hashCode) +
+      (message.hashCode) +
+      (requestData.hashCode) +
+      (runtime.hashCode) +
+      (shortSession == null ? 0 : shortSession!.hashCode);
 
   @override
-  String toString() => 'LogoutRsp[httpStatusCode=$httpStatusCode, message=$message, requestData=$requestData, runtime=$runtime, shortSession=$shortSession]';
+  String toString() =>
+      'LogoutRsp[httpStatusCode=$httpStatusCode, message=$message, requestData=$requestData, runtime=$runtime, shortSession=$shortSession]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-      json[r'httpStatusCode'] = this.httpStatusCode;
-      json[r'message'] = this.message;
-      json[r'requestData'] = this.requestData;
-      json[r'runtime'] = this.runtime;
+    json[r'httpStatusCode'] = this.httpStatusCode;
+    json[r'message'] = this.message;
+    json[r'requestData'] = this.requestData;
+    json[r'runtime'] = this.runtime;
     if (this.shortSession != null) {
       json[r'shortSession'] = this.shortSession;
     } else {
@@ -87,8 +90,10 @@ class LogoutRsp {
       // Note 2: this code is stripped in release mode!
       assert(() {
         requiredKeys.forEach((key) {
-          assert(json.containsKey(key), 'Required key "LogoutRsp[$key]" is missing from JSON.');
-          assert(json[key] != null, 'Required key "LogoutRsp[$key]" has a null value in JSON.');
+          assert(json.containsKey(key),
+              'Required key "LogoutRsp[$key]" is missing from JSON.');
+          assert(json[key] != null,
+              'Required key "LogoutRsp[$key]" has a null value in JSON.');
         });
         return true;
       }());
@@ -104,7 +109,10 @@ class LogoutRsp {
     return null;
   }
 
-  static List<LogoutRsp> listFromJson(dynamic json, {bool growable = false,}) {
+  static List<LogoutRsp> listFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
     final result = <LogoutRsp>[];
     if (json is List && json.isNotEmpty) {
       for (final row in json) {
@@ -132,13 +140,19 @@ class LogoutRsp {
   }
 
   // maps a json object with a list of LogoutRsp-objects as value to a dart map
-  static Map<String, List<LogoutRsp>> mapListFromJson(dynamic json, {bool growable = false,}) {
+  static Map<String, List<LogoutRsp>> mapListFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
     final map = <String, List<LogoutRsp>>{};
     if (json is Map && json.isNotEmpty) {
       // ignore: parameter_assignments
       json = json.cast<String, dynamic>();
       for (final entry in json.entries) {
-        map[entry.key] = LogoutRsp.listFromJson(entry.value, growable: growable,);
+        map[entry.key] = LogoutRsp.listFromJson(
+          entry.value,
+          growable: growable,
+        );
       }
     }
     return map;
@@ -152,4 +166,3 @@ class LogoutRsp {
     'runtime',
   };
 }
-

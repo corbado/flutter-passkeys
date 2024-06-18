@@ -19,20 +19,23 @@ class EmailLinkRegisterStartRspAllOfData {
   String emailLinkID;
 
   @override
-  bool operator ==(Object other) => identical(this, other) || other is EmailLinkRegisterStartRspAllOfData &&
-     other.emailLinkID == emailLinkID;
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is EmailLinkRegisterStartRspAllOfData &&
+          other.emailLinkID == emailLinkID;
 
   @override
   int get hashCode =>
-    // ignore: unnecessary_parenthesis
-    (emailLinkID.hashCode);
+      // ignore: unnecessary_parenthesis
+      (emailLinkID.hashCode);
 
   @override
-  String toString() => 'EmailLinkRegisterStartRspAllOfData[emailLinkID=$emailLinkID]';
+  String toString() =>
+      'EmailLinkRegisterStartRspAllOfData[emailLinkID=$emailLinkID]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-      json[r'emailLinkID'] = this.emailLinkID;
+    json[r'emailLinkID'] = this.emailLinkID;
     return json;
   }
 
@@ -48,8 +51,10 @@ class EmailLinkRegisterStartRspAllOfData {
       // Note 2: this code is stripped in release mode!
       assert(() {
         requiredKeys.forEach((key) {
-          assert(json.containsKey(key), 'Required key "EmailLinkRegisterStartRspAllOfData[$key]" is missing from JSON.');
-          assert(json[key] != null, 'Required key "EmailLinkRegisterStartRspAllOfData[$key]" has a null value in JSON.');
+          assert(json.containsKey(key),
+              'Required key "EmailLinkRegisterStartRspAllOfData[$key]" is missing from JSON.');
+          assert(json[key] != null,
+              'Required key "EmailLinkRegisterStartRspAllOfData[$key]" has a null value in JSON.');
         });
         return true;
       }());
@@ -61,7 +66,10 @@ class EmailLinkRegisterStartRspAllOfData {
     return null;
   }
 
-  static List<EmailLinkRegisterStartRspAllOfData> listFromJson(dynamic json, {bool growable = false,}) {
+  static List<EmailLinkRegisterStartRspAllOfData> listFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
     final result = <EmailLinkRegisterStartRspAllOfData>[];
     if (json is List && json.isNotEmpty) {
       for (final row in json) {
@@ -74,7 +82,8 @@ class EmailLinkRegisterStartRspAllOfData {
     return result.toList(growable: growable);
   }
 
-  static Map<String, EmailLinkRegisterStartRspAllOfData> mapFromJson(dynamic json) {
+  static Map<String, EmailLinkRegisterStartRspAllOfData> mapFromJson(
+      dynamic json) {
     final map = <String, EmailLinkRegisterStartRspAllOfData>{};
     if (json is Map && json.isNotEmpty) {
       json = json.cast<String, dynamic>(); // ignore: parameter_assignments
@@ -89,13 +98,19 @@ class EmailLinkRegisterStartRspAllOfData {
   }
 
   // maps a json object with a list of EmailLinkRegisterStartRspAllOfData-objects as value to a dart map
-  static Map<String, List<EmailLinkRegisterStartRspAllOfData>> mapListFromJson(dynamic json, {bool growable = false,}) {
+  static Map<String, List<EmailLinkRegisterStartRspAllOfData>> mapListFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
     final map = <String, List<EmailLinkRegisterStartRspAllOfData>>{};
     if (json is Map && json.isNotEmpty) {
       // ignore: parameter_assignments
       json = json.cast<String, dynamic>();
       for (final entry in json.entries) {
-        map[entry.key] = EmailLinkRegisterStartRspAllOfData.listFromJson(entry.value, growable: growable,);
+        map[entry.key] = EmailLinkRegisterStartRspAllOfData.listFromJson(
+          entry.value,
+          growable: growable,
+        );
       }
     }
     return map;
@@ -106,4 +121,3 @@ class EmailLinkRegisterStartRspAllOfData {
     'emailLinkID',
   };
 }
-

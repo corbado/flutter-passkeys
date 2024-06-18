@@ -24,23 +24,24 @@ class RequestData {
   String link;
 
   @override
-  bool operator ==(Object other) => identical(this, other) || other is RequestData &&
-     other.requestID == requestID &&
-     other.link == link;
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is RequestData &&
+          other.requestID == requestID &&
+          other.link == link;
 
   @override
   int get hashCode =>
-    // ignore: unnecessary_parenthesis
-    (requestID.hashCode) +
-    (link.hashCode);
+      // ignore: unnecessary_parenthesis
+      (requestID.hashCode) + (link.hashCode);
 
   @override
   String toString() => 'RequestData[requestID=$requestID, link=$link]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-      json[r'requestID'] = this.requestID;
-      json[r'link'] = this.link;
+    json[r'requestID'] = this.requestID;
+    json[r'link'] = this.link;
     return json;
   }
 
@@ -56,8 +57,10 @@ class RequestData {
       // Note 2: this code is stripped in release mode!
       assert(() {
         requiredKeys.forEach((key) {
-          assert(json.containsKey(key), 'Required key "RequestData[$key]" is missing from JSON.');
-          assert(json[key] != null, 'Required key "RequestData[$key]" has a null value in JSON.');
+          assert(json.containsKey(key),
+              'Required key "RequestData[$key]" is missing from JSON.');
+          assert(json[key] != null,
+              'Required key "RequestData[$key]" has a null value in JSON.');
         });
         return true;
       }());
@@ -70,7 +73,10 @@ class RequestData {
     return null;
   }
 
-  static List<RequestData> listFromJson(dynamic json, {bool growable = false,}) {
+  static List<RequestData> listFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
     final result = <RequestData>[];
     if (json is List && json.isNotEmpty) {
       for (final row in json) {
@@ -98,13 +104,19 @@ class RequestData {
   }
 
   // maps a json object with a list of RequestData-objects as value to a dart map
-  static Map<String, List<RequestData>> mapListFromJson(dynamic json, {bool growable = false,}) {
+  static Map<String, List<RequestData>> mapListFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
     final map = <String, List<RequestData>>{};
     if (json is Map && json.isNotEmpty) {
       // ignore: parameter_assignments
       json = json.cast<String, dynamic>();
       for (final entry in json.entries) {
-        map[entry.key] = RequestData.listFromJson(entry.value, growable: growable,);
+        map[entry.key] = RequestData.listFromJson(
+          entry.value,
+          growable: growable,
+        );
       }
     }
     return map;
@@ -116,4 +128,3 @@ class RequestData {
     'link',
   };
 }
-

@@ -19,20 +19,23 @@ class PassKeyAppendFinishRspAllOfData {
   String redirectURL;
 
   @override
-  bool operator ==(Object other) => identical(this, other) || other is PassKeyAppendFinishRspAllOfData &&
-     other.redirectURL == redirectURL;
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is PassKeyAppendFinishRspAllOfData &&
+          other.redirectURL == redirectURL;
 
   @override
   int get hashCode =>
-    // ignore: unnecessary_parenthesis
-    (redirectURL.hashCode);
+      // ignore: unnecessary_parenthesis
+      (redirectURL.hashCode);
 
   @override
-  String toString() => 'PassKeyAppendFinishRspAllOfData[redirectURL=$redirectURL]';
+  String toString() =>
+      'PassKeyAppendFinishRspAllOfData[redirectURL=$redirectURL]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-      json[r'redirectURL'] = this.redirectURL;
+    json[r'redirectURL'] = this.redirectURL;
     return json;
   }
 
@@ -48,8 +51,10 @@ class PassKeyAppendFinishRspAllOfData {
       // Note 2: this code is stripped in release mode!
       assert(() {
         requiredKeys.forEach((key) {
-          assert(json.containsKey(key), 'Required key "PassKeyAppendFinishRspAllOfData[$key]" is missing from JSON.');
-          assert(json[key] != null, 'Required key "PassKeyAppendFinishRspAllOfData[$key]" has a null value in JSON.');
+          assert(json.containsKey(key),
+              'Required key "PassKeyAppendFinishRspAllOfData[$key]" is missing from JSON.');
+          assert(json[key] != null,
+              'Required key "PassKeyAppendFinishRspAllOfData[$key]" has a null value in JSON.');
         });
         return true;
       }());
@@ -61,7 +66,10 @@ class PassKeyAppendFinishRspAllOfData {
     return null;
   }
 
-  static List<PassKeyAppendFinishRspAllOfData> listFromJson(dynamic json, {bool growable = false,}) {
+  static List<PassKeyAppendFinishRspAllOfData> listFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
     final result = <PassKeyAppendFinishRspAllOfData>[];
     if (json is List && json.isNotEmpty) {
       for (final row in json) {
@@ -74,7 +82,8 @@ class PassKeyAppendFinishRspAllOfData {
     return result.toList(growable: growable);
   }
 
-  static Map<String, PassKeyAppendFinishRspAllOfData> mapFromJson(dynamic json) {
+  static Map<String, PassKeyAppendFinishRspAllOfData> mapFromJson(
+      dynamic json) {
     final map = <String, PassKeyAppendFinishRspAllOfData>{};
     if (json is Map && json.isNotEmpty) {
       json = json.cast<String, dynamic>(); // ignore: parameter_assignments
@@ -89,13 +98,19 @@ class PassKeyAppendFinishRspAllOfData {
   }
 
   // maps a json object with a list of PassKeyAppendFinishRspAllOfData-objects as value to a dart map
-  static Map<String, List<PassKeyAppendFinishRspAllOfData>> mapListFromJson(dynamic json, {bool growable = false,}) {
+  static Map<String, List<PassKeyAppendFinishRspAllOfData>> mapListFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
     final map = <String, List<PassKeyAppendFinishRspAllOfData>>{};
     if (json is Map && json.isNotEmpty) {
       // ignore: parameter_assignments
       json = json.cast<String, dynamic>();
       for (final entry in json.entries) {
-        map[entry.key] = PassKeyAppendFinishRspAllOfData.listFromJson(entry.value, growable: growable,);
+        map[entry.key] = PassKeyAppendFinishRspAllOfData.listFromJson(
+          entry.value,
+          growable: growable,
+        );
       }
     }
     return map;
@@ -106,4 +121,3 @@ class PassKeyAppendFinishRspAllOfData {
     'redirectURL',
   };
 }
-

@@ -19,20 +19,21 @@ class WellKnownJWKSListRsp {
   List<Jwk> keys;
 
   @override
-  bool operator ==(Object other) => identical(this, other) || other is WellKnownJWKSListRsp &&
-     other.keys == keys;
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is WellKnownJWKSListRsp && _deepEquality.equals(other.keys, keys);
 
   @override
   int get hashCode =>
-    // ignore: unnecessary_parenthesis
-    (keys.hashCode);
+      // ignore: unnecessary_parenthesis
+      (keys.hashCode);
 
   @override
   String toString() => 'WellKnownJWKSListRsp[keys=$keys]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-      json[r'keys'] = this.keys;
+    json[r'keys'] = this.keys;
     return json;
   }
 
@@ -48,8 +49,10 @@ class WellKnownJWKSListRsp {
       // Note 2: this code is stripped in release mode!
       assert(() {
         requiredKeys.forEach((key) {
-          assert(json.containsKey(key), 'Required key "WellKnownJWKSListRsp[$key]" is missing from JSON.');
-          assert(json[key] != null, 'Required key "WellKnownJWKSListRsp[$key]" has a null value in JSON.');
+          assert(json.containsKey(key),
+              'Required key "WellKnownJWKSListRsp[$key]" is missing from JSON.');
+          assert(json[key] != null,
+              'Required key "WellKnownJWKSListRsp[$key]" has a null value in JSON.');
         });
         return true;
       }());
@@ -61,7 +64,10 @@ class WellKnownJWKSListRsp {
     return null;
   }
 
-  static List<WellKnownJWKSListRsp> listFromJson(dynamic json, {bool growable = false,}) {
+  static List<WellKnownJWKSListRsp> listFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
     final result = <WellKnownJWKSListRsp>[];
     if (json is List && json.isNotEmpty) {
       for (final row in json) {
@@ -89,13 +95,19 @@ class WellKnownJWKSListRsp {
   }
 
   // maps a json object with a list of WellKnownJWKSListRsp-objects as value to a dart map
-  static Map<String, List<WellKnownJWKSListRsp>> mapListFromJson(dynamic json, {bool growable = false,}) {
+  static Map<String, List<WellKnownJWKSListRsp>> mapListFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
     final map = <String, List<WellKnownJWKSListRsp>>{};
     if (json is Map && json.isNotEmpty) {
       // ignore: parameter_assignments
       json = json.cast<String, dynamic>();
       for (final entry in json.entries) {
-        map[entry.key] = WellKnownJWKSListRsp.listFromJson(entry.value, growable: growable,);
+        map[entry.key] = WellKnownJWKSListRsp.listFromJson(
+          entry.value,
+          growable: growable,
+        );
       }
     }
     return map;
@@ -106,4 +118,3 @@ class WellKnownJWKSListRsp {
     'keys',
   };
 }
-

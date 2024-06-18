@@ -1,3 +1,7 @@
+## 1.1.1
+
+* Bump dependency versions (intl, meta, http).
+
 ## 1.1.0
 
 * Added support for email OTP endpoints.

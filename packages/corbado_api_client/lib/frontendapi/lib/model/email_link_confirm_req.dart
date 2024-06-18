@@ -32,25 +32,28 @@ class EmailLinkConfirmReq {
   String? requestID;
 
   @override
-  bool operator ==(Object other) => identical(this, other) || other is EmailLinkConfirmReq &&
-     other.emailLinkID == emailLinkID &&
-     other.token == token &&
-     other.requestID == requestID;
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is EmailLinkConfirmReq &&
+          other.emailLinkID == emailLinkID &&
+          other.token == token &&
+          other.requestID == requestID;
 
   @override
   int get hashCode =>
-    // ignore: unnecessary_parenthesis
-    (emailLinkID.hashCode) +
-    (token.hashCode) +
-    (requestID == null ? 0 : requestID!.hashCode);
+      // ignore: unnecessary_parenthesis
+      (emailLinkID.hashCode) +
+      (token.hashCode) +
+      (requestID == null ? 0 : requestID!.hashCode);
 
   @override
-  String toString() => 'EmailLinkConfirmReq[emailLinkID=$emailLinkID, token=$token, requestID=$requestID]';
+  String toString() =>
+      'EmailLinkConfirmReq[emailLinkID=$emailLinkID, token=$token, requestID=$requestID]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-      json[r'emailLinkID'] = this.emailLinkID;
-      json[r'token'] = this.token;
+    json[r'emailLinkID'] = this.emailLinkID;
+    json[r'token'] = this.token;
     if (this.requestID != null) {
       json[r'requestID'] = this.requestID;
     } else {
@@ -71,8 +74,10 @@ class EmailLinkConfirmReq {
       // Note 2: this code is stripped in release mode!
       assert(() {
         requiredKeys.forEach((key) {
-          assert(json.containsKey(key), 'Required key "EmailLinkConfirmReq[$key]" is missing from JSON.');
-          assert(json[key] != null, 'Required key "EmailLinkConfirmReq[$key]" has a null value in JSON.');
+          assert(json.containsKey(key),
+              'Required key "EmailLinkConfirmReq[$key]" is missing from JSON.');
+          assert(json[key] != null,
+              'Required key "EmailLinkConfirmReq[$key]" has a null value in JSON.');
         });
         return true;
       }());
@@ -86,7 +91,10 @@ class EmailLinkConfirmReq {
     return null;
   }
 
-  static List<EmailLinkConfirmReq> listFromJson(dynamic json, {bool growable = false,}) {
+  static List<EmailLinkConfirmReq> listFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
     final result = <EmailLinkConfirmReq>[];
     if (json is List && json.isNotEmpty) {
       for (final row in json) {
@@ -114,13 +122,19 @@ class EmailLinkConfirmReq {
   }
 
   // maps a json object with a list of EmailLinkConfirmReq-objects as value to a dart map
-  static Map<String, List<EmailLinkConfirmReq>> mapListFromJson(dynamic json, {bool growable = false,}) {
+  static Map<String, List<EmailLinkConfirmReq>> mapListFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
     final map = <String, List<EmailLinkConfirmReq>>{};
     if (json is Map && json.isNotEmpty) {
       // ignore: parameter_assignments
       json = json.cast<String, dynamic>();
       for (final entry in json.entries) {
-        map[entry.key] = EmailLinkConfirmReq.listFromJson(entry.value, growable: growable,);
+        map[entry.key] = EmailLinkConfirmReq.listFromJson(
+          entry.value,
+          growable: growable,
+        );
       }
     }
     return map;
@@ -132,4 +146,3 @@ class EmailLinkConfirmReq {
     'token',
   };
 }
-

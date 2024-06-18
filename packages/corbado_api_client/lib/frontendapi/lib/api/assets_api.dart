@@ -10,7 +10,6 @@
 
 part of openapi.api;
 
-
 class AssetsApi {
   AssetsApi([ApiClient? apiClient]) : apiClient = apiClient ?? defaultApiClient;
 
@@ -32,7 +31,6 @@ class AssetsApi {
 
     const contentTypes = <String>[];
 
-
     return apiClient.invokeAPI(
       path,
       'GET',
@@ -53,9 +51,12 @@ class AssetsApi {
     // When a remote server returns no body with a status of 204, we shall not decode it.
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
-    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
-      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'AppleAppSiteAssociationRsp',) as AppleAppSiteAssociationRsp;
-    
+    if (response.body.isNotEmpty &&
+        response.statusCode != HttpStatus.noContent) {
+      return await apiClient.deserializeAsync(
+        await _decodeBodyBytes(response),
+        'AppleAppSiteAssociationRsp',
+      ) as AppleAppSiteAssociationRsp;
     }
     return null;
   }
@@ -75,7 +76,6 @@ class AssetsApi {
     final formParams = <String, String>{};
 
     const contentTypes = <String>[];
-
 
     return apiClient.invokeAPI(
       path,
@@ -97,12 +97,13 @@ class AssetsApi {
     // When a remote server returns no body with a status of 204, we shall not decode it.
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
-    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
+    if (response.body.isNotEmpty &&
+        response.statusCode != HttpStatus.noContent) {
       final responseBody = await _decodeBodyBytes(response);
-      return (await apiClient.deserializeAsync(responseBody, 'List<AssetLink>') as List)
-        .cast<AssetLink>()
-        .toList();
-
+      return (await apiClient.deserializeAsync(responseBody, 'List<AssetLink>')
+              as List)
+          .cast<AssetLink>()
+          .toList(growable: false);
     }
     return null;
   }

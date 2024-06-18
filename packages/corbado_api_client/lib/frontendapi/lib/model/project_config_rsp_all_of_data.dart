@@ -34,35 +34,38 @@ class ProjectConfigRspAllOfData {
   bool webComponentDebug;
 
   @override
-  bool operator ==(Object other) => identical(this, other) || other is ProjectConfigRspAllOfData &&
-     other.allowUserRegistration == allowUserRegistration &&
-     other.passkeyAppendInterval == passkeyAppendInterval &&
-     other.fallbackLanguage == fallbackLanguage &&
-     other.autoDetectLanguage == autoDetectLanguage &&
-     other.userFullNameRequired == userFullNameRequired &&
-     other.webComponentDebug == webComponentDebug;
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is ProjectConfigRspAllOfData &&
+          other.allowUserRegistration == allowUserRegistration &&
+          other.passkeyAppendInterval == passkeyAppendInterval &&
+          other.fallbackLanguage == fallbackLanguage &&
+          other.autoDetectLanguage == autoDetectLanguage &&
+          other.userFullNameRequired == userFullNameRequired &&
+          other.webComponentDebug == webComponentDebug;
 
   @override
   int get hashCode =>
-    // ignore: unnecessary_parenthesis
-    (allowUserRegistration.hashCode) +
-    (passkeyAppendInterval.hashCode) +
-    (fallbackLanguage.hashCode) +
-    (autoDetectLanguage.hashCode) +
-    (userFullNameRequired.hashCode) +
-    (webComponentDebug.hashCode);
+      // ignore: unnecessary_parenthesis
+      (allowUserRegistration.hashCode) +
+      (passkeyAppendInterval.hashCode) +
+      (fallbackLanguage.hashCode) +
+      (autoDetectLanguage.hashCode) +
+      (userFullNameRequired.hashCode) +
+      (webComponentDebug.hashCode);
 
   @override
-  String toString() => 'ProjectConfigRspAllOfData[allowUserRegistration=$allowUserRegistration, passkeyAppendInterval=$passkeyAppendInterval, fallbackLanguage=$fallbackLanguage, autoDetectLanguage=$autoDetectLanguage, userFullNameRequired=$userFullNameRequired, webComponentDebug=$webComponentDebug]';
+  String toString() =>
+      'ProjectConfigRspAllOfData[allowUserRegistration=$allowUserRegistration, passkeyAppendInterval=$passkeyAppendInterval, fallbackLanguage=$fallbackLanguage, autoDetectLanguage=$autoDetectLanguage, userFullNameRequired=$userFullNameRequired, webComponentDebug=$webComponentDebug]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-      json[r'allowUserRegistration'] = this.allowUserRegistration;
-      json[r'passkeyAppendInterval'] = this.passkeyAppendInterval;
-      json[r'fallbackLanguage'] = this.fallbackLanguage;
-      json[r'autoDetectLanguage'] = this.autoDetectLanguage;
-      json[r'userFullNameRequired'] = this.userFullNameRequired;
-      json[r'webComponentDebug'] = this.webComponentDebug;
+    json[r'allowUserRegistration'] = this.allowUserRegistration;
+    json[r'passkeyAppendInterval'] = this.passkeyAppendInterval;
+    json[r'fallbackLanguage'] = this.fallbackLanguage;
+    json[r'autoDetectLanguage'] = this.autoDetectLanguage;
+    json[r'userFullNameRequired'] = this.userFullNameRequired;
+    json[r'webComponentDebug'] = this.webComponentDebug;
     return json;
   }
 
@@ -78,25 +81,33 @@ class ProjectConfigRspAllOfData {
       // Note 2: this code is stripped in release mode!
       assert(() {
         requiredKeys.forEach((key) {
-          assert(json.containsKey(key), 'Required key "ProjectConfigRspAllOfData[$key]" is missing from JSON.');
-          assert(json[key] != null, 'Required key "ProjectConfigRspAllOfData[$key]" has a null value in JSON.');
+          assert(json.containsKey(key),
+              'Required key "ProjectConfigRspAllOfData[$key]" is missing from JSON.');
+          assert(json[key] != null,
+              'Required key "ProjectConfigRspAllOfData[$key]" has a null value in JSON.');
         });
         return true;
       }());
 
       return ProjectConfigRspAllOfData(
-        allowUserRegistration: mapValueOfType<bool>(json, r'allowUserRegistration')!,
-        passkeyAppendInterval: mapValueOfType<String>(json, r'passkeyAppendInterval')!,
+        allowUserRegistration:
+            mapValueOfType<bool>(json, r'allowUserRegistration')!,
+        passkeyAppendInterval:
+            mapValueOfType<String>(json, r'passkeyAppendInterval')!,
         fallbackLanguage: mapValueOfType<String>(json, r'fallbackLanguage')!,
         autoDetectLanguage: mapValueOfType<bool>(json, r'autoDetectLanguage')!,
-        userFullNameRequired: mapValueOfType<bool>(json, r'userFullNameRequired')!,
+        userFullNameRequired:
+            mapValueOfType<bool>(json, r'userFullNameRequired')!,
         webComponentDebug: mapValueOfType<bool>(json, r'webComponentDebug')!,
       );
     }
     return null;
   }
 
-  static List<ProjectConfigRspAllOfData> listFromJson(dynamic json, {bool growable = false,}) {
+  static List<ProjectConfigRspAllOfData> listFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
     final result = <ProjectConfigRspAllOfData>[];
     if (json is List && json.isNotEmpty) {
       for (final row in json) {
@@ -124,13 +135,19 @@ class ProjectConfigRspAllOfData {
   }
 
   // maps a json object with a list of ProjectConfigRspAllOfData-objects as value to a dart map
-  static Map<String, List<ProjectConfigRspAllOfData>> mapListFromJson(dynamic json, {bool growable = false,}) {
+  static Map<String, List<ProjectConfigRspAllOfData>> mapListFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
     final map = <String, List<ProjectConfigRspAllOfData>>{};
     if (json is Map && json.isNotEmpty) {
       // ignore: parameter_assignments
       json = json.cast<String, dynamic>();
       for (final entry in json.entries) {
-        map[entry.key] = ProjectConfigRspAllOfData.listFromJson(entry.value, growable: growable,);
+        map[entry.key] = ProjectConfigRspAllOfData.listFromJson(
+          entry.value,
+          growable: growable,
+        );
       }
     }
     return map;
@@ -146,4 +163,3 @@ class ProjectConfigRspAllOfData {
     'webComponentDebug',
   };
 }
-

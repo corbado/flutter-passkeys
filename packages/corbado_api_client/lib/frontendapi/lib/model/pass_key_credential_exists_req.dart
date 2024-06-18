@@ -32,25 +32,28 @@ class PassKeyCredentialExistsReq {
   String? requestID;
 
   @override
-  bool operator ==(Object other) => identical(this, other) || other is PassKeyCredentialExistsReq &&
-     other.loginIdentifier == loginIdentifier &&
-     other.loginIdentifierType == loginIdentifierType &&
-     other.requestID == requestID;
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is PassKeyCredentialExistsReq &&
+          other.loginIdentifier == loginIdentifier &&
+          other.loginIdentifierType == loginIdentifierType &&
+          other.requestID == requestID;
 
   @override
   int get hashCode =>
-    // ignore: unnecessary_parenthesis
-    (loginIdentifier.hashCode) +
-    (loginIdentifierType.hashCode) +
-    (requestID == null ? 0 : requestID!.hashCode);
+      // ignore: unnecessary_parenthesis
+      (loginIdentifier.hashCode) +
+      (loginIdentifierType.hashCode) +
+      (requestID == null ? 0 : requestID!.hashCode);
 
   @override
-  String toString() => 'PassKeyCredentialExistsReq[loginIdentifier=$loginIdentifier, loginIdentifierType=$loginIdentifierType, requestID=$requestID]';
+  String toString() =>
+      'PassKeyCredentialExistsReq[loginIdentifier=$loginIdentifier, loginIdentifierType=$loginIdentifierType, requestID=$requestID]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-      json[r'loginIdentifier'] = this.loginIdentifier;
-      json[r'loginIdentifierType'] = this.loginIdentifierType;
+    json[r'loginIdentifier'] = this.loginIdentifier;
+    json[r'loginIdentifierType'] = this.loginIdentifierType;
     if (this.requestID != null) {
       json[r'requestID'] = this.requestID;
     } else {
@@ -71,22 +74,28 @@ class PassKeyCredentialExistsReq {
       // Note 2: this code is stripped in release mode!
       assert(() {
         requiredKeys.forEach((key) {
-          assert(json.containsKey(key), 'Required key "PassKeyCredentialExistsReq[$key]" is missing from JSON.');
-          assert(json[key] != null, 'Required key "PassKeyCredentialExistsReq[$key]" has a null value in JSON.');
+          assert(json.containsKey(key),
+              'Required key "PassKeyCredentialExistsReq[$key]" is missing from JSON.');
+          assert(json[key] != null,
+              'Required key "PassKeyCredentialExistsReq[$key]" has a null value in JSON.');
         });
         return true;
       }());
 
       return PassKeyCredentialExistsReq(
         loginIdentifier: mapValueOfType<String>(json, r'loginIdentifier')!,
-        loginIdentifierType: LoginIdentifierType.fromJson(json[r'loginIdentifierType'])!,
+        loginIdentifierType:
+            LoginIdentifierType.fromJson(json[r'loginIdentifierType'])!,
         requestID: mapValueOfType<String>(json, r'requestID'),
       );
     }
     return null;
   }
 
-  static List<PassKeyCredentialExistsReq> listFromJson(dynamic json, {bool growable = false,}) {
+  static List<PassKeyCredentialExistsReq> listFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
     final result = <PassKeyCredentialExistsReq>[];
     if (json is List && json.isNotEmpty) {
       for (final row in json) {
@@ -114,13 +123,19 @@ class PassKeyCredentialExistsReq {
   }
 
   // maps a json object with a list of PassKeyCredentialExistsReq-objects as value to a dart map
-  static Map<String, List<PassKeyCredentialExistsReq>> mapListFromJson(dynamic json, {bool growable = false,}) {
+  static Map<String, List<PassKeyCredentialExistsReq>> mapListFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
     final map = <String, List<PassKeyCredentialExistsReq>>{};
     if (json is Map && json.isNotEmpty) {
       // ignore: parameter_assignments
       json = json.cast<String, dynamic>();
       for (final entry in json.entries) {
-        map[entry.key] = PassKeyCredentialExistsReq.listFromJson(entry.value, growable: growable,);
+        map[entry.key] = PassKeyCredentialExistsReq.listFromJson(
+          entry.value,
+          growable: growable,
+        );
       }
     }
     return map;
@@ -132,4 +147,3 @@ class PassKeyCredentialExistsReq {
     'loginIdentifierType',
   };
 }
-

@@ -19,20 +19,22 @@ class AppleAppSiteAssociationRspApplinks {
   List<AppleAppSiteAssociationRspApplinksDetailsInner> details;
 
   @override
-  bool operator ==(Object other) => identical(this, other) || other is AppleAppSiteAssociationRspApplinks &&
-     other.details == details;
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is AppleAppSiteAssociationRspApplinks &&
+          _deepEquality.equals(other.details, details);
 
   @override
   int get hashCode =>
-    // ignore: unnecessary_parenthesis
-    (details.hashCode);
+      // ignore: unnecessary_parenthesis
+      (details.hashCode);
 
   @override
   String toString() => 'AppleAppSiteAssociationRspApplinks[details=$details]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-      json[r'details'] = this.details;
+    json[r'details'] = this.details;
     return json;
   }
 
@@ -48,20 +50,26 @@ class AppleAppSiteAssociationRspApplinks {
       // Note 2: this code is stripped in release mode!
       assert(() {
         requiredKeys.forEach((key) {
-          assert(json.containsKey(key), 'Required key "AppleAppSiteAssociationRspApplinks[$key]" is missing from JSON.');
-          assert(json[key] != null, 'Required key "AppleAppSiteAssociationRspApplinks[$key]" has a null value in JSON.');
+          assert(json.containsKey(key),
+              'Required key "AppleAppSiteAssociationRspApplinks[$key]" is missing from JSON.');
+          assert(json[key] != null,
+              'Required key "AppleAppSiteAssociationRspApplinks[$key]" has a null value in JSON.');
         });
         return true;
       }());
 
       return AppleAppSiteAssociationRspApplinks(
-        details: AppleAppSiteAssociationRspApplinksDetailsInner.listFromJson(json[r'details']),
+        details: AppleAppSiteAssociationRspApplinksDetailsInner.listFromJson(
+            json[r'details']),
       );
     }
     return null;
   }
 
-  static List<AppleAppSiteAssociationRspApplinks> listFromJson(dynamic json, {bool growable = false,}) {
+  static List<AppleAppSiteAssociationRspApplinks> listFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
     final result = <AppleAppSiteAssociationRspApplinks>[];
     if (json is List && json.isNotEmpty) {
       for (final row in json) {
@@ -74,7 +82,8 @@ class AppleAppSiteAssociationRspApplinks {
     return result.toList(growable: growable);
   }
 
-  static Map<String, AppleAppSiteAssociationRspApplinks> mapFromJson(dynamic json) {
+  static Map<String, AppleAppSiteAssociationRspApplinks> mapFromJson(
+      dynamic json) {
     final map = <String, AppleAppSiteAssociationRspApplinks>{};
     if (json is Map && json.isNotEmpty) {
       json = json.cast<String, dynamic>(); // ignore: parameter_assignments
@@ -89,13 +98,19 @@ class AppleAppSiteAssociationRspApplinks {
   }
 
   // maps a json object with a list of AppleAppSiteAssociationRspApplinks-objects as value to a dart map
-  static Map<String, List<AppleAppSiteAssociationRspApplinks>> mapListFromJson(dynamic json, {bool growable = false,}) {
+  static Map<String, List<AppleAppSiteAssociationRspApplinks>> mapListFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
     final map = <String, List<AppleAppSiteAssociationRspApplinks>>{};
     if (json is Map && json.isNotEmpty) {
       // ignore: parameter_assignments
       json = json.cast<String, dynamic>();
       for (final entry in json.entries) {
-        map[entry.key] = AppleAppSiteAssociationRspApplinks.listFromJson(entry.value, growable: growable,);
+        map[entry.key] = AppleAppSiteAssociationRspApplinks.listFromJson(
+          entry.value,
+          growable: growable,
+        );
       }
     }
     return map;
@@ -106,4 +121,3 @@ class AppleAppSiteAssociationRspApplinks {
     'details',
   };
 }
-

@@ -43,41 +43,44 @@ class FullUser {
   List<UserPhoneNumber> phoneNumbers;
 
   @override
-  bool operator ==(Object other) => identical(this, other) || other is FullUser &&
-     other.ID == ID &&
-     other.name == name &&
-     other.fullName == fullName &&
-     other.created == created &&
-     other.updated == updated &&
-     other.status == status &&
-     other.emails == emails &&
-     other.phoneNumbers == phoneNumbers;
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is FullUser &&
+          other.ID == ID &&
+          other.name == name &&
+          other.fullName == fullName &&
+          other.created == created &&
+          other.updated == updated &&
+          other.status == status &&
+          _deepEquality.equals(other.emails, emails) &&
+          _deepEquality.equals(other.phoneNumbers, phoneNumbers);
 
   @override
   int get hashCode =>
-    // ignore: unnecessary_parenthesis
-    (ID.hashCode) +
-    (name.hashCode) +
-    (fullName.hashCode) +
-    (created.hashCode) +
-    (updated.hashCode) +
-    (status.hashCode) +
-    (emails.hashCode) +
-    (phoneNumbers.hashCode);
+      // ignore: unnecessary_parenthesis
+      (ID.hashCode) +
+      (name.hashCode) +
+      (fullName.hashCode) +
+      (created.hashCode) +
+      (updated.hashCode) +
+      (status.hashCode) +
+      (emails.hashCode) +
+      (phoneNumbers.hashCode);
 
   @override
-  String toString() => 'FullUser[ID=$ID, name=$name, fullName=$fullName, created=$created, updated=$updated, status=$status, emails=$emails, phoneNumbers=$phoneNumbers]';
+  String toString() =>
+      'FullUser[ID=$ID, name=$name, fullName=$fullName, created=$created, updated=$updated, status=$status, emails=$emails, phoneNumbers=$phoneNumbers]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-      json[r'ID'] = this.ID;
-      json[r'name'] = this.name;
-      json[r'fullName'] = this.fullName;
-      json[r'created'] = this.created;
-      json[r'updated'] = this.updated;
-      json[r'status'] = this.status;
-      json[r'emails'] = this.emails;
-      json[r'phoneNumbers'] = this.phoneNumbers;
+    json[r'ID'] = this.ID;
+    json[r'name'] = this.name;
+    json[r'fullName'] = this.fullName;
+    json[r'created'] = this.created;
+    json[r'updated'] = this.updated;
+    json[r'status'] = this.status;
+    json[r'emails'] = this.emails;
+    json[r'phoneNumbers'] = this.phoneNumbers;
     return json;
   }
 
@@ -93,8 +96,10 @@ class FullUser {
       // Note 2: this code is stripped in release mode!
       assert(() {
         requiredKeys.forEach((key) {
-          assert(json.containsKey(key), 'Required key "FullUser[$key]" is missing from JSON.');
-          assert(json[key] != null, 'Required key "FullUser[$key]" has a null value in JSON.');
+          assert(json.containsKey(key),
+              'Required key "FullUser[$key]" is missing from JSON.');
+          assert(json[key] != null,
+              'Required key "FullUser[$key]" has a null value in JSON.');
         });
         return true;
       }());
@@ -113,7 +118,10 @@ class FullUser {
     return null;
   }
 
-  static List<FullUser> listFromJson(dynamic json, {bool growable = false,}) {
+  static List<FullUser> listFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
     final result = <FullUser>[];
     if (json is List && json.isNotEmpty) {
       for (final row in json) {
@@ -141,13 +149,19 @@ class FullUser {
   }
 
   // maps a json object with a list of FullUser-objects as value to a dart map
-  static Map<String, List<FullUser>> mapListFromJson(dynamic json, {bool growable = false,}) {
+  static Map<String, List<FullUser>> mapListFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
     final map = <String, List<FullUser>>{};
     if (json is Map && json.isNotEmpty) {
       // ignore: parameter_assignments
       json = json.cast<String, dynamic>();
       for (final entry in json.entries) {
-        map[entry.key] = FullUser.listFromJson(entry.value, growable: growable,);
+        map[entry.key] = FullUser.listFromJson(
+          entry.value,
+          growable: growable,
+        );
       }
     }
     return map;
@@ -165,4 +179,3 @@ class FullUser {
     'phoneNumbers',
   };
 }
-

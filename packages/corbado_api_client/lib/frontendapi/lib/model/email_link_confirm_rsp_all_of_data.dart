@@ -13,16 +13,16 @@ part of openapi.api;
 class EmailLinkConfirmRspAllOfData {
   /// Returns a new [EmailLinkConfirmRspAllOfData] instance.
   EmailLinkConfirmRspAllOfData({
-    this.authMethods = const [],
     required this.redirectURL,
+    this.authMethods = const [],
     this.sessionToken,
     this.longSession,
     this.shortSession,
   });
 
-  List<AuthMethod> authMethods;
-
   String redirectURL;
+
+  List<AuthMethod> authMethods;
 
   /// Only given when using session v1
   ///
@@ -51,29 +51,32 @@ class EmailLinkConfirmRspAllOfData {
   ShortSession? shortSession;
 
   @override
-  bool operator ==(Object other) => identical(this, other) || other is EmailLinkConfirmRspAllOfData &&
-     other.authMethods == authMethods &&
-     other.redirectURL == redirectURL &&
-     other.sessionToken == sessionToken &&
-     other.longSession == longSession &&
-     other.shortSession == shortSession;
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is EmailLinkConfirmRspAllOfData &&
+          other.redirectURL == redirectURL &&
+          _deepEquality.equals(other.authMethods, authMethods) &&
+          other.sessionToken == sessionToken &&
+          other.longSession == longSession &&
+          other.shortSession == shortSession;
 
   @override
   int get hashCode =>
-    // ignore: unnecessary_parenthesis
-    (authMethods.hashCode) +
-    (redirectURL.hashCode) +
-    (sessionToken == null ? 0 : sessionToken!.hashCode) +
-    (longSession == null ? 0 : longSession!.hashCode) +
-    (shortSession == null ? 0 : shortSession!.hashCode);
+      // ignore: unnecessary_parenthesis
+      (redirectURL.hashCode) +
+      (authMethods.hashCode) +
+      (sessionToken == null ? 0 : sessionToken!.hashCode) +
+      (longSession == null ? 0 : longSession!.hashCode) +
+      (shortSession == null ? 0 : shortSession!.hashCode);
 
   @override
-  String toString() => 'EmailLinkConfirmRspAllOfData[authMethods=$authMethods, redirectURL=$redirectURL, sessionToken=$sessionToken, longSession=$longSession, shortSession=$shortSession]';
+  String toString() =>
+      'EmailLinkConfirmRspAllOfData[redirectURL=$redirectURL, authMethods=$authMethods, sessionToken=$sessionToken, longSession=$longSession, shortSession=$shortSession]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-      json[r'authMethods'] = this.authMethods;
-      json[r'redirectURL'] = this.redirectURL;
+    json[r'redirectURL'] = this.redirectURL;
+    json[r'authMethods'] = this.authMethods;
     if (this.sessionToken != null) {
       json[r'sessionToken'] = this.sessionToken;
     } else {
@@ -104,15 +107,17 @@ class EmailLinkConfirmRspAllOfData {
       // Note 2: this code is stripped in release mode!
       assert(() {
         requiredKeys.forEach((key) {
-          assert(json.containsKey(key), 'Required key "EmailLinkConfirmRspAllOfData[$key]" is missing from JSON.');
-          assert(json[key] != null, 'Required key "EmailLinkConfirmRspAllOfData[$key]" has a null value in JSON.');
+          assert(json.containsKey(key),
+              'Required key "EmailLinkConfirmRspAllOfData[$key]" is missing from JSON.');
+          assert(json[key] != null,
+              'Required key "EmailLinkConfirmRspAllOfData[$key]" has a null value in JSON.');
         });
         return true;
       }());
 
       return EmailLinkConfirmRspAllOfData(
-        authMethods: AuthMethod.listFromJson(json[r'authMethods']),
         redirectURL: mapValueOfType<String>(json, r'redirectURL')!,
+        authMethods: AuthMethod.listFromJson(json[r'authMethods']),
         sessionToken: mapValueOfType<String>(json, r'sessionToken'),
         longSession: mapValueOfType<String>(json, r'longSession'),
         shortSession: ShortSession.fromJson(json[r'shortSession']),
@@ -121,7 +126,10 @@ class EmailLinkConfirmRspAllOfData {
     return null;
   }
 
-  static List<EmailLinkConfirmRspAllOfData> listFromJson(dynamic json, {bool growable = false,}) {
+  static List<EmailLinkConfirmRspAllOfData> listFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
     final result = <EmailLinkConfirmRspAllOfData>[];
     if (json is List && json.isNotEmpty) {
       for (final row in json) {
@@ -149,13 +157,19 @@ class EmailLinkConfirmRspAllOfData {
   }
 
   // maps a json object with a list of EmailLinkConfirmRspAllOfData-objects as value to a dart map
-  static Map<String, List<EmailLinkConfirmRspAllOfData>> mapListFromJson(dynamic json, {bool growable = false,}) {
+  static Map<String, List<EmailLinkConfirmRspAllOfData>> mapListFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
     final map = <String, List<EmailLinkConfirmRspAllOfData>>{};
     if (json is Map && json.isNotEmpty) {
       // ignore: parameter_assignments
       json = json.cast<String, dynamic>();
       for (final entry in json.entries) {
-        map[entry.key] = EmailLinkConfirmRspAllOfData.listFromJson(entry.value, growable: growable,);
+        map[entry.key] = EmailLinkConfirmRspAllOfData.listFromJson(
+          entry.value,
+          growable: growable,
+        );
       }
     }
     return map;
@@ -163,8 +177,7 @@ class EmailLinkConfirmRspAllOfData {
 
   /// The list of required keys that must be present in a JSON.
   static const requiredKeys = <String>{
-    'authMethods',
     'redirectURL',
+    'authMethods',
   };
 }
-

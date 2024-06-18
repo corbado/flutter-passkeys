@@ -36,32 +36,35 @@ class ErrorRsp {
   ErrorRspAllOfError error;
 
   @override
-  bool operator ==(Object other) => identical(this, other) || other is ErrorRsp &&
-     other.httpStatusCode == httpStatusCode &&
-     other.message == message &&
-     other.requestData == requestData &&
-     other.runtime == runtime &&
-     other.error == error;
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is ErrorRsp &&
+          other.httpStatusCode == httpStatusCode &&
+          other.message == message &&
+          other.requestData == requestData &&
+          other.runtime == runtime &&
+          other.error == error;
 
   @override
   int get hashCode =>
-    // ignore: unnecessary_parenthesis
-    (httpStatusCode.hashCode) +
-    (message.hashCode) +
-    (requestData.hashCode) +
-    (runtime.hashCode) +
-    (error.hashCode);
+      // ignore: unnecessary_parenthesis
+      (httpStatusCode.hashCode) +
+      (message.hashCode) +
+      (requestData.hashCode) +
+      (runtime.hashCode) +
+      (error.hashCode);
 
   @override
-  String toString() => 'ErrorRsp[httpStatusCode=$httpStatusCode, message=$message, requestData=$requestData, runtime=$runtime, error=$error]';
+  String toString() =>
+      'ErrorRsp[httpStatusCode=$httpStatusCode, message=$message, requestData=$requestData, runtime=$runtime, error=$error]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-      json[r'httpStatusCode'] = this.httpStatusCode;
-      json[r'message'] = this.message;
-      json[r'requestData'] = this.requestData;
-      json[r'runtime'] = this.runtime;
-      json[r'error'] = this.error;
+    json[r'httpStatusCode'] = this.httpStatusCode;
+    json[r'message'] = this.message;
+    json[r'requestData'] = this.requestData;
+    json[r'runtime'] = this.runtime;
+    json[r'error'] = this.error;
     return json;
   }
 
@@ -77,8 +80,10 @@ class ErrorRsp {
       // Note 2: this code is stripped in release mode!
       assert(() {
         requiredKeys.forEach((key) {
-          assert(json.containsKey(key), 'Required key "ErrorRsp[$key]" is missing from JSON.');
-          assert(json[key] != null, 'Required key "ErrorRsp[$key]" has a null value in JSON.');
+          assert(json.containsKey(key),
+              'Required key "ErrorRsp[$key]" is missing from JSON.');
+          assert(json[key] != null,
+              'Required key "ErrorRsp[$key]" has a null value in JSON.');
         });
         return true;
       }());
@@ -94,7 +99,10 @@ class ErrorRsp {
     return null;
   }
 
-  static List<ErrorRsp> listFromJson(dynamic json, {bool growable = false,}) {
+  static List<ErrorRsp> listFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
     final result = <ErrorRsp>[];
     if (json is List && json.isNotEmpty) {
       for (final row in json) {
@@ -122,13 +130,19 @@ class ErrorRsp {
   }
 
   // maps a json object with a list of ErrorRsp-objects as value to a dart map
-  static Map<String, List<ErrorRsp>> mapListFromJson(dynamic json, {bool growable = false,}) {
+  static Map<String, List<ErrorRsp>> mapListFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
     final map = <String, List<ErrorRsp>>{};
     if (json is Map && json.isNotEmpty) {
       // ignore: parameter_assignments
       json = json.cast<String, dynamic>();
       for (final entry in json.entries) {
-        map[entry.key] = ErrorRsp.listFromJson(entry.value, growable: growable,);
+        map[entry.key] = ErrorRsp.listFromJson(
+          entry.value,
+          growable: growable,
+        );
       }
     }
     return map;
@@ -143,4 +157,3 @@ class ErrorRsp {
     'error',
   };
 }
-

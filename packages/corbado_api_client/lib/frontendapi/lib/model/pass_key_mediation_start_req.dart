@@ -35,18 +35,21 @@ class PassKeyMediationStartReq {
   String? username;
 
   @override
-  bool operator ==(Object other) => identical(this, other) || other is PassKeyMediationStartReq &&
-     other.requestID == requestID &&
-     other.username == username;
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is PassKeyMediationStartReq &&
+          other.requestID == requestID &&
+          other.username == username;
 
   @override
   int get hashCode =>
-    // ignore: unnecessary_parenthesis
-    (requestID == null ? 0 : requestID!.hashCode) +
-    (username == null ? 0 : username!.hashCode);
+      // ignore: unnecessary_parenthesis
+      (requestID == null ? 0 : requestID!.hashCode) +
+      (username == null ? 0 : username!.hashCode);
 
   @override
-  String toString() => 'PassKeyMediationStartReq[requestID=$requestID, username=$username]';
+  String toString() =>
+      'PassKeyMediationStartReq[requestID=$requestID, username=$username]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
@@ -75,8 +78,10 @@ class PassKeyMediationStartReq {
       // Note 2: this code is stripped in release mode!
       assert(() {
         requiredKeys.forEach((key) {
-          assert(json.containsKey(key), 'Required key "PassKeyMediationStartReq[$key]" is missing from JSON.');
-          assert(json[key] != null, 'Required key "PassKeyMediationStartReq[$key]" has a null value in JSON.');
+          assert(json.containsKey(key),
+              'Required key "PassKeyMediationStartReq[$key]" is missing from JSON.');
+          assert(json[key] != null,
+              'Required key "PassKeyMediationStartReq[$key]" has a null value in JSON.');
         });
         return true;
       }());
@@ -89,7 +94,10 @@ class PassKeyMediationStartReq {
     return null;
   }
 
-  static List<PassKeyMediationStartReq> listFromJson(dynamic json, {bool growable = false,}) {
+  static List<PassKeyMediationStartReq> listFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
     final result = <PassKeyMediationStartReq>[];
     if (json is List && json.isNotEmpty) {
       for (final row in json) {
@@ -117,20 +125,24 @@ class PassKeyMediationStartReq {
   }
 
   // maps a json object with a list of PassKeyMediationStartReq-objects as value to a dart map
-  static Map<String, List<PassKeyMediationStartReq>> mapListFromJson(dynamic json, {bool growable = false,}) {
+  static Map<String, List<PassKeyMediationStartReq>> mapListFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
     final map = <String, List<PassKeyMediationStartReq>>{};
     if (json is Map && json.isNotEmpty) {
       // ignore: parameter_assignments
       json = json.cast<String, dynamic>();
       for (final entry in json.entries) {
-        map[entry.key] = PassKeyMediationStartReq.listFromJson(entry.value, growable: growable,);
+        map[entry.key] = PassKeyMediationStartReq.listFromJson(
+          entry.value,
+          growable: growable,
+        );
       }
     }
     return map;
   }
 
   /// The list of required keys that must be present in a JSON.
-  static const requiredKeys = <String>{
-  };
+  static const requiredKeys = <String>{};
 }
-

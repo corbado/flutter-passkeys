@@ -10,9 +10,9 @@
 
 part of openapi.api;
 
-
 class SessionsApi {
-  SessionsApi([ApiClient? apiClient]) : apiClient = apiClient ?? defaultApiClient;
+  SessionsApi([ApiClient? apiClient])
+      : apiClient = apiClient ?? defaultApiClient;
 
   final ApiClient apiClient;
 
@@ -23,7 +23,9 @@ class SessionsApi {
   /// Parameters:
   ///
   /// * [EmptyReq] emptyReq (required):
-  Future<Response> sessionLogoutWithHttpInfo(EmptyReq emptyReq,) async {
+  Future<Response> sessionLogoutWithHttpInfo(
+    EmptyReq emptyReq,
+  ) async {
     // ignore: prefer_const_declarations
     final path = r'/v1/sessions/logout';
 
@@ -35,7 +37,6 @@ class SessionsApi {
     final formParams = <String, String>{};
 
     const contentTypes = <String>['application/json'];
-
 
     return apiClient.invokeAPI(
       path,
@@ -53,17 +54,24 @@ class SessionsApi {
   /// Parameters:
   ///
   /// * [EmptyReq] emptyReq (required):
-  Future<LogoutRsp?> sessionLogout(EmptyReq emptyReq,) async {
-    final response = await sessionLogoutWithHttpInfo(emptyReq,);
+  Future<LogoutRsp?> sessionLogout(
+    EmptyReq emptyReq,
+  ) async {
+    final response = await sessionLogoutWithHttpInfo(
+      emptyReq,
+    );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
     // When a remote server returns no body with a status of 204, we shall not decode it.
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
-    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
-      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'LogoutRsp',) as LogoutRsp;
-    
+    if (response.body.isNotEmpty &&
+        response.statusCode != HttpStatus.noContent) {
+      return await apiClient.deserializeAsync(
+        await _decodeBodyBytes(response),
+        'LogoutRsp',
+      ) as LogoutRsp;
     }
     return null;
   }
@@ -75,7 +83,9 @@ class SessionsApi {
   /// Parameters:
   ///
   /// * [EmptyReq] emptyReq (required):
-  Future<Response> sessionRefreshWithHttpInfo(EmptyReq emptyReq,) async {
+  Future<Response> sessionRefreshWithHttpInfo(
+    EmptyReq emptyReq,
+  ) async {
     // ignore: prefer_const_declarations
     final path = r'/v1/sessions/refresh';
 
@@ -87,7 +97,6 @@ class SessionsApi {
     final formParams = <String, String>{};
 
     const contentTypes = <String>['application/json'];
-
 
     return apiClient.invokeAPI(
       path,
@@ -105,17 +114,24 @@ class SessionsApi {
   /// Parameters:
   ///
   /// * [EmptyReq] emptyReq (required):
-  Future<SessionRefreshRsp?> sessionRefresh(EmptyReq emptyReq,) async {
-    final response = await sessionRefreshWithHttpInfo(emptyReq,);
+  Future<SessionRefreshRsp?> sessionRefresh(
+    EmptyReq emptyReq,
+  ) async {
+    final response = await sessionRefreshWithHttpInfo(
+      emptyReq,
+    );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
     // When a remote server returns no body with a status of 204, we shall not decode it.
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
-    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
-      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'SessionRefreshRsp',) as SessionRefreshRsp;
-    
+    if (response.body.isNotEmpty &&
+        response.statusCode != HttpStatus.noContent) {
+      return await apiClient.deserializeAsync(
+        await _decodeBodyBytes(response),
+        'SessionRefreshRsp',
+      ) as SessionRefreshRsp;
     }
     return null;
   }
@@ -135,7 +151,6 @@ class SessionsApi {
     final formParams = <String, String>{};
 
     const contentTypes = <String>[];
-
 
     return apiClient.invokeAPI(
       path,
@@ -157,9 +172,12 @@ class SessionsApi {
     // When a remote server returns no body with a status of 204, we shall not decode it.
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
-    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
-      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'WellKnownJWKSListRsp',) as WellKnownJWKSListRsp;
-    
+    if (response.body.isNotEmpty &&
+        response.statusCode != HttpStatus.noContent) {
+      return await apiClient.deserializeAsync(
+        await _decodeBodyBytes(response),
+        'WellKnownJWKSListRsp',
+      ) as WellKnownJWKSListRsp;
     }
     return null;
   }

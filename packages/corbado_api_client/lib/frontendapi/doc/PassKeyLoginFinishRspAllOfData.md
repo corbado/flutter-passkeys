@@ -8,9 +8,9 @@ import 'package:corbado_api/api.dart';
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**redirectURL** | **String** |  | 
 **username** | **String** |  | 
 **confirmedCredential** | **bool** |  | 
-**redirectURL** | **String** |  | 
 **sessionToken** | **String** | Only given when using session v1 | [optional] 
 **longSession** | **String** | Only given when project environment is dev | [optional] 
 **shortSession** | [**ShortSession**](ShortSession.md) |  | [optional] 

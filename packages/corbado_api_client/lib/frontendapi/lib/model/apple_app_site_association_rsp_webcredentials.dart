@@ -19,20 +19,22 @@ class AppleAppSiteAssociationRspWebcredentials {
   List<String> apps;
 
   @override
-  bool operator ==(Object other) => identical(this, other) || other is AppleAppSiteAssociationRspWebcredentials &&
-     other.apps == apps;
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is AppleAppSiteAssociationRspWebcredentials &&
+          _deepEquality.equals(other.apps, apps);
 
   @override
   int get hashCode =>
-    // ignore: unnecessary_parenthesis
-    (apps.hashCode);
+      // ignore: unnecessary_parenthesis
+      (apps.hashCode);
 
   @override
   String toString() => 'AppleAppSiteAssociationRspWebcredentials[apps=$apps]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-      json[r'apps'] = this.apps;
+    json[r'apps'] = this.apps;
     return json;
   }
 
@@ -48,22 +50,27 @@ class AppleAppSiteAssociationRspWebcredentials {
       // Note 2: this code is stripped in release mode!
       assert(() {
         requiredKeys.forEach((key) {
-          assert(json.containsKey(key), 'Required key "AppleAppSiteAssociationRspWebcredentials[$key]" is missing from JSON.');
-          assert(json[key] != null, 'Required key "AppleAppSiteAssociationRspWebcredentials[$key]" has a null value in JSON.');
+          assert(json.containsKey(key),
+              'Required key "AppleAppSiteAssociationRspWebcredentials[$key]" is missing from JSON.');
+          assert(json[key] != null,
+              'Required key "AppleAppSiteAssociationRspWebcredentials[$key]" has a null value in JSON.');
         });
         return true;
       }());
 
       return AppleAppSiteAssociationRspWebcredentials(
-        apps: json[r'apps'] is List
-            ? (json[r'apps'] as List).cast<String>()
+        apps: json[r'apps'] is Iterable
+            ? (json[r'apps'] as Iterable).cast<String>().toList(growable: false)
             : const [],
       );
     }
     return null;
   }
 
-  static List<AppleAppSiteAssociationRspWebcredentials> listFromJson(dynamic json, {bool growable = false,}) {
+  static List<AppleAppSiteAssociationRspWebcredentials> listFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
     final result = <AppleAppSiteAssociationRspWebcredentials>[];
     if (json is List && json.isNotEmpty) {
       for (final row in json) {
@@ -76,12 +83,14 @@ class AppleAppSiteAssociationRspWebcredentials {
     return result.toList(growable: growable);
   }
 
-  static Map<String, AppleAppSiteAssociationRspWebcredentials> mapFromJson(dynamic json) {
+  static Map<String, AppleAppSiteAssociationRspWebcredentials> mapFromJson(
+      dynamic json) {
     final map = <String, AppleAppSiteAssociationRspWebcredentials>{};
     if (json is Map && json.isNotEmpty) {
       json = json.cast<String, dynamic>(); // ignore: parameter_assignments
       for (final entry in json.entries) {
-        final value = AppleAppSiteAssociationRspWebcredentials.fromJson(entry.value);
+        final value =
+            AppleAppSiteAssociationRspWebcredentials.fromJson(entry.value);
         if (value != null) {
           map[entry.key] = value;
         }
@@ -91,13 +100,20 @@ class AppleAppSiteAssociationRspWebcredentials {
   }
 
   // maps a json object with a list of AppleAppSiteAssociationRspWebcredentials-objects as value to a dart map
-  static Map<String, List<AppleAppSiteAssociationRspWebcredentials>> mapListFromJson(dynamic json, {bool growable = false,}) {
+  static Map<String, List<AppleAppSiteAssociationRspWebcredentials>>
+      mapListFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
     final map = <String, List<AppleAppSiteAssociationRspWebcredentials>>{};
     if (json is Map && json.isNotEmpty) {
       // ignore: parameter_assignments
       json = json.cast<String, dynamic>();
       for (final entry in json.entries) {
-        map[entry.key] = AppleAppSiteAssociationRspWebcredentials.listFromJson(entry.value, growable: growable,);
+        map[entry.key] = AppleAppSiteAssociationRspWebcredentials.listFromJson(
+          entry.value,
+          growable: growable,
+        );
       }
     }
     return map;
@@ -108,4 +124,3 @@ class AppleAppSiteAssociationRspWebcredentials {
     'apps',
   };
 }
-

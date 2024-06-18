@@ -29,22 +29,25 @@ class PassKeyAssociateStartReq {
   String? requestID;
 
   @override
-  bool operator ==(Object other) => identical(this, other) || other is PassKeyAssociateStartReq &&
-     other.associationToken == associationToken &&
-     other.requestID == requestID;
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is PassKeyAssociateStartReq &&
+          other.associationToken == associationToken &&
+          other.requestID == requestID;
 
   @override
   int get hashCode =>
-    // ignore: unnecessary_parenthesis
-    (associationToken.hashCode) +
-    (requestID == null ? 0 : requestID!.hashCode);
+      // ignore: unnecessary_parenthesis
+      (associationToken.hashCode) +
+      (requestID == null ? 0 : requestID!.hashCode);
 
   @override
-  String toString() => 'PassKeyAssociateStartReq[associationToken=$associationToken, requestID=$requestID]';
+  String toString() =>
+      'PassKeyAssociateStartReq[associationToken=$associationToken, requestID=$requestID]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-      json[r'associationToken'] = this.associationToken;
+    json[r'associationToken'] = this.associationToken;
     if (this.requestID != null) {
       json[r'requestID'] = this.requestID;
     } else {
@@ -65,8 +68,10 @@ class PassKeyAssociateStartReq {
       // Note 2: this code is stripped in release mode!
       assert(() {
         requiredKeys.forEach((key) {
-          assert(json.containsKey(key), 'Required key "PassKeyAssociateStartReq[$key]" is missing from JSON.');
-          assert(json[key] != null, 'Required key "PassKeyAssociateStartReq[$key]" has a null value in JSON.');
+          assert(json.containsKey(key),
+              'Required key "PassKeyAssociateStartReq[$key]" is missing from JSON.');
+          assert(json[key] != null,
+              'Required key "PassKeyAssociateStartReq[$key]" has a null value in JSON.');
         });
         return true;
       }());
@@ -79,7 +84,10 @@ class PassKeyAssociateStartReq {
     return null;
   }
 
-  static List<PassKeyAssociateStartReq> listFromJson(dynamic json, {bool growable = false,}) {
+  static List<PassKeyAssociateStartReq> listFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
     final result = <PassKeyAssociateStartReq>[];
     if (json is List && json.isNotEmpty) {
       for (final row in json) {
@@ -107,13 +115,19 @@ class PassKeyAssociateStartReq {
   }
 
   // maps a json object with a list of PassKeyAssociateStartReq-objects as value to a dart map
-  static Map<String, List<PassKeyAssociateStartReq>> mapListFromJson(dynamic json, {bool growable = false,}) {
+  static Map<String, List<PassKeyAssociateStartReq>> mapListFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
     final map = <String, List<PassKeyAssociateStartReq>>{};
     if (json is Map && json.isNotEmpty) {
       // ignore: parameter_assignments
       json = json.cast<String, dynamic>();
       for (final entry in json.entries) {
-        map[entry.key] = PassKeyAssociateStartReq.listFromJson(entry.value, growable: growable,);
+        map[entry.key] = PassKeyAssociateStartReq.listFromJson(
+          entry.value,
+          growable: growable,
+        );
       }
     }
     return map;
@@ -124,4 +138,3 @@ class PassKeyAssociateStartReq {
     'associationToken',
   };
 }
-

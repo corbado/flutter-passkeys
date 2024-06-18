@@ -65,38 +65,41 @@ class SessionRefreshRsp {
   ShortSession? shortSession;
 
   @override
-  bool operator ==(Object other) => identical(this, other) || other is SessionRefreshRsp &&
-     other.httpStatusCode == httpStatusCode &&
-     other.message == message &&
-     other.requestData == requestData &&
-     other.runtime == runtime &&
-     other.redirectURL == redirectURL &&
-     other.sessionToken == sessionToken &&
-     other.longSession == longSession &&
-     other.shortSession == shortSession;
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is SessionRefreshRsp &&
+          other.httpStatusCode == httpStatusCode &&
+          other.message == message &&
+          other.requestData == requestData &&
+          other.runtime == runtime &&
+          other.redirectURL == redirectURL &&
+          other.sessionToken == sessionToken &&
+          other.longSession == longSession &&
+          other.shortSession == shortSession;
 
   @override
   int get hashCode =>
-    // ignore: unnecessary_parenthesis
-    (httpStatusCode.hashCode) +
-    (message.hashCode) +
-    (requestData.hashCode) +
-    (runtime.hashCode) +
-    (redirectURL.hashCode) +
-    (sessionToken == null ? 0 : sessionToken!.hashCode) +
-    (longSession == null ? 0 : longSession!.hashCode) +
-    (shortSession == null ? 0 : shortSession!.hashCode);
+      // ignore: unnecessary_parenthesis
+      (httpStatusCode.hashCode) +
+      (message.hashCode) +
+      (requestData.hashCode) +
+      (runtime.hashCode) +
+      (redirectURL.hashCode) +
+      (sessionToken == null ? 0 : sessionToken!.hashCode) +
+      (longSession == null ? 0 : longSession!.hashCode) +
+      (shortSession == null ? 0 : shortSession!.hashCode);
 
   @override
-  String toString() => 'SessionRefreshRsp[httpStatusCode=$httpStatusCode, message=$message, requestData=$requestData, runtime=$runtime, redirectURL=$redirectURL, sessionToken=$sessionToken, longSession=$longSession, shortSession=$shortSession]';
+  String toString() =>
+      'SessionRefreshRsp[httpStatusCode=$httpStatusCode, message=$message, requestData=$requestData, runtime=$runtime, redirectURL=$redirectURL, sessionToken=$sessionToken, longSession=$longSession, shortSession=$shortSession]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-      json[r'httpStatusCode'] = this.httpStatusCode;
-      json[r'message'] = this.message;
-      json[r'requestData'] = this.requestData;
-      json[r'runtime'] = this.runtime;
-      json[r'redirectURL'] = this.redirectURL;
+    json[r'httpStatusCode'] = this.httpStatusCode;
+    json[r'message'] = this.message;
+    json[r'requestData'] = this.requestData;
+    json[r'runtime'] = this.runtime;
+    json[r'redirectURL'] = this.redirectURL;
     if (this.sessionToken != null) {
       json[r'sessionToken'] = this.sessionToken;
     } else {
@@ -127,8 +130,10 @@ class SessionRefreshRsp {
       // Note 2: this code is stripped in release mode!
       assert(() {
         requiredKeys.forEach((key) {
-          assert(json.containsKey(key), 'Required key "SessionRefreshRsp[$key]" is missing from JSON.');
-          assert(json[key] != null, 'Required key "SessionRefreshRsp[$key]" has a null value in JSON.');
+          assert(json.containsKey(key),
+              'Required key "SessionRefreshRsp[$key]" is missing from JSON.');
+          assert(json[key] != null,
+              'Required key "SessionRefreshRsp[$key]" has a null value in JSON.');
         });
         return true;
       }());
@@ -147,7 +152,10 @@ class SessionRefreshRsp {
     return null;
   }
 
-  static List<SessionRefreshRsp> listFromJson(dynamic json, {bool growable = false,}) {
+  static List<SessionRefreshRsp> listFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
     final result = <SessionRefreshRsp>[];
     if (json is List && json.isNotEmpty) {
       for (final row in json) {
@@ -175,13 +183,19 @@ class SessionRefreshRsp {
   }
 
   // maps a json object with a list of SessionRefreshRsp-objects as value to a dart map
-  static Map<String, List<SessionRefreshRsp>> mapListFromJson(dynamic json, {bool growable = false,}) {
+  static Map<String, List<SessionRefreshRsp>> mapListFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
     final map = <String, List<SessionRefreshRsp>>{};
     if (json is Map && json.isNotEmpty) {
       // ignore: parameter_assignments
       json = json.cast<String, dynamic>();
       for (final entry in json.entries) {
-        map[entry.key] = SessionRefreshRsp.listFromJson(entry.value, growable: growable,);
+        map[entry.key] = SessionRefreshRsp.listFromJson(
+          entry.value,
+          growable: growable,
+        );
       }
     }
     return map;
@@ -196,4 +210,3 @@ class SessionRefreshRsp {
     'redirectURL',
   };
 }
-

@@ -32,25 +32,28 @@ class PasswordVerifyReq {
   String? requestID;
 
   @override
-  bool operator ==(Object other) => identical(this, other) || other is PasswordVerifyReq &&
-     other.username == username &&
-     other.password == password &&
-     other.requestID == requestID;
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is PasswordVerifyReq &&
+          other.username == username &&
+          other.password == password &&
+          other.requestID == requestID;
 
   @override
   int get hashCode =>
-    // ignore: unnecessary_parenthesis
-    (username.hashCode) +
-    (password.hashCode) +
-    (requestID == null ? 0 : requestID!.hashCode);
+      // ignore: unnecessary_parenthesis
+      (username.hashCode) +
+      (password.hashCode) +
+      (requestID == null ? 0 : requestID!.hashCode);
 
   @override
-  String toString() => 'PasswordVerifyReq[username=$username, password=$password, requestID=$requestID]';
+  String toString() =>
+      'PasswordVerifyReq[username=$username, password=$password, requestID=$requestID]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-      json[r'username'] = this.username;
-      json[r'password'] = this.password;
+    json[r'username'] = this.username;
+    json[r'password'] = this.password;
     if (this.requestID != null) {
       json[r'requestID'] = this.requestID;
     } else {
@@ -71,8 +74,10 @@ class PasswordVerifyReq {
       // Note 2: this code is stripped in release mode!
       assert(() {
         requiredKeys.forEach((key) {
-          assert(json.containsKey(key), 'Required key "PasswordVerifyReq[$key]" is missing from JSON.');
-          assert(json[key] != null, 'Required key "PasswordVerifyReq[$key]" has a null value in JSON.');
+          assert(json.containsKey(key),
+              'Required key "PasswordVerifyReq[$key]" is missing from JSON.');
+          assert(json[key] != null,
+              'Required key "PasswordVerifyReq[$key]" has a null value in JSON.');
         });
         return true;
       }());
@@ -86,7 +91,10 @@ class PasswordVerifyReq {
     return null;
   }
 
-  static List<PasswordVerifyReq> listFromJson(dynamic json, {bool growable = false,}) {
+  static List<PasswordVerifyReq> listFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
     final result = <PasswordVerifyReq>[];
     if (json is List && json.isNotEmpty) {
       for (final row in json) {
@@ -114,13 +122,19 @@ class PasswordVerifyReq {
   }
 
   // maps a json object with a list of PasswordVerifyReq-objects as value to a dart map
-  static Map<String, List<PasswordVerifyReq>> mapListFromJson(dynamic json, {bool growable = false,}) {
+  static Map<String, List<PasswordVerifyReq>> mapListFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
     final map = <String, List<PasswordVerifyReq>>{};
     if (json is Map && json.isNotEmpty) {
       // ignore: parameter_assignments
       json = json.cast<String, dynamic>();
       for (final entry in json.entries) {
-        map[entry.key] = PasswordVerifyReq.listFromJson(entry.value, growable: growable,);
+        map[entry.key] = PasswordVerifyReq.listFromJson(
+          entry.value,
+          growable: growable,
+        );
       }
     }
     return map;
@@ -132,4 +146,3 @@ class PasswordVerifyReq {
     'password',
   };
 }
-

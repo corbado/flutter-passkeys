@@ -37,38 +37,41 @@ class ShortSession {
   String sameSite;
 
   @override
-  bool operator ==(Object other) => identical(this, other) || other is ShortSession &&
-     other.key == key &&
-     other.value == value &&
-     other.domain == domain &&
-     other.path == path &&
-     other.secure == secure &&
-     other.expires == expires &&
-     other.sameSite == sameSite;
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is ShortSession &&
+          other.key == key &&
+          other.value == value &&
+          other.domain == domain &&
+          other.path == path &&
+          other.secure == secure &&
+          other.expires == expires &&
+          other.sameSite == sameSite;
 
   @override
   int get hashCode =>
-    // ignore: unnecessary_parenthesis
-    (key.hashCode) +
-    (value.hashCode) +
-    (domain.hashCode) +
-    (path.hashCode) +
-    (secure.hashCode) +
-    (expires.hashCode) +
-    (sameSite.hashCode);
+      // ignore: unnecessary_parenthesis
+      (key.hashCode) +
+      (value.hashCode) +
+      (domain.hashCode) +
+      (path.hashCode) +
+      (secure.hashCode) +
+      (expires.hashCode) +
+      (sameSite.hashCode);
 
   @override
-  String toString() => 'ShortSession[key=$key, value=$value, domain=$domain, path=$path, secure=$secure, expires=$expires, sameSite=$sameSite]';
+  String toString() =>
+      'ShortSession[key=$key, value=$value, domain=$domain, path=$path, secure=$secure, expires=$expires, sameSite=$sameSite]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-      json[r'key'] = this.key;
-      json[r'value'] = this.value;
-      json[r'domain'] = this.domain;
-      json[r'path'] = this.path;
-      json[r'secure'] = this.secure;
-      json[r'expires'] = this.expires;
-      json[r'sameSite'] = this.sameSite;
+    json[r'key'] = this.key;
+    json[r'value'] = this.value;
+    json[r'domain'] = this.domain;
+    json[r'path'] = this.path;
+    json[r'secure'] = this.secure;
+    json[r'expires'] = this.expires;
+    json[r'sameSite'] = this.sameSite;
     return json;
   }
 
@@ -84,8 +87,10 @@ class ShortSession {
       // Note 2: this code is stripped in release mode!
       assert(() {
         requiredKeys.forEach((key) {
-          assert(json.containsKey(key), 'Required key "ShortSession[$key]" is missing from JSON.');
-          assert(json[key] != null, 'Required key "ShortSession[$key]" has a null value in JSON.');
+          assert(json.containsKey(key),
+              'Required key "ShortSession[$key]" is missing from JSON.');
+          assert(json[key] != null,
+              'Required key "ShortSession[$key]" has a null value in JSON.');
         });
         return true;
       }());
@@ -103,7 +108,10 @@ class ShortSession {
     return null;
   }
 
-  static List<ShortSession> listFromJson(dynamic json, {bool growable = false,}) {
+  static List<ShortSession> listFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
     final result = <ShortSession>[];
     if (json is List && json.isNotEmpty) {
       for (final row in json) {
@@ -131,13 +139,19 @@ class ShortSession {
   }
 
   // maps a json object with a list of ShortSession-objects as value to a dart map
-  static Map<String, List<ShortSession>> mapListFromJson(dynamic json, {bool growable = false,}) {
+  static Map<String, List<ShortSession>> mapListFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
     final map = <String, List<ShortSession>>{};
     if (json is Map && json.isNotEmpty) {
       // ignore: parameter_assignments
       json = json.cast<String, dynamic>();
       for (final entry in json.entries) {
-        map[entry.key] = ShortSession.listFromJson(entry.value, growable: growable,);
+        map[entry.key] = ShortSession.listFromJson(
+          entry.value,
+          growable: growable,
+        );
       }
     }
     return map;
@@ -154,4 +168,3 @@ class ShortSession {
     'sameSite',
   };
 }
-

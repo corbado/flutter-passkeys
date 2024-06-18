@@ -40,24 +40,27 @@ class PassKeyRegisterStartReq {
   String? requestID;
 
   @override
-  bool operator ==(Object other) => identical(this, other) || other is PassKeyRegisterStartReq &&
-     other.username == username &&
-     other.fullName == fullName &&
-     other.requestID == requestID;
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is PassKeyRegisterStartReq &&
+          other.username == username &&
+          other.fullName == fullName &&
+          other.requestID == requestID;
 
   @override
   int get hashCode =>
-    // ignore: unnecessary_parenthesis
-    (username.hashCode) +
-    (fullName == null ? 0 : fullName!.hashCode) +
-    (requestID == null ? 0 : requestID!.hashCode);
+      // ignore: unnecessary_parenthesis
+      (username.hashCode) +
+      (fullName == null ? 0 : fullName!.hashCode) +
+      (requestID == null ? 0 : requestID!.hashCode);
 
   @override
-  String toString() => 'PassKeyRegisterStartReq[username=$username, fullName=$fullName, requestID=$requestID]';
+  String toString() =>
+      'PassKeyRegisterStartReq[username=$username, fullName=$fullName, requestID=$requestID]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-      json[r'username'] = this.username;
+    json[r'username'] = this.username;
     if (this.fullName != null) {
       json[r'fullName'] = this.fullName;
     } else {
@@ -83,8 +86,10 @@ class PassKeyRegisterStartReq {
       // Note 2: this code is stripped in release mode!
       assert(() {
         requiredKeys.forEach((key) {
-          assert(json.containsKey(key), 'Required key "PassKeyRegisterStartReq[$key]" is missing from JSON.');
-          assert(json[key] != null, 'Required key "PassKeyRegisterStartReq[$key]" has a null value in JSON.');
+          assert(json.containsKey(key),
+              'Required key "PassKeyRegisterStartReq[$key]" is missing from JSON.');
+          assert(json[key] != null,
+              'Required key "PassKeyRegisterStartReq[$key]" has a null value in JSON.');
         });
         return true;
       }());
@@ -98,7 +103,10 @@ class PassKeyRegisterStartReq {
     return null;
   }
 
-  static List<PassKeyRegisterStartReq> listFromJson(dynamic json, {bool growable = false,}) {
+  static List<PassKeyRegisterStartReq> listFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
     final result = <PassKeyRegisterStartReq>[];
     if (json is List && json.isNotEmpty) {
       for (final row in json) {
@@ -126,13 +134,19 @@ class PassKeyRegisterStartReq {
   }
 
   // maps a json object with a list of PassKeyRegisterStartReq-objects as value to a dart map
-  static Map<String, List<PassKeyRegisterStartReq>> mapListFromJson(dynamic json, {bool growable = false,}) {
+  static Map<String, List<PassKeyRegisterStartReq>> mapListFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
     final map = <String, List<PassKeyRegisterStartReq>>{};
     if (json is Map && json.isNotEmpty) {
       // ignore: parameter_assignments
       json = json.cast<String, dynamic>();
       for (final entry in json.entries) {
-        map[entry.key] = PassKeyRegisterStartReq.listFromJson(entry.value, growable: growable,);
+        map[entry.key] = PassKeyRegisterStartReq.listFromJson(
+          entry.value,
+          growable: growable,
+        );
       }
     }
     return map;
@@ -143,4 +157,3 @@ class PassKeyRegisterStartReq {
     'username',
   };
 }
-

@@ -19,20 +19,21 @@ class PassKeyCredentialExistsRspAllOf {
   bool exists;
 
   @override
-  bool operator ==(Object other) => identical(this, other) || other is PassKeyCredentialExistsRspAllOf &&
-     other.exists == exists;
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is PassKeyCredentialExistsRspAllOf && other.exists == exists;
 
   @override
   int get hashCode =>
-    // ignore: unnecessary_parenthesis
-    (exists.hashCode);
+      // ignore: unnecessary_parenthesis
+      (exists.hashCode);
 
   @override
   String toString() => 'PassKeyCredentialExistsRspAllOf[exists=$exists]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-      json[r'exists'] = this.exists;
+    json[r'exists'] = this.exists;
     return json;
   }
 
@@ -48,8 +49,10 @@ class PassKeyCredentialExistsRspAllOf {
       // Note 2: this code is stripped in release mode!
       assert(() {
         requiredKeys.forEach((key) {
-          assert(json.containsKey(key), 'Required key "PassKeyCredentialExistsRspAllOf[$key]" is missing from JSON.');
-          assert(json[key] != null, 'Required key "PassKeyCredentialExistsRspAllOf[$key]" has a null value in JSON.');
+          assert(json.containsKey(key),
+              'Required key "PassKeyCredentialExistsRspAllOf[$key]" is missing from JSON.');
+          assert(json[key] != null,
+              'Required key "PassKeyCredentialExistsRspAllOf[$key]" has a null value in JSON.');
         });
         return true;
       }());
@@ -61,7 +64,10 @@ class PassKeyCredentialExistsRspAllOf {
     return null;
   }
 
-  static List<PassKeyCredentialExistsRspAllOf> listFromJson(dynamic json, {bool growable = false,}) {
+  static List<PassKeyCredentialExistsRspAllOf> listFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
     final result = <PassKeyCredentialExistsRspAllOf>[];
     if (json is List && json.isNotEmpty) {
       for (final row in json) {
@@ -74,7 +80,8 @@ class PassKeyCredentialExistsRspAllOf {
     return result.toList(growable: growable);
   }
 
-  static Map<String, PassKeyCredentialExistsRspAllOf> mapFromJson(dynamic json) {
+  static Map<String, PassKeyCredentialExistsRspAllOf> mapFromJson(
+      dynamic json) {
     final map = <String, PassKeyCredentialExistsRspAllOf>{};
     if (json is Map && json.isNotEmpty) {
       json = json.cast<String, dynamic>(); // ignore: parameter_assignments
@@ -89,13 +96,19 @@ class PassKeyCredentialExistsRspAllOf {
   }
 
   // maps a json object with a list of PassKeyCredentialExistsRspAllOf-objects as value to a dart map
-  static Map<String, List<PassKeyCredentialExistsRspAllOf>> mapListFromJson(dynamic json, {bool growable = false,}) {
+  static Map<String, List<PassKeyCredentialExistsRspAllOf>> mapListFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
     final map = <String, List<PassKeyCredentialExistsRspAllOf>>{};
     if (json is Map && json.isNotEmpty) {
       // ignore: parameter_assignments
       json = json.cast<String, dynamic>();
       for (final entry in json.entries) {
-        map[entry.key] = PassKeyCredentialExistsRspAllOf.listFromJson(entry.value, growable: growable,);
+        map[entry.key] = PassKeyCredentialExistsRspAllOf.listFromJson(
+          entry.value,
+          growable: growable,
+        );
       }
     }
     return map;
@@ -106,4 +119,3 @@ class PassKeyCredentialExistsRspAllOf {
     'exists',
   };
 }
-

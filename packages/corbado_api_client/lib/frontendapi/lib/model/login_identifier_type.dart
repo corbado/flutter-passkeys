@@ -34,9 +34,13 @@ class LoginIdentifierType {
     custom,
   ];
 
-  static LoginIdentifierType? fromJson(dynamic value) => LoginIdentifierTypeTypeTransformer().decode(value);
+  static LoginIdentifierType? fromJson(dynamic value) =>
+      LoginIdentifierTypeTypeTransformer().decode(value);
 
-  static List<LoginIdentifierType> listFromJson(dynamic json, {bool growable = false,}) {
+  static List<LoginIdentifierType> listFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
     final result = <LoginIdentifierType>[];
     if (json is List && json.isNotEmpty) {
       for (final row in json) {
@@ -53,7 +57,8 @@ class LoginIdentifierType {
 /// Transformation class that can [encode] an instance of [LoginIdentifierType] to String,
 /// and [decode] dynamic data back to [LoginIdentifierType].
 class LoginIdentifierTypeTypeTransformer {
-  factory LoginIdentifierTypeTypeTransformer() => _instance ??= const LoginIdentifierTypeTypeTransformer._();
+  factory LoginIdentifierTypeTypeTransformer() =>
+      _instance ??= const LoginIdentifierTypeTypeTransformer._();
 
   const LoginIdentifierTypeTypeTransformer._();
 
@@ -70,9 +75,12 @@ class LoginIdentifierTypeTypeTransformer {
   LoginIdentifierType? decode(dynamic data, {bool allowNull = true}) {
     if (data != null) {
       switch (data) {
-        case r'email': return LoginIdentifierType.email;
-        case r'phone_number': return LoginIdentifierType.phoneNumber;
-        case r'custom': return LoginIdentifierType.custom;
+        case r'email':
+          return LoginIdentifierType.email;
+        case r'phone_number':
+          return LoginIdentifierType.phoneNumber;
+        case r'custom':
+          return LoginIdentifierType.custom;
         default:
           if (!allowNull) {
             throw ArgumentError('Unknown enum value to decode: $data');
@@ -85,4 +93,3 @@ class LoginIdentifierTypeTypeTransformer {
   /// Singleton [LoginIdentifierTypeTypeTransformer] instance.
   static LoginIdentifierTypeTypeTransformer? _instance;
 }
-

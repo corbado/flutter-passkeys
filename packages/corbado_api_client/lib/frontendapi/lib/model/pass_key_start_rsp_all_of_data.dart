@@ -20,20 +20,21 @@ class PassKeyStartRspAllOfData {
   String challenge;
 
   @override
-  bool operator ==(Object other) => identical(this, other) || other is PassKeyStartRspAllOfData &&
-     other.challenge == challenge;
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is PassKeyStartRspAllOfData && other.challenge == challenge;
 
   @override
   int get hashCode =>
-    // ignore: unnecessary_parenthesis
-    (challenge.hashCode);
+      // ignore: unnecessary_parenthesis
+      (challenge.hashCode);
 
   @override
   String toString() => 'PassKeyStartRspAllOfData[challenge=$challenge]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-      json[r'challenge'] = this.challenge;
+    json[r'challenge'] = this.challenge;
     return json;
   }
 
@@ -49,8 +50,10 @@ class PassKeyStartRspAllOfData {
       // Note 2: this code is stripped in release mode!
       assert(() {
         requiredKeys.forEach((key) {
-          assert(json.containsKey(key), 'Required key "PassKeyStartRspAllOfData[$key]" is missing from JSON.');
-          assert(json[key] != null, 'Required key "PassKeyStartRspAllOfData[$key]" has a null value in JSON.');
+          assert(json.containsKey(key),
+              'Required key "PassKeyStartRspAllOfData[$key]" is missing from JSON.');
+          assert(json[key] != null,
+              'Required key "PassKeyStartRspAllOfData[$key]" has a null value in JSON.');
         });
         return true;
       }());
@@ -62,7 +65,10 @@ class PassKeyStartRspAllOfData {
     return null;
   }
 
-  static List<PassKeyStartRspAllOfData> listFromJson(dynamic json, {bool growable = false,}) {
+  static List<PassKeyStartRspAllOfData> listFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
     final result = <PassKeyStartRspAllOfData>[];
     if (json is List && json.isNotEmpty) {
       for (final row in json) {
@@ -90,13 +96,19 @@ class PassKeyStartRspAllOfData {
   }
 
   // maps a json object with a list of PassKeyStartRspAllOfData-objects as value to a dart map
-  static Map<String, List<PassKeyStartRspAllOfData>> mapListFromJson(dynamic json, {bool growable = false,}) {
+  static Map<String, List<PassKeyStartRspAllOfData>> mapListFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
     final map = <String, List<PassKeyStartRspAllOfData>>{};
     if (json is Map && json.isNotEmpty) {
       // ignore: parameter_assignments
       json = json.cast<String, dynamic>();
       for (final entry in json.entries) {
-        map[entry.key] = PassKeyStartRspAllOfData.listFromJson(entry.value, growable: growable,);
+        map[entry.key] = PassKeyStartRspAllOfData.listFromJson(
+          entry.value,
+          growable: growable,
+        );
       }
     }
     return map;
@@ -107,4 +119,3 @@ class PassKeyStartRspAllOfData {
     'challenge',
   };
 }
-

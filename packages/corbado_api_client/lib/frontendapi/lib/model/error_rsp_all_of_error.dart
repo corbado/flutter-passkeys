@@ -14,13 +14,16 @@ class ErrorRspAllOfError {
   /// Returns a new [ErrorRspAllOfError] instance.
   ErrorRspAllOfError({
     required this.type,
+    this.links = const [],
     this.details,
     this.validation = const [],
-    this.links = const [],
   });
 
   /// Type of error
   String type;
+
+  /// Additional links to help understand the error
+  List<String> links;
 
   /// Details of error
   ///
@@ -34,37 +37,37 @@ class ErrorRspAllOfError {
   /// Validation errors per field
   List<ErrorRspAllOfErrorValidation> validation;
 
-  /// Additional links to help understand the error
-  List<String> links;
-
   @override
-  bool operator ==(Object other) => identical(this, other) || other is ErrorRspAllOfError &&
-     other.type == type &&
-     other.details == details &&
-     other.validation == validation &&
-     other.links == links;
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is ErrorRspAllOfError &&
+          other.type == type &&
+          _deepEquality.equals(other.links, links) &&
+          other.details == details &&
+          _deepEquality.equals(other.validation, validation);
 
   @override
   int get hashCode =>
-    // ignore: unnecessary_parenthesis
-    (type.hashCode) +
-    (details == null ? 0 : details!.hashCode) +
-    (validation.hashCode) +
-    (links.hashCode);
+      // ignore: unnecessary_parenthesis
+      (type.hashCode) +
+      (links.hashCode) +
+      (details == null ? 0 : details!.hashCode) +
+      (validation.hashCode);
 
   @override
-  String toString() => 'ErrorRspAllOfError[type=$type, details=$details, validation=$validation, links=$links]';
+  String toString() =>
+      'ErrorRspAllOfError[type=$type, links=$links, details=$details, validation=$validation]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-      json[r'type'] = this.type;
+    json[r'type'] = this.type;
+    json[r'links'] = this.links;
     if (this.details != null) {
       json[r'details'] = this.details;
     } else {
       json[r'details'] = null;
     }
-      json[r'validation'] = this.validation;
-      json[r'links'] = this.links;
+    json[r'validation'] = this.validation;
     return json;
   }
 
@@ -80,25 +83,33 @@ class ErrorRspAllOfError {
       // Note 2: this code is stripped in release mode!
       assert(() {
         requiredKeys.forEach((key) {
-          assert(json.containsKey(key), 'Required key "ErrorRspAllOfError[$key]" is missing from JSON.');
-          assert(json[key] != null, 'Required key "ErrorRspAllOfError[$key]" has a null value in JSON.');
+          assert(json.containsKey(key),
+              'Required key "ErrorRspAllOfError[$key]" is missing from JSON.');
+          assert(json[key] != null,
+              'Required key "ErrorRspAllOfError[$key]" has a null value in JSON.');
         });
         return true;
       }());
 
       return ErrorRspAllOfError(
         type: mapValueOfType<String>(json, r'type')!,
-        details: mapValueOfType<String>(json, r'details'),
-        validation: ErrorRspAllOfErrorValidation.listFromJson(json[r'validation']),
-        links: json[r'links'] is List
-            ? (json[r'links'] as List).cast<String>()
+        links: json[r'links'] is Iterable
+            ? (json[r'links'] as Iterable)
+                .cast<String>()
+                .toList(growable: false)
             : const [],
+        details: mapValueOfType<String>(json, r'details'),
+        validation:
+            ErrorRspAllOfErrorValidation.listFromJson(json[r'validation']),
       );
     }
     return null;
   }
 
-  static List<ErrorRspAllOfError> listFromJson(dynamic json, {bool growable = false,}) {
+  static List<ErrorRspAllOfError> listFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
     final result = <ErrorRspAllOfError>[];
     if (json is List && json.isNotEmpty) {
       for (final row in json) {
@@ -126,13 +137,19 @@ class ErrorRspAllOfError {
   }
 
   // maps a json object with a list of ErrorRspAllOfError-objects as value to a dart map
-  static Map<String, List<ErrorRspAllOfError>> mapListFromJson(dynamic json, {bool growable = false,}) {
+  static Map<String, List<ErrorRspAllOfError>> mapListFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
     final map = <String, List<ErrorRspAllOfError>>{};
     if (json is Map && json.isNotEmpty) {
       // ignore: parameter_assignments
       json = json.cast<String, dynamic>();
       for (final entry in json.entries) {
-        map[entry.key] = ErrorRspAllOfError.listFromJson(entry.value, growable: growable,);
+        map[entry.key] = ErrorRspAllOfError.listFromJson(
+          entry.value,
+          growable: growable,
+        );
       }
     }
     return map;
@@ -144,4 +161,3 @@ class ErrorRspAllOfError {
     'links',
   };
 }
-
