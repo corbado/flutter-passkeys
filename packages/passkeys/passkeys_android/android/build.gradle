@@ -25,6 +25,10 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
 android {
+    // Conditional for campatibility with AGP <4.2
+    if (project.android.hasProperty('namespace')) {
+        namespace 'com.corbado.passkeys_android'
+    }
     compileSdkVersion 34
 
     compileOptions {
