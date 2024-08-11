@@ -1,3 +1,6 @@
+## 2.0.5
+* Bump versions of passkeys, corbado_auth and corbado_frontend_api_client
+
 ## 2.0.4
 * Pass correct userAgent to passkey related firebase functions
 

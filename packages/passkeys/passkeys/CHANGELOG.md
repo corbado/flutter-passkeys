@@ -1,3 +1,7 @@
+## 2.0.9
+* Bump version of passkeys_web and corbado_frontend_api_client
+* Removed dependencies to openapi_generator_annotations and openapi_generator
+
 ## 2.0.8
 * Added NoCredentialsAvailableException to indicate that no credentials are available during a login (android)
 
