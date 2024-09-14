@@ -7,7 +7,7 @@ openapi: 3.0.3
 # General                                                         #
 ###################################################################
 info:
-  version: 1.0.0
+  version: 2.0.0
   title: Corbado Frontend API
   description: Overview of all Corbado Frontend API calls to implement passwordless authentication.
   contact:
@@ -19,23 +19,45 @@ servers:
   - url: https://<project ID>.frontendapi.corbado.io
 
 tags:
+  - name: Auth
+    description: All API calls that are related to an authentication process.
+  - name: Configs
+    description: All API calls to manage configurations
   - name: Users
-    description: All API calls to handle users
-
-  - name: Projects
-    description: All API calls to handle project
-
-  - name: Assets
-    description: All asset calls
-
-  - name: Sessions
-    description: All API calls to handle session management
+    description: All API calls to manage users
+  - name: CorbadoConnect
+    description: All API calls that are related to a connect process
 
 paths:
-  ###################################################################
-  # Paths: Users                                                    #
-  ###################################################################
-  /v1/me:
+  /v2/session-config:
+    get:
+      description: tbd
+      operationId: GetSessionConfig
+      tags:
+        - Configs
+      responses:
+        '200':
+          description: tbd
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/sessionConfigRsp'
+
+  /v2/user-details-config:
+    get:
+      description: Gets configs needed by the UserDetails component
+      operationId: GetUserDetailsConfig
+      tags:
+        - Configs
+      responses:
+        '200':
+          description: tbd
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/userDetailsConfigRsp'
+
+  /v2/me:
     get:
       description: Gets current user
       operationId: CurrentUserGet
@@ -43,34 +65,90 @@ paths:
         - Users
       responses:
         '200':
-          description: Provides current user data
+          description: tbd
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/meRsp'
-        default:
-          $ref: '#/components/responses/error'
-
-  /v1/me/passkeys:
-    get:
-      description: Gets current user's passkeys
-      operationId: CurrentUserPassKeyGet
+    patch:
+      description: Updates current user
+      operationId: CurrentUserUpdate
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/meUpdateReq'
+      responses:
+        '200':
+          $ref: '#/components/responses/200'
+    delete:
+      description: Deletes current user
+      operationId: CurrentUserDelete
       tags:
         - Users
       responses:
         '200':
-          description: Provides current user data
+          $ref: '#/components/responses/200'
+
+  /v2/me/passkeys:
+    get:
+      description: Gets current user's passkeys
+      operationId: CurrentUserPasskeyGet
+      tags:
+        - Users
+      responses:
+        '200':
+          description: tbd
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/mePassKeyRsp'
-        default:
-          $ref: '#/components/responses/error'
+                $ref: '#/components/schemas/mePasskeyRsp'
 
-  /v1/me/passkeys/{credentialID}:
+  /v2/me/passkeys/append/start:
+    post:
+      description: Starts passkey append for current user
+      operationId: CurrentUserPasskeyAppendStart
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/mePasskeysAppendStartReq'
+      responses:
+        '200':
+          description: tbd
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/mePasskeysAppendStartRsp'
+
+  /v2/me/passkeys/append/finish:
+    post:
+      description: Finishes passkey append for current user
+      operationId: CurrentUserPasskeyAppendFinish
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/mePasskeysAppendFinishReq'
+      responses:
+        '200':
+          description: tbd
+
+  /v2/me/passkeys/{credentialID}:
     delete:
       description: Delete current user's passkeys
-      operationId: CurrentUserPassKeyDelete
+      operationId: CurrentUserPasskeyDelete
+      tags:
+        - Users
       parameters:
         - in: path
           required: true
@@ -79,580 +157,713 @@ paths:
             type: string
           description: 'Credential ID from passkeys'
           example: 'cre-abc123'
+      responses:
+        '200':
+          description: tbs
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/mePasskeyDeleteRsp'
+
+  /v2/me/refresh:
+    post:
+      description: Performs session refresh
+      operationId: CurrentUserSessionRefresh
       tags:
         - Users
+      responses:
+        '200':
+          description: tbd
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/meRefreshRsp'
+
+  /v2/me/logout:
+    post:
+      description: Performs session logout
+      operationId: CurrentUserSessionLogout
+      tags:
+        - Users
+      responses:
+        '204':
+          description: tbd
+
+  /v2/me/identifier:
+    post:
+      description: Creates an identifier
+      operationId: CurrentUserIdentifierCreate
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/meIdentifierCreateReq'
       responses:
         '200':
           $ref: '#/components/responses/200'
-        default:
-          $ref: '#/components/responses/error'
-
-  /v1/users/authmethods:
-    post:
-      description: Lists user's available authentication methods
-      operationId: AuthMethodsList
-      tags:
-        - Users
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/authMethodsListReq'
-      responses:
-        '200':
-          description: Authentication methods retrieved
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/authMethodsListRsp'
-        default:
-          $ref: '#/components/responses/error'
-
-  ################
-  ### PassKeys ###
-  ################
-
-  /v1/users/passkey/login/start:
-    post:
-      description: Performs passkey login start
-      operationId: PassKeyLoginStart
-      tags:
-        - Users
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/passKeyLoginStartReq'
-      responses:
-        '200':
-          description: Provides challenge for perform PassKey ceremony
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/passKeyStartRsp'
-        default:
-          $ref: '#/components/responses/error'
-
-  /v1/users/passkey/login/finish:
-    post:
-      description: Performs passkey login finish
-      operationId: PassKeyLoginFinish
-      tags:
-        - Users
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/passKeyFinishReq'
-      responses:
-        '200':
-          description: Provides a session token to initialize your session
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/passKeyLoginFinishRsp'
-        default:
-          $ref: '#/components/responses/error'
-
-  /v1/users/passkey/mediation/start:
-    post:
-      description: Performs passkey mediation start
-      operationId: PassKeyMediationStart
-      tags:
-        - Users
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/passKeyMediationStartReq'
-      responses:
-        '200':
-          description: Provides challenge for perform PassKey ceremony
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/passKeyMediationStartRsp'
-        default:
-          $ref: '#/components/responses/error'
-
-  /v1/users/passkey/register/start:
-    post:
-      description: Performs passkey register start
-      operationId: PassKeyRegisterStart
-      tags:
-        - Users
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/passKeyRegisterStartReq'
-      responses:
-        '200':
-          description: Provides challenge for perform PassKey ceremony
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/passKeyStartRsp'
-        default:
-          $ref: '#/components/responses/error'
-
-  /v1/users/passkey/register/finish:
-    post:
-      description: Performs passkey register finish
-      operationId: PassKeyRegisterFinish
-      tags:
-        - Users
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/passKeyFinishReq'
-      responses:
-        '200':
-          description: Provides a session token to initialize your session
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/passKeyRegisterFinishRsp'
-        default:
-          $ref: '#/components/responses/error'
-
-  /v1/users/passkey/append/start:
-    post:
-      description: Performs passkey append start
-      operationId: PassKeyAppendStart
-      tags:
-        - Users
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/emptyReq'
-      responses:
-        '200':
-          description: Provides challenge for perform PassKey ceremony
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/passKeyStartRsp'
-        default:
-          $ref: '#/components/responses/error'
-
-  /v1/users/passkey/append/finish:
-    post:
-      description: Performs passkey append finish
-      operationId: PassKeyAppendFinish
-      tags:
-        - Users
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/passKeyFinishReq'
-      responses:
-        '200':
-          description: Provides a session token to initialize your session
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/passKeyAppendFinishRsp'
-        default:
-          $ref: '#/components/responses/error'
-
-  /v1/users/passkey/associate/start:
-    post:
-      description: Performs passkey associate start
-      operationId: PassKeyAssociateStart
-      tags:
-        - Users
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/passKeyAssociateStartReq'
-      responses:
-        '200':
-          description: Provides challenge for perform PassKey ceremony
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/passKeyStartRsp'
-        default:
-          $ref: '#/components/responses/error'
-
-  ###################
-  ### Email links ###
-  ###################
-  /v1/users/emaillinks/register/start:
-    post:
-      description: Performs email link register start
-      operationId: EmailLinkRegisterStart
-      tags:
-        - Users
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/emailLinkRegisterStartReq'
-      responses:
-        '200':
-          description: Successfully started register
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/emailLinkRegisterStartRsp'
-        default:
-          $ref: '#/components/responses/error'
-
-  /v1/users/emaillinks/confirm:
-    post:
-      description: Performs email link register confirm
-      operationId: EmailLinkConfirm
-      tags:
-        - Users
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/emailLinkConfirmReq'
-      responses:
-        '200':
-          description: Successfully confirmed email link
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/emailLinkConfirmRsp'
-        default:
-          $ref: '#/components/responses/error'
-
-  /v1/users/emaillinks/login/start:
-    post:
-      description: Performs email link login start
-      operationId: EmailLinkLoginStart
-      tags:
-        - Users
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/emailLinkLoginStartReq'
-      responses:
-        '200':
-          description: Provides a session token to initialize your session
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/emailLinkLoginStartRsp'
-        default:
-          $ref: '#/components/responses/error'
-
-  /v1/users/emaillinks/status:
-    post:
-      description: Performs email link login status check
-      operationId: EmailLinkStatus
-      tags:
-        - Users
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/emailLinkStatusReq'
-      responses:
-        '200':
-          description: Provides a session token to initialize your session
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/emailLinkStatusRsp'
-        default:
-          $ref: '#/components/responses/error'
-
-  ###################
-  ### Email OTP   ###
-  ###################
-  /v1/users/emailcodes/register/start:
-    post:
-      description: Performs email OTP register start
-      operationId: EmailCodeRegisterStart
-      tags:
-        - Users
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/emailCodeRegisterStartReq'
-      responses:
-        '200':
-          description: Successfully started register
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/emailCodeRegisterStartRsp'
-        default:
-          $ref: '#/components/responses/error'
-
-  /v1/users/emailcodes/confirm:
-    post:
-      description: Performs email OTP register confirm
-      operationId: EmailCodeConfirm
-      tags:
-        - Users
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/emailCodeConfirmReq'
-      responses:
-        '200':
-          description: Successfully confirmed email OTP
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/emailCodeConfirmRsp'
-        default:
-          $ref: '#/components/responses/error'
-
-  /v1/users/emailcodes/login/start:
-    post:
-      description: Performs email OTP login start
-      operationId: EmailCodeLoginStart
-      tags:
-        - Users
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/emailCodeLoginStartReq'
-      responses:
-        '200':
-          description: Provides a session token to initialize your session
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/emailCodeLoginStartRsp'
-        default:
-          $ref: '#/components/responses/error'
-
-  /v1/users/emailcodes/status:
-    post:
-      description: Performs email OTP login status check
-      operationId: EmailCodeStatus
-      tags:
-        - Users
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/emailCodeStatusReq'
-      responses:
-        '200':
-          description: Provides a session token to initialize your session
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/emailCodeStatusRsp'
-        default:
-          $ref: '#/components/responses/error'
-
-  ###################
-  #### Password  ####
-  ###################
-  /v1/users/password/verify:
-    post:
-      description: Performs password verify
-      operationId: Password
-      tags:
-        - Users
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/passwordVerifyReq'
-      responses:
-        '200':
-          description: Provides a session token to initialize your session
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/passwordVerifyRsp'
-        default:
-          $ref: '#/components/responses/error'
-
-  ############
-  ### MISC ###
-  ############
-  /v1/users/logintoken:
-    post:
-      description: Performs login for given token
-      operationId: LoginToken
-      tags:
-        - Users
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/loginTokenReq'
-      responses:
-        '200':
-          description: Provides a session token to initialize your session
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/loginTokenRsp'
-        default:
-          $ref: '#/components/responses/error'
-
-  /v1/users/device/passkey:
-    post:
-      description: Checks if active passkey credential exists for provided user and device
-      operationId: PassKeyCredentialExists
-      tags:
-        - Users
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/passKeyCredentialExistsReq'
-      responses:
-        '200':
-          description: PassKeys credentials check completed
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/passKeyCredentialExistsRsp'
-        default:
-          $ref: '#/components/responses/error'
-
-  /v1/projects/projectConfig:
-    get:
-      description: Get project configuration
-      operationId: ProjectConfig
-      tags:
-        - Projects
-      responses:
-        '200':
-          description: Project Configuration successfully retrieved
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/projectConfigRsp'
-        default:
-          $ref: '#/components/responses/error'
-
-  /.well-known/assetlinks.json:
-    get:
-      description: Provides asset links for android devices
-      operationId: AssetLinks
-      tags:
-        - Assets
-      responses:
-        '200':
-          description: Provides a list of assets links
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/assetLinksRsp'
-        default:
-          $ref: '#/components/responses/error'
-
-  /.well-known/apple-app-site-association:
-    get:
-      description: Provides apple app site association
-      operationId: AppleAppSiteAssociation
-      tags:
-        - Assets
-      responses:
-        '200':
-          description: Provides a list of site association
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/appleAppSiteAssociationRsp'
-        default:
-          $ref: '#/components/responses/error'
-
-  ###############
-  ### Session ###
-  ###############
-  /v1/sessions/logout:
     delete:
-      description: Performs session logout
-      operationId: SessionLogout
+      description: Deletes an identifier
+      operationId: CurrentUserIdentifierDelete
       tags:
-        - Sessions
+        - Users
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/emptyReq'
+              $ref: '#/components/schemas/meIdentifierDeleteReq'
       responses:
         '200':
-          description: Successful performed logout
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/logoutRsp'
-        default:
-          $ref: '#/components/responses/error'
-
-  /v1/sessions/refresh:
-    put:
-      description: Performs session refresh
-      operationId: SessionRefresh
+          $ref: '#/components/responses/200'
+    patch:
+      description: Modifies an identifier (only permitted for username; identifierID will change)
+      operationId: CurrentUserIdentifierUpdate
       tags:
-        - Sessions
+        - Users
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/emptyReq'
+              $ref: '#/components/schemas/meIdentifierUpdateReq'
       responses:
         '200':
-          description: Provides a session token to initialize your session
+          $ref: '#/components/responses/200'
+
+  /v2/me/identifier/verify/start:
+    post:
+      description: Creates challenge (only email otp and phone otp supported for now)
+      operationId: CurrentUserIdentifierVerifyStart
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/meIdentifierVerifyStartReq'
+      responses:
+        '200':
+          $ref: '#/components/responses/200'
+
+  /v2/me/identifier/verify/finish:
+    post:
+      description: Verifies challenge
+      operationId: CurrentUserIdentifierVerifyFinish
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/meIdentifierVerifyFinishReq'
+      responses:
+        '200':
+          $ref: '#/components/responses/200'
+
+  /v2/auth/process/init:
+    post:
+      description: tbd
+      operationId: ProcessInit
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/processInitReq'
+      responses:
+        '200':
+          description: tbd
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/sessionRefreshRsp'
-        default:
-          $ref: '#/components/responses/error'
+                $ref: '#/components/schemas/processInitRsp'
 
-  /.well-known/jwks:
+  /v2/auth/process:
     get:
-      description: Retrieves well-known JWKS for Project ID
-      operationId: WellKnownJWKSList
+      description: tbd
+      operationId: ProcessGet
       tags:
-        - Sessions
+        - Auth
+      parameters:
+        - in: query
+          required: false
+          name: preferredBlock
+          schema:
+            $ref: '#/components/schemas/blockType'
       responses:
         '200':
-          description: JWKS successfully retrieved
+          description: tbd
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/wellKnownJWKSListRsp'
-        default:
-          $ref: '#/components/responses/error'
+                $ref: '#/components/schemas/processResponse'
+
+  /v2/auth/process/complete:
+    post:
+      description: tbd
+      operationId: ProcessComplete
+      tags:
+        - Auth
+      responses:
+        '200':
+          description: tbd
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/processResponse'
+
+  /v2/auth/process/reset:
+    post:
+      description: tbd
+      operationId: ProcessReset
+      tags:
+        - Auth
+      responses:
+        '200':
+          description: tbd
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/processResponse'
+
+  /v2/auth/signup/init:
+    post:
+      description: tbd
+      operationId: SignupInit
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/signupInitReq'
+      responses:
+        '200':
+          description: tbd
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/processResponse'
+
+  /v2/auth/login/init:
+    post:
+      description: tbd
+      operationId: LoginInit
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/loginInitReq'
+      responses:
+        '200':
+          description: tbd
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/processResponse'
+
+  /v2/auth/block/skip:
+    post:
+      description: tbd
+      operationId: BlockSkip
+      tags:
+        - Auth
+      responses:
+        '200':
+          description: tbd
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/processResponse'
+
+  /v2/auth/passkey/append/start:
+    post:
+      description: tbd
+      operationId: PasskeyAppendStart
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/passkeyAppendStartReq'
+      responses:
+        '200':
+          description: tbd
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/processResponse'
+
+  /v2/auth/passkey/append/finish:
+    post:
+      description: tbd
+      operationId: PasskeyAppendFinish
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/passkeyAppendFinishReq'
+      responses:
+        '200':
+          description: tbd
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/processResponse'
+
+  /v2/auth/passkey/login/start:
+    post:
+      description: tbd
+      operationId: PasskeyLoginStart
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/passkeyLoginStartReq'
+      responses:
+        '200':
+          description: tbd
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/processResponse'
+
+  /v2/auth/passkey/login/finish:
+    post:
+      description: tbd
+      operationId: PasskeyLoginFinish
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/passkeyLoginFinishReq'
+      responses:
+        '200':
+          description: tbd
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/processResponse'
+
+  /v2/auth/passkey/mediation/finish:
+    post:
+      description: tbd
+      operationId: PasskeyMediationFinish
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/passkeyMediationFinishReq'
+      responses:
+        '200':
+          description: tbd
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/processResponse'
+
+  /v2/auth/identifier/verify/start:
+    post:
+      description: tbd
+      operationId: IdentifierVerifyStart
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/identifierVerifyStartReq'
+      responses:
+        '200':
+          description: tbd
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/processResponse'
+
+  /v2/auth/identifier/verify/finish:
+    post:
+      description: tbd
+      operationId: IdentifierVerifyFinish
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/identifierVerifyFinishReq'
+      responses:
+        '200':
+          description: tbd
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/processResponse'
+
+  /v2/auth/identifier/verify/status:
+    get:
+      description: tbd
+      operationId: IdentifierVerifyStatus
+      tags:
+        - Auth
+      responses:
+        '200':
+          description: tbd
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/processResponse'
+
+  /v2/auth/identifier/update:
+    post:
+      description: tbd
+      operationId: IdentifierUpdate
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/identifierUpdateReq'
+      responses:
+        '200':
+          description: tbd
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/processResponse'
+
+  /v2/auth/social/verify/start:
+    post:
+      description: tbd
+      operationId: SocialVerifyStart
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/socialVerifyStartReq'
+      responses:
+        '200':
+          description: tbd
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/processResponse'
+
+  /v2/auth/social/verify/callback:
+    get:
+      description: tbd
+      operationId: SocialVerifyCallback
+      tags:
+        - Auth
+      responses:
+        '200':
+          description: tbd
+
+  /v2/auth/social/verify/finish:
+    post:
+      description: tbd
+      operationId: SocialVerifyFinish
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/socialVerifyFinishReq'
+      responses:
+        '200':
+          description: tbd
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/processResponse'
+
+  /v2/auth/phone/collect:
+    post:
+      description: tbd
+      operationId: PhoneCollect
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/phoneCollectReq'
+      responses:
+        '200':
+          description: tbd
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/processResponse'
+
+  /v2/auth/username/collect:
+    post:
+      description: tbd
+      operationId: UsernameCollect
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/usernameCollectReq'
+      responses:
+        '200':
+          description: tbd
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/processResponse'
+
+  /v2/auth/events:
+    post:
+      description: Creates a new user generated complete event.
+      operationId: EventCreate
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/eventCreateReq'
+      responses:
+        '204':
+          description: tbd
+
+  /v2/connect/login/init:
+    post:
+      description: Initializes a connect process for login.
+      operationId: ConnectLoginInit
+      tags:
+        - CorbadoConnect
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/connectLoginInitReq'
+      responses:
+        '200':
+          description: Contains information about if and how a passkey login can be started.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/connectLoginInitRsp'
+
+  /v2/connect/login/start:
+    post:
+      description: Starts an initialized connect login process.
+      operationId: ConnectLoginStart
+      tags:
+        - CorbadoConnect
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/connectLoginStartReq'
+      responses:
+        '200':
+          description: Contains the challenge for the passkey login.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/connectLoginStartRsp'
+        '404':
+          description: No user was found for the identifier
+
+  /v2/connect/login/finish:
+    post:
+      description: Finishes an initialized connect login process.
+      operationId: ConnectLoginFinish
+      tags:
+        - CorbadoConnect
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/connectLoginFinishReq'
+      responses:
+        '200':
+          description: Data about the passkey login and the session.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/connectLoginFinishRsp'
+
+  /v2/connect/append/init:
+    post:
+      description: Initializes a connect process for passkey append.
+      operationId: ConnectAppendInit
+      tags:
+        - CorbadoConnect
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/connectAppendInitReq'
+      responses:
+        '200':
+          description: Contains information about if and how a passkey append can be started.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/connectAppendInitRsp'
+
+  /v2/connect/append/start:
+    post:
+      description: Starts an initialized connect passkey append process.
+      operationId: ConnectAppendStart
+      tags:
+        - CorbadoConnect
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/connectAppendStartReq'
+      responses:
+        '200':
+          description: Contains the challenge for the passkey append.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/connectAppendStartRsp'
+
+  /v2/connect/append/finish:
+    post:
+      description: Finishes an initialized connect passkey append process.
+      operationId: ConnectAppendFinish
+      tags:
+        - CorbadoConnect
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/connectAppendFinishReq'
+      responses:
+        '200':
+          description: Data about the new passkey.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/connectAppendFinishRsp'
+
+  /v2/connect/manage/init:
+    post:
+      description: Initializes a connect process for passkey management.
+      operationId: ConnectManageInit
+      tags:
+        - CorbadoConnect
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/connectManageInitReq'
+      responses:
+        '200':
+          description: Contains information about if and how passkey management can be started.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/connectManageInitRsp'
+
+  /v2/connect/manage/delete:
+    post:
+      description: Deletes a passkey for a user identified by a connect token
+      operationId: ConnectManageDelete
+      tags:
+        - CorbadoConnect
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/connectManageDeleteReq'
+      responses:
+        '200':
+          description: Contains the ID of the deleted passkey.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/connectManageDeleteRsp'
+
+  /v2/connect/manage/list:
+    post:
+      description: Lists all passkeys for a user identifier by a connect token.
+      operationId: ConnectManageList
+      tags:
+        - CorbadoConnect
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/connectManageListReq'
+      responses:
+        '200':
+          description: Contains all passkeys for a user.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/connectManageListRsp'
+
+  /v2/connect/events:
+    post:
+      description: Creates a new user generated connect event.
+      operationId: ConnectEventCreate
+      tags:
+        - CorbadoConnect
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/connectEventCreateReq'
+      responses:
+        '204':
+          description: tbd
 
 components:
   ###################################################################
@@ -672,30 +883,563 @@ components:
       type: apiKey
 
   schemas:
-    ###################################################################
-    # Schemas: Users                                                  #
-    ###################################################################
-    meRsp:
-      allOf:
-        - $ref: 'common.yml#/components/schemas/genericRsp'
-        - type: object
-          required:
-            - data
-          properties:
-            data:
-              $ref: 'common.yml#/components/schemas/fullUser'
+    processInitReq:
+      type: object
+      description: tbd.
+      required:
+        - clientInformation
+      properties:
+        clientInformation:
+          $ref: '#/components/schemas/clientInformation'
+        passkeyAppendShown:
+          type: integer
+          format: int64
+        optOutOfPasskeyAppendAfterHybrid:
+          type: boolean
+          description: deprecated
+        preferredBlock:
+          $ref: '#/components/schemas/blockType'
 
-    mePassKeyRsp:
-      allOf:
-        - $ref: 'common.yml#/components/schemas/genericRsp'
-        - type: object
-          required:
-            - data
-          properties:
-            data:
-              $ref: '#/components/schemas/passKeyList'
+    processInitRsp:
+      type: object
+      description: tbd.
+      required:
+        - token
+        - expiresAt
+        - processResponse
+      properties:
+        newClientEnvHandle:
+          type: string
+        token:
+          type: string
+        expiresAt:
+          type: integer
+        processResponse:
+          $ref: '#/components/schemas/processResponse'
 
-    passKeyList:
+    signupInitReq:
+      type: object
+      description: tbd.
+      required:
+        - identifiers
+      properties:
+        fullName:
+          type: string
+        identifiers:
+          type: array
+          items:
+            $ref: '#/components/schemas/loginIdentifier'
+
+    #    signupInitRsp:
+    #      $ref: '#/components/schemas/blockBody'
+
+    loginInitReq:
+      type: object
+      description: tbd.
+      required:
+        - identifierValue
+        - isPhone
+      properties:
+        identifierValue:
+          type: string
+        isPhone:
+          type: boolean
+
+
+    #    loginInitRsp:
+    #      $ref: '#/components/schemas/blockBody'
+
+    passkeyAppendStartReq:
+      type: object
+      description: tbd.
+
+    passkeyAppendFinishReq:
+      type: object
+      description: tbd.
+      required:
+        - signedChallenge
+      properties:
+        signedChallenge:
+          type: string
+
+    #    passkeyAppendStartRsp:
+    #      $ref: '#/components/schemas/blockBody'
+
+    mePasskeysAppendStartReq:
+      type: object
+      required:
+        - clientInformation
+      properties:
+        clientInformation:
+          $ref: '#/components/schemas/clientInformation'
+
+    mePasskeysAppendStartRsp:
+      type: object
+      required:
+        - attestationOptions
+      properties:
+        newClientEnvHandle:
+          type: string
+        appendNotAllowedReason:
+          type: string
+          enum: [ 'passkey_already_exists', 'passkeys_not_supported' ]
+        attestationOptions:
+          type: string
+          example: '{"publicKey":{"challenge":"2m6...0w9/MgW...KE=","rp":{"name":"demo","id":"localhost"},"user":{"name":"example@mail.com","id":"dXN...zk5"},"pubKeyCredParams":[{"type":"public-key","alg":-7},{"type":"public-key","alg":-35},{"type":"public-key","alg":-36},{"type":"public-key","alg":-257},{"type":"public-key","alg":-258},{"type":"public-key","alg":-259},{"type":"public-key","alg":-37},{"type":"public-key","alg":-38},{"type":"public-key","alg":-39},{"type":"public-key","alg":-8}],"authenticatorSelection":{"authenticatorAttachment":"platform","requireResidentKey":false,"userVerification":"required"},"timeout":60000,"attestation":"none"}}'
+
+    mePasskeysAppendFinishReq:
+      type: object
+      required:
+        - attestationResponse
+        - clientInformation
+      properties:
+        attestationResponse:
+          type: string
+          example: '{"type":"public-key","id":"JM6...J_Q","rawId":"JM6...J_Q","authenticatorAttachment":null,"response":{"clientDataJSON":"eyJ...ZX0","authenticatorData":"SZY...AAQ","signature":"Ni7...YAg","userHandle":"dXN...zk5"},"clientExtensionResults":{}}'
+        clientInformation:
+          $ref: '#/components/schemas/clientInformation'
+
+    meIdentifierCreateReq:
+      type: object
+      required:
+        - identifierType
+        - value
+      properties:
+        identifierType:
+          $ref: '#/components/schemas/loginIdentifierType'
+        value:
+          type: string
+
+    meIdentifierDeleteReq:
+      type: object
+      required:
+        - identifierID
+      properties:
+        identifierID:
+          type: string
+
+    meIdentifierUpdateReq:
+      type: object
+      required:
+        - identifierID
+        - identifierType
+        - value
+      properties:
+        identifierID:
+          type: string
+        identifierType:
+          $ref: '#/components/schemas/loginIdentifierType'
+        value:
+          type: string
+
+    meIdentifierVerifyStartReq:
+      type: object
+      description: tbd.
+      required:
+        - identifierID
+        - clientInformation
+      properties:
+        identifierID:
+          type: string
+        clientInformation:
+          $ref: '#/components/schemas/clientInformation'
+
+    meIdentifierVerifyFinishReq:
+      type: object
+      required:
+        - identifierID
+        - code
+      properties:
+        identifierID:
+          type: string
+        code:
+          type: string
+
+    #    passkeyAppendFinishRsp:
+    #      $ref: '#/components/schemas/blockBody'
+
+    passkeyLoginStartReq:
+      type: object
+      description: tbd.
+
+    #    passkeyLoginStartRsp:
+    #      $ref: '#/components/schemas/blockBody'
+
+    passkeyLoginFinishReq:
+      type: object
+      description: tbd.
+      required:
+        - signedChallenge
+      properties:
+        signedChallenge:
+          type: string
+
+    passkeyMediationFinishReq:
+      type: object
+      description: tbd.
+      required:
+        - signedChallenge
+      properties:
+        signedChallenge:
+          type: string
+
+    identifierVerifyStartReq:
+      type: object
+      description: tbd.
+      required:
+        - identifierType
+        - verificationType
+      properties:
+        identifierType:
+          $ref: '#/components/schemas/loginIdentifierType'
+        verificationType:
+          $ref: '#/components/schemas/verificationMethod'
+
+    identifierVerifyFinishReq:
+      type: object
+      required:
+        - code
+        - identifierType
+        - verificationType
+        - isNewDevice
+      properties:
+        code:
+          type: string
+        identifierType:
+          $ref: '#/components/schemas/loginIdentifierType'
+        verificationType:
+          $ref: '#/components/schemas/verificationMethod'
+        isNewDevice:
+          type: boolean
+
+    usernameCollectReq:
+      type: object
+      required:
+        - value
+      properties:
+        value:
+          type: string
+
+    #    usernameCollectRsp:
+    #      $ref: '#/components/schemas/blockBody'
+
+    phoneCollectReq:
+      type: object
+      required:
+        - value
+      properties:
+        value:
+          type: string
+
+    socialVerifyStartReq:
+      type: object
+      required:
+        - providerType
+        - redirectUrl
+        - authType
+      properties:
+        providerType:
+          $ref: 'common.yml#/components/schemas/socialProviderType'
+        redirectUrl:
+          type: string
+        authType:
+          $ref: '#/components/schemas/authType'
+
+    socialVerifyFinishReq:
+      type: object
+
+    identifierUpdateReq:
+      type: object
+      required:
+        - value
+        - identifierType
+      properties:
+        identifierType:
+          $ref: '#/components/schemas/loginIdentifierType'
+        value:
+          type: string
+
+    sessionConfigRsp:
+      type: object
+      required:
+        - useSessionManagement
+      properties:
+        useSessionManagement:
+          type: boolean
+        shortSessionCookieConfig:
+          $ref: '#/components/schemas/shortSessionCookieConfig'
+        frontendApiUrl:
+          type: string
+
+    userDetailsConfigRsp:
+      type: object
+      required:
+        - fullNameRequired
+        - identifiers
+      properties:
+        fullNameRequired:
+          type: boolean
+        identifiers:
+          type: array
+          items:
+            $ref: '#/components/schemas/loginIdentifierConfig'
+
+    mePasskeyRsp:
+      type: object
+      required:
+        - passkeys
+        - paging
+      properties:
+        passkeys:
+          type: array
+          items:
+            $ref: '#/components/schemas/passkey'
+        paging:
+          $ref: 'common.yml#/components/schemas/paging'
+
+    meRefreshRsp:
+      type: object
+      required:
+        - shortSession
+      properties:
+        shortSession:
+          type: string
+
+    mePasskeyDeleteRsp:
+      type: object
+      required:
+        - id
+      properties:
+        id:
+          type: string
+
+    connectLoginInitReq:
+      type: object
+      required:
+        - clientInformation
+        - flags
+      properties:
+        clientInformation:
+          $ref: '#/components/schemas/clientInformationV2'
+        flags:
+          type: object
+          additionalProperties:
+            type: string
+
+    connectLoginInitRsp:
+      type: object
+      required:
+        - token
+        - expiresAt
+        - frontendApiUrl
+        - loginAllowed
+        - flags
+      properties:
+        token:
+          type: string
+        newClientEnvHandle:
+          type: string
+        expiresAt:
+          type: integer
+        frontendApiUrl:
+          type: string
+        loginAllowed:
+          type: boolean
+        conditionalUIChallenge:
+          type: string
+        flags:
+          type: object
+          additionalProperties:
+            type: string
+
+    connectLoginStartReq:
+      type: object
+      required:
+        - identifier
+        - source
+        - loadedMs
+      properties:
+        identifier:
+          type: string
+        source:
+          type: string
+          enum: [ 'one-tap', 'text-field', 'error-soft', 'error-hard' ]
+        loadedMs:
+          type: integer
+          format: int64
+
+    connectLoginStartRsp:
+      type: object
+      required:
+        - assertionOptions
+        - isCDA
+      properties:
+        assertionOptions:
+          type: string
+        isCDA:
+          type: boolean
+
+    connectLoginFinishReq:
+      type: object
+      required:
+        - assertionResponse
+        - isConditionalUI
+      properties:
+        isConditionalUI:
+          type: boolean
+        assertionResponse:
+          type: string
+
+    connectLoginFinishRsp:
+      type: object
+      required:
+        - passkeyOperation
+        - session
+      properties:
+        passkeyOperation:
+          $ref: '#/components/schemas/passkeyOperation'
+        session:
+          type: string
+
+    connectAppendInitReq:
+      type: object
+      required:
+        - clientInformation
+        - flags
+      properties:
+        clientInformation:
+          $ref: '#/components/schemas/clientInformationV2'
+        flags:
+          type: object
+          additionalProperties:
+            type: string
+
+    connectAppendInitRsp:
+      type: object
+      required:
+        - processID
+        - expiresAt
+        - frontendApiUrl
+        - appendAllowed
+        - flags
+      properties:
+        processID:
+          type: string
+        newClientEnvHandle:
+          type: string
+        expiresAt:
+          type: integer
+        frontendApiUrl:
+          type: string
+        appendAllowed:
+          type: boolean
+        flags:
+          type: object
+          additionalProperties:
+            type: string
+
+    connectAppendStartReq:
+      type: object
+      required:
+        - appendTokenValue
+        - loadedMs
+      properties:
+        appendTokenValue:
+          type: string
+        forcePasskeyAppend:
+          type: boolean
+        loadedMs:
+          type: integer
+          format: int64
+
+    connectAppendStartRsp:
+      type: object
+      required:
+        - attestationOptions
+        - variant
+      properties:
+        attestationOptions:
+          type: string
+        variant:
+          type: string
+          enum:
+            - default
+            - after-hybrid
+            - after-error
+
+    connectAppendFinishReq:
+      type: object
+      required:
+        - attestationResponse
+      properties:
+        attestationResponse:
+          type: string
+
+    connectAppendFinishRsp:
+      type: object
+      required:
+        - passkeyOperation
+      properties:
+        passkeyOperation:
+          $ref: '#/components/schemas/passkeyOperation'
+
+    connectManageInitReq:
+      type: object
+      required:
+        - clientInformation
+        - flags
+      properties:
+        clientInformation:
+          $ref: '#/components/schemas/clientInformationV2'
+        flags:
+          type: object
+          additionalProperties:
+            type: string
+
+    connectManageInitRsp:
+      type: object
+      required:
+        - processID
+        - expiresAt
+        - frontendApiUrl
+        - manageAllowed
+        - flags
+      properties:
+        processID:
+          type: string
+        newClientEnvHandle:
+          type: string
+        expiresAt:
+          type: integer
+        frontendApiUrl:
+          type: string
+        manageAllowed:
+          type: boolean
+        flags:
+          type: object
+          additionalProperties:
+            type: string
+
+    connectManageDeleteReq:
+      type: object
+      required:
+        - connectToken
+        - credentialID
+      properties:
+        connectToken:
+          type: string
+        credentialID:
+          type: string
+
+    connectManageListReq:
+      type: object
+      required:
+        - connectToken
+      properties:
+        connectToken:
+          type: string
+
+    connectManageListRsp:
       type: object
       required:
         - passkeys
@@ -703,28 +1447,44 @@ components:
         passkeys:
           type: array
           items:
-            $ref: '#/components/schemas/passKeyItem'
-        paging:
-          $ref: 'common.yml#/components/schemas/paging'
+            $ref: '#/components/schemas/passkey'
 
-    passKeyItem:
+    connectManageDeleteRsp:
+      type: object
+      required:
+        - credentialID
+      properties:
+        credentialID:
+          type: string
+
+    connectEventCreateReq:
+      type: object
+      required:
+        - eventType
+      properties:
+        eventType:
+          $ref: '#/components/schemas/passkeyEventType'
+
+    passkey:
       type: object
       required:
         - id
-        - aaguid
-        - userAgent
+        - credentialID
         - attestationType
         - transport
         - backupEligible
         - backupState
-        - status
+        - authenticatorAAGUID
+        - sourceOS
+        - sourceBrowser
+        - lastUsed
         - created
+        - status
       properties:
         id:
           type: string
-        aaguid:
-          type: string
-        userAgent:
+          example: "cre-12345"
+        credentialID:
           type: string
         attestationType:
           type: string
@@ -732,695 +1492,534 @@ components:
           type: array
           items:
             type: string
+            enum: [ 'usb', 'nfc', 'ble', 'internal', 'hybrid', 'smart-card' ]
         backupEligible:
           type: boolean
         backupState:
           type: boolean
+        authenticatorAAGUID:
+          type: string
+        sourceOS:
+          type: string
+        sourceBrowser:
+          type: string
+        lastUsed:
+          type: string
+          description: Timestamp of when the passkey was last used in yyyy-MM-dd'T'HH:mm:ss format
+        created:
+          $ref: 'common.yml#/components/schemas/created'
         status:
           type: string
           enum: [ 'pending', 'active' ]
           description: "Status"
-        created:
-          $ref: 'common.yml#/components/schemas/created'
 
-    authMethodsListReq:
+    processResponse:
       type: object
       required:
-        - username
+        - blockBody
+        - common
       properties:
-        username:
-          type: string
-          description: Users login name
-        requestID:
-          $ref: 'common.yml#/components/schemas/requestID'
+        blockBody:
+          $ref: '#/components/schemas/blockBody'
+        common:
+          $ref: '#/components/schemas/processCommon'
+        newProcess:
+          $ref: '#/components/schemas/processStaticInfo'
 
-    authMethodsListRsp:
-      allOf:
-        - $ref: 'common.yml#/components/schemas/genericRsp'
-        - type: object
-          required:
-            - data
-          properties:
-            data:
-              type: object
-              required:
-                - selectedMethods
-                - possibleMethods
-              properties:
-                selectedMethods:
-                  $ref: 'common.yml#/components/schemas/authMethods'
-                possibleMethods:
-                  $ref: 'common.yml#/components/schemas/authMethods'
-
-    ########################
-    ### PassKeys section ###
-    ########################
-    passKeyLoginStartReq:
+    eventCreateReq:
       type: object
       required:
-        - username
+        - eventType
       properties:
-        username:
-          type: string
-          description: Users login name
-        requestID:
-          $ref: 'common.yml#/components/schemas/requestID'
+        eventType:
+          $ref: '#/components/schemas/passkeyEventType'
 
-    passKeyStartRsp:
-      allOf:
-        - $ref: 'common.yml#/components/schemas/genericRsp'
-        - type: object
-          required:
-            - data
-          properties:
-            data:
-              type: object
-              required:
-                - challenge
-              properties:
-                challenge:
-                  type: string
-                  description: Contains json payload data for start webauthn login challenge
-
-    passKeyFinishReq:
-      type: object
-      properties:
-        signedChallenge:
-          type: string
-        requestID:
-          $ref: 'common.yml#/components/schemas/requestID'
-      required:
-        - signedChallenge
-
-    passKeyLoginFinishRsp:
-      allOf:
-        - $ref: 'common.yml#/components/schemas/genericRsp'
-        - type: object
-          required:
-            - data
-          properties:
-            data:
-              allOf:
-                - type: object
-                  properties:
-                    username:
-                      type: string
-                    confirmedCredential:
-                      type: boolean
-                  required:
-                    - username
-                    - confirmedCredential
-                - $ref: '#/components/schemas/authenticationRsp'
-
-    passKeyRegisterFinishRsp:
-      allOf:
-        - $ref: 'common.yml#/components/schemas/genericRsp'
-        - type: object
-          required:
-            - data
-          properties:
-            data:
-              $ref: '#/components/schemas/authenticationRsp'
-
-    passKeyRegisterStartReq:
+    processStaticInfo:
       type: object
       required:
-        - username
-      properties:
-        username:
-          type: string
-          description: Users login name
-        fullName:
-          type: string
-          description: Users full name
-        requestID:
-          $ref: 'common.yml#/components/schemas/requestID'
-
-    passKeyAppendFinishRsp:
-      allOf:
-        - $ref: 'common.yml#/components/schemas/genericRsp'
-        - type: object
-          required:
-            - data
-          properties:
-            data:
-              type: object
-              properties:
-                redirectURL:
-                  type: string
-              required:
-                - redirectURL
-
-
-    passKeyMediationStartReq:
-      type: object
-      properties:
-        requestID:
-          $ref: 'common.yml#/components/schemas/requestID'
-        username:
-          type: string
-
-    passKeyMediationStartRsp:
-      allOf:
-        - $ref: 'common.yml#/components/schemas/genericRsp'
-        - type: object
-          required:
-            - data
-          properties:
-            data:
-              type: object
-              required:
-                - challenge
-              properties:
-                challenge:
-                  type: string
-                  description: Contains json payload data for start webauthn mediation challenge
-
-    passKeyAssociateStartReq:
-      type: object
-      required:
-        - associationToken
-      properties:
-        associationToken:
-          type: string
-        requestID:
-          $ref: 'common.yml#/components/schemas/requestID'
-
-    ##########################
-    ### Email Link section ###
-    ##########################
-    emailLinkRegisterStartReq:
-      type: object
-      properties:
-        username:
-          type: string
-        email:
-          type: string
-        requestID:
-          $ref: 'common.yml#/components/schemas/requestID'
-      required:
-        - email
-
-    emailLinkRegisterStartRsp:
-      allOf:
-        - $ref: 'common.yml#/components/schemas/genericRsp'
-        - type: object
-          required:
-            - data
-          properties:
-            data:
-              type: object
-              properties:
-                emailLinkID:
-                  type: string
-              required:
-                - emailLinkID
-
-    emailLinkConfirmReq:
-      type: object
-      properties:
-        emailLinkID:
-          type: string
-        token:
-          type: string
-        requestID:
-          $ref: 'common.yml#/components/schemas/requestID'
-      required:
-        - emailLinkID
         - token
-
-    emailLinkLoginStartReq:
-      type: object
-      properties:
-        username:
-          type: string
-        requestID:
-          $ref: 'common.yml#/components/schemas/requestID'
-      required:
-        - username
-
-    emailLinkLoginStartRsp:
-      allOf:
-        - $ref: 'common.yml#/components/schemas/genericRsp'
-        - type: object
-          required:
-            - data
-          properties:
-            data:
-              type: object
-              properties:
-                emailLinkID:
-                  type: string
-              required:
-                - emailLinkID
-
-    emailLinkStatusReq:
-      type: object
-      properties:
-        emailLinkID:
-          type: string
-        requestID:
-          $ref: 'common.yml#/components/schemas/requestID'
-      required:
-        - emailLinkID
-
-    emailLinkStatusRsp:
-      allOf:
-        - $ref: 'common.yml#/components/schemas/genericRsp'
-        - type: object
-          required:
-            - data
-          properties:
-            data:
-              $ref: '#/components/schemas/authenticationRsp'
-
-    emailLinkConfirmRsp:
-      allOf:
-        - $ref: 'common.yml#/components/schemas/genericRsp'
-        - type: object
-          required:
-            - data
-          properties:
-            data:
-              allOf:
-                - type: object
-                  properties:
-                    authMethods:
-                      $ref: 'common.yml#/components/schemas/authMethods'
-                  required:
-                    - authMethods
-                - $ref: '#/components/schemas/authenticationRsp'
-
-    ##########################
-    ### Email OTP section  ###
-    ##########################
-    emailCodeRegisterStartReq:
-      type: object
-      properties:
-        username:
-          type: string
-        email:
-          type: string
-        requestID:
-          $ref: 'common.yml#/components/schemas/requestID'
-      required:
-        - email
-
-    emailCodeRegisterStartRsp:
-      allOf:
-        - $ref: 'common.yml#/components/schemas/genericRsp'
-        - type: object
-          required:
-            - data
-          properties:
-            data:
-              type: object
-              properties:
-                emailCodeID:
-                  type: string
-              required:
-                - emailCodeID
-
-    emailCodeConfirmReq:
-      type: object
-      properties:
-        emailCodeID:
-          type: string
-        code:
-          type: string
-        requestID:
-          $ref: 'common.yml#/components/schemas/requestID'
-      required:
-        - emailCodeID
-        - code
-
-    emailCodeLoginStartReq:
-      type: object
-      properties:
-        username:
-          type: string
-        requestID:
-          $ref: 'common.yml#/components/schemas/requestID'
-      required:
-        - username
-
-    emailCodeLoginStartRsp:
-      allOf:
-        - $ref: 'common.yml#/components/schemas/genericRsp'
-        - type: object
-          required:
-            - data
-          properties:
-            data:
-              type: object
-              properties:
-                emailCodeID:
-                  type: string
-              required:
-                - emailCodeID
-
-    emailCodeStatusReq:
-      type: object
-      properties:
-        emailCodeID:
-          type: string
-        requestID:
-          $ref: 'common.yml#/components/schemas/requestID'
-      required:
-        - emailCodeID
-
-    emailCodeStatusRsp:
-      allOf:
-        - $ref: 'common.yml#/components/schemas/genericRsp'
-        - type: object
-          required:
-            - data
-          properties:
-            data:
-              $ref: '#/components/schemas/authenticationRsp'
-
-    emailCodeConfirmRsp:
-      allOf:
-        - $ref: 'common.yml#/components/schemas/genericRsp'
-        - type: object
-          required:
-            - data
-          properties:
-            data:
-              allOf:
-                - type: object
-                  properties:
-                    authMethods:
-                      $ref: 'common.yml#/components/schemas/authMethods'
-                  required:
-                    - authMethods
-                - $ref: '#/components/schemas/authenticationRsp'
-
-    passwordVerifyReq:
-      type: object
-      properties:
-        username:
-          type: string
-        password:
-          type: string
-        requestID:
-          $ref: 'common.yml#/components/schemas/requestID'
-      required:
-        - username
-        - password
-
-    passwordVerifyRsp:
-      allOf:
-        - $ref: 'common.yml#/components/schemas/genericRsp'
-        - type: object
-          required:
-            - data
-          properties:
-            data:
-              $ref: '#/components/schemas/authenticationRsp'
-
-
-    loginTokenReq:
-      type: object
+        - expiresAt
       properties:
         token:
           type: string
-        requestID:
-          $ref: 'common.yml#/components/schemas/requestID'
-      required:
-        - token
+        expiresAt:
+          type: integer
 
-    loginTokenRsp:
-      allOf:
-        - $ref: 'common.yml#/components/schemas/genericRsp'
-        - type: object
-          required:
-            - data
-          properties:
-            data:
-              $ref: '#/components/schemas/authenticationRsp'
-
-    passKeyCredentialExistsReq:
+    processCommon:
       type: object
       required:
-        - loginIdentifier
-        - loginIdentifierType
+        - appName
+        - frontendApiUrl
+        - hideBadge
       properties:
-        loginIdentifier:
+        appName:
           type: string
-        loginIdentifierType:
-          $ref: 'common.yml#/components/schemas/loginIdentifierType'
-        requestID:
-          $ref: 'common.yml#/components/schemas/requestID'
+        frontendApiUrl:
+          type: string
+        hideBadge:
+          type: boolean
 
-    passKeyCredentialExistsRsp:
-      allOf:
-        - $ref: 'common.yml#/components/schemas/genericRsp'
-        - type: object
-          required:
-            - exists
-          properties:
-            exists:
-              type: boolean
-
-    projectConfigRsp:
-      allOf:
-        - $ref: 'common.yml#/components/schemas/genericRsp'
-        - type: object
-          required:
-            - data
-          properties:
-            data:
-              type: object
-              required:
-                - allowUserRegistration
-                - passkeyAppendInterval
-                - fallbackLanguage
-                - autoDetectLanguage
-                - userFullNameRequired
-                - webComponentDebug
-              properties:
-                allowUserRegistration:
-                  type: boolean
-                passkeyAppendInterval:
-                  type: string
-                fallbackLanguage:
-                  type: string
-                autoDetectLanguage:
-                  type: boolean
-                userFullNameRequired:
-                  type: boolean
-                webComponentDebug:
-                  type: boolean
-
-    assetLinksRsp:
-      type: array
-      items:
-        $ref: '#/components/schemas/assetLink'
-
-    assetLink:
+    shortSessionCookieConfig:
       type: object
       required:
-        - relation
-        - target
-      properties:
-        relation:
-          type: array
-          items:
-            type: string
-        target:
-          $ref: '#/components/schemas/assetLinkTarget'
-
-    assetLinkTarget:
-      type: object
-      required:
-        - namespace
-      properties:
-        namespace:
-          type: string
-        package_name:
-          type: string
-        site:
-          type: string
-        sha256_cert_fingerprints:
-          type: array
-          items:
-            type: string
-
-    appleAppSiteAssociationRsp:
-      type: object
-      required:
-        - applinks
-        - webcredentials
-        - appclips
-      properties:
-        applinks:
-          type: object
-          required:
-            - details
-          properties:
-            details:
-              type: array
-              items:
-                type: object
-                required:
-                  - appID
-                  - paths
-                properties:
-                  appID:
-                    type: string
-                  paths:
-                    type: array
-                    items:
-                      type: string
-
-        webcredentials:
-          type: object
-          required:
-            - apps
-          properties:
-            apps:
-              type: array
-              items:
-                type: string
-
-        appclips:
-          type: object
-          required:
-            - apps
-          properties:
-            apps:
-              type: array
-              items:
-                type: string
-    wellKnownJWKSListRsp:
-      type: object
-      required:
-        - keys
-      properties:
-        keys:
-          type: array
-          items:
-            $ref: '#/components/schemas/jwk'
-
-    # DO NOT MODIFY - see https://www.rfc-editor.org/rfc/rfc7517#section-4
-    jwk:
-      description: JSON Web Key
-      type: object
-      required:
-        - alg
-        - kty
-        - use
-        - 'n'
-        - e
-        - kid
-      properties:
-        alg:
-          description: The specific cryptographic algorithm used with the key
-          type: string
-          example: 'RS256'
-        kty:
-          description: The family of cryptographic algorithms used with the key
-          type: string
-          example: 'RSA'
-        use:
-          description: How the key was meant to be used; sig represents the signature
-          type: string
-        # 'n' is a reserved key in yaml and must be escaped, otherwise code generation breaks!
-        'n':
-          description: The modulus for the RSA public key
-          type: string
-        e:
-          description: The exponent for the RSA public key
-          type: string
-        kid:
-          description: The unique identifier for the key
-          type: string
-
-    sessionRefreshRsp:
-      type: object
-      allOf:
-        - $ref: 'common.yml#/components/schemas/genericRsp'
-        - $ref: '#/components/schemas/authenticationRsp'
-
-    shortSession:
-      type: object
-      required:
-        - key
-        - value
         - domain
-        - path
         - secure
-        - expires
         - sameSite
+        - path
+        - lifetimeSeconds
       properties:
-        key:
-          type: string
-        value:
-          type: string
         domain:
-          type: string
-        path:
           type: string
         secure:
           type: boolean
-        expires:
-          type: string
         sameSite:
           type: string
+          enum: [ 'lax', 'strict', 'none' ]
+        path:
+          type: string
+        lifetimeSeconds:
+          type: integer
 
-    logoutRsp:
-      type: object
-      allOf:
-        - $ref: 'common.yml#/components/schemas/genericRsp'
-        - type: object
-          properties:
-            shortSession:
-              $ref: '#/components/schemas/shortSession'
-
-    emptyReq:
-      type: object
-      properties:
-        requestID:
-          $ref: 'common.yml#/components/schemas/requestID'
-
-    authenticationRsp:
+    loginIdentifierConfig:
       type: object
       required:
-        - redirectURL
-        - authMethods
+        - type
       properties:
-        redirectURL:
+        type:
+          $ref: '#/components/schemas/loginIdentifierType'
+
+    blockBody:
+      type: object
+      required:
+        - block
+        - data
+        - authType
+      properties:
+        block:
+          $ref: '#/components/schemas/blockType'
+        authType:
+          $ref: '#/components/schemas/authType'
+        data:
+          type: object
+          anyOf:
+            - $ref: '#/components/schemas/generalBlockPasskeyAppend'
+            - $ref: '#/components/schemas/generalBlockPasskeyVerify'
+            - $ref: '#/components/schemas/generalBlockVerifyIdentifier'
+            - $ref: '#/components/schemas/generalBlockPasskeyAppended'
+            - $ref: '#/components/schemas/generalBlockCompleted'
+            - $ref: '#/components/schemas/generalBlockSignupInit'
+            - $ref: '#/components/schemas/generalBlockUsernameCollect'
+            - $ref: '#/components/schemas/generalPhoneCollect'
+            - $ref: '#/components/schemas/generalBlockLoginInit'
+            - $ref: '#/components/schemas/generalBlockPostSignupEmailVerify'
+        alternatives:
+          type: array
+          items:
+            $ref: '#/components/schemas/blockBody'
+        error:
+          $ref: '#/components/schemas/requestError'
+        continueOnOtherDevice:
+          $ref: '#/components/schemas/continueOnOtherDevice'
+
+    loginIdentifier:
+      type: object
+      required:
+        - type
+        - identifier
+      properties:
+        type:
+          $ref: '#/components/schemas/loginIdentifierType'
+        identifier:
           type: string
-        sessionToken:
+
+    loginIdentifierWithError:
+      type: object
+      required:
+        - type
+        - identifier
+      properties:
+        type:
+          $ref: '#/components/schemas/loginIdentifierType'
+        identifier:
           type: string
-          description: Only given when using session v1
+        error:
+          $ref: '#/components/schemas/requestError'
+
+    fullNameWithError:
+      type: object
+      required:
+        - fullName
+      properties:
+        fullName:
+          type: string
+        error:
+          $ref: '#/components/schemas/requestError'
+
+    loginIdentifierType:
+      type: string
+      enum: [ email, phone, username ]
+
+    passkeyEventType:
+      type: string
+      enum: [ login-explicit-abort, login-error, login-one-tap-switch, user-append-after-cross-platform-blacklisted, user-append-after-login-error-blacklisted, append-credential-exists, append-explicit-abort, append-error ]
+
+    blockType:
+      type: string
+      enum: [ signup-init, passkey-append, phone-verify, email-verify, passkey-appended, completed, social-verify, username-collect, phone-collect, login-init, passkey-verify, conditional-ui-completed, post-signup-email-verify, passkey-append-after-hybrid ]
+
+    authType:
+      type: string
+      enum: [ signup, login ]
+
+    verificationMethod:
+      type: string
+      enum: [ email-link, email-otp, phone-otp ]
+
+    passkeyIconSet:
+      type: string
+      enum: [ default, apple, android, windows ]
+
+    generalBlockSignupInit:
+      type: object
+      required:
+        - identifiers
+        - socialProviders
+      properties:
+        identifiers:
+          type: array
+          items:
+            $ref: '#/components/schemas/loginIdentifierWithError'
+        fullName:
+          $ref: '#/components/schemas/fullNameWithError'
+        socialData:
+          $ref: '#/components/schemas/socialData'
+        error:
+          $ref: '#/components/schemas/requestError'
+
+    generalBlockLoginInit:
+      type: object
+      required:
+        - identifierValue
+        - isPhone
+        - isPhoneAvailable
+        - isEmailAvailable
+        - isUsernameAvailable
+        - socialData
+      properties:
+        conditionalUIChallenge:
+          type: string
+        identifierValue:
+          type: string
+        isPhone:
+          type: boolean
+        isPhoneAvailable:
+          type: boolean
+        isEmailAvailable:
+          type: boolean
+        isUsernameAvailable:
+          type: boolean
+        socialData:
+          $ref: '#/components/schemas/socialData'
+        fieldError:
+          $ref: '#/components/schemas/requestError'
+        error:
+          $ref: '#/components/schemas/requestError'
+
+    generalBlockUsernameCollect:
+      $ref: '#/components/schemas/loginIdentifierWithError'
+
+    generalPhoneCollect:
+      $ref: '#/components/schemas/loginIdentifierWithError'
+
+    generalBlockPasskeyAppend:
+      type: object
+      required:
+        - challenge
+        - identifierValue
+        - identifierType
+        - autoSubmit
+        - passkeyIconSet
+        - variant
+      properties:
+        challenge:
+          type: string
+        identifierValue:
+          type: string
+        identifierType:
+          $ref: '#/components/schemas/loginIdentifierType'
+        autoSubmit:
+          type: boolean
+        passkeyIconSet:
+          $ref: '#/components/schemas/passkeyIconSet'
+        variant:
+          type: string
+          enum: [ 'default', 'after-hybrid', 'after-error' ]
+
+    generalBlockPasskeyVerify:
+      type: object
+      required:
+        - challenge
+        - identifierValue
+      properties:
+        challenge:
+          type: string
+        identifierValue:
+          type: string
+        loginHint:
+          type: string
+          enum: [ "cda" ]
+
+    generalBlockPasskeyAppended:
+      type: object
+
+    generalBlockCompleted:
+      $ref: '#/components/schemas/authenticationResponse'
+
+    generalBlockVerifyIdentifier:
+      type: object
+      required:
+        - verificationMethod
+        - identifier
+        - alternativeVerificationMethods
+        - isPostLoginVerification
+      properties:
+        verificationMethod:
+          $ref: '#/components/schemas/verificationMethod'
+        identifier:
+          type: string
+        retryNotBefore:
+          type: integer
+          format: int32
+        error:
+          $ref: '#/components/schemas/requestError'
+        alternativeVerificationMethods:
+          type: array
+          items:
+            type: object
+          required:
+            - verificationMethod
+            - identifier
+          properties:
+            verificationMethod:
+              $ref: '#/components/schemas/verificationMethod'
+            identifier:
+              type: string
+        isPostLoginVerification:
+          type: boolean
+
+    generalBlockPostSignupEmailVerify:
+      type: object
+      properties:
+        error:
+          $ref: '#/components/schemas/requestError'
+
+    clientInformation:
+      type: object
+      properties:
+        bluetoothAvailable:
+          type: boolean
+        clientEnvHandle:
+          type: string
+        visitorId:
+          type: string
+        canUsePasskeys:
+          type: boolean
+          description: Deprecated, use isUserVerifyingPlatformAuthenticatorAvailable instead
+        isUserVerifyingPlatformAuthenticatorAvailable:
+          type: boolean
+        isConditionalMediationAvailable:
+          type: boolean
+        clientCapabilities:
+          $ref: '#/components/schemas/clientCapabilities'
+        javaScriptHighEntropy:
+          $ref: '#/components/schemas/javaScriptHighEntropy'
+
+    clientInformationV2:
+      type: object
+      properties:
+        bluetoothAvailable:
+          type: boolean
+        clientEnvHandle:
+          type: string
+        visitorId:
+          type: string
+        isUserVerifyingPlatformAuthenticatorAvailable:
+          type: boolean
+        isConditionalMediationAvailable:
+          type: boolean
+        clientCapabilities:
+          $ref: '#/components/schemas/clientCapabilities'
+        javaScriptHighEntropy:
+          $ref: '#/components/schemas/javaScriptHighEntropy'
+
+    clientCapabilities:
+      type: object
+      properties:
+        conditionalCreate:
+          type: boolean
+        conditionalMediation:
+          type: boolean
+        hybridTransport:
+          type: boolean
+        passkeyPlatformAuthenticator:
+          type: boolean
+        userVerifyingPlatformAuthenticator:
+          type: boolean
+
+    javaScriptHighEntropy:
+      type: object
+      required:
+        - platform
+        - platformVersion
+        - mobile
+      properties:
+        platform:
+          type: string
+        platformVersion:
+          type: string
+        mobile:
+          type: boolean
+
+    authenticationResponse:
+      type: object
+      required:
+        - shortSession
+      properties:
         longSession:
           type: string
           description: Only given when project environment is dev
         shortSession:
-          $ref: '#/components/schemas/shortSession'
+          type: string
+        passkeyOperation:
+          $ref: '#/components/schemas/passkeyOperation'
+
+    passkeyOperation:
+      type: object
+      required:
+        - operationType
+        - identifierValue
+        - identifierType
+        - ceremonyType
+      properties:
+        operationType:
+          type: string
+          enum: [ 'append', 'verify' ]
+        identifierValue:
+          type: string
+        identifierType:
+          $ref: '#/components/schemas/loginIdentifierType'
+        ceremonyType:
+          type: string
+          enum: [ 'local', 'cda', 'security-key' ]
+
+    continueOnOtherDevice:
+      type: object
+      required:
+        - reason
+      properties:
+        reason:
+          type: string
+          enum: [ 'email-link-verified', 'process-already-completed' ]
+
+    meRsp:
+      type: object
+      required:
+        - id
+        - fullName
+        - identifiers
+        - socialAccounts
+      properties:
+        id:
+          type: string
+        fullName:
+          type: string
+        identifiers:
+          type: array
+          items:
+            $ref: '#/components/schemas/identifier'
+        socialAccounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/socialAccount'
+
+    meUpdateReq:
+      type: object
+      required:
+        - fullName
+      properties:
+        fullName:
+          type: string
+
+    identifier:
+      type: object
+      required:
+        - id
+        - value
+        - type
+        - status
+      properties:
+        id:
+          type: string
+        value:
+          type: string
+        type:
+          $ref: '#/components/schemas/loginIdentifierType'
+        status:
+          type: string
+
+    socialAccount:
+      type: object
+      required:
+        - providerType
+        - identifierValue
+        - avatarUrl
+        - fullName
+      properties:
+        providerType:
+          $ref: 'common.yml#/components/schemas/socialProviderType'
+        identifierValue:
+          type: string
+        avatarUrl:
+          type: string
+        fullName:
+          type: string
+
+    socialData:
+      type: object
+      required:
+        - providers
+        - status
+      properties:
+        providers:
+          type: array
+          items:
+            $ref: 'common.yml#/components/schemas/socialProviderType'
+        status:
+          type: string
+          enum: [ 'initial', 'started', 'finished' ]
+        oauthUrl:
+          type: string
+        error:
+          $ref: '#/components/schemas/requestError'
+
+    requestError:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: string
+        message:
+          type: string
 
   responses:
-    ###################################################################
-    # Responses: 200                                                  #
-    ###################################################################
     '200':
       description: Operation succeeded
       content:
         application/json:
           schema:
             $ref: 'common.yml#/components/schemas/genericRsp'
-
-    ###################################################################
-    # Responses: Error                                                #
-    ###################################################################
-    error:
-      description: Error
-      content:
-        application/json:
-          schema:
-            $ref: 'common.yml#/components/schemas/errorRsp'
 
 security:
   - bearerAuth: [ ]

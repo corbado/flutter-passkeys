@@ -43,7 +43,7 @@ android {
 
     defaultConfig {
         applicationId "com.corbado.corbadoauth.example"
-        minSdkVersion 28
+        minSdkVersion 21
         targetSdk 34
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName

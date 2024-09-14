@@ -10,7 +10,6 @@
 
 part of openapi.api;
 
-/// Login Identifier type
 class LoginIdentifierType {
   /// Instantiate a new enum with the provided [value].
   const LoginIdentifierType._(this.value);
@@ -24,14 +23,14 @@ class LoginIdentifierType {
   String toJson() => value;
 
   static const email = LoginIdentifierType._(r'email');
-  static const phoneNumber = LoginIdentifierType._(r'phone_number');
-  static const custom = LoginIdentifierType._(r'custom');
+  static const phone = LoginIdentifierType._(r'phone');
+  static const username = LoginIdentifierType._(r'username');
 
   /// List of all possible values in this [enum][LoginIdentifierType].
   static const values = <LoginIdentifierType>[
     email,
-    phoneNumber,
-    custom,
+    phone,
+    username,
   ];
 
   static LoginIdentifierType? fromJson(dynamic value) =>
@@ -77,10 +76,10 @@ class LoginIdentifierTypeTypeTransformer {
       switch (data) {
         case r'email':
           return LoginIdentifierType.email;
-        case r'phone_number':
-          return LoginIdentifierType.phoneNumber;
-        case r'custom':
-          return LoginIdentifierType.custom;
+        case r'phone':
+          return LoginIdentifierType.phone;
+        case r'username':
+          return LoginIdentifierType.username;
         default:
           if (!allowNull) {
             throw ArgumentError('Unknown enum value to decode: $data');

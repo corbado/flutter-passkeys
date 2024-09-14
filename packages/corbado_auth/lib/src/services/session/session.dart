@@ -135,8 +135,7 @@ class SessionService {
       );
     }
 
-    final response =
-        await SessionsApi(frontendAPIClient).sessionRefresh(EmptyReq());
+    final response = null;
     if (response == null || response.shortSession == null) {
       throw Exception('Stopped refreshToken: missing token in response.');
     }

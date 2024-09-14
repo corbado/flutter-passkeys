@@ -41,7 +41,7 @@ android {
     }
 
     defaultConfig {
-        minSdkVersion 28
+        minSdkVersion 21
         multiDexEnabled true
     }
 }

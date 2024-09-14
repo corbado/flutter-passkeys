@@ -65,14 +65,26 @@ String parameterToString(dynamic value) {
   if (value is DateTime) {
     return value.toUtc().toIso8601String();
   }
-  if (value is AuthMethod) {
-    return AuthMethodTypeTransformer().encode(value).toString();
+  if (value is AuthType) {
+    return AuthTypeTypeTransformer().encode(value).toString();
+  }
+  if (value is BlockType) {
+    return BlockTypeTypeTransformer().encode(value).toString();
   }
   if (value is LoginIdentifierType) {
     return LoginIdentifierTypeTypeTransformer().encode(value).toString();
   }
-  if (value is Status) {
-    return StatusTypeTransformer().encode(value).toString();
+  if (value is PasskeyEventType) {
+    return PasskeyEventTypeTypeTransformer().encode(value).toString();
+  }
+  if (value is PasskeyIconSet) {
+    return PasskeyIconSetTypeTransformer().encode(value).toString();
+  }
+  if (value is SocialProviderType) {
+    return SocialProviderTypeTypeTransformer().encode(value).toString();
+  }
+  if (value is VerificationMethod) {
+    return VerificationMethodTypeTransformer().encode(value).toString();
   }
   return value.toString();
 }

@@ -12,7 +12,6 @@ class ProfilePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final authService = ref.watch(authServiceProvider);
     final user = ref.watch(userProvider);
 
     return BasePage(
@@ -62,7 +61,7 @@ class ProfilePage extends ConsumerWidget {
             width: double.infinity,
             height: 50,
             child: OutlinedTextButton(
-              onTap: () => authService.signOut(),
+              onTap: () => {},
               content: 'sign out',
             ),
           ),

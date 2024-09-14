@@ -12,11 +12,9 @@ class BasePage extends StatelessWidget {
       body: Center(
         child: Container(
           constraints: const BoxConstraints(maxWidth: 500),
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: child,
-            ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: child,
           ),
         ),
       ),

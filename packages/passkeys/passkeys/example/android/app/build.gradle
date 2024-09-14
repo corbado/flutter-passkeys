@@ -43,7 +43,7 @@ android {
 
     defaultConfig {
         applicationId "com.corbado.passkeys.pub"
-        minSdkVersion 28
+        minSdkVersion 21
         targetSdk 34
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName

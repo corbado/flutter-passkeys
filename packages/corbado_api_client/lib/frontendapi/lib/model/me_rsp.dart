@@ -13,58 +13,47 @@ part of openapi.api;
 class MeRsp {
   /// Returns a new [MeRsp] instance.
   MeRsp({
-    required this.httpStatusCode,
-    required this.message,
-    required this.requestData,
-    required this.runtime,
-    required this.data,
+    required this.id,
+    required this.fullName,
+    this.identifiers = const [],
+    this.socialAccounts = const [],
   });
 
-  /// HTTP status code of operation
-  ///
-  /// Minimum value: 200
-  /// Maximum value: 599
-  int httpStatusCode;
+  String id;
 
-  String message;
+  String fullName;
 
-  RequestData requestData;
+  List<Identifier> identifiers;
 
-  /// Runtime in seconds for this request
-  double runtime;
-
-  FullUser data;
+  List<SocialAccount> socialAccounts;
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is MeRsp &&
-          other.httpStatusCode == httpStatusCode &&
-          other.message == message &&
-          other.requestData == requestData &&
-          other.runtime == runtime &&
-          other.data == data;
+          other.id == id &&
+          other.fullName == fullName &&
+          _deepEquality.equals(other.identifiers, identifiers) &&
+          _deepEquality.equals(other.socialAccounts, socialAccounts);
 
   @override
   int get hashCode =>
       // ignore: unnecessary_parenthesis
-      (httpStatusCode.hashCode) +
-      (message.hashCode) +
-      (requestData.hashCode) +
-      (runtime.hashCode) +
-      (data.hashCode);
+      (id.hashCode) +
+      (fullName.hashCode) +
+      (identifiers.hashCode) +
+      (socialAccounts.hashCode);
 
   @override
   String toString() =>
-      'MeRsp[httpStatusCode=$httpStatusCode, message=$message, requestData=$requestData, runtime=$runtime, data=$data]';
+      'MeRsp[id=$id, fullName=$fullName, identifiers=$identifiers, socialAccounts=$socialAccounts]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    json[r'httpStatusCode'] = this.httpStatusCode;
-    json[r'message'] = this.message;
-    json[r'requestData'] = this.requestData;
-    json[r'runtime'] = this.runtime;
-    json[r'data'] = this.data;
+    json[r'id'] = this.id;
+    json[r'fullName'] = this.fullName;
+    json[r'identifiers'] = this.identifiers;
+    json[r'socialAccounts'] = this.socialAccounts;
     return json;
   }
 
@@ -89,11 +78,10 @@ class MeRsp {
       }());
 
       return MeRsp(
-        httpStatusCode: mapValueOfType<int>(json, r'httpStatusCode')!,
-        message: mapValueOfType<String>(json, r'message')!,
-        requestData: RequestData.fromJson(json[r'requestData'])!,
-        runtime: mapValueOfType<double>(json, r'runtime')!,
-        data: FullUser.fromJson(json[r'data'])!,
+        id: mapValueOfType<String>(json, r'id')!,
+        fullName: mapValueOfType<String>(json, r'fullName')!,
+        identifiers: Identifier.listFromJson(json[r'identifiers']),
+        socialAccounts: SocialAccount.listFromJson(json[r'socialAccounts']),
       );
     }
     return null;
@@ -150,10 +138,9 @@ class MeRsp {
 
   /// The list of required keys that must be present in a JSON.
   static const requiredKeys = <String>{
-    'httpStatusCode',
-    'message',
-    'requestData',
-    'runtime',
-    'data',
+    'id',
+    'fullName',
+    'identifiers',
+    'socialAccounts',
   };
 }

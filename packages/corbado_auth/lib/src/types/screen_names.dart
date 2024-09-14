@@ -1,0 +1,4 @@
+enum ScreenNames {
+  SignupInit,
+  LoginInit,
+}
