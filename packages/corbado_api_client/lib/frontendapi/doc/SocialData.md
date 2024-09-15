@@ -1,14 +1,14 @@
-# corbado_api.model.SocialData
+# corbado_frontend_api_client.model.SocialData
 
 ## Load the model package
 ```dart
-import 'package:corbado_api/api.dart';
+import 'package:corbado_frontend_api_client/api.dart';
 ```
 
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**providers** | [**List<SocialProviderType>**](SocialProviderType.md) |  | [default to const []]
+**providers** | [**BuiltList&lt;SocialProviderType&gt;**](SocialProviderType.md) |  | 
 **status** | **String** |  | 
 **oauthUrl** | **String** |  | [optional] 
 **error** | [**RequestError**](RequestError.md) |  | [optional] 

@@ -1,16 +1,18 @@
+import 'package:corbado_frontend_api_client/corbado_frontend_api_client.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'passkey_info.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 class PasskeyInfo {
-  factory PasskeyInfo.fromResponse(dynamic p) {
+  factory PasskeyInfo.fromResponse(Passkey p) {
     return PasskeyInfo(
       p.id,
-      p.aaguid,
-      p.userAgent,
+      p.authenticatorAAGUID,
+      p.sourceOS,
+      p.sourceBrowser,
       p.attestationType,
-      p.transport,
+      p.transport.map((i) => i.name).toList(),
       p.backupEligible,
       p.backupState,
       p.created,
@@ -22,7 +24,8 @@ class PasskeyInfo {
   PasskeyInfo(
     this.id,
     this.aaguid,
-    this.userAgent,
+    this.sourceOS,
+    this.sourceBrowser,
     this.attestationType,
     this.transport,
     this.backupEligible,
@@ -32,7 +35,8 @@ class PasskeyInfo {
 
   final String id;
   final String aaguid;
-  final String userAgent;
+  final String sourceOS;
+  final String sourceBrowser;
   final String attestationType;
   final List<String> transport;
   final bool backupEligible;

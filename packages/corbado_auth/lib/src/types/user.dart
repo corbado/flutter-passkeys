@@ -24,7 +24,7 @@ class User {
   String? get email => decoded.email;
 
   /// Username that has been set during sign up.
-  String get username => decoded.name;
+  String? get username => decoded.name;
 
   /// JWT token that encodes the user object (encoded).
   final String idToken;
@@ -60,7 +60,7 @@ class IdToken {
   final int iat;
 
   /// Username
-  final String name;
+  final String? name;
   final String orig;
 
   /// Null if the email has not been verified by the user.

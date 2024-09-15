@@ -1,21 +1,12 @@
-//
-// AUTO-GENERATED FILE, DO NOT MODIFY!
-//
-// @dart=2.12
-
-// ignore_for_file: unused_element, unused_import
-// ignore_for_file: always_put_required_named_parameters_first
-// ignore_for_file: constant_identifier_names
-// ignore_for_file: lines_longer_than_80_chars
-
-import 'package:corbado_api/api.dart';
 import 'package:test/test.dart';
+import 'package:corbado_frontend_api_client/corbado_frontend_api_client.dart';
 
 // tests for MeRsp
 void main() {
-  // final instance = MeRsp();
+  final instance = MeRspBuilder();
+  // TODO add properties to the builder and call build()
 
-  group('test MeRsp', () {
+  group(MeRsp, () {
     // String id
     test('to test the property `id`', () async {
       // TODO
@@ -26,12 +17,12 @@ void main() {
       // TODO
     });
 
-    // List<Identifier> identifiers (default value: const [])
+    // BuiltList<Identifier> identifiers
     test('to test the property `identifiers`', () async {
       // TODO
     });
 
-    // List<SocialAccount> socialAccounts (default value: const [])
+    // BuiltList<SocialAccount> socialAccounts
     test('to test the property `socialAccounts`', () async {
       // TODO
     });

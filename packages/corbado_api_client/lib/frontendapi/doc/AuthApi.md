@@ -1,11 +1,11 @@
-# corbado_api.api.AuthApi
+# corbado_frontend_api_client.api.AuthApi
 
 ## Load the API package
 ```dart
-import 'package:corbado_api/api.dart';
+import 'package:corbado_frontend_api_client/api.dart';
 ```
 
-All URIs are relative to *https://<project ID>.frontendapi.corbado.io*
+All URIs are relative to *https://&lt;project ID&gt;.frontendapi.corbado.io*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
@@ -21,7 +21,6 @@ Method | HTTP request | Description
 [**passkeyLoginFinish**](AuthApi.md#passkeyloginfinish) | **POST** /v2/auth/passkey/login/finish | 
 [**passkeyLoginStart**](AuthApi.md#passkeyloginstart) | **POST** /v2/auth/passkey/login/start | 
 [**passkeyMediationFinish**](AuthApi.md#passkeymediationfinish) | **POST** /v2/auth/passkey/mediation/finish | 
-[**phoneCollect**](AuthApi.md#phonecollect) | **POST** /v2/auth/phone/collect | 
 [**processComplete**](AuthApi.md#processcomplete) | **POST** /v2/auth/process/complete | 
 [**processGet**](AuthApi.md#processget) | **GET** /v2/auth/process | 
 [**processInit**](AuthApi.md#processinit) | **POST** /v2/auth/process/init | 
@@ -30,7 +29,6 @@ Method | HTTP request | Description
 [**socialVerifyCallback**](AuthApi.md#socialverifycallback) | **GET** /v2/auth/social/verify/callback | 
 [**socialVerifyFinish**](AuthApi.md#socialverifyfinish) | **POST** /v2/auth/social/verify/finish | 
 [**socialVerifyStart**](AuthApi.md#socialverifystart) | **POST** /v2/auth/social/verify/start | 
-[**usernameCollect**](AuthApi.md#usernamecollect) | **POST** /v2/auth/username/collect | 
 
 
 # **blockSkip**
@@ -42,24 +40,18 @@ tbd
 
 ### Example
 ```dart
-import 'package:corbado_api/api.dart';
-// TODO Configure HTTP Bearer authorization: bearerAuth
-// Case 1. Use String Token
-//defaultApiClient.getAuthentication<HttpBearerAuth>('bearerAuth').setAccessToken('YOUR_ACCESS_TOKEN');
-// Case 2. Use Function which generate token.
-// String yourTokenGeneratorFunction() { ... }
-//defaultApiClient.getAuthentication<HttpBearerAuth>('bearerAuth').setAccessToken(yourTokenGeneratorFunction);
+import 'package:corbado_frontend_api_client/api.dart';
 // TODO Configure API key authorization: projectID
 //defaultApiClient.getAuthentication<ApiKeyAuth>('projectID').apiKey = 'YOUR_API_KEY';
 // uncomment below to setup prefix (e.g. Bearer) for API key, if needed
 //defaultApiClient.getAuthentication<ApiKeyAuth>('projectID').apiKeyPrefix = 'Bearer';
 
-final api_instance = AuthApi();
+final api = CorbadoFrontendApiClient().getAuthApi();
 
 try {
-    final result = api_instance.blockSkip();
-    print(result);
-} catch (e) {
+    final response = api.blockSkip();
+    print(response);
+} catch on DioException (e) {
     print('Exception when calling AuthApi->blockSkip: $e\n');
 }
 ```
@@ -91,24 +83,18 @@ Creates a new user generated complete event.
 
 ### Example
 ```dart
-import 'package:corbado_api/api.dart';
-// TODO Configure HTTP Bearer authorization: bearerAuth
-// Case 1. Use String Token
-//defaultApiClient.getAuthentication<HttpBearerAuth>('bearerAuth').setAccessToken('YOUR_ACCESS_TOKEN');
-// Case 2. Use Function which generate token.
-// String yourTokenGeneratorFunction() { ... }
-//defaultApiClient.getAuthentication<HttpBearerAuth>('bearerAuth').setAccessToken(yourTokenGeneratorFunction);
+import 'package:corbado_frontend_api_client/api.dart';
 // TODO Configure API key authorization: projectID
 //defaultApiClient.getAuthentication<ApiKeyAuth>('projectID').apiKey = 'YOUR_API_KEY';
 // uncomment below to setup prefix (e.g. Bearer) for API key, if needed
 //defaultApiClient.getAuthentication<ApiKeyAuth>('projectID').apiKeyPrefix = 'Bearer';
 
-final api_instance = AuthApi();
-final eventCreateReq = EventCreateReq(); // EventCreateReq | 
+final api = CorbadoFrontendApiClient().getAuthApi();
+final EventCreateReq eventCreateReq = ; // EventCreateReq | 
 
 try {
-    api_instance.eventCreate(eventCreateReq);
-} catch (e) {
+    api.eventCreate(eventCreateReq);
+} catch on DioException (e) {
     print('Exception when calling AuthApi->eventCreate: $e\n');
 }
 ```
@@ -143,25 +129,19 @@ tbd
 
 ### Example
 ```dart
-import 'package:corbado_api/api.dart';
-// TODO Configure HTTP Bearer authorization: bearerAuth
-// Case 1. Use String Token
-//defaultApiClient.getAuthentication<HttpBearerAuth>('bearerAuth').setAccessToken('YOUR_ACCESS_TOKEN');
-// Case 2. Use Function which generate token.
-// String yourTokenGeneratorFunction() { ... }
-//defaultApiClient.getAuthentication<HttpBearerAuth>('bearerAuth').setAccessToken(yourTokenGeneratorFunction);
+import 'package:corbado_frontend_api_client/api.dart';
 // TODO Configure API key authorization: projectID
 //defaultApiClient.getAuthentication<ApiKeyAuth>('projectID').apiKey = 'YOUR_API_KEY';
 // uncomment below to setup prefix (e.g. Bearer) for API key, if needed
 //defaultApiClient.getAuthentication<ApiKeyAuth>('projectID').apiKeyPrefix = 'Bearer';
 
-final api_instance = AuthApi();
-final identifierUpdateReq = IdentifierUpdateReq(); // IdentifierUpdateReq | 
+final api = CorbadoFrontendApiClient().getAuthApi();
+final IdentifierUpdateReq identifierUpdateReq = ; // IdentifierUpdateReq | 
 
 try {
-    final result = api_instance.identifierUpdate(identifierUpdateReq);
-    print(result);
-} catch (e) {
+    final response = api.identifierUpdate(identifierUpdateReq);
+    print(response);
+} catch on DioException (e) {
     print('Exception when calling AuthApi->identifierUpdate: $e\n');
 }
 ```
@@ -196,25 +176,19 @@ tbd
 
 ### Example
 ```dart
-import 'package:corbado_api/api.dart';
-// TODO Configure HTTP Bearer authorization: bearerAuth
-// Case 1. Use String Token
-//defaultApiClient.getAuthentication<HttpBearerAuth>('bearerAuth').setAccessToken('YOUR_ACCESS_TOKEN');
-// Case 2. Use Function which generate token.
-// String yourTokenGeneratorFunction() { ... }
-//defaultApiClient.getAuthentication<HttpBearerAuth>('bearerAuth').setAccessToken(yourTokenGeneratorFunction);
+import 'package:corbado_frontend_api_client/api.dart';
 // TODO Configure API key authorization: projectID
 //defaultApiClient.getAuthentication<ApiKeyAuth>('projectID').apiKey = 'YOUR_API_KEY';
 // uncomment below to setup prefix (e.g. Bearer) for API key, if needed
 //defaultApiClient.getAuthentication<ApiKeyAuth>('projectID').apiKeyPrefix = 'Bearer';
 
-final api_instance = AuthApi();
-final identifierVerifyFinishReq = IdentifierVerifyFinishReq(); // IdentifierVerifyFinishReq | 
+final api = CorbadoFrontendApiClient().getAuthApi();
+final IdentifierVerifyFinishReq identifierVerifyFinishReq = ; // IdentifierVerifyFinishReq | 
 
 try {
-    final result = api_instance.identifierVerifyFinish(identifierVerifyFinishReq);
-    print(result);
-} catch (e) {
+    final response = api.identifierVerifyFinish(identifierVerifyFinishReq);
+    print(response);
+} catch on DioException (e) {
     print('Exception when calling AuthApi->identifierVerifyFinish: $e\n');
 }
 ```
@@ -249,25 +223,19 @@ tbd
 
 ### Example
 ```dart
-import 'package:corbado_api/api.dart';
-// TODO Configure HTTP Bearer authorization: bearerAuth
-// Case 1. Use String Token
-//defaultApiClient.getAuthentication<HttpBearerAuth>('bearerAuth').setAccessToken('YOUR_ACCESS_TOKEN');
-// Case 2. Use Function which generate token.
-// String yourTokenGeneratorFunction() { ... }
-//defaultApiClient.getAuthentication<HttpBearerAuth>('bearerAuth').setAccessToken(yourTokenGeneratorFunction);
+import 'package:corbado_frontend_api_client/api.dart';
 // TODO Configure API key authorization: projectID
 //defaultApiClient.getAuthentication<ApiKeyAuth>('projectID').apiKey = 'YOUR_API_KEY';
 // uncomment below to setup prefix (e.g. Bearer) for API key, if needed
 //defaultApiClient.getAuthentication<ApiKeyAuth>('projectID').apiKeyPrefix = 'Bearer';
 
-final api_instance = AuthApi();
-final identifierVerifyStartReq = IdentifierVerifyStartReq(); // IdentifierVerifyStartReq | 
+final api = CorbadoFrontendApiClient().getAuthApi();
+final IdentifierVerifyStartReq identifierVerifyStartReq = ; // IdentifierVerifyStartReq | 
 
 try {
-    final result = api_instance.identifierVerifyStart(identifierVerifyStartReq);
-    print(result);
-} catch (e) {
+    final response = api.identifierVerifyStart(identifierVerifyStartReq);
+    print(response);
+} catch on DioException (e) {
     print('Exception when calling AuthApi->identifierVerifyStart: $e\n');
 }
 ```
@@ -302,24 +270,18 @@ tbd
 
 ### Example
 ```dart
-import 'package:corbado_api/api.dart';
-// TODO Configure HTTP Bearer authorization: bearerAuth
-// Case 1. Use String Token
-//defaultApiClient.getAuthentication<HttpBearerAuth>('bearerAuth').setAccessToken('YOUR_ACCESS_TOKEN');
-// Case 2. Use Function which generate token.
-// String yourTokenGeneratorFunction() { ... }
-//defaultApiClient.getAuthentication<HttpBearerAuth>('bearerAuth').setAccessToken(yourTokenGeneratorFunction);
+import 'package:corbado_frontend_api_client/api.dart';
 // TODO Configure API key authorization: projectID
 //defaultApiClient.getAuthentication<ApiKeyAuth>('projectID').apiKey = 'YOUR_API_KEY';
 // uncomment below to setup prefix (e.g. Bearer) for API key, if needed
 //defaultApiClient.getAuthentication<ApiKeyAuth>('projectID').apiKeyPrefix = 'Bearer';
 
-final api_instance = AuthApi();
+final api = CorbadoFrontendApiClient().getAuthApi();
 
 try {
-    final result = api_instance.identifierVerifyStatus();
-    print(result);
-} catch (e) {
+    final response = api.identifierVerifyStatus();
+    print(response);
+} catch on DioException (e) {
     print('Exception when calling AuthApi->identifierVerifyStatus: $e\n');
 }
 ```
@@ -351,25 +313,19 @@ tbd
 
 ### Example
 ```dart
-import 'package:corbado_api/api.dart';
-// TODO Configure HTTP Bearer authorization: bearerAuth
-// Case 1. Use String Token
-//defaultApiClient.getAuthentication<HttpBearerAuth>('bearerAuth').setAccessToken('YOUR_ACCESS_TOKEN');
-// Case 2. Use Function which generate token.
-// String yourTokenGeneratorFunction() { ... }
-//defaultApiClient.getAuthentication<HttpBearerAuth>('bearerAuth').setAccessToken(yourTokenGeneratorFunction);
+import 'package:corbado_frontend_api_client/api.dart';
 // TODO Configure API key authorization: projectID
 //defaultApiClient.getAuthentication<ApiKeyAuth>('projectID').apiKey = 'YOUR_API_KEY';
 // uncomment below to setup prefix (e.g. Bearer) for API key, if needed
 //defaultApiClient.getAuthentication<ApiKeyAuth>('projectID').apiKeyPrefix = 'Bearer';
 
-final api_instance = AuthApi();
-final loginInitReq = LoginInitReq(); // LoginInitReq | 
+final api = CorbadoFrontendApiClient().getAuthApi();
+final LoginInitReq loginInitReq = ; // LoginInitReq | 
 
 try {
-    final result = api_instance.loginInit(loginInitReq);
-    print(result);
-} catch (e) {
+    final response = api.loginInit(loginInitReq);
+    print(response);
+} catch on DioException (e) {
     print('Exception when calling AuthApi->loginInit: $e\n');
 }
 ```
@@ -404,25 +360,19 @@ tbd
 
 ### Example
 ```dart
-import 'package:corbado_api/api.dart';
-// TODO Configure HTTP Bearer authorization: bearerAuth
-// Case 1. Use String Token
-//defaultApiClient.getAuthentication<HttpBearerAuth>('bearerAuth').setAccessToken('YOUR_ACCESS_TOKEN');
-// Case 2. Use Function which generate token.
-// String yourTokenGeneratorFunction() { ... }
-//defaultApiClient.getAuthentication<HttpBearerAuth>('bearerAuth').setAccessToken(yourTokenGeneratorFunction);
+import 'package:corbado_frontend_api_client/api.dart';
 // TODO Configure API key authorization: projectID
 //defaultApiClient.getAuthentication<ApiKeyAuth>('projectID').apiKey = 'YOUR_API_KEY';
 // uncomment below to setup prefix (e.g. Bearer) for API key, if needed
 //defaultApiClient.getAuthentication<ApiKeyAuth>('projectID').apiKeyPrefix = 'Bearer';
 
-final api_instance = AuthApi();
-final passkeyAppendFinishReq = PasskeyAppendFinishReq(); // PasskeyAppendFinishReq | 
+final api = CorbadoFrontendApiClient().getAuthApi();
+final PasskeyAppendFinishReq passkeyAppendFinishReq = ; // PasskeyAppendFinishReq | 
 
 try {
-    final result = api_instance.passkeyAppendFinish(passkeyAppendFinishReq);
-    print(result);
-} catch (e) {
+    final response = api.passkeyAppendFinish(passkeyAppendFinishReq);
+    print(response);
+} catch on DioException (e) {
     print('Exception when calling AuthApi->passkeyAppendFinish: $e\n');
 }
 ```
@@ -457,25 +407,19 @@ tbd
 
 ### Example
 ```dart
-import 'package:corbado_api/api.dart';
-// TODO Configure HTTP Bearer authorization: bearerAuth
-// Case 1. Use String Token
-//defaultApiClient.getAuthentication<HttpBearerAuth>('bearerAuth').setAccessToken('YOUR_ACCESS_TOKEN');
-// Case 2. Use Function which generate token.
-// String yourTokenGeneratorFunction() { ... }
-//defaultApiClient.getAuthentication<HttpBearerAuth>('bearerAuth').setAccessToken(yourTokenGeneratorFunction);
+import 'package:corbado_frontend_api_client/api.dart';
 // TODO Configure API key authorization: projectID
 //defaultApiClient.getAuthentication<ApiKeyAuth>('projectID').apiKey = 'YOUR_API_KEY';
 // uncomment below to setup prefix (e.g. Bearer) for API key, if needed
 //defaultApiClient.getAuthentication<ApiKeyAuth>('projectID').apiKeyPrefix = 'Bearer';
 
-final api_instance = AuthApi();
-final body = Object(); // Object | 
+final api = CorbadoFrontendApiClient().getAuthApi();
+final JsonObject body = Object; // JsonObject | 
 
 try {
-    final result = api_instance.passkeyAppendStart(body);
-    print(result);
-} catch (e) {
+    final response = api.passkeyAppendStart(body);
+    print(response);
+} catch on DioException (e) {
     print('Exception when calling AuthApi->passkeyAppendStart: $e\n');
 }
 ```
@@ -484,7 +428,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **body** | **Object**|  | 
+ **body** | **JsonObject**|  | 
 
 ### Return type
 
@@ -510,25 +454,19 @@ tbd
 
 ### Example
 ```dart
-import 'package:corbado_api/api.dart';
-// TODO Configure HTTP Bearer authorization: bearerAuth
-// Case 1. Use String Token
-//defaultApiClient.getAuthentication<HttpBearerAuth>('bearerAuth').setAccessToken('YOUR_ACCESS_TOKEN');
-// Case 2. Use Function which generate token.
-// String yourTokenGeneratorFunction() { ... }
-//defaultApiClient.getAuthentication<HttpBearerAuth>('bearerAuth').setAccessToken(yourTokenGeneratorFunction);
+import 'package:corbado_frontend_api_client/api.dart';
 // TODO Configure API key authorization: projectID
 //defaultApiClient.getAuthentication<ApiKeyAuth>('projectID').apiKey = 'YOUR_API_KEY';
 // uncomment below to setup prefix (e.g. Bearer) for API key, if needed
 //defaultApiClient.getAuthentication<ApiKeyAuth>('projectID').apiKeyPrefix = 'Bearer';
 
-final api_instance = AuthApi();
-final passkeyLoginFinishReq = PasskeyLoginFinishReq(); // PasskeyLoginFinishReq | 
+final api = CorbadoFrontendApiClient().getAuthApi();
+final PasskeyLoginFinishReq passkeyLoginFinishReq = ; // PasskeyLoginFinishReq | 
 
 try {
-    final result = api_instance.passkeyLoginFinish(passkeyLoginFinishReq);
-    print(result);
-} catch (e) {
+    final response = api.passkeyLoginFinish(passkeyLoginFinishReq);
+    print(response);
+} catch on DioException (e) {
     print('Exception when calling AuthApi->passkeyLoginFinish: $e\n');
 }
 ```
@@ -563,25 +501,19 @@ tbd
 
 ### Example
 ```dart
-import 'package:corbado_api/api.dart';
-// TODO Configure HTTP Bearer authorization: bearerAuth
-// Case 1. Use String Token
-//defaultApiClient.getAuthentication<HttpBearerAuth>('bearerAuth').setAccessToken('YOUR_ACCESS_TOKEN');
-// Case 2. Use Function which generate token.
-// String yourTokenGeneratorFunction() { ... }
-//defaultApiClient.getAuthentication<HttpBearerAuth>('bearerAuth').setAccessToken(yourTokenGeneratorFunction);
+import 'package:corbado_frontend_api_client/api.dart';
 // TODO Configure API key authorization: projectID
 //defaultApiClient.getAuthentication<ApiKeyAuth>('projectID').apiKey = 'YOUR_API_KEY';
 // uncomment below to setup prefix (e.g. Bearer) for API key, if needed
 //defaultApiClient.getAuthentication<ApiKeyAuth>('projectID').apiKeyPrefix = 'Bearer';
 
-final api_instance = AuthApi();
-final body = Object(); // Object | 
+final api = CorbadoFrontendApiClient().getAuthApi();
+final JsonObject body = Object; // JsonObject | 
 
 try {
-    final result = api_instance.passkeyLoginStart(body);
-    print(result);
-} catch (e) {
+    final response = api.passkeyLoginStart(body);
+    print(response);
+} catch on DioException (e) {
     print('Exception when calling AuthApi->passkeyLoginStart: $e\n');
 }
 ```
@@ -590,7 +522,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **body** | **Object**|  | 
+ **body** | **JsonObject**|  | 
 
 ### Return type
 
@@ -616,25 +548,19 @@ tbd
 
 ### Example
 ```dart
-import 'package:corbado_api/api.dart';
-// TODO Configure HTTP Bearer authorization: bearerAuth
-// Case 1. Use String Token
-//defaultApiClient.getAuthentication<HttpBearerAuth>('bearerAuth').setAccessToken('YOUR_ACCESS_TOKEN');
-// Case 2. Use Function which generate token.
-// String yourTokenGeneratorFunction() { ... }
-//defaultApiClient.getAuthentication<HttpBearerAuth>('bearerAuth').setAccessToken(yourTokenGeneratorFunction);
+import 'package:corbado_frontend_api_client/api.dart';
 // TODO Configure API key authorization: projectID
 //defaultApiClient.getAuthentication<ApiKeyAuth>('projectID').apiKey = 'YOUR_API_KEY';
 // uncomment below to setup prefix (e.g. Bearer) for API key, if needed
 //defaultApiClient.getAuthentication<ApiKeyAuth>('projectID').apiKeyPrefix = 'Bearer';
 
-final api_instance = AuthApi();
-final passkeyMediationFinishReq = PasskeyMediationFinishReq(); // PasskeyMediationFinishReq | 
+final api = CorbadoFrontendApiClient().getAuthApi();
+final PasskeyMediationFinishReq passkeyMediationFinishReq = ; // PasskeyMediationFinishReq | 
 
 try {
-    final result = api_instance.passkeyMediationFinish(passkeyMediationFinishReq);
-    print(result);
-} catch (e) {
+    final response = api.passkeyMediationFinish(passkeyMediationFinishReq);
+    print(response);
+} catch on DioException (e) {
     print('Exception when calling AuthApi->passkeyMediationFinish: $e\n');
 }
 ```
@@ -660,59 +586,6 @@ Name | Type | Description  | Notes
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **phoneCollect**
-> ProcessResponse phoneCollect(phoneCollectReq)
-
-
-
-tbd
-
-### Example
-```dart
-import 'package:corbado_api/api.dart';
-// TODO Configure HTTP Bearer authorization: bearerAuth
-// Case 1. Use String Token
-//defaultApiClient.getAuthentication<HttpBearerAuth>('bearerAuth').setAccessToken('YOUR_ACCESS_TOKEN');
-// Case 2. Use Function which generate token.
-// String yourTokenGeneratorFunction() { ... }
-//defaultApiClient.getAuthentication<HttpBearerAuth>('bearerAuth').setAccessToken(yourTokenGeneratorFunction);
-// TODO Configure API key authorization: projectID
-//defaultApiClient.getAuthentication<ApiKeyAuth>('projectID').apiKey = 'YOUR_API_KEY';
-// uncomment below to setup prefix (e.g. Bearer) for API key, if needed
-//defaultApiClient.getAuthentication<ApiKeyAuth>('projectID').apiKeyPrefix = 'Bearer';
-
-final api_instance = AuthApi();
-final phoneCollectReq = PhoneCollectReq(); // PhoneCollectReq | 
-
-try {
-    final result = api_instance.phoneCollect(phoneCollectReq);
-    print(result);
-} catch (e) {
-    print('Exception when calling AuthApi->phoneCollect: $e\n');
-}
-```
-
-### Parameters
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **phoneCollectReq** | [**PhoneCollectReq**](PhoneCollectReq.md)|  | 
-
-### Return type
-
-[**ProcessResponse**](ProcessResponse.md)
-
-### Authorization
-
-[bearerAuth](../README.md#bearerAuth), [projectID](../README.md#projectID)
-
-### HTTP request headers
-
- - **Content-Type**: application/json
- - **Accept**: application/json
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
 # **processComplete**
 > ProcessResponse processComplete()
 
@@ -722,24 +595,18 @@ tbd
 
 ### Example
 ```dart
-import 'package:corbado_api/api.dart';
-// TODO Configure HTTP Bearer authorization: bearerAuth
-// Case 1. Use String Token
-//defaultApiClient.getAuthentication<HttpBearerAuth>('bearerAuth').setAccessToken('YOUR_ACCESS_TOKEN');
-// Case 2. Use Function which generate token.
-// String yourTokenGeneratorFunction() { ... }
-//defaultApiClient.getAuthentication<HttpBearerAuth>('bearerAuth').setAccessToken(yourTokenGeneratorFunction);
+import 'package:corbado_frontend_api_client/api.dart';
 // TODO Configure API key authorization: projectID
 //defaultApiClient.getAuthentication<ApiKeyAuth>('projectID').apiKey = 'YOUR_API_KEY';
 // uncomment below to setup prefix (e.g. Bearer) for API key, if needed
 //defaultApiClient.getAuthentication<ApiKeyAuth>('projectID').apiKeyPrefix = 'Bearer';
 
-final api_instance = AuthApi();
+final api = CorbadoFrontendApiClient().getAuthApi();
 
 try {
-    final result = api_instance.processComplete();
-    print(result);
-} catch (e) {
+    final response = api.processComplete();
+    print(response);
+} catch on DioException (e) {
     print('Exception when calling AuthApi->processComplete: $e\n');
 }
 ```
@@ -771,25 +638,19 @@ tbd
 
 ### Example
 ```dart
-import 'package:corbado_api/api.dart';
-// TODO Configure HTTP Bearer authorization: bearerAuth
-// Case 1. Use String Token
-//defaultApiClient.getAuthentication<HttpBearerAuth>('bearerAuth').setAccessToken('YOUR_ACCESS_TOKEN');
-// Case 2. Use Function which generate token.
-// String yourTokenGeneratorFunction() { ... }
-//defaultApiClient.getAuthentication<HttpBearerAuth>('bearerAuth').setAccessToken(yourTokenGeneratorFunction);
+import 'package:corbado_frontend_api_client/api.dart';
 // TODO Configure API key authorization: projectID
 //defaultApiClient.getAuthentication<ApiKeyAuth>('projectID').apiKey = 'YOUR_API_KEY';
 // uncomment below to setup prefix (e.g. Bearer) for API key, if needed
 //defaultApiClient.getAuthentication<ApiKeyAuth>('projectID').apiKeyPrefix = 'Bearer';
 
-final api_instance = AuthApi();
-final preferredBlock = ; // BlockType | 
+final api = CorbadoFrontendApiClient().getAuthApi();
+final BlockType preferredBlock = ; // BlockType | 
 
 try {
-    final result = api_instance.processGet(preferredBlock);
-    print(result);
-} catch (e) {
+    final response = api.processGet(preferredBlock);
+    print(response);
+} catch on DioException (e) {
     print('Exception when calling AuthApi->processGet: $e\n');
 }
 ```
@@ -824,25 +685,19 @@ tbd
 
 ### Example
 ```dart
-import 'package:corbado_api/api.dart';
-// TODO Configure HTTP Bearer authorization: bearerAuth
-// Case 1. Use String Token
-//defaultApiClient.getAuthentication<HttpBearerAuth>('bearerAuth').setAccessToken('YOUR_ACCESS_TOKEN');
-// Case 2. Use Function which generate token.
-// String yourTokenGeneratorFunction() { ... }
-//defaultApiClient.getAuthentication<HttpBearerAuth>('bearerAuth').setAccessToken(yourTokenGeneratorFunction);
+import 'package:corbado_frontend_api_client/api.dart';
 // TODO Configure API key authorization: projectID
 //defaultApiClient.getAuthentication<ApiKeyAuth>('projectID').apiKey = 'YOUR_API_KEY';
 // uncomment below to setup prefix (e.g. Bearer) for API key, if needed
 //defaultApiClient.getAuthentication<ApiKeyAuth>('projectID').apiKeyPrefix = 'Bearer';
 
-final api_instance = AuthApi();
-final processInitReq = ProcessInitReq(); // ProcessInitReq | 
+final api = CorbadoFrontendApiClient().getAuthApi();
+final ProcessInitReq processInitReq = ; // ProcessInitReq | 
 
 try {
-    final result = api_instance.processInit(processInitReq);
-    print(result);
-} catch (e) {
+    final response = api.processInit(processInitReq);
+    print(response);
+} catch on DioException (e) {
     print('Exception when calling AuthApi->processInit: $e\n');
 }
 ```
@@ -877,24 +732,18 @@ tbd
 
 ### Example
 ```dart
-import 'package:corbado_api/api.dart';
-// TODO Configure HTTP Bearer authorization: bearerAuth
-// Case 1. Use String Token
-//defaultApiClient.getAuthentication<HttpBearerAuth>('bearerAuth').setAccessToken('YOUR_ACCESS_TOKEN');
-// Case 2. Use Function which generate token.
-// String yourTokenGeneratorFunction() { ... }
-//defaultApiClient.getAuthentication<HttpBearerAuth>('bearerAuth').setAccessToken(yourTokenGeneratorFunction);
+import 'package:corbado_frontend_api_client/api.dart';
 // TODO Configure API key authorization: projectID
 //defaultApiClient.getAuthentication<ApiKeyAuth>('projectID').apiKey = 'YOUR_API_KEY';
 // uncomment below to setup prefix (e.g. Bearer) for API key, if needed
 //defaultApiClient.getAuthentication<ApiKeyAuth>('projectID').apiKeyPrefix = 'Bearer';
 
-final api_instance = AuthApi();
+final api = CorbadoFrontendApiClient().getAuthApi();
 
 try {
-    final result = api_instance.processReset();
-    print(result);
-} catch (e) {
+    final response = api.processReset();
+    print(response);
+} catch on DioException (e) {
     print('Exception when calling AuthApi->processReset: $e\n');
 }
 ```
@@ -926,25 +775,19 @@ tbd
 
 ### Example
 ```dart
-import 'package:corbado_api/api.dart';
-// TODO Configure HTTP Bearer authorization: bearerAuth
-// Case 1. Use String Token
-//defaultApiClient.getAuthentication<HttpBearerAuth>('bearerAuth').setAccessToken('YOUR_ACCESS_TOKEN');
-// Case 2. Use Function which generate token.
-// String yourTokenGeneratorFunction() { ... }
-//defaultApiClient.getAuthentication<HttpBearerAuth>('bearerAuth').setAccessToken(yourTokenGeneratorFunction);
+import 'package:corbado_frontend_api_client/api.dart';
 // TODO Configure API key authorization: projectID
 //defaultApiClient.getAuthentication<ApiKeyAuth>('projectID').apiKey = 'YOUR_API_KEY';
 // uncomment below to setup prefix (e.g. Bearer) for API key, if needed
 //defaultApiClient.getAuthentication<ApiKeyAuth>('projectID').apiKeyPrefix = 'Bearer';
 
-final api_instance = AuthApi();
-final signupInitReq = SignupInitReq(); // SignupInitReq | 
+final api = CorbadoFrontendApiClient().getAuthApi();
+final SignupInitReq signupInitReq = ; // SignupInitReq | 
 
 try {
-    final result = api_instance.signupInit(signupInitReq);
-    print(result);
-} catch (e) {
+    final response = api.signupInit(signupInitReq);
+    print(response);
+} catch on DioException (e) {
     print('Exception when calling AuthApi->signupInit: $e\n');
 }
 ```
@@ -979,23 +822,17 @@ tbd
 
 ### Example
 ```dart
-import 'package:corbado_api/api.dart';
-// TODO Configure HTTP Bearer authorization: bearerAuth
-// Case 1. Use String Token
-//defaultApiClient.getAuthentication<HttpBearerAuth>('bearerAuth').setAccessToken('YOUR_ACCESS_TOKEN');
-// Case 2. Use Function which generate token.
-// String yourTokenGeneratorFunction() { ... }
-//defaultApiClient.getAuthentication<HttpBearerAuth>('bearerAuth').setAccessToken(yourTokenGeneratorFunction);
+import 'package:corbado_frontend_api_client/api.dart';
 // TODO Configure API key authorization: projectID
 //defaultApiClient.getAuthentication<ApiKeyAuth>('projectID').apiKey = 'YOUR_API_KEY';
 // uncomment below to setup prefix (e.g. Bearer) for API key, if needed
 //defaultApiClient.getAuthentication<ApiKeyAuth>('projectID').apiKeyPrefix = 'Bearer';
 
-final api_instance = AuthApi();
+final api = CorbadoFrontendApiClient().getAuthApi();
 
 try {
-    api_instance.socialVerifyCallback();
-} catch (e) {
+    api.socialVerifyCallback();
+} catch on DioException (e) {
     print('Exception when calling AuthApi->socialVerifyCallback: $e\n');
 }
 ```
@@ -1027,25 +864,19 @@ tbd
 
 ### Example
 ```dart
-import 'package:corbado_api/api.dart';
-// TODO Configure HTTP Bearer authorization: bearerAuth
-// Case 1. Use String Token
-//defaultApiClient.getAuthentication<HttpBearerAuth>('bearerAuth').setAccessToken('YOUR_ACCESS_TOKEN');
-// Case 2. Use Function which generate token.
-// String yourTokenGeneratorFunction() { ... }
-//defaultApiClient.getAuthentication<HttpBearerAuth>('bearerAuth').setAccessToken(yourTokenGeneratorFunction);
+import 'package:corbado_frontend_api_client/api.dart';
 // TODO Configure API key authorization: projectID
 //defaultApiClient.getAuthentication<ApiKeyAuth>('projectID').apiKey = 'YOUR_API_KEY';
 // uncomment below to setup prefix (e.g. Bearer) for API key, if needed
 //defaultApiClient.getAuthentication<ApiKeyAuth>('projectID').apiKeyPrefix = 'Bearer';
 
-final api_instance = AuthApi();
-final body = Object(); // Object | 
+final api = CorbadoFrontendApiClient().getAuthApi();
+final JsonObject body = Object; // JsonObject | 
 
 try {
-    final result = api_instance.socialVerifyFinish(body);
-    print(result);
-} catch (e) {
+    final response = api.socialVerifyFinish(body);
+    print(response);
+} catch on DioException (e) {
     print('Exception when calling AuthApi->socialVerifyFinish: $e\n');
 }
 ```
@@ -1054,7 +885,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **body** | **Object**|  | 
+ **body** | **JsonObject**|  | 
 
 ### Return type
 
@@ -1080,25 +911,19 @@ tbd
 
 ### Example
 ```dart
-import 'package:corbado_api/api.dart';
-// TODO Configure HTTP Bearer authorization: bearerAuth
-// Case 1. Use String Token
-//defaultApiClient.getAuthentication<HttpBearerAuth>('bearerAuth').setAccessToken('YOUR_ACCESS_TOKEN');
-// Case 2. Use Function which generate token.
-// String yourTokenGeneratorFunction() { ... }
-//defaultApiClient.getAuthentication<HttpBearerAuth>('bearerAuth').setAccessToken(yourTokenGeneratorFunction);
+import 'package:corbado_frontend_api_client/api.dart';
 // TODO Configure API key authorization: projectID
 //defaultApiClient.getAuthentication<ApiKeyAuth>('projectID').apiKey = 'YOUR_API_KEY';
 // uncomment below to setup prefix (e.g. Bearer) for API key, if needed
 //defaultApiClient.getAuthentication<ApiKeyAuth>('projectID').apiKeyPrefix = 'Bearer';
 
-final api_instance = AuthApi();
-final socialVerifyStartReq = SocialVerifyStartReq(); // SocialVerifyStartReq | 
+final api = CorbadoFrontendApiClient().getAuthApi();
+final SocialVerifyStartReq socialVerifyStartReq = ; // SocialVerifyStartReq | 
 
 try {
-    final result = api_instance.socialVerifyStart(socialVerifyStartReq);
-    print(result);
-} catch (e) {
+    final response = api.socialVerifyStart(socialVerifyStartReq);
+    print(response);
+} catch on DioException (e) {
     print('Exception when calling AuthApi->socialVerifyStart: $e\n');
 }
 ```
@@ -1108,59 +933,6 @@ try {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **socialVerifyStartReq** | [**SocialVerifyStartReq**](SocialVerifyStartReq.md)|  | 
-
-### Return type
-
-[**ProcessResponse**](ProcessResponse.md)
-
-### Authorization
-
-[bearerAuth](../README.md#bearerAuth), [projectID](../README.md#projectID)
-
-### HTTP request headers
-
- - **Content-Type**: application/json
- - **Accept**: application/json
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
-# **usernameCollect**
-> ProcessResponse usernameCollect(usernameCollectReq)
-
-
-
-tbd
-
-### Example
-```dart
-import 'package:corbado_api/api.dart';
-// TODO Configure HTTP Bearer authorization: bearerAuth
-// Case 1. Use String Token
-//defaultApiClient.getAuthentication<HttpBearerAuth>('bearerAuth').setAccessToken('YOUR_ACCESS_TOKEN');
-// Case 2. Use Function which generate token.
-// String yourTokenGeneratorFunction() { ... }
-//defaultApiClient.getAuthentication<HttpBearerAuth>('bearerAuth').setAccessToken(yourTokenGeneratorFunction);
-// TODO Configure API key authorization: projectID
-//defaultApiClient.getAuthentication<ApiKeyAuth>('projectID').apiKey = 'YOUR_API_KEY';
-// uncomment below to setup prefix (e.g. Bearer) for API key, if needed
-//defaultApiClient.getAuthentication<ApiKeyAuth>('projectID').apiKeyPrefix = 'Bearer';
-
-final api_instance = AuthApi();
-final usernameCollectReq = UsernameCollectReq(); // UsernameCollectReq | 
-
-try {
-    final result = api_instance.usernameCollect(usernameCollectReq);
-    print(result);
-} catch (e) {
-    print('Exception when calling AuthApi->usernameCollect: $e\n');
-}
-```
-
-### Parameters
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **usernameCollectReq** | [**UsernameCollectReq**](UsernameCollectReq.md)|  | 
 
 ### Return type
 

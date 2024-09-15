@@ -20,7 +20,7 @@ StartLoginPublicKey _$StartLoginPublicKeyFromJson(Map<String, dynamic> json) =>
     StartLoginPublicKey(
       rpId: json['rpId'] as String,
       challenge: json['challenge'] as String,
-      timeout: json['timeout'] as int?,
+      timeout: (json['timeout'] as num?)?.toInt(),
       userVerification: json['userVerification'] as String?,
       allowCredentials: (json['allowCredentials'] as List<dynamic>?)
           ?.map((e) => AllowCredential.fromJson(e as Map<String, dynamic>))

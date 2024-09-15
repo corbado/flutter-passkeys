@@ -1,8 +1,8 @@
-# corbado_api.model.ConnectLoginFinishRsp
+# corbado_frontend_api_client.model.ConnectLoginFinishRsp
 
 ## Load the model package
 ```dart
-import 'package:corbado_api/api.dart';
+import 'package:corbado_frontend_api_client/api.dart';
 ```
 
 ## Properties

@@ -19,12 +19,12 @@ Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
 IdToken _$IdTokenFromJson(Map<String, dynamic> json) => IdToken(
       json['iss'] as String,
       json['sub'] as String,
-      json['exp'] as int,
-      json['nbf'] as int,
-      json['iat'] as int,
-      json['name'] as String,
+      (json['exp'] as num).toInt(),
+      (json['nbf'] as num).toInt(),
+      (json['iat'] as num).toInt(),
+      json['name'] as String?,
       json['orig'] as String,
-      json['version'] as int,
+      (json['version'] as num).toInt(),
       email: json['email'] as String? ?? '',
     );
 

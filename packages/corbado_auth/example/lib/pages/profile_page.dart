@@ -13,6 +13,7 @@ class ProfilePage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final user = ref.watch(userProvider);
+    final corbado = ref.watch(corbadoProvider);
 
     return BasePage(
         child: Column(
@@ -61,7 +62,7 @@ class ProfilePage extends ConsumerWidget {
             width: double.infinity,
             height: 50,
             child: OutlinedTextButton(
-              onTap: () => {},
+              onTap: () => corbado.signOut(),
               content: 'sign out',
             ),
           ),

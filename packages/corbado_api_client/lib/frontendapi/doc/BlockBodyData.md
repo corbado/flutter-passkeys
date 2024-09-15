@@ -1,13 +1,14 @@
-# corbado_api.model.BlockBodyData
+# corbado_frontend_api_client.model.BlockBodyData
 
 ## Load the model package
 ```dart
-import 'package:corbado_api/api.dart';
+import 'package:corbado_frontend_api_client/api.dart';
 ```
 
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**blockType** | **String** |  | 
 **challenge** | **String** |  | 
 **identifierValue** | **String** |  | 
 **identifierType** | [**LoginIdentifierType**](LoginIdentifierType.md) |  | 
@@ -16,12 +17,11 @@ Name | Type | Description | Notes
 **variant** | **String** |  | 
 **verificationMethod** | [**VerificationMethod**](VerificationMethod.md) |  | 
 **identifier** | **String** |  | 
-**alternativeVerificationMethods** | [**List<Object>**](Object.md) |  | [default to const []]
+**alternativeVerificationMethods** | [**BuiltList&lt;GeneralBlockVerifyIdentifierAlternativeVerificationMethodsInner&gt;**](GeneralBlockVerifyIdentifierAlternativeVerificationMethodsInner.md) |  | 
 **isPostLoginVerification** | **bool** |  | 
 **shortSession** | **String** |  | 
-**identifiers** | [**List<LoginIdentifierWithError>**](LoginIdentifierWithError.md) |  | [default to const []]
+**identifiers** | [**BuiltList&lt;LoginIdentifierWithError&gt;**](LoginIdentifierWithError.md) |  | 
 **socialData** | [**SocialData**](SocialData.md) |  | 
-**type** | [**LoginIdentifierType**](LoginIdentifierType.md) |  | 
 **isPhone** | **bool** |  | 
 **isPhoneAvailable** | **bool** |  | 
 **isEmailAvailable** | **bool** |  | 

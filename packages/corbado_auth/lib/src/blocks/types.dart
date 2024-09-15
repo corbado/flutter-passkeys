@@ -3,7 +3,8 @@ import 'package:corbado_auth/src/blocks/translator.dart';
 import 'package:corbado_auth/src/process_handler.dart';
 import 'package:corbado_auth/src/services/corbado/corbado.dart';
 import 'package:corbado_auth/src/types/screen_names.dart';
-import 'package:corbado_frontend_api_client/frontendapi/lib/api.dart';
+import 'package:corbado_frontend_api_client/corbado_frontend_api_client.dart';
+import 'package:passkeys/authenticator.dart';
 
 class TextFieldWithError {
   final String value;
@@ -20,39 +21,70 @@ class CorbadoError {
 
   factory CorbadoError.fromMissingServerResponse() {
     const code = 'missing_server_response';
+
     return CorbadoError(
       errorCode: code,
       translatedError: Translator.error(code),
     );
   }
 
-  factory CorbadoError.fromApiException(ApiException e) {
-    const code = 'api_exception';
+  factory CorbadoError.fromUnknownError(Object e) {
+    const code = 'unknown_error';
+
     return CorbadoError(
       errorCode: code,
-      translatedError: Translator.error(code) + ': ${e.message}',
+      translatedError: Translator.error(code),
     );
   }
 
-  factory CorbadoError.fromUnknownError(Object e) {
-    const code = 'unknown_error';
+  static CorbadoError? fromRequestError(RequestError? error) {
+    if (error == null) {
+      return null;
+    }
+
     return CorbadoError(
-      errorCode: code,
-      translatedError: Translator.error(code) + ': ${e.toString()}',
+      errorCode: error.code,
+      translatedError: Translator.error(error.code),
+    );
+  }
+
+  static CorbadoError? fromRequestErrorWithIdentifier(
+    RequestError? error,
+    LoginIdentifierType identifierType,
+  ) {
+    if (error == null) {
+      return null;
+    }
+
+    final translatedError = Translator.errorWithIdentifier(
+      error.code,
+      identifierType,
+    );
+
+    return CorbadoError(
+      errorCode: error.code,
+      translatedError: translatedError,
     );
   }
 }
 
 class Block {
   List<Block> alternatives;
-  final CorbadoService corbadoService;
   final ProcessHandler processHandler;
-  final ScreenNames initialScreen;
+  ScreenNames? initialScreen;
+  final BlockType type;
   CorbadoError? error;
 
-  Block(
-      {required this.corbadoService,
-      required this.processHandler,
-      required this.initialScreen,
-      required this.alternatives});
+  CorbadoService get corbadoService => processHandler.corbadoService;
+
+  PasskeyAuthenticator get passkeyAuthenticator => processHandler.passkeyAuthenticator;
+
+  Block({
+    required this.processHandler,
+    required this.type,
+    this.initialScreen,
+    required this.alternatives,
+  });
+
+  init() {}
 }

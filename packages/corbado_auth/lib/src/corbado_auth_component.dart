@@ -20,6 +20,8 @@ class _CorbadoAuthComponentState extends State<CorbadoAuthComponent> {
   void initState() {
     super.initState();
     _componentStream = widget.corbadoAuth.componentWithDataStream;
+
+    widget.corbadoAuth.initProcessHandler();
   }
 
   @override

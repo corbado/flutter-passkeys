@@ -1,8 +1,8 @@
-# corbado_api.model.Passkey
+# corbado_frontend_api_client.model.Passkey
 
 ## Load the model package
 ```dart
-import 'package:corbado_api/api.dart';
+import 'package:corbado_frontend_api_client/api.dart';
 ```
 
 ## Properties
@@ -11,7 +11,7 @@ Name | Type | Description | Notes
 **id** | **String** |  | 
 **credentialID** | **String** |  | 
 **attestationType** | **String** |  | 
-**transport** | **List<String>** |  | [default to const []]
+**transport** | **BuiltList&lt;String&gt;** |  | 
 **backupEligible** | **bool** |  | 
 **backupState** | **bool** |  | 
 **authenticatorAAGUID** | **String** |  | 

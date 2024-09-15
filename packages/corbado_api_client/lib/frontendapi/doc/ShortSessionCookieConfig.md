@@ -1,8 +1,8 @@
-# corbado_api.model.ShortSessionCookieConfig
+# corbado_frontend_api_client.model.ShortSessionCookieConfig
 
 ## Load the model package
 ```dart
-import 'package:corbado_api/api.dart';
+import 'package:corbado_frontend_api_client/api.dart';
 ```
 
 ## Properties

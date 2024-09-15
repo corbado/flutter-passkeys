@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:corbado_frontend_api_client/frontendapi/lib/api.dart';
 import 'package:http/http.dart';
 
 ///
@@ -11,22 +10,6 @@ class AuthResponse {
     required this.token,
     this.refreshToken,
   });
-
-  static Future<AuthResponse> fromHttpResponse(Response response) async {
-    if (response.statusCode >= HttpStatus.badRequest || response.body.isEmpty) {
-      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
-    }
-
-    final result =
-        jsonDecode(utf8.decode(response.bodyBytes)) as Map<String, dynamic>;
-    final token = result['data']['shortSession']['value'] as String;
-    final refreshToken = _getLongSession(result, response);
-
-    return AuthResponse(
-      token: token,
-      refreshToken: refreshToken,
-    );
-  }
 
   final String token;
   final String? refreshToken;

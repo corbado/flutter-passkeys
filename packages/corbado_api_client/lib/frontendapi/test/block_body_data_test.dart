@@ -1,21 +1,12 @@
-//
-// AUTO-GENERATED FILE, DO NOT MODIFY!
-//
-// @dart=2.12
-
-// ignore_for_file: unused_element, unused_import
-// ignore_for_file: always_put_required_named_parameters_first
-// ignore_for_file: constant_identifier_names
-// ignore_for_file: lines_longer_than_80_chars
-
-import 'package:corbado_api/api.dart';
 import 'package:test/test.dart';
+import 'package:corbado_frontend_api_client/corbado_frontend_api_client.dart';
 
 // tests for BlockBodyData
 void main() {
-  // final instance = BlockBodyData();
+  final instance = BlockBodyDataBuilder();
+  // TODO add properties to the builder and call build()
 
-  group('test BlockBodyData', () {
+  group(BlockBodyData, () {
     // String challenge
     test('to test the property `challenge`', () async {
       // TODO
@@ -56,7 +47,7 @@ void main() {
       // TODO
     });
 
-    // List<Object> alternativeVerificationMethods (default value: const [])
+    // BuiltList<GeneralBlockVerifyIdentifierAlternativeVerificationMethodsInner> alternativeVerificationMethods
     test('to test the property `alternativeVerificationMethods`', () async {
       // TODO
     });
@@ -71,7 +62,7 @@ void main() {
       // TODO
     });
 
-    // List<LoginIdentifierWithError> identifiers (default value: const [])
+    // BuiltList<LoginIdentifierWithError> identifiers
     test('to test the property `identifiers`', () async {
       // TODO
     });

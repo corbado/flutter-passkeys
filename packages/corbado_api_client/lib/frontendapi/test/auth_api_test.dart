@@ -1,21 +1,11 @@
-//
-// AUTO-GENERATED FILE, DO NOT MODIFY!
-//
-// @dart=2.12
-
-// ignore_for_file: unused_element, unused_import
-// ignore_for_file: always_put_required_named_parameters_first
-// ignore_for_file: constant_identifier_names
-// ignore_for_file: lines_longer_than_80_chars
-
-import 'package:corbado_api/api.dart';
 import 'package:test/test.dart';
+import 'package:corbado_frontend_api_client/corbado_frontend_api_client.dart';
 
 /// tests for AuthApi
 void main() {
-  // final instance = AuthApi();
+  final instance = CorbadoFrontendApiClient().getAuthApi();
 
-  group('tests for AuthApi', () {
+  group(AuthApi, () {
     // tbd
     //
     //Future<ProcessResponse> blockSkip() async
@@ -74,7 +64,7 @@ void main() {
 
     // tbd
     //
-    //Future<ProcessResponse> passkeyAppendStart(Object body) async
+    //Future<ProcessResponse> passkeyAppendStart(JsonObject body) async
     test('test passkeyAppendStart', () async {
       // TODO
     });
@@ -88,7 +78,7 @@ void main() {
 
     // tbd
     //
-    //Future<ProcessResponse> passkeyLoginStart(Object body) async
+    //Future<ProcessResponse> passkeyLoginStart(JsonObject body) async
     test('test passkeyLoginStart', () async {
       // TODO
     });
@@ -151,7 +141,7 @@ void main() {
 
     // tbd
     //
-    //Future<ProcessResponse> socialVerifyFinish(Object body) async
+    //Future<ProcessResponse> socialVerifyFinish(JsonObject body) async
     test('test socialVerifyFinish', () async {
       // TODO
     });

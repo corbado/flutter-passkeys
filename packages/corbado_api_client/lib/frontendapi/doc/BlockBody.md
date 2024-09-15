@@ -1,8 +1,8 @@
-# corbado_api.model.BlockBody
+# corbado_frontend_api_client.model.BlockBody
 
 ## Load the model package
 ```dart
-import 'package:corbado_api/api.dart';
+import 'package:corbado_frontend_api_client/api.dart';
 ```
 
 ## Properties
@@ -11,7 +11,7 @@ Name | Type | Description | Notes
 **block** | [**BlockType**](BlockType.md) |  | 
 **authType** | [**AuthType**](AuthType.md) |  | 
 **data** | [**BlockBodyData**](BlockBodyData.md) |  | 
-**alternatives** | [**List<BlockBody>**](BlockBody.md) |  | [optional] [default to const []]
+**alternatives** | [**BuiltList&lt;BlockBody&gt;**](BlockBody.md) |  | [optional] 
 **error** | [**RequestError**](RequestError.md) |  | [optional] 
 **continueOnOtherDevice** | [**ContinueOnOtherDevice**](ContinueOnOtherDevice.md) |  | [optional] 
 

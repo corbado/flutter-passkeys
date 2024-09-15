@@ -18,7 +18,13 @@ void main() async {
   final projectId = const String.fromEnvironment('CORBADO_PROJECT_ID');
   final customDomain = const String.fromEnvironment('CORBADO_CUSTOM_DOMAIN');
   final corbadoAuth = CorbadoAuth();
-  await corbadoAuth.init(projectId, customDomain: customDomain);
+  await corbadoAuth.init(
+      projectId: projectId,
+      onLoggedIn: () {
+        print('User logged in');
+      },
+      customDomain: customDomain
+  );
 
   // Finally we override the providers that needed initialization.
   // Now the real app can be loaded.

@@ -1,13 +1,14 @@
-# corbado_api.model.GeneralBlockPostSignupEmailVerify
+# corbado_frontend_api_client.model.GeneralBlockPostSignupEmailVerify
 
 ## Load the model package
 ```dart
-import 'package:corbado_api/api.dart';
+import 'package:corbado_frontend_api_client/api.dart';
 ```
 
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**blockType** | **String** |  | 
 **error** | [**RequestError**](RequestError.md) |  | [optional] 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

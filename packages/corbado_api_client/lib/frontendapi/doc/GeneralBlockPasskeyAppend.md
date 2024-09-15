@@ -1,13 +1,14 @@
-# corbado_api.model.GeneralBlockPasskeyAppend
+# corbado_frontend_api_client.model.GeneralBlockPasskeyAppend
 
 ## Load the model package
 ```dart
-import 'package:corbado_api/api.dart';
+import 'package:corbado_frontend_api_client/api.dart';
 ```
 
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**blockType** | **String** |  | 
 **challenge** | **String** |  | 
 **identifierValue** | **String** |  | 
 **identifierType** | [**LoginIdentifierType**](LoginIdentifierType.md) |  | 

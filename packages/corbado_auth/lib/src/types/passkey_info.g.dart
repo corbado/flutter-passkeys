@@ -9,7 +9,8 @@ part of 'passkey_info.dart';
 PasskeyInfo _$PasskeyInfoFromJson(Map<String, dynamic> json) => PasskeyInfo(
       json['id'] as String,
       json['aaguid'] as String,
-      json['userAgent'] as String,
+      json['sourceOS'] as String,
+      json['sourceBrowser'] as String,
       json['attestationType'] as String,
       (json['transport'] as List<dynamic>).map((e) => e as String).toList(),
       json['backupEligible'] as bool,
@@ -21,7 +22,8 @@ Map<String, dynamic> _$PasskeyInfoToJson(PasskeyInfo instance) =>
     <String, dynamic>{
       'id': instance.id,
       'aaguid': instance.aaguid,
-      'userAgent': instance.userAgent,
+      'sourceOS': instance.sourceOS,
+      'sourceBrowser': instance.sourceBrowser,
       'attestationType': instance.attestationType,
       'transport': instance.transport,
       'backupEligible': instance.backupEligible,

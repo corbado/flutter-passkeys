@@ -1,8 +1,8 @@
-# corbado_api.model.VerificationMethod
+# corbado_frontend_api_client.model.VerificationMethod
 
 ## Load the model package
 ```dart
-import 'package:corbado_api/api.dart';
+import 'package:corbado_frontend_api_client/api.dart';
 ```
 
 ## Properties

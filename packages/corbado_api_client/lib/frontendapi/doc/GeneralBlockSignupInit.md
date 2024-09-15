@@ -1,14 +1,15 @@
-# corbado_api.model.GeneralBlockSignupInit
+# corbado_frontend_api_client.model.GeneralBlockSignupInit
 
 ## Load the model package
 ```dart
-import 'package:corbado_api/api.dart';
+import 'package:corbado_frontend_api_client/api.dart';
 ```
 
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**identifiers** | [**List<LoginIdentifierWithError>**](LoginIdentifierWithError.md) |  | [default to const []]
+**blockType** | **String** |  | 
+**identifiers** | [**BuiltList&lt;LoginIdentifierWithError&gt;**](LoginIdentifierWithError.md) |  | 
 **fullName** | [**FullNameWithError**](FullNameWithError.md) |  | [optional] 
 **socialData** | [**SocialData**](SocialData.md) |  | [optional] 
 **error** | [**RequestError**](RequestError.md) |  | [optional] 

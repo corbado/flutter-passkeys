@@ -7,7 +7,7 @@ openapi: 3.0.3
 # General                                                         #
 ###################################################################
 info:
-  version: 2.0.0
+  version: 2.0.4
   title: Corbado Frontend API
   description: Overview of all Corbado Frontend API calls to implement passwordless authentication.
   contact:
@@ -611,46 +611,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/processResponse'
 
-  /v2/auth/phone/collect:
-    post:
-      description: tbd
-      operationId: PhoneCollect
-      tags:
-        - Auth
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/phoneCollectReq'
-      responses:
-        '200':
-          description: tbd
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/processResponse'
-
-  /v2/auth/username/collect:
-    post:
-      description: tbd
-      operationId: UsernameCollect
-      tags:
-        - Auth
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/usernameCollectReq'
-      responses:
-        '200':
-          description: tbd
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/processResponse'
-
   /v2/auth/events:
     post:
       description: Creates a new user generated complete event.
@@ -1111,25 +1071,6 @@ components:
           $ref: '#/components/schemas/verificationMethod'
         isNewDevice:
           type: boolean
-
-    usernameCollectReq:
-      type: object
-      required:
-        - value
-      properties:
-        value:
-          type: string
-
-    #    usernameCollectRsp:
-    #      $ref: '#/components/schemas/blockBody'
-
-    phoneCollectReq:
-      type: object
-      required:
-        - value
-      properties:
-        value:
-          type: string
 
     socialVerifyStartReq:
       type: object
@@ -1601,15 +1542,15 @@ components:
           $ref: '#/components/schemas/authType'
         data:
           type: object
-          anyOf:
+          discriminator:
+            propertyName: blockType
+          oneOf:
             - $ref: '#/components/schemas/generalBlockPasskeyAppend'
             - $ref: '#/components/schemas/generalBlockPasskeyVerify'
             - $ref: '#/components/schemas/generalBlockVerifyIdentifier'
             - $ref: '#/components/schemas/generalBlockPasskeyAppended'
             - $ref: '#/components/schemas/generalBlockCompleted'
             - $ref: '#/components/schemas/generalBlockSignupInit'
-            - $ref: '#/components/schemas/generalBlockUsernameCollect'
-            - $ref: '#/components/schemas/generalPhoneCollect'
             - $ref: '#/components/schemas/generalBlockLoginInit'
             - $ref: '#/components/schemas/generalBlockPostSignupEmailVerify'
         alternatives:
@@ -1665,7 +1606,7 @@ components:
 
     blockType:
       type: string
-      enum: [ signup-init, passkey-append, phone-verify, email-verify, passkey-appended, completed, social-verify, username-collect, phone-collect, login-init, passkey-verify, conditional-ui-completed, post-signup-email-verify, passkey-append-after-hybrid ]
+      enum: [ signup-init, passkey-append, phone-verify, email-verify, passkey-appended, completed, social-verify, login-init, passkey-verify, conditional-ui-completed, post-signup-email-verify, passkey-append-after-hybrid ]
 
     authType:
       type: string
@@ -1682,9 +1623,12 @@ components:
     generalBlockSignupInit:
       type: object
       required:
+        - blockType
         - identifiers
         - socialProviders
       properties:
+        blockType:
+          type: string
         identifiers:
           type: array
           items:
@@ -1699,6 +1643,7 @@ components:
     generalBlockLoginInit:
       type: object
       required:
+        - blockType
         - identifierValue
         - isPhone
         - isPhoneAvailable
@@ -1706,6 +1651,8 @@ components:
         - isUsernameAvailable
         - socialData
       properties:
+        blockType:
+          type: string
         conditionalUIChallenge:
           type: string
         identifierValue:
@@ -1725,15 +1672,10 @@ components:
         error:
           $ref: '#/components/schemas/requestError'
 
-    generalBlockUsernameCollect:
-      $ref: '#/components/schemas/loginIdentifierWithError'
-
-    generalPhoneCollect:
-      $ref: '#/components/schemas/loginIdentifierWithError'
-
     generalBlockPasskeyAppend:
       type: object
       required:
+        - blockType
         - challenge
         - identifierValue
         - identifierType
@@ -1741,6 +1683,8 @@ components:
         - passkeyIconSet
         - variant
       properties:
+        blockType:
+          type: string
         challenge:
           type: string
         identifierValue:
@@ -1758,9 +1702,12 @@ components:
     generalBlockPasskeyVerify:
       type: object
       required:
+        - blockType
         - challenge
         - identifierValue
       properties:
+        blockType:
+          type: string
         challenge:
           type: string
         identifierValue:
@@ -1771,9 +1718,28 @@ components:
 
     generalBlockPasskeyAppended:
       type: object
+      required:
+        - blockType
+      properties:
+        blockType:
+          type: string
 
     generalBlockCompleted:
-      $ref: '#/components/schemas/authenticationResponse'
+      type: object
+      required:
+        - blockType
+        - shortSession
+      properties:
+        blockType:
+          type: string
+        longSession:
+          type: string
+          description: Only given when project environment is dev
+        shortSession:
+          type: string
+        passkeyOperation:
+          $ref: '#/components/schemas/passkeyOperation'
+
 
     generalBlockVerifyIdentifier:
       type: object
@@ -1782,7 +1748,10 @@ components:
         - identifier
         - alternativeVerificationMethods
         - isPostLoginVerification
+        - blockType
       properties:
+        blockType:
+          type: string
         verificationMethod:
           $ref: '#/components/schemas/verificationMethod'
         identifier:
@@ -1796,20 +1765,24 @@ components:
           type: array
           items:
             type: object
-          required:
-            - verificationMethod
-            - identifier
-          properties:
-            verificationMethod:
-              $ref: '#/components/schemas/verificationMethod'
-            identifier:
-              type: string
+            required:
+              - verificationMethod
+              - identifier
+            properties:
+              verificationMethod:
+                $ref: '#/components/schemas/verificationMethod'
+              identifier:
+                type: string
         isPostLoginVerification:
           type: boolean
 
     generalBlockPostSignupEmailVerify:
       type: object
+      required:
+        - blockType
       properties:
+        blockType:
+          type: string
         error:
           $ref: '#/components/schemas/requestError'
 
@@ -1879,19 +1852,6 @@ components:
           type: string
         mobile:
           type: boolean
-
-    authenticationResponse:
-      type: object
-      required:
-        - shortSession
-      properties:
-        longSession:
-          type: string
-          description: Only given when project environment is dev
-        shortSession:
-          type: string
-        passkeyOperation:
-          $ref: '#/components/schemas/passkeyOperation'
 
     passkeyOperation:
       type: object

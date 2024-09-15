@@ -1,8 +1,8 @@
-# corbado_api.model.AuthType
+# corbado_frontend_api_client.model.AuthType
 
 ## Load the model package
 ```dart
-import 'package:corbado_api/api.dart';
+import 'package:corbado_frontend_api_client/api.dart';
 ```
 
 ## Properties

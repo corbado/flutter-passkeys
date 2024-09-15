@@ -1,8 +1,8 @@
-# corbado_api.model.ConnectLoginInitRsp
+# corbado_frontend_api_client.model.ConnectLoginInitRsp
 
 ## Load the model package
 ```dart
-import 'package:corbado_api/api.dart';
+import 'package:corbado_frontend_api_client/api.dart';
 ```
 
 ## Properties
@@ -12,7 +12,7 @@ Name | Type | Description | Notes
 **expiresAt** | **int** |  | 
 **frontendApiUrl** | **String** |  | 
 **loginAllowed** | **bool** |  | 
-**flags** | **Map<String, String>** |  | [default to const {}]
+**flags** | **BuiltMap&lt;String, String&gt;** |  | 
 **newClientEnvHandle** | **String** |  | [optional] 
 **conditionalUIChallenge** | **String** |  | [optional] 
 

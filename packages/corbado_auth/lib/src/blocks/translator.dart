@@ -1,20 +1,55 @@
-class Translator {
-  static error(String? code) {
-    if (code == null) return null;
+import 'package:corbado_frontend_api_client/corbado_frontend_api_client.dart';
 
-    switch (code) {
-      case 'user_not_found':
-        return 'User does not exist. Please check your email address.';
-      case 'required_field_empty':
-        return 'Required field "Email address" can not be empty.';
-      case 'invalid_passkey':
-        return 'Invalid passkey. Please check your email address.';
-      case 'no_passkey_for_device':
-        return 'No passkey for device. Please check your email address.';
-      case 'passkey_auth_cancelled':
-        return 'Passkey authentication cancelled. Please check your email address.';
-      default:
-        return 'An unexpected error has happened. Please try again.';
+const identifierErrorMap = {
+  'missing_identifier_type': {
+    LoginIdentifierType.username: 'Please enter a username.',
+    LoginIdentifierType.email: 'Please enter an email address.',
+    LoginIdentifierType.phone: 'Please enter a phone number.',
+  },
+  'identifier_already_in_use': {
+    LoginIdentifierType.username: 'This username is already taken. Please try another one or log in with this one.',
+    LoginIdentifierType.email: 'This email address is already taken. Please try another one or log in with this one.',
+    LoginIdentifierType.phone: 'This phone number is already taken. Please try another one or log in with this one',
+  },
+  'identifier_invalid_format': {
+    LoginIdentifierType.username:
+    'Username must be between 4 and 32 characters long and may only consist of alphanumeric characters and \"-\" or \"_\".',
+    LoginIdentifierType.email: 'Please enter a valid email address.',
+    LoginIdentifierType.phone: 'Please enter a valid phone number',
+  }
+};
+
+const Map<String, String> errorMap = {
+  'forbidden_request': 'This request is currently not allowed.',
+  'too_many_requests': 'Too many requests. Please try again later.',
+  'login_identifier_unknown_user': "Couldn't find your account.",
+};
+
+class Translator {
+  static String error(String code) {
+    final out = errorMap[code];
+    if (out == null) {
+      return _missingTranslation(code);
     }
+
+    return out;
+  }
+
+  static String errorWithIdentifier(String code, LoginIdentifierType identifierType) {
+    final filteredByError = identifierErrorMap[code];
+    if (filteredByError == null) {
+      return _missingTranslation(code);
+    }
+
+    final out = filteredByError[identifierType];
+    if (out == null) {
+      return _missingTranslation(code);
+    }
+
+    return out;
+  }
+
+  static String _missingTranslation(String code) {
+    return 'Missing translation for error code: $code';
   }
 }

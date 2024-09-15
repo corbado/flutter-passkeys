@@ -1,8 +1,8 @@
-# corbado_api.model.PasskeyEventType
+# corbado_frontend_api_client.model.PasskeyEventType
 
 ## Load the model package
 ```dart
-import 'package:corbado_api/api.dart';
+import 'package:corbado_frontend_api_client/api.dart';
 ```
 
 ## Properties

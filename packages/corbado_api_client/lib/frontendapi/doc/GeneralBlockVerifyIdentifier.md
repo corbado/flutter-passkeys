@@ -1,16 +1,17 @@
-# corbado_api.model.GeneralBlockVerifyIdentifier
+# corbado_frontend_api_client.model.GeneralBlockVerifyIdentifier
 
 ## Load the model package
 ```dart
-import 'package:corbado_api/api.dart';
+import 'package:corbado_frontend_api_client/api.dart';
 ```
 
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**blockType** | **String** |  | 
 **verificationMethod** | [**VerificationMethod**](VerificationMethod.md) |  | 
 **identifier** | **String** |  | 
-**alternativeVerificationMethods** | [**List<Object>**](Object.md) |  | [default to const []]
+**alternativeVerificationMethods** | [**BuiltList&lt;GeneralBlockVerifyIdentifierAlternativeVerificationMethodsInner&gt;**](GeneralBlockVerifyIdentifierAlternativeVerificationMethodsInner.md) |  | 
 **isPostLoginVerification** | **bool** |  | 
 **retryNotBefore** | **int** |  | [optional] 
 **error** | [**RequestError**](RequestError.md) |  | [optional] 

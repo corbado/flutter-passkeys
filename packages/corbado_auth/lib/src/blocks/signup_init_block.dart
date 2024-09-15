@@ -1,9 +1,8 @@
-import 'package:corbado_auth/src/blocks/translator.dart';
 import 'package:corbado_auth/src/blocks/types.dart';
 import 'package:corbado_auth/src/process_handler.dart';
 import 'package:corbado_auth/src/services/corbado/corbado.dart';
 import 'package:corbado_auth/src/types/screen_names.dart';
-import 'package:corbado_frontend_api_client/frontendapi/lib/api.dart';
+import 'package:corbado_frontend_api_client/corbado_frontend_api_client.dart';
 
 class SignupInitBlockData {
   final TextFieldWithError? fullName;
@@ -12,13 +11,13 @@ class SignupInitBlockData {
 
   SignupInitBlockData({this.fullName, this.email, this.error});
 
-  factory SignupInitBlockData.fromProcessResponse(
-      GeneralBlockSignupInit typed) {
+  factory SignupInitBlockData.fromProcessResponse(GeneralBlockSignupInit typed) {
     TextFieldWithError? fullName;
     if (typed.fullName != null) {
       fullName = TextFieldWithError(
-          value: typed.fullName!.fullName,
-          error: Translator.error(typed.fullName!.error?.code));
+        value: typed.fullName!.fullName,
+        error: CorbadoError.fromRequestError(typed.fullName!.error),
+      );
     }
 
     TextFieldWithError? email;
@@ -26,33 +25,30 @@ class SignupInitBlockData {
       if (identifier.type == LoginIdentifierType.email) {
         email = TextFieldWithError(
             value: identifier.identifier,
-            error: Translator.error(identifier.error?.code));
+            error: CorbadoError.fromRequestErrorWithIdentifier(identifier.error, identifier.type));
       }
     }
 
     return SignupInitBlockData(
       fullName: fullName,
       email: email,
-      error: Translator.error(typed.error?.code),
+      error: CorbadoError.fromRequestError(typed.error),
     );
   }
 }
 
 class SignupInitBlock extends Block {
   final SignupInitBlockData data;
-  final ScreenNames initialScreen = ScreenNames.SignupInit;
 
-  SignupInitBlock(
-      {required CorbadoService corbadoService,
-      required ProcessHandler processHandler,
-      required this.data})
+  SignupInitBlock({required ProcessHandler processHandler, required this.data})
       : super(
-            corbadoService: corbadoService,
-            processHandler: processHandler,
-            alternatives: [],
-            initialScreen: ScreenNames.SignupInit);
+          processHandler: processHandler,
+          type: BlockType.signupInit,
+          alternatives: [],
+          initialScreen: ScreenNames.SignupInit,
+        );
 
-  switchToLogin() {
+  navigateToLogin() {
     final newPrimaryBlock = alternatives.first;
     final newAlternatives = [this];
 
