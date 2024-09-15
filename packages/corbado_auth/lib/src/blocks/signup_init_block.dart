@@ -37,15 +37,14 @@ class SignupInitBlockData {
   }
 }
 
-class SignupInitBlock extends Block {
-  final SignupInitBlockData data;
-
-  SignupInitBlock({required ProcessHandler processHandler, required this.data})
+class SignupInitBlock extends Block<SignupInitBlockData> {
+  SignupInitBlock({required ProcessHandler processHandler, required SignupInitBlockData data})
       : super(
           processHandler: processHandler,
           type: BlockType.signupInit,
           alternatives: [],
           initialScreen: ScreenNames.SignupInit,
+          data: data,
         );
 
   navigateToLogin() {

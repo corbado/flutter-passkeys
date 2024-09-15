@@ -1,7 +1,8 @@
 import 'dart:async';
 
 import 'package:corbado_auth/corbado_auth.dart';
-import 'package:corbado_auth/src/blocks/completed.dart';
+import 'package:corbado_auth/src/blocks/completed_block.dart';
+import 'package:corbado_auth/src/blocks/passkey_verify_block.dart';
 import 'package:corbado_auth/src/blocks/signup_init_block.dart';
 import 'package:corbado_auth/src/blocks/translator.dart';
 import 'package:corbado_auth/src/blocks/types.dart';
@@ -15,7 +16,8 @@ import 'package:passkeys/authenticator.dart';
 class ProcessHandler {
   final CorbadoService corbadoService;
   final SessionService sessionService;
-  final PasskeyAuthenticator passkeyAuthenticator;
+
+  // final PasskeyAuthenticator passkeyAuthenticator;
   final void Function() onLoggedIn;
 
   final _componentWithDataStream = StreamController<ComponentWithData>.broadcast();
@@ -24,7 +26,7 @@ class ProcessHandler {
 
   Stream<ComponentWithData> get componentWithDataStream => _componentWithDataStream.stream;
 
-  ProcessHandler({required this.corbadoService, required this.sessionService, required this.passkeyAuthenticator, required this.onLoggedIn});
+  ProcessHandler({required this.corbadoService, required this.sessionService, required this.onLoggedIn});
 
   updateBlockFromServer(ProcessResponse processResponse) {
     final newPrimaryBlock = _parseBlockData(processResponse.blockBody, processResponse.common);
@@ -32,7 +34,6 @@ class ProcessHandler {
         .map((BlockBody e) => _parseBlockData(e, processResponse.common))
         .toList();
 
-    newPrimaryBlock.init();
     newPrimaryBlock.alternatives = alternatives;
 
     _updatePrimaryBlock(newPrimaryBlock);
@@ -88,6 +89,18 @@ class ProcessHandler {
           data: CompletedBlockData.fromProcessResponse(body.data.oneOf.value! as GeneralBlockCompleted),
         );
 
+      case BlockType.passkeyAppend:
+        block = PasskeyAppendBlock(
+          processHandler: this,
+          data: PasskeyAppendBlockData.fromProcessResponse(body.data.oneOf.value! as GeneralBlockPasskeyAppend),
+        );
+
+      case BlockType.passkeyVerify:
+        block = PasskeyVerifyBlock(
+          processHandler: this,
+          data: PasskeyVerifyBlockData.fromProcessResponse(body.data.oneOf.value! as GeneralBlockPasskeyVerify),
+        );
+
       default:
         throw Exception('Unknown block type: ${body.block}');
     }
@@ -102,7 +115,7 @@ class ProcessHandler {
     return block;
   }
 
-  _updatePrimaryBlock(Block newPrimaryBlock) {
+  _updatePrimaryBlock(Block<dynamic> newPrimaryBlock) {
     if (newPrimaryBlock is CompletedBlock) {
       _onAuthProcessCompleted(newPrimaryBlock.data);
       return;
@@ -111,6 +124,7 @@ class ProcessHandler {
     final blockHasChanged = _currentBlock?.type != newPrimaryBlock.type;
     if (blockHasChanged && newPrimaryBlock.initialScreen != null) {
       _currentScreen = newPrimaryBlock.initialScreen!;
+      newPrimaryBlock.init();
     }
 
     _currentBlock = newPrimaryBlock;

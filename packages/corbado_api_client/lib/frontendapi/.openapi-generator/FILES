@@ -69,9 +69,11 @@ doc/MeUpdateReq.md
 doc/Paging.md
 doc/Passkey.md
 doc/PasskeyAppendFinishReq.md
+doc/PasskeyAppendStartReq.md
 doc/PasskeyEventType.md
 doc/PasskeyIconSet.md
 doc/PasskeyLoginFinishReq.md
+doc/PasskeyLoginStartReq.md
 doc/PasskeyMediationFinishReq.md
 doc/PasskeyOperation.md
 doc/ProcessCommon.md
@@ -170,9 +172,11 @@ lib/src/model/me_update_req.dart
 lib/src/model/paging.dart
 lib/src/model/passkey.dart
 lib/src/model/passkey_append_finish_req.dart
+lib/src/model/passkey_append_start_req.dart
 lib/src/model/passkey_event_type.dart
 lib/src/model/passkey_icon_set.dart
 lib/src/model/passkey_login_finish_req.dart
+lib/src/model/passkey_login_start_req.dart
 lib/src/model/passkey_mediation_finish_req.dart
 lib/src/model/passkey_operation.dart
 lib/src/model/process_common.dart
@@ -193,3 +197,4 @@ lib/src/model/user_details_config_rsp.dart
 lib/src/model/verification_method.dart
 lib/src/serializers.dart
 pubspec.yaml
+test/passkey_login_start_req_test.dart

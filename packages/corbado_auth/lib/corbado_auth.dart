@@ -3,6 +3,8 @@ library corbado_auth;
 
 export 'src/blocks/email_verify_block.dart';
 export 'src/blocks/login_init_block.dart';
+export 'src/blocks/passkey_append_block.dart';
+export 'src/blocks/passkey_verify_block.dart';
 export 'src/blocks/signup_init_block.dart';
 export 'src/corbado_auth.dart';
 export 'src/corbado_auth_component.dart';

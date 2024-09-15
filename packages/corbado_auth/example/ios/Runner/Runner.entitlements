@@ -6,6 +6,7 @@
 	<array>
         <string>webcredentials:flutter.corbado.io?mode=developer</string>
         <string>webcredentials:flutter.corbado.io</string>
+        <string>webcredentials:pro-0162710327414405397.frontendapi.cloud.corbado-staging.io?mode=developer</string>
 	</array>
 </dict>
 </plist>

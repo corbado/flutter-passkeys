@@ -399,7 +399,7 @@ Name | Type | Description  | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **passkeyAppendStart**
-> ProcessResponse passkeyAppendStart(body)
+> ProcessResponse passkeyAppendStart(passkeyAppendStartReq)
 
 
 
@@ -414,10 +414,10 @@ import 'package:corbado_frontend_api_client/api.dart';
 //defaultApiClient.getAuthentication<ApiKeyAuth>('projectID').apiKeyPrefix = 'Bearer';
 
 final api = CorbadoFrontendApiClient().getAuthApi();
-final JsonObject body = Object; // JsonObject | 
+final PasskeyAppendStartReq passkeyAppendStartReq = ; // PasskeyAppendStartReq | 
 
 try {
-    final response = api.passkeyAppendStart(body);
+    final response = api.passkeyAppendStart(passkeyAppendStartReq);
     print(response);
 } catch on DioException (e) {
     print('Exception when calling AuthApi->passkeyAppendStart: $e\n');
@@ -428,7 +428,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **body** | **JsonObject**|  | 
+ **passkeyAppendStartReq** | [**PasskeyAppendStartReq**](PasskeyAppendStartReq.md)|  | 
 
 ### Return type
 
@@ -493,7 +493,7 @@ Name | Type | Description  | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **passkeyLoginStart**
-> ProcessResponse passkeyLoginStart(body)
+> ProcessResponse passkeyLoginStart(passkeyLoginStartReq)
 
 
 
@@ -508,10 +508,10 @@ import 'package:corbado_frontend_api_client/api.dart';
 //defaultApiClient.getAuthentication<ApiKeyAuth>('projectID').apiKeyPrefix = 'Bearer';
 
 final api = CorbadoFrontendApiClient().getAuthApi();
-final JsonObject body = Object; // JsonObject | 
+final PasskeyLoginStartReq passkeyLoginStartReq = ; // PasskeyLoginStartReq | 
 
 try {
-    final response = api.passkeyLoginStart(body);
+    final response = api.passkeyLoginStart(passkeyLoginStartReq);
     print(response);
 } catch on DioException (e) {
     print('Exception when calling AuthApi->passkeyLoginStart: $e\n');
@@ -522,7 +522,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **body** | **JsonObject**|  | 
+ **passkeyLoginStartReq** | [**PasskeyLoginStartReq**](PasskeyLoginStartReq.md)|  | 
 
 ### Return type
 

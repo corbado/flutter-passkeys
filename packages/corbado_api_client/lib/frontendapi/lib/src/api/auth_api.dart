@@ -16,7 +16,9 @@ import 'package:corbado_frontend_api_client/src/model/identifier_verify_finish_r
 import 'package:corbado_frontend_api_client/src/model/identifier_verify_start_req.dart';
 import 'package:corbado_frontend_api_client/src/model/login_init_req.dart';
 import 'package:corbado_frontend_api_client/src/model/passkey_append_finish_req.dart';
+import 'package:corbado_frontend_api_client/src/model/passkey_append_start_req.dart';
 import 'package:corbado_frontend_api_client/src/model/passkey_login_finish_req.dart';
+import 'package:corbado_frontend_api_client/src/model/passkey_login_start_req.dart';
 import 'package:corbado_frontend_api_client/src/model/passkey_mediation_finish_req.dart';
 import 'package:corbado_frontend_api_client/src/model/process_init_req.dart';
 import 'package:corbado_frontend_api_client/src/model/process_init_rsp.dart';
@@ -824,7 +826,7 @@ class AuthApi {
   /// tbd
   ///
   /// Parameters:
-  /// * [body]
+  /// * [passkeyAppendStartReq]
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
   /// * [headers] - Can be used to add additional headers to the request
   /// * [extras] - Can be used to add flags to the request
@@ -835,7 +837,7 @@ class AuthApi {
   /// Returns a [Future] containing a [Response] with a [ProcessResponse] as data
   /// Throws [DioException] if API call or serialization fails
   Future<Response<ProcessResponse>> passkeyAppendStart({
-    required JsonObject body,
+    required PasskeyAppendStartReq passkeyAppendStartReq,
     CancelToken? cancelToken,
     Map<String, dynamic>? headers,
     Map<String, dynamic>? extra,
@@ -872,7 +874,9 @@ class AuthApi {
     dynamic _bodyData;
 
     try {
-      _bodyData = body;
+      const _type = FullType(PasskeyAppendStartReq);
+      _bodyData =
+          _serializers.serialize(passkeyAppendStartReq, specifiedType: _type);
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _options.compose(
@@ -1038,7 +1042,7 @@ class AuthApi {
   /// tbd
   ///
   /// Parameters:
-  /// * [body]
+  /// * [passkeyLoginStartReq]
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
   /// * [headers] - Can be used to add additional headers to the request
   /// * [extras] - Can be used to add flags to the request
@@ -1049,7 +1053,7 @@ class AuthApi {
   /// Returns a [Future] containing a [Response] with a [ProcessResponse] as data
   /// Throws [DioException] if API call or serialization fails
   Future<Response<ProcessResponse>> passkeyLoginStart({
-    required JsonObject body,
+    required PasskeyLoginStartReq passkeyLoginStartReq,
     CancelToken? cancelToken,
     Map<String, dynamic>? headers,
     Map<String, dynamic>? extra,
@@ -1086,7 +1090,9 @@ class AuthApi {
     dynamic _bodyData;
 
     try {
-      _bodyData = body;
+      const _type = FullType(PasskeyLoginStartReq);
+      _bodyData =
+          _serializers.serialize(passkeyLoginStartReq, specifiedType: _type);
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _options.compose(

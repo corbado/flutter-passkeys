@@ -15,13 +15,12 @@ class CompletedBlockData {
   }
 }
 
-class CompletedBlock extends Block {
-  final CompletedBlockData data;
-
-  CompletedBlock({required ProcessHandler processHandler, required this.data})
+class CompletedBlock extends Block<CompletedBlockData> {
+  CompletedBlock({required ProcessHandler processHandler, required CompletedBlockData data})
       : super(
           processHandler: processHandler,
           type: BlockType.completed,
           alternatives: [],
+          data: data,
         );
 }

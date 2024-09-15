@@ -63,7 +63,7 @@ class SignupInitScreen extends CorbadoComponent<SignupInitBlock> {
             isLoading: false,
             onTap: () async {
               final email = _emailController.value.text;
-              await block.submitSignupInit(email: email);
+              await block.submitSignupInit(email: email, fullName: 'fixed');
             },
             content: 'sign up',
           ),

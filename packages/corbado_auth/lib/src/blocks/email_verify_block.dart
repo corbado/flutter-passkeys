@@ -1,6 +1,5 @@
 import 'package:corbado_auth/src/blocks/types.dart';
 import 'package:corbado_auth/src/process_handler.dart';
-import 'package:corbado_auth/src/services/corbado/corbado.dart';
 import 'package:corbado_auth/src/types/screen_names.dart';
 import 'package:corbado_frontend_api_client/corbado_frontend_api_client.dart' as Api;
 
@@ -43,15 +42,14 @@ class EmailVerifyBlockData {
   }
 }
 
-class EmailVerifyBlock extends Block {
-  final EmailVerifyBlockData data;
-
-  EmailVerifyBlock({required ProcessHandler processHandler, required this.data})
+class EmailVerifyBlock extends Block<EmailVerifyBlockData> {
+  EmailVerifyBlock({required ProcessHandler processHandler, required EmailVerifyBlockData data})
       : super(
           processHandler: processHandler,
           type: Api.BlockType.emailVerify,
           alternatives: [],
           initialScreen: ScreenNames.EmailVerifyOTP,
+          data: data,
         );
 
   init() {
@@ -85,12 +83,12 @@ class EmailVerifyBlock extends Block {
   resendEmail() async {
     try {
       if (data.verificationMethod == VerificationMethod.emailOTP) {
-        final res = await corbadoService.sendEmailOtpCode(data.email);
+        final res = await corbadoService.sendEmailOtpCode();
         processHandler.updateBlockFromServer(res);
 
         return;
       } else {
-        final res = await corbadoService.sendEmailLink(data.email);
+        final res = await corbadoService.sendEmailLink();
         processHandler.updateBlockFromServer(res);
 
         return;

@@ -13,6 +13,13 @@ class TextFieldWithError {
   const TextFieldWithError({required this.value, this.error});
 }
 
+class PasskeyFallback {
+  PasskeyFallback({required this.label, required this.onTap});
+
+  final String label;
+  final void Function() onTap;
+}
+
 class CorbadoError {
   final String errorCode;
   final String translatedError;
@@ -68,22 +75,22 @@ class CorbadoError {
   }
 }
 
-class Block {
-  List<Block> alternatives;
+class Block<T> {
   final ProcessHandler processHandler;
+  List<Block<dynamic>> alternatives;
   ScreenNames? initialScreen;
   final BlockType type;
   CorbadoError? error;
+  T data;
 
   CorbadoService get corbadoService => processHandler.corbadoService;
-
-  PasskeyAuthenticator get passkeyAuthenticator => processHandler.passkeyAuthenticator;
 
   Block({
     required this.processHandler,
     required this.type,
     this.initialScreen,
     required this.alternatives,
+    required this.data,
   });
 
   init() {}

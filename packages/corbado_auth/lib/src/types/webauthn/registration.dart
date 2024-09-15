@@ -22,7 +22,7 @@ class StartRegisterResponse {
     final authenticatorSelection = AuthenticatorSelectionType(
       authenticatorAttachment:
           publicKey.authenticatorSelection.authenticatorAttachment,
-      requireResidentKey: publicKey.authenticatorSelection.requireResidentKey,
+      requireResidentKey: publicKey.authenticatorSelection.requireResidentKey ?? false,
       residentKey: publicKey.authenticatorSelection.residentKey,
       userVerification: publicKey.authenticatorSelection.userVerification,
     );
@@ -82,7 +82,7 @@ class CorbadoAuthenticatorSelection {
   factory CorbadoAuthenticatorSelection.fromJson(Map<String, dynamic> json) =>
       _$CorbadoAuthenticatorSelectionFromJson(json);
   final String authenticatorAttachment;
-  final bool requireResidentKey;
+  final bool? requireResidentKey;
   final String residentKey;
   final String userVerification;
 

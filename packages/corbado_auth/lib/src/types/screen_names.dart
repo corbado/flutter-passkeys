@@ -4,4 +4,6 @@ enum ScreenNames {
   EmailEdit,
   EmailVerifyOTP,
   EmailVerifyLink,
+  PasskeyAppend,
+  PasskeyVerify
 }

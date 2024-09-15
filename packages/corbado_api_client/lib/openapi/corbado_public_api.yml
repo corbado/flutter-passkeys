@@ -911,7 +911,9 @@ components:
 
     passkeyAppendStartReq:
       type: object
-      description: tbd.
+      properties:
+        clientInformation:
+          $ref: '#/components/schemas/clientInformationV2'
 
     passkeyAppendFinishReq:
       type: object
@@ -1020,7 +1022,9 @@ components:
 
     passkeyLoginStartReq:
       type: object
-      description: tbd.
+      properties:
+        clientInformation:
+          $ref: '#/components/schemas/clientInformationV2'
 
     #    passkeyLoginStartRsp:
     #      $ref: '#/components/schemas/blockBody'

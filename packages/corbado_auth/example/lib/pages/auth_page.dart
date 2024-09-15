@@ -3,6 +3,8 @@ import 'package:corbado_auth_example/auth_provider.dart';
 import 'package:corbado_auth_example/pages/base_page.dart';
 import 'package:corbado_auth_example/screens/email_verify_otp.dart';
 import 'package:corbado_auth_example/screens/login_init.dart';
+import 'package:corbado_auth_example/screens/passkey_append.dart';
+import 'package:corbado_auth_example/screens/passkey_verify.dart';
 import 'package:corbado_auth_example/screens/signup_init.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -19,6 +21,8 @@ class AuthPage extends HookConsumerWidget {
         ScreenNames.SignupInit: SignupInitScreen(),
         ScreenNames.LoginInit: LoginInitScreen(),
         ScreenNames.EmailVerifyOTP: EmailVerifyOtpScreen(),
+        ScreenNames.PasskeyAppend: PasskeyAppendScreen(),
+        ScreenNames.PasskeyVerify: PasskeyVerifyScreen(),
       }),
     );
   }

@@ -79,9 +79,11 @@ import 'package:corbado_frontend_api_client/src/model/me_update_req.dart';
 import 'package:corbado_frontend_api_client/src/model/paging.dart';
 import 'package:corbado_frontend_api_client/src/model/passkey.dart';
 import 'package:corbado_frontend_api_client/src/model/passkey_append_finish_req.dart';
+import 'package:corbado_frontend_api_client/src/model/passkey_append_start_req.dart';
 import 'package:corbado_frontend_api_client/src/model/passkey_event_type.dart';
 import 'package:corbado_frontend_api_client/src/model/passkey_icon_set.dart';
 import 'package:corbado_frontend_api_client/src/model/passkey_login_finish_req.dart';
+import 'package:corbado_frontend_api_client/src/model/passkey_login_start_req.dart';
 import 'package:corbado_frontend_api_client/src/model/passkey_mediation_finish_req.dart';
 import 'package:corbado_frontend_api_client/src/model/passkey_operation.dart';
 import 'package:corbado_frontend_api_client/src/model/process_common.dart';
@@ -169,9 +171,11 @@ part 'serializers.g.dart';
   Paging,
   Passkey,
   PasskeyAppendFinishReq,
+  PasskeyAppendStartReq,
   PasskeyEventType,
   PasskeyIconSet,
   PasskeyLoginFinishReq,
+  PasskeyLoginStartReq,
   PasskeyMediationFinishReq,
   PasskeyOperation,
   ProcessCommon,

@@ -36,7 +36,7 @@ class ComponentWithData {
 /// app.
 class CorbadoAuth {
   /// Constructor
-  CorbadoAuth({CorbadoAuthConfig config = DefaultCorbadoAuthConfig}) : passkeyAuthenticator = PasskeyAuthenticator();
+  CorbadoAuth({CorbadoAuthConfig config = DefaultCorbadoAuthConfig});
 
   /// Should be listened to to get updates to the User object
   /// (e.g. updates to the idToken, sign in, sign out, changes to user data).
@@ -59,7 +59,6 @@ class CorbadoAuth {
   final StreamController<List<PasskeyInfo>> _passkeysStreamController = StreamController();
 
   late ProcessHandler _processHandler;
-  final PasskeyAuthenticator passkeyAuthenticator;
   late CorbadoService _corbadoService;
   late final SessionService _sessionService;
 
@@ -71,14 +70,14 @@ class CorbadoAuth {
   /// Tries to get the user object from secure storage (this only works if
   /// the user has already signed in before and then closed the app).
   Future<void> init({required String projectId, required void Function() onLoggedIn, String? customDomain}) async {
-    _corbadoService = await createClient(projectId, customDomain: customDomain);
+    final passkeyAuthenticator = PasskeyAuthenticator();
+    _corbadoService = await createClient(projectId, passkeyAuthenticator: passkeyAuthenticator, customDomain: customDomain);
     _sessionService = _buildSessionService(
       _corbadoService.frontendAPIClient,
     );
     _processHandler = ProcessHandler(
         corbadoService: _corbadoService,
         sessionService: _sessionService,
-        passkeyAuthenticator: passkeyAuthenticator,
         onLoggedIn: onLoggedIn);
 
     try {
