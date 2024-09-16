@@ -32,13 +32,16 @@ class SessionService {
       return null;
     }
 
-    // if token is invalid we try to refresh it
-    if (!user.hasValidToken()) {
+    final refreshToken = await getRefreshToken();
+
+    if (!user.hasValidToken() || refreshToken == null) {
       return null;
     }
 
+    frontendAPIClient.dio.options.headers['Authorization'] = 'Bearer $refreshToken';
+
     // if token is valid we schedule a refresh
-    _scheduleRefreshRoutine(user);
+    _scheduleRefreshRoutine();
     _userStreamController.add(user);
     _authStateStreamController.add(AuthState.SignedIn);
 
@@ -49,9 +52,12 @@ class SessionService {
     return _storageService.getRefreshToken();
   }
 
-  Future<void> setRefreshToken(User user, String value) async {
-    await _storageService.setRefreshToken(value);
-    _scheduleRefreshRoutine(user);
+  Future<void> setRefreshToken(String? value) async {
+    if (value != null) {
+      await _storageService.setRefreshToken(value);
+    }
+
+    _scheduleRefreshRoutine();
   }
 
   Future<User?> getUser() {
@@ -74,7 +80,7 @@ class SessionService {
 
   Future<void> explicitlyTriggerTokenRefresh() => _refreshToken();
 
-  void _scheduleRefreshRoutine(User user) {
+  void _scheduleRefreshRoutine() {
     // if another refresh has already been scheduled we stop that one
     // this is not expected => if it occurs there is a problem with the code
     if (_refreshTimer != null && _refreshTimer!.isActive) {

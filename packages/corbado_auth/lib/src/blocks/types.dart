@@ -2,9 +2,9 @@ import 'package:corbado_auth/corbado_auth.dart';
 import 'package:corbado_auth/src/blocks/translator.dart';
 import 'package:corbado_auth/src/process_handler.dart';
 import 'package:corbado_auth/src/services/corbado/corbado.dart';
-import 'package:corbado_auth/src/types/screen_names.dart';
 import 'package:corbado_frontend_api_client/corbado_frontend_api_client.dart';
-import 'package:passkeys/authenticator.dart';
+
+enum AuthProcessType { Login, Signup }
 
 class TextFieldWithError {
   final String value;
@@ -73,6 +73,18 @@ class CorbadoError {
       translatedError: translatedError,
     );
   }
+
+  static CorbadoError fromAuthenticatorError(AuthenticatorException e) {
+    if (e is PasskeyAuthCancelledException) {
+      const errorCode = 'passkey_operation_cancelled';
+      return CorbadoError(
+        errorCode: errorCode,
+        translatedError: Translator.error(errorCode),
+      );
+    }
+
+    return CorbadoError.fromUnknownError(e);
+  }
 }
 
 class Block<T> {
@@ -82,6 +94,7 @@ class Block<T> {
   final BlockType type;
   CorbadoError? error;
   T data;
+  AuthProcessType authProcessType;
 
   CorbadoService get corbadoService => processHandler.corbadoService;
 
@@ -91,6 +104,7 @@ class Block<T> {
     this.initialScreen,
     required this.alternatives,
     required this.data,
+    required this.authProcessType,
   });
 
   init() {}

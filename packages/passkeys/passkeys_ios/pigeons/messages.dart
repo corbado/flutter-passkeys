@@ -101,6 +101,7 @@ abstract class PasskeysApi {
     String challenge,
     bool conditionalUI,
     List<String> allowedCredentialIDs,
+    bool preferImmediatelyAvailableCredentials,
   );
 
   @async

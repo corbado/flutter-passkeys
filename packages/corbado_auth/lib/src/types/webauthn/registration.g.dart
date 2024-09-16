@@ -64,7 +64,7 @@ Map<String, dynamic> _$StartRegisterPubKeyCredParamToJson(
 CorbadoAuthenticatorSelection _$CorbadoAuthenticatorSelectionFromJson(
         Map<String, dynamic> json) =>
     CorbadoAuthenticatorSelection(
-      json['authenticatorAttachment'] as String,
+      json['authenticatorAttachment'] as String?,
       json['requireResidentKey'] as bool?,
       json['residentKey'] as String,
       json['userVerification'] as String,

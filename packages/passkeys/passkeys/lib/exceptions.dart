@@ -67,6 +67,11 @@ class NoCredentialsAvailableException implements AuthenticatorException {
   NoCredentialsAvailableException();
 }
 
+class DomainNotAssociatedException implements AuthenticatorException {
+  /// Constructor
+  DomainNotAssociatedException();
+}
+
 /// This exception is thrown when an exception is thrown by the authenticator
 /// that we do not handle so far in this package.
 ///

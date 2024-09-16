@@ -12,7 +12,7 @@ class AuthenticateController: NSObject, ASAuthorizationControllerDelegate, ASAut
         self.completion = completion;
     }
     
-    func run(request: ASAuthorizationPlatformPublicKeyCredentialAssertionRequest, conditionalUI: Bool) {
+    func run(request: ASAuthorizationPlatformPublicKeyCredentialAssertionRequest, conditionalUI: Bool, preferImmediatelyAvailableCredentials: Bool) {
         let authorizationController = ASAuthorizationController(authorizationRequests: [request])
         authorizationController.delegate = self
         authorizationController.presentationContextProvider = self
@@ -20,7 +20,7 @@ class AuthenticateController: NSObject, ASAuthorizationControllerDelegate, ASAut
         if (conditionalUI) {
             authorizationController.performAutoFillAssistedRequests()
         } else {
-            authorizationController.performRequests()
+            authorizationController.performRequests(options: .preferImmediatelyAvailableCredentials)
         }
 
         func cancel() {

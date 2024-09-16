@@ -11,7 +11,11 @@ extension FlutterError: Error {
             code = "unknown"
             break
         case ASAuthorizationError.canceled:
-            code = "cancelled"
+            if (error.localizedDescription.contains("No credentials available for login.")) {
+                code = "no-credentials-available"
+            } else {
+                code = "cancelled"
+            }
             break
         case ASAuthorizationError.invalidResponse:
             code = "invalidResponse"

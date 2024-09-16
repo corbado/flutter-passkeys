@@ -17,13 +17,13 @@ class AuthPage extends HookConsumerWidget {
     final corbadoAuth = ref.watch(corbadoProvider);
 
     return BasePage(
-      child: CorbadoAuthComponent(corbadoAuth: corbadoAuth, components: {
-        ScreenNames.SignupInit: SignupInitScreen(),
-        ScreenNames.LoginInit: LoginInitScreen(),
-        ScreenNames.EmailVerifyOTP: EmailVerifyOtpScreen(),
-        ScreenNames.PasskeyAppend: PasskeyAppendScreen(),
-        ScreenNames.PasskeyVerify: PasskeyVerifyScreen(),
-      }),
+      child: CorbadoAuthComponent(corbadoAuth: corbadoAuth, components: CorbadoScreens(
+        signupInit: (SignupInitBlock block) => SignupInitScreen(block),
+        loginInit: (LoginInitBlock block) => LoginInitScreen(block),
+        emailVerifyOtp: (EmailVerifyBlock block) => EmailVerifyOtpScreen(block),
+        passkeyAppend: (PasskeyAppendBlock block) => PasskeyAppendScreen(block),
+        passkeyVerify: (PasskeyVerifyBlock block) => PasskeyVerifyScreen(block),
+      )),
     );
   }
 }

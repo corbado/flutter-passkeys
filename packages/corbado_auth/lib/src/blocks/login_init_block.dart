@@ -1,3 +1,4 @@
+import 'package:corbado_auth/corbado_auth.dart';
 import 'package:corbado_auth/src/blocks/types.dart';
 import 'package:corbado_auth/src/process_handler.dart';
 import 'package:corbado_auth/src/types/screen_names.dart';
@@ -21,6 +22,7 @@ class LoginInitBlockData {
   final bool emailEnabled;
   final bool usernameEnabled;
   final bool phoneEnabled;
+  bool primaryLoading = false;
 
   factory LoginInitBlockData.fromProcessResponse(GeneralBlockLoginInit typed) {
     return LoginInitBlockData(
@@ -43,7 +45,12 @@ class LoginInitBlock extends Block<LoginInitBlockData> {
           alternatives: [],
           initialScreen: ScreenNames.LoginInit,
           data: data,
+          authProcessType: AuthProcessType.Login,
         );
+
+  init() {
+    initConditionalUI();
+  }
 
   navigateToSignup() {
     final newPrimaryBlock = alternatives.first;
@@ -54,23 +61,32 @@ class LoginInitBlock extends Block<LoginInitBlockData> {
 
   submitLogin({required String loginIdentifier, bool isPhone = false}) async {
     try {
+      data.primaryLoading = true;
+      processHandler.notifyCurrentScreen();
+
       final response = await corbadoService.loginInit(loginIdentifier, isPhone);
       processHandler.updateBlockFromServer(response);
     } on CorbadoError catch (e) {
+      data.primaryLoading = false;
       processHandler.updateBlockFromError(e);
     }
   }
 
-  continueWithConditionalUI({void Function()? onAuthenticatorCompleted}) async {
-    if (data.conditionalUIChallenge == null) {
+  initConditionalUI() async {
+    final challenge = data.conditionalUIChallenge;
+    if (challenge == null) {
+      print('Conditional UI can not be started (missing challenge)');
       return;
     }
 
     try {
-      final response = await corbadoService.finishPasskeyMediation(data.conditionalUIChallenge!);
+      final response = await corbadoService.verifyPasskeyConditional(challenge, false);
       processHandler.updateBlockFromServer(response);
     } on CorbadoError catch (e) {
       processHandler.updateBlockFromError(e);
+    } on AuthenticatorException catch (e) {
+      // all authenticator exceptions that have not been translated to errors are handled silently here
+      return;
     }
   }
 }

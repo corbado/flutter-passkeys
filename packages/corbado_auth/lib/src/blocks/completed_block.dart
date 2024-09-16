@@ -22,5 +22,6 @@ class CompletedBlock extends Block<CompletedBlockData> {
           type: BlockType.completed,
           alternatives: [],
           data: data,
+          authProcessType: AuthProcessType.Login,
         );
 }

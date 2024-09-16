@@ -67,7 +67,7 @@ public class PasskeysPlugin: NSObject, FlutterPlugin, PasskeysApi {
         inFlightController = con
     }
 
-    func authenticate(relyingPartyId: String, challenge: String, conditionalUI: Bool, allowedCredentialIDs: [String], completion: @escaping (Result<AuthenticateResponse, Error>) -> Void) {
+    func authenticate(relyingPartyId: String, challenge: String, conditionalUI: Bool, allowedCredentialIDs: [String], preferImmediatelyAvailableCredentials: Bool, completion: @escaping (Result<AuthenticateResponse, Error>) -> Void) {
 
         guard let decodedChallenge = Data.fromBase64Url(challenge) else {
             completion(.failure(CustomErrors.decodingChallenge))
@@ -82,7 +82,7 @@ public class PasskeysPlugin: NSObject, FlutterPlugin, PasskeysApi {
         request.allowedCredentials = parseCredentials(credentialIDs: allowedCredentialIDs)
                 
         let con = AuthenticateController(completion: completion)
-        con.run(request: request, conditionalUI: conditionalUI)
+        con.run(request: request, conditionalUI: conditionalUI, preferImmediatelyAvailableCredentials: preferImmediatelyAvailableCredentials)
         inFlightController = con
     }
     

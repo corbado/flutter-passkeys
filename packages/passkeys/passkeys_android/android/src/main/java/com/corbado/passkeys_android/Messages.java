@@ -527,16 +527,13 @@ public class Messages {
    */
   public static final class AuthenticatorSelection {
     /** The authenticator attachment */
-    private @NonNull String authenticatorAttachment;
+    private @Nullable String authenticatorAttachment;
 
-    public @NonNull String getAuthenticatorAttachment() {
+    public @Nullable String getAuthenticatorAttachment() {
       return authenticatorAttachment;
     }
 
-    public void setAuthenticatorAttachment(@NonNull String setterArg) {
-      if (setterArg == null) {
-        throw new IllegalStateException("Nonnull field \"authenticatorAttachment\" is null.");
-      }
+    public void setAuthenticatorAttachment(@Nullable String setterArg) {
       this.authenticatorAttachment = setterArg;
     }
 
@@ -589,7 +586,7 @@ public class Messages {
 
       private @Nullable String authenticatorAttachment;
 
-      public @NonNull Builder setAuthenticatorAttachment(@NonNull String setterArg) {
+      public @NonNull Builder setAuthenticatorAttachment(@Nullable String setterArg) {
         this.authenticatorAttachment = setterArg;
         return this;
       }

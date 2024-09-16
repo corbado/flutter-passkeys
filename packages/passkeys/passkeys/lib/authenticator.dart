@@ -48,8 +48,8 @@ class PasskeyAuthenticator {
   /// Returns [AuthenticateResponseType] which must be sent to the relying party
   /// server.
   Future<AuthenticateResponseType> authenticate(
-    AuthenticateRequestType request,
-  ) async {
+      AuthenticateRequestType request,
+      ) async {
     try {
       await _platform.cancelCurrentAuthenticatorOperation();
       final r = await _platform.authenticate(request);
@@ -57,6 +57,10 @@ class PasskeyAuthenticator {
       return r;
     } on PlatformException catch (e) {
       switch (e.code) {
+        case 'domain-not-associated':
+          throw DomainNotAssociatedException();
+        case 'no-credentials-available':
+          throw NoCredentialsAvailableException();
         case 'cancelled':
           throw PasskeyAuthCancelledException();
         case 'android-no-credential':

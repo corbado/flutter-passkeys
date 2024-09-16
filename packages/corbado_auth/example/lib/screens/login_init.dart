@@ -4,10 +4,13 @@ import 'package:corbado_auth_example/widgets/generic_error.dart';
 import 'package:corbado_auth_example/widgets/outlined_text_button.dart';
 import 'package:flutter/material.dart';
 
-class LoginInitScreen extends CorbadoComponent<LoginInitBlock> {
+class LoginInitScreen extends StatelessWidget implements CorbadoScreen<LoginInitBlock> {
+  final LoginInitBlock block;
   final _emailController = TextEditingController();
 
-  Widget build(BuildContext context, LoginInitBlock block) {
+  LoginInitScreen(this.block);
+
+  Widget build(BuildContext context) {
     final email = block.data.loginIdentifier;
     _emailController.value = TextEditingValue(text: email);
 
@@ -41,7 +44,7 @@ class LoginInitScreen extends CorbadoComponent<LoginInitBlock> {
             controller: _emailController,
             decoration: InputDecoration(
               border: OutlineInputBorder(),
-              hintText: 'email address',
+              hintText: 'Email address',
             ),
           ),
         ),
@@ -56,12 +59,12 @@ class LoginInitScreen extends CorbadoComponent<LoginInitBlock> {
           width: double.infinity,
           height: 50,
           child: FilledTextButton(
-            isLoading: false,
+            isLoading: block.data.primaryLoading,
             onTap: () async {
               final email = _emailController.value.text;
               await block.submitLogin(loginIdentifier: email);
             },
-            content: 'login',
+            content: 'Login',
           ),
         ),
         SizedBox(height: 10),
@@ -70,7 +73,7 @@ class LoginInitScreen extends CorbadoComponent<LoginInitBlock> {
           height: 50,
           child: OutlinedTextButton(
             onTap: () => block.navigateToSignup(),
-            content: 'create a new account',
+            content: 'Create a new account',
           ),
         ),
       ],

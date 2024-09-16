@@ -23,6 +23,12 @@ abstract class CorbadoComponent<T> {
   Widget build(BuildContext context, T data);
 }
 
+abstract class CorbadoScreen<T> implements Widget {
+  final T block;
+
+  CorbadoScreen(this.block);
+}
+
 class CorbadoComponentData {}
 
 class ComponentWithData {
@@ -69,16 +75,22 @@ class CorbadoAuth {
 
   /// Tries to get the user object from secure storage (this only works if
   /// the user has already signed in before and then closed the app).
-  Future<void> init({required String projectId, required void Function() onLoggedIn, String? customDomain}) async {
+  Future<void> init({required String projectId, String? customDomain}) async {
     final passkeyAuthenticator = PasskeyAuthenticator();
-    _corbadoService = await createClient(projectId, passkeyAuthenticator: passkeyAuthenticator, customDomain: customDomain);
+    _corbadoService =
+        await createClient(projectId, passkeyAuthenticator: passkeyAuthenticator, customDomain: customDomain);
     _sessionService = _buildSessionService(
       _corbadoService.frontendAPIClient,
     );
+
     _processHandler = ProcessHandler(
-        corbadoService: _corbadoService,
-        sessionService: _sessionService,
-        onLoggedIn: onLoggedIn);
+      corbadoService: _corbadoService,
+      onLoggedIn: (String shortSession, String? longSession) async {
+        await _sessionService.setUser(User.fromIdToken(shortSession));
+        await _sessionService.setRefreshToken(longSession);
+        await _loadPasskeys();
+      },
+    );
 
     try {
       final maybeUser = await _sessionService.init();
@@ -86,6 +98,8 @@ class CorbadoAuth {
         await signOut();
         return;
       }
+
+      await _loadPasskeys();
     } catch (e) {
       await signOut();
       debugPrint(e.toString());
@@ -94,8 +108,19 @@ class CorbadoAuth {
 
   Future<void> _updateSession(User user, {String? refreshToken}) async {
     if (refreshToken != null) {
-      await _sessionService.setRefreshToken(user, refreshToken);
+      await _sessionService.setRefreshToken(refreshToken);
     }
+  }
+
+  /// Load all passkeys that are available to the currently logged in user.
+  Future<List<PasskeyInfo>> _loadPasskeys({String? explicitRefreshToken}) async {
+    final refreshToken = explicitRefreshToken ?? await _sessionService.getRefreshToken();
+    final passkeys = await _corbadoService.sessionListPasskeys(token: refreshToken);
+    final mapped = passkeys.map((p) => PasskeyInfo.fromResponse(p)).toList();
+
+    _passkeysStreamController.sink.add(mapped);
+
+    return mapped;
   }
 
   /// Explicitly trigger a token refresh.
@@ -111,6 +136,18 @@ class CorbadoAuth {
     await _sessionService.signOut();
 
     _passkeysStreamController.add([]);
+  }
+
+  Future<void> appendPasskey() async {
+    await _corbadoService.sessionAppendPasskey();
+
+    await _loadPasskeys();
+  }
+
+  Future<void> deletePasskey({required String credentialID}) async {
+    await _corbadoService.sessionDeletePasskeys(credentialID: credentialID);
+
+    await _loadPasskeys();
   }
 
   static SessionService _buildSessionService(CorbadoFrontendApiClient frontendAPIClient) {

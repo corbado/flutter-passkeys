@@ -1,6 +1,5 @@
 import 'package:corbado_auth/src/blocks/types.dart';
 import 'package:corbado_auth/src/process_handler.dart';
-import 'package:corbado_auth/src/services/corbado/corbado.dart';
 import 'package:corbado_auth/src/types/screen_names.dart';
 import 'package:corbado_frontend_api_client/corbado_frontend_api_client.dart';
 
@@ -8,6 +7,8 @@ class SignupInitBlockData {
   final TextFieldWithError? fullName;
   final TextFieldWithError? email;
   final CorbadoError? error;
+
+  bool primaryLoading = false;
 
   SignupInitBlockData({this.fullName, this.email, this.error});
 
@@ -45,6 +46,7 @@ class SignupInitBlock extends Block<SignupInitBlockData> {
           alternatives: [],
           initialScreen: ScreenNames.SignupInit,
           data: data,
+          authProcessType: AuthProcessType.Signup,
         );
 
   navigateToLogin() {
@@ -56,9 +58,13 @@ class SignupInitBlock extends Block<SignupInitBlockData> {
 
   submitSignupInit({String? email, String? fullName}) async {
     try {
+      data.primaryLoading = true;
+      processHandler.notifyCurrentScreen();
+
       final res = await corbadoService.signupInit(email: email, fullName: fullName);
       processHandler.updateBlockFromServer(res);
     } on CorbadoError catch (e) {
+      data.primaryLoading = false;
       processHandler.updateBlockFromError(e);
     }
   }

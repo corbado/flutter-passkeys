@@ -16,6 +16,7 @@ class StartLoginResponse {
 
   AuthenticateRequestType toPlatformType({
     required bool conditional,
+    bool preferImmediatelyAvailableCredentials = true,
   }) {
     return AuthenticateRequestType(
       relyingPartyId: publicKey.rpId,
@@ -31,13 +32,12 @@ class StartLoginResponse {
             ),
           )
           .toList(),
-      mediation:
-          conditional ? MediationType.Conditional : MediationType.Optional,
+      mediation: conditional ? MediationType.Conditional : MediationType.Optional,
+      preferImmediatelyAvailableCredentials: preferImmediatelyAvailableCredentials,
     );
   }
 
-  Map<String, dynamic> toJson() =>
-      _$StartLoginResponseToJson(this);
+  Map<String, dynamic> toJson() => _$StartLoginResponseToJson(this);
 }
 
 @JsonSerializable()
@@ -72,8 +72,7 @@ class StartLoginPublicKey {
   final List<AllowCredential>? allowCredentials;
 
   /// Serializes object to json
-  Map<String, dynamic> toJson() =>
-      _$StartLoginPublicKeyToJson(this);
+  Map<String, dynamic> toJson() => _$StartLoginPublicKeyToJson(this);
 }
 
 @JsonSerializable()
@@ -144,8 +143,7 @@ class FinishLoginRequest {
   /// The type
   final String type;
 
-  Map<String, dynamic> toJson() =>
-      _$FinishLoginRequestToJson(this);
+  Map<String, dynamic> toJson() => _$FinishLoginRequestToJson(this);
 }
 
 @JsonSerializable()

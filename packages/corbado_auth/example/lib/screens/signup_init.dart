@@ -4,10 +4,13 @@ import 'package:corbado_auth_example/widgets/generic_error.dart';
 import 'package:corbado_auth_example/widgets/outlined_text_button.dart';
 import 'package:flutter/material.dart';
 
-class SignupInitScreen extends CorbadoComponent<SignupInitBlock> {
+class SignupInitScreen extends StatelessWidget implements CorbadoScreen<SignupInitBlock> {
+  final SignupInitBlock block;
   final _emailController = TextEditingController();
 
-  Widget build(BuildContext context, SignupInitBlock block) {
+  SignupInitScreen(this.block);
+
+  Widget build(BuildContext context) {
     final email = block.data.email;
     if (email == null) {
       return Container();
@@ -45,15 +48,15 @@ class SignupInitScreen extends CorbadoComponent<SignupInitBlock> {
             controller: _emailController,
             decoration: InputDecoration(
               border: OutlineInputBorder(),
-              hintText: 'email address',
+              hintText: 'Email address',
             ),
           ),
         ),
         email.error?.translatedError != null
             ? Text(
-                email.error!.translatedError,
-                style: TextStyle(color: Theme.of(context).colorScheme.error),
-              )
+          email.error!.translatedError,
+          style: TextStyle(color: Theme.of(context).colorScheme.error),
+        )
             : Container(),
         SizedBox(height: 20),
         SizedBox(
@@ -65,7 +68,7 @@ class SignupInitScreen extends CorbadoComponent<SignupInitBlock> {
               final email = _emailController.value.text;
               await block.submitSignupInit(email: email, fullName: 'fixed');
             },
-            content: 'sign up',
+            content: 'Sign up',
           ),
         ),
         SizedBox(height: 10),

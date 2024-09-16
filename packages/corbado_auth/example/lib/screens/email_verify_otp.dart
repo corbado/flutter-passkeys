@@ -4,17 +4,20 @@ import 'package:corbado_auth_example/widgets/generic_error.dart';
 import 'package:corbado_auth_example/widgets/outlined_text_button.dart';
 import 'package:flutter/material.dart';
 
-class EmailVerifyOtpScreen extends CorbadoComponent<EmailVerifyBlock> {
-  EmailVerifyOtpScreen() {}
-
+class EmailVerifyOtpScreen extends StatelessWidget implements CorbadoScreen<EmailVerifyBlock> {
+  final EmailVerifyBlock block;
   final _textFieldController = TextEditingController();
 
-  Widget build(BuildContext context, EmailVerifyBlock block) {
+  EmailVerifyOtpScreen(this.block);
+
+  Widget build(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         MaybeGenericError(message: block.error?.translatedError),
-        SizedBox(height: 10,),
+        SizedBox(
+          height: 10,
+        ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
           child: const Text(
@@ -46,21 +49,21 @@ class EmailVerifyOtpScreen extends CorbadoComponent<EmailVerifyBlock> {
         ),
         block.data.error != null
             ? Text(
-          block.data.error!.translatedError,
-          style: TextStyle(color: Theme.of(context).colorScheme.error),
-        )
+                block.data.error!.translatedError,
+                style: TextStyle(color: Theme.of(context).colorScheme.error),
+              )
             : Container(),
         SizedBox(height: 20),
         SizedBox(
           width: double.infinity,
           height: 50,
           child: FilledTextButton(
-            isLoading: false,
+            isLoading: block.data.primaryLoading,
             onTap: () async {
               final code = _textFieldController.value.text;
               await block.submitOtpCode(code);
             },
-            content: 'submit',
+            content: 'Submit',
           ),
         ),
         SizedBox(height: 10),
@@ -69,18 +72,10 @@ class EmailVerifyOtpScreen extends CorbadoComponent<EmailVerifyBlock> {
           height: 50,
           child: OutlinedTextButton(
             onTap: () => block.resendEmail(),
-            content: 'resend code',
+            content: 'Resend code',
           ),
         ),
         SizedBox(height: 10),
-        SizedBox(
-          width: double.infinity,
-          height: 50,
-          child: OutlinedTextButton(
-            onTap: () => block.navigateToEditEmail(),
-            content: 'change email',
-          ),
-        ),
       ],
     );
   }

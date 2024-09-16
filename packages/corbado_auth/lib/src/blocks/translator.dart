@@ -23,6 +23,8 @@ const Map<String, String> errorMap = {
   'forbidden_request': 'This request is currently not allowed.',
   'too_many_requests': 'Too many requests. Please try again later.',
   'login_identifier_unknown_user': "Couldn't find your account.",
+  'passkey_operation_cancelled': 'The operation was cancelled. Please try again.',
+  'invalid_challenge_solution_email-otp': 'The code is invalid or expired',
 };
 
 class Translator {

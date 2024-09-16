@@ -84,7 +84,7 @@ class AuthenticatorSelection {
       this.requireResidentKey, this.residentKey, this.userVerification);
 
   /// The authenticator attachment
-  final String authenticatorAttachment;
+  final String? authenticatorAttachment;
 
   /// Whether a resident key is required
   final bool requireResidentKey;

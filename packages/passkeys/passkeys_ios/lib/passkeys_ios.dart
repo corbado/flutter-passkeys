@@ -57,6 +57,7 @@ class PasskeysIOS extends PasskeysPlatform {
       request.challenge,
       conditionalUI,
       request.allowCredentials?.map((e) => e.id).toList() ?? [],
+      request.preferImmediatelyAvailableCredentials,
     );
 
     return AuthenticateResponseType(

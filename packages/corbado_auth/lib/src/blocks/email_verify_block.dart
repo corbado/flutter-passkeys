@@ -21,6 +21,7 @@ class EmailVerifyBlockData {
   CorbadoError? error;
   DateTime? retryNotBefore;
   final bool? isPostLoginVerification;
+  bool primaryLoading = false;
 
   factory EmailVerifyBlockData.fromProcessResponse(Api.GeneralBlockVerifyIdentifier typed) {
     final verificationMethod = typed.verificationMethod == Api.VerificationMethod.emailOtp
@@ -43,13 +44,14 @@ class EmailVerifyBlockData {
 }
 
 class EmailVerifyBlock extends Block<EmailVerifyBlockData> {
-  EmailVerifyBlock({required ProcessHandler processHandler, required EmailVerifyBlockData data})
+  EmailVerifyBlock({required ProcessHandler processHandler, required EmailVerifyBlockData data, required Api.AuthType authType})
       : super(
           processHandler: processHandler,
           type: Api.BlockType.emailVerify,
           alternatives: [],
           initialScreen: ScreenNames.EmailVerifyOTP,
           data: data,
+          authProcessType: authType == Api.AuthType.login ? AuthProcessType.Login : AuthProcessType.Signup,
         );
 
   init() {
@@ -73,9 +75,13 @@ class EmailVerifyBlock extends Block<EmailVerifyBlockData> {
 
   submitOtpCode(String otpCode) async {
     try {
+      data.primaryLoading = true;
+      processHandler.notifyCurrentScreen();
+
       final res = await corbadoService.verifyEmailOtpCode(otpCode);
       processHandler.updateBlockFromServer(res);
     } on CorbadoError catch (e) {
+      data.primaryLoading = false;
       processHandler.updateBlockFromError(e);
     }
   }

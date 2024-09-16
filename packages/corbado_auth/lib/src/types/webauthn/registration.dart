@@ -81,7 +81,7 @@ class CorbadoAuthenticatorSelection {
 
   factory CorbadoAuthenticatorSelection.fromJson(Map<String, dynamic> json) =>
       _$CorbadoAuthenticatorSelectionFromJson(json);
-  final String authenticatorAttachment;
+  final String? authenticatorAttachment;
   final bool? requireResidentKey;
   final String residentKey;
   final String userVerification;

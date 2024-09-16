@@ -12,11 +12,18 @@ class MaybeGenericError extends StatelessWidget {
     }
 
     return Center(
-      child: Text(
-        message!,
-        style: TextStyle(
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
           color: Colors.red,
-          fontSize: 20,
+        ),
+        padding: EdgeInsets.all(10),
+        child: Text(
+          message!,
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 20,
+          ),
         ),
       ),
     );

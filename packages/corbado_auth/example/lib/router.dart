@@ -2,7 +2,6 @@ import 'package:corbado_auth/corbado_auth.dart';
 import 'package:corbado_auth_example/auth_provider.dart';
 import 'package:corbado_auth_example/pages/auth_page.dart';
 import 'package:corbado_auth_example/pages/profile_page.dart';
-import 'package:corbado_auth_example/pages/tokendetails_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -10,7 +9,6 @@ import 'package:go_router/go_router.dart';
 class Routes {
   static const auth = '/auth';
   static const profile = '/profile';
-  static const tokenDetails = '/tokendetails';
 }
 
 GoRoute _defaultTransitionGoRoute({
@@ -55,10 +53,6 @@ final routerProvider = Provider<GoRouter>((ref) {
         _defaultTransitionGoRoute(
           path: Routes.profile,
           builder: (context, state) => ProfilePage(),
-        ),
-        _defaultTransitionGoRoute(
-          path: Routes.tokenDetails,
-          builder: (context, state) => TokenDetailsPage(),
         ),
       ],
       redirect: (BuildContext context, GoRouterState state) {

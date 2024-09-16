@@ -8,7 +8,7 @@ class PasskeyVerifyBlockData {
   List<PasskeyFallback> availableFallbacks;
   final String identifierValue;
   PasskeyFallback? preferredFallback;
-  bool passkeyOperationInProcess = false;
+  bool primaryLoading = false;
 
   factory PasskeyVerifyBlockData.fromProcessResponse(Api.GeneralBlockPasskeyVerify typed) {
     return PasskeyVerifyBlockData(
@@ -32,6 +32,7 @@ class PasskeyVerifyBlock extends Block<PasskeyVerifyBlockData> {
           type: Api.BlockType.passkeyVerify,
           alternatives: [],
           data: data,
+          authProcessType: AuthProcessType.Login,
         );
 
   init() {
@@ -72,13 +73,16 @@ class PasskeyVerifyBlock extends Block<PasskeyVerifyBlockData> {
 
   passkeyVerify() async {
     try {
-      data.passkeyOperationInProcess = true;
+      error = null;
+      data.primaryLoading = true;
       final response = await corbadoService.verifyPasskey();
-      data.passkeyOperationInProcess = false;
+      data.primaryLoading = false;
       processHandler.updateBlockFromServer(response);
     } on CorbadoError catch (e) {
-      data.passkeyOperationInProcess = false;
+      data.primaryLoading = false;
       processHandler.updateBlockFromError(e);
+    } on NoCredentialsAvailableException {
+      await initFallbackEmailOtp();
     }
   }
 

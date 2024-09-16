@@ -12,7 +12,7 @@ class PasskeyAppendBlockData {
   final CorbadoError? error;
   PasskeyFallback? preferredFallback;
   final bool autoSubmit;
-  bool passkeyOperationInProcess = false;
+  bool primaryLoading = false;
 
   factory PasskeyAppendBlockData.fromProcessResponse(Api.GeneralBlockPasskeyAppend typed) {
     return PasskeyAppendBlockData(
@@ -35,17 +35,24 @@ class PasskeyAppendBlockData {
 }
 
 class PasskeyAppendBlock extends Block<PasskeyAppendBlockData> {
-  PasskeyAppendBlock({required ProcessHandler processHandler, required PasskeyAppendBlockData data})
+  PasskeyAppendBlock(
+      {required ProcessHandler processHandler, required PasskeyAppendBlockData data, required Api.AuthType authType})
       : super(
           processHandler: processHandler,
           initialScreen: ScreenNames.PasskeyAppend,
           type: Api.BlockType.passkeyAppend,
           alternatives: [],
           data: data,
+          authProcessType: authType == Api.AuthType.login ? AuthProcessType.Login : AuthProcessType.Signup,
         );
 
   init() {
-    data.availableFallbacks = alternatives.map((alternative) {
+    const allowedAlternatives = [
+      Api.BlockType.emailVerify,
+      Api.BlockType.phoneVerify,
+    ];
+    data.availableFallbacks =
+        alternatives.where((alternative) => allowedAlternatives.contains(alternative.type)).map((alternative) {
       switch (alternative.type) {
         case Api.BlockType.emailVerify:
           final typed = alternative.data as EmailVerifyBlockData;
@@ -55,11 +62,10 @@ class PasskeyAppendBlock extends Block<PasskeyAppendBlockData> {
 
           return PasskeyFallback(
             label: 'Email verification',
-            onTap: () {
-              processHandler.updateBlockFromClient(alternative, []);
-            },
+            onTap: initFallbackEmailOtp,
           );
 
+        case Api.BlockType.completed:
         case Api.BlockType.phoneVerify:
           throw Exception('Currently not supported');
 
@@ -79,19 +85,22 @@ class PasskeyAppendBlock extends Block<PasskeyAppendBlockData> {
 
     data.canBeSkipped = alternatives.any((a) => a.type == Api.BlockType.completed);
 
-    if (data.autoSubmit) {
+    // depending on data.canBeSkipped is only a short term fix
+    if (data.autoSubmit && !data.canBeSkipped) {
       passkeyAppend();
     }
   }
 
   passkeyAppend() async {
     try {
-      data.passkeyOperationInProcess = true;
+      error = null;
+      data.primaryLoading = true;
+      processHandler.notifyCurrentScreen();
+
       final response = await corbadoService.appendPasskey();
-      data.passkeyOperationInProcess = false;
       processHandler.updateBlockFromServer(response);
     } on CorbadoError catch (e) {
-      data.passkeyOperationInProcess = false;
+      data.primaryLoading = false;
       processHandler.updateBlockFromError(e);
     }
   }
@@ -105,7 +114,13 @@ class PasskeyAppendBlock extends Block<PasskeyAppendBlockData> {
     }
   }
 
-  skipPasskeyAppend() {
-
+  skipPasskeyAppend() async {
+    try {
+      await corbadoService.cancelPasskeyOperation();
+      final response = await corbadoService.completeAuthProcess();
+      processHandler.updateBlockFromServer(response);
+    } on CorbadoError catch (e) {
+      processHandler.updateBlockFromError(e);
+    }
   }
 }

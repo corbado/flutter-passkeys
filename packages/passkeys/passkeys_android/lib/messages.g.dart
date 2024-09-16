@@ -173,14 +173,14 @@ class ExcludeCredential {
 /// Represents an authenticator selection
 class AuthenticatorSelection {
   AuthenticatorSelection({
-    required this.authenticatorAttachment,
+    this.authenticatorAttachment,
     required this.requireResidentKey,
     required this.residentKey,
     required this.userVerification,
   });
 
   /// The authenticator attachment
-  String authenticatorAttachment;
+  String? authenticatorAttachment;
 
   /// Whether a resident key is required
   bool requireResidentKey;
@@ -203,7 +203,7 @@ class AuthenticatorSelection {
   static AuthenticatorSelection decode(Object result) {
     result as List<Object?>;
     return AuthenticatorSelection(
-      authenticatorAttachment: result[0]! as String,
+      authenticatorAttachment: result[0] as String?,
       requireResidentKey: result[1]! as bool,
       residentKey: result[2]! as String,
       userVerification: result[3]! as String,

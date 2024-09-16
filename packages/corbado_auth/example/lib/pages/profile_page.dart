@@ -1,11 +1,8 @@
 import 'package:corbado_auth_example/auth_provider.dart';
 import 'package:corbado_auth_example/pages/base_page.dart';
-import 'package:corbado_auth_example/router.dart';
 import 'package:corbado_auth_example/widgets/filled_text_button.dart';
-import 'package:corbado_auth_example/widgets/outlined_text_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 
 class ProfilePage extends ConsumerWidget {
   ProfilePage({super.key});
@@ -21,8 +18,8 @@ class ProfilePage extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
           const Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-            child: const Text(
+            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+            child: Text(
               'Welcome',
               style: TextStyle(
                 fontSize: 40,
@@ -33,7 +30,7 @@ class ProfilePage extends ConsumerWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
             child: Text(
-              user.value?.username ?? '',
+              user.value?.email ?? '',
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
@@ -51,17 +48,9 @@ class ProfilePage extends ConsumerWidget {
           ),
           SizedBox(height: 10),
           SizedBox(
-              width: double.infinity,
-              height: 50,
-              child: FilledTextButton(
-                onTap: () => context.push(Routes.tokenDetails),
-                content: 'token details',
-              )),
-          SizedBox(height: 10),
-          SizedBox(
             width: double.infinity,
             height: 50,
-            child: OutlinedTextButton(
+            child: FilledTextButton(
               onTap: () => corbado.signOut(),
               content: 'sign out',
             ),

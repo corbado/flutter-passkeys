@@ -1,8 +1,9 @@
-name: corbado_frontend_api_client
+name: corbado_api_clients
 description: Flutter client for the most recent version of the Corbado frontend API.
 homepage: https://docs.corbado.com/overview/welcome
 repository: https://github.com/corbado/flutter-passkeys/tree/main/packages/corbado_api_client
 version: 1.1.1
+publish_to: none
 
 environment:
   sdk: ">=3.0.0 <4.0.0"

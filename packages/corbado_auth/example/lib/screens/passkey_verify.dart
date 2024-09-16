@@ -4,10 +4,12 @@ import 'package:corbado_auth_example/widgets/generic_error.dart';
 import 'package:corbado_auth_example/widgets/outlined_text_button.dart';
 import 'package:flutter/material.dart';
 
-class PasskeyVerifyScreen extends CorbadoComponent<PasskeyVerifyBlock> {
-  PasskeyVerifyScreen() {}
+class PasskeyVerifyScreen extends StatelessWidget implements CorbadoScreen<PasskeyVerifyBlock> {
+  final PasskeyVerifyBlock block;
 
-  Widget build(BuildContext context, PasskeyVerifyBlock block) {
+  PasskeyVerifyScreen(this.block);
+
+  Widget build(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -25,20 +27,16 @@ class PasskeyVerifyScreen extends CorbadoComponent<PasskeyVerifyBlock> {
             ),
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-          child: CircularProgressIndicator(),
-        ),
         SizedBox(height: 20),
         SizedBox(
           width: double.infinity,
           height: 50,
           child: FilledTextButton(
-            isLoading: false,
+            isLoading: block.data.primaryLoading,
             onTap: () async {
               await block.passkeyVerify();
             },
-            content: 'create passkey',
+            content: 'Login with passkey',
           ),
         ),
         SizedBox(height: 10),
@@ -48,7 +46,7 @@ class PasskeyVerifyScreen extends CorbadoComponent<PasskeyVerifyBlock> {
                 height: 50,
                 child: OutlinedTextButton(
                   onTap: () => block.data.preferredFallback!.onTap(),
-                  content: block.data.preferredFallback!.label.toLowerCase(),
+                  content: block.data.preferredFallback!.label,
                 ),
               )
             : Container(),
