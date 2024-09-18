@@ -40,7 +40,7 @@ public class PasskeysPlugin: NSObject, FlutterPlugin, PasskeysApi {
         }
         
         guard let decodedUserId = Data.fromBase64(user.id) else {
-            completion(.failure(CustomErrors.decodingChallenge))
+            completion(.failure(CustomErrors.decodingUserId))
             return
         }
         
@@ -91,7 +91,19 @@ public class PasskeysPlugin: NSObject, FlutterPlugin, PasskeysApi {
         
         completion(.success(Void()))
     }
-    
+
+    func goToSettings(completion: @escaping (Result<Void, Error>) -> Void) {
+        if let settingsUrl = URL(string: UIApplication.openSettingsURLString) {
+            if UIApplication.shared.canOpenURL(settingsUrl) {
+                UIApplication.shared.open(settingsUrl, options: [:], completionHandler: { success in
+                    if success {
+                        completion(.success(Void()))
+                    }
+                })
+            }
+        }
+    }
+
     private func parseCredentials(credentialIDs: [String]) -> [ASAuthorizationPlatformPublicKeyCredentialDescriptor] {
         return credentialIDs.compactMap {
             if let credentialId = Data.fromBase64Url($0) {

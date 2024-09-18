@@ -2,7 +2,6 @@ group 'com.corbado.passkeys_android'
 version '1.0-SNAPSHOT'
 
 buildscript {
-    ext.kotlin_version = '1.8.10'
     repositories {
         google()
         mavenCentral()
@@ -48,13 +47,13 @@ android {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'androidx.annotation:annotation:1.6.0'
+    implementation 'androidx.annotation:annotation:1.8.2'
     implementation("androidx.credentials:credentials:1.2.2")
 
     // optional - needed for credentials support from play services, for devices running
     // Android 13 and below.0
     implementation("androidx.credentials:credentials-play-services-auth:1.2.2")
-    implementation 'com.google.android.gms:play-services-auth:20.5.0'
-    implementation 'com.google.android.gms:play-services-fido:20.0.1'
+    implementation 'com.google.android.gms:play-services-auth:21.2.0'
+    implementation 'com.google.android.gms:play-services-fido:21.1.0'
     implementation 'androidx.multidex:multidex:2.0.1'
 }

@@ -72,4 +72,9 @@ class PasskeysIOS extends PasskeysPlatform {
   @override
   Future<void> cancelCurrentAuthenticatorOperation() =>
       _api.cancelCurrentAuthenticatorOperation();
+
+  @override
+  Future<void> goToSettings() async {
+    await _api.goToSettings();
+  }
 }

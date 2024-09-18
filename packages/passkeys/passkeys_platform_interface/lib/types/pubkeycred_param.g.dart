@@ -9,7 +9,7 @@ part of 'pubkeycred_param.dart';
 PubKeyCredParamType _$PubKeyCredParamTypeFromJson(Map<String, dynamic> json) =>
     PubKeyCredParamType(
       type: json['type'] as String,
-      alg: json['alg'] as int,
+      alg: (json['alg'] as num).toInt(),
     );
 
 Map<String, dynamic> _$PubKeyCredParamTypeToJson(

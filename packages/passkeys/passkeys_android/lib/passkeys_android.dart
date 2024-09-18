@@ -48,6 +48,11 @@ class PasskeysAndroid extends PasskeysPlatform {
   }
 
   @override
+  Future<void> goToSettings() async {
+    await _api.goToSettings();
+  }
+
+  @override
   Future<RegisterResponseType> register(RegisterRequestType request) async {
     final userArg = User(
       displayName: request.user.displayName,

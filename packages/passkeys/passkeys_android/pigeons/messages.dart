@@ -177,4 +177,7 @@ abstract class PasskeysApi {
 
   @async
   void cancelCurrentAuthenticatorOperation();
+
+  @async
+  void goToSettings();
 }

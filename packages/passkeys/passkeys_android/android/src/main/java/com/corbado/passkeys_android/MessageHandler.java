@@ -1,9 +1,8 @@
 package com.corbado.passkeys_android;
 
 import android.app.Activity;
-import android.content.pm.PackageManager;
-import android.content.pm.Signature;
-import android.os.Build;
+import android.app.admin.DevicePolicyManager;
+import android.content.Intent;
 import android.os.CancellationSignal;
 import android.util.Log;
 
@@ -24,13 +23,12 @@ import androidx.credentials.exceptions.GetCredentialCancellationException;
 import androidx.credentials.exceptions.GetCredentialException;
 import androidx.credentials.exceptions.NoCredentialException;
 import androidx.credentials.exceptions.publickeycredential.CreatePublicKeyCredentialDomException;
-import androidx.credentials.exceptions.publickeycredential.CreatePublicKeyCredentialException;
 import androidx.credentials.exceptions.publickeycredential.GetPublicKeyCredentialDomException;
 
 import com.corbado.passkeys_android.models.login.AllowCredentialType;
+import com.corbado.passkeys_android.models.login.GetCredentialOptions;
 import com.corbado.passkeys_android.models.signup.AuthenticatorSelectionType;
 import com.corbado.passkeys_android.models.signup.CreateCredentialOptions;
-import com.corbado.passkeys_android.models.login.GetCredentialOptions;
 import com.corbado.passkeys_android.models.signup.ExcludeCredentialType;
 import com.corbado.passkeys_android.models.signup.PubKeyCredParamType;
 import com.corbado.passkeys_android.models.signup.RelyingPartyType;
@@ -42,8 +40,6 @@ import com.google.android.gms.tasks.Task;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -177,7 +173,10 @@ public class MessageHandler implements Messages.PasskeysApi {
             CredentialManager credentialManager = CredentialManager.create(activity);
             GetPublicKeyCredentialOption getPublicKeyCredentialOption = new GetPublicKeyCredentialOption(options);
 
-            GetCredentialRequest getCredRequest = new GetCredentialRequest.Builder().addCredentialOption(getPublicKeyCredentialOption).build();
+            GetCredentialRequest getCredRequest = new GetCredentialRequest.Builder()
+                    .addCredentialOption(getPublicKeyCredentialOption)
+                    .setPreferImmediatelyAvailableCredentials(true)
+                    .build();
             currentCancellationSignal = new CancellationSignal();
 
             credentialManager.getCredentialAsync(activity, getCredRequest, currentCancellationSignal, Runnable::run, new CredentialManagerCallback<GetCredentialResponse, GetCredentialException>() {
@@ -248,5 +247,12 @@ public class MessageHandler implements Messages.PasskeysApi {
         }
 
         result.success(null);
+    }
+
+    @Override
+    public void goToSettings(@NonNull Messages.Result<Void> result) {
+        Activity activity = plugin.requireActivity();
+        Intent intent = new Intent(DevicePolicyManager.ACTION_SET_NEW_PASSWORD);
+        activity.startActivity(intent);
     }
 }

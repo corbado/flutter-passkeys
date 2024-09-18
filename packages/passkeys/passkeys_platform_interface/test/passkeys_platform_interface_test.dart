@@ -22,6 +22,11 @@ class PasskeysMock extends PasskeysPlatform {
   Future<void> cancelCurrentAuthenticatorOperation() {
     throw UnimplementedError();
   }
+
+  @override
+  Future<void> goToSettings() {
+    throw UnimplementedError();
+  }
 }
 
 void main() {

@@ -15,6 +15,11 @@ class PasskeyAuthenticator {
     return _platform.canAuthenticate();
   }
 
+  /// Go to setting
+  Future<void> goToSettings() async {
+    await _platform.goToSettings();
+  }
+
   Future<void> cancelCurrentAuthenticatorOperation() {
     return _platform.cancelCurrentAuthenticatorOperation();
   }

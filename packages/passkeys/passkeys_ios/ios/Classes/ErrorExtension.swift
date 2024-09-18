@@ -52,6 +52,7 @@ extension FlutterError: Error {
 
 enum CustomErrors: Error {
     case decodingChallenge
+    case decodingUserId
     case unexpectedAuthorizationResponse
     case unknown
 }

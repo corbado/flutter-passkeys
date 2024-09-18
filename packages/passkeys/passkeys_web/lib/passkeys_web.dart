@@ -103,4 +103,9 @@ class PasskeysWeb extends PasskeysPlatform {
   Future<void> cancelCurrentAuthenticatorOperation() async {
     await authenticatorCancel();
   }
+
+  @override
+  Future<void> goToSettings() {
+    throw UnimplementedError();
+  }
 }

@@ -1035,6 +1035,8 @@ public class Messages {
 
     void cancelCurrentAuthenticatorOperation(@NonNull Result<Void> result);
 
+    void goToSettings(@NonNull Result<Void> result);
+
     /** The codec used by PasskeysApi. */
     static @NonNull MessageCodec<Object> getCodec() {
       return PasskeysApiCodec.INSTANCE;
@@ -1159,6 +1161,33 @@ public class Messages {
                     };
 
                 api.cancelCurrentAuthenticatorOperation(resultCallback);
+              });
+        } else {
+          channel.setMessageHandler(null);
+        }
+      }
+      {
+        BasicMessageChannel<Object> channel =
+            new BasicMessageChannel<>(
+                binaryMessenger, "dev.flutter.pigeon.passkeys_android.PasskeysApi.goToSettings", getCodec());
+        if (api != null) {
+          channel.setMessageHandler(
+              (message, reply) -> {
+                ArrayList<Object> wrapped = new ArrayList<Object>();
+                Result<Void> resultCallback =
+                    new Result<Void>() {
+                      public void success(Void result) {
+                        wrapped.add(0, null);
+                        reply.reply(wrapped);
+                      }
+
+                      public void error(Throwable error) {
+                        ArrayList<Object> wrappedError = wrapError(error);
+                        reply.reply(wrappedError);
+                      }
+                    };
+
+                api.goToSettings(resultCallback);
               });
         } else {
           channel.setMessageHandler(null);

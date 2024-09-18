@@ -228,6 +228,7 @@ protocol PasskeysApi {
   func register(challenge: String, relyingParty: RelyingParty, user: User, excludeCredentialIDs: [String], completion: @escaping (Result<RegisterResponse, Error>) -> Void)
   func authenticate(relyingPartyId: String, challenge: String, conditionalUI: Bool, allowedCredentialIDs: [String], completion: @escaping (Result<AuthenticateResponse, Error>) -> Void)
   func cancelCurrentAuthenticatorOperation(completion: @escaping (Result<Void, Error>) -> Void)
+  func goToSettings(completion: @escaping (Result<Void, Error>) -> Void)
 }
 
 /// Generated setup class from Pigeon to handle messages through the `binaryMessenger`.
@@ -303,6 +304,21 @@ class PasskeysApiSetup {
       }
     } else {
       cancelCurrentAuthenticatorOperationChannel.setMessageHandler(nil)
+    }
+    let goToSettingsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.passkeys_ios.PasskeysApi.goToSettings", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      goToSettingsChannel.setMessageHandler { _, reply in
+        api.goToSettings() { result in
+          switch result {
+            case .success:
+              reply(wrapResult(nil))
+            case .failure(let error):
+              reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      goToSettingsChannel.setMessageHandler(nil)
     }
   }
 }
