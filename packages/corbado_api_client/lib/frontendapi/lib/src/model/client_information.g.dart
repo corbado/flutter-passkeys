@@ -23,6 +23,8 @@ class _$ClientInformation extends ClientInformation {
   final ClientCapabilities? clientCapabilities;
   @override
   final JavaScriptHighEntropy? javaScriptHighEntropy;
+  @override
+  final bool? isNative;
 
   factory _$ClientInformation(
           [void Function(ClientInformationBuilder)? updates]) =>
@@ -36,7 +38,8 @@ class _$ClientInformation extends ClientInformation {
       this.isUserVerifyingPlatformAuthenticatorAvailable,
       this.isConditionalMediationAvailable,
       this.clientCapabilities,
-      this.javaScriptHighEntropy})
+      this.javaScriptHighEntropy,
+      this.isNative})
       : super._();
 
   @override
@@ -60,7 +63,8 @@ class _$ClientInformation extends ClientInformation {
         isConditionalMediationAvailable ==
             other.isConditionalMediationAvailable &&
         clientCapabilities == other.clientCapabilities &&
-        javaScriptHighEntropy == other.javaScriptHighEntropy;
+        javaScriptHighEntropy == other.javaScriptHighEntropy &&
+        isNative == other.isNative;
   }
 
   @override
@@ -75,6 +79,7 @@ class _$ClientInformation extends ClientInformation {
     _$hash = $jc(_$hash, isConditionalMediationAvailable.hashCode);
     _$hash = $jc(_$hash, clientCapabilities.hashCode);
     _$hash = $jc(_$hash, javaScriptHighEntropy.hashCode);
+    _$hash = $jc(_$hash, isNative.hashCode);
     _$hash = $jf(_$hash);
     return _$hash;
   }
@@ -91,7 +96,8 @@ class _$ClientInformation extends ClientInformation {
           ..add('isConditionalMediationAvailable',
               isConditionalMediationAvailable)
           ..add('clientCapabilities', clientCapabilities)
-          ..add('javaScriptHighEntropy', javaScriptHighEntropy))
+          ..add('javaScriptHighEntropy', javaScriptHighEntropy)
+          ..add('isNative', isNative))
         .toString();
   }
 }
@@ -146,6 +152,10 @@ class ClientInformationBuilder
           JavaScriptHighEntropyBuilder? javaScriptHighEntropy) =>
       _$this._javaScriptHighEntropy = javaScriptHighEntropy;
 
+  bool? _isNative;
+  bool? get isNative => _$this._isNative;
+  set isNative(bool? isNative) => _$this._isNative = isNative;
+
   ClientInformationBuilder() {
     ClientInformation._defaults(this);
   }
@@ -162,6 +172,7 @@ class ClientInformationBuilder
       _isConditionalMediationAvailable = $v.isConditionalMediationAvailable;
       _clientCapabilities = $v.clientCapabilities?.toBuilder();
       _javaScriptHighEntropy = $v.javaScriptHighEntropy?.toBuilder();
+      _isNative = $v.isNative;
       _$v = null;
     }
     return this;
@@ -194,7 +205,8 @@ class ClientInformationBuilder
                   isUserVerifyingPlatformAuthenticatorAvailable,
               isConditionalMediationAvailable: isConditionalMediationAvailable,
               clientCapabilities: _clientCapabilities?.build(),
-              javaScriptHighEntropy: _javaScriptHighEntropy?.build());
+              javaScriptHighEntropy: _javaScriptHighEntropy?.build(),
+              isNative: isNative);
     } catch (_) {
       late String _$failedField;
       try {

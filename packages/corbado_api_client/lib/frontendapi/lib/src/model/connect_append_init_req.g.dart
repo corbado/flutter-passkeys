@@ -8,7 +8,7 @@ part of 'connect_append_init_req.dart';
 
 class _$ConnectAppendInitReq extends ConnectAppendInitReq {
   @override
-  final ClientInformationV2 clientInformation;
+  final ClientInformation clientInformation;
   @override
   final BuiltMap<String, String> flags;
 
@@ -64,10 +64,10 @@ class ConnectAppendInitReqBuilder
     implements Builder<ConnectAppendInitReq, ConnectAppendInitReqBuilder> {
   _$ConnectAppendInitReq? _$v;
 
-  ClientInformationV2Builder? _clientInformation;
-  ClientInformationV2Builder get clientInformation =>
-      _$this._clientInformation ??= new ClientInformationV2Builder();
-  set clientInformation(ClientInformationV2Builder? clientInformation) =>
+  ClientInformationBuilder? _clientInformation;
+  ClientInformationBuilder get clientInformation =>
+      _$this._clientInformation ??= new ClientInformationBuilder();
+  set clientInformation(ClientInformationBuilder? clientInformation) =>
       _$this._clientInformation = clientInformation;
 
   MapBuilder<String, String>? _flags;

@@ -9,7 +9,6 @@ class PasskeyAppendBlockData {
   bool canBeSkipped;
   final String identifierValue;
   final Api.LoginIdentifierType identifierType;
-  final CorbadoError? error;
   PasskeyFallback? preferredFallback;
   final bool autoSubmit;
   bool primaryLoading = false;
@@ -28,7 +27,6 @@ class PasskeyAppendBlockData {
     this.canBeSkipped = false,
     required this.identifierValue,
     required this.identifierType,
-    this.error,
     this.preferredFallback,
     required this.autoSubmit,
   });
@@ -116,7 +114,6 @@ class PasskeyAppendBlock extends Block<PasskeyAppendBlockData> {
 
   skipPasskeyAppend() async {
     try {
-      await corbadoService.cancelPasskeyOperation();
       final response = await corbadoService.completeAuthProcess();
       processHandler.updateBlockFromServer(response);
     } on CorbadoError catch (e) {

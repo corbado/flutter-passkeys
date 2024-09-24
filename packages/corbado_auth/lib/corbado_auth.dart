@@ -8,5 +8,4 @@ export 'src/blocks/passkey_verify_block.dart';
 export 'src/blocks/signup_init_block.dart';
 export 'src/corbado_auth.dart';
 export 'src/corbado_auth_component.dart';
-export 'src/corbado_auth_config.dart';
 export 'src/types/types.dart';

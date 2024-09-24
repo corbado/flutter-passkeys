@@ -2,8 +2,28 @@ import {PasskeyAuthenticator} from "./passkeyAuthenticator";
 
 let passkeyAuthenticator = new PasskeyAuthenticator();
 
-export async function canAuthenticate(): Promise<boolean> {
-    return await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable();
+export async function isUserVerifyingPlatformAuthenticatorAvailable(): Promise<boolean|undefined> {
+    if (!window.PublicKeyCredential) {
+        return undefined;
+    }
+
+    try {
+        return await window.PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable();
+    } catch (e) {
+        return undefined;
+    }
+}
+
+export async function isConditionalMediationAvailable(): Promise<boolean|undefined> {
+    if (!window.PublicKeyCredential) {
+      return undefined;
+    }
+
+    try {
+      return await window.PublicKeyCredential.isConditionalMediationAvailable();
+    } catch (e) {
+      return undefined;
+    }
 }
 
 export function init(): void {

@@ -1,4 +1,6 @@
 import 'package:corbado_auth/corbado_auth.dart';
+import 'package:corbado_auth/src/process_handler.dart';
+import 'package:corbado_auth/src/types/process_handler.dart';
 import 'package:flutter/material.dart';
 
 class CorbadoScreens {
@@ -16,8 +18,9 @@ class CorbadoScreens {
 class CorbadoAuthComponent extends StatefulWidget {
   final CorbadoAuth corbadoAuth;
   final CorbadoScreens components;
+  final Widget? loading;
 
-  CorbadoAuthComponent({required this.corbadoAuth, required this.components});
+  CorbadoAuthComponent({required this.corbadoAuth, required this.components, this.loading});
 
   @override
   _CorbadoAuthComponentState createState() => _CorbadoAuthComponentState();
@@ -59,7 +62,8 @@ class _CorbadoAuthComponentState extends State<CorbadoAuthComponent> {
               throw UnimplementedError();
           }
         } else {
-          return const SizedBox();
+          if (widget.loading != null) return widget.loading!;
+          return Center(child: CircularProgressIndicator());
         }
       },
     );

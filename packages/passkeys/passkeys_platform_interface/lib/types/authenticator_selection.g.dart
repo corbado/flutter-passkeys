@@ -9,7 +9,7 @@ part of 'authenticator_selection.dart';
 AuthenticatorSelectionType _$AuthenticatorSelectionTypeFromJson(
         Map<String, dynamic> json) =>
     AuthenticatorSelectionType(
-      authenticatorAttachment: json['authenticatorAttachment'] as String,
+      authenticatorAttachment: json['authenticatorAttachment'] as String?,
       requireResidentKey: json['requireResidentKey'] as bool,
       residentKey: json['residentKey'] as String,
       userVerification: json['userVerification'] as String,

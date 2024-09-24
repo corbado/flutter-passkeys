@@ -120,7 +120,6 @@ Class | Method | HTTP request | Description
  - [BlockType](doc/BlockType.md)
  - [ClientCapabilities](doc/ClientCapabilities.md)
  - [ClientInformation](doc/ClientInformation.md)
- - [ClientInformationV2](doc/ClientInformationV2.md)
  - [ConnectAppendFinishReq](doc/ConnectAppendFinishReq.md)
  - [ConnectAppendFinishRsp](doc/ConnectAppendFinishRsp.md)
  - [ConnectAppendInitReq](doc/ConnectAppendInitReq.md)

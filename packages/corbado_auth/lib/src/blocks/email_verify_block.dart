@@ -12,13 +12,11 @@ class EmailVerifyBlockData {
   EmailVerifyBlockData(
       {required this.email,
       required this.verificationMethod,
-      required this.error,
       required this.retryNotBefore,
       required this.isPostLoginVerification});
 
   final String email;
   final VerificationMethod verificationMethod;
-  CorbadoError? error;
   DateTime? retryNotBefore;
   final bool? isPostLoginVerification;
   bool primaryLoading = false;
@@ -36,7 +34,6 @@ class EmailVerifyBlockData {
     return EmailVerifyBlockData(
       email: typed.identifier,
       verificationMethod: verificationMethod,
-      error: CorbadoError.fromRequestError(typed.error),
       retryNotBefore: retryNotBefore,
       isPostLoginVerification: typed.isPostLoginVerification,
     );
@@ -55,16 +52,16 @@ class EmailVerifyBlock extends Block<EmailVerifyBlockData> {
         );
 
   init() {
-    navigateToVerifyEmail();
+    // navigateToVerifyEmail();
   }
 
   navigateToEditEmail() {
-    data.error = null;
+    error = null;
     processHandler.updateCurrentScreen(ScreenNames.EmailEdit);
   }
 
   navigateToVerifyEmail() {
-    data.error = null;
+    error = null;
 
     if (data.verificationMethod == VerificationMethod.emailOTP) {
       processHandler.updateCurrentScreen(ScreenNames.EmailVerifyOTP);

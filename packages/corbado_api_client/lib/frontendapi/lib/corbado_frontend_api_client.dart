@@ -20,7 +20,6 @@ export 'package:corbado_frontend_api_client/src/model/block_body_data.dart';
 export 'package:corbado_frontend_api_client/src/model/block_type.dart';
 export 'package:corbado_frontend_api_client/src/model/client_capabilities.dart';
 export 'package:corbado_frontend_api_client/src/model/client_information.dart';
-export 'package:corbado_frontend_api_client/src/model/client_information_v2.dart';
 export 'package:corbado_frontend_api_client/src/model/connect_append_finish_req.dart';
 export 'package:corbado_frontend_api_client/src/model/connect_append_finish_rsp.dart';
 export 'package:corbado_frontend_api_client/src/model/connect_append_init_req.dart';

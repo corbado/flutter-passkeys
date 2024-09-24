@@ -3,6 +3,7 @@ import 'package:corbado_auth/src/blocks/translator.dart';
 import 'package:corbado_auth/src/process_handler.dart';
 import 'package:corbado_auth/src/services/corbado/corbado.dart';
 import 'package:corbado_frontend_api_client/corbado_frontend_api_client.dart';
+import 'package:meta/meta.dart';
 
 enum AuthProcessType { Login, Signup }
 
@@ -23,8 +24,13 @@ class PasskeyFallback {
 class CorbadoError {
   final String errorCode;
   final String translatedError;
+  final dynamic original;
 
-  const CorbadoError({required this.errorCode, required this.translatedError});
+  const CorbadoError({required this.errorCode, required this.translatedError, this.original});
+
+  String detailedError() {
+    return 'error ($errorCode): $original';
+  }
 
   factory CorbadoError.fromMissingServerResponse() {
     const code = 'missing_server_response';
@@ -41,6 +47,7 @@ class CorbadoError {
     return CorbadoError(
       errorCode: code,
       translatedError: Translator.error(code),
+      original: e,
     );
   }
 
@@ -80,6 +87,7 @@ class CorbadoError {
       return CorbadoError(
         errorCode: errorCode,
         translatedError: Translator.error(errorCode),
+        original: e,
       );
     }
 
@@ -88,14 +96,20 @@ class CorbadoError {
 }
 
 class Block<T> {
+  @protected
   final ProcessHandler processHandler;
+  @protected
   List<Block<dynamic>> alternatives;
+  @protected
   ScreenNames? initialScreen;
+  @protected
   final BlockType type;
+
   CorbadoError? error;
   T data;
   AuthProcessType authProcessType;
 
+  @protected
   CorbadoService get corbadoService => processHandler.corbadoService;
 
   Block({
@@ -107,5 +121,15 @@ class Block<T> {
     required this.authProcessType,
   });
 
+  @protected
   init() {}
+
+  Future<void> resetProcess() async {
+    try {
+      final res = await corbadoService.resetAuthProcess();
+      processHandler.updateBlockFromServer(res);
+    } on CorbadoError catch (e) {
+      processHandler.updateBlockFromError(e);
+    }
+  }
 }

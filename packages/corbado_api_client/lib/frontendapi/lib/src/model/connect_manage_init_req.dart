@@ -4,7 +4,7 @@
 
 // ignore_for_file: unused_element
 import 'package:built_collection/built_collection.dart';
-import 'package:corbado_frontend_api_client/src/model/client_information_v2.dart';
+import 'package:corbado_frontend_api_client/src/model/client_information.dart';
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
 
@@ -19,7 +19,7 @@ part 'connect_manage_init_req.g.dart';
 abstract class ConnectManageInitReq
     implements Built<ConnectManageInitReq, ConnectManageInitReqBuilder> {
   @BuiltValueField(wireName: r'clientInformation')
-  ClientInformationV2 get clientInformation;
+  ClientInformation get clientInformation;
 
   @BuiltValueField(wireName: r'flags')
   BuiltMap<String, String> get flags;
@@ -56,7 +56,7 @@ class _$ConnectManageInitReqSerializer
     yield r'clientInformation';
     yield serializers.serialize(
       object.clientInformation,
-      specifiedType: const FullType(ClientInformationV2),
+      specifiedType: const FullType(ClientInformation),
     );
     yield r'flags';
     yield serializers.serialize(
@@ -92,8 +92,8 @@ class _$ConnectManageInitReqSerializer
         case r'clientInformation':
           final valueDes = serializers.deserialize(
             value,
-            specifiedType: const FullType(ClientInformationV2),
-          ) as ClientInformationV2;
+            specifiedType: const FullType(ClientInformation),
+          ) as ClientInformation;
           result.clientInformation.replace(valueDes);
           break;
         case r'flags':

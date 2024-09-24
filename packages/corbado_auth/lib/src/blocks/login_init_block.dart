@@ -80,7 +80,7 @@ class LoginInitBlock extends Block<LoginInitBlockData> {
     }
 
     try {
-      final response = await corbadoService.verifyPasskeyConditional(challenge, false);
+      final response = await corbadoService.verifyPasskeyConditional(challenge, true);
       processHandler.updateBlockFromServer(response);
     } on CorbadoError catch (e) {
       processHandler.updateBlockFromError(e);

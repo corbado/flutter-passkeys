@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:js/js_util.dart';
 import 'package:passkeys_platform_interface/passkeys_platform_interface.dart';
+import 'package:passkeys_platform_interface/types/availability.dart';
 import 'package:passkeys_platform_interface/types/types.dart';
 import 'package:passkeys_web/interop.dart';
 import 'package:passkeys_web/models/passkeyLoginRequest.dart';
@@ -16,11 +17,6 @@ class PasskeysWeb extends PasskeysPlatform {
   static void registerWith([Object? registrar]) {
     PasskeysPlatform.instance = PasskeysWeb();
     init();
-  }
-
-  @override
-  Future<bool> canAuthenticate() {
-    return Future.value(true);
   }
 
   @override
@@ -39,10 +35,8 @@ class PasskeysWeb extends PasskeysPlatform {
 
     try {
       final serializedRequest = jsonEncode(r.toJson());
-      final response = await promiseToFuture<String>(
-          authenticatorRegister(serializedRequest));
-      final decodedResponse =
-          jsonDecode(response) as Map<String, dynamic>;
+      final response = await promiseToFuture<String>(authenticatorRegister(serializedRequest));
+      final decodedResponse = jsonDecode(response) as Map<String, dynamic>;
       final typedResponse = PasskeySignUpResponse.fromJson(decodedResponse);
 
       return RegisterResponseType(
@@ -58,8 +52,7 @@ class PasskeysWeb extends PasskeysPlatform {
   }
 
   @override
-  Future<AuthenticateResponseType> authenticate(
-      AuthenticateRequestType request) async {
+  Future<AuthenticateResponseType> authenticate(AuthenticateRequestType request) async {
     final r = PasskeyLoginRequest.fromPlatformType(
       request.relyingPartyId,
       request.challenge,
@@ -71,8 +64,7 @@ class PasskeysWeb extends PasskeysPlatform {
 
     try {
       final serializedRequest = jsonEncode(r.toJson());
-      final response =
-          await promiseToFuture<String>(authenticatorLogin(serializedRequest));
+      final response = await promiseToFuture<String>(authenticatorLogin(serializedRequest));
       final decodedResponse = jsonDecode(response) as Map<String, dynamic>;
       final typedResponse = PasskeyLoginResponse.fromJson(decodedResponse);
 
@@ -102,5 +94,17 @@ class PasskeysWeb extends PasskeysPlatform {
   @override
   Future<void> cancelCurrentAuthenticatorOperation() async {
     await authenticatorCancel();
+  }
+
+  @override
+  Future<AvailabilityType> getAvailability() async {
+    final v1 = await promiseToFuture<bool?>(isUserVerifyingPlatformAuthenticatorAvailable());
+    final v2 = await promiseToFuture<bool?>(isConditionalMediationAvailable());
+
+    return AvailabilityType(
+      isUserVerifyingPlatformAuthenticatorAvailable: v1,
+      isConditionalMediationAvailable: v2,
+      isNative: false,
+    );
   }
 }

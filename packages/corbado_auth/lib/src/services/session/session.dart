@@ -54,6 +54,7 @@ class SessionService {
 
   Future<void> setRefreshToken(String? value) async {
     if (value != null) {
+      frontendAPIClient.dio.options.headers['Authorization'] = 'Bearer $value';
       await _storageService.setRefreshToken(value);
     }
 

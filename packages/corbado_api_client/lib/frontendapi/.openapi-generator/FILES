@@ -8,7 +8,6 @@ doc/BlockBodyData.md
 doc/BlockType.md
 doc/ClientCapabilities.md
 doc/ClientInformation.md
-doc/ClientInformationV2.md
 doc/ConfigsApi.md
 doc/ConnectAppendFinishReq.md
 doc/ConnectAppendFinishRsp.md
@@ -112,7 +111,6 @@ lib/src/model/block_body_data.dart
 lib/src/model/block_type.dart
 lib/src/model/client_capabilities.dart
 lib/src/model/client_information.dart
-lib/src/model/client_information_v2.dart
 lib/src/model/connect_append_finish_req.dart
 lib/src/model/connect_append_finish_rsp.dart
 lib/src/model/connect_append_init_req.dart
@@ -197,4 +195,3 @@ lib/src/model/user_details_config_rsp.dart
 lib/src/model/verification_method.dart
 lib/src/serializers.dart
 pubspec.yaml
-test/passkey_login_start_req_test.dart

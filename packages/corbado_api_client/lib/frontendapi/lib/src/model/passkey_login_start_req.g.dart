@@ -8,7 +8,7 @@ part of 'passkey_login_start_req.dart';
 
 class _$PasskeyLoginStartReq extends PasskeyLoginStartReq {
   @override
-  final ClientInformationV2? clientInformation;
+  final ClientInformation? clientInformation;
 
   factory _$PasskeyLoginStartReq(
           [void Function(PasskeyLoginStartReqBuilder)? updates]) =>
@@ -52,10 +52,10 @@ class PasskeyLoginStartReqBuilder
     implements Builder<PasskeyLoginStartReq, PasskeyLoginStartReqBuilder> {
   _$PasskeyLoginStartReq? _$v;
 
-  ClientInformationV2Builder? _clientInformation;
-  ClientInformationV2Builder get clientInformation =>
-      _$this._clientInformation ??= new ClientInformationV2Builder();
-  set clientInformation(ClientInformationV2Builder? clientInformation) =>
+  ClientInformationBuilder? _clientInformation;
+  ClientInformationBuilder get clientInformation =>
+      _$this._clientInformation ??= new ClientInformationBuilder();
+  set clientInformation(ClientInformationBuilder? clientInformation) =>
       _$this._clientInformation = clientInformation;
 
   PasskeyLoginStartReqBuilder() {

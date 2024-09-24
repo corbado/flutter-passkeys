@@ -1,6 +1,7 @@
 import 'package:flutter/services.dart';
 import 'package:passkeys/types.dart';
 import 'package:passkeys_platform_interface/passkeys_platform_interface.dart';
+import 'package:passkeys_platform_interface/types/availability.dart';
 
 /// Handles platform dependent parts of the registration and authentication
 /// flow.
@@ -11,6 +12,7 @@ class PasskeyAuthenticator {
   final PasskeysPlatform _platform;
 
   /// Returns true only if passkeys are supported by the platform.
+  @deprecated
   Future<bool> canAuthenticate() {
     return _platform.canAuthenticate();
   }
@@ -38,6 +40,8 @@ class PasskeyAuthenticator {
           throw MissingGoogleSignInException();
         case 'android-sync-account-not-available':
           throw SyncAccountNotAvailableException();
+        case 'domain-not-associated':
+          throw DomainNotAssociatedException(e.message);
         default:
           rethrow;
       }
@@ -58,7 +62,7 @@ class PasskeyAuthenticator {
     } on PlatformException catch (e) {
       switch (e.code) {
         case 'domain-not-associated':
-          throw DomainNotAssociatedException();
+          throw DomainNotAssociatedException(e.message);
         case 'no-credentials-available':
           throw NoCredentialsAvailableException();
         case 'cancelled':
@@ -75,5 +79,11 @@ class PasskeyAuthenticator {
           }
       }
     }
+  }
+
+  /// Returns information about the availabilty of passkeys.
+  /// Currently, this is only valuable for flutter web.
+  Future<AvailabilityType> getAvailability() {
+    return _platform.getAvailability();
   }
 }

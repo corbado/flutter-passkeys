@@ -14,6 +14,8 @@ class PasskeyEventType extends EnumClass {
   static const PasskeyEventType loginExplicitAbort = _$loginExplicitAbort;
   @BuiltValueEnumConst(wireName: r'login-error')
   static const PasskeyEventType loginError = _$loginError;
+  @BuiltValueEnumConst(wireName: r'login-error-untyped')
+  static const PasskeyEventType loginErrorUntyped = _$loginErrorUntyped;
   @BuiltValueEnumConst(wireName: r'login-one-tap-switch')
   static const PasskeyEventType loginOneTapSwitch = _$loginOneTapSwitch;
   @BuiltValueEnumConst(

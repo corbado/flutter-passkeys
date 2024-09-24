@@ -8,7 +8,7 @@ part of 'passkey_append_start_req.dart';
 
 class _$PasskeyAppendStartReq extends PasskeyAppendStartReq {
   @override
-  final ClientInformationV2? clientInformation;
+  final ClientInformation? clientInformation;
 
   factory _$PasskeyAppendStartReq(
           [void Function(PasskeyAppendStartReqBuilder)? updates]) =>
@@ -52,10 +52,10 @@ class PasskeyAppendStartReqBuilder
     implements Builder<PasskeyAppendStartReq, PasskeyAppendStartReqBuilder> {
   _$PasskeyAppendStartReq? _$v;
 
-  ClientInformationV2Builder? _clientInformation;
-  ClientInformationV2Builder get clientInformation =>
-      _$this._clientInformation ??= new ClientInformationV2Builder();
-  set clientInformation(ClientInformationV2Builder? clientInformation) =>
+  ClientInformationBuilder? _clientInformation;
+  ClientInformationBuilder get clientInformation =>
+      _$this._clientInformation ??= new ClientInformationBuilder();
+  set clientInformation(ClientInformationBuilder? clientInformation) =>
       _$this._clientInformation = clientInformation;
 
   PasskeyAppendStartReqBuilder() {

@@ -68,8 +68,11 @@ class NoCredentialsAvailableException implements AuthenticatorException {
 }
 
 class DomainNotAssociatedException implements AuthenticatorException {
+  final String? message;
   /// Constructor
-  DomainNotAssociatedException();
+  DomainNotAssociatedException(this.message);
+
+  String toString() => message ?? '';
 }
 
 /// This exception is thrown when an exception is thrown by the authenticator

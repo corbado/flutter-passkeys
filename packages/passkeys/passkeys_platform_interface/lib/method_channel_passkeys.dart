@@ -1,4 +1,5 @@
 import 'package:passkeys_platform_interface/passkeys_platform_interface.dart';
+import 'package:passkeys_platform_interface/types/availability.dart';
 import 'package:passkeys_platform_interface/types/types.dart';
 
 /// An implementation of [PasskeysPlatform] that uses method channels.
@@ -22,4 +23,7 @@ class MethodChannelPasskeys extends PasskeysPlatform {
   Future<void> cancelCurrentAuthenticatorOperation() {
     return Future.value();
   }
+
+  @override
+  Future<AvailabilityType> getAvailability() => throw UnimplementedError();
 }

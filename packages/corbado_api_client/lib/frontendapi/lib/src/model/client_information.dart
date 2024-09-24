@@ -21,6 +21,7 @@ part 'client_information.g.dart';
 /// * [isConditionalMediationAvailable]
 /// * [clientCapabilities]
 /// * [javaScriptHighEntropy]
+/// * [isNative]
 @BuiltValue()
 abstract class ClientInformation
     implements Built<ClientInformation, ClientInformationBuilder> {
@@ -48,6 +49,9 @@ abstract class ClientInformation
 
   @BuiltValueField(wireName: r'javaScriptHighEntropy')
   JavaScriptHighEntropy? get javaScriptHighEntropy;
+
+  @BuiltValueField(wireName: r'isNative')
+  bool? get isNative;
 
   ClientInformation._();
 
@@ -131,6 +135,13 @@ class _$ClientInformationSerializer
         specifiedType: const FullType(JavaScriptHighEntropy),
       );
     }
+    if (object.isNative != null) {
+      yield r'isNative';
+      yield serializers.serialize(
+        object.isNative,
+        specifiedType: const FullType(bool),
+      );
+    }
   }
 
   @override
@@ -211,6 +222,13 @@ class _$ClientInformationSerializer
             specifiedType: const FullType(JavaScriptHighEntropy),
           ) as JavaScriptHighEntropy;
           result.javaScriptHighEntropy.replace(valueDes);
+          break;
+        case r'isNative':
+          final valueDes = serializers.deserialize(
+            value,
+            specifiedType: const FullType(bool),
+          ) as bool;
+          result.isNative = valueDes;
           break;
         default:
           unhandled.add(key);

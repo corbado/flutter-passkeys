@@ -14,3 +14,9 @@ external Future<String> authenticatorLogin(Object options);
 
 @JS('PasskeyAuthenticator.cancelCurrentAuthenticatorOperation')
 external Future<String> authenticatorCancel();
+
+@JS('PasskeyAuthenticator.isUserVerifyingPlatformAuthenticatorAvailable')
+external Future<bool?> isUserVerifyingPlatformAuthenticatorAvailable();
+
+@JS('PasskeyAuthenticator.isConditionalMediationAvailable')
+external Future<bool?> isConditionalMediationAvailable();

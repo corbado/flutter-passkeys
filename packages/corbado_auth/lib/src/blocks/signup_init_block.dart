@@ -6,11 +6,10 @@ import 'package:corbado_frontend_api_client/corbado_frontend_api_client.dart';
 class SignupInitBlockData {
   final TextFieldWithError? fullName;
   final TextFieldWithError? email;
-  final CorbadoError? error;
 
   bool primaryLoading = false;
 
-  SignupInitBlockData({this.fullName, this.email, this.error});
+  SignupInitBlockData({this.fullName, this.email});
 
   factory SignupInitBlockData.fromProcessResponse(GeneralBlockSignupInit typed) {
     TextFieldWithError? fullName;
@@ -33,7 +32,6 @@ class SignupInitBlockData {
     return SignupInitBlockData(
       fullName: fullName,
       email: email,
-      error: CorbadoError.fromRequestError(typed.error),
     );
   }
 }

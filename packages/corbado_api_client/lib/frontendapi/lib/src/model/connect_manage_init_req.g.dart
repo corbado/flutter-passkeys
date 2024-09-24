@@ -8,7 +8,7 @@ part of 'connect_manage_init_req.dart';
 
 class _$ConnectManageInitReq extends ConnectManageInitReq {
   @override
-  final ClientInformationV2 clientInformation;
+  final ClientInformation clientInformation;
   @override
   final BuiltMap<String, String> flags;
 
@@ -64,10 +64,10 @@ class ConnectManageInitReqBuilder
     implements Builder<ConnectManageInitReq, ConnectManageInitReqBuilder> {
   _$ConnectManageInitReq? _$v;
 
-  ClientInformationV2Builder? _clientInformation;
-  ClientInformationV2Builder get clientInformation =>
-      _$this._clientInformation ??= new ClientInformationV2Builder();
-  set clientInformation(ClientInformationV2Builder? clientInformation) =>
+  ClientInformationBuilder? _clientInformation;
+  ClientInformationBuilder get clientInformation =>
+      _$this._clientInformation ??= new ClientInformationBuilder();
+  set clientInformation(ClientInformationBuilder? clientInformation) =>
       _$this._clientInformation = clientInformation;
 
   MapBuilder<String, String>? _flags;

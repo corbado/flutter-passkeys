@@ -46,9 +46,7 @@ class PasskeyVerifyBlock extends Block<PasskeyVerifyBlockData> {
 
           return PasskeyFallback(
             label: 'Email verification',
-            onTap: () {
-              processHandler.updateBlockFromClient(alternative, []);
-            },
+            onTap: initFallbackEmailOtp,
           );
 
         case Api.BlockType.phoneVerify:

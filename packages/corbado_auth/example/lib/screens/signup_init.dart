@@ -1,12 +1,13 @@
 import 'package:corbado_auth/corbado_auth.dart';
+import 'package:corbado_auth_example/screens/helper.dart';
 import 'package:corbado_auth_example/widgets/filled_text_button.dart';
 import 'package:corbado_auth_example/widgets/generic_error.dart';
 import 'package:corbado_auth_example/widgets/outlined_text_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 
-class SignupInitScreen extends StatelessWidget implements CorbadoScreen<SignupInitBlock> {
+class SignupInitScreen extends HookWidget implements CorbadoScreen<SignupInitBlock> {
   final SignupInitBlock block;
-  final _emailController = TextEditingController();
 
   SignupInitScreen(this.block);
 
@@ -15,17 +16,27 @@ class SignupInitScreen extends StatelessWidget implements CorbadoScreen<SignupIn
     if (email == null) {
       return Container();
     }
+    final emailController = useTextEditingController(text: email.value);
 
-    _emailController.value = TextEditingValue(text: email.value);
+    useEffect(() {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        final maybeError = block.error;
+        if (maybeError != null) {
+          showNotificationError(context, maybeError.translatedError);
+        }
+      });
+    }, [block.error]);
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         MaybeGenericError(message: block.error?.translatedError),
-        SizedBox(height: 10,),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-          child: const Text(
+        const SizedBox(
+          height: 10,
+        ),
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+          child: Text(
             'Tired of passwords?',
             style: TextStyle(
               fontSize: 40,
@@ -33,9 +44,9 @@ class SignupInitScreen extends StatelessWidget implements CorbadoScreen<SignupIn
             ),
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-          child: const Text(
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          child: Text(
             'Sign up using your biometrics like fingerprint or face.',
             style: TextStyle(
               fontSize: 20,
@@ -43,40 +54,35 @@ class SignupInitScreen extends StatelessWidget implements CorbadoScreen<SignupIn
           ),
         ),
         Padding(
-          padding: EdgeInsets.symmetric(vertical: 4),
+          padding: const EdgeInsets.symmetric(vertical: 4),
           child: TextField(
-            controller: _emailController,
-            decoration: InputDecoration(
+            key: const ValueKey('textfield-email'),
+            controller: emailController,
+            decoration: const InputDecoration(
               border: OutlineInputBorder(),
               hintText: 'Email address',
             ),
           ),
         ),
-        email.error?.translatedError != null
-            ? Text(
-          email.error!.translatedError,
-          style: TextStyle(color: Theme.of(context).colorScheme.error),
-        )
-            : Container(),
-        SizedBox(height: 20),
+        MaybeGenericError(message: email.error?.translatedError),
+        const SizedBox(height: 20),
         SizedBox(
           width: double.infinity,
           height: 50,
           child: FilledTextButton(
-            isLoading: false,
+            isLoading: block.data.primaryLoading,
             onTap: () async {
-              final email = _emailController.value.text;
-              await block.submitSignupInit(email: email, fullName: 'fixed');
+              await block.submitSignupInit(email: emailController.text, fullName: 'fixed');
             },
             content: 'Sign up',
           ),
         ),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         SizedBox(
           width: double.infinity,
           height: 50,
           child: OutlinedTextButton(
-            onTap: () => block.navigateToLogin(),
+            onTap: block.navigateToLogin,
             content: 'I already have an account',
           ),
         ),

@@ -19,24 +19,31 @@ abstract class CorbadoService {
   CorbadoService(this.frontendAPIClient, this.passkeyAuthenticator);
 
   Future<Api.ProcessResponse> initAuthProcess() async {
-    final processInitReq = Api.ProcessInitReqBuilder().build();
+    final ciBuilder = await _buildClientInformation();
+    final processInitReq = Api.ProcessInitReq((b) => b..clientInformation = ciBuilder);
     final res = await frontendAPIClient.getAuthApi().processInit(processInitReq: processInitReq);
     if (res.data == null) {
       throw CorbadoError.fromMissingServerResponse();
     }
 
-    this.frontendAPIClient.dio.options.headers.addAll({
-      'x-corbado-process-id': res.data!.token,
-    });
-
-    _processID = res.data!.token;
-    _processExpiresAt = DateTime.fromMillisecondsSinceEpoch(res.data!.expiresAt * 1000);
+    _setProcessState(res.data!.token, res.data!.expiresAt);
 
     return res.data!.processResponse;
   }
 
   Future<Api.ProcessResponse> completeAuthProcess() async {
     return _wrapWithError(() => frontendAPIClient.getAuthApi().processComplete());
+  }
+
+  Future<Api.ProcessResponse> resetAuthProcess() async {
+    final out = await _wrapWithError(() => frontendAPIClient.getAuthApi().processReset());
+
+    final newProcess = out.newProcess;
+    if (newProcess != null) {
+      _setProcessState(newProcess.token, newProcess.expiresAt);
+    }
+
+    return out;
   }
 
   void clearAuthProcess() {
@@ -142,9 +149,10 @@ abstract class CorbadoService {
   }
 
   Future<void> sessionAppendPasskey() async {
-    final startRes = await _wrapWithError(() => frontendAPIClient
-        .getUsersApi()
-        .currentUserPasskeyAppendStart(mePasskeysAppendStartReq: Api.MePasskeysAppendStartReq()));
+    final ci = await _buildClientInformation();
+    final startReq = Api.MePasskeysAppendStartReq((b) => b..clientInformation = ci);
+    final startRes = await _wrapWithError(
+        () => frontendAPIClient.getUsersApi().currentUserPasskeyAppendStart(mePasskeysAppendStartReq: startReq));
 
     if (startRes.attestationOptions.isEmpty) {
       throw CorbadoError.fromMissingServerResponse();
@@ -156,8 +164,9 @@ abstract class CorbadoService {
       final authenticatorRes = await passkeyAuthenticator.register(authenticatorReq);
       final attestationResponse =
           jsonEncode(FinishRegisterRequest.fromRegisterCompleteRequest(authenticatorRes).toJson());
-      final mePasskeysAppendFinishReq =
-          Api.MePasskeysAppendFinishReq((b) => b..attestationResponse = attestationResponse);
+      final mePasskeysAppendFinishReq = Api.MePasskeysAppendFinishReq((b) => b
+        ..attestationResponse = attestationResponse
+        ..clientInformation = ci);
 
       return _wrapWithErrorEmptyResponse(() => frontendAPIClient
           .getUsersApi()
@@ -177,6 +186,11 @@ abstract class CorbadoService {
 
   Future<void> sessionDeletePasskeys({required String credentialID}) async {
     await _wrapWithError(() => frontendAPIClient.getUsersApi().currentUserPasskeyDelete(credentialID: credentialID));
+  }
+
+  Future<void> sessionUpdateUser({String? fullname}) async {
+    final meUpdateReq = Api.MeUpdateReq((b) => b..fullName = fullname);
+    await _wrapWithError(() => frontendAPIClient.getUsersApi().currentUserUpdate(meUpdateReq: meUpdateReq));
   }
 
   Future<Api.ProcessResponse> verifyPasskey() async {
@@ -210,7 +224,7 @@ abstract class CorbadoService {
   Future<Api.ProcessResponse> verifyPasskeyConditional(String challenge, bool silent) async {
     final json = jsonDecode(challenge) as Map<String, dynamic>;
     final authenticatorReq = StartLoginResponse.fromJson(json)
-        .toPlatformType(conditional: silent, preferImmediatelyAvailableCredentials: true);
+        .toPlatformType(conditional: silent, preferImmediatelyAvailableCredentials: !silent);
 
     try {
       final authenticatorRes = await passkeyAuthenticator.authenticate(authenticatorReq);
@@ -253,6 +267,27 @@ abstract class CorbadoService {
     } catch (e) {
       throw CorbadoError.fromUnknownError(e);
     }
+  }
+
+  void _setProcessState(String token, int expiresAt) {
+    frontendAPIClient.dio.options.headers.addAll({
+      'x-corbado-process-id': token,
+    });
+
+    _processID = token;
+    _processExpiresAt = DateTime.fromMillisecondsSinceEpoch(expiresAt * 1000);
+
+    return;
+  }
+
+  Future<Api.ClientInformationBuilder> _buildClientInformation() async {
+    final passkeyAvailability = await passkeyAuthenticator.getAvailability();
+
+    return Api.ClientInformationBuilder()
+      ..isNative = passkeyAvailability.isNative
+      ..isUserVerifyingPlatformAuthenticatorAvailable =
+          passkeyAvailability.isUserVerifyingPlatformAuthenticatorAvailable
+      ..isConditionalMediationAvailable = passkeyAvailability.isConditionalMediationAvailable;
   }
 
   /// Builds an API client to interact with the Corbado frontend API.

@@ -1,6 +1,5 @@
 import 'package:corbado_auth/corbado_auth.dart';
 import 'package:corbado_auth_example/auth_provider.dart';
-import 'package:corbado_auth_example/pages/base_page.dart';
 import 'package:corbado_auth_example/screens/email_verify_otp.dart';
 import 'package:corbado_auth_example/screens/login_init.dart';
 import 'package:corbado_auth_example/screens/passkey_append.dart';
@@ -16,14 +15,25 @@ class AuthPage extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final corbadoAuth = ref.watch(corbadoProvider);
 
-    return BasePage(
-      child: CorbadoAuthComponent(corbadoAuth: corbadoAuth, components: CorbadoScreens(
-        signupInit: (SignupInitBlock block) => SignupInitScreen(block),
-        loginInit: (LoginInitBlock block) => LoginInitScreen(block),
-        emailVerifyOtp: (EmailVerifyBlock block) => EmailVerifyOtpScreen(block),
-        passkeyAppend: (PasskeyAppendBlock block) => PasskeyAppendScreen(block),
-        passkeyVerify: (PasskeyVerifyBlock block) => PasskeyVerifyScreen(block),
-      )),
+    return Scaffold(
+      appBar: AppBar(title: const Text('Corbado authentication')),
+      body: Center(
+        child: Container(
+          constraints: const BoxConstraints(maxWidth: 500),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: CorbadoAuthComponent(
+                corbadoAuth: corbadoAuth,
+                components: CorbadoScreens(
+                  signupInit: SignupInitScreen.new,
+                  loginInit: LoginInitScreen.new,
+                  emailVerifyOtp: EmailVerifyOtpScreen.new,
+                  passkeyAppend: PasskeyAppendScreen.new,
+                  passkeyVerify: PasskeyVerifyScreen.new,
+                )),
+          ),
+        ),
+      ),
     );
   }
 }

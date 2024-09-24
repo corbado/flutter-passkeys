@@ -1,3 +1,9 @@
+## 3.0.0
+* Switch to Corbado Frontend API v2.
+* Added CorbadoAuthComponent
+* Bump version of passkeys, corbado_frontend_api_client, passkeys_platform_interface, passkeys_web, passkey_android and passkeys_ios
+* BREAKING CHANGE: Removed CustomCorbadoAuth
+
 ## 2.0.8
 * Bump version of passkeys and corbado_frontend_api_client
 

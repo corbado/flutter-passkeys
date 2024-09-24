@@ -9,6 +9,8 @@ part of 'passkey_event_type.dart';
 const PasskeyEventType _$loginExplicitAbort =
     const PasskeyEventType._('loginExplicitAbort');
 const PasskeyEventType _$loginError = const PasskeyEventType._('loginError');
+const PasskeyEventType _$loginErrorUntyped =
+    const PasskeyEventType._('loginErrorUntyped');
 const PasskeyEventType _$loginOneTapSwitch =
     const PasskeyEventType._('loginOneTapSwitch');
 const PasskeyEventType _$userAppendAfterCrossPlatformBlacklisted =
@@ -27,6 +29,8 @@ PasskeyEventType _$valueOf(String name) {
       return _$loginExplicitAbort;
     case 'loginError':
       return _$loginError;
+    case 'loginErrorUntyped':
+      return _$loginErrorUntyped;
     case 'loginOneTapSwitch':
       return _$loginOneTapSwitch;
     case 'userAppendAfterCrossPlatformBlacklisted':
@@ -48,6 +52,7 @@ final BuiltSet<PasskeyEventType> _$values =
     new BuiltSet<PasskeyEventType>(const <PasskeyEventType>[
   _$loginExplicitAbort,
   _$loginError,
+  _$loginErrorUntyped,
   _$loginOneTapSwitch,
   _$userAppendAfterCrossPlatformBlacklisted,
   _$userAppendAfterLoginErrorBlacklisted,
@@ -60,6 +65,7 @@ class _$PasskeyEventTypeMeta {
   const _$PasskeyEventTypeMeta();
   PasskeyEventType get loginExplicitAbort => _$loginExplicitAbort;
   PasskeyEventType get loginError => _$loginError;
+  PasskeyEventType get loginErrorUntyped => _$loginErrorUntyped;
   PasskeyEventType get loginOneTapSwitch => _$loginOneTapSwitch;
   PasskeyEventType get userAppendAfterCrossPlatformBlacklisted =>
       _$userAppendAfterCrossPlatformBlacklisted;
@@ -85,6 +91,7 @@ class _$PasskeyEventTypeSerializer
   static const Map<String, Object> _toWire = const <String, Object>{
     'loginExplicitAbort': 'login-explicit-abort',
     'loginError': 'login-error',
+    'loginErrorUntyped': 'login-error-untyped',
     'loginOneTapSwitch': 'login-one-tap-switch',
     'userAppendAfterCrossPlatformBlacklisted':
         'user-append-after-cross-platform-blacklisted',
@@ -97,6 +104,7 @@ class _$PasskeyEventTypeSerializer
   static const Map<Object, String> _fromWire = const <Object, String>{
     'login-explicit-abort': 'loginExplicitAbort',
     'login-error': 'loginError',
+    'login-error-untyped': 'loginErrorUntyped',
     'login-one-tap-switch': 'loginOneTapSwitch',
     'user-append-after-cross-platform-blacklisted':
         'userAppendAfterCrossPlatformBlacklisted',

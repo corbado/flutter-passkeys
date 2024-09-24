@@ -16,6 +16,7 @@ Name | Type | Description | Notes
 **isConditionalMediationAvailable** | **bool** |  | [optional] 
 **clientCapabilities** | [**ClientCapabilities**](ClientCapabilities.md) |  | [optional] 
 **javaScriptHighEntropy** | [**JavaScriptHighEntropy**](JavaScriptHighEntropy.md) |  | [optional] 
+**isNative** | **bool** |  | [optional] 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

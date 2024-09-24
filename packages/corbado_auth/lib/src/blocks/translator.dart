@@ -25,6 +25,9 @@ const Map<String, String> errorMap = {
   'login_identifier_unknown_user': "Couldn't find your account.",
   'passkey_operation_cancelled': 'The operation was cancelled. Please try again.',
   'invalid_challenge_solution_email-otp': 'The code is invalid or expired',
+  'missing_full_name': 'Please enter a valid name.',
+  'unknown_error': 'Something went wrong. Please try again later.',
+  'invalid_conditional_ui_login': 'The provided passkey is no longer valid. Please enter your identifier (e.g. email) manually.',
 };
 
 class Translator {

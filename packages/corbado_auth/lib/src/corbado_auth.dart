@@ -1,48 +1,25 @@
 import 'dart:async';
 
 import 'package:corbado_auth/corbado_auth.dart';
-import 'package:corbado_auth/src/blocks/types.dart';
 import 'package:corbado_auth/src/process_handler.dart';
 import 'package:corbado_auth/src/services/corbado/corbado.dart';
+import 'package:corbado_auth/src/services/corbado/corbado_stub.dart'
+    if (dart.library.html) 'package:corbado_auth/src/services/corbado/corbado_web.dart'
+    if (dart.library.io) 'package:corbado_auth/src/services/corbado/corbado_native.dart';
 import 'package:corbado_auth/src/services/session/session.dart';
 import 'package:corbado_auth/src/services/storage/storage.dart';
 import 'package:corbado_auth/src/services/storage/storage_native.dart';
 import 'package:corbado_auth/src/services/storage/storage_web.dart';
+import 'package:corbado_auth/src/types/process_handler.dart';
 import 'package:corbado_frontend_api_client/corbado_frontend_api_client.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:passkeys/authenticator.dart';
-
-import 'package:corbado_auth/src/services/corbado/corbado_stub.dart'
-    if (dart.library.html) 'package:corbado_auth/src/services/corbado/corbado_web.dart'
-    if (dart.library.io) 'package:corbado_auth/src/services/corbado/corbado_native.dart';
-
-import 'types/screen_names.dart';
-
-abstract class CorbadoComponent<T> {
-  Widget build(BuildContext context, T data);
-}
-
-abstract class CorbadoScreen<T> implements Widget {
-  final T block;
-
-  CorbadoScreen(this.block);
-}
-
-class CorbadoComponentData {}
-
-class ComponentWithData {
-  final ScreenNames screenName;
-  final Block block;
-
-  ComponentWithData(this.screenName, this.block);
-}
 
 /// The Cobardo Auth SDK helps you with bringing passkey authentication to your
 /// app.
 class CorbadoAuth {
   /// Constructor
-  CorbadoAuth({CorbadoAuthConfig config = DefaultCorbadoAuthConfig});
+  CorbadoAuth();
 
   /// Should be listened to to get updates to the User object
   /// (e.g. updates to the idToken, sign in, sign out, changes to user data).
@@ -106,12 +83,6 @@ class CorbadoAuth {
     }
   }
 
-  Future<void> _updateSession(User user, {String? refreshToken}) async {
-    if (refreshToken != null) {
-      await _sessionService.setRefreshToken(refreshToken);
-    }
-  }
-
   /// Load all passkeys that are available to the currently logged in user.
   Future<List<PasskeyInfo>> _loadPasskeys({String? explicitRefreshToken}) async {
     final refreshToken = explicitRefreshToken ?? await _sessionService.getRefreshToken();
@@ -126,7 +97,7 @@ class CorbadoAuth {
   /// Explicitly trigger a token refresh.
   /// This can be useful when there has been a change to the user's data that is
   /// part of the idToken.
-  Future<void> refreshToken() {
+  Future<void> refreshUser() {
     return _sessionService.explicitlyTriggerTokenRefresh();
   }
 
@@ -138,12 +109,14 @@ class CorbadoAuth {
     _passkeysStreamController.add([]);
   }
 
+  /// Create a new passkey for an existing and logged in user
   Future<void> appendPasskey() async {
     await _corbadoService.sessionAppendPasskey();
 
     await _loadPasskeys();
   }
 
+  /// Create an existing passkey for a logged in user
   Future<void> deletePasskey({required String credentialID}) async {
     await _corbadoService.sessionDeletePasskeys(credentialID: credentialID);
 

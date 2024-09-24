@@ -688,6 +688,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/connectLoginFinishRsp'
+        '404':
+          description: No credential was found for the identifier
 
   /v2/connect/append/init:
     post:
@@ -913,7 +915,7 @@ components:
       type: object
       properties:
         clientInformation:
-          $ref: '#/components/schemas/clientInformationV2'
+          $ref: '#/components/schemas/clientInformation'
 
     passkeyAppendFinishReq:
       type: object
@@ -1024,7 +1026,7 @@ components:
       type: object
       properties:
         clientInformation:
-          $ref: '#/components/schemas/clientInformationV2'
+          $ref: '#/components/schemas/clientInformation'
 
     #    passkeyLoginStartRsp:
     #      $ref: '#/components/schemas/blockBody'
@@ -1165,7 +1167,7 @@ components:
         - flags
       properties:
         clientInformation:
-          $ref: '#/components/schemas/clientInformationV2'
+          $ref: '#/components/schemas/clientInformation'
         flags:
           type: object
           additionalProperties:
@@ -1253,7 +1255,7 @@ components:
         - flags
       properties:
         clientInformation:
-          $ref: '#/components/schemas/clientInformationV2'
+          $ref: '#/components/schemas/clientInformation'
         flags:
           type: object
           additionalProperties:
@@ -1335,7 +1337,7 @@ components:
         - flags
       properties:
         clientInformation:
-          $ref: '#/components/schemas/clientInformationV2'
+          $ref: '#/components/schemas/clientInformation'
         flags:
           type: object
           additionalProperties:
@@ -1606,7 +1608,7 @@ components:
 
     passkeyEventType:
       type: string
-      enum: [ login-explicit-abort, login-error, login-one-tap-switch, user-append-after-cross-platform-blacklisted, user-append-after-login-error-blacklisted, append-credential-exists, append-explicit-abort, append-error ]
+      enum: [ login-explicit-abort, login-error, login-error-untyped, login-one-tap-switch, user-append-after-cross-platform-blacklisted, user-append-after-login-error-blacklisted, append-credential-exists, append-explicit-abort, append-error ]
 
     blockType:
       type: string
@@ -1810,24 +1812,8 @@ components:
           $ref: '#/components/schemas/clientCapabilities'
         javaScriptHighEntropy:
           $ref: '#/components/schemas/javaScriptHighEntropy'
-
-    clientInformationV2:
-      type: object
-      properties:
-        bluetoothAvailable:
+        isNative:
           type: boolean
-        clientEnvHandle:
-          type: string
-        visitorId:
-          type: string
-        isUserVerifyingPlatformAuthenticatorAvailable:
-          type: boolean
-        isConditionalMediationAvailable:
-          type: boolean
-        clientCapabilities:
-          $ref: '#/components/schemas/clientCapabilities'
-        javaScriptHighEntropy:
-          $ref: '#/components/schemas/javaScriptHighEntropy'
 
     clientCapabilities:
       type: object

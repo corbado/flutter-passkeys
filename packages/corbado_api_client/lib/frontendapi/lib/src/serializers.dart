@@ -20,7 +20,6 @@ import 'package:corbado_frontend_api_client/src/model/block_body_data.dart';
 import 'package:corbado_frontend_api_client/src/model/block_type.dart';
 import 'package:corbado_frontend_api_client/src/model/client_capabilities.dart';
 import 'package:corbado_frontend_api_client/src/model/client_information.dart';
-import 'package:corbado_frontend_api_client/src/model/client_information_v2.dart';
 import 'package:corbado_frontend_api_client/src/model/connect_append_finish_req.dart';
 import 'package:corbado_frontend_api_client/src/model/connect_append_finish_rsp.dart';
 import 'package:corbado_frontend_api_client/src/model/connect_append_init_req.dart';
@@ -112,7 +111,6 @@ part 'serializers.g.dart';
   BlockType,
   ClientCapabilities,
   ClientInformation,
-  ClientInformationV2,
   ConnectAppendFinishReq,
   ConnectAppendFinishRsp,
   ConnectAppendInitReq,

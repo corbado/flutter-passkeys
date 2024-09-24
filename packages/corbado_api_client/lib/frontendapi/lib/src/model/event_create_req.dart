@@ -18,7 +18,7 @@ abstract class EventCreateReq
     implements Built<EventCreateReq, EventCreateReqBuilder> {
   @BuiltValueField(wireName: r'eventType')
   PasskeyEventType get eventType;
-  // enum eventTypeEnum {  login-explicit-abort,  login-error,  login-one-tap-switch,  user-append-after-cross-platform-blacklisted,  user-append-after-login-error-blacklisted,  append-credential-exists,  append-explicit-abort,  append-error,  };
+  // enum eventTypeEnum {  login-explicit-abort,  login-error,  login-error-untyped,  login-one-tap-switch,  user-append-after-cross-platform-blacklisted,  user-append-after-login-error-blacklisted,  append-credential-exists,  append-explicit-abort,  append-error,  };
 
   EventCreateReq._();
 

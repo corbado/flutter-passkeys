@@ -13,9 +13,11 @@ Future<CorbadoService> createClient(
     customDomain: customDomain,
   );
 
-  final client = BrowserClient()..withCredentials = true;
-
-  final apiClient = CorbadoFrontendApiClient();
+  final apiClient = CorbadoFrontendApiClient(basePathOverride: basePath);
+  apiClient.dio.options.headers.addAll({
+    'X-Corbado-ProjectID': projectId,
+  });
+  apiClient.dio.options.extra['withCredentials'] = true;
 
   return WebCorbadoService(apiClient, passkeyAuthenticator);
 }

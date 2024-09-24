@@ -37,144 +37,167 @@ when you want to build an app that utilizes passkeys.
 **Note:** For an explanation on passkeys and the information flows between client, authenticator and
 relying party, take a look at the [passkeys package](https://pub.dev/packages/passkeys).
 
-## Preparations and configuration
+## How to run the example
 
-These steps are required to run the example but you also need to follow them to create your own app.
+To get started with the `corbado_auth` it's nice to see a running version of an example application that uses this package.
+You can start the example like this:
+1. Navigate to the corbado_auth/example directory (e.g. by running `cd packages/corbado_auth/example` on your terminal)
+2. Run `flutter run lib/main.dart` to start the example (if you want to run on Android or iOS, start a Simulator/Emulator beforehand) 
 
-### iOS
+## How to integrate the package into your own app
 
-#### 1. Create an iOS app 
+To use `corbado_auth` in your own app, you need to create a free project at the [Corbado developer panel](https://app.corbado.com).
 
-We need to establish trust between your iOS app and the relying party server.
-Your app will be identified through your **Application Identifier Prefix** (e.g. `9RF9KY77B2`) and
-your **Bundle Identifier** (e.g. `com.corbado.passkeys`).
-You need an Apple developer account to set up both.
-If you haven't got one yet, set up a new account.
+Integrating the package is not just about running `flutter pub add corbado_auth`.
+You need to configure and customize the package, which requires about one hour.
 
-**Note:** When creating your Bundle Identifier, make sure that the "Associated Domains" capability
-is enabled.
+For that we have provided an integration guide that is available [here](https://app.corbado.com/pro-6076489647962290072/getting-started).
 
-<img src="https://raw.githubusercontent.com/corbado/flutter-passkeys/main/packages/corbado_auth/doc/img/bundleId.png" alt="xcode-associated-domains">
+## A closer look at the example code
 
-Open the example in Xcode now by opening `packages/passkeys/passkeys/example/ios`.
-In *Runner* -> *Signing & Capabilites* enter your *Application Identifier Prefix* and your *Bundle
-Identifier*.
+In addition to going through the integration guide it can be helpful to see the `corbado_auth` package in an example application.
+For that, let's take a closer look at this package's example.
+It code can be found in the `/example` directory.
 
-#### 2. Set up your Corbado project
+The example is a typical flutter application that makes use of the following libraries:
+- go_router (routing)
+- riverpod (data binding and state management)
+- corbado_auth (authentication)
 
-Create a free Corbado project at
-the [Corbado developer panel](https://app.corbado.com/signin#register) if you haven't got one yet.
-It will act as your relying party server.
+It consists of 3 pages:
+- loading (shown while the app is loading initially)
+- authentication (shown when a user signs up or logs in)
+- profile (shown for users after signup/log in)
 
-After successful sign up, in the wizard, select 'Integration guide', 'Native / mobile app' and 'No
-existing users'.
+To understand how the `corbado_auth` package is integrated into this example application,
+we have to take a look at these files/directories:
+- **router.dart**: Here we handle routing that is based on the authentication state (e.g. a user that is logged in should not see the authentication screen => that user must be navigated to the profile screen).
+- **auth_provider.dart**: Here we set up the riverpod providers and thus make authentication state (e.g. the user object) and functionality (e.g. the logout function) available throughout the app.
+- **pages/auth_page.dart**: Here we define the page that loads the Corbado auth screens. We configure it with a set of custom Flutter components (see the next bullet point).
+- **screens/\*.dart**: Here we define a set of custom Flutter components. Each of them must implement `CorbadoScreen<T>` where `T` is one of 5 currently supported Corbado blocks. Find details about this in the `Corbado blocks` section. 
 
-#### 3. Configure your iOS app in Corbado
+### A quick note about Flutter web
+Flutter web relies on some JavaScript code that we provide on [Github](https://github.com/corbado/flutter-passkeys/releases/download/2.0.0-dev.1/bundle.js).
+If you want to use `corbado_auth` in a Flutter web application you have to include this JavaScript bundle as part of your index.html.
+You can do this by adding the following `<script>` tag to your `<head>` section.
 
-Make sure that under [*Settings* -> *User interface* -> *Identity
-verification*](https://app.corbado.com/app/settings/userinterface) "Option 2: No verification
-required" is selected. This should be set by default, when selecting 'Native / mobile app' in
-the [previous step](#2-set-up-corbado-project).
+```
+<script src="https://github.com/corbado/flutter-passkeys/releases/download/3.0.0/bundle.js" type="application/javascript"></script>
+```
 
-Set up an iOS app at [*Settings* -> *Native
-apps*](https://app.corbado.com/app/settings/credentials/native-apps) by clicking "Add New".
-You will need your **Application Identifier Prefix** and your **Bundle Identifier** that we set up
-in [step 1](#1-create-an-ios-app-and-configure-the-example-in-xcode).
+For an example how the `index.html` can look check out [index.html](https://github.com/corbado/flutter-passkeys/blob/main/packages/corbado_auth/example/web/index.html).
 
-Afterwards, your relying party server will host an `apple-app-site-association` file
-at `https://{PROJECT_ID}}.frontendapi.corbado.io/.well-known/apple-app-site-association`.
-This file will by downloaded by iOS when you install your app.
-To tell iOS where to look for the file, we need the next step in our setup.
+## Corbado blocks
 
-#### 4. Configure your iOS project
+If you introduce passkeys into your application you will have to define a number of screens in your flutter app.
+A user wants to signup and log in with a passkey. We also have to provide fallbacks for situations where a user can not use a passkey.
+Finally we want to ask users that don't have a passkey yet if they want to create one.
 
-In your Xcode workspace, you need to configure the following settings:
-In `Signing & Capabilities` tab, add the `Associated Domains` capability and add the following
-domain: `webcredentials:{PROJECT_ID}.frontendapi.corbado.io`
-Now, iOS knows where to download the `apple-app-site-association` file from.
+Triggering these screens in the right moments requires quite a bit of logic.
+At Corbado we provide this as a service for developers and we make it configurable in our developer panel.
+As a developer you have the freedom of defining your own UI implementation for these screens.
 
-If you forget about this step, the example will show you an error message
-like `Your app is not associated with your relying party server. You have to add...`.
-Your configuration inside Xcode should look something like in the screenshot below (you will have
-your own Corbado project ID and a different Bundle Identifier).
+To give you guidance about what data and what functionalities are available for a screen we introduced the concept of **Corbado blocks**.
+One Corbado block (e.g. `SignupInitBlock`) defines the data and functionalities that you can use on one of these screens.
+Adding `corbado_auth` to your app means defining these screens.
 
-<img src="https://raw.githubusercontent.com/corbado/flutter-passkeys/main/packages/corbado_auth/doc/img/passkeys_example_ios_associated_domains.png" height="250" alt="xcode-associated-domains">
+### Overview of existing Corbado blocks
 
-#### 5. Start your example
+Currently, there are 5 Corbado blocks available in the `corbado_auth` package.
+Over time we will add additional blocks that you can implement (they are optional).
+These 5 blocks are needed by most developers. 
 
-`flutter run --dart-define=CORBADO_PROJECT_ID=<your-corbado-project-id> lib/main.dart`
+#### SignupInitBlock
 
-If you want to run the example from your IDE, please make sure to either
+This block is used to initiate a sign up.
+The goal of this block is to ask the user for a unique identifier (currently only email is supported)
+and an optional nice name (we call this a fullname at Corbado).
+The corresponding screen will thus be shown when a user starts a new signup in your app.
 
-- set the CORBADO_PROJECT_ID environment variable to your Corbado project ID
-- replace `const String.fromEnvironment('CORBADO_PROJECT_ID')` directly in the example with your
-  Corbado project ID
+If the identifier is not available or in the wrong format the block will return an error. 
 
-### Android
+When you implement the screen for this block, you usually want to define one or multiple input fields
+and two buttons ("submit" and "switch to login"). 
+You should also show the errors (ideally close to the input fields).
 
-#### 1. Set up Corbado project
+Check out [signup_init.dart](https://github.com/corbado/flutter-passkeys/blob/main/packages/corbado_auth/example/lib/screens/signup_init.dart) 
+to see an example implementation for a screen that uses this block.
 
-Create a free Corbado project at
-the [Corbado developer panel](https://app.corbado.com/signin#register) if you haven't got one yet.
-It will act as your relying party server.
+#### PasskeyAppendBlock
 
-After successful sign up, in the wizard, select 'Integration guide', 'Native / mobile app' and 'No
-existing users'.
+This block is used to create a new passkey.
+The corresponding screen will thus be shown during a signup (after the user has provided the identifier)
+or potentially at the end of a login (if no passkey is existing for the user).
 
-After creating the project you will get a Corbado project ID (e.g. `pro-4268394291597054564`).
-You will need it in the next steps.
+If setting up the passkey fails (e.g. because the user has cancelled the operation)
+the block allows either a retry or switching to a fallback authentication method (currently email-otp is supported).
 
-#### 2. Start the example
+When you implement the screen for this block, you usually want to define two buttons.
 
-`flutter run --dart-define=CORBADO_PROJECT_ID=<your-corbado-project-id> lib/main.dart`
+Check out [passkey_append.dart](https://github.com/corbado/flutter-passkeys/blob/main/packages/corbado_auth/example/lib/screens/passkey_append.dart)
+to see an example implementation for a screen that uses this block.
 
-#### 3. Set up an Android app in Corbado
+#### EmailVerifyBlock
 
-Setup an Android app at [*Settings* -> *Credentials* -> *Native
-apps*](https://app.corbado.com/app/settings/credentials/native-apps) by clicking "Add new".
-You will need your **Package name** (e.g. `com.corbado.corbadoauth.example`) and your **SHA-256
-fingerprint** (e.g. `54:4C:94:2C:E9:...`).
+This block is used to verify that a user has access to an email address.
+The corresponding screen will thus be shown during a signup (e.g. if passkeys are not supported or if you have configured your Corbado project to verify each email address during signup)
+or during a login (if no passkey has been used).
 
-The package name of your app is defined in *example/android/app/build.gradle* (applicationId).
-Its default value for the example app is `com.corbado.corbadoauth.example`.
+When the screen for this block is rendered, Corbado has already sent out an email to the user containing a 6-digit code.
+The user should provide this code through the screen.
+If the code is wrong the block will indicate this through an error.
+It then allows to enter the code again or to resend the email (after 30s have passed).
 
-The easiest way to find your SHA-256 fingerprint is to look into the logs of the example app.
-You will find a log message like `Fingerprint: 54:4C:94:2C:E9:...`.
-Copy the full SHA-256 fingerprint and use it to set up the Android app in the Corbado developer
-panel.
+When you implement the screen for this block, you usually want to define one or two buttons (submit and resend).
+Also you need an input field (for the 6-digit code).
 
-Alternatively, you can execute one of the following commands to obtain the SHA-256 fingerprint:
+Check out [email_verify_otp.dart](https://github.com/corbado/flutter-passkeys/blob/main/packages/corbado_auth/example/lib/screens/email_verify_otp.dart)
+to see an example implementation for a screen that uses this block.
 
-- macOS /
-  Linux: `keytool -list -v -keystore ~/.android/debug.keystore -alias androiddebugkey -storepass android -keypass android`
--
+#### LoginInitBlock
 
-Windows: `keytool -list -v -keystore "\.android\debug.keystore" -alias androiddebugkey -storepass android -keypass android`
+This block is used to initiate a login process.
+The goal of this block is to ask the user for her unique identifier (the email address).
+The corresponding screen will thus be shown at the beginning of a login.
 
-Now, you are fully set and you can start signing up with your first passkey in the example.
+When the screen for this block is rendered, conditional UI will be started. 
+If the user has a passkey available he can log in without typing his identifier.
+It that's not the case he has to provide the email address to the block through an input field.
 
-## A closer look at the example
+When you implement the screen for this block, you usually want to define one input field (for the email address).
+Also usually you need two buttons ("submit" and "switch to signup").
 
-After following the configuration steps above, you can run the app.
-The first screen you will see is the login/ signup page.
-Here, you can create a new user account by providing an email address and clicking on 'sign up'.
-After providing your fingerprint / face scan, a new passkey is created and stored on your device.
+Check out [login_init.dart](https://github.com/corbado/flutter-passkeys/blob/main/packages/corbado_auth/example/lib/screens/login_init.dart)
+to see an example implementation for a screen that uses this block.
 
+#### PasskeyVerifyBlock
 
-You will now be logged into the app and see the profile page.
-Your user info is represented by a jwt token that has been retrieved from Corbado during the sign up / sign in
-process and is automatically refreshed when expired.
-You can view that token by clicking on "token details".
-Here, you can observe how the token is refreshed automatically (its lifetime will increase once in a
-while).
+This block is used to verify that a user has access to a passkey.
+The corresponding screen will thus be shown during a login process.
 
-You can also close and reopen the app.
-You should still be logged in.
+When the screen for this block is rendered, a passkey authentication is started.
+If the user completes it he will move on to the next block (most of the time he directly is logged in).
+If something goes wrong the user can either retry the passkey operation or use a fallback method.
 
-<p float="left">
-    <img src="https://raw.githubusercontent.com/corbado/flutter-passkeys/main/packages/corbado_auth/doc/img/signin-signup-image.jpg" height="500" alt="signup">
-    <img src="https://raw.githubusercontent.com/corbado/flutter-passkeys/main/packages/corbado_auth/doc/img/profile-token-details-image.jpg" height="500" alt="signup fingerpring">
-</p>
+When you implement the screen for this block, you usually want to define two buttons 
+(one to retry the passkey operation and another one to initiate the fallback).
+
+Check out [passkey_verify.dart](https://github.com/corbado/flutter-passkeys/blob/main/packages/corbado_auth/example/lib/screens/passkey_verify.dart)
+to see an example implementation for a screen that uses this block.
+
+### Deep dive: why do we use the concept of Corbado blocks?
+
+We understand that this concept of `blocks` and `screens` might be challenging at the beginning.
+From personal experience, integrating authentication (no matter what solution you use) is always a bit challenging at first.
+While passkeys are a great feature for end-users for us developers they tend to make life harder
+(at least at the beginning).
+
+With `corbado_auth` we want to reduce complexity as much as possible for you.
+We do this on the one hand by implementing parts of the system for you (e.g. the relying party server and session management)
+On the other hand we try to give clear guidance what authentication related functionalities you can use on which screen.
+This means that on each screen just by looking at the corresponding block you quickly get an idea how you should build the screen.
+You still have full control over the UI though.
+Most importantly we also render these screens in the right order for you so you don't need to bother with complex routing during authentication.
 
 ## Troubleshooting
 

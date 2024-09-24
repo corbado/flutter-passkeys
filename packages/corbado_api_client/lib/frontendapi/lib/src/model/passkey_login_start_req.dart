@@ -3,7 +3,7 @@
 //
 
 // ignore_for_file: unused_element
-import 'package:corbado_frontend_api_client/src/model/client_information_v2.dart';
+import 'package:corbado_frontend_api_client/src/model/client_information.dart';
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
 
@@ -17,7 +17,7 @@ part 'passkey_login_start_req.g.dart';
 abstract class PasskeyLoginStartReq
     implements Built<PasskeyLoginStartReq, PasskeyLoginStartReqBuilder> {
   @BuiltValueField(wireName: r'clientInformation')
-  ClientInformationV2? get clientInformation;
+  ClientInformation? get clientInformation;
 
   PasskeyLoginStartReq._();
 
@@ -52,7 +52,7 @@ class _$PasskeyLoginStartReqSerializer
       yield r'clientInformation';
       yield serializers.serialize(
         object.clientInformation,
-        specifiedType: const FullType(ClientInformationV2),
+        specifiedType: const FullType(ClientInformation),
       );
     }
   }
@@ -83,8 +83,8 @@ class _$PasskeyLoginStartReqSerializer
         case r'clientInformation':
           final valueDes = serializers.deserialize(
             value,
-            specifiedType: const FullType(ClientInformationV2),
-          ) as ClientInformationV2;
+            specifiedType: const FullType(ClientInformation),
+          ) as ClientInformation;
           result.clientInformation.replace(valueDes);
           break;
         default:

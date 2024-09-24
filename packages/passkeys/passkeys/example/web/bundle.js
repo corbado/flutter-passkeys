@@ -326,8 +326,27 @@ var PasskeyAuthenticator = (function (exports) {
     }
 
     let passkeyAuthenticator = new PasskeyAuthenticator();
-    async function canAuthenticate() {
-        return await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable();
+    async function isUserVerifyingPlatformAuthenticatorAvailable() {
+        if (!window.PublicKeyCredential) {
+            return undefined;
+        }
+        try {
+            return await window.PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable();
+        }
+        catch (e) {
+            return undefined;
+        }
+    }
+    async function isConditionalMediationAvailable() {
+        if (!window.PublicKeyCredential) {
+            return undefined;
+        }
+        try {
+            return await window.PublicKeyCredential.isConditionalMediationAvailable();
+        }
+        catch (e) {
+            return undefined;
+        }
     }
     function init() {
         passkeyAuthenticator = new PasskeyAuthenticator();
@@ -342,9 +361,10 @@ var PasskeyAuthenticator = (function (exports) {
         passkeyAuthenticator.abortCurrentWebAuthnOperation();
     }
 
-    exports.canAuthenticate = canAuthenticate;
     exports.cancelCurrentAuthenticatorOperation = cancelCurrentAuthenticatorOperation;
     exports.init = init;
+    exports.isConditionalMediationAvailable = isConditionalMediationAvailable;
+    exports.isUserVerifyingPlatformAuthenticatorAvailable = isUserVerifyingPlatformAuthenticatorAvailable;
     exports.login = login;
     exports.register = register;
 

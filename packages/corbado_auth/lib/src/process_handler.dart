@@ -7,6 +7,13 @@ import 'package:corbado_auth/src/blocks/types.dart';
 import 'package:corbado_auth/src/services/corbado/corbado.dart';
 import 'package:corbado_frontend_api_client/corbado_frontend_api_client.dart';
 
+class ComponentWithData {
+  final ScreenNames screenName;
+  final Block<dynamic> block;
+
+  ComponentWithData(this.screenName, this.block);
+}
+
 class ProcessHandler {
   final CorbadoService corbadoService;
 
@@ -14,7 +21,7 @@ class ProcessHandler {
 
   final _componentWithDataStream = StreamController<ComponentWithData>.broadcast();
   ScreenNames _currentScreen = ScreenNames.SignupInit;
-  Block? _currentBlock;
+  Block<dynamic>? _currentBlock;
 
   Stream<ComponentWithData> get componentWithDataStream => _componentWithDataStream.stream;
 
@@ -31,7 +38,7 @@ class ProcessHandler {
     _updatePrimaryBlock(newPrimaryBlock);
   }
 
-  updateBlockFromClient(Block newPrimaryBlock, List<Block> newAlternatives) {
+  updateBlockFromClient(Block<dynamic> newPrimaryBlock, List<Block<dynamic>> newAlternatives) {
     newPrimaryBlock.alternatives = newAlternatives;
     _updatePrimaryBlock(newPrimaryBlock);
   }
@@ -55,45 +62,52 @@ class ProcessHandler {
     _componentWithDataStream.add(ComponentWithData(_currentScreen, _currentBlock!));
   }
 
-  Block _parseBlockData(BlockBody body, ProcessCommon common) {
-    Block block;
+  Block<dynamic> _parseBlockData(BlockBody body, ProcessCommon common) {
+    Block<dynamic> block;
 
     switch (body.block) {
       case BlockType.signupInit:
+        final typed = body.data.oneOf.value! as GeneralBlockSignupInit;
         block = SignupInitBlock(
           processHandler: this,
-          data: SignupInitBlockData.fromProcessResponse(body.data.oneOf.value! as GeneralBlockSignupInit),
+          data: SignupInitBlockData.fromProcessResponse(typed),
         );
+        block.error = CorbadoError.fromRequestError(typed.error);
 
       case BlockType.loginInit:
-        block = LoginInitBlock(
-            processHandler: this,
-            data: LoginInitBlockData.fromProcessResponse(body.data.oneOf.value! as GeneralBlockLoginInit));
+        final typed = body.data.oneOf.value! as GeneralBlockLoginInit;
+        block = LoginInitBlock(processHandler: this, data: LoginInitBlockData.fromProcessResponse(typed));
+        block.error = CorbadoError.fromRequestError(typed.error);
 
       case BlockType.emailVerify:
+        final typed = body.data.oneOf.value! as GeneralBlockVerifyIdentifier;
         block = EmailVerifyBlock(
-            processHandler: this,
-            data: EmailVerifyBlockData.fromProcessResponse(body.data.oneOf.value! as GeneralBlockVerifyIdentifier),
-            authType: body.authType,
+          processHandler: this,
+          data: EmailVerifyBlockData.fromProcessResponse(typed),
+          authType: body.authType,
         );
+        block.error = CorbadoError.fromRequestError(typed.error);
 
       case BlockType.completed:
+        final typed = body.data.oneOf.value! as GeneralBlockCompleted;
         block = CompletedBlock(
           processHandler: this,
-          data: CompletedBlockData.fromProcessResponse(body.data.oneOf.value! as GeneralBlockCompleted),
+          data: CompletedBlockData.fromProcessResponse(typed),
         );
 
       case BlockType.passkeyAppend:
+        final typed = body.data.oneOf.value! as GeneralBlockPasskeyAppend;
         block = PasskeyAppendBlock(
           processHandler: this,
-          data: PasskeyAppendBlockData.fromProcessResponse(body.data.oneOf.value! as GeneralBlockPasskeyAppend),
+          data: PasskeyAppendBlockData.fromProcessResponse(typed),
           authType: body.authType,
         );
 
       case BlockType.passkeyVerify:
+        final typed = body.data.oneOf.value! as GeneralBlockPasskeyVerify;
         block = PasskeyVerifyBlock(
           processHandler: this,
-          data: PasskeyVerifyBlockData.fromProcessResponse(body.data.oneOf.value! as GeneralBlockPasskeyVerify),
+          data: PasskeyVerifyBlockData.fromProcessResponse(typed),
         );
 
       default:
@@ -110,7 +124,7 @@ class ProcessHandler {
     return block;
   }
 
-  notifyCurrentScreen() {
+  void notifyCurrentScreen() {
     if (_currentBlock == null) {
       return null;
     }
@@ -119,7 +133,7 @@ class ProcessHandler {
     _componentWithDataStream.add(event);
   }
 
-  _updatePrimaryBlock(Block<dynamic> newPrimaryBlock) {
+  void _updatePrimaryBlock(Block<dynamic> newPrimaryBlock) {
     if (newPrimaryBlock is CompletedBlock) {
       _onAuthProcessCompleted(newPrimaryBlock.data);
       return;
@@ -137,7 +151,7 @@ class ProcessHandler {
     _componentWithDataStream.add(event);
   }
 
-  _onAuthProcessCompleted(CompletedBlockData data) {
+  void _onAuthProcessCompleted(CompletedBlockData data) {
     corbadoService.clearAuthProcess();
     _currentBlock = null;
     onLoggedIn(data.shortSession, data.longSession);
