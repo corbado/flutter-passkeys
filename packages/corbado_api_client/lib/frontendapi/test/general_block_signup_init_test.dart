@@ -7,6 +7,11 @@ void main() {
   // TODO add properties to the builder and call build()
 
   group(GeneralBlockSignupInit, () {
+    // String blockType
+    test('to test the property `blockType`', () async {
+      // TODO
+    });
+
     // BuiltList<LoginIdentifierWithError> identifiers
     test('to test the property `identifiers`', () async {
       // TODO

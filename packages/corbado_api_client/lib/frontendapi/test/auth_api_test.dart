@@ -64,7 +64,7 @@ void main() {
 
     // tbd
     //
-    //Future<ProcessResponse> passkeyAppendStart(JsonObject body) async
+    //Future<ProcessResponse> passkeyAppendStart(PasskeyAppendStartReq passkeyAppendStartReq) async
     test('test passkeyAppendStart', () async {
       // TODO
     });
@@ -78,7 +78,7 @@ void main() {
 
     // tbd
     //
-    //Future<ProcessResponse> passkeyLoginStart(JsonObject body) async
+    //Future<ProcessResponse> passkeyLoginStart(PasskeyLoginStartReq passkeyLoginStartReq) async
     test('test passkeyLoginStart', () async {
       // TODO
     });
@@ -87,13 +87,6 @@ void main() {
     //
     //Future<ProcessResponse> passkeyMediationFinish(PasskeyMediationFinishReq passkeyMediationFinishReq) async
     test('test passkeyMediationFinish', () async {
-      // TODO
-    });
-
-    // tbd
-    //
-    //Future<ProcessResponse> phoneCollect(PhoneCollectReq phoneCollectReq) async
-    test('test phoneCollect', () async {
       // TODO
     });
 
@@ -150,13 +143,6 @@ void main() {
     //
     //Future<ProcessResponse> socialVerifyStart(SocialVerifyStartReq socialVerifyStartReq) async
     test('test socialVerifyStart', () async {
-      // TODO
-    });
-
-    // tbd
-    //
-    //Future<ProcessResponse> usernameCollect(UsernameCollectReq usernameCollectReq) async
-    test('test usernameCollect', () async {
       // TODO
     });
   });

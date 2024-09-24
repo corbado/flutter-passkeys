@@ -7,6 +7,11 @@ void main() {
   // TODO add properties to the builder and call build()
 
   group(GeneralBlockPostSignupEmailVerify, () {
+    // String blockType
+    test('to test the property `blockType`', () async {
+      // TODO
+    });
+
     // RequestError error
     test('to test the property `error`', () async {
       // TODO

@@ -7,6 +7,11 @@ void main() {
   // TODO add properties to the builder and call build()
 
   group(GeneralBlockPasskeyVerify, () {
+    // String blockType
+    test('to test the property `blockType`', () async {
+      // TODO
+    });
+
     // String challenge
     test('to test the property `challenge`', () async {
       // TODO

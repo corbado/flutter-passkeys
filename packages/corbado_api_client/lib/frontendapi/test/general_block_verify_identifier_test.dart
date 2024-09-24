@@ -7,6 +7,11 @@ void main() {
   // TODO add properties to the builder and call build()
 
   group(GeneralBlockVerifyIdentifier, () {
+    // String blockType
+    test('to test the property `blockType`', () async {
+      // TODO
+    });
+
     // VerificationMethod verificationMethod
     test('to test the property `verificationMethod`', () async {
       // TODO

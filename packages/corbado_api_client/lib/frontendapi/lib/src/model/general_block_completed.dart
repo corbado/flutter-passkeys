@@ -14,7 +14,7 @@ part 'general_block_completed.g.dart';
 /// Properties:
 /// * [blockType]
 /// * [shortSession]
-/// * [longSession] - Only given when project environment is dev
+/// * [longSession] - Only given when project environment is dev 1
 /// * [passkeyOperation]
 @BuiltValue()
 abstract class GeneralBlockCompleted
@@ -25,7 +25,7 @@ abstract class GeneralBlockCompleted
   @BuiltValueField(wireName: r'shortSession')
   String get shortSession;
 
-  /// Only given when project environment is dev
+  /// Only given when project environment is dev 1
   @BuiltValueField(wireName: r'longSession')
   String? get longSession;
 

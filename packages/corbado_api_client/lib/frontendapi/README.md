@@ -18,7 +18,7 @@ For more information, please visit [https://www.corbado.com](https://www.corbado
 To use the package from [pub.dev](https://pub.dev), please include the following in pubspec.yaml
 ```yaml
 dependencies:
-  corbado_frontend_api_client: 1.0.0
+  corbado_frontend_api_client: 2.0.0
 ```
 
 ### Github

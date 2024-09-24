@@ -7,6 +7,11 @@ void main() {
   // TODO add properties to the builder and call build()
 
   group(BlockBodyData, () {
+    // String blockType
+    test('to test the property `blockType`', () async {
+      // TODO
+    });
+
     // String challenge
     test('to test the property `challenge`', () async {
       // TODO
@@ -72,11 +77,6 @@ void main() {
       // TODO
     });
 
-    // LoginIdentifierType type
-    test('to test the property `type`', () async {
-      // TODO
-    });
-
     // bool isPhone
     test('to test the property `isPhone`', () async {
       // TODO
@@ -112,7 +112,7 @@ void main() {
       // TODO
     });
 
-    // Only given when project environment is dev
+    // Only given when project environment is dev 1
     // String longSession
     test('to test the property `longSession`', () async {
       // TODO

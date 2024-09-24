@@ -17,7 +17,7 @@ void main() {
       // TODO
     });
 
-    // Only given when project environment is dev
+    // Only given when project environment is dev 1
     // String longSession
     test('to test the property `longSession`', () async {
       // TODO

@@ -48,5 +48,10 @@ void main() {
     test('to test the property `javaScriptHighEntropy`', () async {
       // TODO
     });
+
+    // bool isNative
+    test('to test the property `isNative`', () async {
+      // TODO
+    });
   });
 }

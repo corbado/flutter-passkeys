@@ -51,7 +51,7 @@ part 'block_body_data.g.dart';
 /// * [loginHint]
 /// * [retryNotBefore]
 /// * [error]
-/// * [longSession] - Only given when project environment is dev
+/// * [longSession] - Only given when project environment is dev 1
 /// * [passkeyOperation]
 /// * [fullName]
 /// * [conditionalUIChallenge]

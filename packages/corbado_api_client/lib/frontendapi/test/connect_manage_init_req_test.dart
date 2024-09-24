@@ -7,7 +7,7 @@ void main() {
   // TODO add properties to the builder and call build()
 
   group(ConnectManageInitReq, () {
-    // ClientInformationV2 clientInformation
+    // ClientInformation clientInformation
     test('to test the property `clientInformation`', () async {
       // TODO
     });

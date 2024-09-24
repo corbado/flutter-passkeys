@@ -29,7 +29,7 @@ Name | Type | Description | Notes
 **loginHint** | **String** |  | [optional] 
 **retryNotBefore** | **int** |  | [optional] 
 **error** | [**RequestError**](RequestError.md) |  | [optional] 
-**longSession** | **String** | Only given when project environment is dev | [optional] 
+**longSession** | **String** | Only given when project environment is dev 1 | [optional] 
 **passkeyOperation** | [**PasskeyOperation**](PasskeyOperation.md) |  | [optional] 
 **fullName** | [**FullNameWithError**](FullNameWithError.md) |  | [optional] 
 **conditionalUIChallenge** | **String** |  | [optional] 
