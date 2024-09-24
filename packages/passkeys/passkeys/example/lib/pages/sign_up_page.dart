@@ -13,7 +13,7 @@ class SignUpPage extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final emailController = TextEditingController();
     final error = useState<String?>(null);
-    final passkeyAuth = ref.watch(relyingPartyServerProvider);
+    final authService = ref.watch(authServiceProvider);
 
     return BasePage(
       child: Column(
@@ -64,7 +64,7 @@ class SignUpPage extends HookConsumerWidget {
               onPressed: () async {
                 final email = emailController.value.text;
                 try {
-                  await passkeyAuth.signUpWithPasskey(email: email);
+                  await authService.signupWithPasskey(email: email);
                   context.go(Routes.profile);
                 } catch (e) {
                   error.value = e.toString();

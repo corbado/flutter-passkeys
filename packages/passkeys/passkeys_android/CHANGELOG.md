@@ -1,3 +1,6 @@
+## 2.1.0
+* Added support for preferImmediatelyAvailableCredentials
+
 ## 2.0.4
 * Added NoCredentialsAvailableException to indicate that no credentials are available during a login
 

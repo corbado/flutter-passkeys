@@ -1,3 +1,7 @@
+## 2.1.0
+* Added getAvailability().
+* Added preferImmediatelyAvailableCredentials.
+
 ## 2.0.1
 * Added excludeCredentials to RegisterRequestType
 

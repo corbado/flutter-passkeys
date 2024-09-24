@@ -23,11 +23,11 @@ class _SignInPageState extends ConsumerState<SignInPage> {
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final passkeyAuth = ref.watch(relyingPartyServerProvider);
+      final authService = ref.watch(authServiceProvider);
 
       // As soon as the view has been loaded prepare the autocompleted passkey sign in.
-      passkeyAuth
-          .autocompletedLoginWithPasskey()
+      authService
+          .loginWithPasskeyConditionalUI()
           .then((value) => context.go(Routes.profile))
           .onError(
         (error, stackTrace) {
@@ -46,7 +46,7 @@ class _SignInPageState extends ConsumerState<SignInPage> {
   @override
   Widget build(BuildContext context) {
     final error = useState<String?>(null);
-    final passkeyAuth = ref.watch(relyingPartyServerProvider);
+    final authService = ref.watch(authServiceProvider);
 
     return BasePage(
       child: Column(
@@ -98,7 +98,7 @@ class _SignInPageState extends ConsumerState<SignInPage> {
               onPressed: () async {
                 try {
                   final email = _emailController.value.text;
-                  await passkeyAuth.loginWithPasskey(email: email);
+                  await authService.loginWithPasskey(email: email);
                   context.go(Routes.profile);
                 } catch (e) {
                   if (e is PasskeyAuthCancelledException) {
@@ -109,13 +109,6 @@ class _SignInPageState extends ConsumerState<SignInPage> {
 
                   error.value = e.toString();
                   debugPrint('error: $e');
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      backgroundColor: Theme.of(context).primaryColor,
-                      content: Text('$error'),
-                      duration: const Duration(seconds: 10),
-                    ),
-                  );
                 }
               },
               child: const Text('sign in'),

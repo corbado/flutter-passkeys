@@ -1,3 +1,7 @@
+## 2.1.0
+* Added support for preferImmediatelyAvailableCredentials (Android and iOS)
+* Added getAvailability (Flutter web only)
+
 ## 2.0.9
 * Bump version of passkeys_web and corbado_frontend_api_client
 * Removed dependencies to openapi_generator_annotations and openapi_generator

@@ -1,3 +1,6 @@
+## 2.1.0
+* Added getAvailability() to check for isUserVerifyingPlatformAuthenticatorAvailable and isConditionalMediationAvailable.
+
 ## 2.0.2
 * Version bump for js dependency.
 

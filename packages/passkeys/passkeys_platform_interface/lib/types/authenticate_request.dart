@@ -6,9 +6,9 @@ class AuthenticateRequestType {
   const AuthenticateRequestType({
     required this.relyingPartyId,
     required this.challenge,
-    required this.timeout,
-    required this.userVerification,
-    required this.allowCredentials,
+    this.timeout,
+    this.userVerification,
+    this.allowCredentials,
     required this.mediation,
     required this.preferImmediatelyAvailableCredentials,
   });

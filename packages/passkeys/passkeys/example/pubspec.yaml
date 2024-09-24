@@ -18,6 +18,7 @@ dependencies:
   hooks_riverpod: 2.4.0
   corbado_frontend_api_client: ^1.1.1
   flutter_localization: ^0.2.1
+  jwt_decoder: ^2.0.1
 
 dev_dependencies:
   flutter_driver:
