@@ -26,6 +26,7 @@ AttestationResponse _$AttestationResponseFromJson(Map<String, dynamic> json) =>
     AttestationResponse(
       json['clientDataJSON'] as String,
       json['attestationObject'] as String,
+      json['transports'] as List<String>,
     );
 
 Map<String, dynamic> _$AttestationResponseToJson(
@@ -33,4 +34,5 @@ Map<String, dynamic> _$AttestationResponseToJson(
     <String, dynamic>{
       'clientDataJSON': instance.clientDataJSON,
       'attestationObject': instance.attestationObject,
+      'transports': instance.transports,
     };

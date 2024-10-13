@@ -21,10 +21,15 @@ class AttestationResponse {
   factory AttestationResponse.fromJson(Map<String, dynamic> json) =>
       _$AttestationResponseFromJson(json);
 
-  AttestationResponse(this.clientDataJSON, this.attestationObject);
+  AttestationResponse(
+    this.clientDataJSON,
+    this.attestationObject,
+    this.transports,
+  );
 
   final String clientDataJSON;
   final String attestationObject;
+  final List<String> transports;
 
   Map<String, dynamic> toJson() => _$AttestationResponseToJson(this);
 }
