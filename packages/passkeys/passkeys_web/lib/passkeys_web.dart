@@ -44,6 +44,7 @@ class PasskeysWeb extends PasskeysPlatform {
         rawId: typedResponse.rawId,
         clientDataJSON: typedResponse.response.clientDataJSON,
         attestationObject: typedResponse.response.attestationObject,
+        transports: typedResponse.response.transports,
       );
     } catch (e) {
       final exception = _parseException(e as String);
