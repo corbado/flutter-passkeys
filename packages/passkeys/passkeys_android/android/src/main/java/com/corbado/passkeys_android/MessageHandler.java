@@ -85,17 +85,20 @@ public class MessageHandler implements Messages.PasskeysApi {
             @Nullable Long timeout,
             @Nullable String attestation,
             @NonNull List<Messages.ExcludeCredential> excludeCredentials,
-            @NonNull Messages.Result<Messages.RegisterResponse> result
-    ) {
+            @NonNull Messages.Result<Messages.RegisterResponse> result) {
 
         UserType userType = new UserType(user.getName(), user.getDisplayName(), user.getId(), user.getIcon());
         RelyingPartyType relyingPartyType = new RelyingPartyType(relyingParty.getId(), relyingParty.getName());
-        AuthenticatorSelectionType authSelectionType = new AuthenticatorSelectionType(authenticatorSelection.getAuthenticatorAttachment(), authenticatorSelection.getRequireResidentKey(), authenticatorSelection.getResidentKey(), authenticatorSelection.getUserVerification());
+        AuthenticatorSelectionType authSelectionType = new AuthenticatorSelectionType(
+                authenticatorSelection.getAuthenticatorAttachment(), authenticatorSelection.getRequireResidentKey(),
+                authenticatorSelection.getResidentKey(), authenticatorSelection.getUserVerification());
         List<PubKeyCredParamType> pubKeyCredParamsType = new ArrayList<>();
         if (pubKeyCredParams != null) {
-            pubKeyCredParamsType = pubKeyCredParams.stream().map(p -> new PubKeyCredParamType(p.getType(), p.getAlg())).collect(Collectors.toList());
+            pubKeyCredParamsType = pubKeyCredParams.stream().map(p -> new PubKeyCredParamType(p.getType(), p.getAlg()))
+                    .collect(Collectors.toList());
         }
-        final List<ExcludeCredentialType> excludeCredentialsType = excludeCredentials.stream().map(c -> new ExcludeCredentialType(c.getType(), c.getId())).collect(Collectors.toList());
+        final List<ExcludeCredentialType> excludeCredentialsType = excludeCredentials.stream()
+                .map(c -> new ExcludeCredentialType(c.getType(), c.getId())).collect(Collectors.toList());
 
         CreateCredentialOptions createCredentialOptions = new CreateCredentialOptions(
                 challenge,
@@ -105,56 +108,70 @@ public class MessageHandler implements Messages.PasskeysApi {
                 timeout,
                 authSelectionType,
                 attestation,
-                excludeCredentialsType
-        );
+                excludeCredentialsType);
 
         try {
             String options = createCredentialOptions.toJSON().toString();
 
             Activity activity = plugin.requireActivity();
             CredentialManager credentialManager = CredentialManager.create(activity);
-            CreatePublicKeyCredentialRequest createPublicKeyCredentialRequest = new CreatePublicKeyCredentialRequest(options);
+            CreatePublicKeyCredentialRequest createPublicKeyCredentialRequest = new CreatePublicKeyCredentialRequest(
+                    options);
             currentCancellationSignal = new CancellationSignal();
-            credentialManager.createCredentialAsync(activity, createPublicKeyCredentialRequest, currentCancellationSignal, Runnable::run, new CredentialManagerCallback<CreateCredentialResponse, CreateCredentialException>() {
+            credentialManager.createCredentialAsync(activity, createPublicKeyCredentialRequest,
+                    currentCancellationSignal, Runnable::run,
+                    new CredentialManagerCallback<CreateCredentialResponse, CreateCredentialException>() {
 
-                @Override
-                public void onResult(CreateCredentialResponse res) {
-                    String resp = res.getData().getString("androidx.credentials.BUNDLE_KEY_REGISTRATION_RESPONSE_JSON");
-                    try {
-                        JSONObject json = new JSONObject(resp);
-                        JSONObject response = json.getJSONObject("response");
-                        result.success(new Messages.RegisterResponse.Builder().setId(json.getString("id")).setRawId(json.getString("rawId")).setClientDataJSON(response.getString("clientDataJSON")).setAttestationObject(response.getString("attestationObject")).build());
-                    } catch (JSONException e) {
-                        Log.e(TAG, "Error parsing response: " + resp, e);
-                        result.error(e);
-                    }
-                }
-
-                @Override
-                public void onError(CreateCredentialException e) {
-                    Exception platformException = e;
-                    if (Objects.equals(e.getMessage(), "Unable to create key during registration")) {
-                        // currently, Android throws this error when users skip the fingerPrint animation => we interpret this as a cancellation for now
-                        platformException = new Messages.FlutterError("cancelled", e.getMessage(), "");
-                    } else if (e instanceof CreateCredentialCancellationException) {
-                        platformException = new Messages.FlutterError("cancelled", e.getMessage(), "");
-                    } else if (e instanceof CreatePublicKeyCredentialDomException) {
-                        if (Objects.equals(e.getMessage(), "User is unable to create passkeys.")) {
-                            platformException = new Messages.FlutterError("android-missing-google-sign-in", e.getMessage(), MISSING_GOOGLE_SIGN_IN_ERROR);
-                        } else if (Objects.equals(e.getMessage(), "Unable to get sync account.")) {
-                            platformException = new Messages.FlutterError("android-sync-account-not-available", e.getMessage(), SYNC_ACCOUNT_NOT_AVAILABLE_ERROR);
-                        } else if (Objects.equals(e.getMessage(), "One of the excluded credentials exists on the local device")) {
-                            platformException = new Messages.FlutterError("exclude-credentials-match", e.getMessage(), EXCLUDE_CREDENTIALS_MATCH_ERROR);
-                        } else {
-                            platformException = new Messages.FlutterError("android-unhandled: " + e.getType(), e.getMessage(), e.getErrorMessage());
+                        @Override
+                        public void onResult(CreateCredentialResponse res) {
+                            String resp = res.getData()
+                                    .getString("androidx.credentials.BUNDLE_KEY_REGISTRATION_RESPONSE_JSON");
+                            try {
+                                JSONObject json = new JSONObject(resp);
+                                JSONObject response = json.getJSONObject("response");
+                                result.success(new Messages.RegisterResponse.Builder().setId(json.getString("id"))
+                                        .setRawId(json.getString("rawId"))
+                                        .setClientDataJSON(response.getString("clientDataJSON"))
+                                        .setAttestationObject(response.getString("attestationObject"))
+                                        .setTransports(json.getJSONArray("transports").toList()).build());
+                            } catch (JSONException e) {
+                                Log.e(TAG, "Error parsing response: " + resp, e);
+                                result.error(e);
+                            }
                         }
-                    } else {
-                        platformException = new Messages.FlutterError("android-unhandled" + e.getType(), e.getMessage(), e.getErrorMessage());
-                    }
 
-                    result.error(platformException);
-                }
-            });
+                        @Override
+                        public void onError(CreateCredentialException e) {
+                            Exception platformException = e;
+                            if (Objects.equals(e.getMessage(), "Unable to create key during registration")) {
+                                // currently, Android throws this error when users skip the fingerPrint
+                                // animation => we interpret this as a cancellation for now
+                                platformException = new Messages.FlutterError("cancelled", e.getMessage(), "");
+                            } else if (e instanceof CreateCredentialCancellationException) {
+                                platformException = new Messages.FlutterError("cancelled", e.getMessage(), "");
+                            } else if (e instanceof CreatePublicKeyCredentialDomException) {
+                                if (Objects.equals(e.getMessage(), "User is unable to create passkeys.")) {
+                                    platformException = new Messages.FlutterError("android-missing-google-sign-in",
+                                            e.getMessage(), MISSING_GOOGLE_SIGN_IN_ERROR);
+                                } else if (Objects.equals(e.getMessage(), "Unable to get sync account.")) {
+                                    platformException = new Messages.FlutterError("android-sync-account-not-available",
+                                            e.getMessage(), SYNC_ACCOUNT_NOT_AVAILABLE_ERROR);
+                                } else if (Objects.equals(e.getMessage(),
+                                        "One of the excluded credentials exists on the local device")) {
+                                    platformException = new Messages.FlutterError("exclude-credentials-match",
+                                            e.getMessage(), EXCLUDE_CREDENTIALS_MATCH_ERROR);
+                                } else {
+                                    platformException = new Messages.FlutterError("android-unhandled: " + e.getType(),
+                                            e.getMessage(), e.getErrorMessage());
+                                }
+                            } else {
+                                platformException = new Messages.FlutterError("android-unhandled" + e.getType(),
+                                        e.getMessage(), e.getErrorMessage());
+                            }
+
+                            result.error(platformException);
+                        }
+                    });
         } catch (JSONException e) {
             Log.e(TAG, "Error creating JSON", e);
             result.error(e);
@@ -162,13 +179,18 @@ public class MessageHandler implements Messages.PasskeysApi {
     }
 
     @Override
-    public void authenticate(@NonNull String relyingPartyId, @NonNull String challenge, @Nullable Long timeout, @Nullable String userVerification, @Nullable List<Messages.AllowCredential> allowCredentials, @NonNull Messages.Result<Messages.AuthenticateResponse> result) {
+    public void authenticate(@NonNull String relyingPartyId, @NonNull String challenge, @Nullable Long timeout,
+            @Nullable String userVerification, @Nullable List<Messages.AllowCredential> allowCredentials,
+            @NonNull Messages.Result<Messages.AuthenticateResponse> result) {
 
         List<AllowCredentialType> allowCredentialsType = new ArrayList<>();
         if (allowCredentials != null) {
-            allowCredentialsType = allowCredentials.stream().map(c -> new AllowCredentialType(c.getType(), c.getId(), c.getTransports())).collect(Collectors.toList());
+            allowCredentialsType = allowCredentials.stream()
+                    .map(c -> new AllowCredentialType(c.getType(), c.getId(), c.getTransports()))
+                    .collect(Collectors.toList());
         }
-        GetCredentialOptions getCredentialOptions = new GetCredentialOptions(challenge, timeout, relyingPartyId, allowCredentialsType, userVerification);
+        GetCredentialOptions getCredentialOptions = new GetCredentialOptions(challenge, timeout, relyingPartyId,
+                allowCredentialsType, userVerification);
         try {
             String options = getCredentialOptions.toJSON().toString();
 
@@ -177,64 +199,77 @@ public class MessageHandler implements Messages.PasskeysApi {
             CredentialManager credentialManager = CredentialManager.create(activity);
             GetPublicKeyCredentialOption getPublicKeyCredentialOption = new GetPublicKeyCredentialOption(options);
 
-            GetCredentialRequest getCredRequest = new GetCredentialRequest.Builder().addCredentialOption(getPublicKeyCredentialOption).build();
+            GetCredentialRequest getCredRequest = new GetCredentialRequest.Builder()
+                    .addCredentialOption(getPublicKeyCredentialOption).build();
             currentCancellationSignal = new CancellationSignal();
 
-            credentialManager.getCredentialAsync(activity, getCredRequest, currentCancellationSignal, Runnable::run, new CredentialManagerCallback<GetCredentialResponse, GetCredentialException>() {
-                @Override
-                public void onResult(GetCredentialResponse res) {
-                    Credential credential = res.getCredential();
-                    if (credential instanceof PublicKeyCredential) {
-                        String responseJson = ((PublicKeyCredential) credential).getAuthenticationResponseJson();
-                        try {
-                            final JSONObject json = new JSONObject(responseJson);
-                            final JSONObject response = json.getJSONObject("response");
+            credentialManager.getCredentialAsync(activity, getCredRequest, currentCancellationSignal, Runnable::run,
+                    new CredentialManagerCallback<GetCredentialResponse, GetCredentialException>() {
+                        @Override
+                        public void onResult(GetCredentialResponse res) {
+                            Credential credential = res.getCredential();
+                            if (credential instanceof PublicKeyCredential) {
+                                String responseJson = ((PublicKeyCredential) credential)
+                                        .getAuthenticationResponseJson();
+                                try {
+                                    final JSONObject json = new JSONObject(responseJson);
+                                    final JSONObject response = json.getJSONObject("response");
 
-                            final String id = json.getString("id");
-                            final String rawId = json.getString("rawId");
+                                    final String id = json.getString("id");
+                                    final String rawId = json.getString("rawId");
 
-                            final String clientDataJSON = response.getString("clientDataJSON");
-                            final String userHandle = response.getString("userHandle");
-                            final String signature = response.getString("signature");
-                            final String authenticatorData = response.getString("authenticatorData");
+                                    final String clientDataJSON = response.getString("clientDataJSON");
+                                    final String userHandle = response.getString("userHandle");
+                                    final String signature = response.getString("signature");
+                                    final String authenticatorData = response.getString("authenticatorData");
 
-                            final Messages.AuthenticateResponse msg = new Messages.AuthenticateResponse.Builder().setId(id).setRawId(rawId).setClientDataJSON(clientDataJSON).setAuthenticatorData(authenticatorData).setSignature(signature).setUserHandle(userHandle).build();
+                                    final Messages.AuthenticateResponse msg = new Messages.AuthenticateResponse.Builder()
+                                            .setId(id).setRawId(rawId).setClientDataJSON(clientDataJSON)
+                                            .setAuthenticatorData(authenticatorData).setSignature(signature)
+                                            .setUserHandle(userHandle).build();
 
-                            result.success(msg);
-                        } catch (JSONException e) {
-                            Log.e(TAG, "Error parsing response: " + responseJson, e);
-                            result.error(e);
+                                    result.success(msg);
+                                } catch (JSONException e) {
+                                    Log.e(TAG, "Error parsing response: " + responseJson, e);
+                                    result.error(e);
+                                }
+                            } else {
+                                result.error(new Exception("Credential is of type " + credential.getClass().getName()
+                                        + ", but should be of type PublicKeyCredential"));
+                            }
                         }
-                    } else {
-                        result.error(new Exception("Credential is of type " + credential.getClass().getName() + ", but should be of type PublicKeyCredential"));
-                    }
-                }
 
-                @Override
-                public void onError(GetCredentialException e) {
-                    Exception platformException = e;
-                    Log.e(TAG, "onError called", e);
+                        @Override
+                        public void onError(GetCredentialException e) {
+                            Exception platformException = e;
+                            Log.e(TAG, "onError called", e);
 
-                    // currently, Android throws this error when users skip the fingerPrint animation => we interpret this as a cancellation for now
-                    if (Objects.equals(e.getMessage(), "None of the allowed credentials can be authenticated")) {
-                        platformException = new Messages.FlutterError("cancelled", e.getMessage(), "");
-                    } else if (e instanceof GetCredentialCancellationException) {
-                        platformException = new Messages.FlutterError("cancelled", e.getMessage(), "");
-                    } else if (e instanceof NoCredentialException) {
-                        platformException = new Messages.FlutterError("android-no-credential", e.getMessage(), "");
-                    } else if (e instanceof GetPublicKeyCredentialDomException) {
-                        if (Objects.equals(e.getMessage(), "Failed to decrypt credential.")) {
-                            platformException = new Messages.FlutterError("android-sync-account-not-available", e.getMessage(), SYNC_ACCOUNT_NOT_AVAILABLE_ERROR);
-                        } else {
-                            platformException = new Messages.FlutterError("android-unhandled: " + e.getType(), e.getMessage(), e.getErrorMessage());
+                            // currently, Android throws this error when users skip the fingerPrint
+                            // animation => we interpret this as a cancellation for now
+                            if (Objects.equals(e.getMessage(),
+                                    "None of the allowed credentials can be authenticated")) {
+                                platformException = new Messages.FlutterError("cancelled", e.getMessage(), "");
+                            } else if (e instanceof GetCredentialCancellationException) {
+                                platformException = new Messages.FlutterError("cancelled", e.getMessage(), "");
+                            } else if (e instanceof NoCredentialException) {
+                                platformException = new Messages.FlutterError("android-no-credential", e.getMessage(),
+                                        "");
+                            } else if (e instanceof GetPublicKeyCredentialDomException) {
+                                if (Objects.equals(e.getMessage(), "Failed to decrypt credential.")) {
+                                    platformException = new Messages.FlutterError("android-sync-account-not-available",
+                                            e.getMessage(), SYNC_ACCOUNT_NOT_AVAILABLE_ERROR);
+                                } else {
+                                    platformException = new Messages.FlutterError("android-unhandled: " + e.getType(),
+                                            e.getMessage(), e.getErrorMessage());
+                                }
+                            } else {
+                                platformException = new Messages.FlutterError("android-unhandled: " + e.getType(),
+                                        e.getMessage(), e.getErrorMessage());
+                            }
+
+                            result.error(platformException);
                         }
-                    } else {
-                        platformException = new Messages.FlutterError("android-unhandled: " + e.getType(), e.getMessage(), e.getErrorMessage());
-                    }
-
-                    result.error(platformException);
-                }
-            });
+                    });
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
