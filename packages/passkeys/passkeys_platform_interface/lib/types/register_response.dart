@@ -11,5 +11,5 @@ class RegisterResponseType {
   final String rawId;
   final String clientDataJSON;
   final String attestationObject;
-  final List<String> transports;
+  final List<String?> transports;
 }

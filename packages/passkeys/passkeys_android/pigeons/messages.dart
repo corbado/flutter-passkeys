@@ -120,7 +120,7 @@ class RegisterResponse {
   final String attestationObject;
 
   /// The supported transports for the authenticator
-  final List<String> transports;
+  final List<String?> transports;
 }
 
 /// Represents an authenticate response

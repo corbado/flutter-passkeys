@@ -129,11 +129,20 @@ public class MessageHandler implements Messages.PasskeysApi {
                             try {
                                 JSONObject json = new JSONObject(resp);
                                 JSONObject response = json.getJSONObject("response");
-                                result.success(new Messages.RegisterResponse.Builder().setId(json.getString("id"))
+
+                                List<String> typedTransports = new ArrayList<>();
+                                JSONArray transports = response.getJSONArray("transports");
+                                for (int i = 0; i < transports.length(); i++) {
+                                    typedTransports.add(transports.getString(i));
+                                }
+
+                                result.success(new Messages.RegisterResponse.Builder()
+                                        .setId(json.getString("id"))
                                         .setRawId(json.getString("rawId"))
                                         .setClientDataJSON(response.getString("clientDataJSON"))
                                         .setAttestationObject(response.getString("attestationObject"))
-                                        .setTransports(json.getJSONArray("transports").toList()).build());
+                                        .setTransports(typedTransports)
+                                        .build());
                             } catch (JSONException e) {
                                 Log.e(TAG, "Error parsing response: " + resp, e);
                                 result.error(e);
