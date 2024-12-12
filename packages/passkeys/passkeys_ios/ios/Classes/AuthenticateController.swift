@@ -20,13 +20,17 @@ class AuthenticateController: NSObject, ASAuthorizationControllerDelegate, ASAut
         if (conditionalUI) {
             authorizationController.performAutoFillAssistedRequests()
         } else {
-            authorizationController.performRequests(options: .preferImmediatelyAvailableCredentials)
+            if preferImmediatelyAvailableCredentials {
+                authorizationController.performRequests(options: .preferImmediatelyAvailableCredentials)
+            } else {
+                authorizationController.performRequests()
+            }
         }
 
         func cancel() {
             authorizationController.cancel();
         }
-        
+
         self.innerCancel = cancel
     }
     
