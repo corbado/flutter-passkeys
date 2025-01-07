@@ -63,7 +63,7 @@ class LocalRelyingPartyServer {
   /// Note: we don't implement a full relying party server here.
   /// To safe effort we don't verify the response from the authenticator.
   LocalUser finishPasskeyRegister({required RegisterResponseType response}) {
-    final raw = '${response.clientDataJSON}=';
+    final raw = addBase64Padding(response.clientDataJSON);
     final json = jsonDecode(String.fromCharCodes(base64.decode(raw)));
 
     final challenge = json['challenge'];
@@ -97,7 +97,7 @@ class LocalRelyingPartyServer {
   /// Note: we don't implement a full relying party server here.
   /// To safe effort we don't verify the response from the authenticator.
   LocalUser finishPasskeyLogin({required AuthenticateResponseType response}) {
-    final raw = '${response.clientDataJSON}=';
+    final raw = addBase64Padding(response.clientDataJSON);
     final json = jsonDecode(String.fromCharCodes(base64.decode(raw)));
 
     final challenge = json['challenge'];
@@ -122,7 +122,8 @@ class LocalRelyingPartyServer {
 
   /// Note: we don't implement a full relying party server here.
   /// To safe effort we don't verify the response from the authenticator.
-  LocalUser finishPasskeyLoginConditionalUI({required AuthenticateResponseType response}) {
+  LocalUser finishPasskeyLoginConditionalUI(
+      {required AuthenticateResponseType response}) {
     LocalUser? existingUser;
     for (final user in _users.values) {
       if (user.credentialID != null && user.credentialID == response.id) {
@@ -147,5 +148,11 @@ class LocalRelyingPartyServer {
     final a = base64Url.encode(rawChallenge.codeUnits);
 
     return a.substring(0, a.length - 1);
+  }
+
+  String addBase64Padding(String base64String) {
+    return (base64String.length % 4 > 0)
+        ? base64String += List.filled(4 - (base64String.length % 4), "=").join("")
+        : base64String;
   }
 }
