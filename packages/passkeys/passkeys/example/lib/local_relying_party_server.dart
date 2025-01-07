@@ -12,7 +12,7 @@ class LocalUser {
   String? credentialID;
 }
 
-const rpID = 'flutter.corbado.io';
+const rpID = 'localhost';
 
 /// This is a local version of a relying party server.
 ///
@@ -46,6 +46,7 @@ class LocalRelyingPartyServer {
       requireResidentKey: false,
       residentKey: 'required',
       userVerification: 'preferred',
+      authenticatorAttachment: 'platform'
     );
 
     return RegisterRequestType(
@@ -54,6 +55,7 @@ class LocalRelyingPartyServer {
       user: user,
       authSelectionType: authenticatorSelection,
       pubKeyCredParams: [
+        PubKeyCredParamType(type: 'public-key', alg: -7),
         PubKeyCredParamType(type: 'public-key', alg: -257),
       ],
       excludeCredentials: [],
@@ -91,6 +93,15 @@ class LocalRelyingPartyServer {
       challenge: challenge,
       mediation: MediationType.Optional,
       preferImmediatelyAvailableCredentials: false,
+      allowCredentials: _users[name]!.credentialID != null
+          ? [
+              CredentialType(
+                type: 'public-key',
+                id: _users[name]!.credentialID!,
+                transports: ['internal'],
+              )
+            ]
+          : null,
     );
   }
 
@@ -151,8 +162,7 @@ class LocalRelyingPartyServer {
   }
 
   String addBase64Padding(String base64String) {
-    return (base64String.length % 4 > 0)
-        ? base64String += List.filled(4 - (base64String.length % 4), "=").join("")
-        : base64String;
+    final missingPadding = (4 - (base64String.length % 4)) % 4;
+    return base64String + ('=' * missingPadding);
   }
 }
