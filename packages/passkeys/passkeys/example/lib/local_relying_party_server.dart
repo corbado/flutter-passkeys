@@ -92,6 +92,7 @@ class LocalRelyingPartyServer {
       relyingPartyId: rpID,
       challenge: challenge,
       mediation: MediationType.Optional,
+      userVerification: 'preferred',
       preferImmediatelyAvailableCredentials: false,
       allowCredentials: _users[name]!.credentialID != null
           ? [
