@@ -28,7 +28,7 @@ apply plugin: 'kotlin-android'
 def agpVersion = com.android.Version.ANDROID_GRADLE_PLUGIN_VERSION ?: com.android.builder.model.Version.ANDROID_GRADLE_PLUGIN_VERSION
 
 android {
-    if (agpVersion <= "7.0") {
+    if (agpVersion >= "7.0") {
         namespace 'com.corbado.passkeys_android'
     }
 
