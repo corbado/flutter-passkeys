@@ -33,7 +33,12 @@ public class PasskeysPlugin: NSObject, FlutterPlugin, PasskeysApi {
         user: User,
         excludeCredentialIDs: [String],
         completion: @escaping (Result<RegisterResponse, Error>) -> Void
-    ) {        
+    ) {
+        guard (try? canAuthenticate()) == true else {
+            completion(.failure(CustomErrors.deviceNotSupported))
+            return
+        }
+
         guard let decodedChallenge = Data.fromBase64Url(challenge) else {
             completion(.failure(CustomErrors.decodingChallenge))
             return
@@ -68,6 +73,10 @@ public class PasskeysPlugin: NSObject, FlutterPlugin, PasskeysApi {
     }
 
     func authenticate(relyingPartyId: String, challenge: String, conditionalUI: Bool, allowedCredentialIDs: [String], preferImmediatelyAvailableCredentials: Bool, completion: @escaping (Result<AuthenticateResponse, Error>) -> Void) {
+        guard (try? canAuthenticate()) == true else {
+            completion(.failure(CustomErrors.deviceNotSupported))
+            return
+        }
 
         guard let decodedChallenge = Data.fromBase64Url(challenge) else {
             completion(.failure(CustomErrors.decodingChallenge))
@@ -111,6 +120,11 @@ open class LocalAuth: NSObject {
     var laContext = LAContext()
 
     func canAuthenticate() -> Bool {
+         // Check iOS version as Passkeys are only available on iOS 16.0 and above
+        if #unavailable(iOS 16.0) {
+            return false
+        }
+
         var error: NSError?
         let hasTouchId = laContext.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error)
         return hasTouchId

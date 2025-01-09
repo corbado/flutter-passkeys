@@ -75,6 +75,14 @@ class DomainNotAssociatedException implements AuthenticatorException {
   String toString() => message ?? '';
 }
 
+/// This exception is thrown when the device does not support passkeys.
+/// Suggestions:
+/// - update the device OS to a newer version
+class DeviceNotSupportedException implements AuthenticatorException {
+  /// Constructor
+  DeviceNotSupportedException();
+}
+
 /// This exception is thrown when an exception is thrown by the authenticator
 /// that we do not handle so far in this package.
 ///

@@ -42,6 +42,8 @@ class PasskeyAuthenticator {
           throw SyncAccountNotAvailableException();
         case 'domain-not-associated':
           throw DomainNotAssociatedException(e.message);
+        case 'deviceNotSupported':
+          throw DeviceNotSupportedException();
         default:
           rethrow;
       }
@@ -69,6 +71,8 @@ class PasskeyAuthenticator {
           throw PasskeyAuthCancelledException();
         case 'android-no-credential':
           throw NoCredentialsAvailableException();
+        case 'deviceNotSupported':
+          throw DeviceNotSupportedException();
         default:
           if (e.code.startsWith('android-unhandled')) {
             throw UnhandledAuthenticatorException(e.code, e.message, e.details);
