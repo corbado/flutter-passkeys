@@ -46,6 +46,7 @@ class LocalRelyingPartyServer {
       requireResidentKey: false,
       residentKey: 'required',
       userVerification: 'preferred',
+      authenticatorAttachment: 'platform'
     );
 
     return RegisterRequestType(
@@ -54,6 +55,7 @@ class LocalRelyingPartyServer {
       user: user,
       authSelectionType: authenticatorSelection,
       pubKeyCredParams: [
+        PubKeyCredParamType(type: 'public-key', alg: -7),
         PubKeyCredParamType(type: 'public-key', alg: -257),
       ],
       excludeCredentials: [],
@@ -63,7 +65,7 @@ class LocalRelyingPartyServer {
   /// Note: we don't implement a full relying party server here.
   /// To safe effort we don't verify the response from the authenticator.
   LocalUser finishPasskeyRegister({required RegisterResponseType response}) {
-    final raw = '${response.clientDataJSON}=';
+    final raw = addBase64Padding(response.clientDataJSON);
     final json = jsonDecode(String.fromCharCodes(base64.decode(raw)));
 
     final challenge = json['challenge'];
@@ -91,13 +93,22 @@ class LocalRelyingPartyServer {
       challenge: challenge,
       mediation: MediationType.Optional,
       preferImmediatelyAvailableCredentials: false,
+      allowCredentials: _users[name]!.credentialID != null
+          ? [
+              CredentialType(
+                type: 'public-key',
+                id: _users[name]!.credentialID!,
+                transports: ['internal'],
+              )
+            ]
+          : null,
     );
   }
 
   /// Note: we don't implement a full relying party server here.
   /// To safe effort we don't verify the response from the authenticator.
   LocalUser finishPasskeyLogin({required AuthenticateResponseType response}) {
-    final raw = '${response.clientDataJSON}=';
+    final raw = addBase64Padding(response.clientDataJSON);
     final json = jsonDecode(String.fromCharCodes(base64.decode(raw)));
 
     final challenge = json['challenge'];
@@ -122,7 +133,8 @@ class LocalRelyingPartyServer {
 
   /// Note: we don't implement a full relying party server here.
   /// To safe effort we don't verify the response from the authenticator.
-  LocalUser finishPasskeyLoginConditionalUI({required AuthenticateResponseType response}) {
+  LocalUser finishPasskeyLoginConditionalUI(
+      {required AuthenticateResponseType response}) {
     LocalUser? existingUser;
     for (final user in _users.values) {
       if (user.credentialID != null && user.credentialID == response.id) {
@@ -147,5 +159,10 @@ class LocalRelyingPartyServer {
     final a = base64Url.encode(rawChallenge.codeUnits);
 
     return a.substring(0, a.length - 1);
+  }
+
+  String addBase64Padding(String base64String) {
+    final missingPadding = (4 - (base64String.length % 4)) % 4;
+    return base64String + ('=' * missingPadding);
   }
 }
