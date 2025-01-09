@@ -87,6 +87,7 @@ class PasskeysAndroid extends PasskeysPlatform {
       rawId: r.rawId,
       clientDataJSON: r.clientDataJSON,
       attestationObject: r.attestationObject,
+      transports: r.transports.whereType<String>().toList(),
     );
   }
 

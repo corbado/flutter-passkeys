@@ -708,6 +708,20 @@ public class Messages {
       this.attestationObject = setterArg;
     }
 
+    /** The supported transports for the authenticator */
+    private @NonNull List<String> transports;
+
+    public @NonNull List<String> getTransports() {
+      return transports;
+    }
+
+    public void setTransports(@NonNull List<String> setterArg) {
+      if (setterArg == null) {
+        throw new IllegalStateException("Nonnull field \"transports\" is null.");
+      }
+      this.transports = setterArg;
+    }
+
     /** Constructor is non-public to enforce null safety; use Builder. */
     RegisterResponse() {}
 
@@ -741,23 +755,32 @@ public class Messages {
         return this;
       }
 
+      private @Nullable List<String> transports;
+
+      public @NonNull Builder setTransports(@NonNull List<String> setterArg) {
+        this.transports = setterArg;
+        return this;
+      }
+
       public @NonNull RegisterResponse build() {
         RegisterResponse pigeonReturn = new RegisterResponse();
         pigeonReturn.setId(id);
         pigeonReturn.setRawId(rawId);
         pigeonReturn.setClientDataJSON(clientDataJSON);
         pigeonReturn.setAttestationObject(attestationObject);
+        pigeonReturn.setTransports(transports);
         return pigeonReturn;
       }
     }
 
     @NonNull
     ArrayList<Object> toList() {
-      ArrayList<Object> toListResult = new ArrayList<Object>(4);
+      ArrayList<Object> toListResult = new ArrayList<Object>(5);
       toListResult.add(id);
       toListResult.add(rawId);
       toListResult.add(clientDataJSON);
       toListResult.add(attestationObject);
+      toListResult.add(transports);
       return toListResult;
     }
 
@@ -771,6 +794,8 @@ public class Messages {
       pigeonResult.setClientDataJSON((String) clientDataJSON);
       Object attestationObject = list.get(3);
       pigeonResult.setAttestationObject((String) attestationObject);
+      Object transports = list.get(4);
+      pigeonResult.setTransports((List<String>) transports);
       return pigeonResult;
     }
   }

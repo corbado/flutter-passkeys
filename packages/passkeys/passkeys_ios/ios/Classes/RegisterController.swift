@@ -34,7 +34,8 @@ class RegisterController: NSObject, ASAuthorizationControllerDelegate, ASAuthori
                 id: credentialRegistration.credentialID.toBase64URL(),
                 rawId: credentialRegistration.credentialID.toBase64URL(),
                 clientDataJSON: credentialRegistration.rawClientDataJSON.toBase64URL(),
-                attestationObject: credentialRegistration.rawAttestationObject!.toBase64URL()
+                attestationObject: credentialRegistration.rawAttestationObject!.toBase64URL(),
+                transports: credentialRegistration.transports
             )
             completion?(.success(response))
             break
