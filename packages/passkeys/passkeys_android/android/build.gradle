@@ -24,13 +24,9 @@ rootProject.allprojects {
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
-// Detect AGP version
-// Using both `com.android.Version.ANDROID_GRADLE_PLUGIN_VERSION` and `com.android.builder.model.Version.ANDROID_GRADLE_PLUGIN_VERSION`
-// for backward compatibility. The first is available in newer AGP versions, while the second supports older AGP versions.
-def agpVersion = com.android.Version.ANDROID_GRADLE_PLUGIN_VERSION ?: com.android.builder.model.Version.ANDROID_GRADLE_PLUGIN_VERSION
-
 android {
-    if (agpVersion >= "7.0") {
+    // Conditional for compatibility with AGP <4.2.
+    if (project.android.hasProperty("namespace")) {
         namespace 'com.corbado.passkeys_android'
     }
 
