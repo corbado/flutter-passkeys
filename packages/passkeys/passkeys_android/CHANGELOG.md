@@ -1,3 +1,6 @@
+## 2.2.0
+* Added support for AGP 8.0 and newer
+
 ## 2.1.0
 * Added support for preferImmediatelyAvailableCredentials
 
