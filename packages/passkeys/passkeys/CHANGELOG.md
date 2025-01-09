@@ -1,3 +1,7 @@
+## 2.2.0
+* Added support for AGP 8.0 and newer (Android)
+* Resolves a crash issue on iOS devices running versions below 16.0. (iOS)
+
 ## 2.1.0
 * Added support for preferImmediatelyAvailableCredentials (Android and iOS)
 * Added getAvailability (Flutter web only)

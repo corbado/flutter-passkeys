@@ -1,3 +1,6 @@
+## 2.2.0
+* Added a new DeviceNotSupported exception to handle cases where the iOS version is lower than 16.0
+
 ## 2.1.0
 * Added support for preferImmediatelyAvailableCredentials
 
