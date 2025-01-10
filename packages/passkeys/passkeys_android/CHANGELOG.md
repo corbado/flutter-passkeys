@@ -1,3 +1,7 @@
+## 2.3.0
+* Fixed `requireResidentKey` mapping error (string instead of boolean) causing 1Password failures
+* Added support for `preferImmediatelyAvailableCredentials`
+
 ## 2.2.0
 * Added support for AGP 8.0 and newer
 
