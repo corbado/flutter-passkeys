@@ -1,5 +1,6 @@
 package com.corbado.passkeys_android.models.signup;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -17,13 +18,19 @@ public class AuthenticatorSelectionType {
         this.userVerification = userVerification;
     }
 
-    public JSONObject toJSON() {
-        HashMap<String, String> map = new HashMap<>();
-        if (authenticatorAttachment != null)
-            map.put("authenticatorAttachment", authenticatorAttachment);
-        map.put("requireResidentKey", String.valueOf(requireResidentKey));
-        if (residentKey != null) map.put("residentKey", residentKey);
-        if (userVerification != null) map.put("userVerification", userVerification);
-        return new JSONObject(map);
+    public JSONObject toJSON() throws JSONException {
+        JSONObject json = new JSONObject();
+        if (authenticatorAttachment != null) {
+            json.put("authenticatorAttachment", authenticatorAttachment);
+        }
+        json.put("requireResidentKey", requireResidentKey);
+        if (residentKey != null) {
+            json.put("residentKey", residentKey);
+        }
+        if (userVerification != null) {
+            json.put("userVerification", userVerification);
+        }
+
+        return json;
     }
 }
