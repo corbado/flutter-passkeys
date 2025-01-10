@@ -1,3 +1,8 @@
+## 2.3.0
+* Improved fallback handling in `PasskeyAuthenticator.authenticate`.
+* Added support for `preferImmediatelyAvailableCredentials` on Android.
+* Fixed `requireResidentKey` mapping for 1Password compatibility.
+
 ## 2.2.0
 * Added support for AGP 8.0 and newer (Android)
 * Resolves a crash issue on iOS devices running versions below 16.0. (iOS)
