@@ -43,7 +43,6 @@ public class GetCredentialOptions {
             }).toArray()));
         }
 
-
         return json;
     }
 }
