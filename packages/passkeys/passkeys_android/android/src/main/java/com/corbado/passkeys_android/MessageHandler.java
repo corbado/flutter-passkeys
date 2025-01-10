@@ -176,8 +176,6 @@ public class MessageHandler implements Messages.PasskeysApi {
 
             CredentialManager credentialManager = CredentialManager.create(activity);
 
-            System.out.println("prefer: " + options);
-
             GetPublicKeyCredentialOption getPublicKeyCredentialOption = new GetPublicKeyCredentialOption(options);
 
             GetCredentialRequest.Builder builder = new GetCredentialRequest.Builder().addCredentialOption(getPublicKeyCredentialOption);
