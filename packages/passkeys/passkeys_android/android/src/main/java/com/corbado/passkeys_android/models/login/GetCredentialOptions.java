@@ -17,15 +17,13 @@ public class GetCredentialOptions {
     private String rpId;
     private List<AllowCredentialType> allowCredentials;
     private String userVerification;
-    private boolean preferImmediatelyAvailableCredentials;
 
-    public GetCredentialOptions(String challenge, Long timeout, String rpId, List<AllowCredentialType> allowCredentials, String userVerification, Boolean preferImmediatelyAvailableCredentials) {
+    public GetCredentialOptions(String challenge, Long timeout, String rpId, List<AllowCredentialType> allowCredentials, String userVerification) {
         this.challenge = challenge;
         this.timeout = timeout;
         this.rpId = rpId;
         this.allowCredentials = allowCredentials;
         this.userVerification = userVerification;
-        this.preferImmediatelyAvailableCredentials = preferImmediatelyAvailableCredentials;
     }
 
     public JSONObject toJSON() throws JSONException {
@@ -34,8 +32,6 @@ public class GetCredentialOptions {
         if (timeout != null) map.put("timeout", timeout);
         if (rpId != null) map.put("rpId", rpId);
         if (userVerification != null) map.put("userVerification", userVerification);
-        if (preferImmediatelyAvailableCredentials)
-            map.put("preferImmediatelyAvailableCredentials", preferImmediatelyAvailableCredentials);
         JSONObject json = new JSONObject(map);
         if (allowCredentials != null) {
             json.put("allowCredentials", new JSONArray(allowCredentials.stream().map(e -> {

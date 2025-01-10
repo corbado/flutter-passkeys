@@ -80,7 +80,7 @@ class PasskeysAndroid extends PasskeysPlatform {
       request.attestation,
       request.excludeCredentials
           .map((e) => ExcludeCredential(id: e.id, type: e.type))
-          .toList(),
+          .toList()
     );
 
     return RegisterResponseType(
