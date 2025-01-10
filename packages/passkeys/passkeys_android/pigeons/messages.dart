@@ -173,6 +173,7 @@ abstract class PasskeysApi {
     int? timeout,
     String? userVerification,
     List<AllowCredential>? allowCredentials,
+    bool? preferImmediatelyAvailableCredentials
   );
 
   @async

@@ -426,12 +426,12 @@ class PasskeysApi {
     }
   }
 
-  Future<AuthenticateResponse> authenticate(String arg_relyingPartyId, String arg_challenge, int? arg_timeout, String? arg_userVerification, List<AllowCredential?>? arg_allowCredentials) async {
+  Future<AuthenticateResponse> authenticate(String arg_relyingPartyId, String arg_challenge, int? arg_timeout, String? arg_userVerification, List<AllowCredential?>? arg_allowCredentials, bool? arg_preferImmediatelyAvailableCredentials) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
         'dev.flutter.pigeon.passkeys_android.PasskeysApi.authenticate', codec,
         binaryMessenger: _binaryMessenger);
     final List<Object?>? replyList =
-        await channel.send(<Object?>[arg_relyingPartyId, arg_challenge, arg_timeout, arg_userVerification, arg_allowCredentials]) as List<Object?>?;
+        await channel.send(<Object?>[arg_relyingPartyId, arg_challenge, arg_timeout, arg_userVerification, arg_allowCredentials, arg_preferImmediatelyAvailableCredentials]) as List<Object?>?;
     if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
