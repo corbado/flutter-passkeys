@@ -20,6 +20,9 @@ class AuthenticateController: NSObject, ASAuthorizationControllerDelegate, ASAut
         if (conditionalUI) {
             authorizationController.performAutoFillAssistedRequests()
         } else {
+            // The `.preferImmediatelyAvailableCredentials` option in `ASAuthorizationController`
+            // does not distinguish between `true` and `false` values. If the option is included
+            // in the `options` parameter, iOS assumes the behavior is enabled.
             if preferImmediatelyAvailableCredentials {
                 authorizationController.performRequests(options: .preferImmediatelyAvailableCredentials)
             } else {
