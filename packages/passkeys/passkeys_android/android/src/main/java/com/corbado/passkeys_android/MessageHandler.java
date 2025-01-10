@@ -162,22 +162,25 @@ public class MessageHandler implements Messages.PasskeysApi {
     }
 
     @Override
-    public void authenticate(@NonNull String relyingPartyId, @NonNull String challenge, @Nullable Long timeout, @Nullable String userVerification, @Nullable List<Messages.AllowCredential> allowCredentials, @NonNull Messages.Result<Messages.AuthenticateResponse> result) {
+    public void authenticate(@NonNull String relyingPartyId, @NonNull String challenge, @Nullable Long timeout, @Nullable String userVerification, @Nullable List<Messages.AllowCredential> allowCredentials, @NonNull Messages.Result<Messages.AuthenticateResponse> result, @NonNull boolean preferImmediatelyAvailableCredentials) {
 
         List<AllowCredentialType> allowCredentialsType = new ArrayList<>();
         if (allowCredentials != null) {
             allowCredentialsType = allowCredentials.stream().map(c -> new AllowCredentialType(c.getType(), c.getId(), c.getTransports())).collect(Collectors.toList());
         }
-        GetCredentialOptions getCredentialOptions = new GetCredentialOptions(challenge, timeout, relyingPartyId, allowCredentialsType, userVerification);
+        GetCredentialOptions getCredentialOptions = new GetCredentialOptions(challenge, timeout, relyingPartyId, allowCredentialsType, userVerification, preferImmediatelyAvailableCredentials);
         try {
             String options = getCredentialOptions.toJSON().toString();
 
             Activity activity = plugin.requireActivity();
 
             CredentialManager credentialManager = CredentialManager.create(activity);
+
+            System.out.println("prefer: " + options);
+
             GetPublicKeyCredentialOption getPublicKeyCredentialOption = new GetPublicKeyCredentialOption(options);
 
-            GetCredentialRequest getCredRequest = new GetCredentialRequest.Builder().addCredentialOption(getPublicKeyCredentialOption).build();
+            GetCredentialRequest getCredRequest = new GetCredentialRequest.Builder().addCredentialOption(getPublicKeyCredentialOption).setPreferImmediatelyAvailableCredentials(preferImmediatelyAvailableCredentials).build();
             currentCancellationSignal = new CancellationSignal();
 
             credentialManager.getCredentialAsync(activity, getCredRequest, currentCancellationSignal, Runnable::run, new CredentialManagerCallback<GetCredentialResponse, GetCredentialException>() {

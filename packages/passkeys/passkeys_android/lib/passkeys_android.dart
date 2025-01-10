@@ -31,6 +31,7 @@ class PasskeysAndroid extends PasskeysPlatform {
           transports: e.transports,
         );
       }).toList(),
+      request.preferImmediatelyAvailableCredentials,
     );
 
     return AuthenticateResponseType(
