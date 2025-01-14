@@ -38,8 +38,10 @@ jobs:
           target: google_apis
           arch: x86_64
           profile: pixel_5
+          emulator-boot-timeout: 600
           script: |
-            adb shell input keyevent 82 & # Unlock the emulator
+            adb wait-for-device
+            adb shell input keyevent 82
 
       # Step 5: Build the App
       - name: Build Flutter App
