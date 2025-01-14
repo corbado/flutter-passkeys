@@ -1,0 +1,69 @@
+name: Build and Test Flutter App
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  build-test:
+    name: Build and Test Flutter App
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the code
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      # Step 2: Set up Flutter
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.27.1' # Replace with your Flutter version (e.g., "3.10.0")
+
+      # Step 3: Install Dependencies
+      - name: Install Flutter Dependencies
+        run: |
+          cd packages/passkeys/passkeys/example
+          flutter pub get
+
+      # Step 4: Start the Emulator
+      - name: Set Up Android Emulator
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 35
+          target: google_apis
+          arch: x86_64
+          profile: pixel_5
+          script: |
+            adb shell input keyevent 82 & # Unlock the emulator
+
+      # Step 5: Build the App
+      - name: Build Flutter App
+        run: flutter build apk --debug
+
+      # Step 6: Launch the App
+      - name: Install and Launch App
+        run: |
+          adb install build/app/outputs/flutter-apk/app-debug.apk
+          adb shell am start -n "com.corbado.passkeys.pub/com.corbado.passkeys.pub.MainActivity" # Replace with your package name and main activity
+
+      # Step 7: Install Node.js (for Appium)
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      # Step 8: Install Appium and Dependencies
+      - name: Install Appium and Test Dependencies
+        run: |
+          npm install -g appium@next
+          npm install -g webdriverio appium-flutter-driver
+
+      # Step 9: Run Appium Tests
+      - name: Run Appium Tests
+        run: |
+          appium
+          sleep 10 # Wait for Appium server to start
+          node tests/main.js # Replace with the path to your test script
