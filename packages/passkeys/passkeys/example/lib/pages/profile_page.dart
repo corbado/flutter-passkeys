@@ -15,6 +15,7 @@ class ProfilePage extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Padding(
+            key: Key('welcome-text'),
             padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
             child: Text(
               'Welcome',

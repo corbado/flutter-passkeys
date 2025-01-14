@@ -41,6 +41,7 @@ class SignUpPage extends HookConsumerWidget {
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 4),
             child: TextField(
+              key: const Key('email-field'),
               controller: emailController,
               keyboardType: TextInputType.emailAddress,
               decoration: const InputDecoration(
@@ -61,6 +62,7 @@ class SignUpPage extends HookConsumerWidget {
             width: double.infinity,
             height: 50,
             child: ElevatedButton(
+              key: const Key('sign-up-button'),
               onPressed: () async {
                 final email = emailController.value.text;
                 try {
