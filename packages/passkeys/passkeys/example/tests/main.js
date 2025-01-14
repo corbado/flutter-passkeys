@@ -33,7 +33,7 @@ const capsIos =
 
 const opts = {
     port: 4723,
-    capabilities: capsIos
+    capabilities: caps
 };
 
 (async () => {
