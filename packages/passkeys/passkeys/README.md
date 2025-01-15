@@ -288,4 +288,26 @@ To make this work, you have to include our JavaScript library in your web/index.
 ```
 
 You can also take a look at this package's example to see how it is done there.
+
 </details>
+
+#### Requirements
+
+- This package requires Flutter 3.19.0 or later.
+
+#### Additional Details
+
+- To support WebAssembly (Wasm) as outlined in [Flutter's documentation](https://docs.flutter.dev/platform-integration/web/wasm), we had to utilize `dart:js_interop`, which requires Dart 3.3.0 and Flutter 3.19.0. Therefore, Flutter 3.19.0 is the minimal requirement for this feature.
+- Starting with Flutter 3.22.0 and later, when inserting the application script into the HTML, use:
+
+```html
+<script src="flutter_bootstrap.js" type="application/javascript"></script>
+```
+
+Instead of:
+
+```html
+<script src="main.dart.js" type="application/javascript"></script>
+```
+
+- To enable running or building using Wasm, simply add the `--wasm` flag to the `flutter run` or `flutter build` commands.
