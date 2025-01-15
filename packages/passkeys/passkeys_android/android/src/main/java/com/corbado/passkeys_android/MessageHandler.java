@@ -18,11 +18,7 @@ import androidx.credentials.GetCredentialRequest;
 import androidx.credentials.GetCredentialResponse;
 import androidx.credentials.GetPublicKeyCredentialOption;
 import androidx.credentials.PublicKeyCredential;
-import androidx.credentials.exceptions.CreateCredentialCancellationException;
-import androidx.credentials.exceptions.CreateCredentialException;
-import androidx.credentials.exceptions.GetCredentialCancellationException;
-import androidx.credentials.exceptions.GetCredentialException;
-import androidx.credentials.exceptions.NoCredentialException;
+import androidx.credentials.exceptions.*;
 import androidx.credentials.exceptions.publickeycredential.CreatePublicKeyCredentialDomException;
 import androidx.credentials.exceptions.publickeycredential.CreatePublicKeyCredentialException;
 import androidx.credentials.exceptions.publickeycredential.GetPublicKeyCredentialDomException;
@@ -55,6 +51,7 @@ public class MessageHandler implements Messages.PasskeysApi {
     private static final String SYNC_ACCOUNT_NOT_AVAILABLE_ERROR = "Sync account could not be accessed. If you are running on an emulator, please restart that device (select 'Could boot now').";
     private static final String MISSING_GOOGLE_SIGN_IN_ERROR = "Please sign in with a Google account first to create a new passkey.";
     private static final String EXCLUDE_CREDENTIALS_MATCH_ERROR = "You can not create a credential on this device because one of the excluded credentials exists on the local device.";
+    private static final String MISSING_CREATION_OPTIONS = "Please make sure you enable a passwords or passkeys provider in your device settings.";
 
     private final FlutterPasskeysPlugin plugin;
 
@@ -148,6 +145,8 @@ public class MessageHandler implements Messages.PasskeysApi {
                         } else {
                             platformException = new Messages.FlutterError("android-unhandled: " + e.getType(), e.getMessage(), e.getErrorMessage());
                         }
+                    } else if (e instanceof CreateCredentialNoCreateOptionException) {
+                        platformException = new Messages.FlutterError("android-no-create-option", e.getMessage(), MISSING_CREATION_OPTIONS);
                     } else {
                         platformException = new Messages.FlutterError("android-unhandled" + e.getType(), e.getMessage(), e.getErrorMessage());
                     }
