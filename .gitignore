@@ -57,3 +57,7 @@ gradlew.bat
 
 # Melos
 **/pubspec_overrides.yaml
+
+# FVM Version Cache
+.fvm/
+.fvmrc
