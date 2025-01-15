@@ -13,7 +13,7 @@ external JSPromise<JSString> authenticatorRegister(JSString options);
 external JSPromise<JSString> authenticatorLogin(JSString options);
 
 @JS('PasskeyAuthenticator.cancelCurrentAuthenticatorOperation')
-external JSPromise<JSString> authenticatorCancel();
+external JSVoid authenticatorCancel();
 
 @JS('PasskeyAuthenticator.isUserVerifyingPlatformAuthenticatorAvailable')
 external JSPromise<JSBoolean?> isUserVerifyingPlatformAuthenticatorAvailable();

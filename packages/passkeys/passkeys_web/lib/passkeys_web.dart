@@ -98,7 +98,7 @@ class PasskeysWeb extends PasskeysPlatform {
 
   @override
   Future<void> cancelCurrentAuthenticatorOperation() async {
-    await authenticatorCancel().toDart;
+    authenticatorCancel();
   }
 
   @override
