@@ -64,6 +64,7 @@ jobs:
           arch: x86_64
           profile: pixel_5
           script: |
+            adb wait-for-device
             adb shell input keyevent 82 &  
 
       # Step 8: Build & run the App
@@ -154,11 +155,10 @@ jobs:
           cd tests
           npm i
           node main.js ios
-        continue-on-error: true
 
       # Step 11: Print Appium Logs (if tests fail)
       - name: Print Appium Logs
-        if: failure() # Executes only if the previous step fails
+        if: failure()
         run: |
           echo "Printing Appium logs..."
           cat appium.log
