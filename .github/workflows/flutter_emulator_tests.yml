@@ -39,7 +39,10 @@ jobs:
       - name: Install Appium and Test Dependencies
         run: |
           npm install -g appium@next
-          npm install -g webdriverio appium-flutter-driver
+          appium driver install --source=npm appium-flutter-driver
+          appium plugin install --name=appium-virtual-authenticator
+          appium driver install uiautomator2
+          appium driver install --source npm appium-flutter-integration-driver 
 
       # Step 5: Install Dependencies
       - name: Install Flutter Dependencies
@@ -111,7 +114,10 @@ jobs:
       - name: Install Appium and Test Dependencies
         run: |
           npm install -g appium@next
-          npm install -g webdriverio appium-flutter-driver
+          appium driver install --source=npm appium-flutter-driver
+          appium plugin install --name=appium-virtual-authenticator
+          appium driver install uiautomator2
+          appium driver install --source npm appium-flutter-integration-driver 
 
       # Step 5: Install Dependencies
       - name: Install Flutter Dependencies
