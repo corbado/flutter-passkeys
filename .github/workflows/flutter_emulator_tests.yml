@@ -140,6 +140,7 @@ jobs:
           xcrun simctl shutdown all
           xcrun simctl boot "iPhone 16 Pro"
           while ! xcrun simctl bootstatus | grep -q "Booted"; do
+            echo "Bootstatus ouput: $(xcrun simctl bootstatus)"
             echo "Waiting for simulator to boot..."
             sleep 5
           done
