@@ -8,7 +8,7 @@ const server = {
 };
 
 // Desired capabilities for the iOS simulator
-const caps =
+const capsAndroid =
     {
         'platformName': 'Android',
         'appium:deviceName': 'emulator-5554',
@@ -23,13 +23,21 @@ const capsIos =
     {
         "platformName": "iOS",
         "appium:deviceName": "iPhone 16 Pro",
-        "appium:platformVersion": "18.1",
         "appium:bundleId": "com.corbado.passkeys.pub",
         "appium:noReset": true,
         "appium:fullReset": false,
         "appium:automationName": "Flutter",
         "appium:retryBackoffTime": 500
     };
+
+const platform = process.argv[2]?.toLowerCase();
+if (!platform || !['android', 'ios'].includes(platform)) {
+    console.error("Please specify the platform: 'android' or 'ios'");
+    process.exit(1);
+}
+
+// Select the capabilities based on the platform
+const caps = platform === 'ios' ? capsIos : capsAndroid;
 
 const opts = {
     port: 4723,

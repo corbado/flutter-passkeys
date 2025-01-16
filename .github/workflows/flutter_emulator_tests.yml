@@ -8,14 +8,15 @@ on:
   pull_request:
     branches:
       - main
+
 jobs:
-  build-test:
-    name: Build and Test Flutter App On Android
+  build-test-android:
+    name: Build and Test Flutter App on Android
     runs-on: ubuntu-latest
 
     defaults:
       run:
-        working-directory: packages/passkeys/passkeys/example # Set a default working directory
+        working-directory: packages/passkeys/passkeys/example
 
     steps:
       # Step 1: Checkout the code
@@ -26,7 +27,7 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.27.1' # Replace with your Flutter version (e.g., "3.10.0")
+          flutter-version: '3.27.1'
 
       # Step 3: Install Node.js (for Appium)
       - name: Install Node.js
@@ -49,7 +50,7 @@ jobs:
       - name: Setup Java 17
         uses: actions/setup-java@v3
         with:
-          distribution: 'temurin' # Use the Eclipse Temurin distribution
+          distribution: 'temurin'
           java-version: '17'
 
       # Step 7: Build the App
@@ -72,12 +73,72 @@ jobs:
       - name: Install and Launch App
         run: |
           adb install build/app/outputs/flutter-apk/app-debug.apk
-          adb shell am start -n "com.corbado.passkeys.pub/com.corbado.passkeys.pub.MainActivity" # Replace with your package name and main activity
-
+          adb shell am start -n "com.corbado.passkeys.pub/com.corbado.passkeys.pub.MainActivity"
 
       # Step 10: Run Appium Tests
       - name: Run Appium Tests
         run: |
           appium
           sleep 10 # Wait for Appium server to start
-          node tests/main.js # Replace with the path to your test script
+          node tests/main.js android
+
+  build-test-ios:
+    name: Build and Test Flutter App on iOS
+    runs-on: macos-latest
+
+    defaults:
+      run:
+        working-directory: packages/passkeys/passkeys/example
+
+    steps:
+      # Step 1: Checkout the code
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      # Step 2: Set up Flutter
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.27.1'
+
+      # Step 3: Install Node.js (for Appium)
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      # Step 4: Install Appium and Dependencies
+      - name: Install Appium and Test Dependencies
+        run: |
+          npm install -g appium@next
+          npm install -g webdriverio appium-flutter-driver
+
+      # Step 5: Install Dependencies
+      - name: Install Flutter Dependencies
+        run: |
+          flutter pub get
+
+      # Step 6: Set up Xcode
+      - name: Set Up Xcode
+        run: |
+          sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
+          sudo xcodebuild -license accept
+
+      # Step 7: Build the App for iOS
+      - name: Build Flutter App for iOS
+        run: |
+          flutter build ios --no-codesign
+
+      # Step 8: Launch the iOS Simulator
+      - name: Launch iOS Simulator
+        run: |
+          xcrun simctl boot "iPhone 16 Pro"
+          xcrun simctl install booted build/ios/iphoneos/Runner.app
+          xcrun simctl launch booted com.corbado.passkeys.pub
+
+      # Step 9: Run Appium Tests
+      - name: Run Appium Tests
+        run: |
+          appium
+          sleep 10 # Wait for Appium server to start
+          node tests/main.js ios
