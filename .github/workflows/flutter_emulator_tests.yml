@@ -53,12 +53,7 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      # Step 7: Build the App
-      - name: Build Flutter App
-        run: |
-          flutter build apk --debug
-
-      # Step 8: Start the Emulator
+      # Step 7: Start the Emulator
       - name: Set Up Android Emulator
         uses: reactivecircus/android-emulator-runner@v2
         with:
@@ -67,15 +62,14 @@ jobs:
           arch: x86_64
           profile: pixel_5
           script: |
-            adb shell input keyevent 82 & # Unlock the emulator
+            adb shell input keyevent 82 & # Unlock the emulator  
 
-      # Step 9: Launch the App
-      - name: Install and Launch App
+      # Step 8: Build the App
+      - name: Build Flutter App
         run: |
-          adb install build/app/outputs/flutter-apk/app-debug.apk
-          adb shell am start -n "com.corbado.passkeys.pub/com.corbado.passkeys.pub.MainActivity"
+          run: flutter run lib/main.dart --dart-define=CORBADO_PROJECT_ID=pro-8751299119685489253 -d emulator-5554
 
-      # Step 10: Run Appium Tests
+      # Step 9: Run Appium Tests
       - name: Run Appium Tests
         run: |
           appium
@@ -115,8 +109,7 @@ jobs:
 
       # Step 5: Install Dependencies
       - name: Install Flutter Dependencies
-        run: |
-          flutter pub get
+        run: flutter pub get
 
       # Step 6: Set up Xcode
       - name: Set Up Xcode
@@ -124,17 +117,13 @@ jobs:
           sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
           sudo xcodebuild -license accept
 
-      # Step 7: Build the App for iOS
-      - name: Build Flutter App for iOS
-        run: |
-          flutter build ios --no-codesign
-
-      # Step 8: Launch the iOS Simulator
+      # Step 7: Launch the iOS Simulator
       - name: Launch iOS Simulator
-        run: |
-          xcrun simctl boot "iPhone 16 Pro"
-          xcrun simctl install booted build/ios/iphoneos/Runner.app
-          xcrun simctl launch booted com.corbado.passkeys.pub
+        run: xcrun simctl boot "iPhone 16 Pro"
+
+      # Step 8: Run the app
+      - name: Run the App
+        run: flutter run lib/main.dart --dart-define=CORBADO_PROJECT_ID=pro-8751299119685489253 -d "iPhone 16 Pro"
 
       # Step 9: Run Appium Tests
       - name: Run Appium Tests
