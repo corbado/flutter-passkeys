@@ -134,7 +134,7 @@ jobs:
       # Step 9: Install and Launch the App
       - name: Install and Launch App
         run: |
-          xcrun simctl install booted build/ios/iphoneos/Runner.app
+          xcrun simctl install booted build/ios/iphonesimulator/Runner.app
 
       # Step 10: Start Appium Server
       - name: Start Appium Server
