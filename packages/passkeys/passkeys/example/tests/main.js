@@ -22,7 +22,8 @@ const capsAndroid =
 const capsIos =
     {
         "platformName": "iOS",
-        "appium:deviceName": "iPhone 16 Pro",
+        "appium:deviceName": "appiumTestDriver",
+        "appium:platformVersion": "18.1",
         "appium:bundleId": "com.corbado.passkeys.pub",
         "appium:noReset": true,
         "appium:fullReset": false,

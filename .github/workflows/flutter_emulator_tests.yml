@@ -40,7 +40,6 @@ jobs:
         run: |
           npm install -g appium
           appium driver install --source=npm appium-flutter-driver
-          appium plugin install --name=appium-virtual-authenticator
           appium driver install uiautomator2
           appium driver install --source npm appium-flutter-integration-driver 
 
@@ -130,11 +129,13 @@ jobs:
 
       # Step 7: Launch the iOS Simulator
       - name: Launch iOS Simulator
-        run: xcrun simctl boot "iPhone 16 Pro"
+        run: |
+          xcrun simctl create "appiumTestDevice" "iPhone 16 Pro" "com.apple.CoreSimulator.SimRuntime.iOS-18-1"
+          xcrun simctl boot "iPhone 16 Pro"
 
       # Step 8: Run the app
       - name: Run the App
-        run: flutter run lib/main.dart --dart-define=CORBADO_PROJECT_ID=pro-8751299119685489253 -d "iPhone 16 Pro" --no-resident
+        run: flutter run lib/main.dart --dart-define=CORBADO_PROJECT_ID=pro-8751299119685489253 -d appiumTestDriver --no-resident
 
       # Step 9: Start Appium Server
       - name: Start Appium Server
