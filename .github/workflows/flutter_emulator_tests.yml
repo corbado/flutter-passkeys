@@ -129,13 +129,12 @@ jobs:
       # Step 8: Build the Flutter App
       - name: Build Flutter App
         run: |
-          flutter build ios --no-codesign
+          flutter build ios --no-codesign --simulator
 
       # Step 9: Install and Launch the App
       - name: Install and Launch App
         run: |
-          xcrun simctl install booted build/ios/iphonesimulator/Runner.app
-          xcrun simctl launch booted com.corbado.passkeys.pub
+          xcrun simctl install booted build/ios/iphoneos/Runner.app
 
       # Step 10: Start Appium Server
       - name: Start Appium Server
