@@ -133,8 +133,8 @@ jobs:
       # Step 7: Launch the iOS Simulator
       - name: Launch iOS Simulator
         run: |
-          xcrun simctl boot "iPhone 14 Pro"
           xcrun simctl list devices
+          xcrun simctl boot "iPhone 14 Pro"
 
       # Step 8: Run the app
       - name: Run the App
