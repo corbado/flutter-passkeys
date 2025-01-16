@@ -24,13 +24,31 @@ jobs:
         with:
           flutter-version: '3.27.1' # Replace with your Flutter version (e.g., "3.10.0")
 
-      # Step 3: Install Dependencies
+      # Step 3: Install Node.js (for Appium)
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      # Step 4: Install Appium and Dependencies
+      - name: Install Appium and Test Dependencies
+        run: |
+          npm install -g appium@next
+          npm install -g webdriverio appium-flutter-driver
+
+      # Step 5: Install Dependencies
       - name: Install Flutter Dependencies
         run: |
           cd packages/passkeys/passkeys/example
           flutter pub get
 
-      # Step 4: Start the Emulator
+      # Step 6: Build the App
+      - name: Build Flutter App
+        run: |
+          cd packages/passkeys/passkeys/example
+          flutter build apk --debug
+
+      # Step 7: Start the Emulator
       - name: Set Up Android Emulator
         uses: reactivecircus/android-emulator-runner@v2
         with:
@@ -41,27 +59,13 @@ jobs:
           script: |
             adb shell input keyevent 82 & # Unlock the emulator
 
-      # Step 5: Build the App
-      - name: Build Flutter App
-        run: flutter build apk --debug
-
-      # Step 6: Launch the App
+      # Step 8: Launch the App
       - name: Install and Launch App
         run: |
+          cd packages/passkeys/passkeys/example
           adb install build/app/outputs/flutter-apk/app-debug.apk
           adb shell am start -n "com.corbado.passkeys.pub/com.corbado.passkeys.pub.MainActivity" # Replace with your package name and main activity
 
-      # Step 7: Install Node.js (for Appium)
-      - name: Install Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18'
-
-      # Step 8: Install Appium and Dependencies
-      - name: Install Appium and Test Dependencies
-        run: |
-          npm install -g appium@next
-          npm install -g webdriverio appium-flutter-driver
 
       # Step 9: Run Appium Tests
       - name: Run Appium Tests
