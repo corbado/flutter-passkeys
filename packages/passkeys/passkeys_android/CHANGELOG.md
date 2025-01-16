@@ -1,3 +1,6 @@
+## 2.4.0
+* Added handling for `CreateCredentialNoCreateOptionException` when no viable creation options were found 
+
 ## 2.3.0
 * Fixed `requireResidentKey` mapping error (string instead of boolean) causing 1Password failures
 * Added support for `preferImmediatelyAvailableCredentials`

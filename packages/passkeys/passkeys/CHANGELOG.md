@@ -1,3 +1,7 @@
+## 2.4.0
+* Added support for WebAssembly (Wasm) (Web)
+* Added handling for `CreateCredentialNoCreateOptionException` when no viable creation options were found (Android)
+
 ## 2.3.0
 * Improved fallback handling in `PasskeyAuthenticator.authenticate`.
 * Added support for `preferImmediatelyAvailableCredentials` on Android.

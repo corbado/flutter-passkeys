@@ -1,3 +1,6 @@
+## 2.2.0
+* Added support for WebAssembly (Wasm)
+
 ## 2.1.0
 * Added getAvailability() to check for isUserVerifyingPlatformAuthenticatorAvailable and isConditionalMediationAvailable.
 
