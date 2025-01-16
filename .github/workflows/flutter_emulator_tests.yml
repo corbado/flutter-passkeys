@@ -12,7 +12,7 @@ on:
 jobs:
   build-test-android:
     name: Build and Test Flutter App on Android
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
 
     defaults:
       run:
