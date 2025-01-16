@@ -42,13 +42,7 @@ jobs:
           cd packages/passkeys/passkeys/example
           flutter pub get
 
-      # Step 6: Build the App
-      - name: Build Flutter App
-        run: |
-          cd packages/passkeys/passkeys/example
-          flutter build apk --debug
-
-      # Step 7: Start the Emulator
+      # Step 6: Start the Emulator
       - name: Set Up Android Emulator
         uses: reactivecircus/android-emulator-runner@v2
         with:
@@ -58,6 +52,12 @@ jobs:
           profile: pixel_5
           script: |
             adb shell input keyevent 82 & # Unlock the emulator
+
+      # Step 7: Build the App
+      - name: Build Flutter App
+        run: |
+          cd packages/passkeys/passkeys/example
+          flutter build apk --debug
 
       # Step 8: Launch the App
       - name: Install and Launch App
