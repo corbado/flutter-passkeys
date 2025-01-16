@@ -70,12 +70,14 @@ jobs:
       - name: Build & run Flutter App
         run: |
           flutter run lib/main.dart --dart-define=CORBADO_PROJECT_ID=pro-8751299119685489253 -d emulator-5554 --no-resident
+          sleep 10
+          adb shell am force-stop com.corbado.passkeys.pub
 
       # Step 9: Start Appium Server
       - name: Start Appium Server
         run: |
-          nohup appium > appium.log 2>&1 & # Start Appium in the background
-          sleep 10 # Wait for Appium server to initialize
+          nohup appium > appium.log 2>&1 &
+          sleep 10
 
       # Step 10: Run Tests
       - name: Run Appium Tests
@@ -135,13 +137,16 @@ jobs:
 
       # Step 8: Run the app
       - name: Run the App
-        run: flutter run lib/main.dart --dart-define=CORBADO_PROJECT_ID=pro-8751299119685489253 -d "iPhone 16 Pro" --no-resident
+        run: |
+          flutter run lib/main.dart --dart-define=CORBADO_PROJECT_ID=pro-8751299119685489253 -d "appiumTestDevice" --no-resident
+          sleep 10
+          xcrun simctl terminate booted com.corbado.passkeys.pub
 
       # Step 9: Start Appium Server
       - name: Start Appium Server
         run: |
-          nohup appium > appium.log 2>&1 & # Start Appium in the background
-          sleep 10 # Wait for Appium server to initialize
+          nohup appium > appium.log 2>&1 & 
+          sleep 10
 
       # Step 10: Run Tests
       - name: Run Appium Tests
