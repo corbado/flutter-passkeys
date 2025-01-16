@@ -125,6 +125,8 @@ jobs:
             echo "Simulator is still booting..."
             sleep 5
           done
+          xcrun simctl list devices
+          xcrun simctl ui "iPhone 16 Pro" unlock
 
       # Step 8: Build the Flutter App
       - name: Build Flutter App
