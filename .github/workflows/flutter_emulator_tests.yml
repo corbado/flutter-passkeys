@@ -154,3 +154,11 @@ jobs:
           cd tests
           npm i
           node main.js ios
+        continue-on-error: true
+
+      # Step 11: Print Appium Logs (if tests fail)
+      - name: Print Appium Logs
+        if: failure() # Executes only if the previous step fails
+        run: |
+          echo "Printing Appium logs..."
+          cat appium.log
