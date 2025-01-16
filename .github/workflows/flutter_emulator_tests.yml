@@ -121,9 +121,8 @@ jobs:
       - name: Launch iOS Simulator
         run: |
           xcrun simctl boot "iPhone 16 Pro"
-          while ! xcrun simctl bootstatus | grep -q "Booted"; do
-            echo "Bootstatus ouput: $(xcrun simctl bootstatus)"
-            echo "Waiting for simulator to boot..."
+          while ! xcrun simctl list devices | grep "iPhone 16 Pro" | grep -q "(Booted)"; do
+            echo "Simulator is still booting..."
             sleep 5
           done
 
