@@ -66,30 +66,13 @@ jobs:
           script: |
             adb wait-for-device
             adb shell input keyevent 82 &  
-
-      # Step 8: Build the Flutter App
-      - name: Build Flutter App
-        run: |
-          flutter build apk --debug
-
-      # Step 9: Install and Launch the App
-      - name: Install and Launch App
-        run: |
-          adb install -r build/app/outputs/flutter-apk/app-debug.apk
-          adb shell am start -n "com.corbado.passkeys.pub/com.corbado.passkeys.pub.MainActivity"
-
-      # Step 10: Start Appium Server
-      - name: Start Appium Server
-        run: |
-          nohup appium > appium.log 2>&1 &
-          sleep 10
-
-      # Step 11: Run Tests
-      - name: Run Appium Tests
-        run: |
-          cd tests
-          npm i
-          node main.js android
+            flutter build apk --debug
+            adb install -r build/app/outputs/flutter-apk/app-debug.apk
+            nohup appium > appium.log 2>&1 &
+            sleep 10
+            cd tests
+            npm i
+            node main.js android
 
   build-test-ios:
     name: Build and Test Flutter App on iOS
@@ -137,7 +120,6 @@ jobs:
       # Step 7: Launch the iOS Simulator
       - name: Launch iOS Simulator
         run: |
-          xcrun simctl shutdown all
           xcrun simctl boot "iPhone 16 Pro"
           while ! xcrun simctl bootstatus | grep -q "Booted"; do
             echo "Bootstatus ouput: $(xcrun simctl bootstatus)"
