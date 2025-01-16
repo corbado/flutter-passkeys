@@ -55,6 +55,11 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
+      # Step 7: Start Appium
+      - name: Start Appium Server
+        run: |
+          appium > appium.log 2>&1 & 
+
       # Step 7: Start the Emulator
       - name: Set Up Android Emulator
         uses: reactivecircus/android-emulator-runner@v2
@@ -62,14 +67,12 @@ jobs:
           api-level: 35
           target: google_apis
           arch: x86_64
-          profile: pixel_5
+          profile: Nexus 5
+          emulator-options: "-no-audio -no-window -gpu swiftshader_indirect"
           script: |
-            adb wait-for-device
             adb shell input keyevent 82 &  
             flutter build apk --debug
             adb install -r build/app/outputs/flutter-apk/app-debug.apk
-            nohup appium > appium.log 2>&1 &
-            sleep 10
             cd tests
             npm i
             node main.js android
