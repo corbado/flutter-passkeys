@@ -64,10 +64,10 @@ jobs:
           script: |
             adb shell input keyevent 82 & # Unlock the emulator  
 
-      # Step 8: Build the App
-      - name: Build Flutter App
+      # Step 8: Build & run the App
+      - name: Build & run Flutter App
         run: |
-          run: flutter run lib/main.dart --dart-define=CORBADO_PROJECT_ID=pro-8751299119685489253 -d emulator-5554 --no-resident
+          flutter run lib/main.dart --dart-define=CORBADO_PROJECT_ID=pro-8751299119685489253 -d emulator-5554 --no-resident
 
       # Step 9: Start Appium Server
       - name: Start Appium Server
@@ -77,7 +77,9 @@ jobs:
 
       # Step 10: Run Tests
       - name: Run Appium Tests
-        run: node tests/main.js android
+        run: |
+          npm i
+          node tests/main.js ios
 
   build-test-ios:
     name: Build and Test Flutter App on iOS
@@ -136,4 +138,6 @@ jobs:
 
       # Step 10: Run Tests
       - name: Run Appium Tests
-        run: node tests/main.js ios
+        run: |
+          npm i
+          node tests/main.js ios
