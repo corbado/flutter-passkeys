@@ -64,7 +64,7 @@ jobs:
           arch: x86_64
           profile: pixel_5
           script: |
-            adb shell input keyevent 82 & # Unlock the emulator  
+            adb shell input keyevent 82 &  
 
       # Step 8: Build & run the App
       - name: Build & run Flutter App
@@ -138,7 +138,7 @@ jobs:
       # Step 8: Run the app
       - name: Run the App
         run: |
-          flutter run lib/main.dart --dart-define=CORBADO_PROJECT_ID=pro-8751299119685489253 -d "appiumTestDevice" --no-resident
+          flutter run lib/main.dart --dart-define=CORBADO_PROJECT_ID=pro-8751299119685489253 -d "iPhone 16 Pro" --no-resident
           sleep 10
           xcrun simctl terminate booted com.corbado.passkeys.pub
 
