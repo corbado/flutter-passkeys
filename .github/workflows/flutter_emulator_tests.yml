@@ -78,8 +78,9 @@ jobs:
       # Step 10: Run Tests
       - name: Run Appium Tests
         run: |
+          cd tests
           npm i
-          node tests/main.js ios
+          node main.js ios
 
   build-test-ios:
     name: Build and Test Flutter App on iOS
@@ -139,5 +140,6 @@ jobs:
       # Step 10: Run Tests
       - name: Run Appium Tests
         run: |
+          cd tests
           npm i
-          node tests/main.js ios
+          node main.js ios
