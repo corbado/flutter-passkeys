@@ -71,7 +71,7 @@ jobs:
           emulator-options: "-no-audio -no-window -gpu swiftshader_indirect"
           script: |
             adb shell input keyevent 82 &  
-            flutter version
+            flutter --version
             flutter run -d emulator-5554 --target=packages/passkeys/passkeys/example/lib/main.dart --dart-define=CORBADO_PROJECT_ID=pro-8751299119685489253
             npm i --prefix packages/passkeys/passkeys/example/tests
             node packages/passkeys/passkeys/example/tests/main.js android
