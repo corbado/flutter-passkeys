@@ -72,5 +72,4 @@ jobs:
             adb shell input keyevent 82 &  
             flutter --version
             cd packages/passkeys/passkeys/example && flutter build apk --debug --dart-define=CORBADO_PROJECT_ID=pro-8751299119685489253 && adb install -r build/app/outputs/flutter-apk/app-debug.apk
-            npm i --prefix packages/passkeys/passkeys/example/tests
-            node packages/passkeys/passkeys/example/tests/main.js android
+            cd packages/passkeys/passkeys/example/tests && npm i && node main.js android
