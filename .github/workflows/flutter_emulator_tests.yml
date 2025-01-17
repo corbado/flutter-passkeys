@@ -21,7 +21,7 @@ jobs:
     steps:
       # Step 1: Checkout the code
       - name: Checkout Code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       # Step 2: Set up Flutter
       - name: Setup Flutter
@@ -71,6 +71,8 @@ jobs:
           emulator-options: "-no-audio -no-window -gpu swiftshader_indirect"
           script: |
             adb shell input keyevent 82 &  
+            ls
+            cd packages/passkeys/passkeys/example
             flutter build apk --debug
             adb install -r build/app/outputs/flutter-apk/app-debug.apk
             cd tests
