@@ -68,11 +68,10 @@ jobs:
           target: google_apis
           arch: x86_64
           profile: Nexus 5
-          emulator-options: "-no-audio -no-window -gpu swiftshader_indirect"
           script: |
             adb shell input keyevent 82 &  
             flutter --version
-            cd packages/passkeys/passkeys/example && \
-            flutter run -d emulator-5554 --dart-define=CORBADO_PROJECT_ID=pro-8751299119685489253
+            cd packages/passkeys/passkeys/example \
+            && flutter run -d emulator-5554 --dart-define=CORBADO_PROJECT_ID=pro-8751299119685489253
             npm i --prefix packages/passkeys/passkeys/example/tests
             node packages/passkeys/passkeys/example/tests/main.js android
