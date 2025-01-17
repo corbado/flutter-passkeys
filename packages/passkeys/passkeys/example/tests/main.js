@@ -27,8 +27,7 @@ const capsIos =
         "appium:bundleId": "com.corbado.passkeys.pub",
         "appium:noReset": true,
         "appium:fullReset": false,
-        "appium:automationName": "Flutter",
-        "appium:retryBackoffTime": 500
+        "appium:automationName": "Flutter"
     };
 
 const platform = process.argv[2]?.toLowerCase();

@@ -73,3 +73,93 @@ jobs:
             flutter --version
             cd packages/passkeys/passkeys/example && flutter build apk --debug --dart-define=CORBADO_PROJECT_ID=pro-8751299119685489253 && adb install -r build/app/outputs/flutter-apk/app-debug.apk
             cd packages/passkeys/passkeys/example/tests && npm i && node main.js android
+
+      #Print Appium Logs (if tests fail)
+      - name: Print Appium Logs
+        if: failure()
+        run: |
+          echo "Printing Appium logs..."
+          cat appium.log
+
+  build-test-ios:
+    name: Build and Test Flutter App on iOS
+    runs-on: macos-latest
+
+    defaults:
+      run:
+        working-directory: packages/passkeys/passkeys/example
+
+    steps:
+      # Step 1: Checkout the code
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      # Step 2: Set up Flutter
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.27.1'
+
+      # Step 3: Install Node.js (for Appium)
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      # Step 4: Install Appium and Dependencies
+      - name: Install Appium and Test Dependencies
+        run: |
+          npm install -g appium
+          appium driver install --source=npm appium-flutter-driver
+          appium driver install uiautomator2
+          appium driver install --source npm appium-flutter-integration-driver 
+
+      # Step 5: Install Flutter Dependencies
+      - name: Install Flutter Dependencies
+        run: flutter pub get
+
+      # Step 6: Set up Xcode
+      - name: Set Up Xcode
+        run: |
+          sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
+          sudo xcodebuild -license accept
+
+      # Step 7: Launch the iOS Simulator
+      - name: Launch iOS Simulator
+        run: |
+          xcrun simctl boot "iPhone 16 Pro"
+          while ! xcrun simctl list devices | grep "iPhone 16 Pro" | grep -q "(Booted)"; do
+            echo "Simulator is still booting..."
+            sleep 5
+          done
+          xcrun simctl list devices
+
+      # Step 8: Build the Flutter App
+      - name: Build Flutter App
+        run: |
+          flutter build ios --no-codesign --simulator --dart-define=CORBADO_PROJECT_ID=pro-8751299119685489253
+
+      # Step 9: Install and Launch the App
+      - name: Install and Launch App
+        run: |
+          xcrun simctl install booted build/ios/iphonesimulator/Runner.app
+
+      # Step 10: Start Appium Server
+      - name: Start Appium Server
+        run: |
+          nohup appium > appium.log 2>&1 & 
+          sleep 10
+
+      # Step 11: Run Tests
+      - name: Run Appium Tests
+        run: |
+          cd tests
+          npm i
+          node main.js ios
+
+      # Step 12: Print Appium Logs (if tests fail)
+      - name: Print Appium Logs
+        if: failure()
+        run: |
+          echo "Printing Appium logs..."
+          cat appium.log
