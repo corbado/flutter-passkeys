@@ -72,7 +72,6 @@ jobs:
           script: |
             adb shell input keyevent 82 &  
             flutter version
-            flutter run -d emulator-5554 --target=packages/passkeys/passkeys/example/lib/main.dart --dart-define=CORBADO_PROJECT_ID=pro-8751299119685489253 \
-            && adb install -r packages/passkeys/passkeys/example/build/app/outputs/flutter-apk/app-debug.apk \
-            && npm i --prefix packages/passkeys/passkeys/example/tests \
-            && node packages/passkeys/passkeys/example/tests/main.js android
+            flutter run -d emulator-5554 --target=packages/passkeys/passkeys/example/lib/main.dart --dart-define=CORBADO_PROJECT_ID=pro-8751299119685489253
+            npm i --prefix packages/passkeys/passkeys/example/tests
+            node packages/passkeys/passkeys/example/tests/main.js android
