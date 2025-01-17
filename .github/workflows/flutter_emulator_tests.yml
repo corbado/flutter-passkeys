@@ -62,6 +62,12 @@ jobs:
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
 
+      # Step 10: Start Appium Server
+      - name: Start Appium Server
+        run: |
+          nohup appium --relaxed-security --port=4567 --address=127.0.0.1 > appium.log 2>&1 & 
+          sleep 10
+
       # Step 8: Start the Emulator & run the tests
       - name: Set Up Android Emulator & Run Tests
         uses: reactivecircus/android-emulator-runner@v2
@@ -74,7 +80,6 @@ jobs:
             adb shell input keyevent 82 &  
             flutter --version
             cd packages/passkeys/passkeys/example && flutter build apk --debug --dart-define=CORBADO_PROJECT_ID=pro-8751299119685489253 && adb install -r build/app/outputs/flutter-apk/app-debug.apk
-            nohup appium ---relaxed-security --port=4567 --address=127.0.0.1 > appium.log 2>&1 & 
             cd packages/passkeys/passkeys/example/tests && npm i && node main.js android
 
       #Print Appium Logs (if tests fail)
@@ -143,7 +148,7 @@ jobs:
           flutter build ios --no-codesign --simulator --dart-define=CORBADO_PROJECT_ID=pro-8751299119685489253
 
       # Step 9: Install the App
-      - name: Install Launch App
+      - name: Install App
         run: |
           xcrun simctl install booted build/ios/iphonesimulator/Runner.app
 

@@ -1,12 +1,6 @@
 const wdio = require('webdriverio');
 const {byValueKey} = require('appium-flutter-finder');
 
-// Appium server configuration
-const server = {
-    host: "localhost",
-    port: 4723,
-};
-
 // Desired capabilities for the iOS simulator
 const capsAndroid =
     {
@@ -16,8 +10,7 @@ const capsAndroid =
         'appium:appActivity': ".MainActivity",
         'appium:noReset': true,
         'appium:automationName': 'Flutter',
-        'appium:retryBackoffTime': 500,
-        "appium:newCommandTimeout": 300
+        'appium:retryBackoffTime': 500
     };
 
 const capsIos =
@@ -29,7 +22,7 @@ const capsIos =
         "appium:noReset": true,
         "appium:fullReset": false,
         "appium:automationName": "Flutter",
-        "appium:newCommandTimeout": 300
+        "appium:showXcodeLog": true
     };
 
 const platform = process.argv[2]?.toLowerCase();
