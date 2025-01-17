@@ -60,14 +60,14 @@ jobs:
         run: |
           appium > appium.log 2>&1 & 
 
-      # Step 7: Start the Emulator
-      - name: Set Up Android Emulator
+      # Step 7: Start the Emulator & run the tests
+      - name: Set Up Android Emulator & Run Tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 35
+          api-level: 29
           target: google_apis
           arch: x86_64
-          profile: Nexus 6
+          profile: Nexus 5
           emulator-options: "-no-audio -no-window -gpu swiftshader_indirect"
           script: |
             adb shell input keyevent 82 &  
