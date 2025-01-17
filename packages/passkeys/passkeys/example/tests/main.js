@@ -16,7 +16,8 @@ const capsAndroid =
         'appium:appActivity': ".MainActivity",
         'appium:noReset': true,
         'appium:automationName': 'Flutter',
-        'appium:retryBackoffTime': 500
+        'appium:retryBackoffTime': 500,
+        "appium:newCommandTimeout": 300
     };
 
 const capsIos =
@@ -27,7 +28,8 @@ const capsIos =
         "appium:bundleId": "com.corbado.passkeys.pub",
         "appium:noReset": true,
         "appium:fullReset": false,
-        "appium:automationName": "Flutter"
+        "appium:automationName": "Flutter",
+        "appium:newCommandTimeout": 300
     };
 
 const platform = process.argv[2]?.toLowerCase();
@@ -40,7 +42,8 @@ if (!platform || !['android', 'ios'].includes(platform)) {
 const caps = platform === 'ios' ? capsIos : capsAndroid;
 
 const opts = {
-    port: 4723,
+    port: 4567,
+    host: '127.0.0.1',
     capabilities: caps
 };
 
