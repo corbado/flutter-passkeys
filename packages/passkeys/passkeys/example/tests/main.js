@@ -63,7 +63,7 @@ const opts = {
         await driver.elementClick(signUpButton);
 
         // Simulate fingerprint authentication
-        await delay(5000);
+        await delay(3000);
         await driver.switchContext('NATIVE_APP');
 
         if (platformName === 'ios') {
@@ -85,6 +85,13 @@ const opts = {
 
             await driver.execute('mobile: sendBiometricMatch', {match: true});
         } else {
+            await driver.tap({x: 850, y: 1300});
+            await delay(20000);
+            await driver.tap({x: 850, y: 1400});
+            await driver.sendKeys(["0405"]);
+            await driver.sendKeyEvent("66");
+            await delay(10000);
+
             // Simulate fingerprint authentication
             await driver.fingerPrint(1);
         }
