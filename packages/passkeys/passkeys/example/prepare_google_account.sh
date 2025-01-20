@@ -63,7 +63,7 @@ sleep 20
 adb shell input tap 400 600
 sleep 20
 
-flutter build apk --debug
+cd packages/passkeys/passkeys/example && flutter build apk --debug
 
-adb install -r build/app/outputs/flutter-apk/app-debug.apk
-node tests/main.js android
+cd packages/passkeys/passkeys/example && adb install -r build/app/outputs/flutter-apk/app-debug.apk
+cd packages/passkeys/passkeys/example && node tests/main.js android
