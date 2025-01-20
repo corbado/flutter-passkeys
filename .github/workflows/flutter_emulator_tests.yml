@@ -84,7 +84,7 @@ jobs:
           script: |
             adb shell input keyevent 82 &  
             flutter --version
-            packages/passkeys/passkeys/example/prepare_google_account.sh
+            packages/passkeys/passkeys/example/run_tests.sh
 
       #Print Appium Logs (if tests fail)
       - name: Print Appium Logs

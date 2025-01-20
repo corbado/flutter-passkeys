@@ -67,4 +67,7 @@ cd packages/passkeys/passkeys/example
 flutter build apk --debug
 
 adb install -r build/app/outputs/flutter-apk/app-debug.apk
-node tests/main.js android
+
+cd tests
+npm i
+node main.js android
