@@ -31,11 +31,7 @@ abstract class PasskeysPlatform extends PlatformInterface {
   }
 
   /// Returns true if passkeys are supported by the device
-  /// We have deprecated this function (it will now always return true).
-  @deprecated
-  Future<bool> canAuthenticate() async {
-    return true;
-  }
+  Future<bool> canAuthenticate();
 
   /// Handles the platform-specific steps for the registration flow
   /// (see https://webauthn.guide/#registration)
@@ -58,7 +54,6 @@ abstract class PasskeysPlatform extends PlatformInterface {
   /// Currently, this is only valuable for flutter web.
   Future<AvailabilityType> getAvailability() async {
     return AvailabilityType(
-      hasPasskeySupport: true,
       isUserVerifyingPlatformAuthenticatorAvailable: null,
       isConditionalMediationAvailable: null,
       isNative: true,

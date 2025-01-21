@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ffi';
 import 'dart:js_interop';
 
 import 'package:flutter/services.dart';
@@ -103,16 +104,19 @@ class PasskeysWeb extends PasskeysPlatform {
 
   @override
   Future<AvailabilityType> getAvailability() async {
-    final passkeySupport = hasPasskeySupport().toDart;
     final v1 = await isUserVerifyingPlatformAuthenticatorAvailable().toDart;
     final v2 = await isConditionalMediationAvailable().toDart;
 
     return AvailabilityType(
-      hasPasskeySupport: passkeySupport,
       isUserVerifyingPlatformAuthenticatorAvailable:
           v1.isUndefinedOrNull ? null : v1!.toDart,
       isConditionalMediationAvailable: v2.isUndefinedOrNull ? null : v2!.toDart,
       isNative: false,
     );
+  }
+
+  @override
+  Future<bool> canAuthenticate() async {
+    return hasPasskeySupport().toDart;
   }
 }
