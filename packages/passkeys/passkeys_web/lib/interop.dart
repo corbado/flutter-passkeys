@@ -20,3 +20,6 @@ external JSPromise<JSBoolean?> isUserVerifyingPlatformAuthenticatorAvailable();
 
 @JS('PasskeyAuthenticator.isConditionalMediationAvailable')
 external JSPromise<JSBoolean?> isConditionalMediationAvailable();
+
+@JS('PasskeyAuthenticator.hasPasskeySupport')
+external JSBoolean hasPasskeySupport();

@@ -1,3 +1,6 @@
+## 2.3.0
+* Added `hasPasskeySupport` to `AvailabilityType` to check if the platform supports passkeys.
+
 ## 2.2.0
 * Added support for WebAssembly (Wasm)
 

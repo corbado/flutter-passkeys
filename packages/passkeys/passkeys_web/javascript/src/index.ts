@@ -26,6 +26,10 @@ export async function isConditionalMediationAvailable(): Promise<boolean|undefin
     }
 }
 
+export function hasPasskeySupport(): boolean {
+    return Boolean(window.PublicKeyCredential);
+}
+
 export function init(): void {
      passkeyAuthenticator = new PasskeyAuthenticator();
 }
