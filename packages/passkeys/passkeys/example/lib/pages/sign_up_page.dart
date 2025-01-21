@@ -15,6 +15,17 @@ class SignUpPage extends HookConsumerWidget {
     final error = useState<String?>(null);
     final authService = ref.watch(authServiceProvider);
 
+    authService.getAvailability().then((value) {
+      debugPrint('passkey support: ${value.hasPasskeySupport}');
+      debugPrint(
+          'isUserVerifyingPlatformAuthenticatorAvailable: '
+              '${value.isUserVerifyingPlatformAuthenticatorAvailable}');
+      debugPrint(
+          'isConditionalMediationAvailable: '
+              '${value.isConditionalMediationAvailable}');
+      debugPrint('isNative: ${value.isNative}');
+    });
+
     return BasePage(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,

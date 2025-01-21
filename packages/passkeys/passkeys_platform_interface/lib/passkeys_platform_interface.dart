@@ -54,6 +54,7 @@ abstract class PasskeysPlatform extends PlatformInterface {
   /// the user decides ignore that and login by typing his username instead.
   Future<void> cancelCurrentAuthenticatorOperation();
 
-  /// Returns information about the availabilty of passkeys.
+  /// Retrieves the availability information for passkeys, user-verifying platform authenticators,
+  /// and conditional mediation whenever possible
   Future<AvailabilityType> getAvailability();
 }
