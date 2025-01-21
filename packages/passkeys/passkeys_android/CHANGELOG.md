@@ -1,3 +1,6 @@
+## 2.5.0
+* Added `getAvailability` api to check for passkey support
+
 ## 2.4.0
 * Added handling for `CreateCredentialNoCreateOptionException` when no viable creation options were found 
 

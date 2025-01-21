@@ -1,5 +1,5 @@
 ## 2.2.0
-* Re-enabled `canAuthenticate` to detect passkey support
+* Added `hasPasskeySupport` to `AvailabilityType`
 
 ## 2.1.0
 * Added getAvailability().
