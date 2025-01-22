@@ -27,8 +27,6 @@ class AuthService {
   }
 
   Future<AvailabilityType> getAvailability() async {
-    final authenticatorRes = await authenticator.getAvailability();
-
-    return authenticatorRes;
+    return await authenticator.getAvailability();
   }
 }
