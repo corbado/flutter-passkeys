@@ -27,12 +27,16 @@ class _SignInPageState extends ConsumerState<SignInPage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final authService = ref.watch(authServiceProvider);
 
-      if (Platform.isAndroid) {
-        authService.authenticator.getAvailability().android().then((value) {
-          debugPrint('Android');
+      // You need to first check for the web platform because on Web calling
+      // Platform will cause an exception
+      if (kIsWeb) {
+        authService.authenticator.getAvailability().web().then((value) {
+          debugPrint('Web');
           debugPrint('hasPasskeySupport: ${value.hasPasskeySupport}');
-          debugPrint('isUserVerifyingPlatformAuthenticatorAvailable:'
-              ' ${value.isUserVerifyingPlatformAuthenticatorAvailable}');
+          debugPrint('isUserVerifyingPlatformAuthenticatorAvailable: '
+              '${value.isUserVerifyingPlatformAuthenticatorAvailable}');
+          debugPrint('isConditionalMediationAvailable: '
+              '${value.isConditionalMediationAvailable}');
           debugPrint('isNative: ${value.isNative}');
         });
       } else if (Platform.isIOS) {
@@ -42,14 +46,12 @@ class _SignInPageState extends ConsumerState<SignInPage> {
           debugPrint('hasBiometrics: ${value.hasBiometrics}');
           debugPrint('isNative: ${value.isNative}');
         });
-      } else if (kIsWeb) {
-        authService.authenticator.getAvailability().web().then((value) {
-          debugPrint('Web');
+      } else if (Platform.isAndroid) {
+        authService.authenticator.getAvailability().android().then((value) {
+          debugPrint('Android');
           debugPrint('hasPasskeySupport: ${value.hasPasskeySupport}');
-          debugPrint('isUserVerifyingPlatformAuthenticatorAvailable: '
-              '${value.isUserVerifyingPlatformAuthenticatorAvailable}');
-          debugPrint('isConditionalMediationAvailable: '
-              '${value.isConditionalMediationAvailable}');
+          debugPrint('isUserVerifyingPlatformAuthenticatorAvailable:'
+              ' ${value.isUserVerifyingPlatformAuthenticatorAvailable}');
           debugPrint('isNative: ${value.isNative}');
         });
       }
