@@ -1,4 +1,5 @@
 import 'package:passkeys/authenticator.dart';
+import 'package:passkeys/availability.dart';
 import 'package:passkeys/types.dart';
 import 'package:passkeys_example/local_relying_party_server.dart';
 
@@ -26,7 +27,7 @@ class AuthService {
     rps.finishPasskeyRegister(response: authenticatorRes);
   }
 
-  Future<AvailabilityType> getAvailability() async {
-    return await authenticator.getAvailability();
+  GetAvailability getAvailability() {
+    return authenticator.getAvailability();
   }
 }
