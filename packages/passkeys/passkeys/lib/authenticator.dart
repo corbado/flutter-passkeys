@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/services.dart';
+import 'package:passkeys/availability.dart';
 import 'package:passkeys/types.dart';
 import 'package:passkeys_platform_interface/passkeys_platform_interface.dart';
 import 'package:passkeys_platform_interface/types/availability.dart';
@@ -87,8 +90,24 @@ class PasskeyAuthenticator {
     }
   }
 
-  /// Returns information about the availabilty of passkeys.
-  Future<AvailabilityType> getAvailability() {
-    return _platform.getAvailability();
-  }
+  /// Returns platform-specific information about the availability of passkeys.
+  ///
+  /// This function returns an instance of [GetAvailability], which provides
+  /// platform-specific methods to query the availability of passkeys.
+  ///
+  /// Supported methods:
+  /// - [GetAvailability.web]: For web-based platforms.
+  /// - [GetAvailability.android]: For Android platforms.
+  /// - [GetAvailability.iOS]: For iOS platforms.
+  ///
+  /// ### Example Usage
+  /// ```dart
+  /// final webAvailability = await getAvailability().web();
+  /// final androidAvailability = await getAvailability().android();
+  /// final iosAvailability = await getAvailability().iOS();
+  /// ```
+  ///
+  /// ### Notes
+  /// - Ensure you are using the correct method for the platform being queried.
+  GetAvailability getAvailability() => GetAvailability(platform: _platform);
 }
