@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
@@ -15,16 +18,34 @@ class SignUpPage extends HookConsumerWidget {
     final error = useState<String?>(null);
     final authService = ref.watch(authServiceProvider);
 
-    authService.getAvailability().then((value) {
-      debugPrint('passkey support: ${value.hasPasskeySupport}');
-      debugPrint(
-          'isUserVerifyingPlatformAuthenticatorAvailable: '
-              '${value.isUserVerifyingPlatformAuthenticatorAvailable}');
-      debugPrint(
-          'isConditionalMediationAvailable: '
-              '${value.isConditionalMediationAvailable}');
-      debugPrint('isNative: ${value.isNative}');
-    });
+    // You need to first check for the web platform because on Web calling
+    // Platform will cause an exception
+    if (kIsWeb) {
+      authService.authenticator.getAvailability().web().then((value) {
+        debugPrint('Web');
+        debugPrint('hasPasskeySupport: ${value.hasPasskeySupport}');
+        debugPrint('isUserVerifyingPlatformAuthenticatorAvailable: '
+            '${value.isUserVerifyingPlatformAuthenticatorAvailable}');
+        debugPrint('isConditionalMediationAvailable: '
+            '${value.isConditionalMediationAvailable}');
+        debugPrint('isNative: ${value.isNative}');
+      });
+    } else if (Platform.isIOS) {
+      authService.authenticator.getAvailability().iOS().then((value) {
+        debugPrint('iOS');
+        debugPrint('hasPasskeySupport: ${value.hasPasskeySupport}');
+        debugPrint('hasBiometrics: ${value.hasBiometrics}');
+        debugPrint('isNative: ${value.isNative}');
+      });
+    } else if (Platform.isAndroid) {
+      authService.authenticator.getAvailability().android().then((value) {
+        debugPrint('Android');
+        debugPrint('hasPasskeySupport: ${value.hasPasskeySupport}');
+        debugPrint('isUserVerifyingPlatformAuthenticatorAvailable:'
+            ' ${value.isUserVerifyingPlatformAuthenticatorAvailable}');
+        debugPrint('isNative: ${value.isNative}');
+      });
+    }
 
     return BasePage(
       child: Column(

@@ -23,6 +23,10 @@ public class PasskeysPlugin: NSObject, FlutterPlugin, PasskeysApi {
         return LocalAuth.shared.canAuthenticate()
     }
 
+    func hasBiometrics() throws -> Bool {
+        return LocalAuth.shared.hasBiometrics()
+    }
+
     func getFacetID(completion: @escaping (Result<String, Error>) -> Void) {
         completion(.success(""))
     }
@@ -125,9 +129,13 @@ open class LocalAuth: NSObject {
             return false
         }
 
+        return true
+    }
+
+    func hasBiometrics() -> Bool {
         var error: NSError?
-        let hasTouchId = laContext.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error)
-        return hasTouchId
+            let hasTouchId = laContext.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error)
+            return hasTouchId
     }
 }
 
