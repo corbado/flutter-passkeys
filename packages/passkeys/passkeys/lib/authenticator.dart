@@ -88,7 +88,6 @@ class PasskeyAuthenticator {
   }
 
   /// Returns information about the availabilty of passkeys.
-  /// Currently, this is only valuable for flutter web.
   Future<AvailabilityType> getAvailability() {
     return _platform.getAvailability();
   }

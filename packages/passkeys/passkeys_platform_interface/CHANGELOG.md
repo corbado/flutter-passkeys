@@ -1,3 +1,6 @@
+## 2.2.0
+* Added `hasPasskeySupport` to `AvailabilityType`
+
 ## 2.1.0
 * Added getAvailability().
 * Added preferImmediatelyAvailableCredentials.

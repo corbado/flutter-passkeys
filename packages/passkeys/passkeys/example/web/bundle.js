@@ -348,6 +348,9 @@ var PasskeyAuthenticator = (function (exports) {
             return undefined;
         }
     }
+    function hasPasskeySupport() {
+        return Boolean(window.PublicKeyCredential);
+    }
     function init() {
         passkeyAuthenticator = new PasskeyAuthenticator();
     }
@@ -362,6 +365,7 @@ var PasskeyAuthenticator = (function (exports) {
     }
 
     exports.cancelCurrentAuthenticatorOperation = cancelCurrentAuthenticatorOperation;
+    exports.hasPasskeySupport = hasPasskeySupport;
     exports.init = init;
     exports.isConditionalMediationAvailable = isConditionalMediationAvailable;
     exports.isUserVerifyingPlatformAuthenticatorAvailable = isUserVerifyingPlatformAuthenticatorAvailable;
