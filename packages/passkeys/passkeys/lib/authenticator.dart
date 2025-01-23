@@ -1,10 +1,7 @@
-import 'dart:io';
-
 import 'package:flutter/services.dart';
 import 'package:passkeys/availability.dart';
 import 'package:passkeys/types.dart';
 import 'package:passkeys_platform_interface/passkeys_platform_interface.dart';
-import 'package:passkeys_platform_interface/types/availability.dart';
 
 /// Handles platform dependent parts of the registration and authentication
 /// flow.

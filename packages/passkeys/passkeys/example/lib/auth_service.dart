@@ -1,5 +1,4 @@
 import 'package:passkeys/authenticator.dart';
-import 'package:passkeys/availability.dart';
 import 'package:passkeys/types.dart';
 import 'package:passkeys_example/local_relying_party_server.dart';
 
