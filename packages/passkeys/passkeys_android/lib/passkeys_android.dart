@@ -98,12 +98,11 @@ class PasskeysAndroid extends PasskeysPlatform {
 
   // In case of android we link passkey support to the availability of the biometric authentication
   @override
-  Future<AvailabilityType> getAvailability() async {
+  Future<AvailabilityTypeAndroid> getAvailability() async {
     final canAuthenticate = await _api.canAuthenticate();
-    return AvailabilityType(
+    return AvailabilityTypeAndroid(
         hasPasskeySupport: canAuthenticate,
         isUserVerifyingPlatformAuthenticatorAvailable: canAuthenticate,
-        isConditionalMediationAvailable: null,
         isNative: true);
   }
 }

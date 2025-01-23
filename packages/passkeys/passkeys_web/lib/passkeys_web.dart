@@ -101,12 +101,12 @@ class PasskeysWeb extends PasskeysPlatform {
   }
 
   @override
-  Future<AvailabilityType> getAvailability() async {
+  Future<AvailabilityTypeWeb> getAvailability() async {
     final passkeySupport = hasPasskeySupport().toDart;
     final v1 = await isUserVerifyingPlatformAuthenticatorAvailable().toDart;
     final v2 = await isConditionalMediationAvailable().toDart;
 
-    return AvailabilityType(
+    return AvailabilityTypeWeb(
       hasPasskeySupport: passkeySupport,
       isUserVerifyingPlatformAuthenticatorAvailable:
           v1.isUndefinedOrNull ? null : v1!.toDart,
