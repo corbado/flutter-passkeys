@@ -82,7 +82,7 @@ If you want to use `corbado_auth` in a Flutter web application you have to inclu
 You can do this by adding the following `<script>` tag to your `<head>` section.
 
 ```
-<script src="https://github.com/corbado/flutter-passkeys/releases/download/3.0.0/bundle.js" type="application/javascript"></script>
+<script src="https://github.com/corbado/flutter-passkeys/releases/download/2.3.0/bundle.js" type="application/javascript"></script>
 ```
 
 For an example how the `index.html` can look check out [index.html](https://github.com/corbado/flutter-passkeys/blob/main/packages/corbado_auth/example/web/index.html).
