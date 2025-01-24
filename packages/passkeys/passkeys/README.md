@@ -317,7 +317,7 @@ To make this work, you have to include our JavaScript library in your web/index.
 
 ```html
 
-<script src="https://github.com/corbado/flutter-passkeys/releases/download/2.0.0-dev.1/bundle.js"
+<script src="https://github.com/corbado/flutter-passkeys/releases/download/2.3.0/bundle.js"
         type="application/javascript"></script>
 ```
 
