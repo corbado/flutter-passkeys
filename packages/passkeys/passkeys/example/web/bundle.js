@@ -80,7 +80,7 @@ var PasskeyAuthenticator = (function (exports) {
         for (const [key, schemaField] of Object.entries(schema2)) {
           if (schemaField.derive) {
             const v = schemaField.derive(input);
-            if (v !== void 0) {
+            if (v !== undefined) {
               input[key] = v;
             }
           }
@@ -169,7 +169,7 @@ var PasskeyAuthenticator = (function (exports) {
           copyValue,
           (response) => {
             var _a;
-            return ((_a = response.getTransports) == null ? void 0 : _a.call(response)) || [];
+            return ((_a = response.getTransports) == null ? undefined : _a.call(response)) || [];
           }
         )
       }),
@@ -245,7 +245,7 @@ var PasskeyAuthenticator = (function (exports) {
     const ABORTED_BY_USER = 'operation aborted by user.';
     class PasskeyAuthenticator {
         constructor() {
-            _PasskeyAuthenticator_abortController.set(this, void 0);
+            _PasskeyAuthenticator_abortController.set(this, undefined);
         }
         async register(params) {
             try {
