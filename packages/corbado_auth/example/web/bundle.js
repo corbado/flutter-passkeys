@@ -2,19 +2,19 @@ var PasskeyAuthenticator = (function (exports) {
     'use strict';
 
     /******************************************************************************
-    Copyright (c) Microsoft Corporation.
+     Copyright (c) Microsoft Corporation.
 
-    Permission to use, copy, modify, and/or distribute this software for any
-    purpose with or without fee is hereby granted.
+     Permission to use, copy, modify, and/or distribute this software for any
+     purpose with or without fee is hereby granted.
 
-    THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
-    REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
-    AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
-    INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
-    LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
-    OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
-    PERFORMANCE OF THIS SOFTWARE.
-    ***************************************************************************** */
+     THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+     REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+     AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+     INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+     LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+     OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+     PERFORMANCE OF THIS SOFTWARE.
+     ***************************************************************************** */
     /* global Reflect, Promise, SuppressedError, Symbol */
 
 
@@ -38,214 +38,214 @@ var PasskeyAuthenticator = (function (exports) {
 
     // src/webauthn-json/base64url.ts
     function base64urlToBuffer(baseurl64String) {
-      const padding = "==".slice(0, (4 - baseurl64String.length % 4) % 4);
-      const base64String = baseurl64String.replace(/-/g, "+").replace(/_/g, "/") + padding;
-      const str = atob(base64String);
-      const buffer = new ArrayBuffer(str.length);
-      const byteView = new Uint8Array(buffer);
-      for (let i = 0; i < str.length; i++) {
-        byteView[i] = str.charCodeAt(i);
-      }
-      return buffer;
+        const padding = "==".slice(0, (4 - baseurl64String.length % 4) % 4);
+        const base64String = baseurl64String.replace(/-/g, "+").replace(/_/g, "/") + padding;
+        const str = atob(base64String);
+        const buffer = new ArrayBuffer(str.length);
+        const byteView = new Uint8Array(buffer);
+        for (let i = 0; i < str.length; i++) {
+            byteView[i] = str.charCodeAt(i);
+        }
+        return buffer;
     }
     function bufferToBase64url(buffer) {
-      const byteView = new Uint8Array(buffer);
-      let str = "";
-      for (const charCode of byteView) {
-        str += String.fromCharCode(charCode);
-      }
-      const base64String = btoa(str);
-      const base64urlString = base64String.replace(/\+/g, "-").replace(
-        /\//g,
-        "_"
-      ).replace(/=/g, "");
-      return base64urlString;
+        const byteView = new Uint8Array(buffer);
+        let str = "";
+        for (const charCode of byteView) {
+            str += String.fromCharCode(charCode);
+        }
+        const base64String = btoa(str);
+        const base64urlString = base64String.replace(/\+/g, "-").replace(
+            /\//g,
+            "_"
+        ).replace(/=/g, "");
+        return base64urlString;
     }
 
     // src/webauthn-json/convert.ts
     var copyValue = "copy";
     var convertValue = "convert";
     function convert(conversionFn, schema2, input) {
-      if (schema2 === copyValue) {
-        return input;
-      }
-      if (schema2 === convertValue) {
-        return conversionFn(input);
-      }
-      if (schema2 instanceof Array) {
-        return input.map((v) => convert(conversionFn, schema2[0], v));
-      }
-      if (schema2 instanceof Object) {
-        const output = {};
-        for (const [key, schemaField] of Object.entries(schema2)) {
-          if (schemaField.derive) {
-            const v = schemaField.derive(input);
-            if (v !== void 0) {
-              input[key] = v;
-            }
-          }
-          if (!(key in input)) {
-            if (schemaField.required) {
-              throw new Error(`Missing key: ${key}`);
-            }
-            continue;
-          }
-          if (input[key] == null) {
-            output[key] = null;
-            continue;
-          }
-          output[key] = convert(
-            conversionFn,
-            schemaField.schema,
-            input[key]
-          );
+        if (schema2 === copyValue) {
+            return input;
         }
-        return output;
-      }
+        if (schema2 === convertValue) {
+            return conversionFn(input);
+        }
+        if (schema2 instanceof Array) {
+            return input.map((v) => convert(conversionFn, schema2[0], v));
+        }
+        if (schema2 instanceof Object) {
+            const output = {};
+            for (const [key, schemaField] of Object.entries(schema2)) {
+                if (schemaField.derive) {
+                    const v = schemaField.derive(input);
+                    if (v !== undefined) {
+                        input[key] = v;
+                    }
+                }
+                if (!(key in input)) {
+                    if (schemaField.required) {
+                        throw new Error(`Missing key: ${key}`);
+                    }
+                    continue;
+                }
+                if (input[key] == null) {
+                    output[key] = null;
+                    continue;
+                }
+                output[key] = convert(
+                    conversionFn,
+                    schemaField.schema,
+                    input[key]
+                );
+            }
+            return output;
+        }
     }
     function derived(schema2, derive) {
-      return {
-        required: true,
-        schema: schema2,
-        derive
-      };
+        return {
+            required: true,
+            schema: schema2,
+            derive
+        };
     }
     function required(schema2) {
-      return {
-        required: true,
-        schema: schema2
-      };
+        return {
+            required: true,
+            schema: schema2
+        };
     }
     function optional(schema2) {
-      return {
-        required: false,
-        schema: schema2
-      };
+        return {
+            required: false,
+            schema: schema2
+        };
     }
 
     // src/webauthn-json/basic/schema.ts
     var publicKeyCredentialDescriptorSchema = {
-      type: required(copyValue),
-      id: required(convertValue),
-      transports: optional(copyValue)
+        type: required(copyValue),
+        id: required(convertValue),
+        transports: optional(copyValue)
     };
     var simplifiedExtensionsSchema = {
-      appid: optional(copyValue),
-      appidExclude: optional(copyValue),
-      credProps: optional(copyValue)
+        appid: optional(copyValue),
+        appidExclude: optional(copyValue),
+        credProps: optional(copyValue)
     };
     var simplifiedClientExtensionResultsSchema = {
-      appid: optional(copyValue),
-      appidExclude: optional(copyValue),
-      credProps: optional(copyValue)
+        appid: optional(copyValue),
+        appidExclude: optional(copyValue),
+        credProps: optional(copyValue)
     };
     var credentialCreationOptions = {
-      publicKey: required({
-        rp: required(copyValue),
-        user: required({
-          id: required(convertValue),
-          name: required(copyValue),
-          displayName: required(copyValue)
+        publicKey: required({
+            rp: required(copyValue),
+            user: required({
+                id: required(convertValue),
+                name: required(copyValue),
+                displayName: required(copyValue)
+            }),
+            challenge: required(convertValue),
+            pubKeyCredParams: required(copyValue),
+            timeout: optional(copyValue),
+            excludeCredentials: optional([publicKeyCredentialDescriptorSchema]),
+            authenticatorSelection: optional(copyValue),
+            attestation: optional(copyValue),
+            extensions: optional(simplifiedExtensionsSchema)
         }),
-        challenge: required(convertValue),
-        pubKeyCredParams: required(copyValue),
-        timeout: optional(copyValue),
-        excludeCredentials: optional([publicKeyCredentialDescriptorSchema]),
-        authenticatorSelection: optional(copyValue),
-        attestation: optional(copyValue),
-        extensions: optional(simplifiedExtensionsSchema)
-      }),
-      signal: optional(copyValue)
+        signal: optional(copyValue)
     };
     var publicKeyCredentialWithAttestation = {
-      type: required(copyValue),
-      id: required(copyValue),
-      rawId: required(convertValue),
-      authenticatorAttachment: optional(copyValue),
-      response: required({
-        clientDataJSON: required(convertValue),
-        attestationObject: required(convertValue),
-        transports: derived(
-          copyValue,
-          (response) => {
-            var _a;
-            return ((_a = response.getTransports) == null ? void 0 : _a.call(response)) || [];
-          }
+        type: required(copyValue),
+        id: required(copyValue),
+        rawId: required(convertValue),
+        authenticatorAttachment: optional(copyValue),
+        response: required({
+            clientDataJSON: required(convertValue),
+            attestationObject: required(convertValue),
+            transports: derived(
+                copyValue,
+                (response) => {
+                    var _a;
+                    return ((_a = response.getTransports) == null ? undefined : _a.call(response)) || [];
+                }
+            )
+        }),
+        clientExtensionResults: derived(
+            simplifiedClientExtensionResultsSchema,
+            (pkc) => pkc.getClientExtensionResults()
         )
-      }),
-      clientExtensionResults: derived(
-        simplifiedClientExtensionResultsSchema,
-        (pkc) => pkc.getClientExtensionResults()
-      )
     };
     var credentialRequestOptions = {
-      mediation: optional(copyValue),
-      publicKey: required({
-        challenge: required(convertValue),
-        timeout: optional(copyValue),
-        rpId: optional(copyValue),
-        allowCredentials: optional([publicKeyCredentialDescriptorSchema]),
-        userVerification: optional(copyValue),
-        extensions: optional(simplifiedExtensionsSchema)
-      }),
-      signal: optional(copyValue)
+        mediation: optional(copyValue),
+        publicKey: required({
+            challenge: required(convertValue),
+            timeout: optional(copyValue),
+            rpId: optional(copyValue),
+            allowCredentials: optional([publicKeyCredentialDescriptorSchema]),
+            userVerification: optional(copyValue),
+            extensions: optional(simplifiedExtensionsSchema)
+        }),
+        signal: optional(copyValue)
     };
     var publicKeyCredentialWithAssertion = {
-      type: required(copyValue),
-      id: required(copyValue),
-      rawId: required(convertValue),
-      authenticatorAttachment: optional(copyValue),
-      response: required({
-        clientDataJSON: required(convertValue),
-        authenticatorData: required(convertValue),
-        signature: required(convertValue),
-        userHandle: required(convertValue)
-      }),
-      clientExtensionResults: derived(
-        simplifiedClientExtensionResultsSchema,
-        (pkc) => pkc.getClientExtensionResults()
-      )
+        type: required(copyValue),
+        id: required(copyValue),
+        rawId: required(convertValue),
+        authenticatorAttachment: optional(copyValue),
+        response: required({
+            clientDataJSON: required(convertValue),
+            authenticatorData: required(convertValue),
+            signature: required(convertValue),
+            userHandle: required(convertValue)
+        }),
+        clientExtensionResults: derived(
+            simplifiedClientExtensionResultsSchema,
+            (pkc) => pkc.getClientExtensionResults()
+        )
     };
 
     // src/webauthn-json/basic/api.ts
     function createRequestFromJSON(requestJSON) {
-      return convert(base64urlToBuffer, credentialCreationOptions, requestJSON);
+        return convert(base64urlToBuffer, credentialCreationOptions, requestJSON);
     }
     function createResponseToJSON(credential) {
-      return convert(
-        bufferToBase64url,
-        publicKeyCredentialWithAttestation,
-        credential
-      );
+        return convert(
+            bufferToBase64url,
+            publicKeyCredentialWithAttestation,
+            credential
+        );
     }
     async function create(requestJSON) {
-      const credential = await navigator.credentials.create(
-        createRequestFromJSON(requestJSON)
-      );
-      return createResponseToJSON(credential);
+        const credential = await navigator.credentials.create(
+            createRequestFromJSON(requestJSON)
+        );
+        return createResponseToJSON(credential);
     }
     function getRequestFromJSON(requestJSON) {
-      return convert(base64urlToBuffer, credentialRequestOptions, requestJSON);
+        return convert(base64urlToBuffer, credentialRequestOptions, requestJSON);
     }
     function getResponseToJSON(credential) {
-      return convert(
-        bufferToBase64url,
-        publicKeyCredentialWithAssertion,
-        credential
-      );
+        return convert(
+            bufferToBase64url,
+            publicKeyCredentialWithAssertion,
+            credential
+        );
     }
     async function get(requestJSON) {
-      const credential = await navigator.credentials.get(
-        getRequestFromJSON(requestJSON)
-      );
-      return getResponseToJSON(credential);
+        const credential = await navigator.credentials.get(
+            getRequestFromJSON(requestJSON)
+        );
+        return getResponseToJSON(credential);
     }
 
     var _PasskeyAuthenticator_abortController;
     const ABORTED_BY_USER = 'operation aborted by user.';
     class PasskeyAuthenticator {
         constructor() {
-            _PasskeyAuthenticator_abortController.set(this, void 0);
+            _PasskeyAuthenticator_abortController.set(this, undefined);
         }
         async register(params) {
             try {
@@ -348,6 +348,9 @@ var PasskeyAuthenticator = (function (exports) {
             return undefined;
         }
     }
+    function hasPasskeySupport() {
+        return Boolean(window.PublicKeyCredential);
+    }
     function init() {
         passkeyAuthenticator = new PasskeyAuthenticator();
     }
@@ -362,6 +365,7 @@ var PasskeyAuthenticator = (function (exports) {
     }
 
     exports.cancelCurrentAuthenticatorOperation = cancelCurrentAuthenticatorOperation;
+    exports.hasPasskeySupport = hasPasskeySupport;
     exports.init = init;
     exports.isConditionalMediationAvailable = isConditionalMediationAvailable;
     exports.isUserVerifyingPlatformAuthenticatorAvailable = isUserVerifyingPlatformAuthenticatorAvailable;

@@ -19,7 +19,7 @@ dependencies:
   json_annotation: ^4.8.1
   jwt_decoder: ^2.0.1
   meta: ^1.15.0
-  passkeys: ^2.1.0
+  passkeys: ^2.5.0
   rxdart: ^0.27.7
   ua_client_hints: ^1.1.3
   universal_html: ^2.2.4
