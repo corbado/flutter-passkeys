@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:built_collection/built_collection.dart';
 import 'package:corbado_auth/corbado_auth.dart';
@@ -6,6 +7,7 @@ import 'package:corbado_auth/src/blocks/types.dart';
 import 'package:corbado_frontend_api_client/corbado_frontend_api_client.dart' as api;
 import 'package:corbado_frontend_api_client/corbado_frontend_api_client.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:passkeys/authenticator.dart';
 
 abstract class CorbadoService {
@@ -281,13 +283,31 @@ abstract class CorbadoService {
   }
 
   Future<api.ClientInformationBuilder> _buildClientInformation() async {
-    final passkeyAvailability = await passkeyAuthenticator.getAvailability();
+    final getAvailability = passkeyAuthenticator.getAvailability();
 
-    return api.ClientInformationBuilder()
-      ..isNative = passkeyAvailability.isNative
-      ..isUserVerifyingPlatformAuthenticatorAvailable =
-          passkeyAvailability.isUserVerifyingPlatformAuthenticatorAvailable
-      ..isConditionalMediationAvailable = passkeyAvailability.isConditionalMediationAvailable;
+    if (kIsWeb) {
+      final passkeyAvailability = await getAvailability.web();
+      return api.ClientInformationBuilder()
+        ..isNative = passkeyAvailability.isNative
+        ..isUserVerifyingPlatformAuthenticatorAvailable =
+            passkeyAvailability.isUserVerifyingPlatformAuthenticatorAvailable
+        ..isConditionalMediationAvailable =
+            passkeyAvailability.isConditionalMediationAvailable;
+    } else if (Platform.isIOS) {
+      final passkeyAvailability = await getAvailability.iOS();
+      return api.ClientInformationBuilder()
+        ..isNative = passkeyAvailability.isNative
+        ..isUserVerifyingPlatformAuthenticatorAvailable =
+            passkeyAvailability.hasBiometrics
+        ..isConditionalMediationAvailable = null;
+    } else {
+      final passkeyAvailability = await getAvailability.android();
+      return api.ClientInformationBuilder()
+        ..isNative = passkeyAvailability.isNative
+        ..isUserVerifyingPlatformAuthenticatorAvailable =
+            passkeyAvailability.isUserVerifyingPlatformAuthenticatorAvailable
+        ..isConditionalMediationAvailable = null;
+    }
   }
 
   /// Builds an API client to interact with the Corbado frontend API.

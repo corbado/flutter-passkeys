@@ -54,13 +54,7 @@ abstract class PasskeysPlatform extends PlatformInterface {
   /// the user decides ignore that and login by typing his username instead.
   Future<void> cancelCurrentAuthenticatorOperation();
 
-  /// Returns information about the availabilty of passkeys.
-  /// Currently, this is only valuable for flutter web.
-  Future<AvailabilityType> getAvailability() async {
-    return AvailabilityType(
-      isUserVerifyingPlatformAuthenticatorAvailable: null,
-      isConditionalMediationAvailable: null,
-      isNative: true,
-    );
-  }
+  /// Retrieves the availability information for passkeys, user-verifying platform authenticators,
+  /// and conditional mediation whenever possible
+  Future<AvailabilityType> getAvailability();
 }

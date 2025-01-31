@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -25,7 +27,37 @@ class _SignInPageState extends ConsumerState<SignInPage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final authService = ref.watch(authServiceProvider);
 
-      // As soon as the view has been loaded prepare the autocompleted passkey sign in.
+      // You need to first check for the web platform because on Web calling
+      // Platform will cause an exception
+      if (kIsWeb) {
+        authService.authenticator.getAvailability().web().then((value) {
+          debugPrint('Web');
+          debugPrint('hasPasskeySupport: ${value.hasPasskeySupport}');
+          debugPrint('isUserVerifyingPlatformAuthenticatorAvailable: '
+              '${value.isUserVerifyingPlatformAuthenticatorAvailable}');
+          debugPrint('isConditionalMediationAvailable: '
+              '${value.isConditionalMediationAvailable}');
+          debugPrint('isNative: ${value.isNative}');
+        });
+      } else if (Platform.isIOS) {
+        authService.authenticator.getAvailability().iOS().then((value) {
+          debugPrint('iOS');
+          debugPrint('hasPasskeySupport: ${value.hasPasskeySupport}');
+          debugPrint('hasBiometrics: ${value.hasBiometrics}');
+          debugPrint('isNative: ${value.isNative}');
+        });
+      } else if (Platform.isAndroid) {
+        authService.authenticator.getAvailability().android().then((value) {
+          debugPrint('Android');
+          debugPrint('hasPasskeySupport: ${value.hasPasskeySupport}');
+          debugPrint('isUserVerifyingPlatformAuthenticatorAvailable:'
+              ' ${value.isUserVerifyingPlatformAuthenticatorAvailable}');
+          debugPrint('isNative: ${value.isNative}');
+        });
+      }
+
+      // As soon as the view has been loaded prepare the autocompleted passkey
+      // sign in.
       authService
           .loginWithPasskeyConditionalUI()
           .then((value) => context.go(Routes.profile))

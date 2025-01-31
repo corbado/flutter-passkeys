@@ -1,3 +1,9 @@
+## 2.5.0
+* Introduced `getAvailability` API: Enables checking for passkey support across platforms.
+* Updated `androidx.credentials:credentials` to version 1.3.0 for improved compatibility. (Android)
+* Resolved an issue on iOS 16.0+ where a `DeviceNotSupported` exception was incorrectly thrown on supported devices. (iOS)
+* Added `hasPasskeySupport` to `AvailabilityType` to verify passkey support on web platforms. (Web)
+
 ## 2.4.0
 * Added support for WebAssembly (Wasm) (Web)
 * Added handling for `CreateCredentialNoCreateOptionException` when no viable creation options were found (Android)

@@ -1,4 +1,5 @@
 import 'package:passkeys/authenticator.dart';
+import 'package:passkeys/availability.dart';
 import 'package:passkeys_example/local_relying_party_server.dart';
 
 class AuthService {
@@ -23,5 +24,9 @@ class AuthService {
     final rps1 = rps.startPasskeyRegister(name: email);
     final authenticatorRes = await authenticator.register(rps1);
     rps.finishPasskeyRegister(response: authenticatorRes);
+  }
+
+  GetAvailability getAvailability() {
+    return authenticator.getAvailability();
   }
 }

@@ -1,3 +1,8 @@
+## 2.4.0
+
+* Added `getAvailability` api to check for passkey support
+* Fixes issue with iOS 16.0 and above where the `DeviceNotSupported` exception was thrown when the device was supported
+
 ## 2.3.0
 
 * Fixed an issue where iOS treated `.preferImmediatelyAvailableCredentials` as always enabled, causing improper behavior
