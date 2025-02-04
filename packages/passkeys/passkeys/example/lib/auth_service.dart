@@ -16,6 +16,11 @@ List<Configuration> ANDROID_CONFIGURATIONS = [
   Configuration(name: 'ExcludeCredentials', excludeCredentials: true),
 ];
 
+List<Configuration> IOS_CONFIGURATIONS = [
+  Configuration(name: 'Default'),
+  Configuration(name: 'ExcludeCredentials', excludeCredentials: true),
+];
+
 class AuthService {
   AuthService({required this.rps, required this.authenticator});
 

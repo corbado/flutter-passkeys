@@ -128,7 +128,8 @@ class SignUpPage extends HookConsumerWidget {
           ),
           if (isTestMode)
             SelectTestConfiguration(
-              configurations: ANDROID_CONFIGURATIONS,
+              configurations:
+                  Platform.isIOS ? IOS_CONFIGURATIONS : ANDROID_CONFIGURATIONS,
               onSelectConfiguration: authService.setSignupConfiguration,
               selectedConfiguration: authService.signUpConfiguration,
             ),
