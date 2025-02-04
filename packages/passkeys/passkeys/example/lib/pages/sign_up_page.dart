@@ -5,9 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:passkeys_example/auth_service.dart';
 import 'package:passkeys_example/pages/base_page.dart';
 import 'package:passkeys_example/providers.dart';
 import 'package:passkeys_example/router.dart';
+import 'package:passkeys_example/widgets/select_test_configuration.dart';
 
 class SignUpPage extends HookConsumerWidget {
   const SignUpPage({super.key});
@@ -17,6 +19,8 @@ class SignUpPage extends HookConsumerWidget {
     final emailController = TextEditingController();
     final error = useState<String?>(null);
     final authService = ref.watch(authServiceProvider);
+
+    bool isTestMode = const bool.fromEnvironment('TEST_MODE');
 
     // You need to first check for the web platform because on Web calling
     // Platform will cause an exception
@@ -84,6 +88,7 @@ class SignUpPage extends HookConsumerWidget {
           ),
           if (error.value != null)
             Text(
+              key: const Key('error-text'),
               error.value!,
               style: TextStyle(color: Theme.of(context).colorScheme.error),
             )
@@ -121,6 +126,12 @@ class SignUpPage extends HookConsumerWidget {
               child: const Text('I already have an account'),
             ),
           ),
+          if (isTestMode)
+            SelectTestConfiguration(
+              configurations: ANDROID_CONFIGURATIONS,
+              onSelectConfiguration: authService.setSignupConfiguration,
+              selectedConfiguration: authService.signUpConfiguration,
+            ),
         ],
       ),
     );
