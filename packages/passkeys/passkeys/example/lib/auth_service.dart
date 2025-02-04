@@ -3,15 +3,17 @@ import 'package:passkeys/availability.dart';
 import 'package:passkeys_example/local_relying_party_server.dart';
 
 class Configuration {
-  Configuration({required this.name, this.timeout});
+  Configuration({required this.name, this.timeout, this.excludeCredentials});
 
   final String name;
   final int? timeout;
+  final bool? excludeCredentials;
 }
 
 List<Configuration> ANDROID_CONFIGURATIONS = [
   Configuration(name: 'Default'),
   Configuration(name: '5s Timeout', timeout: 5000),
+  Configuration(name: 'ExcludeCredentials', excludeCredentials: true),
 ];
 
 class AuthService {
@@ -45,22 +47,14 @@ class AuthService {
   }
 
   // This is only related to testing and testing configurations.
-  late final Configuration? signUpConfiguration;
-  late final Configuration? loginConfiguration;
+  Configuration? signUpConfiguration = null;
+  Configuration? loginConfiguration = null;
 
-  void setSignupConfiguration(Configuration configuration) {
+  void setSignupConfiguration(Configuration? configuration) {
     signUpConfiguration = configuration;
   }
 
-  void unsetSignupConfiguration() {
-    signUpConfiguration = null;
-  }
-
-  void setLoginConfiguration(Configuration configuration) {
+  void setLoginConfiguration(Configuration? configuration) {
     loginConfiguration = configuration;
-  }
-
-  void unsetLoginConfiguration() {
-    loginConfiguration = null;
   }
 }

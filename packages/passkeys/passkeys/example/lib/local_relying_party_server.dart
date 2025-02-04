@@ -59,7 +59,13 @@ class LocalRelyingPartyServer {
         PubKeyCredParamType(type: 'public-key', alg: -7),
         PubKeyCredParamType(type: 'public-key', alg: -257),
       ],
-      excludeCredentials: [],
+      excludeCredentials: configuration?.excludeCredentials == true ? _users.values
+          .map((e) => CredentialType(
+                type: 'public-key',
+                id: e.credentialID!,
+                transports: ['internal'],
+              ))
+          .toList() : [],
       timeout: configuration?.timeout,
     );
   }

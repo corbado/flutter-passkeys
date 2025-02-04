@@ -4,7 +4,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:passkeys_example/router.dart';
 
 void main() async {
-  enableFlutterDriverExtension();
+  bool isTestMode = const bool.fromEnvironment('TEST_MODE');
+  if (isTestMode) {
+    enableFlutterDriverExtension();
+  }
   WidgetsFlutterBinding.ensureInitialized();
   runApp(
     const ProviderScope(
