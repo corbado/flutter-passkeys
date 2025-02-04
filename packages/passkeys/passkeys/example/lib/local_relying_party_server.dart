@@ -59,13 +59,15 @@ class LocalRelyingPartyServer {
         PubKeyCredParamType(type: 'public-key', alg: -7),
         PubKeyCredParamType(type: 'public-key', alg: -257),
       ],
-      excludeCredentials: configuration?.excludeCredentials == true ? _users.values
-          .map((e) => CredentialType(
-                type: 'public-key',
-                id: e.credentialID!,
-                transports: ['internal'],
-              ))
-          .toList() : [],
+      excludeCredentials: configuration?.excludeCredentials == true
+          ? _users.values
+              .map((e) => CredentialType(
+                    type: 'public-key',
+                    id: e.credentialID!,
+                    transports: ['internal'],
+                  ))
+              .toList()
+          : [],
       timeout: configuration?.timeout,
     );
   }
@@ -102,16 +104,27 @@ class LocalRelyingPartyServer {
       challenge: challenge,
       mediation: MediationType.Optional,
       userVerification: 'preferred',
-      preferImmediatelyAvailableCredentials: false,
-      allowCredentials: _users[name]!.credentialID != null
+      preferImmediatelyAvailableCredentials:
+          configuration?.preferImmediatelyAvailableCredentials == true
+              ? true
+              : false,
+      allowCredentials: configuration?.allowCredentials == true
           ? [
               CredentialType(
                 type: 'public-key',
-                id: _users[name]!.credentialID!,
+                id: 'id',
                 transports: ['internal'],
               )
             ]
-          : null,
+          : _users[name]!.credentialID != null
+              ? [
+                  CredentialType(
+                    type: 'public-key',
+                    id: _users[name]!.credentialID!,
+                    transports: ['internal'],
+                  )
+                ]
+              : null,
       timeout: configuration?.timeout,
     );
   }

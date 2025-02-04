@@ -117,6 +117,7 @@ class SignUpPage extends HookConsumerWidget {
             width: double.infinity,
             height: 50,
             child: OutlinedButton(
+              key: const Key('go-to-login-button'),
               style: OutlinedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(vertical: 10),
                 side:
@@ -129,7 +130,7 @@ class SignUpPage extends HookConsumerWidget {
           if (isTestMode)
             SelectTestConfiguration(
               configurations:
-                  Platform.isIOS ? IOS_CONFIGURATIONS : ANDROID_CONFIGURATIONS,
+                  Platform.isIOS ? SIGNUP_IOS_CONFIGURATIONS : SIGNUP_ANDROID_CONFIGURATIONS,
               onSelectConfiguration: authService.setSignupConfiguration,
               selectedConfiguration: authService.signUpConfiguration,
             ),

@@ -3,22 +3,47 @@ import 'package:passkeys/availability.dart';
 import 'package:passkeys_example/local_relying_party_server.dart';
 
 class Configuration {
-  Configuration({required this.name, this.timeout, this.excludeCredentials});
+  Configuration(
+      {required this.name,
+      this.timeout,
+      this.excludeCredentials,
+      this.allowCredentials,
+      this.preferImmediatelyAvailableCredentials});
 
   final String name;
   final int? timeout;
   final bool? excludeCredentials;
+  final bool? allowCredentials;
+  final bool? preferImmediatelyAvailableCredentials;
 }
 
-List<Configuration> ANDROID_CONFIGURATIONS = [
+List<Configuration> SIGNUP_ANDROID_CONFIGURATIONS = [
   Configuration(name: 'Default'),
   Configuration(name: '5s Timeout', timeout: 5000),
   Configuration(name: 'ExcludeCredentials', excludeCredentials: true),
 ];
 
-List<Configuration> IOS_CONFIGURATIONS = [
+List<Configuration> SIGNUP_IOS_CONFIGURATIONS = [
   Configuration(name: 'Default'),
   Configuration(name: 'ExcludeCredentials', excludeCredentials: true),
+];
+
+List<Configuration> LOGIN_ANDROID_CONFIGURATIONS = [
+  Configuration(name: 'Default'),
+  Configuration(name: '5s Timeout', timeout: 5000),
+  Configuration(name: 'AllowCredentials', allowCredentials: true),
+  Configuration(
+      name: 'PreferImmediatelyAvailableCredentials',
+      preferImmediatelyAvailableCredentials: true,
+      allowCredentials: true),
+];
+
+List<Configuration> LOGIN_IOS_CONFIGURATIONS = [
+  Configuration(name: 'Default'),
+  Configuration(
+      name: 'AllowCredentials And PreferImmediatelyAvailableCredentials',
+      allowCredentials: true,
+      preferImmediatelyAvailableCredentials: true),
 ];
 
 class AuthService {

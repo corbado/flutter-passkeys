@@ -1,6 +1,6 @@
 import * as wdio from 'webdriverio';
 import {byValueKey, byText} from 'appium-flutter-finder';
-import {describe, test, beforeAll, afterAll, expect} from '@jest/globals';
+import {describe, test, beforeAll, afterAll, expect, beforeEach} from '@jest/globals';
 import {delay} from './util';
 
 // Desired capabilities for the iOS simulator
@@ -114,6 +114,127 @@ describe('Android Tests', () => {
             const errorText = await driver.getElementText(error);
 
             expect(errorText).toContain('ExcludeCredentialsCanNotBeRegisteredException');
+        });
+    });
+
+    describe('Login Tests', () => {
+        beforeAll(async () => {
+            await driver.elementClick(byValueKey('test-selector'));
+            await driver.elementClick(byText('Default'));
+
+            // Fill in details
+            const emailField = byValueKey('email-field');
+            await driver.elementClick(emailField);
+            await driver.execute('flutter:enterText', 'test+login@gmail.com');
+            const signUpButton = byValueKey("sign-up-button");
+            await driver.elementClick(signUpButton);
+
+            // Simulate fingerprint authentication
+            await delay(1000);
+            await driver.switchContext('NATIVE_APP');
+
+            await driver.tap({x: 850, y: 1300});
+
+            await delay(1000);
+
+            await driver.fingerPrint(1);
+
+            await driver.switchContext('FLUTTER');
+            // Wait for the new screen to appear
+            await driver.execute('flutter:waitFor', byValueKey('welcome-text'));
+
+            await driver.elementClick(byValueKey('sign-out-button'));
+        });
+
+        beforeEach(async () => {
+            await driver.elementClick(byValueKey("go-to-login-button"));
+
+            await delay(1000);
+            await driver.switchContext('NATIVE_APP');
+
+            await driver.tap({x: 100, y: 100});
+            await delay(1000);
+            await driver.switchContext('FLUTTER');
+        })
+
+        test('Default Login', async () => {
+            await driver.elementClick(byValueKey('test-selector'));
+            await driver.elementClick(byText('Default'));
+
+            // Fill in details
+            await driver.elementClick(byValueKey('email-field'));
+            await driver.execute('flutter:enterText', 'test+login@gmail.com');
+            await driver.elementClick(byValueKey('sign-in-button'));
+
+            await delay(1000);
+            await driver.switchContext('NATIVE_APP');
+
+            await delay(1000);
+
+            await driver.fingerPrint(1);
+
+            await driver.switchContext('FLUTTER');
+            // Wait for the new screen to appear
+            await driver.execute('flutter:waitFor', byValueKey('welcome-text'));
+
+            await driver.elementClick(byValueKey('sign-out-button'));
+        });
+
+        test('5s Timeout', async () => {
+            await driver.elementClick(byValueKey('test-selector'));
+            await driver.elementClick(byText('5s Timeout'));
+
+            // Fill in details
+            await driver.elementClick(byValueKey('email-field'));
+            await driver.execute('flutter:enterText', 'test+login@gmail.com');
+            await driver.elementClick(byValueKey('sign-in-button'));
+
+            await delay(5000);
+            await driver.switchContext('NATIVE_APP');
+
+            await delay(1000);
+
+            await driver.fingerPrint(1);
+
+            await driver.switchContext('FLUTTER');
+            // Wait for the new screen to appear
+            const errorText = await driver.getElementText(byValueKey('error-text-login'));
+
+            expect(errorText).toContain('TYPE_TIMEOUT_ERROR');
+
+            await driver.elementClick(byValueKey("go-to-sign-up-button"));
+        });
+
+        test('allowCredentials', async () => {
+            await driver.elementClick(byValueKey('test-selector'));
+            await driver.elementClick(byText('AllowCredentials'));
+
+            // Fill in details
+            await driver.elementClick(byValueKey('email-field'));
+            await driver.execute('flutter:enterText', 'test+login@gmail.com');
+            await driver.elementClick(byValueKey('sign-in-button'));
+            // Wait for the new screen to appear
+            const errorText = await driver.getElementText(byValueKey('error-text-login'));
+
+            expect(errorText).toContain('NoCredentialsAvailableException');
+
+            await driver.elementClick(byValueKey("go-to-sign-up-button"));
+        });
+
+        test('PreferImmediatelyAvailableCredentials', async () => {
+            await driver.elementClick(byValueKey('test-selector'));
+            await driver.elementClick(byText('PreferImmediatelyAvailableCredentials'));
+
+            // Fill in details
+            await driver.elementClick(byValueKey('email-field'));
+            await driver.execute('flutter:enterText', 'test+login@gmail.com');
+            await driver.elementClick(byValueKey('sign-in-button'));
+            // Wait for the new screen to appear
+            const errorText = await driver.getElementText(byValueKey('error-text-login'));
+
+            expect(errorText).toContain('NoCredentialsAvailableException');
+
+            await driver.elementClick(byValueKey("go-to-sign-up-button"));
         });
     });
 });
