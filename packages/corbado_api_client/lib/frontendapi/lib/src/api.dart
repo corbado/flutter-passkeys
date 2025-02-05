@@ -2,6 +2,9 @@
 // AUTO-GENERATED FILE, DO NOT MODIFY!
 //
 
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:built_value/serializer.dart';
 import 'package:corbado_frontend_api_client/src/serializers.dart';
@@ -31,6 +34,13 @@ class CorbadoFrontendApiClient {
               baseUrl: basePathOverride ?? basePath,
               connectTimeout: const Duration(milliseconds: 5000),
               receiveTimeout: const Duration(milliseconds: 3000),
+              headers: {
+                "X-Corbado-SDK": jsonEncode({
+                  "name": "Flutter SDK",
+                  "sdkVersion": "3.1.1",
+                  "languageVersion": Platform.version,
+                })
+              },
             )) {
     if (interceptors == null) {
       this.dio.interceptors.addAll([
