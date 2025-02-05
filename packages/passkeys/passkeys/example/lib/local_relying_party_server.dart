@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:passkeys/types.dart';
+import 'package:passkeys_example/auth_service.dart';
 
 class LocalUser {
   LocalUser({required this.name, required this.id, this.credentialID});
@@ -26,7 +27,8 @@ class LocalRelyingPartyServer {
   final Map<String, LocalUser> _inFlightChallenges = HashMap();
   final Random _random = Random();
 
-  RegisterRequestType startPasskeyRegister({required String name}) {
+  RegisterRequestType startPasskeyRegister(
+      {required String name, Configuration? configuration}) {
     if (_users.containsKey(name)) {
       throw Exception('User $name already exists. Please log in instead');
     }
@@ -43,11 +45,10 @@ class LocalRelyingPartyServer {
       id: base64Url.encode(userID.codeUnits),
     );
     final authenticatorSelection = AuthenticatorSelectionType(
-      requireResidentKey: false,
-      residentKey: 'required',
-      userVerification: 'preferred',
-      authenticatorAttachment: 'platform'
-    );
+        requireResidentKey: false,
+        residentKey: 'required',
+        userVerification: 'preferred',
+        authenticatorAttachment: 'platform');
 
     return RegisterRequestType(
       challenge: challenge,
@@ -58,7 +59,16 @@ class LocalRelyingPartyServer {
         PubKeyCredParamType(type: 'public-key', alg: -7),
         PubKeyCredParamType(type: 'public-key', alg: -257),
       ],
-      excludeCredentials: [],
+      excludeCredentials: configuration?.excludeCredentials == true
+          ? _users.values
+              .map((e) => CredentialType(
+                    type: 'public-key',
+                    id: e.credentialID!,
+                    transports: ['internal'],
+                  ))
+              .toList()
+          : [],
+      timeout: configuration?.timeout,
     );
   }
 
@@ -80,7 +90,8 @@ class LocalRelyingPartyServer {
     return user;
   }
 
-  AuthenticateRequestType startPasskeyLogin({required String name}) {
+  AuthenticateRequestType startPasskeyLogin(
+      {required String name, Configuration? configuration}) {
     if (!_users.containsKey(name)) {
       throw Exception('User $name does not exist. Please register first');
     }
@@ -93,16 +104,28 @@ class LocalRelyingPartyServer {
       challenge: challenge,
       mediation: MediationType.Optional,
       userVerification: 'preferred',
-      preferImmediatelyAvailableCredentials: false,
-      allowCredentials: _users[name]!.credentialID != null
+      preferImmediatelyAvailableCredentials:
+          configuration?.preferImmediatelyAvailableCredentials == true
+              ? true
+              : false,
+      allowCredentials: configuration?.allowCredentials == true
           ? [
               CredentialType(
                 type: 'public-key',
-                id: _users[name]!.credentialID!,
+                id: 'id',
                 transports: ['internal'],
               )
             ]
-          : null,
+          : _users[name]!.credentialID != null
+              ? [
+                  CredentialType(
+                    type: 'public-key',
+                    id: _users[name]!.credentialID!,
+                    transports: ['internal'],
+                  )
+                ]
+              : null,
+      timeout: configuration?.timeout,
     );
   }
 
@@ -151,7 +174,8 @@ class LocalRelyingPartyServer {
   }
 
   String generateChallenge() {
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const chars =
+        'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     var rawChallenge = '';
     for (var i = 0; i < 32; i++) {
       rawChallenge += chars[_random.nextInt(chars.length)];

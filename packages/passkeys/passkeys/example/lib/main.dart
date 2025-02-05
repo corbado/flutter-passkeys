@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_driver/driver_extension.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:passkeys_example/router.dart';
 
 void main() async {
+  bool isTestMode = const bool.fromEnvironment('TEST_MODE');
+  if (isTestMode) {
+    enableFlutterDriverExtension();
+  }
   WidgetsFlutterBinding.ensureInitialized();
   runApp(
     const ProviderScope(
