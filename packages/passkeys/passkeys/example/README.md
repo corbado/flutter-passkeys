@@ -33,3 +33,122 @@ because the relying party server in the example only trusts apps that have been 
 development team id of "0000000000" and a Bundle Identifier of "com.corbado.passkeys.pub".
 
 <img src="https://raw.githubusercontent.com/corbado/flutter-passkeys/main/packages/passkeys/passkeys/doc/xcode-team-unknown-name.png" style="width: 50%" calt="ios_enrolled_biometrics">
+
+
+# How to run automatic tests of the example
+
+## Requirements
+
+Before running the tests, ensure you have the following setup:
+
+- **Appium** (installed globally with Flutter Plugin)
+- **iPhone 16 Pro Simulator** (configured in Xcode)
+- **Android Emulator with API 29** (Nexus 5 device setup in Android Studio)
+- **Google Account** (credentials available in 1Password)
+- **Biometric Authentication**:
+    - Set up a PIN code on the Android device
+    - Register a fingerprint on the Android device
+
+## Step-by-Step Guide
+
+### 1. Set Up the iOS Simulator
+
+1. Open **Xcode**.
+2. Navigate to **Xcode > Settings > Platforms** and ensure the latest iOS version is installed.
+3. Open the **Simulator** app.
+4. Select **iPhone 16 Pro** as the active simulator.
+5. Ensure the simulator is running before proceeding.
+
+### 2. Set Up the Android Emulator
+
+1. Open **Android Studio**.
+2. Navigate to **AVD Manager** (Android Virtual Device Manager).
+3. Create a new device with the following specifications:
+    - **Device:** Nexus 5
+    - **API Level:** 29
+    - **Google Play Services:** Enabled
+4. Start the emulator and complete the setup.
+5. Log in with the Google Account (credentials available in 1Password).
+6. Set up a **PIN code**.
+7. Register a **fingerprint** under device security settings. (You can use adb commands to simulate fingerprint authentication.)
+```shell
+    adb emu finger touch 1
+```
+
+### 3. Build and Install the Example App
+
+1. Ensure all dependencies are installed:
+   ```sh
+   flutter pub get
+   ```
+2. Get Device ID for Android & iOS:
+   ```sh
+   flutter devices
+   ```
+3. Build and install the app on both devices:
+   ```sh
+   flutter build apk --debug --dart-define=TESTMODE=true
+   flutter install --device-id=<device-id>
+   ```
+   ```sh
+   flutter build ios --simulator --dart-define=TESTMODE=true
+   flutter install --device-id=<device-id>
+   ```
+
+### 4. Install and run Appium
+
+1. Install Appium globally:
+   ```sh
+   npm install -g appium
+   ```
+
+2. Install the drivers for Flutter
+    ```sh
+    appium driver install --source=npm appium-flutter-driver
+    appium driver install uiautomator2
+    appium driver install --source=npm appium-flutter-integration-driver
+    ```
+
+3. Start Appium on port 4567
+    ```sh
+    appium -p 4567
+    ```
+   
+### 5. Run the Automated Tests
+
+Make sure the emulators are running before executing the tests.
+
+1. Install required Node.js dependencies:
+   ```sh
+   cd tests
+   npm install
+   ```
+2. Run tests for Android:
+   ```sh
+   npm run test:android
+   ```
+3. Run tests for iOS:
+   ```sh
+   npm run test:ios
+   ```
+
+### 6. Notes
+
+- Ensure emulators are running before executing tests.
+- Restart the emulators if needed and re-run the tests.
+- You will have to rebuild and reinstall the app if you make changes to the code and want to run the tests again.
+
+### 7. Clean Up (Optional)
+
+- To clean the project:
+  ```sh
+  flutter clean
+  ```
+- To reset and reinstall dependencies:
+  ```sh
+  flutter pub get
+  ```
+
+---
+
+Follow these steps carefully to ensure a successful automated testing process.
