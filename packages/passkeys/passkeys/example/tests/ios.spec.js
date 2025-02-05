@@ -48,6 +48,8 @@ describe('iOS Tests', () => {
             await driver.elementClick(byValueKey('test-selector'));
             await driver.elementClick(byText('Default'));
 
+            await delay(10000); // Wait for apple to download apple-app-site-association
+
             // Fill in details
             const emailField = byValueKey('email-field');
             await driver.elementClick(emailField);
