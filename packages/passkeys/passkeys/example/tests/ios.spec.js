@@ -3,12 +3,13 @@ import {byValueKey, byText} from 'appium-flutter-finder';
 import {describe, test, beforeAll, afterAll, expect, beforeEach} from '@jest/globals';
 import {delay} from './util';
 
+const deviceName = process.argv.find(arg => arg.startsWith('--device='))?.split('=')[1] || "iPhone 16 Pro";
+
 // Desired capabilities for the iOS simulator
 const capsIos =
     {
         "platformName": "iOS",
-        "appium:deviceName": "iPhone 16 Pro",
-        "appium:platformVersion": "18.1",
+        "appium:deviceName": deviceName,
         "appium:bundleId": "com.corbado.passkeys.pub",
         "appium:noReset": true,
         "appium:fullReset": false,

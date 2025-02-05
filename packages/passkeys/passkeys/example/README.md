@@ -125,11 +125,11 @@ Make sure the emulators are running before executing the tests.
    ```
 2. Run tests for Android:
    ```sh
-   npm run test:android
+   npm run test:android -- --deviceName=<device-id>
    ```
 3. Run tests for iOS:
    ```sh
-   npm run test:ios
+   npm run test:ios -- --deviceName=<device-id>
    ```
 
 ### 6. Notes

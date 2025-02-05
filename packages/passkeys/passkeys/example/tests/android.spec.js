@@ -3,11 +3,13 @@ import {byValueKey, byText} from 'appium-flutter-finder';
 import {describe, test, beforeAll, afterAll, expect, beforeEach} from '@jest/globals';
 import {delay} from './util';
 
+const deviceName = process.argv.find(arg => arg.startsWith('--device='))?.split('=')[1] || "emulator-5554";
+
 // Desired capabilities for the iOS simulator
 const capsAndroid =
     {
         'platformName': 'Android',
-        'appium:deviceName': 'emulator-5554',
+        'appium:deviceName': deviceName,
         'appium:appPackage': "com.corbado.passkeys.pub",
         'appium:appActivity': ".MainActivity",
         'appium:noReset': true,
