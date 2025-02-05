@@ -87,11 +87,11 @@ Before running the tests, ensure you have the following setup:
    ```
 3. Build and install the app on both devices:
    ```sh
-   flutter build apk --debug --dart-define=TESTMODE=true
+   flutter build apk --debug --dart-define=TEST_MODE=true
    flutter install --device-id=<device-id>
    ```
    ```sh
-   flutter build ios --simulator --dart-define=TESTMODE=true
+   flutter build ios --simulator --dart-define=TEST_MODE=true
    flutter install --device-id=<device-id>
    ```
 
