@@ -37,7 +37,7 @@ class CorbadoFrontendApiClient {
               headers: {
                 "X-Corbado-SDK": jsonEncode({
                   "name": "Flutter SDK",
-                  "sdkVersion": "3.1.1",
+                  "sdkVersion": "3.2.0",
                   "languageVersion": Platform.version,
                 })
               },
