@@ -1,3 +1,6 @@
+## 3.2.0
+* Added `X-Corbado-SDK` header to all requests.
+
 ## 3.1.0
 * Updates passkeys dependency to 2.5.0
 * Added `getAvailability` api to check for passkey support

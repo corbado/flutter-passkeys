@@ -13,7 +13,8 @@ Future<CorbadoService> createClient(
     customDomain: customDomain,
   );
 
-  final apiClient = CorbadoFrontendApiClient(basePathOverride: basePath);
+  final apiClient =
+      CorbadoFrontendApiClient(basePathOverride: basePath, sdkVersion: '3.2.0');
   apiClient.dio.options.headers.addAll({
     'X-Corbado-ProjectID': projectId,
   });
@@ -24,6 +25,7 @@ Future<CorbadoService> createClient(
 
 class WebCorbadoService extends CorbadoService {
   ///
-  WebCorbadoService(CorbadoFrontendApiClient frontendAPIClient, PasskeyAuthenticator passkeyAuthenticator)
+  WebCorbadoService(CorbadoFrontendApiClient frontendAPIClient,
+      PasskeyAuthenticator passkeyAuthenticator)
       : super(frontendAPIClient, passkeyAuthenticator);
 }

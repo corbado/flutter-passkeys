@@ -4,7 +4,7 @@ import 'package:openapi_generator_annotations/openapi_generator_annotations.dart
 @Openapi(
   additionalProperties: AdditionalProperties(
     pubName: 'corbado_frontend_api_client',
-    pubVersion: '2.0.0',
+    pubVersion: '2.1.0',
     pubDescription: 'Client for the Corbado Frontend API',
     pubHomepage: 'https://docs.corbado.com/overview/welcome',
   ),
