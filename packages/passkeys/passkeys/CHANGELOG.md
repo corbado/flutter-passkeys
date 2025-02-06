@@ -1,3 +1,7 @@
+## 2.6.0
+* Added `transports` to RegistrationResponse
+* Fixes `hasPasskeySupport` in `getAvailability` (Android)
+
 ## 2.5.0
 * Introduced `getAvailability` API: Enables checking for passkey support across platforms.
 * Updated `androidx.credentials:credentials` to version 1.3.0 for improved compatibility. (Android)
