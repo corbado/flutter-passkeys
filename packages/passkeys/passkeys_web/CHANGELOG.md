@@ -1,3 +1,9 @@
+## 2.3.0
+* Added `hasPasskeySupport` to `AvailabilityType` to check if the platform supports passkeys.
+
+## 2.2.0
+* Added support for WebAssembly (Wasm)
+
 ## 2.1.0
 * Added getAvailability() to check for isUserVerifyingPlatformAuthenticatorAvailable and isConditionalMediationAvailable.
 

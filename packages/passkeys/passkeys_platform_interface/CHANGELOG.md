@@ -1,3 +1,10 @@
+## 2.2.1
+* Fixes bug with new added types
+
+## 2.2.0
+* Added `hasPasskeySupport` to `AvailabilityType`
+* Separate `AvailabilityType` for each supported platform
+
 ## 2.1.0
 * Added getAvailability().
 * Added preferImmediatelyAvailableCredentials.

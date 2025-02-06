@@ -74,4 +74,16 @@ class PasskeysIOS extends PasskeysPlatform {
   @override
   Future<void> cancelCurrentAuthenticatorOperation() =>
       _api.cancelCurrentAuthenticatorOperation();
+
+  @override
+  Future<AvailabilityTypeIOS> getAvailability() async {
+    final availability = await _api.canAuthenticate();
+    final hasBiometrics = await _api.hasBiometrics();
+
+    return AvailabilityTypeIOS(
+      hasPasskeySupport: availability,
+      hasBiometrics: hasBiometrics,
+      isNative: true,
+    );
+  }
 }

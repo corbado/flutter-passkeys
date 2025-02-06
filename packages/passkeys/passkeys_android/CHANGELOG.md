@@ -1,3 +1,17 @@
+## 2.5.0
+* Added `getAvailability` api to check for passkey support
+* Upgrade `androidx.credentials:credentials` to 1.3.0
+
+## 2.4.0
+* Added handling for `CreateCredentialNoCreateOptionException` when no viable creation options were found 
+
+## 2.3.0
+* Fixed `requireResidentKey` mapping error (string instead of boolean) causing 1Password failures
+* Added support for `preferImmediatelyAvailableCredentials`
+
+## 2.2.0
+* Added support for AGP 8.0 and newer
+
 ## 2.1.0
 * Added support for preferImmediatelyAvailableCredentials
 

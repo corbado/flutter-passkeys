@@ -31,6 +31,7 @@ class PasskeysAndroid extends PasskeysPlatform {
           transports: e.transports,
         );
       }).toList(),
+      request.preferImmediatelyAvailableCredentials,
     );
 
     return AuthenticateResponseType(
@@ -68,19 +69,18 @@ class PasskeysAndroid extends PasskeysPlatform {
     );
 
     final r = await _api.register(
-      request.challenge,
-      relyingPartyArg,
-      userArg,
-      authSelection,
-      request.pubKeyCredParams
-          ?.map((e) => PubKeyCredParam(alg: e.alg, type: e.type))
-          .toList(),
-      request.timeout,
-      request.attestation,
-      request.excludeCredentials
-          .map((e) => ExcludeCredential(id: e.id, type: e.type))
-          .toList(),
-    );
+        request.challenge,
+        relyingPartyArg,
+        userArg,
+        authSelection,
+        request.pubKeyCredParams
+            ?.map((e) => PubKeyCredParam(alg: e.alg, type: e.type))
+            .toList(),
+        request.timeout,
+        request.attestation,
+        request.excludeCredentials
+            .map((e) => ExcludeCredential(id: e.id, type: e.type))
+            .toList());
 
     return RegisterResponseType(
       id: r.id,
@@ -95,5 +95,15 @@ class PasskeysAndroid extends PasskeysPlatform {
   @override
   Future<void> cancelCurrentAuthenticatorOperation() async {
     return;
+  }
+
+  // In case of android we link passkey support to the availability of the biometric authentication
+  @override
+  Future<AvailabilityTypeAndroid> getAvailability() async {
+    final canAuthenticate = await _api.canAuthenticate();
+    return AvailabilityTypeAndroid(
+        hasPasskeySupport: canAuthenticate,
+        isUserVerifyingPlatformAuthenticatorAvailable: canAuthenticate,
+        isNative: true);
   }
 }

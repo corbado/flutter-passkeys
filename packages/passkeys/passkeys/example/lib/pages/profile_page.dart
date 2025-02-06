@@ -15,6 +15,7 @@ class ProfilePage extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Padding(
+            key: Key('welcome-text'),
             padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
             child: Text(
               'Welcome',
@@ -44,6 +45,7 @@ class ProfilePage extends ConsumerWidget {
             ),
           ),
           SizedBox(
+            key: Key('sign-out-button'),
             width: double.infinity,
             height: 50,
             child: OutlinedButton(

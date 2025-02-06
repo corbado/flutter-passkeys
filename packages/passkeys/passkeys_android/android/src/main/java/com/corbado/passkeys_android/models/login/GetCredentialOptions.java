@@ -33,7 +33,7 @@ public class GetCredentialOptions {
         if (rpId != null) map.put("rpId", rpId);
         if (userVerification != null) map.put("userVerification", userVerification);
         JSONObject json = new JSONObject(map);
-        if(allowCredentials != null) {
+        if (allowCredentials != null) {
             json.put("allowCredentials", new JSONArray(allowCredentials.stream().map(e -> {
                 try {
                     return e.toJSON();

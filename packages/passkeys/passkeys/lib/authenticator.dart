@@ -1,7 +1,7 @@
 import 'package:flutter/services.dart';
+import 'package:passkeys/availability.dart';
 import 'package:passkeys/types.dart';
 import 'package:passkeys_platform_interface/passkeys_platform_interface.dart';
-import 'package:passkeys_platform_interface/types/availability.dart';
 
 /// Handles platform dependent parts of the registration and authentication
 /// flow.
@@ -42,6 +42,8 @@ class PasskeyAuthenticator {
           throw SyncAccountNotAvailableException();
         case 'domain-not-associated':
           throw DomainNotAssociatedException(e.message);
+        case 'deviceNotSupported':
+          throw DeviceNotSupportedException();
         default:
           rethrow;
       }
@@ -69,6 +71,10 @@ class PasskeyAuthenticator {
           throw PasskeyAuthCancelledException();
         case 'android-no-credential':
           throw NoCredentialsAvailableException();
+        case 'deviceNotSupported':
+          throw DeviceNotSupportedException();
+        case 'android-no-create-option':
+          throw NoCreateOptionException(e.message);
         default:
           if (e.code.startsWith('android-unhandled')) {
             throw UnhandledAuthenticatorException(e.code, e.message, e.details);
@@ -81,9 +87,24 @@ class PasskeyAuthenticator {
     }
   }
 
-  /// Returns information about the availabilty of passkeys.
-  /// Currently, this is only valuable for flutter web.
-  Future<AvailabilityType> getAvailability() {
-    return _platform.getAvailability();
-  }
+  /// Returns platform-specific information about the availability of passkeys.
+  ///
+  /// This function returns an instance of [GetAvailability], which provides
+  /// platform-specific methods to query the availability of passkeys.
+  ///
+  /// Supported methods:
+  /// - [GetAvailability.web]: For web-based platforms.
+  /// - [GetAvailability.android]: For Android platforms.
+  /// - [GetAvailability.iOS]: For iOS platforms.
+  ///
+  /// ### Example Usage
+  /// ```dart
+  /// final webAvailability = await getAvailability().web();
+  /// final androidAvailability = await getAvailability().android();
+  /// final iosAvailability = await getAvailability().iOS();
+  /// ```
+  ///
+  /// ### Notes
+  /// - Ensure you are using the correct method for the platform being queried.
+  GetAvailability getAvailability() => GetAvailability(platform: _platform);
 }

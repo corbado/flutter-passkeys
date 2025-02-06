@@ -91,6 +91,8 @@ class AuthenticateResponse {
 abstract class PasskeysApi {
   bool canAuthenticate();
 
+  bool hasBiometrics();
+
   @async
   RegisterResponse register(
     String challenge,

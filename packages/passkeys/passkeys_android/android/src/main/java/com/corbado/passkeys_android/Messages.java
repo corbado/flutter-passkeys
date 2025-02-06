@@ -1053,7 +1053,7 @@ public class Messages {
 
     void register(@NonNull String challenge, @NonNull RelyingParty relyingParty, @NonNull User user, @NonNull AuthenticatorSelection authenticatorSelection, @Nullable List<PubKeyCredParam> pubKeyCredParams, @Nullable Long timeout, @Nullable String attestation, @NonNull List<ExcludeCredential> excludeCredentials, @NonNull Result<RegisterResponse> result);
 
-    void authenticate(@NonNull String relyingPartyId, @NonNull String challenge, @Nullable Long timeout, @Nullable String userVerification, @Nullable List<AllowCredential> allowCredentials, @NonNull Result<AuthenticateResponse> result);
+    void authenticate(@NonNull String relyingPartyId, @NonNull String challenge, @Nullable Long timeout, @Nullable String userVerification, @Nullable List<AllowCredential> allowCredentials, @Nullable Boolean preferImmediatelyAvailableCredentials, @NonNull Result<AuthenticateResponse> result);
 
     void cancelCurrentAuthenticatorOperation(@NonNull Result<Void> result);
 
@@ -1140,6 +1140,7 @@ public class Messages {
                 Number timeoutArg = (Number) args.get(2);
                 String userVerificationArg = (String) args.get(3);
                 List<AllowCredential> allowCredentialsArg = (List<AllowCredential>) args.get(4);
+                Boolean preferImmediatelyAvailableCredentialsArg = (Boolean) args.get(5);
                 Result<AuthenticateResponse> resultCallback =
                     new Result<AuthenticateResponse>() {
                       public void success(AuthenticateResponse result) {
@@ -1153,7 +1154,7 @@ public class Messages {
                       }
                     };
 
-                api.authenticate(relyingPartyIdArg, challengeArg, (timeoutArg == null) ? null : timeoutArg.longValue(), userVerificationArg, allowCredentialsArg, resultCallback);
+                api.authenticate(relyingPartyIdArg, challengeArg, (timeoutArg == null) ? null : timeoutArg.longValue(), userVerificationArg, allowCredentialsArg, preferImmediatelyAvailableCredentialsArg, resultCallback);
               });
         } else {
           channel.setMessageHandler(null);

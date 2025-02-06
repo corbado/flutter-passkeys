@@ -75,6 +75,31 @@ class DomainNotAssociatedException implements AuthenticatorException {
   String toString() => message ?? '';
 }
 
+/// This exception is thrown when the device does not support passkeys.
+/// Suggestions:
+/// - update the device OS to a newer version
+class DeviceNotSupportedException implements AuthenticatorException {
+  /// Constructor
+  DeviceNotSupportedException();
+}
+
+/// During the create credential flow, this is thrown when no viable creation
+/// options were found for the given CreateCredentialRequest. (no passkeys
+/// providers available or none enabled)
+///
+/// Platforms: Android
+///
+/// Suggestions:
+/// - use a fallback method (e.g. redirect the user to the device settings)
+/// - ask the user to enable passkeys in the device settings
+class NoCreateOptionException implements AuthenticatorException {
+  final String? message;
+  /// Constructor
+  NoCreateOptionException(this.message);
+
+  String toString() => message ?? '';
+}
+
 /// This exception is thrown when an exception is thrown by the authenticator
 /// that we do not handle so far in this package.
 ///

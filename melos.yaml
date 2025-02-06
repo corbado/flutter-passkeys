@@ -56,9 +56,9 @@ scripts:
   build-passkeys-web-javascript:
     description: Build passkeys_web's javascript code and copy it to the example.
     run: |
-      cd packages/passkeys/passkeys_web
+      cd packages/passkeys/passkeys_web/javascript
       npm run build
-      cp javascript/dist/bundle.js ../passkeys/example/web/bundle.js
+      cp dist/bundle.js ../../passkeys/example/web/bundle.js
 
   deploy-example-passkeys-web:
     description: Deploy passkeys example to Vercel.

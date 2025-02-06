@@ -2,6 +2,9 @@
 // AUTO-GENERATED FILE, DO NOT MODIFY!
 //
 
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:built_value/serializer.dart';
 import 'package:corbado_frontend_api_client/src/serializers.dart';
@@ -25,12 +28,20 @@ class CorbadoFrontendApiClient {
     Serializers? serializers,
     String? basePathOverride,
     List<Interceptor>? interceptors,
+    String? sdkVersion,
   })  : this.serializers = serializers ?? standardSerializers,
         this.dio = dio ??
             Dio(BaseOptions(
               baseUrl: basePathOverride ?? basePath,
               connectTimeout: const Duration(milliseconds: 5000),
               receiveTimeout: const Duration(milliseconds: 3000),
+              headers: {
+                "X-Corbado-SDK": jsonEncode({
+                  "name": "Flutter SDK",
+                  "sdkVersion": sdkVersion ?? "1.0.0",
+                  "languageVersion": Platform.version,
+                })
+              },
             )) {
     if (interceptors == null) {
       this.dio.interceptors.addAll([

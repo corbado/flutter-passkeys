@@ -230,6 +230,7 @@ class PasskeysApiCodec: FlutterStandardMessageCodec {
 /// Generated protocol from Pigeon that represents a handler of messages from Flutter.
 protocol PasskeysApi {
   func canAuthenticate() throws -> Bool
+  func hasBiometrics() throws -> Bool
   func register(challenge: String, relyingParty: RelyingParty, user: User, excludeCredentialIDs: [String], completion: @escaping (Result<RegisterResponse, Error>) -> Void)
   func authenticate(relyingPartyId: String, challenge: String, conditionalUI: Bool, allowedCredentialIDs: [String], preferImmediatelyAvailableCredentials: Bool, completion: @escaping (Result<AuthenticateResponse, Error>) -> Void)
   func cancelCurrentAuthenticatorOperation(completion: @escaping (Result<Void, Error>) -> Void)
@@ -253,6 +254,19 @@ class PasskeysApiSetup {
       }
     } else {
       canAuthenticateChannel.setMessageHandler(nil)
+    }
+    let hasBiometricsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.passkeys_ios.PasskeysApi.hasBiometrics", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      hasBiometricsChannel.setMessageHandler { _, reply in
+        do {
+          let result = try api.hasBiometrics()
+          reply(wrapResult(result))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      hasBiometricsChannel.setMessageHandler(nil)
     }
     let registerChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.passkeys_ios.PasskeysApi.register", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
