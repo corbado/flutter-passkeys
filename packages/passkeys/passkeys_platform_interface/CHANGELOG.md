@@ -1,3 +1,6 @@
+## 2.3.0
+* Added `transports` to RegistrationResponse
+
 ## 2.2.1
 * Fixes bug with new added types
 
