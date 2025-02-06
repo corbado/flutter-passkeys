@@ -1,3 +1,6 @@
+## 2.5.0
+* Added `transports` to RegistrationResponse
+
 ## 2.4.0
 
 * Added `getAvailability` api to check for passkey support

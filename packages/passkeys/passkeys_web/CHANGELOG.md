@@ -1,3 +1,6 @@
+## 2.4.0
+* Added `transports` to RegistrationResponse
+
 ## 2.3.0
 * Added `hasPasskeySupport` to `AvailabilityType` to check if the platform supports passkeys.
 
