@@ -48,7 +48,7 @@ class LocalRelyingPartyServer {
         requireResidentKey: false,
         residentKey: 'required',
         userVerification: 'preferred',
-        authenticatorAttachment: 'platform');
+        authenticatorAttachment: 'preferred');
 
     return RegisterRequestType(
       challenge: challenge,
