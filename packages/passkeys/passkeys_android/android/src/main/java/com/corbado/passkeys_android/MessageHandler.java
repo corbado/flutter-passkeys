@@ -36,6 +36,7 @@ import com.google.android.gms.fido.fido2.Fido2ApiClient;
 import com.google.android.gms.tasks.Task;
 
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -62,7 +63,6 @@ public class MessageHandler implements Messages.PasskeysApi {
 
     @Override
     public void canAuthenticate(@NonNull Messages.Result<Boolean> result) {
-
         Activity activity = plugin.requireActivity();
         Fido2ApiClient fido2ApiClient = Fido.getFido2ApiClient(activity.getApplicationContext());
 
@@ -146,33 +146,33 @@ public class MessageHandler implements Messages.PasskeysApi {
                             }
                         }
 
-                @Override
-                public void onError(CreateCredentialException e) {
-                    Exception platformException = e;
-                    if (Objects.equals(e.getMessage(), "Unable to create key during registration")) {
-                        // currently, Android throws this error when users skip the fingerPrint animation => we interpret this as a cancellation for now
-                        platformException = new Messages.FlutterError("cancelled", e.getMessage(), "");
-                    } else if (e instanceof CreateCredentialCancellationException) {
-                        platformException = new Messages.FlutterError("cancelled", e.getMessage(), "");
-                    } else if (e instanceof CreatePublicKeyCredentialDomException) {
-                        if (Objects.equals(e.getMessage(), "User is unable to create passkeys.")) {
-                            platformException = new Messages.FlutterError("android-missing-google-sign-in", e.getMessage(), MISSING_GOOGLE_SIGN_IN_ERROR);
-                        } else if (Objects.equals(e.getMessage(), "Unable to get sync account.")) {
-                            platformException = new Messages.FlutterError("android-sync-account-not-available", e.getMessage(), SYNC_ACCOUNT_NOT_AVAILABLE_ERROR);
-                        } else if (Objects.equals(e.getMessage(), "One of the excluded credentials exists on the local device")) {
-                            platformException = new Messages.FlutterError("exclude-credentials-match", e.getMessage(), EXCLUDE_CREDENTIALS_MATCH_ERROR);
-                        } else {
-                            platformException = new Messages.FlutterError("android-unhandled: " + e.getType(), e.getMessage(), e.getErrorMessage());
-                        }
-                    } else if (e instanceof CreateCredentialNoCreateOptionException) {
-                        platformException = new Messages.FlutterError("android-no-create-option", e.getMessage(), MISSING_CREATION_OPTIONS);
-                    } else {
-                        platformException = new Messages.FlutterError("android-unhandled" + e.getType(), e.getMessage(), e.getErrorMessage());
-                    }
+                        @Override
+                        public void onError(CreateCredentialException e) {
+                            Exception platformException = e;
+                            if (Objects.equals(e.getMessage(), "Unable to create key during registration")) {
+                                // currently, Android throws this error when users skip the fingerPrint animation => we interpret this as a cancellation for now
+                                platformException = new Messages.FlutterError("cancelled", e.getMessage(), "");
+                            } else if (e instanceof CreateCredentialCancellationException) {
+                                platformException = new Messages.FlutterError("cancelled", e.getMessage(), "");
+                            } else if (e instanceof CreatePublicKeyCredentialDomException) {
+                                if (Objects.equals(e.getMessage(), "User is unable to create passkeys.")) {
+                                    platformException = new Messages.FlutterError("android-missing-google-sign-in", e.getMessage(), MISSING_GOOGLE_SIGN_IN_ERROR);
+                                } else if (Objects.equals(e.getMessage(), "Unable to get sync account.")) {
+                                    platformException = new Messages.FlutterError("android-sync-account-not-available", e.getMessage(), SYNC_ACCOUNT_NOT_AVAILABLE_ERROR);
+                                } else if (Objects.equals(e.getMessage(), "One of the excluded credentials exists on the local device")) {
+                                    platformException = new Messages.FlutterError("exclude-credentials-match", e.getMessage(), EXCLUDE_CREDENTIALS_MATCH_ERROR);
+                                } else {
+                                    platformException = new Messages.FlutterError("android-unhandled: " + e.getType(), e.getMessage(), e.getErrorMessage());
+                                }
+                            } else if (e instanceof CreateCredentialNoCreateOptionException) {
+                                platformException = new Messages.FlutterError("android-no-create-option", e.getMessage(), MISSING_CREATION_OPTIONS);
+                            } else {
+                                platformException = new Messages.FlutterError("android-unhandled" + e.getType(), e.getMessage(), e.getErrorMessage());
+                            }
 
-                    result.error(platformException);
-                }
-            });
+                            result.error(platformException);
+                        }
+                    });
         } catch (JSONException e) {
             Log.e(TAG, "Error creating JSON", e);
             result.error(e);
