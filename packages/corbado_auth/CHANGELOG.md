@@ -1,3 +1,6 @@
+## 3.2.1
+* Fixes Platform.version exception on Web
+
 ## 3.2.0
 * Added `X-Corbado-SDK` header to all requests.
 
