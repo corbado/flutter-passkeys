@@ -13,7 +13,7 @@ class LocalUser {
   String? credentialID;
 }
 
-const rpID = 'flutter.corbado.io';
+const rpID = 'localhost';
 
 /// This is a local version of a relying party server.
 ///
@@ -48,7 +48,7 @@ class LocalRelyingPartyServer {
         requireResidentKey: false,
         residentKey: 'required',
         userVerification: 'preferred',
-        authenticatorAttachment: 'preferred');
+        authenticatorAttachment: 'platform');
 
     return RegisterRequestType(
       challenge: challenge,
