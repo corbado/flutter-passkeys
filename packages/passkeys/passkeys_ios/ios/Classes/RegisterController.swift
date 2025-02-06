@@ -34,12 +34,41 @@ class RegisterController: NSObject, ASAuthorizationControllerDelegate, ASAuthori
                 id: credentialRegistration.credentialID.toBase64URL(),
                 rawId: credentialRegistration.credentialID.toBase64URL(),
                 clientDataJSON: credentialRegistration.rawClientDataJSON.toBase64URL(),
-                attestationObject: credentialRegistration.rawAttestationObject!.toBase64URL()
+                attestationObject: credentialRegistration.rawAttestationObject!.toBase64URL(),
+                transports: []
+            )
+            completion?(.success(response))
+            break
+        case let securityKeyRegistration as ASAuthorizationSecurityKeyPublicKeyCredentialRegistration:
+            var transportStrings: [String] = []
+            
+            if #available(iOS 17.5, *) {
+                for transport in securityKeyRegistration.transports {
+                    switch transport {
+                    case .usb:
+                        transportStrings.append("usb")
+                    case .nfc:
+                        transportStrings.append("nfc")
+                    case .bluetooth:
+                        transportStrings.append("bluetooth")
+                    default:
+                        transportStrings.append("unknown")
+                    }
+                }
+            }
+
+                
+            let response = RegisterResponse(
+                id: securityKeyRegistration.credentialID.toBase64URL(),
+                rawId: securityKeyRegistration.credentialID.toBase64URL(),
+                clientDataJSON: securityKeyRegistration.rawClientDataJSON.toBase64URL(),
+                attestationObject: securityKeyRegistration.rawAttestationObject!.toBase64URL(),
+                transports: transportStrings
             )
             completion?(.success(response))
             break
         default:
-            let message = "Expected instance of ASAuthorizationPlatformPublicKeyCredentialRegistration but got: " + authorization.credential.description
+            let message = "Expected instance of ASAuthorizationPlatformPublicKeyCredentialRegistration or ASAuthorizationSecurityKeyPublicKeyCredentialRegistration but got: " + authorization.credential.description
             completion?(.failure(FlutterError(code: CustomErrors.unexpectedAuthorizationResponse, message: message)))
         }
 

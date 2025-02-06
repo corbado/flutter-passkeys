@@ -36,6 +36,7 @@ import com.google.android.gms.fido.fido2.Fido2ApiClient;
 import com.google.android.gms.tasks.Task;
 
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -62,7 +63,6 @@ public class MessageHandler implements Messages.PasskeysApi {
 
     @Override
     public void canAuthenticate(@NonNull Messages.Result<Boolean> result) {
-
         Activity activity = plugin.requireActivity();
         Fido2ApiClient fido2ApiClient = Fido.getFido2ApiClient(activity.getApplicationContext());
 
@@ -86,12 +86,16 @@ public class MessageHandler implements Messages.PasskeysApi {
 
         UserType userType = new UserType(user.getName(), user.getDisplayName(), user.getId(), user.getIcon());
         RelyingPartyType relyingPartyType = new RelyingPartyType(relyingParty.getId(), relyingParty.getName());
-        AuthenticatorSelectionType authSelectionType = new AuthenticatorSelectionType(authenticatorSelection.getAuthenticatorAttachment(), authenticatorSelection.getRequireResidentKey(), authenticatorSelection.getResidentKey(), authenticatorSelection.getUserVerification());
+        AuthenticatorSelectionType authSelectionType = new AuthenticatorSelectionType(
+                authenticatorSelection.getAuthenticatorAttachment(), authenticatorSelection.getRequireResidentKey(),
+                authenticatorSelection.getResidentKey(), authenticatorSelection.getUserVerification());
         List<PubKeyCredParamType> pubKeyCredParamsType = new ArrayList<>();
         if (pubKeyCredParams != null) {
-            pubKeyCredParamsType = pubKeyCredParams.stream().map(p -> new PubKeyCredParamType(p.getType(), p.getAlg())).collect(Collectors.toList());
+            pubKeyCredParamsType = pubKeyCredParams.stream().map(p -> new PubKeyCredParamType(p.getType(), p.getAlg()))
+                    .collect(Collectors.toList());
         }
-        final List<ExcludeCredentialType> excludeCredentialsType = excludeCredentials.stream().map(c -> new ExcludeCredentialType(c.getType(), c.getId())).collect(Collectors.toList());
+        final List<ExcludeCredentialType> excludeCredentialsType = excludeCredentials.stream()
+                .map(c -> new ExcludeCredentialType(c.getType(), c.getId())).collect(Collectors.toList());
 
         CreateCredentialOptions createCredentialOptions = new CreateCredentialOptions(
                 challenge,
@@ -101,58 +105,74 @@ public class MessageHandler implements Messages.PasskeysApi {
                 timeout,
                 authSelectionType,
                 attestation,
-                excludeCredentialsType
-        );
+                excludeCredentialsType);
 
         try {
             String options = createCredentialOptions.toJSON().toString();
 
             Activity activity = plugin.requireActivity();
             CredentialManager credentialManager = CredentialManager.create(activity);
-            CreatePublicKeyCredentialRequest createPublicKeyCredentialRequest = new CreatePublicKeyCredentialRequest(options);
+            CreatePublicKeyCredentialRequest createPublicKeyCredentialRequest = new CreatePublicKeyCredentialRequest(
+                    options);
             currentCancellationSignal = new CancellationSignal();
-            credentialManager.createCredentialAsync(activity, createPublicKeyCredentialRequest, currentCancellationSignal, Runnable::run, new CredentialManagerCallback<CreateCredentialResponse, CreateCredentialException>() {
+            credentialManager.createCredentialAsync(activity, createPublicKeyCredentialRequest,
+                    currentCancellationSignal, Runnable::run,
+                    new CredentialManagerCallback<CreateCredentialResponse, CreateCredentialException>() {
 
-                @Override
-                public void onResult(CreateCredentialResponse res) {
-                    String resp = res.getData().getString("androidx.credentials.BUNDLE_KEY_REGISTRATION_RESPONSE_JSON");
-                    try {
-                        JSONObject json = new JSONObject(resp);
-                        JSONObject response = json.getJSONObject("response");
-                        result.success(new Messages.RegisterResponse.Builder().setId(json.getString("id")).setRawId(json.getString("rawId")).setClientDataJSON(response.getString("clientDataJSON")).setAttestationObject(response.getString("attestationObject")).build());
-                    } catch (JSONException e) {
-                        Log.e(TAG, "Error parsing response: " + resp, e);
-                        result.error(e);
-                    }
-                }
+                        @Override
+                        public void onResult(CreateCredentialResponse res) {
+                            String resp = res.getData()
+                                    .getString("androidx.credentials.BUNDLE_KEY_REGISTRATION_RESPONSE_JSON");
+                            try {
+                                JSONObject json = new JSONObject(resp);
+                                JSONObject response = json.getJSONObject("response");
 
-                @Override
-                public void onError(CreateCredentialException e) {
-                    Exception platformException = e;
-                    if (Objects.equals(e.getMessage(), "Unable to create key during registration")) {
-                        // currently, Android throws this error when users skip the fingerPrint animation => we interpret this as a cancellation for now
-                        platformException = new Messages.FlutterError("cancelled", e.getMessage(), "");
-                    } else if (e instanceof CreateCredentialCancellationException) {
-                        platformException = new Messages.FlutterError("cancelled", e.getMessage(), "");
-                    } else if (e instanceof CreatePublicKeyCredentialDomException) {
-                        if (Objects.equals(e.getMessage(), "User is unable to create passkeys.")) {
-                            platformException = new Messages.FlutterError("android-missing-google-sign-in", e.getMessage(), MISSING_GOOGLE_SIGN_IN_ERROR);
-                        } else if (Objects.equals(e.getMessage(), "Unable to get sync account.")) {
-                            platformException = new Messages.FlutterError("android-sync-account-not-available", e.getMessage(), SYNC_ACCOUNT_NOT_AVAILABLE_ERROR);
-                        } else if (Objects.equals(e.getMessage(), "One of the excluded credentials exists on the local device")) {
-                            platformException = new Messages.FlutterError("exclude-credentials-match", e.getMessage(), EXCLUDE_CREDENTIALS_MATCH_ERROR);
-                        } else {
-                            platformException = new Messages.FlutterError("android-unhandled: " + e.getType(), e.getMessage(), e.getErrorMessage());
+                                List<String> typedTransports = new ArrayList<>();
+                                JSONArray transports = response.getJSONArray("transports");
+                                for (int i = 0; i < transports.length(); i++) {
+                                    typedTransports.add(transports.getString(i));
+                                }
+
+                                result.success(new Messages.RegisterResponse.Builder()
+                                        .setId(json.getString("id"))
+                                        .setRawId(json.getString("rawId"))
+                                        .setClientDataJSON(response.getString("clientDataJSON"))
+                                        .setAttestationObject(response.getString("attestationObject"))
+                                        .setTransports(typedTransports)
+                                        .build());
+                            } catch (JSONException e) {
+                                Log.e(TAG, "Error parsing response: " + resp, e);
+                                result.error(e);
+                            }
                         }
-                    } else if (e instanceof CreateCredentialNoCreateOptionException) {
-                        platformException = new Messages.FlutterError("android-no-create-option", e.getMessage(), MISSING_CREATION_OPTIONS);
-                    } else {
-                        platformException = new Messages.FlutterError("android-unhandled" + e.getType(), e.getMessage(), e.getErrorMessage());
-                    }
 
-                    result.error(platformException);
-                }
-            });
+                        @Override
+                        public void onError(CreateCredentialException e) {
+                            Exception platformException = e;
+                            if (Objects.equals(e.getMessage(), "Unable to create key during registration")) {
+                                // currently, Android throws this error when users skip the fingerPrint animation => we interpret this as a cancellation for now
+                                platformException = new Messages.FlutterError("cancelled", e.getMessage(), "");
+                            } else if (e instanceof CreateCredentialCancellationException) {
+                                platformException = new Messages.FlutterError("cancelled", e.getMessage(), "");
+                            } else if (e instanceof CreatePublicKeyCredentialDomException) {
+                                if (Objects.equals(e.getMessage(), "User is unable to create passkeys.")) {
+                                    platformException = new Messages.FlutterError("android-missing-google-sign-in", e.getMessage(), MISSING_GOOGLE_SIGN_IN_ERROR);
+                                } else if (Objects.equals(e.getMessage(), "Unable to get sync account.")) {
+                                    platformException = new Messages.FlutterError("android-sync-account-not-available", e.getMessage(), SYNC_ACCOUNT_NOT_AVAILABLE_ERROR);
+                                } else if (Objects.equals(e.getMessage(), "One of the excluded credentials exists on the local device")) {
+                                    platformException = new Messages.FlutterError("exclude-credentials-match", e.getMessage(), EXCLUDE_CREDENTIALS_MATCH_ERROR);
+                                } else {
+                                    platformException = new Messages.FlutterError("android-unhandled: " + e.getType(), e.getMessage(), e.getErrorMessage());
+                                }
+                            } else if (e instanceof CreateCredentialNoCreateOptionException) {
+                                platformException = new Messages.FlutterError("android-no-create-option", e.getMessage(), MISSING_CREATION_OPTIONS);
+                            } else {
+                                platformException = new Messages.FlutterError("android-unhandled" + e.getType(), e.getMessage(), e.getErrorMessage());
+                            }
+
+                            result.error(platformException);
+                        }
+                    });
         } catch (JSONException e) {
             Log.e(TAG, "Error creating JSON", e);
             result.error(e);
@@ -164,9 +184,12 @@ public class MessageHandler implements Messages.PasskeysApi {
 
         List<AllowCredentialType> allowCredentialsType = new ArrayList<>();
         if (allowCredentials != null) {
-            allowCredentialsType = allowCredentials.stream().map(c -> new AllowCredentialType(c.getType(), c.getId(), c.getTransports())).collect(Collectors.toList());
+            allowCredentialsType = allowCredentials.stream()
+                    .map(c -> new AllowCredentialType(c.getType(), c.getId(), c.getTransports()))
+                    .collect(Collectors.toList());
         }
-        GetCredentialOptions getCredentialOptions = new GetCredentialOptions(challenge, timeout, relyingPartyId, allowCredentialsType, userVerification);
+        GetCredentialOptions getCredentialOptions = new GetCredentialOptions(challenge, timeout, relyingPartyId,
+                allowCredentialsType, userVerification);
         try {
             String options = getCredentialOptions.toJSON().toString();
 
