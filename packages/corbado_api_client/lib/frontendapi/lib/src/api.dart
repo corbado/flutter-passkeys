@@ -29,6 +29,7 @@ class CorbadoFrontendApiClient {
     String? basePathOverride,
     List<Interceptor>? interceptors,
     String? sdkVersion,
+    String? languageVersion,
   })  : this.serializers = serializers ?? standardSerializers,
         this.dio = dio ??
             Dio(BaseOptions(
@@ -39,7 +40,7 @@ class CorbadoFrontendApiClient {
                 "X-Corbado-SDK": jsonEncode({
                   "name": "Flutter SDK",
                   "sdkVersion": sdkVersion ?? "1.0.0",
-                  "languageVersion": Platform.version,
+                  "languageVersion": languageVersion ?? "1.0.0",
                 })
               },
             )) {

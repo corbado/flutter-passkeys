@@ -13,8 +13,10 @@ Future<CorbadoService> createClient(
     customDomain: customDomain,
   );
 
-  final apiClient =
-      CorbadoFrontendApiClient(basePathOverride: basePath, sdkVersion: '3.2.0');
+  final apiClient = CorbadoFrontendApiClient(
+      basePathOverride: basePath,
+      sdkVersion: '3.2.0',
+      languageVersion: "Flutter Web");
   apiClient.dio.options.headers.addAll({
     'X-Corbado-ProjectID': projectId,
   });

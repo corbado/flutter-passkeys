@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:corbado_auth/src/services/corbado/corbado.dart';
 import 'package:corbado_frontend_api_client/corbado_frontend_api_client.dart';
 import 'package:passkeys/authenticator.dart';
@@ -15,8 +17,10 @@ Future<CorbadoService> createClient(
 
   final uaData = await userAgentData();
 
-  final apiClient =
-      CorbadoFrontendApiClient(basePathOverride: basePath, sdkVersion: '3.2.0');
+  final apiClient = CorbadoFrontendApiClient(
+      basePathOverride: basePath,
+      sdkVersion: '3.2.0',
+      languageVersion: Platform.version);
   apiClient.dio.options.headers.addAll({
     'X-Corbado-ProjectID': projectId,
     'User-Agent': _buildUserAgent(uaData),

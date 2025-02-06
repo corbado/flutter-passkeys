@@ -10,7 +10,6 @@ import 'package:corbado_auth/src/services/session/session.dart';
 import 'package:corbado_auth/src/services/storage/storage.dart';
 import 'package:corbado_auth/src/services/storage/storage_native.dart';
 import 'package:corbado_auth/src/services/storage/storage_web.dart';
-import 'package:corbado_auth/src/types/process_handler.dart';
 import 'package:corbado_frontend_api_client/corbado_frontend_api_client.dart';
 import 'package:flutter/foundation.dart';
 import 'package:passkeys/authenticator.dart';
