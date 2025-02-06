@@ -13,7 +13,7 @@ class LocalUser {
   String? credentialID;
 }
 
-const rpID = 'flutter.corbado.io';
+const rpID = 'localhost';
 
 /// This is a local version of a relying party server.
 ///

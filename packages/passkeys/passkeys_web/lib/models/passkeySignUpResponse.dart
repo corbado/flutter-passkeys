@@ -18,8 +18,21 @@ class PasskeySignUpResponse {
 
 @JsonSerializable(explicitToJson: true)
 class AttestationResponse {
-  factory AttestationResponse.fromJson(Map<String, dynamic> json) =>
-      _$AttestationResponseFromJson(json);
+  factory AttestationResponse.fromJson(dynamic response) {
+    // 'response' might be a JSObject, so we convert or cast to Dart.
+    final map = Map<String, dynamic>.from(response as Map);
+
+    // 'transports' might be a JSArray<dynamic>,
+    final dynamicTransports = map['transports'] as List<dynamic>;
+    final List<String> transports =
+    dynamicTransports.map((e) => e as String).toList();
+
+    return AttestationResponse(
+      map['clientDataJSON'] as String,
+      map['attestationObject'] as String,
+      transports,
+    );
+  }
 
   AttestationResponse(
     this.clientDataJSON,
