@@ -11,7 +11,7 @@ PasskeySignUpResponse _$PasskeySignUpResponseFromJson(
     PasskeySignUpResponse(
       json['id'] as String,
       json['rawId'] as String,
-      AttestationResponse.fromJson(json['response'] as Map<String, dynamic>),
+      AttestationResponse.fromJson(json['response']),
     );
 
 Map<String, dynamic> _$PasskeySignUpResponseToJson(
@@ -26,7 +26,7 @@ AttestationResponse _$AttestationResponseFromJson(Map<String, dynamic> json) =>
     AttestationResponse(
       json['clientDataJSON'] as String,
       json['attestationObject'] as String,
-      json['transports'] as List<String>,
+      (json['transports'] as List<dynamic>).map((e) => e as String).toList(),
     );
 
 Map<String, dynamic> _$AttestationResponseToJson(
