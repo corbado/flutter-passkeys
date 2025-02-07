@@ -18,7 +18,8 @@ AuthenticatorSelectionType _$AuthenticatorSelectionTypeFromJson(
 Map<String, dynamic> _$AuthenticatorSelectionTypeToJson(
         AuthenticatorSelectionType instance) =>
     <String, dynamic>{
-      'authenticatorAttachment': instance.authenticatorAttachment,
+      if (instance.authenticatorAttachment case final value?)
+        'authenticatorAttachment': value,
       'requireResidentKey': instance.requireResidentKey,
       'residentKey': instance.residentKey,
       'userVerification': instance.userVerification,

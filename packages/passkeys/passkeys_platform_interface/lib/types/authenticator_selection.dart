@@ -15,6 +15,7 @@ class AuthenticatorSelectionType {
     required this.userVerification,
   });
 
+  @JsonKey(includeIfNull: false)
   final String? authenticatorAttachment;
   final bool requireResidentKey;
   final String residentKey;
