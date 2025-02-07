@@ -1,6 +1,7 @@
 name: Deploy corbado_auth example to Vercel
 env:
   VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
 
 on:
   push:
