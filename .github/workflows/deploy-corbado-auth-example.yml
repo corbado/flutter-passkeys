@@ -1,4 +1,4 @@
-name: Deploy examples to Vercel
+name: Deploy corbado_auth example to Vercel
 env:
   VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
 
