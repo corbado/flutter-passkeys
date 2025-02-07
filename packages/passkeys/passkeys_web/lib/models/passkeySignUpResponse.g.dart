@@ -11,7 +11,7 @@ PasskeySignUpResponse _$PasskeySignUpResponseFromJson(
     PasskeySignUpResponse(
       json['id'] as String,
       json['rawId'] as String,
-      AttestationResponse.fromJson(json['response']),
+      AttestationResponse.fromJson(json['response'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$PasskeySignUpResponseToJson(
