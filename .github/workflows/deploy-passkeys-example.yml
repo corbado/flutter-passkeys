@@ -20,6 +20,13 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
 
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          # Pin to a Flutter version that your app supports
+          # or omit to use the default stable version
+          flutter-version: "3.27.4"
+
       - name: Deploy Next example to Vercel
         run: |
           cd packages/passkeys/passkeys/example
