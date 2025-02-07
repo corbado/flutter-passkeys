@@ -6,11 +6,16 @@ import 'package:passkeys/types.dart';
 import 'package:passkeys_example/auth_service.dart';
 
 class LocalUser {
-  LocalUser({required this.name, required this.id, this.credentialID});
+  LocalUser(
+      {required this.name,
+      required this.id,
+      this.credentialID,
+      required this.transports});
 
   final String name;
   final String id;
   String? credentialID;
+  List<String> transports;
 }
 
 const rpID = 'flutter.corbado.io';
@@ -34,7 +39,7 @@ class LocalRelyingPartyServer {
     }
 
     final userID = 'user-${_random.nextInt(100000000)}';
-    final newUser = LocalUser(id: userID, name: name);
+    final newUser = LocalUser(id: userID, name: name, transports: []);
     final challenge = generateChallenge();
     _inFlightChallenges[challenge] = newUser;
 
@@ -45,10 +50,10 @@ class LocalRelyingPartyServer {
       id: base64Url.encode(userID.codeUnits),
     );
     final authenticatorSelection = AuthenticatorSelectionType(
-        requireResidentKey: false,
-        residentKey: 'required',
-        userVerification: 'preferred',
-        authenticatorAttachment: 'platform');
+      requireResidentKey: false,
+      residentKey: 'required',
+      userVerification: 'preferred',
+    );
 
     return RegisterRequestType(
       challenge: challenge,
@@ -84,7 +89,12 @@ class LocalRelyingPartyServer {
       throw Exception('invalid state: user does not exist');
     }
 
-    user.credentialID = response.id;
+    user
+      ..credentialID = response.id
+      ..transports = response.transports.isEmpty
+          // For iOS faceID and touchID transports returns an empty list.
+          ? ["internal"]
+          : response.transports as List<String>;
     _users[user.name] = user;
 
     return user;
@@ -119,10 +129,9 @@ class LocalRelyingPartyServer {
           : _users[name]!.credentialID != null
               ? [
                   CredentialType(
-                    type: 'public-key',
-                    id: _users[name]!.credentialID!,
-                    transports: ['internal'],
-                  )
+                      type: 'public-key',
+                      id: _users[name]!.credentialID!,
+                      transports: _users[name]!.transports)
                 ]
               : null,
       timeout: configuration?.timeout,
