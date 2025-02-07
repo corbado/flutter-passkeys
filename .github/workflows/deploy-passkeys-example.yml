@@ -23,8 +23,8 @@ jobs:
       - name: Deploy Next example to Vercel
         run: |
           cd packages/passkeys/passkeys/example
-          vercel pull -t $VERCEL_TOKEN
-          vercel build --prod -t $VERCEL_TOKEN
-          vercel deploy --prebuilt --prod -t $VERCEL_TOKEN
+          npx vercel pull -t $VERCEL_TOKEN
+          npx vercel build --prod -t $VERCEL_TOKEN
+          npx vercel deploy --prebuilt --prod -t $VERCEL_TOKEN
         env:
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_PASSKEYS_EXAMPLE }}
