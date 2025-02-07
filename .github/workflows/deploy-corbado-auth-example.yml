@@ -1,0 +1,27 @@
+name: Deploy examples to Vercel
+env:
+  VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+
+      - name: Deploy Next example to Vercel
+        run: |
+          cd packages/corbado_auth/example
+          npx vercel pull -t $VERCEL_TOKEN
+          npx vercel build --prod -t $VERCEL_TOKEN
+          npx vercel deploy --prebuilt --prod -t $VERCEL_TOKEN
+        env:
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_CORBADO_AUTH_EXAMPLE }}
