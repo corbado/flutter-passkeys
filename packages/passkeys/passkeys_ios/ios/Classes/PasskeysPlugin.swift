@@ -137,12 +137,12 @@ public class PasskeysPlugin: NSObject, FlutterPlugin, PasskeysApi {
         platformRequest.allowedCredentials = parseCredentials(credentials: allowedCredentials)
         requests.append(platformRequest)
         
-        // Only add external assertion request if we don't prefer immediately available credentials.
+        // We should not show the security key flow when preferImmediatelyAvailable is set to true
         if !preferImmediatelyAvailableCredentials {
             let securityKeyProvider = ASAuthorizationSecurityKeyPublicKeyCredentialProvider(relyingPartyIdentifier: relyingPartyId)
             let externalRequest = securityKeyProvider.createCredentialAssertionRequest(challenge: decodedChallenge)
             externalRequest.allowedCredentials = parseSecurityKeyCredentials(credentials: allowedCredentials)
-            requests.append(externalRequest)  // Append externalRequest, not platformRequest again.
+            requests.append(externalRequest)
         }
         
         let con = AuthenticateController(completion: completion)
@@ -155,7 +155,6 @@ public class PasskeysPlugin: NSObject, FlutterPlugin, PasskeysApi {
         completion(.success(()))
     }
     
-    // Parses credentials for platform requests
     private func parseCredentials(credentials: [CredentialType]) -> [ASAuthorizationPlatformPublicKeyCredentialDescriptor] {
         return credentials.compactMap { credential in
             guard let credentialData = Data.fromBase64Url(credential.id) else {
@@ -165,14 +164,12 @@ public class PasskeysPlugin: NSObject, FlutterPlugin, PasskeysApi {
         }
     }
     
-    // Parses credentials for security key requests
     private func parseSecurityKeyCredentials(credentials: [CredentialType]) -> [ASAuthorizationSecurityKeyPublicKeyCredentialDescriptor] {
         return credentials.compactMap { credential in
             guard let credentialData = Data.fromBase64Url(credential.id) else {
                 return nil
             }
             
-            // Map transport strings to their enum values, filtering out any unsupported strings.
             let parsedTransports: [ASAuthorizationSecurityKeyPublicKeyCredentialDescriptor.Transport] = credential.transports.compactMap { transport in
                 switch transport {
                 case "nfc":

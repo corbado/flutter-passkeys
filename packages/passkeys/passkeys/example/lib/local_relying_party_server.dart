@@ -92,7 +92,10 @@ class LocalRelyingPartyServer {
 
     user
       ..credentialID = response.id
-      ..transports = response.transports as List<String>;
+      ..transports = response.transports.isEmpty
+          // When using FaceID or TouchID, the transports are empty.
+          ? ['internal', 'hybrid']
+          : response.transports as List<String>;
     _users[user.name] = user;
 
     return user;
