@@ -39,7 +39,20 @@ class AuthenticateController: NSObject, ASAuthorizationControllerDelegate, ASAut
     
     func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
         switch authorization.credential {
-        case let r as ASAuthorizationPublicKeyCredentialAssertion:
+        case let r as ASAuthorizationSecurityKeyPublicKeyCredentialAssertion:
+            let response = AuthenticateResponse(
+                id: r.credentialID.toBase64URL(),
+                rawId: r.credentialID.toBase64URL(),
+                clientDataJSON: r.rawClientDataJSON.toBase64URL(),
+                authenticatorData: r.rawAuthenticatorData.toBase64URL(),
+                signature: r.signature.toBase64URL(),
+                // External authenticators generally do not store or return the user identifier with the assertion. Instead, your server is expected to maintain a mapping between the credentialID (which is returned) and the userID that was originally provided during registration.
+                userHandle: ""
+            )
+
+            completion?(.success(response))
+            break
+        case let r as ASAuthorizationPlatformPublicKeyCredentialAssertion:
             let response = AuthenticateResponse(
                 id: r.credentialID.toBase64URL(),
                 rawId: r.credentialID.toBase64URL(),

@@ -18,6 +18,25 @@ class RelyingParty {
   final String id;
 }
 
+/// Represents a credential
+class CredentialType {
+  /// Constructor
+  const CredentialType({
+    required this.type,
+    required this.id,
+    required this.transports,
+  });
+
+  /// The type of the credential.
+  final String type;
+
+  /// The ID of the credential.
+  final String id;
+
+  /// The transports of the credential.
+  final List<String?> transports;
+}
+
 /// Represents a user
 class User {
   /// Constructor
@@ -98,7 +117,10 @@ abstract class PasskeysApi {
     String challenge,
     RelyingParty relyingParty,
     User user,
-    List<String> excludeCredentialIDs,
+    List<CredentialType> excludeCredentials,
+    List<int> pubKeyCredValues,
+    bool canBePlatformAuthenticator,
+    bool canBeSecurityKey,
   );
 
   @async
@@ -106,7 +128,7 @@ abstract class PasskeysApi {
     String relyingPartyId,
     String challenge,
     bool conditionalUI,
-    List<String> allowedCredentialIDs,
+    List<CredentialType> allowedCredentials,
     bool preferImmediatelyAvailableCredentials,
   );
 
