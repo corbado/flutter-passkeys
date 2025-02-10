@@ -12,8 +12,8 @@ class AuthenticateController: NSObject, ASAuthorizationControllerDelegate, ASAut
         self.completion = completion;
     }
     
-    func run(request: ASAuthorizationPlatformPublicKeyCredentialAssertionRequest, conditionalUI: Bool, preferImmediatelyAvailableCredentials: Bool) {
-        let authorizationController = ASAuthorizationController(authorizationRequests: [request])
+    func run(requests: [ASAuthorizationRequest], conditionalUI: Bool, preferImmediatelyAvailableCredentials: Bool) {
+        let authorizationController = ASAuthorizationController(authorizationRequests: requests)
         authorizationController.delegate = self
         authorizationController.presentationContextProvider = self
         

@@ -12,9 +12,9 @@ class RegisterController: NSObject, ASAuthorizationControllerDelegate, ASAuthori
         self.completion = completion;
     }
     
-    func run(request: ASAuthorizationPlatformPublicKeyCredentialRegistrationRequest) {
+    func run(requests: [ASAuthorizationRequest]) {
         
-        let authorizationController = ASAuthorizationController(authorizationRequests: [request])
+        let authorizationController = ASAuthorizationController(authorizationRequests: requests)
 
         authorizationController.delegate = self
         authorizationController.presentationContextProvider = self

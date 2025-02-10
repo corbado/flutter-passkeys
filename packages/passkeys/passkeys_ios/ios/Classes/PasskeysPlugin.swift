@@ -55,24 +55,49 @@ public class PasskeysPlugin: NSObject, FlutterPlugin, PasskeysApi {
         
         
         let rp = relyingParty.id
+        // Create a platform (on‑device) request.
         let platformProvider = ASAuthorizationPlatformPublicKeyCredentialProvider(relyingPartyIdentifier: rp)
-        let request = platformProvider.createCredentialRegistrationRequest(
+        let platformRequest = platformProvider.createCredentialRegistrationRequest(
             challenge: decodedChallenge,
+            name: user.name,
+            userID: decodedUserId
+        )
+        
+        // Create an external (security key, e.g. NFC) request.
+        let securityKeyProvider = ASAuthorizationSecurityKeyPublicKeyCredentialProvider(relyingPartyIdentifier: rp)
+        let externalRequest = securityKeyProvider.createCredentialRegistrationRequest(
+            challenge: decodedChallenge,
+            displayName: user.name,
             name: user.name,
             userID: decodedUserId
         )
 
         if #available(iOS 17.4, *) {
-            request.excludedCredentials = parseCredentials(credentialIDs: excludeCredentialIDs)
+            let excluded = parseCredentials(credentialIDs: excludeCredentialIDs)
+            platformRequest.excludedCredentials = excluded
+            
+            let excludedSecurityKeys = parseSecurityKeyCredentials(credentialIDs: excludeCredentialIDs)
+            externalRequest.excludedCredentials = excludedSecurityKeys
         }
+        
+        externalRequest.credentialParameters = [
+            ASAuthorizationPublicKeyCredentialParameters(
+                algorithm: ASCOSEAlgorithmIdentifier(rawValue: -7)
+            ),
+            ASAuthorizationPublicKeyCredentialParameters(
+                algorithm: ASCOSEAlgorithmIdentifier(rawValue: -257)
+            )
+        ]
 
         func wrappedCompletion(result: Result<RegisterResponse, Error>) {
             lock.unlock()
             completion(result)
         }
         
+        let requests: [ASAuthorizationRequest] = [platformRequest, externalRequest]
+        
         let con = RegisterController(completion: completion)
-        con.run(request: request)
+        con.run(requests: requests)
         inFlightController = con
     }
 
@@ -88,14 +113,20 @@ public class PasskeysPlugin: NSObject, FlutterPlugin, PasskeysApi {
         }
 
         let platformProvider = ASAuthorizationPlatformPublicKeyCredentialProvider(relyingPartyIdentifier: relyingPartyId)
-        let request = platformProvider.createCredentialAssertionRequest(
+        let platformRequest = platformProvider.createCredentialAssertionRequest(
+            challenge: decodedChallenge
+        )
+        
+        let securityKeyProvider = ASAuthorizationSecurityKeyPublicKeyCredentialProvider(relyingPartyIdentifier: relyingPartyId)
+        let externalRequest = securityKeyProvider.createCredentialAssertionRequest(
             challenge: decodedChallenge
         )
                 
-        request.allowedCredentials = parseCredentials(credentialIDs: allowedCredentialIDs)
+        platformRequest.allowedCredentials = parseCredentials(credentialIDs: allowedCredentialIDs)
+        externalRequest.allowedCredentials = parseSecurityKeyCredentials(credentialIDs: allowedCredentialIDs)
                 
         let con = AuthenticateController(completion: completion)
-        con.run(request: request, conditionalUI: conditionalUI, preferImmediatelyAvailableCredentials: preferImmediatelyAvailableCredentials)
+        con.run(requests: [platformRequest, externalRequest], conditionalUI: conditionalUI, preferImmediatelyAvailableCredentials: preferImmediatelyAvailableCredentials)
         inFlightController = con
     }
     
@@ -109,6 +140,16 @@ public class PasskeysPlugin: NSObject, FlutterPlugin, PasskeysApi {
         return credentialIDs.compactMap {
             if let credentialId = Data.fromBase64Url($0) {
                 return ASAuthorizationPlatformPublicKeyCredentialDescriptor.init(credentialID: credentialId)
+            } else {
+                return nil
+            }
+        }
+    }
+    
+    private func parseSecurityKeyCredentials(credentialIDs: [String]) -> [ASAuthorizationSecurityKeyPublicKeyCredentialDescriptor] {
+        return credentialIDs.compactMap {
+            if let credentialId = Data.fromBase64Url($0) {
+                return ASAuthorizationSecurityKeyPublicKeyCredentialDescriptor.init(credentialID: credentialId, transports: [.bluetooth, .nfc, .usb])
             } else {
                 return nil
             }
