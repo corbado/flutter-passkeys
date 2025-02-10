@@ -74,6 +74,7 @@ class LocalRelyingPartyServer {
               .toList()
           : [],
       timeout: configuration?.timeout,
+      attestation: "direct",
     );
   }
 
@@ -91,10 +92,7 @@ class LocalRelyingPartyServer {
 
     user
       ..credentialID = response.id
-      ..transports = response.transports.isEmpty
-          // For iOS faceID and touchID transports returns an empty list.
-          ? ["internal"]
-          : response.transports as List<String>;
+      ..transports = response.transports as List<String>;
     _users[user.name] = user;
 
     return user;
