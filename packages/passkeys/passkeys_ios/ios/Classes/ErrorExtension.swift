@@ -42,6 +42,9 @@ extension FlutterError: Error {
         var code = ""
         if (error.domain == "WKErrorDomain" && error.code == 8) {
             code = "exclude-credentials-match"
+        }else if(error.domain == "WKErrorDomain" && error.code == 31){
+            // This error happens when the security key prompt times out (2 minutes)
+            code = "ios-security-key-timeout"
         } else {
             code = "ios-unhandled-" + error.domain
         }

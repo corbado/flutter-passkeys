@@ -32,7 +32,13 @@ class PasskeysIOS extends PasskeysPlatform {
       request.challenge,
       relyingPartyArg,
       userArg,
-      request.excludeCredentials.map((e) => e.id).toList(),
+      request.excludeCredentials
+          .map((e) =>
+              CredentialType(type: e.type, id: e.id, transports: e.transports))
+          .toList(),
+      request.pubKeyCredParams?.map((e) => e.alg).toList() ?? [],
+      request.authSelectionType.authenticatorAttachment != 'cross-platform',
+      request.authSelectionType.authenticatorAttachment != 'platform',
     );
 
     return RegisterResponseType(
@@ -57,7 +63,11 @@ class PasskeysIOS extends PasskeysPlatform {
       request.relyingPartyId,
       request.challenge,
       conditionalUI,
-      request.allowCredentials?.map((e) => e.id).toList() ?? [],
+      request.allowCredentials
+              ?.map((e) => CredentialType(
+                  type: e.type, id: e.id, transports: e.transports))
+              .toList() ??
+          [],
       request.preferImmediatelyAvailableCredentials,
     );
 

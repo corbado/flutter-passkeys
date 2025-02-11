@@ -67,7 +67,6 @@ class PasskeysWeb extends PasskeysPlatform {
 
     try {
       final serializedRequest = jsonEncode(r.toJson());
-      print(serializedRequest);
       final response = await authenticatorLogin(serializedRequest.toJS).toDart;
       final decodedResponse =
           jsonDecode(response.toDart) as Map<String, dynamic>;

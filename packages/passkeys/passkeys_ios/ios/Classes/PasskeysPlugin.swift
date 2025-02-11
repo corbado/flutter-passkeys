@@ -11,8 +11,8 @@ protocol Cancellable {
 
 @available(iOS 16.0, *)
 public class PasskeysPlugin: NSObject, FlutterPlugin, PasskeysApi {
-    var inFlightController: Cancellable?;
-    let lock: NSLock = NSLock();
+    var inFlightController: Cancellable?
+    let lock = NSLock()
     
     public static func register(with registrar: FlutterPluginRegistrar) {
         let instance = PasskeysPlugin()
@@ -22,11 +22,11 @@ public class PasskeysPlugin: NSObject, FlutterPlugin, PasskeysApi {
     func canAuthenticate() throws -> Bool {
         return LocalAuth.shared.canAuthenticate()
     }
-
+    
     func hasBiometrics() throws -> Bool {
         return LocalAuth.shared.hasBiometrics()
     }
-
+    
     func getFacetID(completion: @escaping (Result<String, Error>) -> Void) {
         completion(.success(""))
     }
@@ -35,14 +35,17 @@ public class PasskeysPlugin: NSObject, FlutterPlugin, PasskeysApi {
         challenge: String,
         relyingParty: RelyingParty,
         user: User,
-        excludeCredentialIDs: [String],
+        excludeCredentials: [CredentialType],
+        pubKeyCredValues: [Int64],
+        canBePlatformAuthenticator: Bool = true,
+        canBeSecurityKey: Bool = true,
         completion: @escaping (Result<RegisterResponse, Error>) -> Void
     ) {
         guard (try? canAuthenticate()) == true else {
             completion(.failure(CustomErrors.deviceNotSupported))
             return
         }
-
+        
         guard let decodedChallenge = Data.fromBase64Url(challenge) else {
             completion(.failure(CustomErrors.decodingChallenge))
             return
@@ -53,89 +56,157 @@ public class PasskeysPlugin: NSObject, FlutterPlugin, PasskeysApi {
             return
         }
         
-        
+        var requests: [ASAuthorizationRequest] = []
         let rp = relyingParty.id
-        let platformProvider = ASAuthorizationPlatformPublicKeyCredentialProvider(relyingPartyIdentifier: rp)
-        let request = platformProvider.createCredentialRegistrationRequest(
-            challenge: decodedChallenge,
-            name: user.name,
-            userID: decodedUserId
-        )
-
-        if #available(iOS 17.4, *) {
-            request.excludedCredentials = parseCredentials(credentialIDs: excludeCredentialIDs)
+        
+        if(canBePlatformAuthenticator){
+            // Create a platform (on‑device) registration request.
+            let platformProvider = ASAuthorizationPlatformPublicKeyCredentialProvider(relyingPartyIdentifier: rp)
+            let platformRequest = platformProvider.createCredentialRegistrationRequest(
+                challenge: decodedChallenge,
+                name: user.name,
+                userID: decodedUserId
+            )
+            
+            if #available(iOS 17.4, *) {
+                let excluded = parseCredentials(credentials: excludeCredentials)
+                platformRequest.excludedCredentials = excluded
+            }
+            
+            requests.append(platformRequest)
         }
-
+        
+        if(canBeSecurityKey){
+            // Create an external (security key) registration request.
+            let securityKeyProvider = ASAuthorizationSecurityKeyPublicKeyCredentialProvider(relyingPartyIdentifier: rp)
+            let externalRequest = securityKeyProvider.createCredentialRegistrationRequest(
+                challenge: decodedChallenge,
+                displayName: user.name,   // displayName as provided by the new API
+                name: user.name,
+                userID: decodedUserId
+            )
+            
+            if #available(iOS 17.4, *) {
+                let excludedSecurityKeys = parseSecurityKeyCredentials(credentials: excludeCredentials)
+                externalRequest.excludedCredentials = excludedSecurityKeys
+            }
+            
+            externalRequest.credentialParameters = pubKeyCredValues.map { rawValue in
+                let intValue = Int(rawValue)
+                
+                return ASAuthorizationPublicKeyCredentialParameters(
+                    algorithm: ASCOSEAlgorithmIdentifier(rawValue: intValue)
+                )
+            }
+            
+            requests.append(externalRequest)
+        }
+        
         func wrappedCompletion(result: Result<RegisterResponse, Error>) {
             lock.unlock()
             completion(result)
         }
         
-        let con = RegisterController(completion: completion)
-        con.run(request: request)
+        let con = RegisterController(completion: wrappedCompletion)
+        con.run(requests: requests)
         inFlightController = con
     }
-
-    func authenticate(relyingPartyId: String, challenge: String, conditionalUI: Bool, allowedCredentialIDs: [String], preferImmediatelyAvailableCredentials: Bool, completion: @escaping (Result<AuthenticateResponse, Error>) -> Void) {
+    
+    func authenticate(
+        relyingPartyId: String,
+        challenge: String,
+        conditionalUI: Bool,
+        allowedCredentials: [CredentialType],
+        preferImmediatelyAvailableCredentials: Bool,
+        completion: @escaping (Result<AuthenticateResponse, Error>) -> Void
+    ) {
         guard (try? canAuthenticate()) == true else {
             completion(.failure(CustomErrors.deviceNotSupported))
             return
         }
-
+        
         guard let decodedChallenge = Data.fromBase64Url(challenge) else {
             completion(.failure(CustomErrors.decodingChallenge))
             return
         }
-
+        
+        var requests: [ASAuthorizationRequest] = []
+        
         let platformProvider = ASAuthorizationPlatformPublicKeyCredentialProvider(relyingPartyIdentifier: relyingPartyId)
-        let request = platformProvider.createCredentialAssertionRequest(
-            challenge: decodedChallenge
-        )
-                
-        request.allowedCredentials = parseCredentials(credentialIDs: allowedCredentialIDs)
-                
+        let platformRequest = platformProvider.createCredentialAssertionRequest(challenge: decodedChallenge)
+        platformRequest.allowedCredentials = parseCredentials(credentials: allowedCredentials)
+        requests.append(platformRequest)
+        
+        // We should not show the security key flow when preferImmediatelyAvailable is set to true
+        if !preferImmediatelyAvailableCredentials {
+            let securityKeyProvider = ASAuthorizationSecurityKeyPublicKeyCredentialProvider(relyingPartyIdentifier: relyingPartyId)
+            let externalRequest = securityKeyProvider.createCredentialAssertionRequest(challenge: decodedChallenge)
+            externalRequest.allowedCredentials = parseSecurityKeyCredentials(credentials: allowedCredentials)
+            requests.append(externalRequest)
+        }
+        
         let con = AuthenticateController(completion: completion)
-        con.run(request: request, conditionalUI: conditionalUI, preferImmediatelyAvailableCredentials: preferImmediatelyAvailableCredentials)
+        con.run(requests: requests, conditionalUI: conditionalUI, preferImmediatelyAvailableCredentials: preferImmediatelyAvailableCredentials)
         inFlightController = con
     }
     
     func cancelCurrentAuthenticatorOperation(completion: @escaping (Result<Void, Error>) -> Void) {
         inFlightController?.cancel()
-        
-        completion(.success(Void()))
+        completion(.success(()))
     }
     
-    private func parseCredentials(credentialIDs: [String]) -> [ASAuthorizationPlatformPublicKeyCredentialDescriptor] {
-        return credentialIDs.compactMap {
-            if let credentialId = Data.fromBase64Url($0) {
-                return ASAuthorizationPlatformPublicKeyCredentialDescriptor.init(credentialID: credentialId)
-            } else {
+    private func parseCredentials(credentials: [CredentialType]) -> [ASAuthorizationPlatformPublicKeyCredentialDescriptor] {
+        return credentials.compactMap { credential in
+            guard let credentialData = Data.fromBase64Url(credential.id) else {
                 return nil
             }
+            return ASAuthorizationPlatformPublicKeyCredentialDescriptor(credentialID: credentialData)
+        }
+    }
+    
+    private func parseSecurityKeyCredentials(credentials: [CredentialType]) -> [ASAuthorizationSecurityKeyPublicKeyCredentialDescriptor] {
+        return credentials.compactMap { credential in
+            guard let credentialData = Data.fromBase64Url(credential.id) else {
+                return nil
+            }
+            
+            let parsedTransports: [ASAuthorizationSecurityKeyPublicKeyCredentialDescriptor.Transport] = credential.transports.compactMap { transport in
+                switch transport {
+                case "nfc":
+                    return .nfc
+                case "usb":
+                    return .usb
+                case "bluetooth":
+                    return .bluetooth
+                default:
+                    return nil
+                }
+            }
+            
+            return ASAuthorizationSecurityKeyPublicKeyCredentialDescriptor(
+                credentialID: credentialData,
+                transports: parsedTransports
+            )
         }
     }
 }
 
 open class LocalAuth: NSObject {
     public static let shared = LocalAuth()
-
-    override private init() {}
-
+    private override init() {}
+    
     var laContext = LAContext()
-
+    
     func canAuthenticate() -> Bool {
-         // Check iOS version as Passkeys are only available on iOS 16.0 and above
         if #unavailable(iOS 16.0) {
             return false
         }
-
         return true
     }
-
+    
     func hasBiometrics() -> Bool {
         var error: NSError?
-            let hasTouchId = laContext.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error)
-            return hasTouchId
+        return laContext.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error)
     }
 }
 
@@ -157,20 +228,17 @@ struct PublicKeyCredentialCreateResponse: Codable {
 }
 
 public extension Data {
-    /// Same as ``Data(base64Encoded:)``, but adds padding automatically
-    /// (if missing, instead of returning `nil`).
+    /// Same as Data(base64Encoded:), but adds padding automatically (if missing).
     static func fromBase64(_ encoded: String) -> Data? {
-        // Prefixes padding-character(s) (if needed).
         var encoded = encoded
         let remainder = encoded.count % 4
         if remainder > 0 {
             encoded = encoded.padding(
                 toLength: encoded.count + 4 - remainder,
-                withPad: "=", startingAt: 0
+                withPad: "=",
+                startingAt: 0
             )
         }
-
-        // Finally, decode.
         return Data(base64Encoded: encoded)
     }
 
@@ -180,11 +248,8 @@ public extension Data {
     }
 
     private static func base64UrlToBase64(base64Url: String) -> String {
-        let base64 = base64Url
-            .replacingOccurrences(of: "-", with: "+")
-            .replacingOccurrences(of: "_", with: "/")
-
-        return base64
+        return base64Url.replacingOccurrences(of: "-", with: "+")
+                         .replacingOccurrences(of: "_", with: "/")
     }
 }
 
@@ -199,9 +264,7 @@ public extension String {
 
 extension Data {
     func toBase64URL() -> String {
-        let current = self
-
-        var result = current.base64EncodedString()
+        var result = self.base64EncodedString()
         result = result.replacingOccurrences(of: "+", with: "-")
         result = result.replacingOccurrences(of: "/", with: "_")
         result = result.replacingOccurrences(of: "=", with: "")
