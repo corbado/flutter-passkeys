@@ -1,9 +1,6 @@
 package com.corbado.passkeys_android;
 
 import android.app.Activity;
-import android.content.pm.PackageManager;
-import android.content.pm.Signature;
-import android.os.Build;
 import android.os.CancellationSignal;
 import android.util.Log;
 
@@ -18,15 +15,19 @@ import androidx.credentials.GetCredentialRequest;
 import androidx.credentials.GetCredentialResponse;
 import androidx.credentials.GetPublicKeyCredentialOption;
 import androidx.credentials.PublicKeyCredential;
-import androidx.credentials.exceptions.*;
+import androidx.credentials.exceptions.CreateCredentialCancellationException;
+import androidx.credentials.exceptions.CreateCredentialException;
+import androidx.credentials.exceptions.CreateCredentialNoCreateOptionException;
+import androidx.credentials.exceptions.GetCredentialCancellationException;
+import androidx.credentials.exceptions.GetCredentialException;
+import androidx.credentials.exceptions.NoCredentialException;
 import androidx.credentials.exceptions.publickeycredential.CreatePublicKeyCredentialDomException;
-import androidx.credentials.exceptions.publickeycredential.CreatePublicKeyCredentialException;
 import androidx.credentials.exceptions.publickeycredential.GetPublicKeyCredentialDomException;
 
 import com.corbado.passkeys_android.models.login.AllowCredentialType;
+import com.corbado.passkeys_android.models.login.GetCredentialOptions;
 import com.corbado.passkeys_android.models.signup.AuthenticatorSelectionType;
 import com.corbado.passkeys_android.models.signup.CreateCredentialOptions;
-import com.corbado.passkeys_android.models.login.GetCredentialOptions;
 import com.corbado.passkeys_android.models.signup.ExcludeCredentialType;
 import com.corbado.passkeys_android.models.signup.PubKeyCredParamType;
 import com.corbado.passkeys_android.models.signup.RelyingPartyType;
@@ -35,7 +36,6 @@ import com.google.android.gms.fido.Fido;
 import com.google.android.gms.fido.fido2.Fido2ApiClient;
 import com.google.android.gms.tasks.Task;
 
-import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -52,6 +52,7 @@ public class MessageHandler implements Messages.PasskeysApi {
     private static final String MISSING_GOOGLE_SIGN_IN_ERROR = "Please sign in with a Google account first to create a new passkey.";
     private static final String EXCLUDE_CREDENTIALS_MATCH_ERROR = "You can not create a credential on this device because one of the excluded credentials exists on the local device.";
     private static final String MISSING_CREATION_OPTIONS = "Please make sure you enable a passwords or passkeys provider in your device settings.";
+    private static final String TIMEOUT_ERROR = "Passkey operation timed out, please try again";
 
     private final FlutterPasskeysPlugin plugin;
 
@@ -161,6 +162,8 @@ public class MessageHandler implements Messages.PasskeysApi {
                                     platformException = new Messages.FlutterError("android-sync-account-not-available", e.getMessage(), SYNC_ACCOUNT_NOT_AVAILABLE_ERROR);
                                 } else if (Objects.equals(e.getMessage(), "One of the excluded credentials exists on the local device")) {
                                     platformException = new Messages.FlutterError("exclude-credentials-match", e.getMessage(), EXCLUDE_CREDENTIALS_MATCH_ERROR);
+                                } else if (Objects.equals(e.getMessage(), "[15] Flow has timed out.")) {
+                                    platformException = new Messages.FlutterError("android-timeout", e.getMessage(), TIMEOUT_ERROR);
                                 } else {
                                     platformException = new Messages.FlutterError("android-unhandled: " + e.getType(), e.getMessage(), e.getErrorMessage());
                                 }
@@ -253,6 +256,8 @@ public class MessageHandler implements Messages.PasskeysApi {
                     } else if (e instanceof GetPublicKeyCredentialDomException) {
                         if (Objects.equals(e.getMessage(), "Failed to decrypt credential.")) {
                             platformException = new Messages.FlutterError("android-sync-account-not-available", e.getMessage(), SYNC_ACCOUNT_NOT_AVAILABLE_ERROR);
+                        } else if (Objects.equals(e.getMessage(), "[15] Flow has timed out.")) {
+                            platformException = new Messages.FlutterError("android-timeout", e.getMessage(), TIMEOUT_ERROR);
                         } else {
                             platformException = new Messages.FlutterError("android-unhandled: " + e.getType(), e.getMessage(), e.getErrorMessage());
                         }
