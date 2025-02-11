@@ -1,3 +1,8 @@
+## 2.7.0
+* Fixed Exception when trying to register while `authenticatorAttachment` is null on Safari or IOS device. (Web)
+* Added support for external security keys (Yubikey) on iOS. (iOS)
+* Added handling for timeouts in `authenticate` and `register` methods. (Android)
+
 ## 2.6.0
 * Added `transports` to RegistrationResponse
 * Fixes `hasPasskeySupport` in `getAvailability` (Android)
