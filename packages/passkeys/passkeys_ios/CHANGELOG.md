@@ -1,3 +1,7 @@
+## 2.6.0
+* Added external security keys support (Yubikeys)
+* Handles new Security Key timeout exception
+
 ## 2.5.0
 * Added `transports` to RegistrationResponse
 

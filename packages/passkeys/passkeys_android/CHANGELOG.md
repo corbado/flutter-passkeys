@@ -1,3 +1,7 @@
+## 2.7.0
+* Implement `passkeys_platform_interface 2.3.1`
+* Handles timeout exceptions
+
 ## 2.6.0
 * Added `transports` to RegistrationResponse
 * Fixes `hasPasskeySupport` in `getAvailability`
