@@ -1,3 +1,6 @@
+## 2.3.1
+* Fixed Exception when trying to register while `authenticatorAttachment` is null on Safari or IOS device.
+
 ## 2.3.0
 * Added `transports` to RegistrationResponse
 
