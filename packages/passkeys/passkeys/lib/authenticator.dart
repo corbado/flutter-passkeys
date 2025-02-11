@@ -44,6 +44,10 @@ class PasskeyAuthenticator {
           throw DomainNotAssociatedException(e.message);
         case 'deviceNotSupported':
           throw DeviceNotSupportedException();
+        case 'android-timeout':
+          throw TimeoutException(e.message);
+        case 'ios-security-key-timeout':
+          throw TimeoutException(e.message);
         default:
           rethrow;
       }
@@ -75,6 +79,10 @@ class PasskeyAuthenticator {
           throw DeviceNotSupportedException();
         case 'android-no-create-option':
           throw NoCreateOptionException(e.message);
+        case 'android-timeout':
+          throw TimeoutException(e.message);
+        case 'ios-security-key-timeout':
+          throw TimeoutException(e.message);
         default:
           if (e.code.startsWith('android-unhandled')) {
             throw UnhandledAuthenticatorException(e.code, e.message, e.details);

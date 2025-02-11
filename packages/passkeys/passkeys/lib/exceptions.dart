@@ -100,6 +100,21 @@ class NoCreateOptionException implements AuthenticatorException {
   String toString() => message ?? '';
 }
 
+/// This exception is thrown when the user tries to login or register but the
+/// operation times out.
+///
+/// Platforms: Android, iOS
+///
+/// Suggestions:
+/// - ask the user to try again
+class TimeoutException implements AuthenticatorException {
+  final String? message;
+  /// Constructor
+  TimeoutException(this.message);
+
+  String toString() => message ?? '';
+}
+
 /// This exception is thrown when an exception is thrown by the authenticator
 /// that we do not handle so far in this package.
 ///
