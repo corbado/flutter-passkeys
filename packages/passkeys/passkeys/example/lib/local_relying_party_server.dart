@@ -74,7 +74,6 @@ class LocalRelyingPartyServer {
               .toList()
           : [],
       timeout: configuration?.timeout,
-      attestation: "direct",
     );
   }
 

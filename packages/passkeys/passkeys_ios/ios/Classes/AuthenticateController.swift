@@ -46,8 +46,7 @@ class AuthenticateController: NSObject, ASAuthorizationControllerDelegate, ASAut
                 clientDataJSON: r.rawClientDataJSON.toBase64URL(),
                 authenticatorData: r.rawAuthenticatorData.toBase64URL(),
                 signature: r.signature.toBase64URL(),
-                // External authenticators generally do not store or return the user identifier with the assertion. Instead, your server is expected to maintain a mapping between the credentialID (which is returned) and the userID that was originally provided during registration.
-                userHandle: ""
+                userHandle: r.userID.toBase64URL()
             )
 
             completion?(.success(response))
@@ -75,7 +74,9 @@ class AuthenticateController: NSObject, ASAuthorizationControllerDelegate, ASAut
             completion?(.failure(FlutterError(from: err)))
         }
 
-        completion?(.failure(FlutterError(code: CustomErrors.unknown)))
+        let nsErr = error as NSError
+        completion?(.failure(FlutterError(fromNSError: nsErr)))
+        return
     }
 
     func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
