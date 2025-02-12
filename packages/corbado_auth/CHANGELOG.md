@@ -1,3 +1,6 @@
+## 3.2.2
+* Bump version of passkeys to 2.7.0
+
 ## 3.2.1
 * Fixes Platform.version exception on Web
 
