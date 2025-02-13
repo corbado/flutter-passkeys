@@ -6,17 +6,23 @@ import 'package:corbado_auth_example/widgets/outlined_text_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
-class SignupInitScreen extends HookWidget implements CorbadoScreen<SignupInitBlock> {
+class SignupInitScreen extends HookWidget
+    implements CorbadoScreen<SignupInitBlock> {
   final SignupInitBlock block;
 
   SignupInitScreen(this.block);
 
   Widget build(BuildContext context) {
     final email = block.data.email;
+    final fullName = block.data.fullName;
+
     if (email == null) {
       return Container();
     }
+
     final emailController = useTextEditingController(text: email.value);
+
+    final fullNameController = useTextEditingController(text: fullName?.value);
 
     useEffect(() {
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -65,6 +71,23 @@ class SignupInitScreen extends HookWidget implements CorbadoScreen<SignupInitBlo
           ),
         ),
         MaybeGenericError(message: email.error?.translatedError),
+        if (fullName != null)
+          Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4),
+                child: TextField(
+                  key: const ValueKey('textfield-fullName'),
+                  controller: fullNameController,
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    hintText: 'Full name',
+                  ),
+                ),
+              ),
+              MaybeGenericError(message: fullName.error?.translatedError),
+            ],
+          ),
         const SizedBox(height: 20),
         SizedBox(
           width: double.infinity,
@@ -72,7 +95,10 @@ class SignupInitScreen extends HookWidget implements CorbadoScreen<SignupInitBlo
           child: FilledTextButton(
             isLoading: block.data.primaryLoading,
             onTap: () async {
-              await block.submitSignupInit(email: emailController.text, fullName: 'fixed');
+              await block.submitSignupInit(
+                email: emailController.text,
+                fullName: fullName != null ? fullNameController.text : 'fixed',
+              );
             },
             content: 'Sign up',
           ),
