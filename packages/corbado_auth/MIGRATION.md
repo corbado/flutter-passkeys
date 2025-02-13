@@ -6,18 +6,17 @@
 
 Here is a list of the major breaking changes going into v3:
 
-### 1. Removal of AuthService
+### 1. Updated Dependencies and JavaScript Bundle
 
-- All authentication logic now resides within Block classes (e.g., `LoginInitBlock`, `SignupInitBlock`).
-- Consequently, references to `auth_service.dart` must be deleted in favor of each block’s respective logic.
+- Update corbado_auth in your pubspec.yaml to ^3.x.x.
+- Switch the external JavaScript bundle in web/index.html to the latest 2.4.0 version from GitHub. [Web]
 
 ---
 
-### 2. Elimination of Old Authentication Pages
+### 2. Replace authentication pages with blocks
 
-- Pages like sign_in_page.dart, sign_up_page.dart, base_page.dart, and tokendetails_page.dart have been removed.
-- Replace them with the new block-based screens (e.g., LoginInitScreen, SignupInitScreen).
-  
+- Pages like sign_in_page.dart, sign_up_page.dart, base_page.dart have been removed.
+- Replace them with the new block-based screens (e.g., LoginInitScreen, SignupInitScreen). 
 
 ---
 
@@ -29,19 +28,20 @@ Here is a list of the major breaking changes going into v3:
 
 ---
 
-### 4. Updated Dependencies and JavaScript Bundle
-
-- Update corbado_auth in your pubspec.yaml to ^3.x.x.
-- Switch the external JavaScript bundle in web/index.html to the latest 2.4.0 version from GitHub.
-
----
-
-### 5. Adoption of CorbadoAuthComponent
+### 4. Adoption of CorbadoAuthComponent
 
 - A new CorbadoAuthComponent integrates directly with CorbadoAuth via a stream.
 - It automatically rebuilds with the correct screen (login, signup, passkey, OTP, etc.) based on emitted Block data.
 - This centralizes your authentication flow into a single widget, removing the need for manual page-by-page routing or
   state handling.
+
+---
+
+### 5. Removal of AuthService
+
+- All authentication logic now resides within Block classes (e.g., `LoginInitBlock`, `SignupInitBlock`).
+- Consequently, references to `auth_service.dart` must be deleted in favor of each block’s respective logic.
+
 
 ## Migration Steps
 
@@ -62,7 +62,7 @@ environment:
 +  corbado_auth: ^3.2.2
 ```  
 
-- Update the JavaScript bundle in `web/index.html` to the latest 2.4.0 version from GitHub.
+- Update the JavaScript bundle in `web/index.html` to the latest 2.4.0 version from GitHub. [Web]
 
 ```diff web/index.html
 -  <script src="https://github.com/corbado/flutter-passkeys/releases/download/2.0.0-dev.1/bundle.js" type="application/javascript"></script>
@@ -86,8 +86,7 @@ Here are the code changes needed to migrate from v2 to v3:
 ```
 
 - Delete `lib/auth_service.dart` as the logic is moved to the `Block` classes now.
-- Delete `lib/pages/base_page.dart`, `lib/pages/sign_in_page.dart`, `lib/pages/sign_up_page.dart`,
-  `lib/pages/tokendetails_page.dart`
+- Delete `lib/pages/base_page.dart`, `lib/pages/sign_in_page.dart`, `lib/pages/sign_up_page.dart`
 
 
 - Modify `lib/router.dart` to get rid of unused routes and add the new `auth` (which we will implement in section 4)
@@ -98,14 +97,12 @@ Here are the code changes needed to migrate from v2 to v3:
 +import 'package:corbado_auth_example/pages/auth_page.dart';
 -import 'package:corbado_auth_example/pages/sign_in_page.dart';
 -import 'package:corbado_auth_example/pages/sign_up_page.dart';
--import 'package:corbado_auth_example/pages/tokendetails_page.dart';
 
 class Routes {
 -  static const signUp = '/sign-up';
 -  static const signIn = '/sign-in';
 +  static const auth = '/auth';
    static const profile = '/profile';
--  static const tokenDetails = '/tokendetails';
 }
 
 GoRoute _defaultTransitionGoRoute({
@@ -126,10 +123,6 @@ GoRoute _defaultTransitionGoRoute({
 +          path: Routes.auth,
 +          builder: (context, state) => AuthPage(),
          ),
--        _defaultTransitionGoRoute(
--          path: Routes.tokenDetails,
--          builder: (context, state) => TokenDetailsPage(),
--        ),
        ],
        redirect: (BuildContext context, GoRouterState state) {
          final onLoggedOutRoutes = [
