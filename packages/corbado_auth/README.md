@@ -251,8 +251,8 @@ with complex routing during authentication.
 
 ## Troubleshooting
 
-| Type                | Issue                     | Note                                                                                                                                                                                                          |
-|---------------------|---------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| iOS Sim             | Localizd string not found | For passkeys to work in the iOS simulator, you need to enable faceID first in the top menu bar under features > faceID > enrolled                                                                             |
-| iOS physical device | Passkeys not working      | Passkeys do not work when running your flutter application on your physical iOS device. This has to do with the signing of your app. Rather test on a virtual iOS device or virtual/ physical Android device. |
+| Type                | Issue                      | Note                                                                                                                                                                                                          |
+|---------------------|----------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| iOS Sim             | Localized string not found | For passkeys to work in the iOS simulator, you need to enable faceID first in the top menu bar under features > faceID > enrolled                                                                             |
+| iOS physical device | Passkeys not working       | Passkeys do not work when running your flutter application on your physical iOS device. This has to do with the signing of your app. Rather test on a virtual iOS device or virtual/ physical Android device. |
 
