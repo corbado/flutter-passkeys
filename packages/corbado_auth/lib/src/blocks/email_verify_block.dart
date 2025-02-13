@@ -1,7 +1,8 @@
 import 'package:corbado_auth/src/blocks/types.dart';
 import 'package:corbado_auth/src/process_handler.dart';
 import 'package:corbado_auth/src/types/screen_names.dart';
-import 'package:corbado_frontend_api_client/corbado_frontend_api_client.dart' as Api;
+import 'package:corbado_frontend_api_client/corbado_frontend_api_client.dart'
+    as Api;
 
 enum VerificationMethod {
   emailOTP,
@@ -11,28 +12,43 @@ enum VerificationMethod {
 class EmailVerifyBlockData {
   EmailVerifyBlockData(
       {required this.email,
+      required this.newEmail,
       required this.verificationMethod,
       required this.retryNotBefore,
       required this.isPostLoginVerification});
 
+  final TextFieldWithError? newEmail;
   final String email;
   final VerificationMethod verificationMethod;
   DateTime? retryNotBefore;
   final bool? isPostLoginVerification;
   bool primaryLoading = false;
 
-  factory EmailVerifyBlockData.fromProcessResponse(Api.GeneralBlockVerifyIdentifier typed) {
-    final verificationMethod = typed.verificationMethod == Api.VerificationMethod.emailOtp
-        ? VerificationMethod.emailOTP
-        : VerificationMethod.emailLink;
+  factory EmailVerifyBlockData.fromProcessResponse(
+      Api.GeneralBlockVerifyIdentifier typed) {
+    final verificationMethod =
+        typed.verificationMethod == Api.VerificationMethod.emailOtp
+            ? VerificationMethod.emailOTP
+            : VerificationMethod.emailLink;
 
     DateTime? retryNotBefore;
     if (typed.retryNotBefore != null) {
-      retryNotBefore = DateTime.fromMillisecondsSinceEpoch(typed.retryNotBefore! * 1000);
+      retryNotBefore =
+          DateTime.fromMillisecondsSinceEpoch(typed.retryNotBefore! * 1000);
     }
+
+    TextFieldWithError? emailField;
+    emailField = TextFieldWithError(
+      value: typed.identifier,
+      error: CorbadoError.fromRequestErrorWithIdentifier(
+        typed.error,
+        Api.LoginIdentifierType.email,
+      ),
+    );
 
     return EmailVerifyBlockData(
       email: typed.identifier,
+      newEmail: emailField,
       verificationMethod: verificationMethod,
       retryNotBefore: retryNotBefore,
       isPostLoginVerification: typed.isPostLoginVerification,
@@ -41,14 +57,19 @@ class EmailVerifyBlockData {
 }
 
 class EmailVerifyBlock extends Block<EmailVerifyBlockData> {
-  EmailVerifyBlock({required ProcessHandler processHandler, required EmailVerifyBlockData data, required Api.AuthType authType})
+  EmailVerifyBlock(
+      {required ProcessHandler processHandler,
+      required EmailVerifyBlockData data,
+      required Api.AuthType authType})
       : super(
           processHandler: processHandler,
           type: Api.BlockType.emailVerify,
           alternatives: [],
           initialScreen: ScreenNames.EmailVerifyOTP,
           data: data,
-          authProcessType: authType == Api.AuthType.login ? AuthProcessType.Login : AuthProcessType.Signup,
+          authProcessType: authType == Api.AuthType.login
+              ? AuthProcessType.Login
+              : AuthProcessType.Signup,
         );
 
   init() {
@@ -103,9 +124,13 @@ class EmailVerifyBlock extends Block<EmailVerifyBlockData> {
 
   updateEmail(String newValue) async {
     try {
+      data.primaryLoading = true;
+      processHandler.notifyCurrentScreen();
+
       final res = await corbadoService.updateEmail(newValue);
       processHandler.updateBlockFromServer(res);
     } on CorbadoError catch (e) {
+      data.primaryLoading = false;
       processHandler.updateBlockFromError(e);
     }
   }

@@ -1,5 +1,6 @@
 import 'package:corbado_auth/corbado_auth.dart';
 import 'package:corbado_auth_example/auth_provider.dart';
+import 'package:corbado_auth_example/screens/email_edit.dart';
 import 'package:corbado_auth_example/screens/email_verify_otp.dart';
 import 'package:corbado_auth_example/screens/login_init.dart';
 import 'package:corbado_auth_example/screens/passkey_append.dart';
@@ -23,14 +24,16 @@ class AuthPage extends HookConsumerWidget {
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child: CorbadoAuthComponent(
-                corbadoAuth: corbadoAuth,
-                components: CorbadoScreens(
-                  signupInit: SignupInitScreen.new,
-                  loginInit: LoginInitScreen.new,
-                  emailVerifyOtp: EmailVerifyOtpScreen.new,
-                  passkeyAppend: PasskeyAppendScreen.new,
-                  passkeyVerify: PasskeyVerifyScreen.new,
-                )),
+              corbadoAuth: corbadoAuth,
+              components: CorbadoScreens(
+                signupInit: SignupInitScreen.new,
+                loginInit: LoginInitScreen.new,
+                emailVerifyOtp: EmailVerifyOtpScreen.new,
+                passkeyAppend: PasskeyAppendScreen.new,
+                passkeyVerify: PasskeyVerifyScreen.new,
+                emailEdit: EmailEditScreen.new,
+              ),
+            ),
           ),
         ),
       ),
