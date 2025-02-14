@@ -28,8 +28,10 @@ const Map<String, String> errorMap = {
   'missing_full_name': 'Please enter a valid name.',
   'unknown_error': 'Something went wrong. Please try again later.',
   'invalid_conditional_ui_login': 'The provided passkey is no longer valid. Please enter your identifier (e.g. email) manually.',
+
   // Temporary fix, we should identifierErrorMap for this
   'identifier_invalid_format': 'Please enter a valid email address.',
+  'identifier_already_in_use': 'This email address is already taken. Please try another one or log in with this one.'
 };
 
 class Translator {
