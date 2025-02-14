@@ -40,10 +40,7 @@ class EmailVerifyBlockData {
     TextFieldWithError? emailField;
     emailField = TextFieldWithError(
       value: typed.identifier,
-      error: CorbadoError.fromRequestErrorWithIdentifier(
-        typed.error,
-        Api.LoginIdentifierType.email,
-      ),
+      error: null,
     );
 
     return EmailVerifyBlockData(
@@ -128,7 +125,17 @@ class EmailVerifyBlock extends Block<EmailVerifyBlockData> {
       processHandler.notifyCurrentScreen();
 
       final res = await corbadoService.updateEmail(newValue);
-      processHandler.updateBlockFromServer(res);
+
+      final error = CorbadoError.fromRequestError(res.blockBody.error);
+
+      if (error != null) {
+        data.primaryLoading = false;
+
+        throw error;
+      }
+
+      await resendEmail();
+      navigateToVerifyEmail();
     } on CorbadoError catch (e) {
       data.primaryLoading = false;
       processHandler.updateBlockFromError(e);
