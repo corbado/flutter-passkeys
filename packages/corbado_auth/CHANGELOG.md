@@ -1,8 +1,13 @@
+## 3.3.0
+* Added Edit Email integration and screen when verifying Email.
+* Added Full name to the sign-up flow when it is enabled in the console.
+* Fixed issue with conditional UI never showing.
+
 ## 3.2.2
-* Bump version of passkeys to 2.7.0
+* Bump version of passkeys to 2.7.0.
 
 ## 3.2.1
-* Fixes Platform.version exception on Web
+* Fixes Platform.version exception on Web.
 
 ## 3.2.0
 * Added `X-Corbado-SDK` header to all requests.
