@@ -31,7 +31,8 @@ const Map<String, String> errorMap = {
 
   // Temporary fix, we should identifierErrorMap for this
   'identifier_invalid_format': 'Please enter a valid email address.',
-  'identifier_already_in_use': 'This email address is already taken. Please try another one or log in with this one.'
+  'identifier_already_in_use': 'This email address is already taken. Please try another one or log in with this one.',
+  'new_identifier_same_as_old': 'Please enter a new email address.',
 };
 
 class Translator {

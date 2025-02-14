@@ -1,3 +1,4 @@
+import 'package:corbado_auth/src/blocks/translator.dart';
 import 'package:corbado_auth/src/blocks/types.dart';
 import 'package:corbado_auth/src/process_handler.dart';
 import 'package:corbado_auth/src/types/screen_names.dart';
@@ -12,12 +13,10 @@ enum VerificationMethod {
 class EmailVerifyBlockData {
   EmailVerifyBlockData(
       {required this.email,
-      required this.newEmail,
       required this.verificationMethod,
       required this.retryNotBefore,
       required this.isPostLoginVerification});
 
-  final TextFieldWithError? newEmail;
   final String email;
   final VerificationMethod verificationMethod;
   DateTime? retryNotBefore;
@@ -37,15 +36,8 @@ class EmailVerifyBlockData {
           DateTime.fromMillisecondsSinceEpoch(typed.retryNotBefore! * 1000);
     }
 
-    TextFieldWithError? emailField;
-    emailField = TextFieldWithError(
-      value: typed.identifier,
-      error: null,
-    );
-
     return EmailVerifyBlockData(
       email: typed.identifier,
-      newEmail: emailField,
       verificationMethod: verificationMethod,
       retryNotBefore: retryNotBefore,
       isPostLoginVerification: typed.isPostLoginVerification,
@@ -121,6 +113,13 @@ class EmailVerifyBlock extends Block<EmailVerifyBlockData> {
 
   updateEmail(String newValue) async {
     try {
+      if (newValue == data.email) {
+        throw CorbadoError(
+          errorCode: 'new_identifier_same_as_old',
+          translatedError: Translator.error('new_identifier_same_as_old'),
+        );
+      }
+
       data.primaryLoading = true;
       processHandler.notifyCurrentScreen();
 

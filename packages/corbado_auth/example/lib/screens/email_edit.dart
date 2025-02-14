@@ -13,9 +13,9 @@ class EmailEditScreen extends HookWidget
   EmailEditScreen(this.block);
 
   Widget build(BuildContext context) {
-    final email = block.data.newEmail;
+    final email = block.data.email;
 
-    final emailController = useTextEditingController(text: email?.value);
+    final emailController = useTextEditingController(text: email);
 
     useEffect(() {
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -61,7 +61,6 @@ class EmailEditScreen extends HookWidget
             ),
           ),
         ),
-        MaybeGenericError(message: email?.error?.translatedError),
         const SizedBox(height: 10),
         SizedBox(
           width: double.infinity,
