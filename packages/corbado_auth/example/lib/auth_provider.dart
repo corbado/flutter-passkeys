@@ -21,3 +21,11 @@ final authStateProvider = StreamProvider((ref) async* {
     yield value;
   }
 });
+
+// Make the passkeys available throughout the app.
+final passkeysProvider = StreamProvider<List<PasskeyInfo>>((ref) async* {
+  final corbado = ref.watch(corbadoProvider);
+  await for (final value in corbado.passkeysChanges) {
+    yield value;
+  }
+});
