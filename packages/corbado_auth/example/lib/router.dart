@@ -1,6 +1,8 @@
 import 'package:corbado_auth/corbado_auth.dart';
 import 'package:corbado_auth_example/auth_provider.dart';
 import 'package:corbado_auth_example/pages/auth_page.dart';
+import 'package:corbado_auth_example/pages/edit_profile_page.dart';
+import 'package:corbado_auth_example/pages/passkey_list_page.dart';
 import 'package:corbado_auth_example/pages/profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -9,6 +11,8 @@ import 'package:go_router/go_router.dart';
 class Routes {
   static const auth = '/auth';
   static const profile = '/profile';
+  static const editProfile = '/edit-profile';
+  static const passkeyList = '/passkey-list';
 }
 
 GoRoute _defaultTransitionGoRoute({
@@ -53,6 +57,14 @@ final routerProvider = Provider<GoRouter>((ref) {
         _defaultTransitionGoRoute(
           path: Routes.profile,
           builder: (context, state) => ProfilePage(),
+        ),
+        _defaultTransitionGoRoute(
+          path: Routes.editProfile,
+          builder: (context, state) => EditProfilePage(),
+        ),
+        _defaultTransitionGoRoute(
+          path: Routes.passkeyList,
+          builder: (context, state) => PasskeyListPage(),
         ),
       ],
       redirect: (BuildContext context, GoRouterState state) {

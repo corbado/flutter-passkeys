@@ -2,6 +2,8 @@
 * Added Edit Email integration and screen when verifying Email.
 * Added Full name to the sign-up flow when it is enabled in the console.
 * Fixed issue with conditional UI never showing.
+* Added support for editing user full name.
+* Fixed `CorbadoError` not being exported from the package.
 
 ## 3.2.2
 * Bump version of passkeys to 2.7.0.

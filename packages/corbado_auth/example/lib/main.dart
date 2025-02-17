@@ -12,7 +12,7 @@ String calculateProjectID() {
   if (kIsWeb) {
     return 'pro-4268394291597054564';
   } else {
-    return 'pro-8751299119685489253';
+    return 'pro-4268394291597054564';
   }
 }
 
