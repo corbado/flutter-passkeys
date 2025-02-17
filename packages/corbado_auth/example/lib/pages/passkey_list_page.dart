@@ -1,13 +1,14 @@
+import 'package:corbado_auth/corbado_auth.dart';
 import 'package:corbado_auth_example/auth_provider.dart';
+import 'package:corbado_auth_example/screens/helper.dart';
 import 'package:corbado_auth_example/widgets/filled_text_button.dart';
-import 'package:corbado_auth_example/widgets/generic_error.dart';
 import 'package:corbado_auth_example/widgets/outlined_text_button.dart';
 import 'package:corbado_auth_example/widgets/passkey_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:overlay_support/overlay_support.dart';
 
 class PasskeyListPage extends HookConsumerWidget {
   PasskeyListPage({super.key});
@@ -19,6 +20,17 @@ class PasskeyListPage extends HookConsumerWidget {
 
     final isLoading = useState<bool>(false);
     final error = useState<String?>(null);
+
+    useEffect(() {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        final maybeError = error.value;
+        if (maybeError != null) {
+          showNotificationError(context, maybeError);
+        }
+      });
+
+      return null;
+    }, [error.value]);
 
     return Scaffold(
       appBar: AppBar(title: const Text('Corbado authentication')),
@@ -47,15 +59,34 @@ class PasskeyListPage extends HookConsumerWidget {
                           child: PasskeyCard(
                             passkey: p,
                             onDelete: (String credentialID) async {
+                              if (isLoading.value) {
+                                return;
+                              }
+                              isLoading.value = true;
+                              error.value = null;
+
                               try {
-                                isLoading.value = true;
                                 await corbado.deletePasskey(
                                   credentialID: credentialID,
                                 );
-                                isLoading.value = false;
+
+                                showSimpleNotification(
+                                    const Text(
+                                      'Passkey has been deleted successfully.',
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                    leading: const Icon(
+                                      Icons.check,
+                                      color: Colors.green,
+                                    ),
+                                    background:
+                                        Theme.of(context).colorScheme.primary);
+                              } on CorbadoError catch (e) {
+                                error.value = e.translatedError;
                               } catch (e) {
-                                isLoading.value = false;
                                 error.value = e.toString();
+                              } finally {
+                                isLoading.value = false;
                               }
                             },
                           ),
@@ -69,7 +100,32 @@ class PasskeyListPage extends HookConsumerWidget {
                   height: 50,
                   child: FilledTextButton(
                     onTap: () async {
-                      await corbado.appendPasskey();
+                      if (isLoading.value) {
+                        return;
+                      }
+
+                      isLoading.value = true;
+                      error.value = null;
+
+                      try {
+                        await corbado.appendPasskey();
+                        showSimpleNotification(
+                            const Text(
+                              'Passkey has been created successfully.',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            leading: const Icon(
+                              Icons.check,
+                              color: Colors.green,
+                            ),
+                            background: Theme.of(context).colorScheme.primary);
+                      } on CorbadoError catch (e) {
+                        error.value = e.translatedError;
+                      } catch (e) {
+                        error.value = e.toString();
+                      } finally {
+                        isLoading.value = false;
+                      }
                     },
                     content: 'Add passkey',
                   ),
