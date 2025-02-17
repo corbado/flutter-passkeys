@@ -57,6 +57,7 @@ class EmailVerifyOtpScreen extends HookWidget implements CorbadoScreen<EmailVeri
             ),
           ),
         ),
+        const SizedBox(height: 10),
         SizedBox(
           width: double.infinity,
           height: 50,
@@ -75,6 +76,15 @@ class EmailVerifyOtpScreen extends HookWidget implements CorbadoScreen<EmailVeri
           child: OutlinedTextButton(
             onTap: block.resendEmail,
             content: 'Resend code',
+          ),
+        ),
+        const SizedBox(height: 10),
+        SizedBox(
+          width: double.infinity,
+          height: 50,
+          child: OutlinedTextButton(
+            onTap: block.navigateToEditEmail,
+            content: 'Change email',
           ),
         ),
         const SizedBox(height: 10),

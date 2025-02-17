@@ -1,7 +1,9 @@
+import 'package:corbado_auth/src/blocks/translator.dart';
 import 'package:corbado_auth/src/blocks/types.dart';
 import 'package:corbado_auth/src/process_handler.dart';
 import 'package:corbado_auth/src/types/screen_names.dart';
-import 'package:corbado_frontend_api_client/corbado_frontend_api_client.dart' as Api;
+import 'package:corbado_frontend_api_client/corbado_frontend_api_client.dart'
+    as Api;
 
 enum VerificationMethod {
   emailOTP,
@@ -21,14 +23,17 @@ class EmailVerifyBlockData {
   final bool? isPostLoginVerification;
   bool primaryLoading = false;
 
-  factory EmailVerifyBlockData.fromProcessResponse(Api.GeneralBlockVerifyIdentifier typed) {
-    final verificationMethod = typed.verificationMethod == Api.VerificationMethod.emailOtp
-        ? VerificationMethod.emailOTP
-        : VerificationMethod.emailLink;
+  factory EmailVerifyBlockData.fromProcessResponse(
+      Api.GeneralBlockVerifyIdentifier typed) {
+    final verificationMethod =
+        typed.verificationMethod == Api.VerificationMethod.emailOtp
+            ? VerificationMethod.emailOTP
+            : VerificationMethod.emailLink;
 
     DateTime? retryNotBefore;
     if (typed.retryNotBefore != null) {
-      retryNotBefore = DateTime.fromMillisecondsSinceEpoch(typed.retryNotBefore! * 1000);
+      retryNotBefore =
+          DateTime.fromMillisecondsSinceEpoch(typed.retryNotBefore! * 1000);
     }
 
     return EmailVerifyBlockData(
@@ -41,14 +46,19 @@ class EmailVerifyBlockData {
 }
 
 class EmailVerifyBlock extends Block<EmailVerifyBlockData> {
-  EmailVerifyBlock({required ProcessHandler processHandler, required EmailVerifyBlockData data, required Api.AuthType authType})
+  EmailVerifyBlock(
+      {required ProcessHandler processHandler,
+      required EmailVerifyBlockData data,
+      required Api.AuthType authType})
       : super(
           processHandler: processHandler,
           type: Api.BlockType.emailVerify,
           alternatives: [],
           initialScreen: ScreenNames.EmailVerifyOTP,
           data: data,
-          authProcessType: authType == Api.AuthType.login ? AuthProcessType.Login : AuthProcessType.Signup,
+          authProcessType: authType == Api.AuthType.login
+              ? AuthProcessType.Login
+              : AuthProcessType.Signup,
         );
 
   init() {
@@ -103,9 +113,30 @@ class EmailVerifyBlock extends Block<EmailVerifyBlockData> {
 
   updateEmail(String newValue) async {
     try {
+      if (newValue == data.email) {
+        throw CorbadoError(
+          errorCode: 'new_identifier_same_as_old',
+          translatedError: Translator.error('new_identifier_same_as_old'),
+        );
+      }
+
+      data.primaryLoading = true;
+      processHandler.notifyCurrentScreen();
+
       final res = await corbadoService.updateEmail(newValue);
-      processHandler.updateBlockFromServer(res);
+
+      final error = CorbadoError.fromRequestError(res.blockBody.error);
+
+      if (error != null) {
+        data.primaryLoading = false;
+
+        throw error;
+      }
+
+      await resendEmail();
+      navigateToVerifyEmail();
     } on CorbadoError catch (e) {
+      data.primaryLoading = false;
       processHandler.updateBlockFromError(e);
     }
   }

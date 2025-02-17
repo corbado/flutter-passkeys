@@ -4,13 +4,23 @@ import 'package:corbado_auth/src/types/process_handler.dart';
 import 'package:flutter/material.dart';
 
 class CorbadoScreens {
-  CorbadoScreens({this.loginInit, this.passkeyVerify, this.passkeyAppend, this.emailVerifyOtp, this.signupInit});
+  CorbadoScreens(
+      {this.loginInit,
+      this.passkeyVerify,
+      this.passkeyAppend,
+      this.emailVerifyOtp,
+      this.signupInit,
+      this.emailEdit});
 
   final CorbadoScreen<SignupInitBlock> Function(SignupInitBlock)? signupInit;
   final CorbadoScreen<LoginInitBlock> Function(LoginInitBlock)? loginInit;
-  final CorbadoScreen<PasskeyVerifyBlock> Function(PasskeyVerifyBlock)? passkeyVerify;
-  final CorbadoScreen<PasskeyAppendBlock> Function(PasskeyAppendBlock)? passkeyAppend;
-  final CorbadoScreen<EmailVerifyBlock> Function(EmailVerifyBlock)? emailVerifyOtp;
+  final CorbadoScreen<PasskeyVerifyBlock> Function(PasskeyVerifyBlock)?
+      passkeyVerify;
+  final CorbadoScreen<PasskeyAppendBlock> Function(PasskeyAppendBlock)?
+      passkeyAppend;
+  final CorbadoScreen<EmailVerifyBlock> Function(EmailVerifyBlock)?
+      emailVerifyOtp;
+  final CorbadoScreen<EmailVerifyBlock> Function(EmailVerifyBlock)? emailEdit;
 }
 
 // CorbadoAuthComponent listens to a Stream<Widget> and rebuilds itself
@@ -20,7 +30,8 @@ class CorbadoAuthComponent extends StatefulWidget {
   final CorbadoScreens components;
   final Widget? loading;
 
-  CorbadoAuthComponent({required this.corbadoAuth, required this.components, this.loading});
+  CorbadoAuthComponent(
+      {required this.corbadoAuth, required this.components, this.loading});
 
   @override
   _CorbadoAuthComponentState createState() => _CorbadoAuthComponentState();
@@ -51,13 +62,16 @@ class _CorbadoAuthComponentState extends State<CorbadoAuthComponent> {
             case ScreenNames.LoginInit:
               return widget.components.loginInit!(d.block as LoginInitBlock);
             case ScreenNames.EmailVerifyOTP:
-              return widget.components.emailVerifyOtp!(d.block as EmailVerifyBlock);
+              return widget
+                  .components.emailVerifyOtp!(d.block as EmailVerifyBlock);
             case ScreenNames.PasskeyAppend:
-              return widget.components.passkeyAppend!(d.block as PasskeyAppendBlock);
+              return widget
+                  .components.passkeyAppend!(d.block as PasskeyAppendBlock);
             case ScreenNames.PasskeyVerify:
-              return widget.components.passkeyVerify!(d.block as PasskeyVerifyBlock);
+              return widget
+                  .components.passkeyVerify!(d.block as PasskeyVerifyBlock);
             case ScreenNames.EmailEdit:
-              throw UnimplementedError();
+              return widget.components.emailEdit!(d.block as EmailVerifyBlock);
             case ScreenNames.EmailVerifyLink:
               throw UnimplementedError();
           }

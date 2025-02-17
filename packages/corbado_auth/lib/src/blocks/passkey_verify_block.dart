@@ -92,8 +92,4 @@ class PasskeyVerifyBlock extends Block<PasskeyVerifyBlockData> {
       processHandler.updateBlockFromError(e);
     }
   }
-
-  skipPasskeyAppend() {
-
-  }
 }

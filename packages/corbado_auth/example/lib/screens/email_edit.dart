@@ -6,23 +6,16 @@ import 'package:corbado_auth_example/widgets/outlined_text_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
-class SignupInitScreen extends HookWidget
-    implements CorbadoScreen<SignupInitBlock> {
-  final SignupInitBlock block;
+class EmailEditScreen extends HookWidget
+    implements CorbadoScreen<EmailVerifyBlock> {
+  final EmailVerifyBlock block;
 
-  SignupInitScreen(this.block);
+  EmailEditScreen(this.block);
 
   Widget build(BuildContext context) {
     final email = block.data.email;
-    final fullName = block.data.fullName;
 
-    if (email == null) {
-      return Container();
-    }
-
-    final emailController = useTextEditingController(text: email.value);
-
-    final fullNameController = useTextEditingController(text: fullName?.value);
+    final emailController = useTextEditingController(text: email);
 
     useEffect(() {
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -36,14 +29,13 @@ class SignupInitScreen extends HookWidget
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        MaybeGenericError(message: block.error?.translatedError),
         const SizedBox(
           height: 10,
         ),
         const Padding(
           padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
           child: Text(
-            'Tired of passwords?',
+            'Edit the email address',
             style: TextStyle(
               fontSize: 40,
               fontWeight: FontWeight.bold,
@@ -53,7 +45,7 @@ class SignupInitScreen extends HookWidget
         const Padding(
           padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           child: Text(
-            'Sign up using your biometrics like fingerprint or face.',
+            'Insert the new email address below.',
             style: TextStyle(
               fontSize: 20,
             ),
@@ -62,7 +54,6 @@ class SignupInitScreen extends HookWidget
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 4),
           child: TextField(
-            key: const ValueKey('textfield-email'),
             controller: emailController,
             decoration: const InputDecoration(
               border: OutlineInputBorder(),
@@ -70,37 +61,16 @@ class SignupInitScreen extends HookWidget
             ),
           ),
         ),
-        MaybeGenericError(message: email.error?.translatedError),
-        if (fullName != null)
-          Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 4),
-                child: TextField(
-                  key: const ValueKey('textfield-fullName'),
-                  controller: fullNameController,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    hintText: 'Full name',
-                  ),
-                ),
-              ),
-              MaybeGenericError(message: fullName.error?.translatedError),
-            ],
-          ),
-        const SizedBox(height: 20),
+        const SizedBox(height: 10),
         SizedBox(
           width: double.infinity,
           height: 50,
           child: FilledTextButton(
             isLoading: block.data.primaryLoading,
             onTap: () async {
-              await block.submitSignupInit(
-                email: emailController.text,
-                fullName: fullName != null ? fullNameController.text : 'fixed',
-              );
+                await block.updateEmail(emailController.text);
             },
-            content: 'Sign up',
+            content: 'Edit email',
           ),
         ),
         const SizedBox(height: 10),
@@ -108,10 +78,11 @@ class SignupInitScreen extends HookWidget
           width: double.infinity,
           height: 50,
           child: OutlinedTextButton(
-            onTap: block.navigateToLogin,
-            content: 'I already have an account',
+            onTap: block.navigateToVerifyEmail,
+            content: 'Back',
           ),
         ),
+        const SizedBox(height: 10),
       ],
     );
   }
