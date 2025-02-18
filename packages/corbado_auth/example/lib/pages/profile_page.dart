@@ -1,7 +1,10 @@
 import 'package:corbado_auth_example/auth_provider.dart';
+import 'package:corbado_auth_example/router.dart';
 import 'package:corbado_auth_example/widgets/filled_text_button.dart';
+import 'package:corbado_auth_example/widgets/outlined_text_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 class ProfilePage extends ConsumerWidget {
   ProfilePage({super.key});
@@ -49,8 +52,26 @@ class ProfilePage extends ConsumerWidget {
                   width: double.infinity,
                   height: 50,
                   child: FilledTextButton(
+                    onTap: () => context.push(Routes.editProfile),
+                    content: 'Edit profile',
+                  ),
+                ),
+                const SizedBox(height: 10),
+                SizedBox(
+                  width: double.infinity,
+                  height: 50,
+                  child: FilledTextButton(
+                    onTap: () => context.push(Routes.passkeyList),
+                    content: 'Passkey list',
+                  ),
+                ),
+                const SizedBox(height: 10),
+                SizedBox(
+                  width: double.infinity,
+                  height: 50,
+                  child: OutlinedTextButton(
                     onTap: corbado.signOut,
-                    content: 'sign out',
+                    content: 'Sign out',
                   ),
                 ),
               ],

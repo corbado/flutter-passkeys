@@ -192,7 +192,7 @@ abstract class CorbadoService {
 
   Future<void> sessionUpdateUser({String? fullname}) async {
     final meUpdateReq = api.MeUpdateReq((b) => b..fullName = fullname);
-    await _wrapWithError(() => frontendAPIClient.getUsersApi().currentUserUpdate(meUpdateReq: meUpdateReq));
+    await _wrapWithErrorEmptyResponse(() => frontendAPIClient.getUsersApi().currentUserUpdate(meUpdateReq: meUpdateReq));
   }
 
   Future<api.ProcessResponse> verifyPasskey() async {

@@ -122,6 +122,13 @@ class CorbadoAuth {
     await _loadPasskeys();
   }
 
+  /// Change the user's full name.
+  Future<void> changeUsername({required String fullName}) async {
+    await _corbadoService.sessionUpdateUser(fullname: fullName);
+
+    await refreshUser();
+  }
+
   static SessionService _buildSessionService(CorbadoFrontendApiClient frontendAPIClient) {
     StorageService storageService;
     if (kIsWeb) {
