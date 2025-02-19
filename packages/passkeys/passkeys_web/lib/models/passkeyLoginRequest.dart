@@ -89,6 +89,8 @@ class PasskeyLoginAllowCredentialType {
 }
 
 enum AuthenticatorTransport {
+  @JsonValue('hybrid')
+  Hybrid,
   @JsonValue('internal')
   Internal,
   @JsonValue('nfc')
@@ -100,6 +102,8 @@ enum AuthenticatorTransport {
 
   factory AuthenticatorTransport.fromPlatformType(String value) {
     switch (value) {
+      case 'hybrid':
+        return AuthenticatorTransport.Hybrid;
       case 'internal':
         return AuthenticatorTransport.Internal;
       case 'usb':

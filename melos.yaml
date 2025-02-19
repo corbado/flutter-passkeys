@@ -48,10 +48,10 @@ scripts:
       flutter run lib/main.dart
 
   example-corbado_auth-web:
-  description: Run corbado_auth example on web.
-  run: |
-    cd packages/corbado_auth/example
-    flutter run lib/main.dart -d chrome --web-browser-flag "--disable-web-security"
+    description: Run corbado_auth example on web.
+    run: |
+      cd packages/corbado_auth/example
+      flutter run lib/main.dart -d chrome --web-browser-flag "--disable-web-security"
 
   example-corbado_auth_firebase-native:
     description: Run corbado_auth_firebase example on iOS or Android (you should start the emulator/simulator before you run this command).
