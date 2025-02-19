@@ -1,3 +1,6 @@
+## 3.3.1
+* Bump up version of passkeys to 2.7.1.
+
 ## 3.3.0
 * Added Edit Email integration and screen when verifying Email.
 * Added Full name to the sign-up flow when it is enabled in the console.
