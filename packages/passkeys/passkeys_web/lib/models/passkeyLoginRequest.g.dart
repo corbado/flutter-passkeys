@@ -84,6 +84,7 @@ Map<String, dynamic> _$PasskeyLoginAllowCredentialTypeToJson(
     };
 
 const _$AuthenticatorTransportEnumMap = {
+  AuthenticatorTransport.Hybrid: 'hybrid',
   AuthenticatorTransport.Internal: 'internal',
   AuthenticatorTransport.Nfc: 'nfc',
   AuthenticatorTransport.Usb: 'usb',

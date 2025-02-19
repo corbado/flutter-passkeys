@@ -10,11 +10,18 @@ import 'package:overlay_support/overlay_support.dart';
 // In your own project you should get this from an ENV variable or from a Flutter flavour.
 String calculateProjectID() {
   if (kIsWeb) {
-    return 'pro-4268394291597054564';
+    return 'pro-8751299119685489253';
   } else {
     return 'pro-4268394291597054564';
   }
 }
+
+const String CORBADO_PROJECT_ID_DEFAULT_VALUE = 'none';
+
+const String envProjectId = String.fromEnvironment(
+  'CORBADO_PROJECT_ID',
+  defaultValue: CORBADO_PROJECT_ID_DEFAULT_VALUE,
+);
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,7 +33,9 @@ void main() async {
   runApp(const LoadingPage());
 
   // Now we do the initialization.
-  final projectId = calculateProjectID();
+  final projectId =
+      envProjectId == 'none' ? calculateProjectID() : envProjectId;
+
   final customDomain = 'https://$projectId.frontendapi.cloud.corbado.io';
   final corbadoAuth = CorbadoAuth();
   await corbadoAuth.init(projectId: projectId, customDomain: customDomain);

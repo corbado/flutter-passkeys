@@ -1,3 +1,6 @@
+## 2.7.1
+* Fixed a bug where `hybrid` transports causes login to fail. (Web)
+
 ## 2.7.0
 * Fixed Exception when trying to register while `authenticatorAttachment` is null on Safari or IOS device. (Web)
 * Added support for external security keys (Yubikey) on iOS. (iOS)
