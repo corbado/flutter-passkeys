@@ -16,11 +16,16 @@ String calculateProjectID() {
   }
 }
 
-const String CORBADO_PROJECT_ID_DEFAULT_VALUE = 'none';
+const String DEFAULT_VALUE = 'none';
 
 const String envProjectId = String.fromEnvironment(
   'CORBADO_PROJECT_ID',
-  defaultValue: CORBADO_PROJECT_ID_DEFAULT_VALUE,
+  defaultValue: DEFAULT_VALUE,
+);
+
+const String envCustomDomain = String.fromEnvironment(
+  'CORBADO_CUSTOM_DOMAIN',
+  defaultValue: DEFAULT_VALUE,
 );
 
 void main() async {
@@ -36,7 +41,10 @@ void main() async {
   final projectId =
       envProjectId == 'none' ? calculateProjectID() : envProjectId;
 
-  final customDomain = 'https://$projectId.frontendapi.cloud.corbado.io';
+  final customDomain = envCustomDomain == 'none'
+      ? 'https://$projectId.frontendapi.cloud.corbado.io'
+      : envCustomDomain;
+
   final corbadoAuth = CorbadoAuth();
   await corbadoAuth.init(projectId: projectId, customDomain: customDomain);
 
