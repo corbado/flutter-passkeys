@@ -10,7 +10,7 @@ import 'package:overlay_support/overlay_support.dart';
 // In your own project you should get this from an ENV variable or from a Flutter flavour.
 String calculateProjectID() {
   if (kIsWeb) {
-    return 'pro-4268394291597054564';
+    return 'pro-8751299119685489253';
   } else {
     return 'pro-4268394291597054564';
   }
