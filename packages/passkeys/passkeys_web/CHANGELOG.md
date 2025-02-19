@@ -1,3 +1,6 @@
+## 2.5.1
+* Fixed a bug where `hybrid` transports causes login to fail.
+
 ## 2.5.0
 * Fixed Exception when trying to register while `authenticatorAttachment` is null on Safari or IOS device. 
 
