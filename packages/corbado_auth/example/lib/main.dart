@@ -23,11 +23,6 @@ const String envProjectId = String.fromEnvironment(
   defaultValue: DEFAULT_VALUE,
 );
 
-const String envCustomDomain = String.fromEnvironment(
-  'CORBADO_CUSTOM_DOMAIN',
-  defaultValue: DEFAULT_VALUE,
-);
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -41,9 +36,7 @@ void main() async {
   final projectId =
       envProjectId == 'none' ? calculateProjectID() : envProjectId;
 
-  final customDomain = envCustomDomain == 'none'
-      ? 'https://$projectId.frontendapi.cloud.corbado.io'
-      : envCustomDomain;
+  final customDomain = 'https://$projectId.frontendapi.cloud.corbado.io';
 
   final corbadoAuth = CorbadoAuth();
   await corbadoAuth.init(projectId: projectId, customDomain: customDomain);
