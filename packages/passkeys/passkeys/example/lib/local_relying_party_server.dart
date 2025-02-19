@@ -2,6 +2,7 @@ import 'dart:collection';
 import 'dart:convert';
 import 'dart:math';
 
+import 'package:flutter/foundation.dart';
 import 'package:passkeys/types.dart';
 import 'package:passkeys_example/auth_service.dart';
 
@@ -18,7 +19,10 @@ class LocalUser {
   List<String> transports;
 }
 
-const rpID = 'flutter.corbado.io';
+const rpID = kIsWeb &&
+        String.fromEnvironment('IS_VERCEL', defaultValue: 'false') != 'true'
+    ? 'localhost'
+    : 'flutter.corbado.io';
 
 /// This is a local version of a relying party server.
 ///
