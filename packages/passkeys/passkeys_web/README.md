@@ -1,4 +1,4 @@
-# passkeys_ios
+# passkeys_web
 
 The Flutter web implementation of `passkeys`.
 
