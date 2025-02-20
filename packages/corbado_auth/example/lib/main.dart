@@ -41,9 +41,7 @@ void main() async {
   final projectId =
       envProjectId == 'none' ? calculateProjectID() : envProjectId;
 
-  final customDomain = envCustomDomain == 'none'
-      ? 'https://$projectId.frontendapi.cloud.corbado.io'
-      : envCustomDomain;
+  final customDomain = 'https://$projectId.frontendapi.cloud.corbado.io';
 
   final corbadoAuth = CorbadoAuth();
   await corbadoAuth.init(projectId: projectId, customDomain: customDomain);
