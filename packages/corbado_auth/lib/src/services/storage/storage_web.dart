@@ -74,7 +74,8 @@ class WebStorageService implements StorageService {
   Future<void> clear() async {
     _localStorage
       ..remove(_userKey)
-      ..remove(_refreshTokenKey);
+      ..remove(_refreshTokenKey)
+      ..remove(_frontEndApiUrlKey);
 
     return;
   }

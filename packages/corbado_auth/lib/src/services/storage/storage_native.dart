@@ -67,5 +67,6 @@ class NativeStorageService implements StorageService {
   Future<void> clear() async {
     await FlutterKeychain.remove(key: _userKey);
     await FlutterKeychain.remove(key: _refreshTokenKey);
+    await FlutterKeychain.remove(key: _frontEndApiUrlKey);
   }
 }
