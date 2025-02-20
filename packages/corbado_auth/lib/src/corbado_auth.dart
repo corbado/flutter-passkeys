@@ -28,17 +28,21 @@ class CorbadoAuth {
   /// Should be listened to to get updates to a user's auth state
   /// (e.g. sign in, sign out).
   /// This is a subset of userChanges.
-  Stream<AuthState> get authStateChanges => _sessionService.authStateChanges.distinct();
+  Stream<AuthState> get authStateChanges =>
+      _sessionService.authStateChanges.distinct();
 
   /// Should be listened to to get updates to a user's passkeys.
-  Stream<List<PasskeyInfo>> get passkeysChanges => _passkeysStreamController.stream.distinct();
+  Stream<List<PasskeyInfo>> get passkeysChanges =>
+      _passkeysStreamController.stream.distinct();
 
   /// Returns the current value of the user object.
   Future<User?> get currentUser => _sessionService.userChanges.first;
 
-  Stream<ComponentWithData> get componentWithDataStream => _processHandler.componentWithDataStream;
+  Stream<ComponentWithData> get componentWithDataStream =>
+      _processHandler.componentWithDataStream;
 
-  final StreamController<List<PasskeyInfo>> _passkeysStreamController = StreamController();
+  final StreamController<List<PasskeyInfo>> _passkeysStreamController =
+      StreamController();
 
   late ProcessHandler _processHandler;
   late CorbadoService _corbadoService;
@@ -46,15 +50,18 @@ class CorbadoAuth {
 
   Future<void> initProcessHandler() async {
     final res = await _corbadoService.initAuthProcess();
+    await _sessionService.setFrontEndApiUrl(res.common.frontendApiUrl);
+
     _processHandler.updateBlockFromServer(res);
   }
 
   /// Tries to get the user object from secure storage (this only works if
   /// the user has already signed in before and then closed the app).
-  Future<void> init({required String projectId,@deprecated String? customDomain}) async {
+  Future<void> init(
+      {required String projectId, @deprecated String? customDomain}) async {
     final passkeyAuthenticator = PasskeyAuthenticator();
-    _corbadoService =
-        await createClient(projectId, passkeyAuthenticator: passkeyAuthenticator, customDomain: customDomain);
+    _corbadoService = await createClient(projectId,
+        passkeyAuthenticator: passkeyAuthenticator, customDomain: customDomain);
     _sessionService = _buildSessionService(
       _corbadoService.frontendAPIClient,
     );
@@ -83,9 +90,12 @@ class CorbadoAuth {
   }
 
   /// Load all passkeys that are available to the currently logged in user.
-  Future<List<PasskeyInfo>> _loadPasskeys({String? explicitRefreshToken}) async {
-    final refreshToken = explicitRefreshToken ?? await _sessionService.getRefreshToken();
-    final passkeys = await _corbadoService.sessionListPasskeys(token: refreshToken);
+  Future<List<PasskeyInfo>> _loadPasskeys(
+      {String? explicitRefreshToken}) async {
+    final refreshToken =
+        explicitRefreshToken ?? await _sessionService.getRefreshToken();
+    final passkeys =
+        await _corbadoService.sessionListPasskeys(token: refreshToken);
     final mapped = passkeys.map((p) => PasskeyInfo.fromResponse(p)).toList();
 
     _passkeysStreamController.sink.add(mapped);
@@ -129,7 +139,8 @@ class CorbadoAuth {
     await refreshUser();
   }
 
-  static SessionService _buildSessionService(CorbadoFrontendApiClient frontendAPIClient) {
+  static SessionService _buildSessionService(
+      CorbadoFrontendApiClient frontendAPIClient) {
     StorageService storageService;
     if (kIsWeb) {
       storageService = WebStorageService();

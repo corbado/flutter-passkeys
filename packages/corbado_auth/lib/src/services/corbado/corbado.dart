@@ -31,11 +31,6 @@ abstract class CorbadoService {
       throw CorbadoError.fromMissingServerResponse();
     }
 
-    // We set the api client baseURL to the value received from the init call as
-    // it contains the correct baseUrl calculated by the backend
-    frontendAPIClient.dio.options.baseUrl =
-        res.data!.processResponse.common.frontendApiUrl;
-
     _setProcessState(res.data!.token, res.data!.expiresAt);
 
     return res.data!.processResponse;

@@ -25,6 +25,12 @@ class SessionService {
   SessionService(this._storageService, this.frontendAPIClient);
 
   Future<User?> init() async {
+    final baseUrl = await getFrontEndApiUrl();
+
+    if (baseUrl != null) {
+      frontendAPIClient.dio.options.baseUrl = baseUrl;
+    }
+
     await _handleRefreshRequest();
 
     final user = await getUser();
