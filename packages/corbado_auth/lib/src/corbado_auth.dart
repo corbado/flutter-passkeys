@@ -66,6 +66,12 @@ class CorbadoAuth {
       _corbadoService.frontendAPIClient,
     );
 
+    final frontEndApiUrl = await _sessionService.getFrontEndApiUrl();
+
+    if (frontEndApiUrl != null) {
+      _corbadoService.frontendAPIClient.dio.options.baseUrl = frontEndApiUrl;
+    }
+
     _processHandler = ProcessHandler(
       corbadoService: _corbadoService,
       onLoggedIn: (String shortSession, String? longSession) async {
