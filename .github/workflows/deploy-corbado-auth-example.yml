@@ -40,12 +40,7 @@ jobs:
           npx vercel pull --token $VERCEL_TOKEN --scope $VERCEL_ORG_ID
           npx vercel build --token $VERCEL_TOKEN --scope $VERCEL_ORG_ID
           url="$(npx vercel deploy --prebuilt -t ${{ secrets.VERCEL_TOKEN }})"
-          npx vercel alias -S corbado -t ${{ secrets.VERCEL_TOKEN }} "$url" $BRANCH_NAME.react.playground.corbado.io
-
-      - name: Assign Alias for PR
-        if: github.event_name == 'pull_request'
-        run: |
-          npx vercel alias set $DEPLOY_URL $ALIAS_URL --token $VERCEL_TOKEN --scope $VERCEL_ORG_ID
+          npx vercel alias -S corbado -t ${{ secrets.VERCEL_TOKEN }} "$url" $BRANCH_NAME.corbadoauth.flutter.corbado.io
 
       - name: Deploy Next example to Vercel (Production on main)
         if: github.ref == 'refs/heads/main'
