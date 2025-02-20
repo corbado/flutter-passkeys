@@ -72,6 +72,14 @@ class SessionService {
     return _storageService.setUser(value);
   }
 
+  Future<String?> getFrontEndApiUrl() {
+    return _storageService.getFrontEndApiUrl();
+  }
+
+  Future<void> setFrontEndApiUrl(String value) {
+    return _storageService.setFrontEndApiUrl(value);
+  }
+
   Future<void> signOut() async {
     _refreshTimer?.cancel();
     _userStreamController.add(null);

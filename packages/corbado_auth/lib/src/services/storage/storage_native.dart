@@ -6,6 +6,7 @@ import 'package:flutter_keychain/flutter_keychain.dart';
 
 const _refreshTokenKey = 'refresh_token';
 const _userKey = 'user';
+const _frontEndApiUrlKey = 'front_end_api_url';
 
 /// Used to store session data like:
 /// - refreshToken (longSession)
@@ -44,6 +45,21 @@ class NativeStorageService implements StorageService {
   Future<void> setUser(User value) {
     final serialized = jsonEncode(value.toJson());
     return FlutterKeychain.put(key: _userKey, value: serialized);
+  }
+
+  @override
+  Future<String?> getFrontEndApiUrl() async {
+    final value = await FlutterKeychain.get(key: _frontEndApiUrlKey);
+    if (value == null) {
+      return null;
+    }
+
+    return value;
+  }
+
+  @override
+  Future<void> setFrontEndApiUrl(String value) {
+    return FlutterKeychain.put(key: _frontEndApiUrlKey, value: value);
   }
 
   /// removes all data from (full clear)
