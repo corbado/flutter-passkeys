@@ -45,7 +45,7 @@ jobs:
           npx vercel alias -S corbado -t ${{ secrets.VERCEL_TOKEN }} "$url" $BRANCH_NAME.passkeys.flutter.corbado.io
 
       - name: Deploy Next example to Vercel (Production on main)
-        if: github.event_name == 'push'
+        if: github.event_name != 'pull_request'
         run: |
           cd packages/passkeys/passkeys/example
           npx vercel pull -t $VERCEL_TOKEN
