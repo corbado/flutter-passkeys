@@ -1,3 +1,7 @@
+## 3.4.0
+* Deprecated `customDomain` and replaced with `frontendApiUrl` coming from the backend instead.
+* Fixed a bug where reloading the page when logged in to a Production Project logs you out.
+
 ## 3.3.1
 * Bump up version of passkeys to 2.7.1.
 
