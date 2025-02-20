@@ -59,7 +59,7 @@ Here are the dependency changes needed to migrate from v2 to v3:
 environment:  
  dependencies:
 -  corbado_auth: ^2.0.8
-+  corbado_auth: ^3.2.2
++  corbado_auth: ^3.4.0
 ```  
 
 - Update the JavaScript bundle in `web/index.html` to the latest 2.4.0 version from GitHub. [Web]
