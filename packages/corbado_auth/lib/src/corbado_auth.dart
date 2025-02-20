@@ -51,7 +51,7 @@ class CorbadoAuth {
 
   /// Tries to get the user object from secure storage (this only works if
   /// the user has already signed in before and then closed the app).
-  Future<void> init({required String projectId, String? customDomain}) async {
+  Future<void> init({required String projectId,@deprecated String? customDomain}) async {
     final passkeyAuthenticator = PasskeyAuthenticator();
     _corbadoService =
         await createClient(projectId, passkeyAuthenticator: passkeyAuthenticator, customDomain: customDomain);

@@ -8,7 +8,7 @@ import 'package:ua_client_hints/ua_client_hints.dart';
 Future<CorbadoService> createClient(
   String projectId, {
   required PasskeyAuthenticator passkeyAuthenticator,
-  String? customDomain,
+  @deprecated String? customDomain,
 }) async {
   final basePath = CorbadoService.getFrontendAPIDomain(
     projectId,

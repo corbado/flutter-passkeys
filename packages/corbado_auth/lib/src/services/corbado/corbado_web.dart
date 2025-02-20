@@ -6,7 +6,7 @@ import 'package:passkeys/authenticator.dart';
 Future<CorbadoService> createClient(
   String projectId, {
   required PasskeyAuthenticator passkeyAuthenticator,
-  String? customDomain,
+  @deprecated String? customDomain,
 }) async {
   final basePath = CorbadoService.getFrontendAPIDomain(
     projectId,
