@@ -142,7 +142,7 @@ class _SignInPageState extends ConsumerState<SignInPage> {
                   await authService.loginWithPasskey(email: email);
                   context.go(Routes.profile);
                 } catch (e) {
-                  if (e is PlatformException) {
+                  if (e is AuthenticatorException) {
                     error.value = getFriendlyErrorMessage(e);
                   } else {
                     error.value = e.toString();

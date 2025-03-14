@@ -4,7 +4,7 @@ import 'package:passkeys/exceptions.dart';
 /// error_handling.dart
 
 /// Returns a user-friendly error message for the given [AuthenticatorException].
-String getFriendlyErrorMessage(PlatformException exception) {
+String getFriendlyErrorMessage(AuthenticatorException exception) {
   if (exception is PasskeyAuthCancelledException) {
     return 'Authentication was cancelled. Please try again.';
   } else if (exception is MissingGoogleSignInException) {

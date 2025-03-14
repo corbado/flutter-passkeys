@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:passkeys/exceptions.dart';
 import 'package:passkeys_example/auth_service.dart';
 import 'package:passkeys_example/error_handling.dart';
 import 'package:passkeys_example/pages/base_page.dart';
@@ -108,7 +109,7 @@ class SignUpPage extends HookConsumerWidget {
                   await authService.signupWithPasskey(email: email);
                   context.go(Routes.profile);
                 } catch (e) {
-                  if (e is PlatformException) {
+                  if (e is AuthenticatorException) {
                     error.value = getFriendlyErrorMessage(e);
                   } else {
                     error.value = e.toString();
