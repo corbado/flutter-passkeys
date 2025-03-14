@@ -7,6 +7,7 @@ import 'package:universal_html/html.dart';
 const _refreshTokenKey = 'refresh_token';
 const _userKey = 'user';
 const _frontEndApiUrlKey = 'front_end_api_url';
+const _clientEnvHandleKey = 'client_env_handle';
 
 /// Used to store session data like:
 /// - refreshToken (longSession)
@@ -69,13 +70,26 @@ class WebStorageService implements StorageService {
     return;
   }
 
+  @override
+  Future<void> setClientEnvHandle(String value) async {
+    _localStorage[_clientEnvHandleKey] = value;
+
+    return;
+  }
+
+  @override
+  Future<String?> getClientEnvHandle() async {
+    return _localStorage[_clientEnvHandleKey];
+  }
+
   /// removes all data from (full clear)
   @override
   Future<void> clear() async {
     _localStorage
       ..remove(_userKey)
       ..remove(_refreshTokenKey)
-      ..remove(_frontEndApiUrlKey);
+      ..remove(_frontEndApiUrlKey)
+      ..remove(_clientEnvHandleKey);
 
     return;
   }
