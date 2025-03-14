@@ -77,7 +77,7 @@ class LocalRelyingPartyServer {
                   ))
               .toList()
           : [],
-      timeout: configuration?.timeout,
+      timeout: configuration?.timeout ?? 60000,
     );
   }
 
@@ -133,12 +133,13 @@ class LocalRelyingPartyServer {
           : _users[name]!.credentialID != null
               ? [
                   CredentialType(
-                      type: 'public-key',
-                      id: _users[name]!.credentialID!,
-                      transports: _users[name]!.transports)
+                    type: 'public-key',
+                    id: _users[name]!.credentialID!,
+                    transports: _users[name]!.transports,
+                  ),
                 ]
               : null,
-      timeout: configuration?.timeout,
+      timeout: configuration?.timeout ?? 60000,
     );
   }
 
