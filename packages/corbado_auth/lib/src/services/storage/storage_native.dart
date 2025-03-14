@@ -69,16 +69,17 @@ class NativeStorageService implements StorageService {
   }
 
   @override
-  Future<String?> getClientEnvHandle() async {
+  Future<String?> getClientEnvHandle() {
     return FlutterKeychain.get(key: _clientEnvHandleKey);
   }
 
   /// removes all data from (full clear)
   @override
   Future<void> clear() async {
+    // We wont clear clientEnv because we want to keep track of it even when we
+    // log out and the clear function is called on sign out
     await FlutterKeychain.remove(key: _userKey);
     await FlutterKeychain.remove(key: _refreshTokenKey);
     await FlutterKeychain.remove(key: _frontEndApiUrlKey);
-    await FlutterKeychain.remove(key: _clientEnvHandleKey);
   }
 }

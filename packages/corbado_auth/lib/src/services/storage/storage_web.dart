@@ -79,17 +79,24 @@ class WebStorageService implements StorageService {
 
   @override
   Future<String?> getClientEnvHandle() async {
-    return _localStorage[_clientEnvHandleKey];
+    final value = _localStorage[_clientEnvHandleKey];
+
+    if (value == null) {
+      return null;
+    }
+
+    return value;
   }
 
   /// removes all data from (full clear)
   @override
   Future<void> clear() async {
+    // We wont clear clientEnv because we want to keep track of it even when we
+    // log out and the clear function is called on sign out
     _localStorage
       ..remove(_userKey)
       ..remove(_refreshTokenKey)
-      ..remove(_frontEndApiUrlKey)
-      ..remove(_clientEnvHandleKey);
+      ..remove(_frontEndApiUrlKey);
 
     return;
   }

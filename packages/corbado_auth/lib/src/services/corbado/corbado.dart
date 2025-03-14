@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:built_collection/built_collection.dart';
 import 'package:corbado_auth/corbado_auth.dart';
 import 'package:corbado_auth/src/blocks/types.dart';
+import 'package:corbado_auth/src/services/storage/storage.dart';
 import 'package:corbado_frontend_api_client/corbado_frontend_api_client.dart'
     as api;
 import 'package:corbado_frontend_api_client/corbado_frontend_api_client.dart';
@@ -12,10 +13,12 @@ import 'package:flutter/foundation.dart';
 import 'package:passkeys/authenticator.dart';
 
 abstract class CorbadoService {
-  CorbadoService(this.frontendAPIClient, this.passkeyAuthenticator);
+  CorbadoService(
+      this.frontendAPIClient, this.passkeyAuthenticator, this._storageService);
 
   final api.CorbadoFrontendApiClient frontendAPIClient;
   final PasskeyAuthenticator passkeyAuthenticator;
+  final StorageService _storageService;
 
   String? _processID;
   DateTime? _processExpiresAt;
@@ -29,6 +32,10 @@ abstract class CorbadoService {
         .processInit(processInitReq: processInitReq);
     if (res.data == null) {
       throw CorbadoError.fromMissingServerResponse();
+    }
+
+    if (res.data!.newClientEnvHandle != null) {
+      await _storageService.setClientEnvHandle(res.data!.newClientEnvHandle!);
     }
 
     _setProcessState(res.data!.token, res.data!.expiresAt);
@@ -336,6 +343,7 @@ abstract class CorbadoService {
   }
 
   Future<api.ClientInformationBuilder> _buildClientInformation() async {
+    final clientEnvHandle = await _storageService.getClientEnvHandle();
     final getAvailability = passkeyAuthenticator.getAvailability();
 
     if (kIsWeb) {
@@ -345,31 +353,36 @@ abstract class CorbadoService {
         ..isUserVerifyingPlatformAuthenticatorAvailable =
             passkeyAvailability.isUserVerifyingPlatformAuthenticatorAvailable
         ..isConditionalMediationAvailable =
-            passkeyAvailability.isConditionalMediationAvailable;
+            passkeyAvailability.isConditionalMediationAvailable
+        ..clientEnvHandle = clientEnvHandle;
     } else if (Platform.isIOS) {
       final passkeyAvailability = await getAvailability.iOS();
       return api.ClientInformationBuilder()
         ..isNative = passkeyAvailability.isNative
         ..isUserVerifyingPlatformAuthenticatorAvailable =
             passkeyAvailability.hasBiometrics
-        ..isConditionalMediationAvailable = null;
+        ..isConditionalMediationAvailable = null
+        ..clientEnvHandle = clientEnvHandle;
     } else {
       final passkeyAvailability = await getAvailability.android();
       return api.ClientInformationBuilder()
         ..isNative = passkeyAvailability.isNative
         ..isUserVerifyingPlatformAuthenticatorAvailable =
             passkeyAvailability.isUserVerifyingPlatformAuthenticatorAvailable
-        ..isConditionalMediationAvailable = null;
+        ..isConditionalMediationAvailable = null
+        ..clientEnvHandle = clientEnvHandle;
     }
   }
 
   /// Builds an API client to interact with the Corbado frontend API.
   /// Depending on the platform different headers will be set.
-  static String getFrontendAPIDomain(String projectId, {@deprecated String? customDomain}) {
+  static String getFrontendAPIDomain(String projectId,
+      {@deprecated String? customDomain}) {
     var frontendAPIDomain = 'https://$projectId.frontendapi.corbado.io';
     if (customDomain != null && customDomain.isNotEmpty) {
       if (kDebugMode) {
-        print('[DEPRECATED] The "customDomain" parameter is deprecated and will be removed in a future release.');
+        print(
+            '[DEPRECATED] The "customDomain" parameter is deprecated and will be removed in a future release.');
       }
       frontendAPIDomain = customDomain;
     }
