@@ -1,3 +1,6 @@
+## 3.4.1
+* Added persisting of `clientEnvHandle` to fix issues with passkeys intelligence.
+
 ## 3.4.0
 * Deprecated `customDomain` and replaced with `frontendApiUrl` coming from the backend instead.
 * Fixed a bug where reloading the page when logged in to a Production Project logs you out.
