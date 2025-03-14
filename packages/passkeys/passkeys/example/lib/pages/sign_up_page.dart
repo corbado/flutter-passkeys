@@ -2,10 +2,12 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:passkeys_example/auth_service.dart';
+import 'package:passkeys_example/error_handling.dart';
 import 'package:passkeys_example/pages/base_page.dart';
 import 'package:passkeys_example/providers.dart';
 import 'package:passkeys_example/router.dart';
@@ -106,7 +108,11 @@ class SignUpPage extends HookConsumerWidget {
                   await authService.signupWithPasskey(email: email);
                   context.go(Routes.profile);
                 } catch (e) {
-                  error.value = e.toString();
+                  if (e is PlatformException) {
+                    error.value = getFriendlyErrorMessage(e);
+                  } else {
+                    error.value = e.toString();
+                  }
                 }
               },
               child: const Text('sign up'),

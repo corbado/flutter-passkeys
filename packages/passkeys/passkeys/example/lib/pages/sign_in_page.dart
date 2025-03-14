@@ -2,11 +2,13 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:passkeys/types.dart';
 import 'package:passkeys_example/auth_service.dart';
+import 'package:passkeys_example/error_handling.dart';
 import 'package:passkeys_example/pages/base_page.dart';
 import 'package:passkeys_example/providers.dart';
 import 'package:passkeys_example/router.dart';
@@ -140,13 +142,11 @@ class _SignInPageState extends ConsumerState<SignInPage> {
                   await authService.loginWithPasskey(email: email);
                   context.go(Routes.profile);
                 } catch (e) {
-                  if (e is PasskeyAuthCancelledException) {
-                    debugPrint(
-                        'user cancelled authentication. This is not a problem. It can just be started again.');
-                    return;
+                  if (e is PlatformException) {
+                    error.value = getFriendlyErrorMessage(e);
+                  } else {
+                    error.value = e.toString();
                   }
-
-                  error.value = e.toString();
                   debugPrint('error: $e');
                 }
               },
@@ -170,8 +170,9 @@ class _SignInPageState extends ConsumerState<SignInPage> {
           ),
           if (isTestMode)
             SelectTestConfiguration(
-              configurations:
-              Platform.isIOS ? LOGIN_IOS_CONFIGURATIONS : LOGIN_ANDROID_CONFIGURATIONS,
+              configurations: Platform.isIOS
+                  ? LOGIN_IOS_CONFIGURATIONS
+                  : LOGIN_ANDROID_CONFIGURATIONS,
               onSelectConfiguration: authService.setLoginConfiguration,
               selectedConfiguration: authService.loginConfiguration,
             ),
