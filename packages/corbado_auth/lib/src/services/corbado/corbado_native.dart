@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:corbado_auth/src/services/corbado/corbado.dart';
+import 'package:corbado_auth/src/services/storage/storage.dart';
+import 'package:corbado_auth/src/services/storage/storage_native.dart';
 import 'package:corbado_frontend_api_client/corbado_frontend_api_client.dart';
 import 'package:passkeys/authenticator.dart';
 import 'package:ua_client_hints/ua_client_hints.dart';
@@ -26,7 +28,11 @@ Future<CorbadoService> createClient(
     'User-Agent': _buildUserAgent(uaData),
   });
 
-  return NativeCorbadoService(apiClient, passkeyAuthenticator);
+  return NativeCorbadoService(
+    apiClient,
+    passkeyAuthenticator,
+    NativeStorageService(),
+  );
 }
 
 String _buildUserAgent(UserAgentData uaData) {
@@ -35,7 +41,9 @@ String _buildUserAgent(UserAgentData uaData) {
 
 class NativeCorbadoService extends CorbadoService {
   ///
-  NativeCorbadoService(CorbadoFrontendApiClient frontendAPIClient,
-      PasskeyAuthenticator passkeyAuthenticator)
-      : super(frontendAPIClient, passkeyAuthenticator);
+  NativeCorbadoService(
+    CorbadoFrontendApiClient frontendAPIClient,
+    PasskeyAuthenticator passkeyAuthenticator,
+    StorageService storageService,
+  ) : super(frontendAPIClient, passkeyAuthenticator, storageService);
 }
