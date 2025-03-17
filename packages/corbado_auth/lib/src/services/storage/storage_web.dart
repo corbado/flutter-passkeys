@@ -18,7 +18,7 @@ class WebStorageService implements StorageService {
   final String _projectId;
   final Storage _localStorage = window.localStorage;
 
-  String _generateKey(String key) => '$_projectId-$key';
+  String _generateKey(String key) => '$key-$_projectId';
 
   String? _get(String key) => _localStorage[_generateKey(key)];
 

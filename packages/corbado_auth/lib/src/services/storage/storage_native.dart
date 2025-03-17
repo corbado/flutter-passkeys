@@ -19,7 +19,7 @@ class NativeStorageService implements StorageService {
 
   final String _projectId;
 
-  String _generateKey(String key) => '$_projectId-$key';
+  String _generateKey(String key) => '$key-$_projectId';
 
   Future<String?> _get(String key) {
     return FlutterKeychain.get(key: _generateKey(key));
