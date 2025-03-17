@@ -27,15 +27,18 @@ class WebStorageService implements StorageService {
 
   void _remove(String key) => _localStorage.remove(_generateKey(key));
 
+  /// Returns the refresh token if it has been set
   @override
   Future<String?> getRefreshToken() async => _get(_refreshTokenKey);
 
+  /// Sets the refresh token
   @override
   Future<void> setRefreshToken(String value) async => _put(
         _refreshTokenKey,
         value,
       );
 
+  /// Returns the user if it has been set
   @override
   Future<User?> getUser() async {
     final serialized = _get(_userKey);
@@ -47,32 +50,40 @@ class WebStorageService implements StorageService {
     return User.fromJson(decoded);
   }
 
+  /// Sets the user
   @override
   Future<void> setUser(User value) async {
     final serialized = jsonEncode(value.toJson());
     _put(_userKey, serialized);
   }
 
+  /// Returns the front end API URL
   @override
   Future<String?> getFrontEndApiUrl() async => _get(_frontEndApiUrlKey);
 
+  /// Sets the front end API URL
   @override
   Future<void> setFrontEndApiUrl(String value) async => _put(
         _frontEndApiUrlKey,
         value,
       );
 
+  /// Sets the client environment handle
   @override
   Future<void> setClientEnvHandle(String value) async => _put(
         _clientEnvHandleKey,
         value,
       );
 
+  /// Returns the client environment handle if it has been set
   @override
   Future<String?> getClientEnvHandle() async => _get(_clientEnvHandleKey);
 
+  /// Removes all data except the client environment handle (full clear)
   @override
   Future<void> clear() async {
+    // We wont clear clientEnv because we want to keep track of it even when we
+    // log out and the clear function is called on sign out
     _remove(_userKey);
     _remove(_refreshTokenKey);
     _remove(_frontEndApiUrlKey);
