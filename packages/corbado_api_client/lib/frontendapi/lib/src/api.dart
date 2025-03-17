@@ -41,7 +41,7 @@ class CorbadoFrontendApiClient {
                   "name": "Flutter SDK",
                   "sdkVersion": sdkVersion ?? "1.0.0",
                   "languageVersion": languageVersion ?? "1.0.0",
-                }),
+                })
               },
             )) {
     if (interceptors == null) {
