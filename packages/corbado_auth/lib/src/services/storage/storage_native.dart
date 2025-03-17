@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:corbado_auth/src/services/storage/storage.dart';
 import 'package:corbado_auth/src/types/user.dart';
-import 'package:flutter_keychain/flutter_keychain.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 const _refreshTokenKey = 'refresh_token';
 const _userKey = 'user';
@@ -18,19 +18,20 @@ class NativeStorageService implements StorageService {
   NativeStorageService(this._projectId);
 
   final String _projectId;
+  final storage = FlutterSecureStorage();
 
   String _generateKey(String key) => '$key-$_projectId';
 
   Future<String?> _get(String key) {
-    return FlutterKeychain.get(key: _generateKey(key));
+    return storage.read(key: _generateKey(key));
   }
 
   Future<void> _put(String key, String value) {
-    return FlutterKeychain.put(key: _generateKey(key), value: value);
+    return storage.write(key: _generateKey(key), value: value);
   }
 
   Future<void> _remove(String key) {
-    return FlutterKeychain.remove(key: _generateKey(key));
+    return storage.delete(key: _generateKey(key));
   }
 
   /// Returns the refreshToken if it has been set
