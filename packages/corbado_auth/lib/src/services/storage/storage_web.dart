@@ -13,25 +13,31 @@ const _clientEnvHandleKey = 'client_env_handle';
 /// - refreshToken (longSession)
 /// - user (shortSession)
 class WebStorageService implements StorageService {
+  WebStorageService(this._projectId);
+
+  final String _projectId;
   final Storage _localStorage = window.localStorage;
+
+  // returns the key with the projectId
+  String _getProjectKey(String key) => '$_projectId-$key';
 
   /// returns the refreshToken if it has been set
   @override
   Future<String?> getRefreshToken() async {
-    return _localStorage[_refreshTokenKey];
+    return _localStorage[_getProjectKey(_refreshTokenKey)];
   }
 
   /// sets the refreshToken
   @override
   Future<void> setRefreshToken(String value) async {
-    _localStorage[_refreshTokenKey] = value;
+    _localStorage[_getProjectKey(_refreshTokenKey)] = value;
     return;
   }
 
   /// returns the user if it has been set
   @override
   Future<User?> getUser() async {
-    final serialized = _localStorage[_userKey];
+    final serialized = _localStorage[_getProjectKey(_userKey)];
     if (serialized == null) {
       return null;
     }
@@ -48,14 +54,14 @@ class WebStorageService implements StorageService {
   @override
   Future<void> setUser(User value) async {
     final serialized = jsonEncode(value.toJson());
-    _localStorage[_userKey] = serialized;
+    _localStorage[_getProjectKey(_userKey)] = serialized;
 
     return;
   }
 
   @override
   Future<String?> getFrontEndApiUrl() async {
-    final value = _localStorage[_frontEndApiUrlKey];
+    final value = _localStorage[_getProjectKey(_frontEndApiUrlKey)];
     if (value == null) {
       return null;
     }
@@ -65,21 +71,21 @@ class WebStorageService implements StorageService {
 
   @override
   Future<void> setFrontEndApiUrl(String value) async {
-    _localStorage[_frontEndApiUrlKey] = value;
+    _localStorage[_getProjectKey(_frontEndApiUrlKey)] = value;
 
     return;
   }
 
   @override
   Future<void> setClientEnvHandle(String value) async {
-    _localStorage[_clientEnvHandleKey] = value;
+    _localStorage[_getProjectKey(_clientEnvHandleKey)] = value;
 
     return;
   }
 
   @override
   Future<String?> getClientEnvHandle() async {
-    final value = _localStorage[_clientEnvHandleKey];
+    final value = _localStorage[_getProjectKey(_clientEnvHandleKey)];
 
     if (value == null) {
       return null;
@@ -94,9 +100,9 @@ class WebStorageService implements StorageService {
     // We wont clear clientEnv because we want to keep track of it even when we
     // log out and the clear function is called on sign out
     _localStorage
-      ..remove(_userKey)
-      ..remove(_refreshTokenKey)
-      ..remove(_frontEndApiUrlKey);
+      ..remove(_getProjectKey(_userKey))
+      ..remove(_getProjectKey(_refreshTokenKey))
+      ..remove(_getProjectKey(_frontEndApiUrlKey));
 
     return;
   }

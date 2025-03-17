@@ -13,22 +13,31 @@ const _clientEnvHandleKey = 'client_env_handle';
 /// - refreshToken (longSession)
 /// - user (shortSession)
 class NativeStorageService implements StorageService {
+  NativeStorageService(this._projectId);
+
+  final String _projectId;
+
+  String _getProjectKey(String key) => '$_projectId-$key';
+
   /// returns the refreshToken if it has been set
   @override
   Future<String?> getRefreshToken() {
-    return FlutterKeychain.get(key: _refreshTokenKey);
+    return FlutterKeychain.get(key: _getProjectKey(_refreshTokenKey));
   }
 
   /// sets the refreshToken
   @override
   Future<void> setRefreshToken(String value) {
-    return FlutterKeychain.put(key: _refreshTokenKey, value: value);
+    return FlutterKeychain.put(
+      key: _getProjectKey(_refreshTokenKey),
+      value: value,
+    );
   }
 
   /// returns the user if it has been set
   @override
   Future<User?> getUser() async {
-    final serialized = await FlutterKeychain.get(key: _userKey);
+    final serialized = await FlutterKeychain.get(key: _getProjectKey(_userKey));
     if (serialized == null) {
       return null;
     }
@@ -50,7 +59,9 @@ class NativeStorageService implements StorageService {
 
   @override
   Future<String?> getFrontEndApiUrl() async {
-    final value = await FlutterKeychain.get(key: _frontEndApiUrlKey);
+    final value = await FlutterKeychain.get(
+      key: _getProjectKey(_frontEndApiUrlKey),
+    );
     if (value == null) {
       return null;
     }
@@ -60,17 +71,25 @@ class NativeStorageService implements StorageService {
 
   @override
   Future<void> setFrontEndApiUrl(String value) {
-    return FlutterKeychain.put(key: _frontEndApiUrlKey, value: value);
+    return FlutterKeychain.put(
+      key: _getProjectKey(_frontEndApiUrlKey),
+      value: value,
+    );
   }
 
   @override
   Future<void> setClientEnvHandle(String value) async {
-    await FlutterKeychain.put(key: _clientEnvHandleKey, value: value);
+    await FlutterKeychain.put(
+      key: _getProjectKey(_clientEnvHandleKey),
+      value: value,
+    );
   }
 
   @override
   Future<String?> getClientEnvHandle() {
-    return FlutterKeychain.get(key: _clientEnvHandleKey);
+    return FlutterKeychain.get(
+      key: _getProjectKey(_clientEnvHandleKey),
+    );
   }
 
   /// removes all data from (full clear)
@@ -78,8 +97,8 @@ class NativeStorageService implements StorageService {
   Future<void> clear() async {
     // We wont clear clientEnv because we want to keep track of it even when we
     // log out and the clear function is called on sign out
-    await FlutterKeychain.remove(key: _userKey);
-    await FlutterKeychain.remove(key: _refreshTokenKey);
-    await FlutterKeychain.remove(key: _frontEndApiUrlKey);
+    await FlutterKeychain.remove(key: _getProjectKey(_userKey));
+    await FlutterKeychain.remove(key: _getProjectKey(_refreshTokenKey));
+    await FlutterKeychain.remove(key: _getProjectKey(_frontEndApiUrlKey));
   }
 }
