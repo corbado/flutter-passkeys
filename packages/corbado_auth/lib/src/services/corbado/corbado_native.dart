@@ -8,6 +8,9 @@ import 'package:flutter/foundation.dart';
 import 'package:passkeys/authenticator.dart';
 import 'package:ua_client_hints/ua_client_hints.dart';
 
+const isAppleDevMode =
+    String.fromEnvironment('APPLE_DEV_MODE', defaultValue: 'false') == 'true';
+
 Future<CorbadoService> createClient(
   String projectId, {
   required PasskeyAuthenticator passkeyAuthenticator,
@@ -20,10 +23,11 @@ Future<CorbadoService> createClient(
 
   final uaData = await userAgentData();
 
-  // in case of iOS we want to use the apple dev mode
-  // when we are in debug mode
-  final isAppleDevMode = kDebugMode &&
-          Platform.isIOS;
+  if (!kDebugMode && isAppleDevMode && Platform.isIOS) {
+    print(
+      '⚠️ WARNING: You should not use the APPLE_DEV_MODE flag in production.',
+    );
+  }
 
   final apiClient = CorbadoFrontendApiClient(
     basePathOverride: basePath,
@@ -32,7 +36,7 @@ Future<CorbadoService> createClient(
   );
   apiClient.dio.options.headers.addAll({
     'X-Corbado-ProjectID': projectId,
-    'X-Corbado-Flags': isAppleDevMode ? 'apple_dev_mode' : '',
+    'X-Corbado-Flags': isAppleDevMode && Platform.isIOS ? 'apple_dev_mode' : '',
     'User-Agent': _buildUserAgent(uaData),
   });
 
