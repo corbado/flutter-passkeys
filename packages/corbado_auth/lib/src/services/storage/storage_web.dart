@@ -18,92 +18,63 @@ class WebStorageService implements StorageService {
   final String _projectId;
   final Storage _localStorage = window.localStorage;
 
-  // returns the key with the projectId
-  String _getProjectKey(String key) => '$_projectId-$key';
+  String _generateKey(String key) => '$_projectId-$key';
 
-  /// returns the refreshToken if it has been set
+  String? _get(String key) => _localStorage[_generateKey(key)];
+
+  void _put(String key, String value) =>
+      _localStorage[_generateKey(key)] = value;
+
+  void _remove(String key) => _localStorage.remove(_generateKey(key));
+
   @override
-  Future<String?> getRefreshToken() async {
-    return _localStorage[_getProjectKey(_refreshTokenKey)];
-  }
+  Future<String?> getRefreshToken() async => _get(_refreshTokenKey);
 
-  /// sets the refreshToken
   @override
-  Future<void> setRefreshToken(String value) async {
-    _localStorage[_getProjectKey(_refreshTokenKey)] = value;
-    return;
-  }
+  Future<void> setRefreshToken(String value) async => _put(
+        _refreshTokenKey,
+        value,
+      );
 
-  /// returns the user if it has been set
   @override
   Future<User?> getUser() async {
-    final serialized = _localStorage[_getProjectKey(_userKey)];
-    if (serialized == null) {
-      return null;
-    }
+    final serialized = _get(_userKey);
+    if (serialized == null) return null;
 
     final decoded = jsonDecode(serialized);
-    if (decoded is! Map<String, dynamic>) {
-      return null;
-    }
+    if (decoded is! Map<String, dynamic>) return null;
 
     return User.fromJson(decoded);
   }
 
-  /// sets the user
   @override
   Future<void> setUser(User value) async {
     final serialized = jsonEncode(value.toJson());
-    _localStorage[_getProjectKey(_userKey)] = serialized;
-
-    return;
+    _put(_userKey, serialized);
   }
 
   @override
-  Future<String?> getFrontEndApiUrl() async {
-    final value = _localStorage[_getProjectKey(_frontEndApiUrlKey)];
-    if (value == null) {
-      return null;
-    }
-
-    return value;
-  }
+  Future<String?> getFrontEndApiUrl() async => _get(_frontEndApiUrlKey);
 
   @override
-  Future<void> setFrontEndApiUrl(String value) async {
-    _localStorage[_getProjectKey(_frontEndApiUrlKey)] = value;
-
-    return;
-  }
-
-  @override
-  Future<void> setClientEnvHandle(String value) async {
-    _localStorage[_getProjectKey(_clientEnvHandleKey)] = value;
-
-    return;
-  }
+  Future<void> setFrontEndApiUrl(String value) async => _put(
+        _frontEndApiUrlKey,
+        value,
+      );
 
   @override
-  Future<String?> getClientEnvHandle() async {
-    final value = _localStorage[_getProjectKey(_clientEnvHandleKey)];
+  Future<void> setClientEnvHandle(String value) async => _put(
+        _clientEnvHandleKey,
+        value,
+      );
 
-    if (value == null) {
-      return null;
-    }
+  @override
+  Future<String?> getClientEnvHandle() async => _get(_clientEnvHandleKey);
 
-    return value;
-  }
-
-  /// removes all data from (full clear)
   @override
   Future<void> clear() async {
-    // We wont clear clientEnv because we want to keep track of it even when we
-    // log out and the clear function is called on sign out
-    _localStorage
-      ..remove(_getProjectKey(_userKey))
-      ..remove(_getProjectKey(_refreshTokenKey))
-      ..remove(_getProjectKey(_frontEndApiUrlKey));
-
-    return;
+    _remove(_userKey);
+    _remove(_refreshTokenKey);
+    _remove(_frontEndApiUrlKey);
   }
 }
