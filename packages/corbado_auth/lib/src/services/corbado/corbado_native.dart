@@ -31,7 +31,7 @@ Future<CorbadoService> createClient(
   return NativeCorbadoService(
     apiClient,
     passkeyAuthenticator,
-    NativeStorageService(),
+    NativeStorageService(projectId),
   );
 }
 

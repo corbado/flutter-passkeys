@@ -27,7 +27,7 @@ Future<CorbadoService> createClient(
   return WebCorbadoService(
     apiClient,
     passkeyAuthenticator,
-    WebStorageService(),
+    WebStorageService(projectId),
   );
 }
 
