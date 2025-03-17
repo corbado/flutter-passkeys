@@ -12,7 +12,7 @@ String calculateProjectID() {
   if (kIsWeb) {
     return 'pro-8751299119685489253';
   } else {
-    return 'pro-4268394291597054564';
+    return 'pro-7715696186248243448';
   }
 }
 
@@ -37,7 +37,7 @@ void main() async {
       envProjectId == 'none' ? calculateProjectID() : envProjectId;
 
   final corbadoAuth = CorbadoAuth();
-  await corbadoAuth.init(projectId: projectId);
+  await corbadoAuth.init(projectId: projectId, customDomain: "https://pro-7715696186248243448.frontendapi.cloud.corbado-staging.io", );
 
   // Finally we override the providers that needed initialization.
   // Now the real app can be loaded.
