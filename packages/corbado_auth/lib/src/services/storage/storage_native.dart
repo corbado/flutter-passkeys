@@ -27,14 +27,6 @@ class NativeStorageService implements StorageService {
   }
 
   Future<void> _put(String key, String value) async {
-    final doesValueExist = await _get(key) != null;
-
-    if (doesValueExist) {
-      return storage.delete(key: _generateKey(key)).then((_) {
-        return storage.write(key: _generateKey(key), value: value);
-      });
-    }
-
     return storage.write(key: _generateKey(key), value: value);
   }
 
