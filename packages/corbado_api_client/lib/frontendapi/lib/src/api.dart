@@ -30,7 +30,6 @@ class CorbadoFrontendApiClient {
     List<Interceptor>? interceptors,
     String? sdkVersion,
     String? languageVersion,
-    bool? isAppleDevMode,
   })  : this.serializers = serializers ?? standardSerializers,
         this.dio = dio ??
             Dio(BaseOptions(
@@ -43,7 +42,6 @@ class CorbadoFrontendApiClient {
                   "sdkVersion": sdkVersion ?? "1.0.0",
                   "languageVersion": languageVersion ?? "1.0.0",
                 }),
-                "X-Corbado-Flags": isAppleDevMode == true ? "apple_dev_mode" : "",
               },
             )) {
     if (interceptors == null) {
