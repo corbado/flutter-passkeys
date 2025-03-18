@@ -1,3 +1,7 @@
+## 3.5.0
+* Moved away from `flutter_keychain` to `flutter_secure_storage`.
+* Makes storage project specific.
+
 ## 3.4.1
 * Added persisting of `clientEnvHandle` to fix issues with passkeys intelligence.
 
