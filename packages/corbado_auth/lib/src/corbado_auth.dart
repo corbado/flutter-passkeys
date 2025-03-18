@@ -63,6 +63,7 @@ class CorbadoAuth {
     _corbadoService = await createClient(projectId,
         passkeyAuthenticator: passkeyAuthenticator, customDomain: customDomain);
     _sessionService = _buildSessionService(
+      projectId,
       _corbadoService.frontendAPIClient,
     );
 
@@ -146,12 +147,14 @@ class CorbadoAuth {
   }
 
   static SessionService _buildSessionService(
-      CorbadoFrontendApiClient frontendAPIClient) {
+    String projectId,
+    CorbadoFrontendApiClient frontendAPIClient,
+  ) {
     StorageService storageService;
     if (kIsWeb) {
-      storageService = WebStorageService();
+      storageService = WebStorageService(projectId);
     } else {
-      storageService = NativeStorageService();
+      storageService = NativeStorageService(projectId);
     }
 
     return SessionService(storageService, frontendAPIClient);

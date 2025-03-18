@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:corbado_auth/src/services/storage/storage.dart';
 import 'package:corbado_auth/src/types/user.dart';
-import 'package:flutter_keychain/flutter_keychain.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 const _refreshTokenKey = 'refresh_token';
 const _userKey = 'user';
@@ -12,23 +12,44 @@ const _clientEnvHandleKey = 'client_env_handle';
 /// Used to store session data like:
 /// - refreshToken (longSession)
 /// - user (shortSession)
+/// - frontEndApiUrl
+/// - clientEnvHandle (needed for passkey intelligence)
 class NativeStorageService implements StorageService {
-  /// returns the refreshToken if it has been set
+  NativeStorageService(this._projectId);
+
+  final String _projectId;
+  final storage = FlutterSecureStorage();
+
+  String _generateKey(String key) => '$key-$_projectId';
+
+  Future<String?> _get(String key) {
+    return storage.read(key: _generateKey(key));
+  }
+
+  Future<void> _put(String key, String value) async {
+    return storage.write(key: _generateKey(key), value: value);
+  }
+
+  Future<void> _remove(String key) {
+    return storage.delete(key: _generateKey(key));
+  }
+
+  /// Returns the refreshToken if it has been set
   @override
   Future<String?> getRefreshToken() {
-    return FlutterKeychain.get(key: _refreshTokenKey);
+    return _get(_refreshTokenKey);
   }
 
-  /// sets the refreshToken
+  /// Sets the refreshToken
   @override
   Future<void> setRefreshToken(String value) {
-    return FlutterKeychain.put(key: _refreshTokenKey, value: value);
+    return _put(_refreshTokenKey, value);
   }
 
-  /// returns the user if it has been set
+  /// Returns the user if it has been set
   @override
   Future<User?> getUser() async {
-    final serialized = await FlutterKeychain.get(key: _userKey);
+    final serialized = await _get(_userKey);
     if (serialized == null) {
       return null;
     }
@@ -41,45 +62,44 @@ class NativeStorageService implements StorageService {
     return User.fromJson(decoded);
   }
 
-  /// sets the user
+  /// Sets the user
   @override
   Future<void> setUser(User value) {
     final serialized = jsonEncode(value.toJson());
-    return FlutterKeychain.put(key: _userKey, value: serialized);
+    return _put(_userKey, serialized);
   }
 
+  /// Returns the front-end API URL if it has been set
   @override
-  Future<String?> getFrontEndApiUrl() async {
-    final value = await FlutterKeychain.get(key: _frontEndApiUrlKey);
-    if (value == null) {
-      return null;
-    }
-
-    return value;
+  Future<String?> getFrontEndApiUrl() {
+    return _get(_frontEndApiUrlKey);
   }
 
+  /// Sets the front-end API URL
   @override
   Future<void> setFrontEndApiUrl(String value) {
-    return FlutterKeychain.put(key: _frontEndApiUrlKey, value: value);
+    return _put(_frontEndApiUrlKey, value);
   }
 
+  /// Sets the client environment handle
   @override
-  Future<void> setClientEnvHandle(String value) async {
-    await FlutterKeychain.put(key: _clientEnvHandleKey, value: value);
+  Future<void> setClientEnvHandle(String value) {
+    return _put(_clientEnvHandleKey, value);
   }
 
+  /// Returns the client environment handle if it has been set
   @override
   Future<String?> getClientEnvHandle() {
-    return FlutterKeychain.get(key: _clientEnvHandleKey);
+    return _get(_clientEnvHandleKey);
   }
 
-  /// removes all data from (full clear)
+  /// Removes all data except the client environment handle (full clear)
   @override
   Future<void> clear() async {
     // We wont clear clientEnv because we want to keep track of it even when we
     // log out and the clear function is called on sign out
-    await FlutterKeychain.remove(key: _userKey);
-    await FlutterKeychain.remove(key: _refreshTokenKey);
-    await FlutterKeychain.remove(key: _frontEndApiUrlKey);
+    await _remove(_userKey);
+    await _remove(_refreshTokenKey);
+    await _remove(_frontEndApiUrlKey);
   }
 }
