@@ -22,7 +22,8 @@ class LocalUser {
 const rpID = kIsWeb &&
         String.fromEnvironment('IS_VERCEL', defaultValue: 'false') != 'true'
     ? 'localhost'
-    : 'flutter.corbado.io';
+    // Temporary fix until flutter.corbado.io assets are fixed.
+    : 'pro-8751299119685489253.frontendapi.cloud.corbado.io';
 
 /// This is a local version of a relying party server.
 ///
