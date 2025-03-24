@@ -1,3 +1,6 @@
+## 3.5.1
+* Exposes the current `projectId` & `rpId`.
+
 ## 3.5.0
 * Moved away from `flutter_keychain` to `flutter_secure_storage`.
 * Makes storage project specific.
