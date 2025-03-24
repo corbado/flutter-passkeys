@@ -38,6 +38,14 @@ class CorbadoAuth {
   /// Returns the current value of the user object.
   Future<User?> get currentUser => _sessionService.userChanges.first;
 
+  // Returns the currently used projectId
+  String get projectId => _projectId;
+
+  // Returns the currently used RPid
+  late final Future<String?> _rpIdFuture =
+      _sessionService.rpIdChanges.firstWhere((value) => value != null);
+  Future<String?> get rpId => _rpIdFuture;
+
   Stream<ComponentWithData> get componentWithDataStream =>
       _processHandler.componentWithDataStream;
 
@@ -47,6 +55,7 @@ class CorbadoAuth {
   late ProcessHandler _processHandler;
   late CorbadoService _corbadoService;
   late final SessionService _sessionService;
+  late final String _projectId;
 
   Future<void> initProcessHandler() async {
     final res = await _corbadoService.initAuthProcess();
@@ -66,6 +75,8 @@ class CorbadoAuth {
       projectId,
       _corbadoService.frontendAPIClient,
     );
+
+    _projectId = projectId;
 
     final frontEndApiUrl = await _sessionService.getFrontEndApiUrl();
 

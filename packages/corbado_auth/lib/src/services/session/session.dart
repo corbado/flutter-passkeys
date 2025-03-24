@@ -14,11 +14,17 @@ class SessionService {
 
   Stream<AuthState> get authStateChanges => _authStateStreamController.stream;
 
+  Stream<String?> get rpIdChanges => _rpIdStreamController.stream;
+
   final StreamController<User?> _userStreamController =
       StreamController<User?>();
 
   final StreamController<AuthState> _authStateStreamController =
       StreamController<AuthState>();
+
+  final StreamController<String?> _rpIdStreamController =
+  StreamController<String?>();
+
   final _preemptiveRefreshDuration = const Duration(seconds: 60);
   Timer? _refreshTimer;
 
@@ -82,6 +88,8 @@ class SessionService {
   Future<void> setFrontEndApiUrl(String? value) async {
     if (value != null) {
       frontendAPIClient.dio.options.baseUrl = value;
+
+      _rpIdStreamController.add(value);
 
       return _storageService.setFrontEndApiUrl(value);
     }
