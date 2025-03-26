@@ -4,6 +4,8 @@
 
 An authentication SDK to enable authentication through passkeys (based on WebAuthn / FIDO2).
 
+[![integration-guides](https://github.com/user-attachments/assets/7859201b-a345-4b68-b336-6e2edcc6577b)](https://app.corbado.com/integration-guides/flutter)
+
 Take a look at https://corbadoauth.flutter.corbado.io for a **live demo** (this is a Flutter web
 deployment of the example on Vercel).
 
