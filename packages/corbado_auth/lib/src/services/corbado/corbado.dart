@@ -279,7 +279,8 @@ abstract class CorbadoService {
       String challenge, bool silent) async {
     final json = jsonDecode(challenge) as Map<String, dynamic>;
     final authenticatorReq = StartLoginResponse.fromJson(json).toPlatformType(
-        conditional: silent, preferImmediatelyAvailableCredentials: !silent);
+      conditional: silent,
+    );
 
     try {
       final authenticatorRes =
