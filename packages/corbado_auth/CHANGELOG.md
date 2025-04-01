@@ -1,3 +1,6 @@
+## 3.5.2
+* Fixes Conditional Login not triggering (on iOS).
+
 ## 3.5.1
 * Exposes the current `projectId` & `rpId`.
 
