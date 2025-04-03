@@ -19,11 +19,6 @@ class LocalUser {
   List<String> transports;
 }
 
-const rpID = kIsWeb &&
-        String.fromEnvironment('IS_VERCEL', defaultValue: 'false') != 'true'
-    ? 'localhost'
-    : 'flutter.corbado.io';
-
 /// This is a local version of a relying party server.
 ///
 /// Note:
@@ -36,8 +31,10 @@ class LocalRelyingPartyServer {
   final Map<String, LocalUser> _inFlightChallenges = HashMap();
   final Random _random = Random();
 
-  RegisterRequestType startPasskeyRegister(
-      {required String name, Configuration? configuration}) {
+  RegisterRequestType startPasskeyRegister({
+    required String name,
+    required String rpID, Configuration? configuration,
+  }) {
     if (_users.containsKey(name)) {
       throw Exception('User $name already exists. Please log in instead');
     }
@@ -105,7 +102,7 @@ class LocalRelyingPartyServer {
   }
 
   AuthenticateRequestType startPasskeyLogin(
-      {required String name, Configuration? configuration}) {
+      {required String name,required String rpID, Configuration? configuration}) {
     if (!_users.containsKey(name)) {
       throw Exception('User $name does not exist. Please register first');
     }
@@ -162,7 +159,7 @@ class LocalRelyingPartyServer {
     final challenge = generateChallenge();
 
     return AuthenticateRequestType(
-      relyingPartyId: rpID,
+      relyingPartyId: "flutter.corbado.io",
       challenge: challenge,
       mediation: MediationType.Conditional,
       preferImmediatelyAvailableCredentials: false,
