@@ -52,9 +52,10 @@ class AuthService {
   final LocalRelyingPartyServer rps;
   final PasskeyAuthenticator authenticator;
 
-  Future<void> loginWithPasskey({required String email}) async {
-    final rps1 =
-        rps.startPasskeyLogin(name: email, configuration: loginConfiguration);
+  Future<void> loginWithPasskey(
+      {required String email, required String rpID}) async {
+    final rps1 = rps.startPasskeyLogin(
+        name: email, configuration: loginConfiguration, rpID: rpID);
     final authenticatorRes = await authenticator.authenticate(rps1);
     rps.finishPasskeyLogin(response: authenticatorRes);
   }
@@ -65,9 +66,10 @@ class AuthService {
     rps.finishPasskeyLoginConditionalUI(response: authenticatorRes);
   }
 
-  Future<void> signupWithPasskey({required String email}) async {
+  Future<void> signupWithPasskey(
+      {required String email, required String rpID}) async {
     final rps1 = rps.startPasskeyRegister(
-        name: email, configuration: signUpConfiguration);
+        name: email, configuration: signUpConfiguration, rpID: rpID);
     final authenticatorRes = await authenticator.register(rps1);
     rps.finishPasskeyRegister(response: authenticatorRes);
   }

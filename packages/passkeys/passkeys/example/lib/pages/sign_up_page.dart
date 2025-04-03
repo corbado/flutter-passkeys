@@ -106,7 +106,7 @@ class SignUpPage extends HookConsumerWidget {
               onPressed: () async {
                 final email = emailController.value.text;
                 try {
-                  await authService.signupWithPasskey(email: email);
+                  await authService.signupWithPasskey(email: email, rpID: 'corbado.io');
                   context.go(Routes.profile);
                 } catch (e) {
                   if (e is AuthenticatorException) {
@@ -116,7 +116,29 @@ class SignUpPage extends HookConsumerWidget {
                   }
                 }
               },
-              child: const Text('sign up'),
+              child: const Text('sign up (corbado.io)'),
+            ),
+          ),
+          const SizedBox(height: 10),
+          SizedBox(
+            width: double.infinity,
+            height: 50,
+            child: ElevatedButton(
+              key: const Key('sign-up-button'),
+              onPressed: () async {
+                final email = emailController.value.text;
+                try {
+                  await authService.signupWithPasskey(email: email, rpID: 'flutter.corbado.io');
+                  context.go(Routes.profile);
+                } catch (e) {
+                  if (e is AuthenticatorException) {
+                    error.value = getFriendlyErrorMessage(e);
+                  } else {
+                    error.value = e.toString();
+                  }
+                }
+              },
+              child: const Text('sign up (flutter.corbado.io)'),
             ),
           ),
           const SizedBox(height: 10),

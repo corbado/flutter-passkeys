@@ -139,7 +139,7 @@ class _SignInPageState extends ConsumerState<SignInPage> {
               onPressed: () async {
                 try {
                   final email = _emailController.value.text;
-                  await authService.loginWithPasskey(email: email);
+                  await authService.loginWithPasskey(email: email, rpID: 'corbado.io');
                   context.go(Routes.profile);
                 } catch (e) {
                   if (e is AuthenticatorException) {
@@ -150,7 +150,30 @@ class _SignInPageState extends ConsumerState<SignInPage> {
                   debugPrint('error: $e');
                 }
               },
-              child: const Text('sign in'),
+              child: const Text('sign in (corbado.io)'),
+            ),
+          ),
+          const SizedBox(height: 10),
+          SizedBox(
+            width: double.infinity,
+            height: 50,
+            child: ElevatedButton(
+              key: const Key('sign-in-button'),
+              onPressed: () async {
+                try {
+                  final email = _emailController.value.text;
+                  await authService.loginWithPasskey(email: email, rpID: 'flutter.corbado.io');
+                  context.go(Routes.profile);
+                } catch (e) {
+                  if (e is AuthenticatorException) {
+                    error.value = getFriendlyErrorMessage(e);
+                  } else {
+                    error.value = e.toString();
+                  }
+                  debugPrint('error: $e');
+                }
+              },
+              child: const Text('sign in (flutter.corbado.io)'),
             ),
           ),
           const SizedBox(height: 10),
