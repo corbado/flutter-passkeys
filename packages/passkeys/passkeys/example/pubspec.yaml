@@ -9,6 +9,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  # We will be using the passkeys package from the local path. So that the example deployment reflects the recent changes
+  # in the plugin and to avoid any build issues in the deployment.
   passkeys:
     path: ../
   go_router: ^10.1.2
