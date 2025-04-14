@@ -9,7 +9,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  passkeys: ^2.7.1
+  passkeys:
+    path: ../
   go_router: ^10.1.2
   flutter_hooks: ^0.20.3
   riverpod: ^2.3.10
