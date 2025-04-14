@@ -33,7 +33,7 @@ class PasskeyAuthenticator {
       _isValidChallenge(request.challenge);
 
       for (final credential in request.excludeCredentials) {
-        _isValidBase64Url(credential.id);
+        _isValidCredentialID(credential.id);
       }
 
       final r = await _platform.register(request);
@@ -76,11 +76,11 @@ class PasskeyAuthenticator {
     try {
       await _platform.cancelCurrentAuthenticatorOperation();
 
-      _isValidBase64Url(request.challenge);
+      _isValidChallenge(request.challenge);
 
       if (request.allowCredentials != null) {
         for (final credential in request.allowCredentials!) {
-          _isValidBase64Url(credential.id);
+          _isValidCredentialID(credential.id);
         }
       }
 
@@ -148,9 +148,9 @@ class PasskeyAuthenticator {
     }
   }
 
-  void _isValidUserID(String userID) {
+  void _isValidCredentialID(String userID) {
     if (!_isValidBase64Url(userID)) {
-      throw PlatformException(code: 'malformed-base64-userID');
+      throw PlatformException(code: 'malformed-base64-credentialID');
     }
   }
 
