@@ -1,4 +1,3 @@
-import 'package:flutter/services.dart';
 import 'package:passkeys/exceptions.dart';
 
 /// error_handling.dart
@@ -16,13 +15,18 @@ String getFriendlyErrorMessage(AuthenticatorException exception) {
   } else if (exception is NoCredentialsAvailableException) {
     return 'No credentials available. Try another login method, such as email OTP.';
   } else if (exception is DomainNotAssociatedException) {
-    return exception.message ?? 'This domain is not correctly associated. Please check your configuration.';
+    return exception.message ??
+        'This domain is not correctly associated. Please check your configuration.';
   } else if (exception is DeviceNotSupportedException) {
     return 'This device does not support passkeys. Please update your OS.';
   } else if (exception is NoCreateOptionException) {
-    return exception.message ?? 'No viable options found to create a credential. Check device settings.';
+    return exception.message ??
+        'No viable options found to create a credential. Check device settings.';
   } else if (exception is TimeoutException) {
     return exception.message ?? 'The operation timed out. Please try again.';
+  } else if (exception is MalformedBase64Challenge ||
+      exception is MalformedBase64CredentialID) {
+    return exception.toString();
   } else if (exception is UnhandledAuthenticatorException) {
     return 'An unexpected error occurred (Code: ${exception.code}). Please contact support.';
   } else {

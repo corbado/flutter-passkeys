@@ -1,3 +1,6 @@
+## 2.8.0
+* Adds new exceptions to help with debugging Base64 encoding issues.
+
 ## 2.7.1
 * Fixed a bug where `hybrid` transports causes login to fail. (Web)
 

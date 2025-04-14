@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/services.dart';
 import 'package:passkeys/availability.dart';
 import 'package:passkeys/types.dart';
@@ -27,6 +29,13 @@ class PasskeyAuthenticator {
   Future<RegisterResponseType> register(RegisterRequestType request) async {
     try {
       await _platform.cancelCurrentAuthenticatorOperation();
+
+      _isValidChallenge(request.challenge);
+
+      for (final credential in request.excludeCredentials) {
+        _isValidCredentialID(credential.id);
+      }
+
       final r = await _platform.register(request);
 
       return r;
@@ -48,6 +57,10 @@ class PasskeyAuthenticator {
           throw TimeoutException(e.message);
         case 'ios-security-key-timeout':
           throw TimeoutException(e.message);
+        case 'malformed-base64-challenge':
+          throw MalformedBase64Challenge();
+        case 'malformed-base64-credentialID':
+          throw MalformedBase64CredentialID();
         default:
           rethrow;
       }
@@ -58,10 +71,19 @@ class PasskeyAuthenticator {
   /// Returns [AuthenticateResponseType] which must be sent to the relying party
   /// server.
   Future<AuthenticateResponseType> authenticate(
-      AuthenticateRequestType request,
-      ) async {
+    AuthenticateRequestType request,
+  ) async {
     try {
       await _platform.cancelCurrentAuthenticatorOperation();
+
+      _isValidChallenge(request.challenge);
+
+      if (request.allowCredentials != null) {
+        for (final credential in request.allowCredentials!) {
+          _isValidCredentialID(credential.id);
+        }
+      }
+
       final r = await _platform.authenticate(request);
 
       return r;
@@ -115,4 +137,33 @@ class PasskeyAuthenticator {
   /// ### Notes
   /// - Ensure you are using the correct method for the platform being queried.
   GetAvailability getAvailability() => GetAvailability(platform: _platform);
+
+  void _isValidChallenge(String challenge) {
+    if (!_isValidBase64Url(challenge)) {
+      throw MalformedBase64Challenge();
+    }
+  }
+
+  void _isValidCredentialID(String userID) {
+    if (!_isValidBase64Url(userID)) {
+      throw MalformedBase64CredentialID();
+    }
+  }
+
+  /// Validates if the given string is a valid Base64URL encoded string.
+  bool _isValidBase64Url(String input) {
+    // Base64URL should only contain A-Z, a-z, 0-9, -, _
+    final base64UrlRegex = RegExp(r'^[A-Za-z0-9\-_]+$');
+
+    if (!base64UrlRegex.hasMatch(input)) return false;
+
+    try {
+      String normalized =
+          input.padRight(input.length + (4 - input.length % 4) % 4, '=');
+      base64Url.decode(normalized);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
 }

@@ -115,6 +115,30 @@ class TimeoutException implements AuthenticatorException {
   String toString() => message ?? '';
 }
 
+/// This exception is thrown when the user tries to login or register but the
+/// challenge is not a valid Base64URL encoded string.
+///
+/// Platforms: Android, iOS, Web
+/// Suggestions:
+/// - make sure that the challenge is a valid Base64URL encoded string
+class MalformedBase64Challenge implements AuthenticatorException {
+  MalformedBase64Challenge();
+
+  String toString() => "Please make sure that the Challenge is a valid Base64URL encoded string.";
+}
+
+/// This exception is thrown when the user tries to login or register but the
+/// credential ID is not a valid Base64URL encoded string.
+///
+/// Platforms: Android, iOS, Web
+/// Suggestions:
+/// - make sure that the credential ID is a valid Base64URL encoded string
+class MalformedBase64CredentialID implements AuthenticatorException {
+  MalformedBase64CredentialID();
+
+  String toString() => "Please make sure that all the CredentialIDs are a valid Base64URL encoded string.";
+}
+
 /// This exception is thrown when an exception is thrown by the authenticator
 /// that we do not handle so far in this package.
 ///
