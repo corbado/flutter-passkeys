@@ -124,7 +124,7 @@ class TimeoutException implements AuthenticatorException {
 class MalformedBase64Challenge implements AuthenticatorException {
   MalformedBase64Challenge();
 
-  String toString() => "Please make sure that the challenge is a valid Base64URL encoded string.";
+  String toString() => "Please make sure that the Challenge is a valid Base64URL encoded string.";
 }
 
 /// This exception is thrown when the user tries to login or register but the
@@ -136,7 +136,7 @@ class MalformedBase64Challenge implements AuthenticatorException {
 class MalformedBase64CredentialID implements AuthenticatorException {
   MalformedBase64CredentialID();
 
-  String toString() => "Please make sure that the credential ID is a valid Base64URL encoded string.";
+  String toString() => "Please make sure that all the CredentialIDs are a valid Base64URL encoded string.";
 }
 
 /// This exception is thrown when an exception is thrown by the authenticator

@@ -105,10 +105,6 @@ class PasskeyAuthenticator {
           throw TimeoutException(e.message);
         case 'ios-security-key-timeout':
           throw TimeoutException(e.message);
-        case 'malformed-base64-challenge':
-          throw MalformedBase64Challenge();
-        case 'malformed-base64-credentialID':
-          throw MalformedBase64CredentialID();
         default:
           if (e.code.startsWith('android-unhandled')) {
             throw UnhandledAuthenticatorException(e.code, e.message, e.details);
@@ -144,13 +140,13 @@ class PasskeyAuthenticator {
 
   void _isValidChallenge(String challenge) {
     if (!_isValidBase64Url(challenge)) {
-      throw PlatformException(code: 'malformed-base64-challenge');
+      throw MalformedBase64Challenge();
     }
   }
 
   void _isValidCredentialID(String userID) {
     if (!_isValidBase64Url(userID)) {
-      throw PlatformException(code: 'malformed-base64-credentialID');
+      throw MalformedBase64CredentialID();
     }
   }
 
