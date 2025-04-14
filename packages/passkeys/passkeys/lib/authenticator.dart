@@ -32,7 +32,9 @@ class PasskeyAuthenticator {
 
       _isValidChallenge(request.challenge);
 
-      _isValidUserID(request.user.id);
+      for (final credential in request.excludeCredentials) {
+        _isValidBase64Url(credential.id);
+      }
 
       final r = await _platform.register(request);
 
@@ -57,8 +59,8 @@ class PasskeyAuthenticator {
           throw TimeoutException(e.message);
         case 'malformed-base64-challenge':
           throw MalformedBase64Challenge();
-        case 'malformed-base64-userID':
-          throw MalformedBase64UserID();
+        case 'malformed-base64-credentialID':
+          throw MalformedBase64CredentialID();
         default:
           rethrow;
       }
@@ -69,12 +71,18 @@ class PasskeyAuthenticator {
   /// Returns [AuthenticateResponseType] which must be sent to the relying party
   /// server.
   Future<AuthenticateResponseType> authenticate(
-      AuthenticateRequestType request,
-      ) async {
+    AuthenticateRequestType request,
+  ) async {
     try {
       await _platform.cancelCurrentAuthenticatorOperation();
 
       _isValidBase64Url(request.challenge);
+
+      if (request.allowCredentials != null) {
+        for (final credential in request.allowCredentials!) {
+          _isValidBase64Url(credential.id);
+        }
+      }
 
       final r = await _platform.authenticate(request);
 
@@ -99,6 +107,8 @@ class PasskeyAuthenticator {
           throw TimeoutException(e.message);
         case 'malformed-base64-challenge':
           throw MalformedBase64Challenge();
+        case 'malformed-base64-credentialID':
+          throw MalformedBase64CredentialID();
         default:
           if (e.code.startsWith('android-unhandled')) {
             throw UnhandledAuthenticatorException(e.code, e.message, e.details);
@@ -133,13 +143,13 @@ class PasskeyAuthenticator {
   GetAvailability getAvailability() => GetAvailability(platform: _platform);
 
   void _isValidChallenge(String challenge) {
-    if(!_isValidBase64Url(challenge)){
+    if (!_isValidBase64Url(challenge)) {
       throw PlatformException(code: 'malformed-base64-challenge');
     }
   }
 
   void _isValidUserID(String userID) {
-    if(!_isValidBase64Url(userID)){
+    if (!_isValidBase64Url(userID)) {
       throw PlatformException(code: 'malformed-base64-userID');
     }
   }
@@ -152,7 +162,8 @@ class PasskeyAuthenticator {
     if (!base64UrlRegex.hasMatch(input)) return false;
 
     try {
-      String normalized = input.padRight(input.length + (4 - input.length % 4) % 4, '=');
+      String normalized =
+          input.padRight(input.length + (4 - input.length % 4) % 4, '=');
       base64Url.decode(normalized);
       return true;
     } catch (e) {

@@ -128,15 +128,15 @@ class MalformedBase64Challenge implements AuthenticatorException {
 }
 
 /// This exception is thrown when the user tries to login or register but the
-/// user ID is not a valid Base64URL encoded string.
+/// credential ID is not a valid Base64URL encoded string.
 ///
 /// Platforms: Android, iOS, Web
 /// Suggestions:
-/// - make sure that the user ID is a valid Base64URL encoded string
-class MalformedBase64UserID implements AuthenticatorException {
-  MalformedBase64UserID();
+/// - make sure that the credential ID is a valid Base64URL encoded string
+class MalformedBase64CredentialID implements AuthenticatorException {
+  MalformedBase64CredentialID();
 
-  String toString() => "Please make sure that the user ID is a valid Base64URL encoded string.";
+  String toString() => "Please make sure that the credential ID is a valid Base64URL encoded string.";
 }
 
 /// This exception is thrown when an exception is thrown by the authenticator
