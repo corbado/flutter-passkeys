@@ -50,8 +50,8 @@ public class PasskeysPlugin: NSObject, FlutterPlugin, PasskeysApi {
             completion(.failure(CustomErrors.decodingChallenge))
             return
         }
-        
-        guard let decodedUserId = Data.fromBase64(user.id) else {
+
+        guard let decodedUserId = Data.fromBase64Url(user.id) else {
             completion(.failure(CustomErrors.decodingChallenge))
             return
         }
