@@ -24,8 +24,7 @@ String getFriendlyErrorMessage(AuthenticatorException exception) {
         'No viable options found to create a credential. Check device settings.';
   } else if (exception is TimeoutException) {
     return exception.message ?? 'The operation timed out. Please try again.';
-  } else if (exception is MalformedBase64Challenge ||
-      exception is MalformedBase64CredentialID) {
+  } else if (exception is MalformedBase64Url) {
     return exception.toString();
   } else if (exception is UnhandledAuthenticatorException) {
     return 'An unexpected error occurred (Code: ${exception.code}). Please contact support.';

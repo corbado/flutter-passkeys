@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ffi';
 
 import 'package:flutter/services.dart';
 import 'package:passkeys/availability.dart';
@@ -32,6 +33,8 @@ class PasskeyAuthenticator {
 
       _isValidChallenge(request.challenge);
 
+      _isValidUserID(request.user.id);
+
       for (final credential in request.excludeCredentials) {
         _isValidCredentialID(credential.id);
       }
@@ -57,10 +60,6 @@ class PasskeyAuthenticator {
           throw TimeoutException(e.message);
         case 'ios-security-key-timeout':
           throw TimeoutException(e.message);
-        case 'malformed-base64-challenge':
-          throw MalformedBase64Challenge();
-        case 'malformed-base64-credentialID':
-          throw MalformedBase64CredentialID();
         default:
           rethrow;
       }
@@ -139,19 +138,38 @@ class PasskeyAuthenticator {
   GetAvailability getAvailability() => GetAvailability(platform: _platform);
 
   void _isValidChallenge(String challenge) {
-    if (!_isValidBase64Url(challenge)) {
-      throw MalformedBase64Challenge();
+    if (!_isValidBase64Url(input: challenge)) {
+      throw MalformedBase64UrlChallenge();
     }
   }
 
-  void _isValidCredentialID(String userID) {
-    if (!_isValidBase64Url(userID)) {
-      throw MalformedBase64CredentialID();
+  void _isValidCredentialID(String credentialID) {
+    if (!_isValidBase64Url(input: credentialID)) {
+      throw MalformedBase64UrlCredentialID();
+    }
+  }
+
+  void _isValidUserID(String userID) {
+    if (!_isValidBase64Url(input: userID, allowPadding: true)) {
+      throw MalformedBase64UrlUserID();
     }
   }
 
   /// Validates if the given string is a valid Base64URL encoded string.
-  bool _isValidBase64Url(String input) {
+  bool _isValidBase64Url({required String input, bool allowPadding = false}) {
+    // If padding is allowed, remove trailing '=' characters, but only up to two
+    if (allowPadding) {
+      var i = 0;
+      while (input.endsWith('=') && i < 3) {
+        input = input.substring(0, input.length - 1);
+        i++;
+      }
+
+      if(i==3) {
+        return false;
+      }
+    }
+
     // Base64URL should only contain A-Z, a-z, 0-9, -, _
     final base64UrlRegex = RegExp(r'^[A-Za-z0-9\-_]+$');
 
@@ -161,6 +179,7 @@ class PasskeyAuthenticator {
       String normalized =
           input.padRight(input.length + (4 - input.length % 4) % 4, '=');
       base64Url.decode(normalized);
+
       return true;
     } catch (e) {
       return false;
