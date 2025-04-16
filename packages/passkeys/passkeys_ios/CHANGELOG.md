@@ -1,3 +1,6 @@
+## 2.6.1
+* Fixed issue with Base64Url encoded userIDs not being decoded correctly.
+
 ## 2.6.0
 * Added external security keys support (Yubikeys)
 * Handles new Security Key timeout exception
