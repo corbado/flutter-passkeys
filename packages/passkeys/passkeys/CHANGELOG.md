@@ -1,3 +1,7 @@
+## 2.8.1
+* Fixed issue with Base64Url encoded userIDs not being decoded correctly. (iOS)
+* Improved exception handling for MalformedBase64Url.
+
 ## 2.8.0
 * Adds new exceptions to help with debugging Base64 encoding issues.
 
