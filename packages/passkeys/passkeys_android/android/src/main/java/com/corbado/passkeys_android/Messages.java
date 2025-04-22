@@ -931,7 +931,7 @@ public class Messages {
 
       private @Nullable String userHandle;
 
-      public @NonNull Builder setUserHandle(@NonNull String setterArg) {
+      public @NonNull Builder setUserHandle(@Nullable String setterArg) {
         this.userHandle = setterArg;
         return this;
       }
