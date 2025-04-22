@@ -225,7 +225,8 @@ public class MessageHandler implements Messages.PasskeysApi {
                             final String rawId = json.getString("rawId");
 
                             final String clientDataJSON = response.getString("clientDataJSON");
-                            final String userHandle = response.getString("userHandle");
+                            // userHandle is optional because some authenticators may return it as a null (exp: cross-platform QR between two android devices)
+                            final String userHandle = response.optString("userHandle");
                             final String signature = response.getString("signature");
                             final String authenticatorData = response.getString("authenticatorData");
 
