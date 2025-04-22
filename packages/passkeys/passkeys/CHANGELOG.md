@@ -1,3 +1,6 @@
+## 2.8.2
+* Fixed a bug where an empty `userHandle` returned by `authenticate` was not being handled correctly. (Android)
+
 ## 2.8.1
 * Fixed issue with Base64Url encoded userIDs not being decoded correctly. (iOS)
 * Improved exception handling for MalformedBase64Url.
