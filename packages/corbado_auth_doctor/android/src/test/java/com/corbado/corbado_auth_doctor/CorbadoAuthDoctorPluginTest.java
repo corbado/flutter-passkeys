@@ -1,4 +1,4 @@
-package com.example.corbado_auth_doctor;
+package com.corbado.corbado_auth_doctor;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;

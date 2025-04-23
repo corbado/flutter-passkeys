@@ -86,13 +86,8 @@ class CorbadoAuthDoctor {
     );
   }
 
-  Future<List<String>> _loadWebCredentialsDomains() async {
-    final result = await _api.getWebCredentialsDomains();
-    return result.domains.whereType<String>().toList();
-  }
-
   Future<Checkpoint> _checkAASAFile() async {
-    final rpID = await _rpIdFuture ?? '';
+    final rpID = await _rpIdFuture;
     final uri = Uri.parse('$rpID/.well-known/apple-app-site-association');
 
     http.Response response;
@@ -187,8 +182,8 @@ class CorbadoAuthDoctor {
   }
 
   Future<Checkpoint> _checkAssetLinks() async {
-    final rpID = await _rpIdFuture ?? '';
-    final uri = Uri.parse('\$rpID/.well-known/assetlinks.json');
+    final rpID = await _rpIdFuture;
+    final uri = Uri.parse('$rpID/.well-known/assetlinks.json');
 
     http.Response response;
     try {
@@ -196,7 +191,7 @@ class CorbadoAuthDoctor {
     } catch (e) {
       return Checkpoint(
         name: 'Asset Link File Check',
-        description: 'Failed to fetch assetlinks.json: \$e',
+        description: 'Failed to fetch assetlinks.json: $e',
         type: CheckpointType.error,
       );
     }
@@ -205,7 +200,7 @@ class CorbadoAuthDoctor {
       return Checkpoint(
         name: 'Asset Link File Check',
         description:
-            'assetlinks.json not found (HTTP \${response.statusCode}).',
+            'assetlinks.json not found (HTTP ${response.statusCode}).',
         type: CheckpointType.error,
       );
     }
@@ -216,7 +211,7 @@ class CorbadoAuthDoctor {
     } catch (e) {
       return Checkpoint(
         name: 'Asset Link File Check',
-        description: 'Invalid JSON array in assetlinks.json: \$e',
+        description: 'Invalid JSON array in assetlinks.json: $e',
         type: CheckpointType.error,
       );
     }
@@ -266,18 +261,20 @@ class CorbadoAuthDoctor {
 
     return Checkpoint(
       name: 'Asset Link File Check',
-      description: 'Missing or invalid entries in assetlinks.json: \$missing',
+      description: 'Missing or invalid entries in assetlinks.json: $missing',
       type: CheckpointType.error,
     );
   }
 
   Future<String> _getBundleId() async {
     final info = await PackageInfo.fromPlatform();
+
     return info.packageName;
   }
 
   Future<String> _getFingerprints() async {
-    final info = await PackageInfo.fromPlatform();
-    return info.packageName;
+    final fingerprints = await _api.getWebCredentialsDomains();
+
+    return fingerprints.domains[0].toString();
   }
 }
