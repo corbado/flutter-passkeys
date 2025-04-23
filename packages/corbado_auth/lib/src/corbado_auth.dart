@@ -11,6 +11,7 @@ import 'package:corbado_auth/src/services/session/session.dart';
 import 'package:corbado_auth/src/services/storage/storage.dart';
 import 'package:corbado_auth/src/services/storage/storage_native.dart';
 import 'package:corbado_auth/src/services/storage/storage_web.dart';
+import 'package:corbado_auth_doctor/types/checkpoint.dart';
 import 'package:corbado_frontend_api_client/corbado_frontend_api_client.dart';
 import 'package:flutter/foundation.dart';
 import 'package:passkeys/authenticator.dart';
@@ -112,12 +113,8 @@ class CorbadoAuth {
     }
   }
 
-  Future<void> doctor() async{
-    final checks = await _doctor.check();
-
-    for (final check in checks) {
-      debugPrint(check.description);
-    }
+  Future<List<Checkpoint>> doctor() async{
+    return _doctor.check();
   }
 
   /// Load all passkeys that are available to the currently logged in user.

@@ -18,6 +18,12 @@ class CorbadoAuthDoctor {
 
   @override
   Future<List<Checkpoint>> check() async {
+    if(kReleaseMode){
+      throw StateError(
+        'CorbadoAuthDoctor.check() should not be called in release mode. '
+      );
+    }
+
     final List<Checkpoint> checkpoints = [];
     checkpoints.add(_checkProjectId());
     checkpoints.add(await _checkRpId());
