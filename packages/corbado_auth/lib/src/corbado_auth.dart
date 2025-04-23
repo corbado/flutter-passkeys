@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:corbado_auth/corbado_auth.dart';
+import 'package:corbado_auth_doctor/corbado_auth_doctor.dart';
 import 'package:corbado_auth/src/process_handler.dart';
 import 'package:corbado_auth/src/services/corbado/corbado.dart';
 import 'package:corbado_auth/src/services/corbado/corbado_stub.dart'
@@ -56,6 +57,10 @@ class CorbadoAuth {
   late CorbadoService _corbadoService;
   late final SessionService _sessionService;
   late final String _projectId;
+  late final CorbadoAuthDoctor _doctor = CorbadoAuthDoctor(
+    _projectId,
+    rpId,
+  );
 
   Future<void> initProcessHandler() async {
     final res = await _corbadoService.initAuthProcess();
@@ -104,6 +109,14 @@ class CorbadoAuth {
     } catch (e) {
       await signOut();
       debugPrint(e.toString());
+    }
+  }
+
+  Future<void> doctor() async{
+    final checks = await _doctor.check();
+
+    for (final check in checks) {
+      debugPrint(check.description);
     }
   }
 
