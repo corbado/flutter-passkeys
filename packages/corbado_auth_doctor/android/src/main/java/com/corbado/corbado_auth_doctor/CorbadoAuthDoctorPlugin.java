@@ -34,7 +34,6 @@ public class CorbadoAuthDoctorPlugin implements FlutterPlugin, Messages.WebCrede
   @NonNull
   @Override
   public List<String> getFingerprints() {
-    // 1) Gather all your SHA-256 fingerprints into a plain List<String>
     List<String> fps = new ArrayList<>();
     try {
       PackageManager pm = applicationContext.getPackageManager();
@@ -52,15 +51,12 @@ public class CorbadoAuthDoctorPlugin implements FlutterPlugin, Messages.WebCrede
                 applicationContext.getPackageName(),
                 PackageManager.GET_SIGNATURES
         );
-        //noinspection deprecation
         sigs = pkgInfo.signatures;
       }
 
-      // Use SHA-256 now
       MessageDigest md = MessageDigest.getInstance("SHA-256");
       for (Signature sig : sigs) {
         byte[] digest = md.digest(sig.toByteArray());
-        // Convert to uppercase hex with colons
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < digest.length; i++) {
           sb.append(String.format("%02X", digest[i]));
