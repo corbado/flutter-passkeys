@@ -2,10 +2,11 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:corbado_auth_doctor/types/checkpoint.dart';
-import 'package:corbado_auth_doctor/web_credentials_api.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:package_info_plus/package_info_plus.dart';
+
+import 'messages.g.dart';
 
 class CorbadoAuthDoctor {
   final String _projectId;

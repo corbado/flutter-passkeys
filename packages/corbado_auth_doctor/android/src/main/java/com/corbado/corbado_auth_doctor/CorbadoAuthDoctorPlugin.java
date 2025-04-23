@@ -5,7 +5,6 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.os.Build;
-import android.util.Base64;
 
 import androidx.annotation.NonNull;
 
@@ -16,7 +15,7 @@ import java.util.List;
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 
 /** CorbadoAuthDoctorPlugin */
-public class CorbadoAuthDoctorPlugin implements FlutterPlugin, WebCredentialsApi.WebCredentialsApiInterface {
+public class CorbadoAuthDoctorPlugin implements FlutterPlugin, Messages.WebCredentialsApi {
 
   private Context applicationContext;
 
@@ -24,10 +23,17 @@ public class CorbadoAuthDoctorPlugin implements FlutterPlugin, WebCredentialsApi
   public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
     applicationContext = flutterPluginBinding.getApplicationContext();
 
-    WebCredentialsApi.WebCredentialsApiInterface.setUp(flutterPluginBinding.getBinaryMessenger(), this);
+    Messages.WebCredentialsApi.setUp(flutterPluginBinding.getBinaryMessenger(), this);
   }
 
-  public WebCredentialsApi.DomainsResult getWebCredentialsDomains() {
+  @Override
+  public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
+    Messages.WebCredentialsApi.setUp(binding.getBinaryMessenger(), null);
+  }
+
+  @NonNull
+  @Override
+  public List<String> getFingerprints() {
     // 1) Gather all your SHA-256 fingerprints into a plain List<String>
     List<String> fps = new ArrayList<>();
     try {
@@ -65,18 +71,9 @@ public class CorbadoAuthDoctorPlugin implements FlutterPlugin, WebCredentialsApi
         fps.add(sb.toString());
       }
     } catch (Exception e) {
-      e.printStackTrace();
-      // You might choose to return an empty list or include error info
+      throw new Messages.FlutterError(String.valueOf(e.hashCode()), e.toString(), e);
     }
 
-    // 2) Wrap it in DomainsResult via the generated Builder
-    return new WebCredentialsApi.DomainsResult.Builder()
-            .setDomains(fps)
-            .build();
-  }
-
-  @Override
-  public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
-    WebCredentialsApi.WebCredentialsApiInterface.setUp(binding.getBinaryMessenger(), null);
+    return fps;
   }
 }
