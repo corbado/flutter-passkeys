@@ -225,7 +225,6 @@ class CorbadoAuthDoctor {
 
     for (var obj in entries) {
       if (obj is Map<String, dynamic>) {
-        final relation = obj['relation'];
         final target = obj['target'];
         if (target is Map<String, dynamic>) {
           final namespace = target['namespace'];
@@ -273,9 +272,9 @@ class CorbadoAuthDoctor {
     return info.packageName;
   }
 
-  Future<String> _getFingerprints() async {
-    final fingerprints = await _api.getWebCredentialsDomains();
+  Future<List<String>> _getFingerprints() async {
+    final fingerprints = await _api.getFingerprints();
 
-    return fingerprints.domains[0].toString();
+    return fingerprints;
   }
 }
