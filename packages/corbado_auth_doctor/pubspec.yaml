@@ -1,6 +1,7 @@
 name: corbado_auth_doctor
 description: "Internal debugging tools used to help with Corbado's Flutter SDK."
 version: 1.0.0
+publish_to: none
 
 environment:
   sdk: ">=3.0.0 <4.0.0"
