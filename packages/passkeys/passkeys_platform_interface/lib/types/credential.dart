@@ -2,7 +2,8 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'credential.g.dart';
 
-/// The [CredentialType] class wraps the data of a credential it can be used to explicitly exclude or allow credentials.
+/// The [CredentialType] class wraps the data of a credential it can be used to
+/// explicitly exclude or allow credentials.
 @JsonSerializable()
 class CredentialType {
   /// Constructs a new instance.
@@ -19,7 +20,7 @@ class CredentialType {
   /// The type of the credential.
   final String type;
 
-  /// The ID of the credential.
+  /// The Base64URL encoded credential ID _without_ padding.
   final String id;
 
   /// The transports of the credential.
