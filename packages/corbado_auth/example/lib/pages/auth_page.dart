@@ -6,7 +6,10 @@ import 'package:corbado_auth_example/screens/login_init.dart';
 import 'package:corbado_auth_example/screens/passkey_append.dart';
 import 'package:corbado_auth_example/screens/passkey_verify.dart';
 import 'package:corbado_auth_example/screens/signup_init.dart';
+import 'package:corbado_auth_example/widgets/debug_overlay.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class AuthPage extends HookConsumerWidget {
@@ -16,11 +19,22 @@ class AuthPage extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final corbadoAuth = ref.watch(corbadoProvider);
 
-    corbadoAuth.doctor().then((checks){
-      for(final check in checks){
-        debugPrint('${check.name}: ${check.description}');
-      }
-    });
+    // run once when corbadoAuth changes / on mount
+    useEffect(
+      () {
+        // schedule after first frame so context is stable
+        SchedulerBinding.instance.addPostFrameCallback((_) {
+          corbadoAuth.doctor().then((checkpoints) {
+            if (!context.mounted) return;
+            DebugOverlay.show(context, checkpoints);
+          });
+        });
+
+        // cleanup: hide overlay when this widget unmounts
+        return DebugOverlay.hide;
+      },
+      [corbadoAuth],
+    );
 
     return Scaffold(
       appBar: AppBar(title: const Text('Corbado authentication')),
