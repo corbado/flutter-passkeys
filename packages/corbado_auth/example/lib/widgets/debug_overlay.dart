@@ -6,9 +6,18 @@ import 'package:url_launcher/url_launcher.dart';
 class DebugOverlay {
   static OverlayEntry? _currentEntry;
   static List<Checkpoint> _checkpoints = [];
+  static String? _projectID;
+  static String? _rpId;
 
   /// Show the overlay with the given checkpoints
-  static void show(BuildContext context, List<Checkpoint> checkpoints) {
+  static void show(
+    BuildContext context,
+    List<Checkpoint> checkpoints,
+    String projectID,
+    String rpId,
+  ) {
+    _projectID = projectID;
+    _rpId = rpId;
     _checkpoints = checkpoints;
     if (_currentEntry != null) return;
     _currentEntry = OverlayEntry(builder: (_) => _DebugOverlayWidget());
@@ -51,6 +60,7 @@ class _DebugOverlayWidgetState extends State<_DebugOverlayWidget> {
           padding: const EdgeInsets.all(12),
           child: Column(
             mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
                 children: [
@@ -64,6 +74,12 @@ class _DebugOverlayWidgetState extends State<_DebugOverlayWidget> {
                     child: const Icon(Icons.close),
                   ),
                 ],
+              ),
+              Text(
+                'Project ID: ${DebugOverlay._projectID}',
+              ),
+              Text(
+                'RPID: ${DebugOverlay._rpId}',
               ),
               const SizedBox(height: 8),
               // Build each checkpoint item
@@ -100,14 +116,16 @@ class _DebugOverlayWidgetState extends State<_DebugOverlayWidget> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(cp.name, style: const TextStyle(fontWeight: FontWeight.bold)),
+                Text(cp.name,
+                    style: const TextStyle(fontWeight: FontWeight.bold)),
                 Text(cp.description, style: const TextStyle(fontSize: 12)),
                 if (cp.documentationLink != null)
                   GestureDetector(
                     onTap: () async {
                       final uri = Uri.parse(cp.documentationLink!);
                       if (await canLaunchUrl(uri)) {
-                        await launchUrl(uri, mode: LaunchMode.externalApplication);
+                        await launchUrl(uri,
+                            mode: LaunchMode.externalApplication);
                       } else {
                         debugPrint('Could not launch ${cp.documentationLink}');
                       }
