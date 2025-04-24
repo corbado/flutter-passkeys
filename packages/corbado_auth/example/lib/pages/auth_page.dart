@@ -16,6 +16,12 @@ class AuthPage extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final corbadoAuth = ref.watch(corbadoProvider);
 
+    corbadoAuth.doctor().then((checks){
+      for(final check in checks){
+        debugPrint('${check.name}: ${check.description}');
+      }
+    });
+
     return Scaffold(
       appBar: AppBar(title: const Text('Corbado authentication')),
       body: Center(

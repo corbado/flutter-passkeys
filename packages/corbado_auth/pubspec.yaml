@@ -11,7 +11,8 @@ environment:
 dependencies:
   built_collection: ^5.1.1
   corbado_frontend_api_client: ^2.1.1
-  corbado_auth_doctor: ^1.0.0
+  corbado_auth_doctor:
+    path: ../corbado_auth_doctor
   dio: ^5.7.0
   flutter:
     sdk: flutter

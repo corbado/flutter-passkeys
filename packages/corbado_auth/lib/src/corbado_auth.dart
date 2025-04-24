@@ -11,7 +11,6 @@ import 'package:corbado_auth/src/services/session/session.dart';
 import 'package:corbado_auth/src/services/storage/storage.dart';
 import 'package:corbado_auth/src/services/storage/storage_native.dart';
 import 'package:corbado_auth/src/services/storage/storage_web.dart';
-import 'package:corbado_auth_doctor/types/checkpoint.dart';
 import 'package:corbado_frontend_api_client/corbado_frontend_api_client.dart';
 import 'package:flutter/foundation.dart';
 import 'package:passkeys/authenticator.dart';
@@ -46,6 +45,7 @@ class CorbadoAuth {
   // Returns the currently used RPid
   late final Future<String?> _rpIdFuture =
       _sessionService.rpIdChanges.firstWhere((value) => value != null);
+
   Future<String?> get rpId => _rpIdFuture;
 
   Stream<ComponentWithData> get componentWithDataStream =>
@@ -60,7 +60,6 @@ class CorbadoAuth {
   late final String _projectId;
   late final CorbadoAuthDoctor _doctor = CorbadoAuthDoctor(
     _projectId,
-    rpId,
   );
 
   Future<void> initProcessHandler() async {
@@ -113,8 +112,10 @@ class CorbadoAuth {
     }
   }
 
-  Future<List<Checkpoint>> doctor() async{
-    return _doctor.check();
+  Future<List<Checkpoint>> doctor({String? rpID}) async {
+    var currentRpId = rpID ?? await _rpIdFuture;
+
+    return _doctor.check(currentRpId!);
   }
 
   /// Load all passkeys that are available to the currently logged in user.
