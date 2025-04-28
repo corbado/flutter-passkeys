@@ -87,9 +87,9 @@ class CorbadoAuthDoctor {
     if (rpId == null || rpId.isEmpty) {
       throw DoctorException(
         blockingCheckpoint: Checkpoint(
-          name: 'RP ID Check',
+          name: 'RPID Check',
           description:
-              'RP ID is not set. Make sure to set it on the Corbado developer panel.',
+              'RPID is not set. Make sure to set it on the Corbado developer panel.',
           documentationLink:
               'https://app.corbado.com/settings/general?tab=URLs',
           type: CheckpointType.error,
@@ -101,16 +101,16 @@ class CorbadoAuthDoctor {
         kIsWeb ? 'localhost' : '$_projectId.frontendapi.cloud.corbado.io';
     if (rpId != expected) {
       return Checkpoint(
-        name: 'RP ID Check',
+        name: 'RPID Check',
         description:
-            'RP ID might not be valid. Expected "$expected" but got "$rpId".',
+            'RPID might not be valid. Expected "$expected" but got "$rpId".',
         documentationLink: 'https://app.corbado.com/settings/general?tab=URLs',
         type: CheckpointType.warning,
       );
     }
     return Checkpoint(
-      name: 'RP ID Check',
-      description: 'RP ID is set correctly.',
+      name: 'RPID Check',
+      description: 'RPID is set correctly.',
       type: CheckpointType.success,
     );
   }
@@ -125,7 +125,7 @@ class CorbadoAuthDoctor {
     } catch (e) {
       return Checkpoint(
         name: 'AASA File Check',
-        description: 'Failed to fetch apple-app-site-association: $e',
+        description: 'Failed to fetch apple-app-site-association from $uri : $e',
         type: CheckpointType.error,
       );
     }
@@ -139,13 +139,23 @@ class CorbadoAuthDoctor {
       );
     }
 
+    final contentType = response.headers['content-type'];
+    if (contentType == null || !contentType.toLowerCase().startsWith('application/json')) {
+      return Checkpoint(
+        name: 'AASA File Check',
+        description:
+        'Invalid Content-Type on $uri: expected application/json but got ${contentType ?? 'none'}.',
+        type: CheckpointType.error,
+      );
+    }
+
     Map<String, dynamic> jsonBody;
     try {
       jsonBody = jsonDecode(response.body) as Map<String, dynamic>;
     } catch (e) {
       return Checkpoint(
         name: 'AASA File Check',
-        description: 'Invalid JSON in apple-app-site-association: $e',
+        description: 'Invalid JSON in apple-app-site-association on $uri: $e',
         type: CheckpointType.error,
       );
     }
@@ -194,7 +204,7 @@ class CorbadoAuthDoctor {
       return Checkpoint(
         name: 'AASA File Check',
         description:
-            'apple-app-site-association contains correct entries for both applinks.details.appID and webcredentials.apps.',
+            'apple-app-site-association hosted on $uri contains correct entries for both applinks.details.appID and webcredentials.apps.',
         type: CheckpointType.success,
       );
     }
@@ -220,7 +230,7 @@ class CorbadoAuthDoctor {
     } catch (e) {
       return Checkpoint(
         name: 'Asset Link File Check',
-        description: 'Failed to fetch assetlinks.json: $e',
+        description: 'Failed to fetch assetlinks.json from $uri: $e',
         type: CheckpointType.error,
       );
     }
@@ -233,13 +243,23 @@ class CorbadoAuthDoctor {
       );
     }
 
+    final contentType = response.headers['content-type'];
+    if (contentType == null || !contentType.toLowerCase().startsWith('application/json')) {
+      return Checkpoint(
+        name: 'Asset Link File Check',
+        description:
+        'Invalid Content-Type on $uri: expected application/json but got ${contentType ?? 'none'}.',
+        type: CheckpointType.error,
+      );
+    }
+
     List<dynamic> entries;
     try {
       entries = jsonDecode(response.body) as List<dynamic>;
     } catch (e) {
       return Checkpoint(
         name: 'Asset Link File Check',
-        description: 'Invalid JSON array in assetlinks.json: $e',
+        description: 'Invalid JSON array in assetlinks.json on $uri: $e',
         type: CheckpointType.error,
       );
     }
@@ -275,7 +295,7 @@ class CorbadoAuthDoctor {
     if (androidValid && webValid) {
       return Checkpoint(
         name: 'Asset Link File Check',
-        description: 'assetlinks.json contains valid Android and Web entries.',
+        description: 'assetlinks.json hosted on $uri contains valid Android and Web entries.',
         type: CheckpointType.success,
       );
     }
@@ -287,7 +307,7 @@ class CorbadoAuthDoctor {
 
     return Checkpoint(
       name: 'Asset Link File Check',
-      description: 'Missing or invalid entries in assetlinks.json: $missing',
+      description: 'Missing or invalid entries in assetlinks.json on $uri: $missing',
       type: CheckpointType.error,
     );
   }
@@ -300,14 +320,14 @@ class CorbadoAuthDoctor {
     if (hostname == rpHost) {
       return Checkpoint(
         name: 'Hostname Check',
-        description: 'Hostname matches the RP ID.',
+        description: 'Hostname matches the RPID.',
         type: CheckpointType.success,
       );
     } else {
       return Checkpoint(
         name: 'Hostname Check',
         description:
-            'Hostname does not match the RP ID. Expected $rpHost but got $hostname.',
+            'Hostname does not match the RPID. Expected $rpHost but got $hostname.',
         type: CheckpointType.error,
       );
     }
