@@ -45,3 +45,20 @@ relying party, take a look at the [passkeys package](https://pub.dev/packages/pa
 We’ve added a detailed [integration guide and example repository](https://github.com/corbado/example-passkeys-flutter) to help you get started quickly. It demonstrates how to build a full passkey-based authentication flow using this SDK.
 
 > ⚠️ The example located in `/example` in this repo is for internal use only and is not intended for production use. Please refer to the external example repository linked above for a clean, production-ready implementation.
+
+## Corbado Doctor
+
+As part of the `corbado_auth` package, you get access to a built-in diagnostics tool called **Corbado Doctor**. It helps you verify your setup and catch common misconfigurations at runtime.
+
+Usage is simple—just call the `doctor(rpid:)` function and pass in your relying-party ID:
+
+```dart
+final corbadoAuth = ref.watch(corbadoProvider);
+
+...
+
+corbadoAuth.doctor(rpid: rpid).then((result) {
+    // Handle the result
+    ...
+});
+```
