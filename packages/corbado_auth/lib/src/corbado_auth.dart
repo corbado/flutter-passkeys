@@ -112,8 +112,8 @@ class CorbadoAuth {
     }
   }
 
-  Future<List<Checkpoint>> doctor(String rpID) async {
-    return _doctor.check(rpID);
+  Future<List<Checkpoint>> doctor(String rpid) async {
+    return _doctor.check(rpid);
   }
 
   /// Load all passkeys that are available to the currently logged in user.
