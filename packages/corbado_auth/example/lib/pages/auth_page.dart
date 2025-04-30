@@ -8,12 +8,11 @@ import 'package:corbado_auth_example/screens/passkey_append.dart';
 import 'package:corbado_auth_example/screens/passkey_verify.dart';
 import 'package:corbado_auth_example/screens/signup_init.dart';
 import 'package:corbado_auth_example/widgets/debug_overlay.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-
-
 
 class AuthPage extends HookConsumerWidget {
   AuthPage({super.key}) {}
@@ -22,20 +21,23 @@ class AuthPage extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final corbadoAuth = ref.watch(corbadoProvider);
 
+    final projectId = corbadoAuth.projectId;
+
     // run once when corbadoAuth changes / on mount
     useEffect(
       () {
         // schedule after first frame so context is stable
         SchedulerBinding.instance.addPostFrameCallback((_) {
           corbadoAuth
-              .doctor('flutter.corbado.io')
+              .doctor(
+            kIsWeb
+                ? 'flutter.corbado.io'
+                : '$projectId.frontendapi.cloud.corbado.io',
+          )
               .then(
             (data) {
               if (!context.mounted) return;
-              DebugOverlay.show(
-                context,
-                data
-              );
+              DebugOverlay.show(context, data);
             },
           );
         });
