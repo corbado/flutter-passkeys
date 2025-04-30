@@ -59,7 +59,7 @@ class _DebugOverlayWidgetState extends State<_DebugOverlayWidget> {
               Row(
                 children: [
                   const Text(
-                    'Doctor Checkpoints',
+                    'Doctor checkpoints',
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
 
                   ),

@@ -11,25 +11,28 @@ import 'messages.g.dart';
 
 class CorbadoAuthDoctor {
   final String _projectId;
-  late String _rpID;
+  late String _rpid;
 
   CorbadoAuthDoctor(this._projectId);
 
   final WebCredentialsApi _api = WebCredentialsApi();
 
-  Future<List<Checkpoint>> check(String rpID) async {
+  Future<List<Checkpoint>> check(String rpid) async {
     if (kReleaseMode) {
       throw StateError('doctor() should not be called in release mode. ');
     }
 
-    this._rpID = rpID;
+    if (rpid.isEmpty) {
+      throw ArgumentError('rpid cannot be empty.');
+    }
+
+    this._rpid = rpid;
 
     final List<Checkpoint> checkpoints = [];
 
     try {
       checkpoints.add(_checkProjectId());
-
-      checkpoints.add(await _checkRpId());
+      checkpoints.add(await _checkRpid());
 
       if (!kIsWeb) {
         if (Platform.isIOS) {
@@ -53,9 +56,9 @@ class CorbadoAuthDoctor {
     if (_projectId.isEmpty) {
       throw DoctorException(
         blockingCheckpoint: Checkpoint(
-          name: 'Project ID Check',
+          name: 'Project ID check',
           description:
-              'Project ID is not set. Make sure you pass it when initializing CorbadoAuthDoctor.',
+              'Project ID is not set.',
           documentationLink:
               'https://app.corbado.com/settings/general?tab=Project+Info',
           type: CheckpointType.error,
@@ -66,7 +69,7 @@ class CorbadoAuthDoctor {
     if (!_projectId.startsWith('pro-')) {
       throw DoctorException(
         blockingCheckpoint: Checkpoint(
-          name: 'Project ID Check',
+          name: 'Project ID check',
           description: 'Project ID must start with "pro-".',
           type: CheckpointType.error,
         ),
@@ -74,82 +77,70 @@ class CorbadoAuthDoctor {
     }
 
     return Checkpoint(
-      name: 'Project ID Check',
-      description: 'Project ID $_projectId is set correctly.',
+      name: 'Project ID check',
+      description: 'Project ID is set correctly ($_projectId).',
       type: CheckpointType.success,
     );
   }
 
-  Future<Checkpoint> _checkRpId() async {
-    if (_rpID.isEmpty) {
-      throw DoctorException(
-        blockingCheckpoint: Checkpoint(
-          name: 'RPID Check',
-          description:
-          'RPID is not set. Make sure to set it on the Corbado developer panel.',
-          documentationLink:
-          'https://app.corbado.com/settings/general?tab=URLs',
-          type: CheckpointType.error,
-        ),
-      );
-    }
-
+  Future<Checkpoint> _checkRpid() async {
     if (kIsWeb) {
       final hostname = Uri.base.host.toLowerCase();
-      final matches = hostname == _rpID || hostname.endsWith('.' + _rpID);
+      final matches = hostname == _rpid || hostname.endsWith('.' + _rpid);
 
       if (!matches) {
         return Checkpoint(
-          name: 'RPID Check',
-          description: 'RPID "$_rpID" is NOT valid for hostname "$hostname".',
+          name: 'RPID check',
+          description: 'RPID "$_rpid" is NOT valid for hostname "$hostname".',
           type: CheckpointType.error,
         );
       }
 
       return Checkpoint(
-        name: 'RPID Check',
-        description: 'RPID "$_rpID" is valid for hostname "$hostname".',
+        name: 'RPID check',
+        description: 'RPID "$_rpid" is valid for hostname "$hostname".',
         type: CheckpointType.success,
       );
     }
 
+    // iOS and Android
     final expected = '$_projectId.frontendapi.cloud.corbado.io';
-    if (_rpID != expected) {
+    if (_rpid != expected) {
       return Checkpoint(
-        name: 'RPID Check',
+        name: 'RPID check',
         description:
-            'RPID might not be valid. Expected "$expected" but got "$_rpID".',
+            'RPID "$_rpid" might not be valid, expected "$expected".',
         documentationLink: 'https://app.corbado.com/settings/general?tab=URLs',
         type: CheckpointType.warning,
       );
     }
 
     return Checkpoint(
-      name: 'RPID Check',
-      description: 'RPID "$_rpID" is set correctly.',
+      name: 'RPID check',
+      description: 'RPID is set correctly ("$_rpid").',
       type: CheckpointType.success,
     );
   }
 
   Future<Checkpoint> _checkAASAFile() async {
-    final uri = Uri.parse('https://$_rpID/.well-known/apple-app-site-association');
+    final uri = Uri.parse('https://$_rpid/.well-known/apple-app-site-association');
 
     http.Response response;
     try {
       response = await http.get(uri).timeout(Duration(seconds: 5));
     } catch (e) {
       return Checkpoint(
-        name: 'AASA File Check',
-        description: 'Failed to fetch apple-app-site-association from $uri : $e',
+        name: 'AASA file check',
+        description: 'Failed to fetch $uri: $e',
         type: CheckpointType.error,
       );
     }
 
     if (response.statusCode != 200) {
       return Checkpoint(
-        name: 'AASA File Check',
+        name: 'AASA file check',
         description:
-            'apple-app-site-association not found (HTTP ${response.statusCode}).',
+            '$uri not found (HTTP ${response.statusCode}).',
         type: CheckpointType.error,
       );
     }
@@ -157,9 +148,9 @@ class CorbadoAuthDoctor {
     final contentType = response.headers['content-type'];
     if (contentType == null || !contentType.toLowerCase().startsWith('application/json')) {
       return Checkpoint(
-        name: 'AASA File Check',
+        name: 'AASA file check',
         description:
-        'Invalid Content-Type on $uri: expected application/json but got ${contentType ?? 'none'}.',
+        '$uri does not return valid "Content-Type" header: expected "application/json" but received "${contentType ?? 'none'}".',
         type: CheckpointType.error,
       );
     }
@@ -169,8 +160,8 @@ class CorbadoAuthDoctor {
       jsonBody = jsonDecode(response.body) as Map<String, dynamic>;
     } catch (e) {
       return Checkpoint(
-        name: 'AASA File Check',
-        description: 'Invalid JSON in apple-app-site-association on $uri: $e',
+        name: 'AASA file check',
+        description: '$uri does not return valid JSON: $e',
         type: CheckpointType.error,
       );
     }
@@ -217,9 +208,9 @@ class CorbadoAuthDoctor {
 
     if (foundInAppLinks && foundInWebCred) {
       return Checkpoint(
-        name: 'AASA File Check',
+        name: 'AASA file check',
         description:
-            'apple-app-site-association hosted on $uri contains correct entries for both applinks.details.appID and webcredentials.apps.',
+            '$uri contains valid entries for applinks.details.appID and webcredentials.apps.',
         type: CheckpointType.success,
       );
     }
@@ -229,30 +220,30 @@ class CorbadoAuthDoctor {
     if (!foundInWebCred) missing.add('webcredentials.apps');
 
     return Checkpoint(
-      name: 'AASA File Check',
-      description: 'Missing expected bundle ID in: ${missing.join(', ')}',
+      name: 'AASA file check',
+      description: 'Missing expected bundle ID "$bundleID" in ${missing.join(', ')} from $uri',
       type: CheckpointType.error,
     );
   }
 
   Future<Checkpoint> _checkAssetLinks() async {
-    final uri = Uri.parse('https://$_rpID/.well-known/assetlinks.json');
+    final uri = Uri.parse('https://$_rpid/.well-known/assetlinks.json');
 
     http.Response response;
     try {
       response = await http.get(uri).timeout(Duration(seconds: 5));
     } catch (e) {
       return Checkpoint(
-        name: 'Asset Link File Check',
-        description: 'Failed to fetch assetlinks.json from $uri: $e',
+        name: 'Asset link file check',
+        description: 'Failed to fetch $uri: $e',
         type: CheckpointType.error,
       );
     }
 
     if (response.statusCode != 200) {
       return Checkpoint(
-        name: 'Asset Link File Check',
-        description: 'assetlinks.json not found (HTTP ${response.statusCode}).',
+        name: 'Asset Link File check',
+        description: '$uri not found (HTTP ${response.statusCode}).',
         type: CheckpointType.error,
       );
     }
@@ -260,9 +251,9 @@ class CorbadoAuthDoctor {
     final contentType = response.headers['content-type'];
     if (contentType == null || !contentType.toLowerCase().startsWith('application/json')) {
       return Checkpoint(
-        name: 'Asset Link File Check',
+        name: 'Asset link file check',
         description:
-        'Invalid Content-Type on $uri: expected application/json but got ${contentType ?? 'none'}.',
+        '$uri does not return valid "Content-Type" header: expected "application/json" but received "${contentType ?? 'none'}".',
         type: CheckpointType.error,
       );
     }
@@ -272,8 +263,8 @@ class CorbadoAuthDoctor {
       entries = jsonDecode(response.body) as List<dynamic>;
     } catch (e) {
       return Checkpoint(
-        name: 'Asset Link File Check',
-        description: 'Invalid JSON array in assetlinks.json on $uri: $e',
+        name: 'Asset link file check',
+        description: '$uri does not return valid JSON: $e',
         type: CheckpointType.error,
       );
     }
@@ -299,7 +290,7 @@ class CorbadoAuthDoctor {
             }
           }
 
-          if (namespace == 'web' && target['site'] == _rpID) {
+          if (namespace == 'web' && target['site'] == _rpid) {
             webValid = true;
           }
         }
@@ -308,8 +299,8 @@ class CorbadoAuthDoctor {
 
     if (androidValid && webValid) {
       return Checkpoint(
-        name: 'Asset Link File Check',
-        description: 'assetlinks.json hosted on $uri contains valid Android and Web entries.',
+        name: 'Asset link file check',
+        description: '$uri contains valid entries for Android and Web.',
         type: CheckpointType.success,
       );
     }
@@ -320,8 +311,8 @@ class CorbadoAuthDoctor {
     if (!webValid) missing.add('web (site mismatch)');
 
     return Checkpoint(
-      name: 'Asset Link File Check',
-      description: 'Missing or invalid entries in assetlinks.json on $uri: $missing',
+      name: 'Asset link file check',
+      description: 'Missing or invalid entries in $uri: $missing',
       type: CheckpointType.error,
     );
   }
