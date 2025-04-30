@@ -11,18 +11,18 @@ import 'messages.g.dart';
 
 class CorbadoAuthDoctor {
   final String _projectId;
-  late String _rpId;
+  late String _rpID;
 
   CorbadoAuthDoctor(this._projectId);
 
   final WebCredentialsApi _api = WebCredentialsApi();
 
-  Future<List<Checkpoint>> check(String rpId) async {
+  Future<List<Checkpoint>> check(String rpID) async {
     if (kReleaseMode) {
       throw StateError('doctor() should not be called in release mode. ');
     }
 
-    this._rpId = rpId;
+    this._rpID = rpID;
 
     final List<Checkpoint> checkpoints = [];
 
@@ -77,14 +77,13 @@ class CorbadoAuthDoctor {
 
     return Checkpoint(
       name: 'Project ID Check',
-      description: 'Project ID is set correctly.',
+      description: 'Project ID $_projectId is set correctly.',
       type: CheckpointType.success,
     );
   }
 
   Future<Checkpoint> _checkRpId() async {
-    final rpId = await _rpId;
-    if (rpId == null || rpId.isEmpty) {
+    if (_rpID.isEmpty) {
       throw DoctorException(
         blockingCheckpoint: Checkpoint(
           name: 'RPID Check',
@@ -99,25 +98,24 @@ class CorbadoAuthDoctor {
 
     final expected =
         kIsWeb ? 'localhost' : '$_projectId.frontendapi.cloud.corbado.io';
-    if (rpId != expected) {
+    if (_rpID != expected) {
       return Checkpoint(
         name: 'RPID Check',
         description:
-            'RPID might not be valid. Expected "$expected" but got "$rpId".',
+            'RPID might not be valid. Expected "$expected" but got "$_rpID".',
         documentationLink: 'https://app.corbado.com/settings/general?tab=URLs',
         type: CheckpointType.warning,
       );
     }
     return Checkpoint(
       name: 'RPID Check',
-      description: 'RPID is set correctly.',
+      description: 'RPID $_rpID is set correctly.',
       type: CheckpointType.success,
     );
   }
 
   Future<Checkpoint> _checkAASAFile() async {
-    final rpID = await _rpId;
-    final uri = Uri.parse('$rpID/.well-known/apple-app-site-association');
+    final uri = Uri.parse('https://$_rpID/.well-known/apple-app-site-association');
 
     http.Response response;
     try {
@@ -221,8 +219,7 @@ class CorbadoAuthDoctor {
   }
 
   Future<Checkpoint> _checkAssetLinks() async {
-    final rpID = await _rpId;
-    final uri = Uri.parse('$rpID/.well-known/assetlinks.json');
+    final uri = Uri.parse('https://$_rpID/.well-known/assetlinks.json');
 
     http.Response response;
     try {
@@ -285,7 +282,7 @@ class CorbadoAuthDoctor {
             }
           }
 
-          if (namespace == 'web' && target['site'] == rpID) {
+          if (namespace == 'web' && target['site'] == _rpID) {
             webValid = true;
           }
         }
@@ -313,25 +310,37 @@ class CorbadoAuthDoctor {
   }
 
   Future<Checkpoint> _checkHostname() async {
-    final String hostname = Uri.base.host;
-    final rpId = await _rpId;
-    final rpHost = Uri.parse(rpId!).host;
+    final String hostname = Uri.base.host.toLowerCase();
 
-    if (hostname == rpHost) {
+    if (_rpID.isEmpty) {
       return Checkpoint(
         name: 'Hostname Check',
-        description: 'Hostname matches the RPID.',
+        description: 'RPID is null or empty.',
+        type: CheckpointType.error,
+      );
+    }
+
+    final String rpHost = Uri.parse(_rpID).host.toLowerCase();
+
+    final bool matches =
+        hostname == rpHost || hostname.endsWith('.' + rpHost);
+
+    if (matches) {
+      return Checkpoint(
+        name: 'Hostname Check',
+        description: 'Hostname "$hostname" is valid for RPID host "$rpHost".',
         type: CheckpointType.success,
       );
     } else {
       return Checkpoint(
         name: 'Hostname Check',
         description:
-            'Hostname does not match the RPID. Expected $rpHost but got $hostname.',
+        'Hostname "$hostname" is NOT valid for RPID host "$rpHost".',
         type: CheckpointType.error,
       );
     }
   }
+
 
   Future<String> _getBundleId() async {
     final info = await PackageInfo.fromPlatform();

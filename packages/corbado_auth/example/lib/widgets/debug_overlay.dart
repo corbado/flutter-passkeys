@@ -6,18 +6,12 @@ import 'package:url_launcher/url_launcher.dart';
 class DebugOverlay {
   static OverlayEntry? _currentEntry;
   static List<Checkpoint> _checkpoints = [];
-  static String? _projectID;
-  static String? _rpId;
 
   /// Show the overlay with the given checkpoints
   static void show(
     BuildContext context,
     List<Checkpoint> checkpoints,
-    String projectID,
-    String rpId,
   ) {
-    _projectID = projectID;
-    _rpId = rpId;
     _checkpoints = checkpoints;
     if (_currentEntry != null) return;
     _currentEntry = OverlayEntry(builder: (_) => _DebugOverlayWidget());
@@ -65,8 +59,9 @@ class _DebugOverlayWidgetState extends State<_DebugOverlayWidget> {
               Row(
                 children: [
                   const Text(
-                    'Debug Checkpoints',
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                    'Doctor Checkpoints',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+
                   ),
                   const Spacer(),
                   GestureDetector(
@@ -74,12 +69,6 @@ class _DebugOverlayWidgetState extends State<_DebugOverlayWidget> {
                     child: const Icon(Icons.close),
                   ),
                 ],
-              ),
-              Text(
-                'Project ID: ${DebugOverlay._projectID}',
-              ),
-              Text(
-                'RPID: ${DebugOverlay._rpId}',
               ),
               const SizedBox(height: 8),
               // Build each checkpoint item
@@ -92,25 +81,47 @@ class _DebugOverlayWidgetState extends State<_DebugOverlayWidget> {
   }
 
   Widget _buildItem(Checkpoint cp) {
+    // choose icon & color per type
+    IconData iconData;
     Color color;
     switch (cp.type) {
       case CheckpointType.success:
+        iconData = Icons.check;
         color = Colors.green;
         break;
       case CheckpointType.warning:
+        iconData = Icons.warning_amber;
         color = Colors.orange;
         break;
       case CheckpointType.error:
+        iconData = Icons.close;
         color = Colors.red;
         break;
     }
+
+    // build a square “checkbox” with border + icon
+    Widget box = Container(
+      width: 20,
+      height: 20,
+      decoration: BoxDecoration(
+        border: Border.all(color: color, width: 2),
+        borderRadius: BorderRadius.circular(4),
+      ),
+      child: Center(
+        child: Icon(
+          iconData,
+          size: 16,
+          color: color,
+        ),
+      ),
+    );
 
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 4),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(Icons.circle, size: 12, color: color),
+          box,
           const SizedBox(width: 8),
           Expanded(
             child: Column(
@@ -146,4 +157,5 @@ class _DebugOverlayWidgetState extends State<_DebugOverlayWidget> {
       ),
     );
   }
+
 }

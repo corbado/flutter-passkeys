@@ -24,17 +24,14 @@ class AuthPage extends HookConsumerWidget {
       () {
         // schedule after first frame so context is stable
         SchedulerBinding.instance.addPostFrameCallback((_) {
-          Future.wait<dynamic>([
-            corbadoAuth.doctor(), // Future<List<Checkpoint>>
-            corbadoAuth.rpId, // Future<UserProfile>
-          ]).then(
+          corbadoAuth
+              .doctor("pro-4268394291597054564.frontendapi.cloud.corbado.io")
+              .then(
             (data) {
               if (!context.mounted) return;
               DebugOverlay.show(
                 context,
-                data[0] as List<Checkpoint>,
-                corbadoAuth.projectId,
-                data[1] as String,
+                data
               );
             },
           );
