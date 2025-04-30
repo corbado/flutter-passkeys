@@ -242,7 +242,7 @@ class CorbadoAuthDoctor {
 
     if (response.statusCode != 200) {
       return Checkpoint(
-        name: 'Asset Link File check',
+        name: 'Asset link file check',
         description: '$uri not found (HTTP ${response.statusCode}).',
         type: CheckpointType.error,
       );
