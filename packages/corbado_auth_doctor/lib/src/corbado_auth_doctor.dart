@@ -32,7 +32,7 @@ class CorbadoAuthDoctor {
 
     try {
       checkpoints.add(_checkProjectId());
-      checkpoints.add(await _checkRpid());
+      checkpoints.add(_checkRpid());
 
       if (!kIsWeb) {
         if (Platform.isIOS) {
@@ -83,7 +83,7 @@ class CorbadoAuthDoctor {
     );
   }
 
-  Future<Checkpoint> _checkRpid() async {
+  Checkpoint _checkRpid() {
     if (kIsWeb) {
       final hostname = Uri.base.host.toLowerCase();
       final matches = hostname == _rpid || hostname.endsWith('.' + _rpid);
