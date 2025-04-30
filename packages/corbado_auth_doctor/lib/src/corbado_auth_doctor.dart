@@ -31,9 +31,7 @@ class CorbadoAuthDoctor {
 
       checkpoints.add(await _checkRpId());
 
-      if (kIsWeb) {
-        checkpoints.add(await _checkHostname());
-      } else {
+      if (!kIsWeb) {
         if (Platform.isIOS) {
           checkpoints.add(await _checkAASAFile());
         }
@@ -88,16 +86,28 @@ class CorbadoAuthDoctor {
         blockingCheckpoint: Checkpoint(
           name: 'RPID Check',
           description:
-              'RPID is not set. Make sure to set it on the Corbado developer panel.',
+          'RPID is not set. Make sure to set it on the Corbado developer panel.',
           documentationLink:
-              'https://app.corbado.com/settings/general?tab=URLs',
+          'https://app.corbado.com/settings/general?tab=URLs',
           type: CheckpointType.error,
         ),
       );
     }
 
-    final expected =
-        kIsWeb ? 'localhost' : '$_projectId.frontendapi.cloud.corbado.io';
+    if (kIsWeb) {
+      final hostname = Uri.base.host.toLowerCase();
+      final matches = hostname == _rpID || hostname.endsWith('.' + _rpID);
+
+      if (!matches) {
+        return Checkpoint(
+          name: 'RPID Check',
+          description: 'RPID "$_rpID" is NOT valid for hostname "$hostname".',
+          type: CheckpointType.error,
+        );
+      }
+    }
+
+    final expected = '$_projectId.frontendapi.cloud.corbado.io';
     if (_rpID != expected) {
       return Checkpoint(
         name: 'RPID Check',
@@ -107,9 +117,10 @@ class CorbadoAuthDoctor {
         type: CheckpointType.warning,
       );
     }
+
     return Checkpoint(
       name: 'RPID Check',
-      description: 'RPID $_rpID is set correctly.',
+      description: 'RPID "$_rpID" is set correctly.',
       type: CheckpointType.success,
     );
   }
@@ -308,39 +319,6 @@ class CorbadoAuthDoctor {
       type: CheckpointType.error,
     );
   }
-
-  Future<Checkpoint> _checkHostname() async {
-    final String hostname = Uri.base.host.toLowerCase();
-
-    if (_rpID.isEmpty) {
-      return Checkpoint(
-        name: 'Hostname Check',
-        description: 'RPID is null or empty.',
-        type: CheckpointType.error,
-      );
-    }
-
-    final String rpHost = Uri.parse(_rpID).host.toLowerCase();
-
-    final bool matches =
-        hostname == rpHost || hostname.endsWith('.' + rpHost);
-
-    if (matches) {
-      return Checkpoint(
-        name: 'Hostname Check',
-        description: 'Hostname "$hostname" is valid for RPID host "$rpHost".',
-        type: CheckpointType.success,
-      );
-    } else {
-      return Checkpoint(
-        name: 'Hostname Check',
-        description:
-        'Hostname "$hostname" is NOT valid for RPID host "$rpHost".',
-        type: CheckpointType.error,
-      );
-    }
-  }
-
 
   Future<String> _getBundleId() async {
     final info = await PackageInfo.fromPlatform();
