@@ -105,6 +105,12 @@ class CorbadoAuthDoctor {
           type: CheckpointType.error,
         );
       }
+
+      return Checkpoint(
+        name: 'RPID Check',
+        description: 'RPID "$_rpID" is valid for hostname "$hostname".',
+        type: CheckpointType.success,
+      );
     }
 
     final expected = '$_projectId.frontendapi.cloud.corbado.io';
