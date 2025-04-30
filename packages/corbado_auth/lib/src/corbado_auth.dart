@@ -113,6 +113,10 @@ class CorbadoAuth {
   }
 
   Future<List<Checkpoint>> doctor(String rpid) async {
+    if (kReleaseMode) {
+      throw StateError('doctor() should not be called in release mode. ');
+    }
+
     return _doctor.check(rpid);
   }
 

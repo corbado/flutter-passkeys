@@ -18,10 +18,6 @@ class CorbadoAuthDoctor {
   final WebCredentialsApi _api = WebCredentialsApi();
 
   Future<List<Checkpoint>> check(String rpid) async {
-    if (kReleaseMode) {
-      throw StateError('doctor() should not be called in release mode. ');
-    }
-
     if (rpid.isEmpty) {
       throw ArgumentError('rpid cannot be empty.');
     }
