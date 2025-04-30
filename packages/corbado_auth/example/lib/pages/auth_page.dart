@@ -1,5 +1,6 @@
 import 'package:corbado_auth/corbado_auth.dart';
 import 'package:corbado_auth_example/auth_provider.dart';
+import 'package:corbado_auth_example/main.dart';
 import 'package:corbado_auth_example/screens/email_edit.dart';
 import 'package:corbado_auth_example/screens/email_verify_otp.dart';
 import 'package:corbado_auth_example/screens/login_init.dart';
@@ -11,6 +12,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+
+
 
 class AuthPage extends HookConsumerWidget {
   AuthPage({super.key}) {}
@@ -25,7 +28,7 @@ class AuthPage extends HookConsumerWidget {
         // schedule after first frame so context is stable
         SchedulerBinding.instance.addPostFrameCallback((_) {
           corbadoAuth
-              .doctor("pro-4268394291597054564.frontendapi.cloud.corbado.io")
+              .doctor('flutter.corbado.io')
               .then(
             (data) {
               if (!context.mounted) return;
