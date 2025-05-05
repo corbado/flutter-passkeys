@@ -1,4 +1,4 @@
-library corbado_auth_doctor;
+library passkeys_doctor;
 
 export 'src/types/exceptions.dart';
 export 'src/types/checkpoint.dart';

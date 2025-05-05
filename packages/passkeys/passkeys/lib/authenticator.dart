@@ -1,17 +1,26 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:passkeys/availability.dart';
 import 'package:passkeys/types.dart';
+import 'package:passkeys_doctor/passkeys_doctor.dart';
 import 'package:passkeys_platform_interface/passkeys_platform_interface.dart';
 
 /// Handles platform dependent parts of the registration and authentication
 /// flow.
 class PasskeyAuthenticator {
-  /// Constructor
-  PasskeyAuthenticator() : _platform = PasskeysPlatform.instance;
-
+  final _doctor = PasskeysDoctor();
   final PasskeysPlatform _platform;
+  final bool debugMode;
+
+  /// Constructor
+  PasskeyAuthenticator({bool? debugMode})
+      : _platform = PasskeysPlatform.instance,
+        debugMode = debugMode ?? false;
+
+  ValueListenable<Exception?> get lastException => _doctor.lastException;
+  ValueListenable<List<Checkpoint>> get checkpoints => _doctor.checkpoints;
 
   /// Returns true only if passkeys are supported by the platform.
   @deprecated
@@ -27,6 +36,10 @@ class PasskeyAuthenticator {
   /// Returns [RegisterResponseType] which must be sent to the relying party
   /// server.
   Future<RegisterResponseType> register(RegisterRequestType request) async {
+    if (debugMode) {
+      _doctor.check(request.relyingParty.id);
+    }
+
     try {
       await _platform.cancelCurrentAuthenticatorOperation();
 
@@ -71,6 +84,10 @@ class PasskeyAuthenticator {
   Future<AuthenticateResponseType> authenticate(
     AuthenticateRequestType request,
   ) async {
+    if (debugMode) {
+      _doctor.check(request.relyingPartyId);
+    }
+
     try {
       await _platform.cancelCurrentAuthenticatorOperation();
 

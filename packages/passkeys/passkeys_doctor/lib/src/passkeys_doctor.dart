@@ -1,4 +1,6 @@
+import 'dart:async';
 import 'dart:convert';
+import 'dart:ffi';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
@@ -8,14 +10,27 @@ import 'package:package_info_plus/package_info_plus.dart';
 import '../passkeys_doctor.dart';
 import 'messages.g.dart';
 
-class CorbadoAuthDoctor {
-  final String _rpid;
+class PasskeysDoctor {
+  late final String _rpid;
 
-  CorbadoAuthDoctor(this._rpid);
+  PasskeysDoctor();
 
   final WebCredentialsApi _api = WebCredentialsApi();
 
-  Future<List<Checkpoint>> check() async {
+  final ValueNotifier<Exception?> _lastException = ValueNotifier(null);
+  final ValueNotifier<List<Checkpoint>> _checkpoints = ValueNotifier([]);
+
+  ValueListenable<Exception?> get lastException => _lastException;
+
+  ValueListenable<List<Checkpoint>> get checkpoints => _checkpoints;
+
+  recordException(Exception exception) {
+    _lastException.value = exception;
+  }
+
+  check(String rpId) async {
+    _rpid = rpId;
+
     final List<Checkpoint> checkpoints = [];
 
     try {
@@ -36,15 +51,14 @@ class CorbadoAuthDoctor {
       checkpoints.add(e.blockingCheckpoint);
     }
 
-    return checkpoints;
+    _checkpoints.value = checkpoints;
   }
 
   Checkpoint _checkRpid() {
     if (_rpid.isEmpty) {
       return Checkpoint(
         name: 'RPID check',
-        description:
-        'RPID is not set',
+        description: 'RPID is not set',
         type: CheckpointType.error,
       );
     }
@@ -78,7 +92,8 @@ class CorbadoAuthDoctor {
   }
 
   Future<Checkpoint> _checkAASAFile() async {
-    final uri = Uri.parse('https://$_rpid/.well-known/apple-app-site-association');
+    final uri =
+        Uri.parse('https://$_rpid/.well-known/apple-app-site-association');
 
     http.Response response;
     try {
@@ -94,18 +109,18 @@ class CorbadoAuthDoctor {
     if (response.statusCode != 200) {
       return Checkpoint(
         name: 'AASA file check',
-        description:
-            '$uri not found (HTTP ${response.statusCode}).',
+        description: '$uri not found (HTTP ${response.statusCode}).',
         type: CheckpointType.error,
       );
     }
 
     final contentType = response.headers['content-type'];
-    if (contentType == null || !contentType.toLowerCase().startsWith('application/json')) {
+    if (contentType == null ||
+        !contentType.toLowerCase().startsWith('application/json')) {
       return Checkpoint(
         name: 'AASA file check',
         description:
-        '$uri does not return valid "Content-Type" header: expected "application/json" but received "${contentType ?? 'none'}".',
+            '$uri does not return valid "Content-Type" header: expected "application/json" but received "${contentType ?? 'none'}".',
         type: CheckpointType.error,
       );
     }
@@ -176,7 +191,8 @@ class CorbadoAuthDoctor {
 
     return Checkpoint(
       name: 'AASA file check',
-      description: 'Missing expected bundle ID "$bundleID" in ${missing.join(', ')} from $uri',
+      description:
+          'Missing expected bundle ID "$bundleID" in ${missing.join(', ')} from $uri',
       type: CheckpointType.error,
     );
   }
@@ -204,11 +220,12 @@ class CorbadoAuthDoctor {
     }
 
     final contentType = response.headers['content-type'];
-    if (contentType == null || !contentType.toLowerCase().startsWith('application/json')) {
+    if (contentType == null ||
+        !contentType.toLowerCase().startsWith('application/json')) {
       return Checkpoint(
         name: 'Asset link file check',
         description:
-        '$uri does not return valid "Content-Type" header: expected "application/json" but received "${contentType ?? 'none'}".',
+            '$uri does not return valid "Content-Type" header: expected "application/json" but received "${contentType ?? 'none'}".',
         type: CheckpointType.error,
       );
     }
@@ -282,5 +299,10 @@ class CorbadoAuthDoctor {
     final fingerprints = await _api.getFingerprints();
 
     return fingerprints;
+  }
+
+  void dispose() {
+    _lastException.dispose();
+    _checkpoints.dispose();
   }
 }
