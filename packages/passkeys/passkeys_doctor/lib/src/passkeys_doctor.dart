@@ -52,11 +52,39 @@ class PasskeysDoctor {
 
   Checkpoint _checkRpid(String rpid) {
     if (rpid.isEmpty) {
-      return Checkpoint(
-        name: 'RPID check',
-        description: 'RPID is not set',
-        type: CheckpointType.error,
+      throw DoctorException(
+        blockingCheckpoint: Checkpoint(
+          name: 'RPID check',
+          description: 'RPID is not set',
+          type: CheckpointType.error,
+        ),
       );
+    }
+
+    // If they passed a URL (scheme or any slash), extract host and bail out with suggestion
+    if (rpid.contains('://') || rpid.contains('/')) {
+      try {
+        final uri = Uri.parse(rpid);
+        final host = uri.host.toLowerCase();
+        if (host.isEmpty) throw FormatException();
+
+        throw DoctorException(
+          blockingCheckpoint: Checkpoint(
+            name: 'RPID check',
+            description: 'RPID must be just a hostname, not a URL. '
+                'Did you mean "$host"?',
+            type: CheckpointType.error,
+          ),
+        );
+      } catch (_) {
+        throw DoctorException(
+          blockingCheckpoint: Checkpoint(
+            name: 'RPID check',
+            description: 'RPID "$rpid" is not a valid URL or hostname.',
+            type: CheckpointType.error,
+          ),
+        );
+      }
     }
 
     if (kIsWeb) {
@@ -77,8 +105,6 @@ class PasskeysDoctor {
         type: CheckpointType.success,
       );
     }
-
-    // iOS and Android
 
     return Checkpoint(
       name: 'RPID check',
