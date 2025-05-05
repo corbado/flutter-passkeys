@@ -11,8 +11,6 @@ import '../passkeys_doctor.dart';
 import 'messages.g.dart';
 
 class PasskeysDoctor {
-  late final String _rpid;
-
   PasskeysDoctor();
 
   final WebCredentialsApi _api = WebCredentialsApi();
@@ -29,20 +27,18 @@ class PasskeysDoctor {
   }
 
   check(String rpId) async {
-    _rpid = rpId;
-
     final List<Checkpoint> checkpoints = [];
 
     try {
-      checkpoints.add(_checkRpid());
+      checkpoints.add(_checkRpid(rpId));
 
       if (!kIsWeb) {
         if (Platform.isIOS) {
-          checkpoints.add(await _checkAASAFile());
+          checkpoints.add(await _checkAASAFile(rpId));
         }
 
         if (Platform.isAndroid) {
-          checkpoints.add(await _checkAssetLinks());
+          checkpoints.add(await _checkAssetLinks(rpId));
         }
       }
     } on DoctorException catch (e) {
@@ -54,8 +50,8 @@ class PasskeysDoctor {
     _checkpoints.value = checkpoints;
   }
 
-  Checkpoint _checkRpid() {
-    if (_rpid.isEmpty) {
+  Checkpoint _checkRpid(String rpid) {
+    if (rpid.isEmpty) {
       return Checkpoint(
         name: 'RPID check',
         description: 'RPID is not set',
@@ -65,19 +61,19 @@ class PasskeysDoctor {
 
     if (kIsWeb) {
       final hostname = Uri.base.host.toLowerCase();
-      final matches = hostname == _rpid || hostname.endsWith('.' + _rpid);
+      final matches = hostname == rpid || hostname.endsWith('.' + rpid);
 
       if (!matches) {
         return Checkpoint(
           name: 'RPID check',
-          description: 'RPID "$_rpid" is NOT valid for hostname "$hostname".',
+          description: 'RPID "$rpid" is NOT valid for hostname "$hostname".',
           type: CheckpointType.error,
         );
       }
 
       return Checkpoint(
         name: 'RPID check',
-        description: 'RPID "$_rpid" is valid for hostname "$hostname".',
+        description: 'RPID "$rpid" is valid for hostname "$hostname".',
         type: CheckpointType.success,
       );
     }
@@ -86,14 +82,14 @@ class PasskeysDoctor {
 
     return Checkpoint(
       name: 'RPID check',
-      description: 'RPID is set correctly ("$_rpid").',
+      description: 'RPID is set correctly ("$rpid").',
       type: CheckpointType.success,
     );
   }
 
-  Future<Checkpoint> _checkAASAFile() async {
+  Future<Checkpoint> _checkAASAFile(String rpid) async {
     final uri =
-        Uri.parse('https://$_rpid/.well-known/apple-app-site-association');
+        Uri.parse('https://$rpid/.well-known/apple-app-site-association');
 
     http.Response response;
     try {
@@ -197,8 +193,8 @@ class PasskeysDoctor {
     );
   }
 
-  Future<Checkpoint> _checkAssetLinks() async {
-    final uri = Uri.parse('https://$_rpid/.well-known/assetlinks.json');
+  Future<Checkpoint> _checkAssetLinks(String rpid) async {
+    final uri = Uri.parse('https://$rpid/.well-known/assetlinks.json');
 
     http.Response response;
     try {
@@ -262,7 +258,7 @@ class PasskeysDoctor {
             }
           }
 
-          if (namespace == 'web' && target['site'] == _rpid) {
+          if (namespace == 'web' && target['site'] == rpid) {
             webValid = true;
           }
         }

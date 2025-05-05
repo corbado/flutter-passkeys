@@ -20,6 +20,7 @@ dependencies:
   hooks_riverpod: 2.4.0
   flutter_localization: ^0.2.1
   jwt_decoder: ^2.0.1
+  overlay_support: ^2.1.0
 
 dev_dependencies:
   flutter_driver:

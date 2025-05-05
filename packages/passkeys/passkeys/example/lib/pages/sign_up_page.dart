@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
@@ -12,6 +13,7 @@ import 'package:passkeys_example/error_handling.dart';
 import 'package:passkeys_example/pages/base_page.dart';
 import 'package:passkeys_example/providers.dart';
 import 'package:passkeys_example/router.dart';
+import 'package:passkeys_example/widgets/debug_overlay.dart';
 import 'package:passkeys_example/widgets/select_test_configuration.dart';
 
 class SignUpPage extends HookConsumerWidget {
@@ -24,6 +26,17 @@ class SignUpPage extends HookConsumerWidget {
     final authService = ref.watch(authServiceProvider);
 
     bool isTestMode = const bool.fromEnvironment('TEST_MODE');
+
+    useEffect(
+      () {
+        SchedulerBinding.instance.addPostFrameCallback((_) {
+            DebugOverlay.show(context, authService.authenticator.checkpoints);
+        });
+
+        return null;
+      },
+      [authService],
+    );
 
     // You need to first check for the web platform because on Web calling
     // Platform will cause an exception
@@ -136,8 +149,9 @@ class SignUpPage extends HookConsumerWidget {
           ),
           if (isTestMode)
             SelectTestConfiguration(
-              configurations:
-                  Platform.isIOS ? SIGNUP_IOS_CONFIGURATIONS : SIGNUP_ANDROID_CONFIGURATIONS,
+              configurations: Platform.isIOS
+                  ? SIGNUP_IOS_CONFIGURATIONS
+                  : SIGNUP_ANDROID_CONFIGURATIONS,
               onSelectConfiguration: authService.setSignupConfiguration,
               selectedConfiguration: authService.signUpConfiguration,
             ),
