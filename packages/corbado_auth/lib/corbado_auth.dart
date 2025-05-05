@@ -1,6 +1,8 @@
 /// Corbado auth flutter package
 library corbado_auth;
 
+export 'package:corbado_auth_doctor/src/types/checkpoint.dart';
+
 export 'src/blocks/email_verify_block.dart';
 export 'src/blocks/login_init_block.dart';
 export 'src/blocks/passkey_append_block.dart';

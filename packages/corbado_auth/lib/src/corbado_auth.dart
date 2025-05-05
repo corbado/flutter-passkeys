@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:corbado_auth/corbado_auth.dart';
+import 'package:corbado_auth_doctor/corbado_auth_doctor.dart';
 import 'package:corbado_auth/src/process_handler.dart';
 import 'package:corbado_auth/src/services/corbado/corbado.dart';
 import 'package:corbado_auth/src/services/corbado/corbado_stub.dart'
@@ -44,6 +45,7 @@ class CorbadoAuth {
   // Returns the currently used RPid
   late final Future<String?> _rpIdFuture =
       _sessionService.rpIdChanges.firstWhere((value) => value != null);
+
   Future<String?> get rpId => _rpIdFuture;
 
   Stream<ComponentWithData> get componentWithDataStream =>
@@ -56,6 +58,9 @@ class CorbadoAuth {
   late CorbadoService _corbadoService;
   late final SessionService _sessionService;
   late final String _projectId;
+  late final CorbadoAuthDoctor _doctor = CorbadoAuthDoctor(
+    _projectId,
+  );
 
   Future<void> initProcessHandler() async {
     final res = await _corbadoService.initAuthProcess();
@@ -105,6 +110,14 @@ class CorbadoAuth {
       await signOut();
       debugPrint(e.toString());
     }
+  }
+
+  Future<List<Checkpoint>> doctor(String rpid) async {
+    if (kReleaseMode) {
+      throw StateError('doctor() should not be called in release mode. ');
+    }
+
+    return _doctor.check(rpid);
   }
 
   /// Load all passkeys that are available to the currently logged in user.
