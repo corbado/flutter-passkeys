@@ -1,3 +1,6 @@
+## 2.6.0
+* Added passkey JS bundle check to ensure the passkey JS bundle is loaded before initializing the PasskeyAuthenticator.
+
 ## 2.5.1
 * Fixed a bug where `hybrid` transports causes login to fail.
 

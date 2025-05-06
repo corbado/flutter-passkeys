@@ -1,3 +1,7 @@
+## 2.9.0
+* Added passkeys_doctor plugin to help with debugging passkey and configuration issues.
+* Added passkey JS bundle check to ensure the passkey JS bundle is loaded before initializing the PasskeyAuthenticator. (Web)
+
 ## 2.8.2
 * Fixed a bug where an empty `userHandle` returned by `authenticate` was not being handled correctly. (Android)
 
