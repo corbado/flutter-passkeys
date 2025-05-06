@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_driver/driver_extension.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:overlay_support/overlay_support.dart';
-import 'package:passkeys_example/providers.dart';
 import 'package:passkeys_example/router.dart';
-import 'package:passkeys_example/widgets/debug_overlay.dart';
 
 void main() async {
   bool isTestMode = const bool.fromEnvironment('TEST_MODE');

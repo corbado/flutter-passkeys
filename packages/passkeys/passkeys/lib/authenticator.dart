@@ -19,9 +19,6 @@ class PasskeyAuthenticator {
       : _platform = PasskeysPlatform.instance,
         debugMode = debugMode ?? false;
 
-  ValueListenable<Exception?> get lastException => _doctor.lastException;
-  ValueListenable<List<Checkpoint>> get checkpoints => _doctor.checkpoints;
-
   /// Returns true only if passkeys are supported by the platform.
   @deprecated
   Future<bool> canAuthenticate() {
