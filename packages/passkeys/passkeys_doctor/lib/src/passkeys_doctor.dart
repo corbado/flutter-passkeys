@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:passkeys_doctor/src/logger.dart';
@@ -17,7 +18,7 @@ class PasskeysDoctor {
   PasskeysDoctor() {
     _logger = Logger(_streamController.stream);
 
-    Listenable.merge([_lastException, _checkpoints]).addListener(
+    _checkpoints.addListener(
       () {
         _streamController.add(
           Result(
@@ -27,16 +28,33 @@ class PasskeysDoctor {
         );
       },
     );
+
+    _lastException.addListener(
+      () {
+        if (_lastException.value == null) {
+          return;
+        }
+
+        _streamController.add(
+          Result(
+            checkpoints: _checkpoints.value,
+            exception: _lastException.value,
+          ),
+        );
+
+        _lastException.value = null;
+      },
+    );
   }
 
   final WebCredentialsApi _api = WebCredentialsApi();
 
-  final ValueNotifier<Exception?> _lastException = ValueNotifier(null);
+  final ValueNotifier<PlatformException?> _lastException = ValueNotifier(null);
   final ValueNotifier<List<Checkpoint>> _checkpoints = ValueNotifier([]);
   final StreamController<Result> _streamController =
       StreamController<Result>.broadcast();
 
-  recordException(Exception exception) {
+  recordException(PlatformException exception) {
     _lastException.value = exception;
   }
 
