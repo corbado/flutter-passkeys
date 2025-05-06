@@ -107,7 +107,7 @@ class Logger {
           print(' DomainNotAssociatedException: Thrown when your app’s domain isn’t correctly associated (no Digital Asset Links or AASA file). In your case it is caused by apple CDN Caching when dealing with AASA files.');
           print(' Platforms: iOS');
           print(' Suggestions:');
-          print('  • Add "?mode=developer" to the URL of the AASA file and to the web credentials.');
+          print('  • Add "?mode=developer" to the URL of the AASA file and to the web credentials in the Runner.entitlements.');
           break;
         }
 
