@@ -91,6 +91,7 @@ class Logger {
 
         if (androidInfo.isPhysicalDevice){
           print(' SyncAccountNotAvailableException: This issue should not happen on a physical device. Please contact the package authors.');
+          break;
         }
 
         print(' SyncAccountNotAvailableException: Thrown when the passkey cannot be retrieved from the sync provider (e.g., on an Android emulator).');
@@ -104,10 +105,10 @@ class Logger {
         if(checkpointList.any((Checkpoint checkpoint) {
           return checkpoint.name.contains("AASA") && checkpoint.type == CheckpointType.success;
         })) {
-          print(' DomainNotAssociatedException: Thrown when your app’s domain isn’t correctly associated (no Digital Asset Links or AASA file). In your case it is caused by apple CDN Caching when dealing with AASA files.');
+          print(' DomainNotAssociatedException: Thrown when your app’s domain isn’t correctly associated (no Digital Asset Links or AASA file). In your case it is caused by apple CDN Caching when dealing with AASA files. For more information check https://docs.corbado.com/corbado-complete/frontend-integration/flutter/run-on-physical-device/ios/overview#aasa-file-caching-and-the-%3Fmode%3Ddeveloper-parameter');
           print(' Platforms: iOS');
           print(' Suggestions:');
-          print('  • Add "?mode=developer" to the URL of the AASA file and to the web credentials in the Runner.entitlements.');
+          print('  • Check our docs on https://docs.corbado.com/corbado-complete/frontend-integration/flutter/run-on-physical-device/ios/configure-device and ');
           break;
         }
 
