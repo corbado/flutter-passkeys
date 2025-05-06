@@ -310,11 +310,11 @@ On a simulator, this can be done under _Features_ => _Face ID_ by clicking on "E
 <details>
 <summary>1. Update your index.html to include our JavaScript library</summary>
 Our passkeys_web package relies on JavaScript for integrating with the browser's WebAuthn API.
-To make this work, you have to include our JavaScript library in your web/index.html file.
+To make this work, you have to include our JavaScript library in your web/index.html file. If not correctly integrated the PasskeyAuthenticator would not correctly initialize and the application would crash and an exception asking to add the code blow will show in your console.
 
 ```html
 <script
-  src="https://github.com/corbado/flutter-passkeys/releases/download/2.3.0/bundle.js"
+  src="https://github.com/corbado/flutter-passkeys/releases/download/2.4.0/bundle.js"
   type="application/javascript"
 ></script>
 ```
