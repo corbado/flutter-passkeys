@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:js_interop_unsafe';
 import 'package:flutter/cupertino.dart';
 import 'package:web/web.dart';
@@ -19,11 +20,13 @@ class PasskeysWeb extends PasskeysPlatform {
   static void registerWith([Object? registrar]) {
     PasskeysPlatform.instance = PasskeysWeb();
 
+    /// Check if the Passkeys Web JS script is loaded
     try {
       final _ = window['PasskeyAuthenticator'];
     } catch (_) {
-      throw FlutterError(
-          'Passkeys Web SDK not loaded. Please include the Passkeys Web SDK (bundle.js) in your HTML file. You can find it on https://github.com/corbado/flutter-passkeys/releases/download/2.4.0/bundle.js');
+      debugPrint(
+          'Error: Passkeys Web SDK not loaded. Please include the Passkeys Web SDK (bundle.js) in your HTML file. You can find it on https://github.com/corbado/flutter-passkeys/releases/download/2.4.0/bundle.js');
+      window.close();
     }
 
     init();
