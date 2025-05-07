@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:corbado_auth/corbado_auth.dart';
-import 'package:corbado_auth_doctor/corbado_auth_doctor.dart';
 import 'package:corbado_auth/src/process_handler.dart';
 import 'package:corbado_auth/src/services/corbado/corbado.dart';
 import 'package:corbado_auth/src/services/corbado/corbado_stub.dart'
@@ -182,5 +181,37 @@ class CorbadoAuth {
     }
 
     return SessionService(storageService, frontendAPIClient);
+  }
+
+
+  Checkpoint _checkProjectId() {
+    if (_projectId.isEmpty) {
+      throw DoctorException(
+        blockingCheckpoint: Checkpoint(
+          name: 'Project ID check',
+          description:
+          'Project ID is not set.',
+          documentationLink:
+          'https://app.corbado.com/settings/general?tab=Project+Info',
+          type: CheckpointType.error,
+        ),
+      );
+    }
+
+    if (!_projectId.startsWith('pro-')) {
+      throw DoctorException(
+        blockingCheckpoint: Checkpoint(
+          name: 'Project ID check',
+          description: 'Project ID must start with "pro-".',
+          type: CheckpointType.error,
+        ),
+      );
+    }
+
+    return Checkpoint(
+      name: 'Project ID check',
+      description: 'Project ID is set correctly ($_projectId).',
+      type: CheckpointType.success,
+    );
   }
 }
