@@ -50,15 +50,10 @@ We’ve added a detailed [integration guide and example repository](https://gith
 
 As part of the `corbado_auth` package, you get access to a built-in diagnostics tool called **Corbado Doctor**. It helps you verify your setup and catch common misconfigurations at runtime.
 
-Usage is simple—just call the `doctor(rpid:)` function and pass in your relying-party ID:
+Usage is simple—simply pass `debugMode: true` when initializing corbadoAuth:
 
 ```dart
-final corbadoAuth = ref.watch(corbadoProvider);
-
-...
-
-corbadoAuth.doctor(rpid: rpid).then((result) {
-    // Handle the result
-    ...
-});
+final corbadoAuth = CorbadoAuth();
+await corbadoAuth.init(projectId: projectId, debugMode: true);
 ```
+
