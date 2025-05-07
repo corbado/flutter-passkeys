@@ -13,6 +13,7 @@ import 'package:corbado_auth/src/services/storage/storage_web.dart';
 import 'package:corbado_frontend_api_client/corbado_frontend_api_client.dart';
 import 'package:flutter/foundation.dart';
 import 'package:passkeys/authenticator.dart';
+import 'package:passkeys/types.dart';
 
 /// The Cobardo Auth SDK helps you with bringing passkey authentication to your
 /// app.
@@ -34,6 +35,10 @@ class CorbadoAuth {
   /// Should be listened to to get updates to a user's passkeys.
   Stream<List<PasskeyInfo>> get passkeysChanges =>
       _passkeysStreamController.stream.distinct();
+
+  /// Should be listened to to get updates to the passkeys doctor.
+  Stream<Result> get doctorChanges =>
+      _corbadoService.resultStream;
 
   /// Returns the current value of the user object.
   Future<User?> get currentUser => _sessionService.userChanges.first;
@@ -57,9 +62,6 @@ class CorbadoAuth {
   late CorbadoService _corbadoService;
   late final SessionService _sessionService;
   late final String _projectId;
-  late final CorbadoAuthDoctor _doctor = CorbadoAuthDoctor(
-    _projectId,
-  );
 
   Future<void> initProcessHandler() async {
     final res = await _corbadoService.initAuthProcess();
@@ -71,9 +73,10 @@ class CorbadoAuth {
   /// Tries to get the user object from secure storage (this only works if
   /// the user has already signed in before and then closed the app).
   Future<void> init(
-      {required String projectId, @deprecated String? customDomain}) async {
-    final passkeyAuthenticator = PasskeyAuthenticator();
-    _corbadoService = await createClient(projectId,
+      {required String projectId, @deprecated String? customDomain, bool? debugMode}) async {
+    final passkeyAuthenticator = PasskeyAuthenticator(debugMode: debugMode);
+    _corbadoService = await
+    createClient(projectId,
         passkeyAuthenticator: passkeyAuthenticator, customDomain: customDomain);
     _sessionService = _buildSessionService(
       projectId,
@@ -109,14 +112,6 @@ class CorbadoAuth {
       await signOut();
       debugPrint(e.toString());
     }
-  }
-
-  Future<List<Checkpoint>> doctor(String rpid) async {
-    if (kReleaseMode) {
-      throw StateError('doctor() should not be called in release mode. ');
-    }
-
-    return _doctor.check(rpid);
   }
 
   /// Load all passkeys that are available to the currently logged in user.
@@ -181,37 +176,5 @@ class CorbadoAuth {
     }
 
     return SessionService(storageService, frontendAPIClient);
-  }
-
-
-  Checkpoint _checkProjectId() {
-    if (_projectId.isEmpty) {
-      throw DoctorException(
-        blockingCheckpoint: Checkpoint(
-          name: 'Project ID check',
-          description:
-          'Project ID is not set.',
-          documentationLink:
-          'https://app.corbado.com/settings/general?tab=Project+Info',
-          type: CheckpointType.error,
-        ),
-      );
-    }
-
-    if (!_projectId.startsWith('pro-')) {
-      throw DoctorException(
-        blockingCheckpoint: Checkpoint(
-          name: 'Project ID check',
-          description: 'Project ID must start with "pro-".',
-          type: CheckpointType.error,
-        ),
-      );
-    }
-
-    return Checkpoint(
-      name: 'Project ID check',
-      description: 'Project ID is set correctly ($_projectId).',
-      type: CheckpointType.success,
-    );
   }
 }

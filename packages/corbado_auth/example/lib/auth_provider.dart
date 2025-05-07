@@ -29,3 +29,10 @@ final passkeysProvider = StreamProvider<List<PasskeyInfo>>((ref) async* {
     yield value;
   }
 });
+
+final doctorProvider = StreamProvider<Result>((ref) async* {
+  final corbado = ref.watch(corbadoProvider);
+  await for (final value in corbado.doctorChanges) {
+    yield value;
+  }
+});

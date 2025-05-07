@@ -2,6 +2,7 @@ import 'package:corbado_auth/corbado_auth.dart';
 import 'package:corbado_auth_example/auth_provider.dart';
 import 'package:corbado_auth_example/pages/loading_page.dart';
 import 'package:corbado_auth_example/router.dart';
+import 'package:corbado_auth_example/widgets/debug_overlay.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -37,7 +38,7 @@ void main() async {
       envProjectId == 'none' ? calculateProjectID() : envProjectId;
 
   final corbadoAuth = CorbadoAuth();
-  await corbadoAuth.init(projectId: projectId);
+  await corbadoAuth.init(projectId: projectId, debugMode: true);
 
   // Finally we override the providers that needed initialization.
   // Now the real app can be loaded.
