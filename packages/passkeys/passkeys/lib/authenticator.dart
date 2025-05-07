@@ -29,6 +29,8 @@ class PasskeyAuthenticator {
     return _platform.cancelCurrentAuthenticatorOperation();
   }
 
+  Stream<Result> get resultStream => _doctor.resultStream;
+
   /// Creates a new passkey and stores it on the device.
   /// Returns [RegisterResponseType] which must be sent to the relying party
   /// server.

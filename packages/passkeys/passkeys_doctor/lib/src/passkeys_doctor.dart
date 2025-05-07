@@ -54,6 +54,8 @@ class PasskeysDoctor {
   final StreamController<Result> _streamController =
       StreamController<Result>.broadcast();
 
+  Stream<Result> get resultStream => _streamController.stream;
+
   recordException(PlatformException exception) {
     _lastException.value = exception;
   }
