@@ -1,17 +1,23 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:passkeys/availability.dart';
 import 'package:passkeys/types.dart';
+import 'package:passkeys_doctor/passkeys_doctor.dart';
 import 'package:passkeys_platform_interface/passkeys_platform_interface.dart';
 
 /// Handles platform dependent parts of the registration and authentication
 /// flow.
 class PasskeyAuthenticator {
-  /// Constructor
-  PasskeyAuthenticator() : _platform = PasskeysPlatform.instance;
-
+  final _doctor = PasskeysDoctor();
   final PasskeysPlatform _platform;
+  final bool debugMode;
+
+  /// Constructor
+  PasskeyAuthenticator({bool? debugMode})
+      : _platform = PasskeysPlatform.instance,
+        debugMode = debugMode ?? false;
 
   /// Returns true only if passkeys are supported by the platform.
   @deprecated
@@ -27,6 +33,10 @@ class PasskeyAuthenticator {
   /// Returns [RegisterResponseType] which must be sent to the relying party
   /// server.
   Future<RegisterResponseType> register(RegisterRequestType request) async {
+    if (debugMode) {
+      await _doctor.check(request.relyingParty.id);
+    }
+
     try {
       await _platform.cancelCurrentAuthenticatorOperation();
 
@@ -42,6 +52,10 @@ class PasskeyAuthenticator {
 
       return r;
     } on PlatformException catch (e) {
+      if (debugMode) {
+        _doctor.recordException(e);
+      }
+
       switch (e.code) {
         case 'cancelled':
           throw PasskeyAuthCancelledException();
@@ -71,6 +85,10 @@ class PasskeyAuthenticator {
   Future<AuthenticateResponseType> authenticate(
     AuthenticateRequestType request,
   ) async {
+    if (debugMode) {
+      await _doctor.check(request.relyingPartyId);
+    }
+
     try {
       await _platform.cancelCurrentAuthenticatorOperation();
 
@@ -86,6 +104,10 @@ class PasskeyAuthenticator {
 
       return r;
     } on PlatformException catch (e) {
+      if (debugMode) {
+        _doctor.recordException(e);
+      }
+
       switch (e.code) {
         case 'domain-not-associated':
           throw DomainNotAssociatedException(e.message);
@@ -138,18 +160,33 @@ class PasskeyAuthenticator {
 
   void _isValidChallenge(String challenge) {
     if (!_isValidBase64Url(input: challenge)) {
+      if (debugMode) {
+        _doctor.recordException(
+          PlatformException(code: 'malformed-base64-url-challenge'),
+        );
+      }
       throw MalformedBase64UrlChallenge();
     }
   }
 
   void _isValidCredentialID(String credentialID) {
     if (!_isValidBase64Url(input: credentialID)) {
+      if (debugMode) {
+        _doctor.recordException(
+          PlatformException(code: 'malformed-base64-url-credential-id'),
+        );
+      }
       throw MalformedBase64UrlCredentialID();
     }
   }
 
   void _isValidUserID(String userID) {
     if (!_isValidBase64Url(input: userID, allowPadding: true)) {
+      if (debugMode) {
+        _doctor.recordException(
+          PlatformException(code: 'malformed-base64-url-user-id'),
+        );
+      }
       throw MalformedBase64UrlUserID();
     }
   }
@@ -164,7 +201,7 @@ class PasskeyAuthenticator {
         i++;
       }
 
-      if(i==3) {
+      if (i == 3) {
         return false;
       }
     }

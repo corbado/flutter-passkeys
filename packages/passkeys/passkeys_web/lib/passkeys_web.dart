@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'package:flutter/cupertino.dart';
+import 'package:web/web.dart';
 import 'dart:js_interop';
 
 import 'package:flutter/services.dart';
@@ -15,6 +17,19 @@ class PasskeysWeb extends PasskeysPlatform {
   /// Registers this class as the default instance of [PasskeysPlatform]
   static void registerWith([Object? registrar]) {
     PasskeysPlatform.instance = PasskeysWeb();
+
+    /// Check if the Passkeys Web JS script is loaded
+    try {
+      final _ = window['PasskeyAuthenticator'];
+    } catch (_) {
+      debugPrint(
+          'Error: Passkeys Web SDK not loaded. Please include the Passkeys Web SDK (bundle.js) in your HTML file. You can find it on https://github.com/corbado/flutter-passkeys/releases/download/2.4.0/bundle.js');
+      // We need to close the window to prevent the app from running afterwards thus causing runtime errors
+      // This is a workaround for the fact that we cannot throw an exception in the web platform
+      // because it will not be caught by the Flutter framework
+      window.close();
+    }
+
     init();
   }
 

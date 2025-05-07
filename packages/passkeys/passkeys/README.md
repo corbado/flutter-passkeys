@@ -8,13 +8,13 @@ Take a look at https://passkeys.flutter.corbado.io for a **live demo** (this is 
 on Vercel).
 
 |             | Android            | iOS                | Linux | macOS | Web                | Windows |
-|-------------|--------------------|--------------------|-------|-------|--------------------|---------|
+| ----------- | ------------------ | ------------------ | ----- | ----- | ------------------ | ------- |
 | **Support** | :white_check_mark: | :white_check_mark: | :x:   | :x:   | :white_check_mark: | :x:     |
 
 ## Features
 
-* sign up and login users with passkeys on iOS, Android and Web
-* login users with conditional UI
+- sign up and login users with passkeys on iOS, Android and Web
+- login users with conditional UI
 
 ## Getting started
 
@@ -42,7 +42,7 @@ At first, the user will provide his email address or a username to your app.
 This email address will be sent to the relying party server.
 You can implement that server yourself, or you can rely on prebuilt ones (e.g. provided
 by [Corbado](https://app.corbado.com)).
-The relying party server's response will contain *publicKeyCredentialCreationOptions*.
+The relying party server's response will contain _publicKeyCredentialCreationOptions_.
 It contains all information required by the user's device to set up a passkey.
 
 Your app will now interact with your native device's OS (no worries, the actual work is abstracted
@@ -58,7 +58,7 @@ The relying party server will validate and store the public key.
 Afterwards, it will respond with a success message (e.g. a JWT token).
 
 From now on, the user can log into your app using this biometric information.
-On each login, your app will ask the relying party server for a *challenge*.
+On each login, your app will ask the relying party server for a _challenge_.
 The relying party server generates a challenge that must be signed with the private key.
 To access that private key the app asks once again the user for his biometrics (another call to your
 native device's OS).
@@ -79,7 +79,7 @@ follow these steps:
 2. If you want to run the example on an iOS Simulator or an Android emulator, start one now (skip
    this step if you want to start the example in a browser).
 3. Run `melos run example-passkeys-native` to start the example on iOS/Android.
-4. Sign up a new user by providing an email address and clicking *sign up*.
+4. Sign up a new user by providing an email address and clicking _sign up_.
 5. After logging out, you can login by providing the exact same email address again or sign up
    another user by providing a new one.
 
@@ -130,7 +130,6 @@ While use case 1 is a very basic one (exploration only), 2, 3 and 4 show cases i
 are
 built.
 
-
 <details>
 <summary>1. Use case: You just want to prototype with passkeys</summary>
 
@@ -140,25 +139,23 @@ There is no configuration required and you can go through sign up and login flow
 
 **Note:**
 
-* ⚠️ You share a relying party server with other Flutter developers. Its user table is flushed every
+- ⚠️ You share a relying party server with other Flutter developers. Its user table is flushed every
   day. We have built the example this way to make it very simple to set up. For an example, this
   works totally fine, but if you want to build your own app you need your own relying party server.
-* ⚠️ You cannot run the example on physical iOS devices but only on a simulator (for Android,
+- ⚠️ You cannot run the example on physical iOS devices but only on a simulator (for Android,
   physical devices + emulators work).
 
 </details>
-
 
 <details>
 <summary>2. Use case: You want to use passkeys for your app and you already have built your relying party server</summary>
 
 If you already have a relying party server that implements the WebAuthn standard, you can use this
 package to abstract away the platform specific code that is required to use passkeys.
-Take a look at the code above in the *Usage* section to get a rough idea on how to wire your relying
+Take a look at the code above in the _Usage_ section to get a rough idea on how to wire your relying
 party server with this package.
 
 </details>
-
 
 <details>
 <summary>3. Use case: You want to use passkeys for your app but you don't want to build your own relying party server</summary>
@@ -222,6 +219,18 @@ if (kIsWeb) {
 </details>
 
 ## Troubleshooting
+
+As a first step, you can rely on our integrated doctor tool to help you debug and configure your app. To enable it, simply pass debugMode: true when initializing PasskeysAuthenticator:
+
+```dart
+import 'package:passkeys/passkeys.dart';
+
+void main() {
+  final authenticator = PasskeyAuthenticator(debugMode: true);
+}
+```
+
+The doctor will automatically perform checks and provide feedback through the Passkeys package's error handling system.
 
 ### Android
 
@@ -303,22 +312,23 @@ Our recommendation if you run the example on an Android emulator is to follow th
 
 If you get an error like "Simulator requires enrolled biometrics to use passkeys" during sign up or
 login, activate Face ID for your device.
-On a simulator, this can be done under *Features* => *Face ID* by clicking on "Enrolled".
+On a simulator, this can be done under _Features_ => _Face ID_ by clicking on "Enrolled".
 
 <img src="https://raw.githubusercontent.com/corbado/flutter-passkeys/main/packages/passkeys/passkeys/doc/ios_error_enrolled_biometrics.png" style="width: 200px" calt="ios_enrolled_biometrics">
-</details> 
+</details>
 
 ### Web
 
 <details>
 <summary>1. Update your index.html to include our JavaScript library</summary>
 Our passkeys_web package relies on JavaScript for integrating with the browser's WebAuthn API.
-To make this work, you have to include our JavaScript library in your web/index.html file.
+To make this work, you have to include our JavaScript library in your web/index.html file. If not correctly integrated the PasskeyAuthenticator would not correctly initialize and the application would crash and an exception asking to add the code blow will show in your console.
 
 ```html
-
-<script src="https://github.com/corbado/flutter-passkeys/releases/download/2.3.0/bundle.js"
-        type="application/javascript"></script>
+<script
+  src="https://github.com/corbado/flutter-passkeys/releases/download/2.4.0/bundle.js"
+  type="application/javascript"
+></script>
 ```
 
 You can also take a look at this package's example to see how it is done there.
@@ -338,16 +348,85 @@ You can also take a look at this package's example to see how it is done there.
 - Starting with Flutter 3.22.0 and later, when inserting the application script into the HTML, use:
 
 ```html
-
 <script src="flutter_bootstrap.js" type="application/javascript"></script>
 ```
 
 Instead of:
 
 ```html
-
 <script src="main.dart.js" type="application/javascript"></script>
 ```
 
 - To enable running or building using Wasm, simply add the `--wasm` flag to the `flutter run` or `flutter build`
   commands.
+
+## Passkeys Doctor
+
+A diagnostic tool for Flutter Passkeys implementation that helps identify and resolve common configuration issues with WebAuthn/Passkeys.
+
+### Overview
+
+Passkeys Doctor is a diagnostic tool that helps developers identify and fix common issues with their Passkeys implementation. It performs various checks to ensure your app is properly configured for Passkeys authentication across different platforms (iOS, Android, and Web).
+
+### Features
+
+- **RPID Validation**: Verifies that your Relying Party ID (RPID) is correctly configured
+- **Platform-Specific Checks**:
+  - iOS: Validates Apple App Site Association (AASA) file configuration
+  - Android: Verifies Digital Asset Links configuration
+  - Web: Ensures RPID matches the current hostname
+- **Real-time Diagnostics**: Provides immediate feedback on configuration issues
+- **Detailed Error Reporting**: Offers specific guidance on how to fix identified issues
+
+### Usage
+
+The Passkeys Doctor is already integrated into the main Passkeys package. To enable it, simply pass `debugMode: true` when initializing PasskeysAuthenticator:
+
+```dart
+import 'package:passkeys/passkeys.dart';
+
+void main() {
+  final authenticator = PasskeyAuthenticator(debugMode: true);
+}
+```
+
+The doctor will automatically perform checks and provide feedback through the Passkeys package's error handling system.
+
+### Diagnostic Checks
+
+#### RPID Validation
+
+- Ensures RPID is properly formatted
+- Verifies RPID matches your domain
+- Checks for common configuration mistakes
+
+#### iOS-specific Checks
+
+- Validates Apple App Site Association (AASA) file
+- Verifies bundle ID configuration
+- Checks web credentials setup
+
+#### Android-specific Checks
+
+- Validates Digital Asset Links configuration
+- Verifies app signing configuration
+- Checks domain verification
+
+#### Web-specific Checks
+
+- Ensures RPID matches current hostname
+- Validates existence of passkeys JS script
+
+### Error Handling
+
+The doctor provides detailed error messages and suggestions for fixing common issues. Each checkpoint includes:
+
+- Name of the check
+- Detailed description of the issue
+- Type of issue (error, warning, or success)
+- Suggested fixes when applicable
+
+### Best Practices
+
+1. Enable the doctor during development to catch configuration issues early
+2. Use the detailed error messages to guide your configuration fixes

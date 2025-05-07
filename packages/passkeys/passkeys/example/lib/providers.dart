@@ -6,7 +6,7 @@ import 'package:passkeys_example/local_relying_party_server.dart';
 // Relying party server provider.
 final authServiceProvider = Provider<AuthService>((ref) {
   final rps = LocalRelyingPartyServer();
-  final authenticator = PasskeyAuthenticator();
+  final authenticator = PasskeyAuthenticator(debugMode: true);
 
   return AuthService(rps: rps, authenticator: authenticator);
 });
