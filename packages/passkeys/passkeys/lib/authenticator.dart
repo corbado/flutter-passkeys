@@ -52,7 +52,9 @@ class PasskeyAuthenticator {
 
       return r;
     } on PlatformException catch (e) {
-      _doctor.recordException(e);
+      if (debugMode) {
+        _doctor.recordException(e);
+      }
 
       switch (e.code) {
         case 'cancelled':
@@ -102,6 +104,10 @@ class PasskeyAuthenticator {
 
       return r;
     } on PlatformException catch (e) {
+      if (debugMode) {
+        _doctor.recordException(e);
+      }
+
       switch (e.code) {
         case 'domain-not-associated':
           throw DomainNotAssociatedException(e.message);
@@ -154,27 +160,33 @@ class PasskeyAuthenticator {
 
   void _isValidChallenge(String challenge) {
     if (!_isValidBase64Url(input: challenge)) {
-      _doctor.recordException(
-        PlatformException(code: 'malformed-base64-url-challenge'),
-      );
+      if (debugMode) {
+        _doctor.recordException(
+          PlatformException(code: 'malformed-base64-url-challenge'),
+        );
+      }
       throw MalformedBase64UrlChallenge();
     }
   }
 
   void _isValidCredentialID(String credentialID) {
     if (!_isValidBase64Url(input: credentialID)) {
-      _doctor.recordException(
-        PlatformException(code: 'malformed-base64-url-credential-id'),
-      );
+      if (debugMode) {
+        _doctor.recordException(
+          PlatformException(code: 'malformed-base64-url-credential-id'),
+        );
+      }
       throw MalformedBase64UrlCredentialID();
     }
   }
 
   void _isValidUserID(String userID) {
     if (!_isValidBase64Url(input: userID, allowPadding: true)) {
-      _doctor.recordException(
-        PlatformException(code: 'malformed-base64-url-user-id'),
-      );
+      if (debugMode) {
+        _doctor.recordException(
+          PlatformException(code: 'malformed-base64-url-user-id'),
+        );
+      }
       throw MalformedBase64UrlUserID();
     }
   }

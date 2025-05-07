@@ -316,7 +316,7 @@ class PasskeysDoctor {
             }
           }
 
-          if (namespace == 'web' && target['site'] == rpid) {
+          if (namespace == 'web' && target['site'] == 'https://' + rpid) {
             webValid = true;
           }
         }

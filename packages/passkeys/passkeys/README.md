@@ -220,6 +220,18 @@ if (kIsWeb) {
 
 ## Troubleshooting
 
+As a first step, you can rely on our integrated doctor tool to help you debug and configure your app. To enable it, simply pass debugMode: true when initializing PasskeysAuthenticator:
+
+```dart
+import 'package:passkeys/passkeys.dart';
+
+void main() {
+  final authenticator = PasskeyAuthenticator(debugMode: true);
+}
+```
+
+The doctor will automatically perform checks and provide feedback through the Passkeys package's error handling system.
+
 ### Android
 
 <details>

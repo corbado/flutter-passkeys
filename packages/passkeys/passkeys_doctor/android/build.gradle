@@ -1,5 +1,3 @@
-package packages.passkeys.passkeys_doctor.android
-
 group = "com.corbado.passkeys_doctor"
 version = "1.0"
 

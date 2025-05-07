@@ -1,4 +1,4 @@
-package packages.passkeys.passkeys_doctor.android.src.main.java.com.corbado.passkeys_doctor;
+package com.corbado.passkeys_doctor;
 
 import android.content.Context;
 import android.content.pm.PackageInfo;
