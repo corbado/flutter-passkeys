@@ -1,23 +1,26 @@
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:passkeys/availability.dart';
 import 'package:passkeys/types.dart';
-import 'package:passkeys_doctor/passkeys_doctor.dart';
 import 'package:passkeys_platform_interface/passkeys_platform_interface.dart';
 
 /// Handles platform dependent parts of the registration and authentication
 /// flow.
 class PasskeyAuthenticator {
-  final _doctor = PasskeysDoctor();
-  final PasskeysPlatform _platform;
-  final bool debugMode;
-
   /// Constructor
   PasskeyAuthenticator({bool? debugMode})
       : _platform = PasskeysPlatform.instance,
         debugMode = debugMode ?? false;
+
+  /// The [PasskeysDoctor] instance for debugging and checking passkeys
+  final _doctor = PasskeysDoctor();
+
+  /// The platform interface for passkeys.
+  final PasskeysPlatform _platform;
+
+  /// Indicates whether the app is in debug mode.
+  final bool debugMode;
 
   /// Returns true only if passkeys are supported by the platform.
   @deprecated
@@ -160,6 +163,7 @@ class PasskeyAuthenticator {
   /// - Ensure you are using the correct method for the platform being queried.
   GetAvailability getAvailability() => GetAvailability(platform: _platform);
 
+  /// Validates the given challenge string.
   void _isValidChallenge(String challenge) {
     if (!_isValidBase64Url(input: challenge)) {
       if (debugMode) {
@@ -171,6 +175,7 @@ class PasskeyAuthenticator {
     }
   }
 
+  /// Validates the given credential ID string.
   void _isValidCredentialID(String credentialID) {
     if (!_isValidBase64Url(input: credentialID)) {
       if (debugMode) {
@@ -182,6 +187,7 @@ class PasskeyAuthenticator {
     }
   }
 
+  /// Validates the given user ID string.
   void _isValidUserID(String userID) {
     if (!_isValidBase64Url(input: userID, allowPadding: true)) {
       if (debugMode) {

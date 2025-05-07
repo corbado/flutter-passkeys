@@ -168,10 +168,14 @@ class UnhandledAuthenticatorException implements AuthenticatorException {
   /// Constructor
   UnhandledAuthenticatorException(this.code, this.message, this.details);
 
+  /// The error code of the exception
   final String code;
+  /// The error message of the exception
   final String? message;
+  /// The details of the exception
   final dynamic details;
 
+  /// Returns a string representation of the exception
   @override
   String toString() {
     return 'Please report this exception to the package authors (code: $code, message: $message, details: $details}';
