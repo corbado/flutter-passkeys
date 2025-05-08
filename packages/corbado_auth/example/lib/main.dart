@@ -37,7 +37,7 @@ void main() async {
       envProjectId == 'none' ? calculateProjectID() : envProjectId;
 
   final corbadoAuth = CorbadoAuth();
-  await corbadoAuth.init(projectId: projectId);
+  await corbadoAuth.init(projectId: projectId, debugMode: true);
 
   // Finally we override the providers that needed initialization.
   // Now the real app can be loaded.

@@ -17,7 +17,7 @@ dependencies:
   flutter_hooks: ^0.20.3
   riverpod: ^2.3.10
   flutter_riverpod: ^2.3.10
-  hooks_riverpod: 2.4.0
+  hooks_riverpod: ^2.4.0
   flutter_localization: ^0.2.1
   jwt_decoder: ^2.0.1
   overlay_support: ^2.1.0

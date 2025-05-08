@@ -20,6 +20,9 @@ abstract class CorbadoService {
   final PasskeyAuthenticator passkeyAuthenticator;
   final StorageService _storageService;
 
+  Stream<Result> get resultStream =>
+      passkeyAuthenticator.resultStream.distinct();
+
   String? _processID;
   DateTime? _processExpiresAt;
 

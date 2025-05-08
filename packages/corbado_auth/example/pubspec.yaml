@@ -18,7 +18,7 @@ dependencies:
   url_launcher: ^6.2.1
   riverpod: ^2.3.10
   flutter_riverpod: ^2.3.10
-  hooks_riverpod: 2.4.0
+  hooks_riverpod: ^2.4.0
   overlay_support: ^2.1.0
 
 dev_dependencies:
