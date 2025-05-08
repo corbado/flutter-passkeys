@@ -2,7 +2,6 @@ import 'package:corbado_auth/corbado_auth.dart';
 import 'package:corbado_auth_example/auth_provider.dart';
 import 'package:corbado_auth_example/pages/loading_page.dart';
 import 'package:corbado_auth_example/router.dart';
-import 'package:corbado_auth_example/widgets/debug_overlay.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
