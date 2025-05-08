@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/services.dart';
 import 'package:device_info_plus/device_info_plus.dart';
@@ -194,13 +195,15 @@ class Logger {
         break;
 
       case 'failed':
-        DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-        IosDeviceInfo iosDeviceInfo = await deviceInfo.iosInfo;
-        if (!iosDeviceInfo.isPhysicalDevice) {
-          print(
-              ' FailedException: Thrown when the operation fails. This is expected on IOS simulator when trying to trigger Conditional Login');
-          print(' Platforms: iOS');
-          break;
+        if(Platform.isIOS) {
+          DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+          IosDeviceInfo iosDeviceInfo = await deviceInfo.iosInfo;
+          if (!iosDeviceInfo.isPhysicalDevice) {
+            print(
+                ' FailedException: Thrown when the operation fails. This is expected on IOS simulator when trying to trigger Conditional Login');
+            print(' Platforms: iOS');
+            break;
+          }
         }
 
       default:
