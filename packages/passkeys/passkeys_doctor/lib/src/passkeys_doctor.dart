@@ -8,16 +8,17 @@ import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:passkeys_doctor/src/logger.dart';
+import 'package:passkeys_platform_interface/passkeys_platform_interface.dart';
 import 'package:passkeys_platform_interface/types/types.dart';
 
 import '../passkeys_doctor.dart';
 import 'messages.g.dart';
 
 class PasskeysDoctor {
-  late Logger _logger;
+  final PasskeysPlatform _platform;
 
-  PasskeysDoctor() {
-    _logger = Logger(_streamController.stream.distinct());
+  PasskeysDoctor() : _platform = PasskeysPlatform.instance {
+    Logger(_streamController.stream.distinct());
 
     _checkpoints.addListener(
       () {
@@ -61,7 +62,9 @@ class PasskeysDoctor {
     _lastException.value = exception;
   }
 
-  check(String rpId, Future<AvailabilityTypeIOS> iosAvailability) async {
+  check(
+    String rpId,
+  ) async {
     final List<Checkpoint> checkpoints = [];
 
     try {
@@ -69,6 +72,8 @@ class PasskeysDoctor {
 
       if (!kIsWeb) {
         if (Platform.isIOS) {
+          final iosAvailability =
+              (await _platform.getAvailability()) as AvailabilityTypeIOS;
           final iosCheck = await _checkIosAvailability(iosAvailability);
           if (iosCheck != null) {
             checkpoints.add(iosCheck);
@@ -351,15 +356,14 @@ class PasskeysDoctor {
   }
 
   Future<Checkpoint?> _checkIosAvailability(
-      Future<AvailabilityTypeIOS> iosAvailability) async {
-    final availability = await iosAvailability;
-
+      AvailabilityTypeIOS iosAvailability) async {
     final info = await DeviceInfoPlugin().iosInfo;
 
-    if (!availability.hasBiometrics && !info.isPhysicalDevice) {
+    if (!iosAvailability.hasBiometrics && !info.isPhysicalDevice) {
       return Checkpoint(
         name: 'iOS Biometrics Check',
-        description: 'FaceID/TouchID is not enabled on your simulator. Please enable it in the simulator settings "Features > Face ID/Touch ID > Enable".',
+        description:
+            'FaceID/TouchID is not enabled on your simulator. Please enable it in the simulator settings "Features > Face ID/Touch ID > Enable".',
         type: CheckpointType.error,
       );
     }

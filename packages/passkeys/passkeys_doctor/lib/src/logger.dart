@@ -1,10 +1,6 @@
-// lib/debug/logger.dart
-
 import 'dart:async';
-import 'dart:io';
 
 import 'package:flutter/services.dart';
-import 'package:device_info_plus/device_info_plus.dart';
 import 'package:passkeys_doctor/passkeys_doctor.dart';
 
 class Logger {
