@@ -398,19 +398,14 @@ The doctor will automatically perform checks and provide feedback through the Pa
 
 - Ensures RPID is properly formatted
 - Verifies RPID matches your domain
-- Checks for common configuration mistakes
 
 #### iOS-specific Checks
 
-- Validates Apple App Site Association (AASA) file
-- Verifies bundle ID configuration
-- Checks web credentials setup
+- Validates Apple App Site Association (AASA) file contains the app bundle
 
 #### Android-specific Checks
 
-- Validates Digital Asset Links configuration
-- Verifies app signing configuration
-- Checks domain verification
+- Validates Digital Asset Links is correctly configured
 
 #### Web-specific Checks
 
