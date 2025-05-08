@@ -2,12 +2,13 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:passkeys_doctor/src/logger.dart';
-import 'package:passkeys_doctor/src/types/result.dart';
+import 'package:passkeys_platform_interface/types/types.dart';
 
 import '../passkeys_doctor.dart';
 import 'messages.g.dart';
@@ -16,7 +17,7 @@ class PasskeysDoctor {
   late Logger _logger;
 
   PasskeysDoctor() {
-    _logger = Logger(_streamController.stream);
+    _logger = Logger(_streamController.stream.distinct());
 
     _checkpoints.addListener(
       () {
@@ -60,7 +61,7 @@ class PasskeysDoctor {
     _lastException.value = exception;
   }
 
-  check(String rpId) async {
+  check(String rpId, Future<AvailabilityTypeIOS> iosAvailability) async {
     final List<Checkpoint> checkpoints = [];
 
     try {
@@ -68,6 +69,10 @@ class PasskeysDoctor {
 
       if (!kIsWeb) {
         if (Platform.isIOS) {
+          final iosCheck = await _checkIosAvailability(iosAvailability);
+          if (iosCheck != null) {
+            checkpoints.add(iosCheck);
+          }
           checkpoints.add(await _checkAASAFile(rpId));
         }
 
@@ -343,6 +348,23 @@ class PasskeysDoctor {
       description: 'Missing or invalid entries in $uri: $missing',
       type: CheckpointType.error,
     );
+  }
+
+  Future<Checkpoint?> _checkIosAvailability(
+      Future<AvailabilityTypeIOS> iosAvailability) async {
+    final availability = await iosAvailability;
+
+    final info = await DeviceInfoPlugin().iosInfo;
+
+    if (!availability.hasBiometrics && !info.isPhysicalDevice) {
+      return Checkpoint(
+        name: 'iOS Biometrics Check',
+        description: 'FaceID/TouchID is not enabled on your simulator. Please enable it in the simulator settings "Features > Face ID/Touch ID > Enable".',
+        type: CheckpointType.error,
+      );
+    }
+
+    return null;
   }
 
   Future<String> _getBundleId() async {

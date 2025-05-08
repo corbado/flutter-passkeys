@@ -39,7 +39,7 @@ class PasskeyAuthenticator {
   /// server.
   Future<RegisterResponseType> register(RegisterRequestType request) async {
     if (debugMode) {
-      await _doctor.check(request.relyingParty.id);
+      await _doctor.check(request.relyingParty.id, getAvailability().iOS());
     }
 
     try {
@@ -91,7 +91,7 @@ class PasskeyAuthenticator {
     AuthenticateRequestType request,
   ) async {
     if (debugMode) {
-      await _doctor.check(request.relyingPartyId);
+      await _doctor.check(request.relyingPartyId, getAvailability().iOS());
     }
 
     try {
