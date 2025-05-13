@@ -2,7 +2,7 @@ import 'dart:convert';
 
 class TelemetryEventPayload {
   final String event;
-  final Map<String, dynamic> data;
+  final Map<String, dynamic>? data;
 
   TelemetryEventPayload({
     required this.event,

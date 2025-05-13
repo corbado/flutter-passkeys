@@ -46,15 +46,22 @@ class TelemetryService {
   final bool isEnabled;
   final bool debugMode;
 
-  void printDebug(String message) {
+  void _printDebug(String message) {
     if (debugMode) {
       print(message);
     }
   }
 
+  void logProcessInit(){
+    final event = TelemetryEventPayload(event: "processInit", data: null);
+
+    logEvent(event);
+  }
+
   void logEvent(TelemetryEventPayload event) {
     if (isEnabled) {
-      printDebug("Logging event: $event");
+      _printDebug("Logging event: ${event.event}");
+
       _sendEvent(event);
     }
   }
@@ -67,7 +74,9 @@ class TelemetryService {
       sdkName: sdkName,
       identifier: projectId,
     );
+
     final uri = Uri.parse(basePath + endpoint);
+
     await http.post(
       uri,
       headers: {'Content-Type': 'application/json'},

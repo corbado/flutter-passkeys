@@ -10,6 +10,7 @@ import 'package:corbado_auth/src/services/session/session.dart';
 import 'package:corbado_auth/src/services/storage/storage.dart';
 import 'package:corbado_auth/src/services/storage/storage_native.dart';
 import 'package:corbado_auth/src/services/storage/storage_web.dart';
+import 'package:corbado_auth/src/services/telemetry/telemetry.dart';
 import 'package:corbado_frontend_api_client/corbado_frontend_api_client.dart';
 import 'package:flutter/foundation.dart';
 import 'package:passkeys/authenticator.dart';
@@ -73,7 +74,7 @@ class CorbadoAuth {
   /// Tries to get the user object from secure storage (this only works if
   /// the user has already signed in before and then closed the app).
   Future<void> init(
-      {required String projectId, @deprecated String? customDomain, bool? debugMode}) async {
+      {required String projectId, @deprecated String? customDomain, bool? debugMode, bool? disableTelemetry}) async {
     final passkeyAuthenticator = PasskeyAuthenticator(debugMode: debugMode);
     _corbadoService = await
     createClient(projectId,
@@ -84,6 +85,12 @@ class CorbadoAuth {
     );
 
     _projectId = projectId;
+
+    TelemetryService.init(
+      projectId: projectId,
+      isEnabled: disableTelemetry == null || !disableTelemetry,
+      debugMode: debugMode,
+    );
 
     final frontEndApiUrl = await _sessionService.getFrontEndApiUrl();
 
@@ -99,6 +106,8 @@ class CorbadoAuth {
         await _loadPasskeys();
       },
     );
+    
+    TelemetryService.instance.logProcessInit();
 
     try {
       final maybeUser = await _sessionService.init();
