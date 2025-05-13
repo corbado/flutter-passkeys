@@ -8,28 +8,52 @@ const String basePath = "https://app.corbado-dev.com/v1/";
 const String endpoint = "telemetryEvents";
 
 class TelemetryService {
-  String projectId;
-  bool isEnabled;
-  bool? debugMode;
-
-  TelemetryService(
-      {required this.projectId,
-      required this.isEnabled,
-      this.debugMode = false}) {
+  TelemetryService._internal({
+    required this.projectId,
+    required this.isEnabled,
+    this.debugMode = false,
+  }) {
     if (isEnabled) {
       print("Telemetry service is enabled");
     }
   }
 
+  static TelemetryService? _instance;
+
+  static void init({
+    required String projectId,
+    required bool isEnabled,
+    bool? debugMode = false,
+  }) {
+    if (_instance != null) {
+      throw StateError('TelemetryService.init() was already called.');
+    }
+    _instance = TelemetryService._internal(
+      projectId: projectId,
+      isEnabled: isEnabled,
+      debugMode: debugMode ?? false,
+    );
+  }
+
+  static TelemetryService get instance {
+    if (_instance == null) {
+      throw StateError('TelemetryService.init() must be called first.');
+    }
+    return _instance!;
+  }
+
+  final String projectId;
+  final bool isEnabled;
+  final bool debugMode;
+
   void printDebug(String message) {
-    if (debugMode == true) {
-      print("$message");
+    if (debugMode) {
+      print(message);
     }
   }
 
   void logEvent(TelemetryEventPayload event) {
     if (isEnabled) {
-      // Log the event to your telemetry system
       printDebug("Logging event: $event");
       _sendEvent(event);
     }
@@ -43,14 +67,10 @@ class TelemetryService {
       sdkName: sdkName,
       identifier: projectId,
     );
-
     final uri = Uri.parse(basePath + endpoint);
-
     await http.post(
       uri,
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: {'Content-Type': 'application/json'},
       body: request.toJsonString(),
     );
   }
