@@ -2,6 +2,7 @@ import 'package:corbado_auth/corbado_auth.dart';
 import 'package:corbado_auth/src/blocks/email_verify_block.dart';
 import 'package:corbado_auth/src/blocks/types.dart';
 import 'package:corbado_auth/src/process_handler.dart';
+import 'package:corbado_auth/src/services/telemetry/telemetry.dart';
 import 'package:corbado_frontend_api_client/corbado_frontend_api_client.dart' as Api;
 
 class PasskeyVerifyBlockData {
@@ -70,6 +71,11 @@ class PasskeyVerifyBlock extends Block<PasskeyVerifyBlockData> {
   }
 
   passkeyVerify() async {
+    TelemetryService.instance.logMethodCalled(
+      'passkeyVerify',
+      'PasskeyVerifyBlock',
+    );
+
     try {
       error = null;
       data.primaryLoading = true;
@@ -85,6 +91,11 @@ class PasskeyVerifyBlock extends Block<PasskeyVerifyBlockData> {
   }
 
   Future<void> initFallbackEmailOtp() async {
+    TelemetryService.instance.logMethodCalled(
+      'initFallbackEmailOtp',
+      'PasskeyVerifyBlock',
+    );
+
     try {
       final response = await corbadoService.sendEmailOtpCode();
       processHandler.updateBlockFromServer(response);
