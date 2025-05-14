@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:corbado_auth/src/types/telemetry/event.dart';
 import 'package:corbado_auth/src/types/telemetry/request.dart';
 import 'package:http/http.dart' as http;
@@ -14,7 +16,8 @@ class TelemetryService {
     this.debugMode = false,
   }) {
     if (isEnabled) {
-      print("Telemetry service is enabled");
+      print(
+          "Telemetry service is enabled, Check out the docs for more information.");
     }
   }
 
@@ -52,27 +55,41 @@ class TelemetryService {
     }
   }
 
-  void logProcessInit(){
-    final event = TelemetryEventPayload(event: "processInit", data: null);
-
-    logEvent(event);
-  }
-
-  void logEvent(TelemetryEventPayload event) {
+  void logMethodCalled(String methodName, String screenName) {
     if (isEnabled) {
-      _printDebug("Logging event: ${event.event}");
+      _printDebug(
+          'Logging Method_Called event: $methodName called on $screenName');
 
-      _sendEvent(event);
+      final payload = {
+        'methodName': methodName,
+        'screenName': screenName,
+      };
+
+      _sendEvent(type: TelemetryEventType.METHOD_CALLED, payload: payload);
     }
   }
 
-  Future<void> _sendEvent(TelemetryEventPayload event) async {
+  void logPackageMetadata(bool debugMode){
+    if (isEnabled) {
+      _printDebug('Logging Package_Metadata event');
+
+      final payload = {
+        'dartSDKVersion': Platform.version,
+        'isDoctorEnabled': debugMode,
+      };
+
+      _sendEvent(type: TelemetryEventType.PACKAGE_METADATA, payload: payload);
+    }
+  }
+
+  Future<void> _sendEvent(
+      {required TelemetryEventType type, Map<String, dynamic>? payload}) async {
     final request = TelemetryEventRequest(
-      type: 'type-1',
-      payload: event.toJsonString(),
+      type: type,
       sdkVersion: sdkVersion,
       sdkName: sdkName,
       identifier: projectId,
+      payload: payload,
     );
 
     final uri = Uri.parse(basePath + endpoint);

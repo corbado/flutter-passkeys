@@ -92,6 +92,10 @@ class CorbadoAuth {
       debugMode: debugMode,
     );
 
+    TelemetryService.instance.logPackageMetadata(
+      debugMode ?? false,
+    );
+
     final frontEndApiUrl = await _sessionService.getFrontEndApiUrl();
 
     if (frontEndApiUrl != null) {
@@ -106,8 +110,6 @@ class CorbadoAuth {
         await _loadPasskeys();
       },
     );
-    
-    TelemetryService.instance.logProcessInit();
 
     try {
       final maybeUser = await _sessionService.init();
