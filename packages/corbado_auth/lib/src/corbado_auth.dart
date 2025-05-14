@@ -38,8 +38,7 @@ class CorbadoAuth {
       _passkeysStreamController.stream.distinct();
 
   /// Should be listened to to get updates to the passkeys doctor.
-  Stream<Result> get doctorChanges =>
-      _corbadoService.resultStream;
+  Stream<Result> get doctorChanges => _corbadoService.resultStream;
 
   /// Returns the current value of the user object.
   Future<User?> get currentUser => _sessionService.userChanges.first;
@@ -73,11 +72,15 @@ class CorbadoAuth {
 
   /// Tries to get the user object from secure storage (this only works if
   /// the user has already signed in before and then closed the app).
-  Future<void> init(
-      {required String projectId, @deprecated String? customDomain, bool? debugMode, bool? disableTelemetry}) async {
+  Future<void> init({
+    required String projectId,
+    @deprecated String? customDomain,
+    bool? debugMode,
+    bool? disableTelemetry,
+    bool? telemetryDebugMode,
+  }) async {
     final passkeyAuthenticator = PasskeyAuthenticator(debugMode: debugMode);
-    _corbadoService = await
-    createClient(projectId,
+    _corbadoService = await createClient(projectId,
         passkeyAuthenticator: passkeyAuthenticator, customDomain: customDomain);
     _sessionService = _buildSessionService(
       projectId,
@@ -89,7 +92,7 @@ class CorbadoAuth {
     TelemetryService.init(
       projectId: projectId,
       isEnabled: disableTelemetry == null || !disableTelemetry,
-      debugMode: debugMode,
+      debugMode: telemetryDebugMode,
     );
 
     TelemetryService.instance.logPackageMetadata(

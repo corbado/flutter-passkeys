@@ -15,7 +15,7 @@ class TelemetryService {
     required this.isEnabled,
     this.debugMode = false,
   }) {
-    if (isEnabled) {
+    if (isEnabled && debugMode) {
       print(
           "Telemetry service is enabled, Check out the docs for more information.");
     }
@@ -25,7 +25,7 @@ class TelemetryService {
 
   static void init({
     required String projectId,
-    required bool isEnabled,
+    bool? isEnabled = true,
     bool? debugMode = false,
   }) {
     if (_instance != null) {
@@ -33,7 +33,7 @@ class TelemetryService {
     }
     _instance = TelemetryService._internal(
       projectId: projectId,
-      isEnabled: isEnabled,
+      isEnabled: isEnabled ?? false,
       debugMode: debugMode ?? false,
     );
   }
@@ -69,7 +69,7 @@ class TelemetryService {
     }
   }
 
-  void logPackageMetadata(bool debugMode){
+  void logPackageMetadata(bool debugMode) {
     if (isEnabled) {
       _printDebug('Logging Package_Metadata event');
 
@@ -91,6 +91,11 @@ class TelemetryService {
       identifier: projectId,
       payload: payload,
     );
+
+    if (debugMode) {
+      print('Telemetry request: ${request.toJsonString()}');
+      return;
+    }
 
     final uri = Uri.parse(basePath + endpoint);
 
