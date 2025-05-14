@@ -24,8 +24,8 @@ class TelemetryEventRequest {
     };
 
     if (payload != null)   map['payload']    = jsonEncode(payload);
-    if (sdkVersion != null) map['sdkVersion'] = sdkVersion;
-    if (sdkName != null)    map['sdkName']    = sdkName;
+    if (sdkVersion != null) map['sdk_version'] = sdkVersion;
+    if (sdkName != null)    map['sdk']    = sdkName;
 
     return map;
   }
