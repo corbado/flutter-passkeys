@@ -6,9 +6,9 @@ import 'package:http/io_client.dart';
 
 const String sdkVersion = "3.6.0";
 const String sdkName = "@corbado/corbado_auth";
-const String basePath = "https://app.corbado.com/v1/";
+const String basePath = "https://app.corbado-dev.com/v1/";
 const String endpoint = "telemetryEvents";
-const Duration _timeout = Duration(seconds: 2);
+const Duration timeout = Duration(seconds: 2);
 
 class TelemetryService {
   TelemetryService._internal({
@@ -89,7 +89,7 @@ class TelemetryService {
     final uri = Uri.parse(basePath + endpoint);
 
     final ioClient = IOClient(
-      HttpClient()..connectionTimeout = _timeout,
+      HttpClient()..connectionTimeout = timeout,
     );
 
     try {
@@ -99,7 +99,7 @@ class TelemetryService {
             headers: {'Content-Type': 'application/json'},
             body: request.toJsonString(),
           )
-          .timeout(_timeout);
+          .timeout(timeout);
     } catch (_) {
     } finally {
       ioClient.close();
