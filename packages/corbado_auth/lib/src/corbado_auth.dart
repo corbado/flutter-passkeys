@@ -76,8 +76,8 @@ class CorbadoAuth {
     required String projectId,
     @deprecated String? customDomain,
     bool? debugMode,
-    bool? disableTelemetry,
-    bool? telemetryDebugMode,
+    bool? telemetryDisabled,
+    bool? telemetryDebugModeEnabled,
   }) async {
     final passkeyAuthenticator = PasskeyAuthenticator(debugMode: debugMode);
     _corbadoService = await createClient(projectId,
@@ -91,8 +91,8 @@ class CorbadoAuth {
 
     TelemetryService.init(
       projectId: projectId,
-      isEnabled: disableTelemetry == null || !disableTelemetry,
-      debugMode: telemetryDebugMode,
+      isEnabled: telemetryDisabled == null || !telemetryDisabled,
+      debugMode: telemetryDebugModeEnabled,
     );
 
     TelemetryService.instance.logPackageMetadata(

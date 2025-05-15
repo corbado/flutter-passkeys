@@ -2,24 +2,20 @@ import 'dart:io';
 
 import 'package:corbado_auth/src/types/telemetry/event.dart';
 import 'package:corbado_auth/src/types/telemetry/request.dart';
-import 'package:http/http.dart' as http;
+import 'package:http/io_client.dart';
 
 const String sdkVersion = "3.6.0";
 const String sdkName = "@corbado/corbado_auth";
-const String basePath = "https://app.corbado-dev.com/v1/";
+const String basePath = "https://app.corbado.com/v1/";
 const String endpoint = "telemetryEvents";
+const Duration _timeout = Duration(seconds: 2);
 
 class TelemetryService {
   TelemetryService._internal({
     required this.projectId,
     required this.isEnabled,
     this.debugMode = false,
-  }) {
-    if (isEnabled && debugMode) {
-      print(
-          "Telemetry service is enabled, Check out the docs for more information.");
-    }
-  }
+  });
 
   static TelemetryService? _instance;
 
@@ -49,37 +45,30 @@ class TelemetryService {
   final bool isEnabled;
   final bool debugMode;
 
-  void _printDebug(String message) {
-    if (debugMode) {
-      print(message);
-    }
-  }
-
   void logMethodCalled(String methodName, String screenName) {
-    if (isEnabled) {
-      _printDebug(
-          'Logging Method_Called event: $methodName called on $screenName');
-
-      final payload = {
-        'methodName': methodName,
-        'screenName': screenName,
-      };
-
-      _sendEvent(type: TelemetryEventType.METHOD_CALLED, payload: payload);
+    if (!isEnabled) {
+      return;
     }
+
+    final payload = {
+      'methodName': methodName,
+      'screenName': screenName,
+    };
+
+    _sendEvent(type: TelemetryEventType.METHOD_CALLED, payload: payload);
   }
 
   void logPackageMetadata(bool debugMode) {
-    if (isEnabled) {
-      _printDebug('Logging Package_Metadata event');
-
-      final payload = {
-        'dartSDKVersion': Platform.version,
-        'isDoctorEnabled': debugMode,
-      };
-
-      _sendEvent(type: TelemetryEventType.PACKAGE_METADATA, payload: payload);
+    if (!isEnabled) {
+      return;
     }
+
+    final payload = {
+      'dartSDKVersion': Platform.version,
+      'isDoctorEnabled': debugMode,
+    };
+
+    _sendEvent(type: TelemetryEventType.PACKAGE_METADATA, payload: payload);
   }
 
   Future<void> _sendEvent(
@@ -99,10 +88,21 @@ class TelemetryService {
 
     final uri = Uri.parse(basePath + endpoint);
 
-    await http.post(
-      uri,
-      headers: {'Content-Type': 'application/json'},
-      body: request.toJsonString(),
+    final ioClient = IOClient(
+      HttpClient()..connectionTimeout = _timeout,
     );
+
+    try {
+      await ioClient
+          .post(
+            uri,
+            headers: {'Content-Type': 'application/json'},
+            body: request.toJsonString(),
+          )
+          .timeout(_timeout);
+    } catch (_) {
+    } finally {
+      ioClient.close();
+    }
   }
 }
