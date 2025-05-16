@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:corbado_auth/src/types/telemetry/event.dart';
 import 'package:corbado_auth/src/types/telemetry/request.dart';
-import 'package:http/io_client.dart';
 
 const String sdkVersion = "3.6.0";
 const String sdkName = "@corbado/corbado_auth";
