@@ -827,28 +827,6 @@ paths:
         '204':
           description: tbd
 
-  /v2/connect/process/clear:
-    post:
-      description: Remove process state for a connect process.
-      operationId: ConnectProcessClear
-      tags:
-        - CorbadoConnect
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/connectProcessClearReq'
-      responses:
-        '200':
-          description: Contains information about the process state.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/connectProcessClearRsp'
-        '404':
-          description: No process was found for the token
-
 components:
   ###################################################################
   # Security schemes                                                #
@@ -1137,8 +1115,6 @@ components:
           type: boolean
         shortSessionCookieConfig:
           $ref: '#/components/schemas/shortSessionCookieConfig'
-        sessionTokenCookieConfig:
-          $ref: '#/components/schemas/sessionTokenCookieConfig'
         frontendApiUrl:
           type: string
 
@@ -1172,12 +1148,8 @@ components:
       type: object
       required:
         - shortSession
-        - sessionToken
       properties:
         shortSession:
-          type: string
-          deprecated: true
-        sessionToken:
           type: string
 
     mePasskeyDeleteRsp:
@@ -1200,8 +1172,6 @@ components:
           type: object
           additionalProperties:
             type: string
-        invitationToken:
-          type: string
 
     connectLoginInitRsp:
       type: object
@@ -1244,26 +1214,17 @@ components:
         loadedMs:
           type: integer
           format: int64
-        loginConnectToken:
-          type: string
-        identifierHintAvailable:
-          type: boolean
-        oneTapMeta:
-          $ref: '#/components/schemas/clientStateMeta'
 
     connectLoginStartRsp:
       type: object
       required:
         - assertionOptions
         - isCDA
-        - fallbackOperationError
       properties:
         assertionOptions:
           type: string
         isCDA:
           type: boolean
-        fallbackOperationError:
-          $ref: '#/components/schemas/fallbackOperationError'
 
     connectLoginFinishReq:
       type: object
@@ -1275,25 +1236,17 @@ components:
           type: boolean
         assertionResponse:
           type: string
-        loadedMs:
-          type: integer
-          format: int64
 
     connectLoginFinishRsp:
       type: object
       required:
         - passkeyOperation
         - session
-        - signedPasskeyData
       properties:
         passkeyOperation:
           $ref: '#/components/schemas/passkeyOperation'
         session:
           type: string
-        signedPasskeyData:
-          type: string
-        fallbackOperationError:
-          $ref: '#/components/schemas/fallbackOperationError'
 
     connectAppendInitReq:
       type: object
@@ -1307,8 +1260,6 @@ components:
           type: object
           additionalProperties:
             type: string
-        invitationToken:
-          type: string
 
     connectAppendInitRsp:
       type: object
@@ -1353,8 +1304,6 @@ components:
       required:
         - attestationOptions
         - variant
-        - isRestrictedBrowser
-        - autoAppend
       properties:
         attestationOptions:
           type: string
@@ -1364,10 +1313,6 @@ components:
             - default
             - after-hybrid
             - after-error
-        isRestrictedBrowser:
-          type: boolean
-        autoAppend:
-          type: boolean
 
     connectAppendFinishReq:
       type: object
@@ -1397,8 +1342,6 @@ components:
           type: object
           additionalProperties:
             type: string
-        invitationToken:
-          type: string
 
     connectManageInitRsp:
       type: object
@@ -1447,17 +1390,11 @@ components:
       type: object
       required:
         - passkeys
-        - rpID
-        - userID
       properties:
         passkeys:
           type: array
           items:
             $ref: '#/components/schemas/passkey'
-        rpID:
-          type: string
-        userID:
-          type: string
 
     connectManageDeleteRsp:
       type: object
@@ -1474,10 +1411,6 @@ components:
       properties:
         eventType:
           $ref: '#/components/schemas/passkeyEventType'
-        message:
-          type: string
-        challenge:
-          type: string
 
     passkey:
       type: object
@@ -1489,7 +1422,6 @@ components:
         - backupEligible
         - backupState
         - authenticatorAAGUID
-        - aaguidDetails
         - sourceOS
         - sourceBrowser
         - lastUsed
@@ -1527,38 +1459,6 @@ components:
           type: string
           enum: [ 'pending', 'active' ]
           description: "Status"
-        aaguidDetails:
-          $ref: '#/components/schemas/aaguidDetails'
-
-    connectProcessClearReq:
-      type: object
-      required:
-        - processId
-      properties:
-        processId:
-          type: string
-
-    connectProcessClearRsp:
-      type: object
-      required:
-        - processId
-      properties:
-        processId:
-          type: string
-
-    aaguidDetails:
-      type: object
-      required:
-        - name
-        - iconLight
-        - iconDark
-      properties:
-        name:
-          type: string
-        iconLight:
-          type: string
-        iconDark:
-          type: string
 
     processResponse:
       type: object
@@ -1580,8 +1480,6 @@ components:
       properties:
         eventType:
           $ref: '#/components/schemas/passkeyEventType'
-        challenge:
-          type: string
 
     processStaticInfo:
       type: object
@@ -1612,28 +1510,6 @@ components:
           type: string
 
     shortSessionCookieConfig:
-      type: object
-      deprecated: true
-      required:
-        - domain
-        - secure
-        - sameSite
-        - path
-        - lifetimeSeconds
-      properties:
-        domain:
-          type: string
-        secure:
-          type: boolean
-        sameSite:
-          type: string
-          enum: [ 'lax', 'strict', 'none' ]
-        path:
-          type: string
-        lifetimeSeconds:
-          type: integer
-
-    sessionTokenCookieConfig:
       type: object
       required:
         - domain
@@ -1735,7 +1611,7 @@ components:
 
     passkeyEventType:
       type: string
-      enum: [ login-explicit-abort, login-error, login-error-untyped, login-error-unexpected, login-one-tap-switch, user-append-after-cross-platform-blacklisted, user-append-after-login-error-blacklisted, append-credential-exists, append-explicit-abort, append-error, append-error-unexpected, manage-error-unexpected, append-learn-more ]
+      enum: [ login-explicit-abort, login-error, login-error-untyped, login-one-tap-switch, user-append-after-cross-platform-blacklisted, user-append-after-login-error-blacklisted, append-credential-exists, append-explicit-abort, append-error ]
 
     blockType:
       type: string
@@ -1862,21 +1738,13 @@ components:
       required:
         - blockType
         - shortSession
-        - sessionToken
       properties:
         blockType:
           type: string
         longSession:
           type: string
-          deprecated: true
-          description: This is only set if the project environment is set to 'dev'. If set the UI components will set the longSession in local storage because the cookie dropping will not work in Safari for example ("third-party cookie").
-        refreshToken:
-          type: string
-          description: This is only set if the project environment is set to 'dev'. If set the UI components will set the longSession in local storage because the cookie dropping will not work in Safari for example ("third-party cookie").
+          description: Only given when project environment is dev
         shortSession:
-          type: string
-          deprecated: true
-        sessionToken:
           type: string
         passkeyOperation:
           $ref: '#/components/schemas/passkeyOperation'
@@ -1949,24 +1817,6 @@ components:
           $ref: '#/components/schemas/javaScriptHighEntropy'
         isNative:
           type: boolean
-        webdriver:
-          type: boolean
-        privateMode:
-          type: boolean
-        clientEnvHandleMeta:
-          $ref: '#/components/schemas/clientStateMeta'
-
-    clientStateMeta:
-      type: object
-      required:
-        - ts
-        - source
-      properties:
-        ts:
-          type: integer
-        source:
-          type: string
-          enum: [ 'ls', 'url' ]
 
     clientCapabilities:
       type: object
@@ -2014,8 +1864,6 @@ components:
         ceremonyType:
           type: string
           enum: [ 'local', 'cda', 'security-key' ]
-        aaguidDetails:
-          $ref: '#/components/schemas/aaguidDetails'
 
     continueOnOtherDevice:
       type: object
@@ -2117,18 +1965,6 @@ components:
           type: string
         message:
           type: string
-
-    fallbackOperationError:
-      type: object
-      required:
-        - initFallback
-      properties:
-        initFallback:
-          type: boolean
-        identifier:
-          type: string
-        error:
-          $ref: '#/components/schemas/requestError'
 
   responses:
     '200':
