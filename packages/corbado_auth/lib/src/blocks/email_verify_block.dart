@@ -1,6 +1,7 @@
 import 'package:corbado_auth/src/blocks/translator.dart';
 import 'package:corbado_auth/src/blocks/types.dart';
 import 'package:corbado_auth/src/process_handler.dart';
+import 'package:corbado_auth/src/services/telemetry/telemetry.dart';
 import 'package:corbado_auth/src/types/screen_names.dart';
 import 'package:corbado_frontend_api_client/corbado_frontend_api_client.dart'
     as Api;
@@ -66,11 +67,21 @@ class EmailVerifyBlock extends Block<EmailVerifyBlockData> {
   }
 
   navigateToEditEmail() {
+    TelemetryService.instance.logMethodCalled(
+      'navigateToEditEmail',
+      'EmailVerifyBlock',
+    );
+
     error = null;
     processHandler.updateCurrentScreen(ScreenNames.EmailEdit);
   }
 
   navigateToVerifyEmail() {
+    TelemetryService.instance.logMethodCalled(
+      'navigateToVerifyEmail',
+      'EmailVerifyBlock',
+    );
+
     error = null;
 
     if (data.verificationMethod == VerificationMethod.emailOTP) {
@@ -81,6 +92,11 @@ class EmailVerifyBlock extends Block<EmailVerifyBlockData> {
   }
 
   submitOtpCode(String otpCode) async {
+    TelemetryService.instance.logMethodCalled(
+      'submitOtpCode',
+      'EmailVerifyBlock',
+    );
+
     try {
       data.primaryLoading = true;
       processHandler.notifyCurrentScreen();
@@ -94,6 +110,11 @@ class EmailVerifyBlock extends Block<EmailVerifyBlockData> {
   }
 
   resendEmail() async {
+    TelemetryService.instance.logMethodCalled(
+      'resendEmail',
+      'EmailVerifyBlock',
+    );
+
     try {
       if (data.verificationMethod == VerificationMethod.emailOTP) {
         final res = await corbadoService.sendEmailOtpCode();
@@ -112,6 +133,11 @@ class EmailVerifyBlock extends Block<EmailVerifyBlockData> {
   }
 
   updateEmail(String newValue) async {
+    TelemetryService.instance.logMethodCalled(
+      'updateEmail',
+      'EmailVerifyBlock',
+    );
+
     try {
       if (newValue == data.email) {
         throw CorbadoError(

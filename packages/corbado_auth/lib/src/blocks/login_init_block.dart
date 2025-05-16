@@ -1,6 +1,7 @@
 import 'package:corbado_auth/corbado_auth.dart';
 import 'package:corbado_auth/src/blocks/types.dart';
 import 'package:corbado_auth/src/process_handler.dart';
+import 'package:corbado_auth/src/services/telemetry/telemetry.dart';
 import 'package:corbado_auth/src/types/screen_names.dart';
 import 'package:corbado_frontend_api_client/corbado_frontend_api_client.dart';
 
@@ -38,7 +39,9 @@ class LoginInitBlockData {
 }
 
 class LoginInitBlock extends Block<LoginInitBlockData> {
-  LoginInitBlock({required ProcessHandler processHandler, required LoginInitBlockData data})
+  LoginInitBlock(
+      {required ProcessHandler processHandler,
+      required LoginInitBlockData data})
       : super(
           processHandler: processHandler,
           type: BlockType.loginInit,
@@ -53,6 +56,11 @@ class LoginInitBlock extends Block<LoginInitBlockData> {
   }
 
   navigateToSignup() {
+    TelemetryService.instance.logMethodCalled(
+      'navigateToSignup',
+      'LoginInitBlock',
+    );
+
     final newPrimaryBlock = alternatives.first;
     final newAlternatives = [this];
 
@@ -60,6 +68,11 @@ class LoginInitBlock extends Block<LoginInitBlockData> {
   }
 
   submitLogin({required String loginIdentifier, bool isPhone = false}) async {
+    TelemetryService.instance.logMethodCalled(
+      'submitLogin',
+      'LoginInitBlock',
+    );
+
     try {
       data.primaryLoading = true;
       processHandler.notifyCurrentScreen();
@@ -73,6 +86,11 @@ class LoginInitBlock extends Block<LoginInitBlockData> {
   }
 
   initConditionalUI() async {
+    TelemetryService.instance.logMethodCalled(
+      'initConditionalUI',
+      'LoginInitBlock',
+    );
+
     final challenge = data.conditionalUIChallenge;
     if (challenge == null) {
       print('Conditional UI can not be started (missing challenge)');
@@ -80,7 +98,8 @@ class LoginInitBlock extends Block<LoginInitBlockData> {
     }
 
     try {
-      final response = await corbadoService.verifyPasskeyConditional(challenge, true);
+      final response =
+          await corbadoService.verifyPasskeyConditional(challenge, true);
       processHandler.updateBlockFromServer(response);
     } on CorbadoError catch (e) {
       processHandler.updateBlockFromError(e);

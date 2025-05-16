@@ -1,3 +1,6 @@
+## 2.2.0
+* Adds environment to ProcessCommon
+
 ## 2.1.1
 * Fixes Platform.version exception on Web
 

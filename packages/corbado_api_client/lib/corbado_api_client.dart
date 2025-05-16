@@ -1,10 +1,10 @@
-// Openapi Generator last run: : 2024-09-24T18:31:23.928402
+// Openapi Generator last run: : 2025-05-16T11:52:49.373060
 import 'package:openapi_generator_annotations/openapi_generator_annotations.dart';
 
 @Openapi(
   additionalProperties: AdditionalProperties(
     pubName: 'corbado_frontend_api_client',
-    pubVersion: '2.1.0',
+    pubVersion: '2.2.0',
     pubDescription: 'Client for the Corbado Frontend API',
     pubHomepage: 'https://docs.corbado.com/overview/welcome',
   ),

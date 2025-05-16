@@ -10,6 +10,7 @@ import 'package:corbado_auth/src/services/session/session.dart';
 import 'package:corbado_auth/src/services/storage/storage.dart';
 import 'package:corbado_auth/src/services/storage/storage_native.dart';
 import 'package:corbado_auth/src/services/storage/storage_web.dart';
+import 'package:corbado_auth/src/services/telemetry/telemetry.dart';
 import 'package:corbado_frontend_api_client/corbado_frontend_api_client.dart';
 import 'package:flutter/foundation.dart';
 import 'package:passkeys/authenticator.dart';
@@ -37,8 +38,7 @@ class CorbadoAuth {
       _passkeysStreamController.stream.distinct();
 
   /// Should be listened to to get updates to the passkeys doctor.
-  Stream<Result> get doctorChanges =>
-      _corbadoService.resultStream;
+  Stream<Result> get doctorChanges => _corbadoService.resultStream;
 
   /// Returns the current value of the user object.
   Future<User?> get currentUser => _sessionService.userChanges.first;
@@ -65,6 +65,13 @@ class CorbadoAuth {
 
   Future<void> initProcessHandler() async {
     final res = await _corbadoService.initAuthProcess();
+
+    if(res.common.environment != 'dev'){
+      TelemetryService.instance.disableTelemetry();
+    }
+
+    TelemetryService.instance.logPackageMetadata();
+
     await _sessionService.setFrontEndApiUrl(res.common.frontendApiUrl);
 
     _processHandler.updateBlockFromServer(res);
@@ -72,11 +79,15 @@ class CorbadoAuth {
 
   /// Tries to get the user object from secure storage (this only works if
   /// the user has already signed in before and then closed the app).
-  Future<void> init(
-      {required String projectId, @deprecated String? customDomain, bool? debugMode}) async {
+  Future<void> init({
+    required String projectId,
+    @deprecated String? customDomain,
+    bool? debugMode,
+    bool? telemetryDisabled,
+    bool? telemetryDebugModeEnabled,
+  }) async {
     final passkeyAuthenticator = PasskeyAuthenticator(debugMode: debugMode);
-    _corbadoService = await
-    createClient(projectId,
+    _corbadoService = await createClient(projectId,
         passkeyAuthenticator: passkeyAuthenticator, customDomain: customDomain);
     _sessionService = _buildSessionService(
       projectId,
@@ -84,6 +95,14 @@ class CorbadoAuth {
     );
 
     _projectId = projectId;
+
+      TelemetryService.init(
+        projectId: projectId,
+        debugMode: telemetryDebugModeEnabled,
+        isDoctorEnabled: debugMode ?? false,
+        isEnabled: telemetryDisabled != true,
+      );
+
 
     final frontEndApiUrl = await _sessionService.getFrontEndApiUrl();
 

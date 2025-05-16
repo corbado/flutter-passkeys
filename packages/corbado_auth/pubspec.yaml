@@ -2,7 +2,8 @@ name: corbado_auth
 description: Flutter package for Corbado Auth. Enables authentication on Android and iOS using passkeys.
 homepage: https://docs.corbado.com/overview/welcome
 repository: https://github.com/corbado/flutter-passkeys/tree/main/packages/corbado_auth
-version: 3.5.2
+### NOTE: Make sure to update the version in the CHANGELOG.md file as well as in telemetry.dart.
+version: 3.6.0
 
 environment:
   sdk: ">=3.0.0 <4.0.0"
@@ -10,7 +11,7 @@ environment:
 
 dependencies:
   built_collection: ^5.1.1
-  corbado_frontend_api_client: ^2.1.1
+  corbado_frontend_api_client: ^2.2.0
   dio: ^5.7.0
   flutter:
     sdk: flutter

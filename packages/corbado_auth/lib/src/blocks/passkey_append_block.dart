@@ -2,7 +2,9 @@ import 'package:corbado_auth/corbado_auth.dart';
 import 'package:corbado_auth/src/blocks/email_verify_block.dart';
 import 'package:corbado_auth/src/blocks/types.dart';
 import 'package:corbado_auth/src/process_handler.dart';
-import 'package:corbado_frontend_api_client/corbado_frontend_api_client.dart' as Api;
+import 'package:corbado_auth/src/services/telemetry/telemetry.dart';
+import 'package:corbado_frontend_api_client/corbado_frontend_api_client.dart'
+    as Api;
 
 class PasskeyAppendBlockData {
   List<PasskeyFallback> availableFallbacks;
@@ -13,7 +15,8 @@ class PasskeyAppendBlockData {
   final bool autoSubmit;
   bool primaryLoading = false;
 
-  factory PasskeyAppendBlockData.fromProcessResponse(Api.GeneralBlockPasskeyAppend typed) {
+  factory PasskeyAppendBlockData.fromProcessResponse(
+      Api.GeneralBlockPasskeyAppend typed) {
     return PasskeyAppendBlockData(
       availableFallbacks: [],
       identifierValue: typed.identifierValue,
@@ -34,14 +37,18 @@ class PasskeyAppendBlockData {
 
 class PasskeyAppendBlock extends Block<PasskeyAppendBlockData> {
   PasskeyAppendBlock(
-      {required ProcessHandler processHandler, required PasskeyAppendBlockData data, required Api.AuthType authType})
+      {required ProcessHandler processHandler,
+      required PasskeyAppendBlockData data,
+      required Api.AuthType authType})
       : super(
           processHandler: processHandler,
           initialScreen: ScreenNames.PasskeyAppend,
           type: Api.BlockType.passkeyAppend,
           alternatives: [],
           data: data,
-          authProcessType: authType == Api.AuthType.login ? AuthProcessType.Login : AuthProcessType.Signup,
+          authProcessType: authType == Api.AuthType.login
+              ? AuthProcessType.Login
+              : AuthProcessType.Signup,
         );
 
   init() {
@@ -49,8 +56,9 @@ class PasskeyAppendBlock extends Block<PasskeyAppendBlockData> {
       Api.BlockType.emailVerify,
       Api.BlockType.phoneVerify,
     ];
-    data.availableFallbacks =
-        alternatives.where((alternative) => allowedAlternatives.contains(alternative.type)).map((alternative) {
+    data.availableFallbacks = alternatives
+        .where((alternative) => allowedAlternatives.contains(alternative.type))
+        .map((alternative) {
       switch (alternative.type) {
         case Api.BlockType.emailVerify:
           final typed = alternative.data as EmailVerifyBlockData;
@@ -81,7 +89,8 @@ class PasskeyAppendBlock extends Block<PasskeyAppendBlockData> {
         throw Exception('Currently not supported');
     }
 
-    data.canBeSkipped = alternatives.any((a) => a.type == Api.BlockType.completed);
+    data.canBeSkipped =
+        alternatives.any((a) => a.type == Api.BlockType.completed);
 
     // depending on data.canBeSkipped is only a short term fix
     if (data.autoSubmit && !data.canBeSkipped) {
@@ -90,6 +99,11 @@ class PasskeyAppendBlock extends Block<PasskeyAppendBlockData> {
   }
 
   passkeyAppend() async {
+    TelemetryService.instance.logMethodCalled(
+      'passkeyAppend',
+      'PasskeyAppendBlock',
+    );
+
     try {
       error = null;
       data.primaryLoading = true;
@@ -104,6 +118,11 @@ class PasskeyAppendBlock extends Block<PasskeyAppendBlockData> {
   }
 
   Future<void> initFallbackEmailOtp() async {
+    TelemetryService.instance.logMethodCalled(
+      'initFallbackEmailOtp',
+      'PasskeyAppendBlock',
+    );
+
     try {
       final response = await corbadoService.sendEmailOtpCode();
       processHandler.updateBlockFromServer(response);
@@ -113,6 +132,11 @@ class PasskeyAppendBlock extends Block<PasskeyAppendBlockData> {
   }
 
   skipPasskeyAppend() async {
+    TelemetryService.instance.logMethodCalled(
+      'skipPasskeyAppend',
+      'PasskeyAppendBlock',
+    );
+
     try {
       final response = await corbadoService.completeAuthProcess();
       processHandler.updateBlockFromServer(response);
