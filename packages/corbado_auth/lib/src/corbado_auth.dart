@@ -66,7 +66,10 @@ class CorbadoAuth {
   Future<void> initProcessHandler() async {
     final res = await _corbadoService.initAuthProcess();
 
-    TelemetryService.instance.toggleTelemetry(res.common.environment == 'dev');
+    if(res.common.environment != 'dev'){
+      TelemetryService.instance.disableTelemetry();
+    }
+
     TelemetryService.instance.logPackageMetadata();
 
     await _sessionService.setFrontEndApiUrl(res.common.frontendApiUrl);
@@ -93,11 +96,13 @@ class CorbadoAuth {
 
     _projectId = projectId;
 
-    TelemetryService.init(
-      projectId: projectId,
-      debugMode: telemetryDebugModeEnabled,
-      isDoctorEnabled: debugMode ?? false,
-    );
+      TelemetryService.init(
+        projectId: projectId,
+        debugMode: telemetryDebugModeEnabled,
+        isDoctorEnabled: debugMode ?? false,
+        isEnabled: telemetryDisabled,
+      );
+
 
     final frontEndApiUrl = await _sessionService.getFrontEndApiUrl();
 

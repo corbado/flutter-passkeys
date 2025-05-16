@@ -23,6 +23,7 @@ class TelemetryService {
   static void init({
     required String projectId,
     required bool isDoctorEnabled,
+    bool? isEnabled = true,
     bool? debugMode = false,
   }) {
     if (_instance != null) {
@@ -30,7 +31,7 @@ class TelemetryService {
     }
     _instance = TelemetryService._internal(
       projectId: projectId,
-      isEnabled: false,
+      isEnabled: isEnabled ?? false,
       debugMode: debugMode ?? false,
       isDoctorEnabled: isDoctorEnabled,
     );
@@ -62,8 +63,8 @@ class TelemetryService {
     _sendEvent(type: TelemetryEventType.METHOD_CALLED, payload: payload);
   }
 
-  void toggleTelemetry(bool isEnabled) {
-    this.isEnabled = isEnabled;
+  void disableTelemetry() {
+    this.isEnabled = false;
   }
 
   void logPackageMetadata() {
