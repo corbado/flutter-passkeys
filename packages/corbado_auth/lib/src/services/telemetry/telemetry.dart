@@ -2,18 +2,20 @@ import 'dart:io';
 
 import 'package:corbado_auth/src/types/telemetry/event.dart';
 import 'package:corbado_auth/src/types/telemetry/request.dart';
+import 'package:flutter/foundation.dart';
+import 'package:http/http.dart' as http;
 
 const String sdkVersion = "3.6.0";
-const String sdkName = "@corbado/corbado_auth";
+const String sdkName = "Flutter SDK";
 const String basePath = "https://app.corbado.com/v1/";
 const String endpoint = "telemetryEvents";
-const Duration timeout = Duration(milliseconds: 250);
+const Duration timeout = Duration(milliseconds: 500);
 
-// The `TelemetryService` manages the collection of telemetry events and 
-// is enabled by default. It can be disabled by setting isEnabled=false 
+// The TelemetryService manages the collection of telemetry events and
+// is enabled by default. It can be disabled by setting isEnabled=false
 // during initialization (see init() method).
 //
-// For more details, please refer to our telemetry documentation 
+// For more details, please refer to our telemetry documentation
 // at https://docs.corbado.com/corbado-complete/other/telemetry.
 
 class TelemetryService {
@@ -79,7 +81,7 @@ class TelemetryService {
     }
 
     final payload = {
-      'dartSDKVersion': Platform.version,
+      'dartSDKVersion': kIsWeb ? 'Flutter web' : Platform.version,
       'isDoctorEnabled': isDoctorEnabled,
     };
 
@@ -105,19 +107,12 @@ class TelemetryService {
 
     final uri = Uri.parse(basePath + endpoint);
 
-    final client = HttpClient()..connectionTimeout = timeout;
-
     try {
-      final req = await client.postUrl(uri);
-
-      req.headers.contentType = ContentType.json;
-
-      req.write(request.toJsonString());
-
-      await req.close().timeout(timeout);
-    } catch (_) {
-    } finally {
-      client.close();
+      await http
+          .post(uri, headers: {'Content-Type': 'application/json'}, body: request.toJsonString())
+          .timeout(timeout);
+    } catch (e) {
+      print(e);
     }
   }
 }
