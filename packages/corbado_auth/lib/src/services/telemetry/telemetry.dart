@@ -8,7 +8,7 @@ const String sdkVersion = "3.6.0";
 const String sdkName = "@corbado/corbado_auth";
 const String basePath = "https://app.corbado.com/v1/";
 const String endpoint = "telemetryEvents";
-const Duration timeout = Duration(seconds: 2);
+const Duration timeout = Duration(milliseconds: 250);
 
 // The `TelemetryService` manages the collection of telemetry events and 
 // is enabled by default. It can be disabled by setting isEnabled=false 
@@ -106,21 +106,19 @@ class TelemetryService {
 
     final uri = Uri.parse(basePath + endpoint);
 
-    final ioClient = IOClient(
-      HttpClient()..connectionTimeout = timeout,
-    );
+    final client = HttpClient()..connectionTimeout = timeout;
 
     try {
-      await ioClient
-          .post(
-            uri,
-            headers: {'Content-Type': 'application/json'},
-            body: request.toJsonString(),
-          )
-          .timeout(timeout);
+      final req = await client.postUrl(uri);
+
+      req.headers.contentType = ContentType.json;
+
+      req.write(request.toJsonString());
+
+      await req.close().timeout(timeout);
     } catch (_) {
     } finally {
-      ioClient.close();
+      client.close();
     }
   }
 }
