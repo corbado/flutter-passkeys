@@ -1,7 +1,7 @@
 ## 3.6.0
 * Bump up passkeys version to 2.9.0.
 * Added support for passkeys doctor tool.
-* Added telemetry support to better understand how our package is being used by developers.
+* Added telemetry support to better understand how our package is being used by developers. Find more [here](https://docs.corbado.com/corbado-complete/other/telemetry)
 
 ## 3.5.2
 * Fixes Conditional Login not triggering (on iOS).
