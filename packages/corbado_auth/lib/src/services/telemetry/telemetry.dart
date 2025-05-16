@@ -10,6 +10,13 @@ const String basePath = "https://app.corbado.com/v1/";
 const String endpoint = "telemetryEvents";
 const Duration timeout = Duration(seconds: 2);
 
+// The `TelemetryService` manages the collection of telemetry events and 
+// is enabled by default. It can be disabled by setting isEnabled=false 
+// during initialization (see init() method).
+//
+// For more details, please refer to our telemetry documentation 
+// at https://docs.corbado.com/corbado-complete/other/telemetry.
+
 class TelemetryService {
   TelemetryService._internal({
     required this.projectId,
