@@ -111,8 +111,7 @@ class TelemetryService {
       await http
           .post(uri, headers: {'Content-Type': 'application/json'}, body: request.toJsonString())
           .timeout(timeout);
-    } catch (e) {
-      print(e);
+    } catch (_) {
     }
   }
 }
