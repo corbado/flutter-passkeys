@@ -100,7 +100,7 @@ class TelemetryService {
     );
 
     if (debugMode) {
-      print('Telemetry request: ${request.toJsonString()}');
+      print('Telemetry event: ${request.toJsonString()}');
       return;
     }
 
