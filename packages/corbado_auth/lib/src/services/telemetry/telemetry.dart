@@ -22,9 +22,9 @@ class TelemetryService {
 
   static void init({
     required String projectId,
-    required bool isDoctorEnabled,
     bool? isEnabled = true,
     bool? debugMode = false,
+    required bool isDoctorEnabled,
   }) {
     if (_instance != null) {
       throw StateError('TelemetryService.init() was already called.');
