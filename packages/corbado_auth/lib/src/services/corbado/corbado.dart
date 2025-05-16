@@ -11,6 +11,7 @@ import 'package:corbado_frontend_api_client/corbado_frontend_api_client.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:passkeys/authenticator.dart';
+import 'package:passkeys/types.dart';
 
 abstract class CorbadoService {
   CorbadoService(

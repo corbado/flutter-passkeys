@@ -37,9 +37,6 @@ class CorbadoAuth {
   Stream<List<PasskeyInfo>> get passkeysChanges =>
       _passkeysStreamController.stream.distinct();
 
-  /// Should be listened to to get updates to the passkeys doctor.
-  Stream<Result> get doctorChanges => _corbadoService.resultStream;
-
   /// Returns the current value of the user object.
   Future<User?> get currentUser => _sessionService.userChanges.first;
 
