@@ -6,7 +6,7 @@ import 'package:http/io_client.dart';
 
 const String sdkVersion = "3.6.0";
 const String sdkName = "@corbado/corbado_auth";
-const String basePath = "https://app.corbado-dev.com/v1/";
+const String basePath = "https://app.corbado.com/v1/";
 const String endpoint = "telemetryEvents";
 const Duration timeout = Duration(seconds: 2);
 

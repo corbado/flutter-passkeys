@@ -100,7 +100,7 @@ class CorbadoAuth {
         projectId: projectId,
         debugMode: telemetryDebugModeEnabled,
         isDoctorEnabled: debugMode ?? false,
-        isEnabled: telemetryDisabled,
+        isEnabled: telemetryDisabled != true,
       );
 
 
