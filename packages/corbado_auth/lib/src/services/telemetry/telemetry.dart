@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http;
 
 const String sdkVersion = "3.6.0";
 const String sdkName = "Flutter SDK";
-const String basePath = "https://app.corbado.com/v1/";
+const String basePath = "https://telemetry.cloud.corbado.io/v1/";
 const String endpoint = "telemetryEvents";
 const Duration timeout = Duration(milliseconds: 500);
 
