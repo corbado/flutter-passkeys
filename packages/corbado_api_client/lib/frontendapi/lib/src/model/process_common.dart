@@ -11,12 +11,12 @@ part 'process_common.g.dart';
 /// ProcessCommon
 ///
 /// Properties:
-/// * [appName]
-/// * [frontendApiUrl]
-/// * [hideBadge]
+/// * [appName] 
+/// * [frontendApiUrl] 
+/// * [hideBadge] 
+/// * [environment] 
 @BuiltValue()
-abstract class ProcessCommon
-    implements Built<ProcessCommon, ProcessCommonBuilder> {
+abstract class ProcessCommon implements Built<ProcessCommon, ProcessCommonBuilder> {
   @BuiltValueField(wireName: r'appName')
   String get appName;
 
@@ -26,17 +26,18 @@ abstract class ProcessCommon
   @BuiltValueField(wireName: r'hideBadge')
   bool get hideBadge;
 
+  @BuiltValueField(wireName: r'environment')
+  String get environment;
+
   ProcessCommon._();
 
-  factory ProcessCommon([void updates(ProcessCommonBuilder b)]) =
-      _$ProcessCommon;
+  factory ProcessCommon([void updates(ProcessCommonBuilder b)]) = _$ProcessCommon;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(ProcessCommonBuilder b) => b;
 
   @BuiltValueSerializer(custom: true)
-  static Serializer<ProcessCommon> get serializer =>
-      _$ProcessCommonSerializer();
+  static Serializer<ProcessCommon> get serializer => _$ProcessCommonSerializer();
 }
 
 class _$ProcessCommonSerializer implements PrimitiveSerializer<ProcessCommon> {
@@ -66,6 +67,11 @@ class _$ProcessCommonSerializer implements PrimitiveSerializer<ProcessCommon> {
       object.hideBadge,
       specifiedType: const FullType(bool),
     );
+    yield r'environment';
+    yield serializers.serialize(
+      object.environment,
+      specifiedType: const FullType(String),
+    );
   }
 
   @override
@@ -74,9 +80,7 @@ class _$ProcessCommonSerializer implements PrimitiveSerializer<ProcessCommon> {
     ProcessCommon object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
   }
 
   void _deserializeProperties(
@@ -112,6 +116,13 @@ class _$ProcessCommonSerializer implements PrimitiveSerializer<ProcessCommon> {
           ) as bool;
           result.hideBadge = valueDes;
           break;
+        case r'environment':
+          final valueDes = serializers.deserialize(
+            value,
+            specifiedType: const FullType(String),
+          ) as String;
+          result.environment = valueDes;
+          break;
         default:
           unhandled.add(key);
           unhandled.add(value);
@@ -140,3 +151,4 @@ class _$ProcessCommonSerializer implements PrimitiveSerializer<ProcessCommon> {
     return result.build();
   }
 }
+
