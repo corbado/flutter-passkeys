@@ -14,6 +14,7 @@ class TelemetryService {
   TelemetryService._internal({
     required this.projectId,
     required this.isEnabled,
+    required this.isDoctorEnabled,
     this.debugMode = false,
   });
 
@@ -21,7 +22,7 @@ class TelemetryService {
 
   static void init({
     required String projectId,
-    bool? isEnabled = true,
+    required bool isDoctorEnabled,
     bool? debugMode = false,
   }) {
     if (_instance != null) {
@@ -29,8 +30,9 @@ class TelemetryService {
     }
     _instance = TelemetryService._internal(
       projectId: projectId,
-      isEnabled: isEnabled ?? false,
+      isEnabled: false,
       debugMode: debugMode ?? false,
+      isDoctorEnabled: isDoctorEnabled,
     );
   }
 
@@ -42,8 +44,9 @@ class TelemetryService {
   }
 
   final String projectId;
-  final bool isEnabled;
+  bool isEnabled;
   final bool debugMode;
+  final bool isDoctorEnabled;
 
   void logMethodCalled(String methodName, String screenName) {
     if (!isEnabled) {
@@ -58,14 +61,18 @@ class TelemetryService {
     _sendEvent(type: TelemetryEventType.METHOD_CALLED, payload: payload);
   }
 
-  void logPackageMetadata(bool debugMode) {
+  void toggleTelemetry(bool isEnabled) {
+    this.isEnabled = isEnabled;
+  }
+
+  void logPackageMetadata() {
     if (!isEnabled) {
       return;
     }
 
     final payload = {
       'dartSDKVersion': Platform.version,
-      'isDoctorEnabled': debugMode,
+      'isDoctorEnabled': isDoctorEnabled,
     };
 
     _sendEvent(type: TelemetryEventType.PACKAGE_METADATA, payload: payload);
