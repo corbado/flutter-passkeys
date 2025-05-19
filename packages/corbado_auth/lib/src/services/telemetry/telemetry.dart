@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:corbado_telemetry/corbado_telemetry.dart';
+import 'package:corbado_shared/corbado_shared.dart';
 import 'package:flutter/foundation.dart';
 
 const String sdkVersion = "3.6.0";

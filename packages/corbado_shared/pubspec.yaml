@@ -1,4 +1,4 @@
-name: corbado_telemetry
+name: corbado_shared
 description: "Shared Utility code for the examples"
 version: 1.0.0
 publish_to: none
