@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:corbado_shared/corbado_shared.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_driver/driver_extension.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -10,6 +13,17 @@ void main() async {
     enableFlutterDriverExtension();
   }
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Telemetry is used to help us understand how the example is used.
+  unawaited(CorbadoTelemetry(
+    projectId: 'passkeys_example',
+  ).sendEvent(
+    type: TelemetryEventType.EXAMPLE_APP_OPENED,
+    payload: {
+      'exampleName': 'passkeys_example',
+    },
+  ));
+
   runApp(
     const ProviderScope(
       child: MyApp(),

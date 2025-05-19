@@ -19,6 +19,7 @@ dependencies:
   flutter_riverpod: ^2.3.10
   hooks_riverpod: ^2.4.0
   overlay_support: ^2.1.0
+  corbado_shared: ^1.0.0
 
 dev_dependencies:
   integration_test:
