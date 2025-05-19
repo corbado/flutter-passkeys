@@ -7,15 +7,15 @@ const String endpoint = "telemetryEvents";
 const Duration timeout = Duration(milliseconds: 500);
 
 class CorbadoTelemetry {
-  final String sdkVersion;
-  final String sdkName;
+  final String? sdkVersion;
+  final String? sdkName;
   final String projectId;
   final bool? debugMode;
 
   CorbadoTelemetry({
-    required this.sdkVersion,
-    required this.sdkName,
     required this.projectId,
+    this.sdkVersion,
+    this.sdkName,
     this.debugMode,
   });
 
@@ -30,6 +30,11 @@ class CorbadoTelemetry {
       identifier: projectId,
       payload: payload,
     );
+
+    if (debugMode == true) {
+      print('Telemetry event: ${request.toJsonString()}');
+      return;
+    }
 
     final uri = Uri.parse(basePath + endpoint);
 
