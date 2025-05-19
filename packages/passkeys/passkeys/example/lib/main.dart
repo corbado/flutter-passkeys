@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:corbado_shared/corbado_shared.dart';
+import 'package:corbado_telemetry_api_client/corbado_telemetry_api_client.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_driver/driver_extension.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

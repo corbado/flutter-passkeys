@@ -8,7 +8,8 @@ environment:
   flutter: 3.10.0
 
 dependencies:
-  corbado_auth: 3.6.0
+  corbado_auth:
+    path: ../
   flutter:
     sdk: flutter
   flutter_hooks: ^0.20.3
@@ -19,7 +20,7 @@ dependencies:
   flutter_riverpod: ^2.3.10
   hooks_riverpod: ^2.4.0
   overlay_support: ^2.1.0
-  corbado_shared: ^1.0.0
+  corbado_telemetry_api_client: ^1.0.0
 
 dev_dependencies:
   integration_test:
