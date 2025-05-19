@@ -47,11 +47,11 @@ void main() async {
 
   // Telemetry is used to help us understand how the example is used.
   unawaited(CorbadoTelemetryApiClient(
-    projectId: 'corbado_auth_example',
+    projectId: projectId,
   ).sendEvent(
-    type: TelemetryEventType.EXAMPLE_APP_OPENED,
+    type: TelemetryEventType.EXAMPLE_APPLICATION_OPENED,
     payload: {
-      'exampleName': 'corbado_auth_example',
+      'exampleName': 'corbado/flutter-passkeys/corbado_auth_example',
     },
   ));
 

@@ -18,9 +18,9 @@ void main() async {
   unawaited(CorbadoTelemetryApiClient(
     projectId: 'passkeys_example',
   ).sendEvent(
-    type: TelemetryEventType.EXAMPLE_APP_OPENED,
+    type: TelemetryEventType.EXAMPLE_APPLICATION_OPENED,
     payload: {
-      'exampleName': 'passkeys_example',
+      'exampleName': 'corbado/flutter_passkeys/passkeys_example',
     },
   ));
 
