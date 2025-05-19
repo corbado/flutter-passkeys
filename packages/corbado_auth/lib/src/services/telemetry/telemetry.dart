@@ -38,6 +38,7 @@ class TelemetryService {
       sdkVersion: sdkVersion,
       sdkName: sdkName,
       projectId: projectId,
+      debugMode: debugMode,
     );
 
     _instance = TelemetryService._internal(
