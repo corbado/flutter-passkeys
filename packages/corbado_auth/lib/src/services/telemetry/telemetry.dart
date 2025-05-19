@@ -5,9 +5,6 @@ import 'package:flutter/foundation.dart';
 
 const String sdkVersion = "3.6.0";
 const String sdkName = "Flutter SDK";
-const String basePath = "https://telemetry.cloud.corbado.io/v1/";
-const String endpoint = "telemetryEvents";
-const Duration timeout = Duration(milliseconds: 500);
 
 // The TelemetryService manages the collection of telemetry events and
 // is enabled by default. It can be disabled by setting isEnabled=false
