@@ -1,9 +1,7 @@
 import 'dart:io';
 
-import 'package:corbado_auth/src/types/telemetry/event.dart';
-import 'package:corbado_auth/src/types/telemetry/request.dart';
+import 'package:corbado_telemetry/corbado_telemetry.dart';
 import 'package:flutter/foundation.dart';
-import 'package:http/http.dart' as http;
 
 const String sdkVersion = "3.6.0";
 const String sdkName = "Flutter SDK";
@@ -23,6 +21,7 @@ class TelemetryService {
     required this.projectId,
     required this.isEnabled,
     required this.isDoctorEnabled,
+    required this.api,
     this.debugMode = false,
   });
 
@@ -37,11 +36,19 @@ class TelemetryService {
     if (_instance != null) {
       throw StateError('TelemetryService.init() was already called.');
     }
+
+    final corbadoTelemetry = CorbadoTelemetry(
+      sdkVersion: sdkVersion,
+      sdkName: sdkName,
+      projectId: projectId,
+    );
+
     _instance = TelemetryService._internal(
       projectId: projectId,
       isEnabled: isEnabled ?? false,
       debugMode: debugMode ?? false,
       isDoctorEnabled: isDoctorEnabled,
+      api: corbadoTelemetry,
     );
   }
 
@@ -57,6 +64,7 @@ class TelemetryService {
   final bool debugMode;
   final bool isDoctorEnabled;
   bool telemetryPacketMetadataSent = false;
+  final CorbadoTelemetry api;
 
   void logMethodCalled(String methodName, String screenName) {
     if (!isEnabled) {
@@ -68,7 +76,7 @@ class TelemetryService {
       'screenName': screenName,
     };
 
-    _sendEvent(type: TelemetryEventType.METHOD_CALLED, payload: payload);
+    api.sendEvent(type: TelemetryEventType.METHOD_CALLED, payload: payload);
   }
 
   void disableTelemetry() {
@@ -85,33 +93,8 @@ class TelemetryService {
       'isDoctorEnabled': isDoctorEnabled,
     };
 
-    _sendEvent(type: TelemetryEventType.PACKAGE_METADATA, payload: payload);
+    api.sendEvent(type: TelemetryEventType.PACKAGE_METADATA, payload: payload);
 
     telemetryPacketMetadataSent = true;
-  }
-
-  Future<void> _sendEvent(
-      {required TelemetryEventType type, Map<String, dynamic>? payload}) async {
-    final request = TelemetryEventRequest(
-      type: type,
-      sdkVersion: sdkVersion,
-      sdkName: sdkName,
-      identifier: projectId,
-      payload: payload,
-    );
-
-    if (debugMode) {
-      print('Telemetry event: ${request.toJsonString()}');
-      return;
-    }
-
-    final uri = Uri.parse(basePath + endpoint);
-
-    try {
-      await http
-          .post(uri, headers: {'Content-Type': 'application/json'}, body: request.toJsonString())
-          .timeout(timeout);
-    } catch (_) {
-    }
   }
 }

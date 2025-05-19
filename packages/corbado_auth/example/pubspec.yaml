@@ -8,8 +8,7 @@ environment:
   flutter: 3.10.0
 
 dependencies:
-  corbado_auth:
-    path: ../
+  corbado_auth: 3.6.0
   flutter:
     sdk: flutter
   flutter_hooks: ^0.20.3

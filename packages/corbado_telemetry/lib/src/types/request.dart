@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:corbado_auth/src/types/telemetry/event.dart';
+import 'event.dart';
 
 class TelemetryEventRequest {
   Map<String, dynamic>? payload;
