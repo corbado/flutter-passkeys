@@ -1,7 +1,6 @@
 name: corbado_telemetry_api_client
-description: "Shared Utility code for the examples"
+description: Client for the Corbado Telemetry API
 version: 1.0.0
-publish_to: none
 
 environment:
   sdk: ^3.7.2
