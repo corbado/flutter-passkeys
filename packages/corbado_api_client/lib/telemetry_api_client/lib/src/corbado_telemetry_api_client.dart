@@ -6,13 +6,13 @@ const String basePath = "https://telemetry.cloud.corbado.io/v1/";
 const String endpoint = "telemetryEvents";
 const Duration timeout = Duration(milliseconds: 500);
 
-class CorbadoTelemetry {
+class CorbadoTelemetryApiClient {
   final String? sdkVersion;
   final String? sdkName;
   final String projectId;
   final bool? debugMode;
 
-  CorbadoTelemetry({
+  CorbadoTelemetryApiClient({
     required this.projectId,
     this.sdkVersion,
     this.sdkName,

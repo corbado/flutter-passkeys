@@ -15,7 +15,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // Telemetry is used to help us understand how the example is used.
-  unawaited(CorbadoTelemetry(
+  unawaited(CorbadoTelemetryApiClient(
     projectId: 'passkeys_example',
   ).sendEvent(
     type: TelemetryEventType.EXAMPLE_APP_OPENED,

@@ -46,7 +46,7 @@ void main() async {
   );
 
   // Telemetry is used to help us understand how the example is used.
-  unawaited(CorbadoTelemetry(
+  unawaited(CorbadoTelemetryApiClient(
     projectId: 'corbado_auth_example',
   ).sendEvent(
     type: TelemetryEventType.EXAMPLE_APP_OPENED,

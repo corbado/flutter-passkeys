@@ -34,7 +34,7 @@ class TelemetryService {
       throw StateError('TelemetryService.init() was already called.');
     }
 
-    final corbadoTelemetry = CorbadoTelemetry(
+    final corbadoTelemetry = CorbadoTelemetryApiClient(
       sdkVersion: sdkVersion,
       sdkName: sdkName,
       projectId: projectId,
@@ -62,7 +62,7 @@ class TelemetryService {
   final bool debugMode;
   final bool isDoctorEnabled;
   bool telemetryPacketMetadataSent = false;
-  final CorbadoTelemetry api;
+  final CorbadoTelemetryApiClient api;
 
   void logMethodCalled(String methodName, String screenName) {
     if (!isEnabled) {
