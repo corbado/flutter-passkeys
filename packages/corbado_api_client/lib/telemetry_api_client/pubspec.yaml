@@ -1,6 +1,6 @@
 name: corbado_telemetry_api_client
 description: Client for the Corbado Telemetry API
-version: 1.0.1
+version: 1.0.2
 homepage: https://docs.corbado.com/overview/welcome
 
 environment:
