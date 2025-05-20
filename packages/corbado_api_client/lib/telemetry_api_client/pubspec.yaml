@@ -1,11 +1,10 @@
 name: corbado_telemetry_api_client
 description: Client for the Corbado Telemetry API
-version: 1.0.0
+version: 1.0.1
 homepage: https://docs.corbado.com/overview/welcome
 
 environment:
-  sdk: ^3.7.2
-  flutter: ">=1.17.0"
+  sdk: '>=2.15.0 <4.0.0'
 
 dependencies:
   flutter:
