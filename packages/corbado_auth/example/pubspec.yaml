@@ -20,6 +20,7 @@ dependencies:
   flutter_riverpod: ^2.3.10
   hooks_riverpod: ^2.4.0
   overlay_support: ^2.1.0
+  corbado_telemetry_api_client: ^1.0.2
 
 dev_dependencies:
   integration_test:

@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:corbado_auth/corbado_auth.dart';
 import 'package:corbado_auth_example/auth_provider.dart';
 import 'package:corbado_auth_example/pages/loading_page.dart';
 import 'package:corbado_auth_example/router.dart';
+import 'package:corbado_telemetry_api_client/corbado_telemetry_api_client.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -41,6 +44,16 @@ void main() async {
     projectId: projectId,
     debugMode: true,
   );
+
+  // Telemetry is used to help us understand how the example is used.
+  unawaited(CorbadoTelemetryApiClient(
+    projectId: projectId,
+  ).sendEvent(
+    type: TelemetryEventType.EXAMPLE_APPLICATION_OPENED,
+    payload: {
+      'exampleName': 'corbado/flutter-passkeys/corbado_auth_example',
+    },
+  ));
 
   // Finally we override the providers that needed initialization.
   // Now the real app can be loaded.
