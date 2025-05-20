@@ -1,3 +1,7 @@
+## 1.0.2
+
+* Makes SDK dependency more consistent with other packages.
+
 ## 1.0.1
 
 * Makes SDK dependency more lenient.
