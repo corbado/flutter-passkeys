@@ -47,6 +47,7 @@ class PasskeysIOS extends PasskeysPlatform {
       clientDataJSON: r.clientDataJSON,
       attestationObject: r.attestationObject,
       transports: r.transports.whereType<String>().toList(),
+      authenticatorData: r.authenticatorData,
     );
   }
 

@@ -22,7 +22,8 @@ dependencies:
   flutter_web_plugins:
     sdk: flutter
   json_annotation: ^4.8.1
-  passkeys_platform_interface: ^2.3.1
+  passkeys_platform_interface:
+    path: ../passkeys_platform_interface
   web: ^1.1.1
 
 dev_dependencies:
@@ -31,4 +32,3 @@ dev_dependencies:
     sdk: flutter
   json_serializable: ^6.7.0
   very_good_analysis: ^5.0.0
-

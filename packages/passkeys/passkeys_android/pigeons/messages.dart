@@ -105,6 +105,7 @@ class RegisterResponse {
     required this.clientDataJSON,
     required this.attestationObject,
     required this.transports,
+    required this.authenticatorData,
   });
 
   /// The ID
@@ -121,6 +122,9 @@ class RegisterResponse {
 
   /// The supported transports for the authenticator
   final List<String?> transports;
+
+  /// The authenticator data
+  final String authenticatorData;
 }
 
 /// Represents an authenticate response

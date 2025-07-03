@@ -109,6 +109,7 @@ class RegisterResponse {
     required this.clientDataJSON,
     required this.attestationObject,
     required this.transports,
+    required this.authenticatorData,
   });
 
   /// The ID
@@ -126,6 +127,9 @@ class RegisterResponse {
   /// The supported transports for the authenticator
   List<String?> transports;
 
+  /// The authenticator data
+  String authenticatorData;
+
   Object encode() {
     return <Object?>[
       id,
@@ -133,6 +137,7 @@ class RegisterResponse {
       clientDataJSON,
       attestationObject,
       transports,
+      authenticatorData,
     ];
   }
 
@@ -144,6 +149,7 @@ class RegisterResponse {
       clientDataJSON: result[2]! as String,
       attestationObject: result[3]! as String,
       transports: (result[4] as List<Object?>?)!.cast<String?>(),
+      authenticatorData: result[5]! as String,
     );
   }
 }

@@ -722,6 +722,20 @@ public class Messages {
       this.transports = setterArg;
     }
 
+    /** The authenticator data */
+    private @NonNull String authenticatorData;
+
+    public @NonNull String getAuthenticatorData() {
+      return authenticatorData;
+    }
+
+    public void setAuthenticatorData(@NonNull String setterArg) {
+      if (setterArg == null) {
+        throw new IllegalStateException("Nonnull field \"authenticatorData\" is null.");
+      }
+      this.authenticatorData = setterArg;
+    }
+
     /** Constructor is non-public to enforce null safety; use Builder. */
     RegisterResponse() {}
 
@@ -762,6 +776,13 @@ public class Messages {
         return this;
       }
 
+      private @Nullable String authenticatorData;
+
+      public @NonNull Builder setAuthenticatorData(@NonNull String setterArg) {
+        this.authenticatorData = setterArg;
+        return this;
+      }
+
       public @NonNull RegisterResponse build() {
         RegisterResponse pigeonReturn = new RegisterResponse();
         pigeonReturn.setId(id);
@@ -769,18 +790,20 @@ public class Messages {
         pigeonReturn.setClientDataJSON(clientDataJSON);
         pigeonReturn.setAttestationObject(attestationObject);
         pigeonReturn.setTransports(transports);
+        pigeonReturn.setAuthenticatorData(authenticatorData);
         return pigeonReturn;
       }
     }
 
     @NonNull
     ArrayList<Object> toList() {
-      ArrayList<Object> toListResult = new ArrayList<Object>(5);
+      ArrayList<Object> toListResult = new ArrayList<Object>(6);
       toListResult.add(id);
       toListResult.add(rawId);
       toListResult.add(clientDataJSON);
       toListResult.add(attestationObject);
       toListResult.add(transports);
+      toListResult.add(authenticatorData);
       return toListResult;
     }
 
@@ -796,6 +819,8 @@ public class Messages {
       pigeonResult.setAttestationObject((String) attestationObject);
       Object transports = list.get(4);
       pigeonResult.setTransports((List<String>) transports);
+      Object authenticatorData = list.get(5);
+      pigeonResult.setAuthenticatorData((String) authenticatorData);
       return pigeonResult;
     }
   }
@@ -931,7 +956,7 @@ public class Messages {
 
       private @Nullable String userHandle;
 
-      public @NonNull Builder setUserHandle(@Nullable String setterArg) {
+      public @NonNull Builder setUserHandle(@NonNull String setterArg) {
         this.userHandle = setterArg;
         return this;
       }

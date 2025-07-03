@@ -135,6 +135,8 @@ struct RegisterResponse {
   var attestationObject: String
   /// The supported transports for the authenticator
   var transports: [String?]
+  /// The authenticator data
+  var authenticatorData: String
 
   static func fromList(_ list: [Any?]) -> RegisterResponse? {
     let id = list[0] as! String
@@ -142,13 +144,15 @@ struct RegisterResponse {
     let clientDataJSON = list[2] as! String
     let attestationObject = list[3] as! String
     let transports = list[4] as! [String?]
+    let authenticatorData = list[5] as! String
 
     return RegisterResponse(
       id: id,
       rawId: rawId,
       clientDataJSON: clientDataJSON,
       attestationObject: attestationObject,
-      transports: transports
+      transports: transports,
+      authenticatorData: authenticatorData
     )
   }
   func toList() -> [Any?] {
@@ -158,6 +162,7 @@ struct RegisterResponse {
       clientDataJSON,
       attestationObject,
       transports,
+      authenticatorData,
     ]
   }
 }

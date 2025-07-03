@@ -5,6 +5,7 @@ class RegisterResponseType {
     required this.clientDataJSON,
     required this.attestationObject,
     required this.transports,
+    required this.authenticatorData,
   });
 
   final String id;
@@ -12,4 +13,5 @@ class RegisterResponseType {
   final String clientDataJSON;
   final String attestationObject;
   final List<String?> transports;
+  final String authenticatorData;
 }

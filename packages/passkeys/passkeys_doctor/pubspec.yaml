@@ -12,8 +12,10 @@ dependencies:
   http: ^1.3.0
   device_info_plus: ^11.2.0
   package_info_plus: ^8.3.0
-  passkeys_platform_interface: ^2.3.1
-  passkeys_ios: ^2.6.1
+  passkeys_platform_interface:
+    path: ../passkeys_platform_interface
+  passkeys_ios:
+    path: ../passkeys_ios
 
 dev_dependencies:
   pigeon: ^25.3.1

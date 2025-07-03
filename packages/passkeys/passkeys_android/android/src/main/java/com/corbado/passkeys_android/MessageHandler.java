@@ -82,8 +82,7 @@ public class MessageHandler implements Messages.PasskeysApi {
             @Nullable Long timeout,
             @Nullable String attestation,
             @NonNull List<Messages.ExcludeCredential> excludeCredentials,
-            @NonNull Messages.Result<Messages.RegisterResponse> result
-    ) {
+            @NonNull Messages.Result<Messages.RegisterResponse> result) {
 
         UserType userType = new UserType(user.getName(), user.getDisplayName(), user.getId(), user.getIcon());
         RelyingPartyType relyingPartyType = new RelyingPartyType(relyingParty.getId(), relyingParty.getName());
@@ -134,12 +133,17 @@ public class MessageHandler implements Messages.PasskeysApi {
                                     typedTransports.add(transports.getString(i));
                                 }
 
+                                String authenticatorData = response.getString("authenticatorData");
+                                Log.d(TAG, "Authenticator Data retrieved: " + (authenticatorData != null ? "yes" : "no")
+                                        + ", length: " + (authenticatorData != null ? authenticatorData.length() : 0));
+
                                 result.success(new Messages.RegisterResponse.Builder()
                                         .setId(json.getString("id"))
                                         .setRawId(json.getString("rawId"))
                                         .setClientDataJSON(response.getString("clientDataJSON"))
                                         .setAttestationObject(response.getString("attestationObject"))
                                         .setTransports(typedTransports)
+                                        .setAuthenticatorData(authenticatorData) // TODO: remove this
                                         .build());
                             } catch (JSONException e) {
                                 Log.e(TAG, "Error parsing response: " + resp, e);
