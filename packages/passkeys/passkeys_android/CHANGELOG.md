@@ -1,3 +1,8 @@
+## 2.8.0
+* Downgrades minSDKVersion from 28 to 23
+* Adds new PasskeyUnsupportedException to handle when device has sdk version lower than 28
+* Fixes some exception documentations
+
 ## 2.7.1
 * Makes `userHandle` similar to the W3 specification.
 
