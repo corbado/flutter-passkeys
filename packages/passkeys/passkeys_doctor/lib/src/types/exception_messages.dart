@@ -151,6 +151,17 @@ const Map<String, ExceptionInfo> exceptionInfos = {
     platforms: ['iOS'],
     suggestions: [],
   ),
+  'android-passkey-unsupported': ExceptionInfo(
+    title: 'PasskeyUnsupportedException',
+    description:
+        'Thrown when the Android device does not support passkeys due to missing hardware or software capabilities. (minimal sdk version is 28)',
+    platforms: ['Android'],
+    suggestions: [
+      'Ensure the device meets the minimum requirements for passkey support.',
+      'Update the device OS to the latest version.',
+      'Check if Google Play Services are up to date.',
+    ],
+  ),
 };
 
 Future<ExceptionInfo> getExceptionInfo(
