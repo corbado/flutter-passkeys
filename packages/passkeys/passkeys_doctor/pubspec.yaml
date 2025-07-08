@@ -1,5 +1,7 @@
 name: passkeys_doctor
 description: "Internal debugging tools used to help with passkeys package."
+homepage: https://docs.corbado.com/overview/welcome
+repository: https://github.com/corbado/flutter-passkeys/tree/main/packages/passkeys/passkeys_doctor
 version: 1.1.0
 
 environment:
