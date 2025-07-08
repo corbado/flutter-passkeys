@@ -41,15 +41,13 @@ class SyncAccountNotAvailableException implements AuthenticatorException {
   SyncAccountNotAvailableException();
 }
 
-/// This exception is thrown when the user tries to login but is not logged in
-/// to a Google account on his device. Being logged in to a Google account is
-/// mandatory for passkeys to work on Android devices.
+/// Thrown when the user tries to register but one of the excluded credentials matches an existing one on your local device.
 ///
 /// Platforms: Android
 ///
 /// Suggestions:
-/// - ask the user to sign in to his Google account first.
-/// - use a fallback method (e.g. login via email OTP)
+/// - Inform the user that the credential already exists.
+/// - Allow the user to proceed with authentication instead of registration.
 class ExcludeCredentialsCanNotBeRegisteredException
     implements AuthenticatorException {
   /// Constructor
@@ -190,4 +188,22 @@ class UnhandledAuthenticatorException implements AuthenticatorException {
     return 'Please report this exception to the package authors'
         '(code: $code, message: $message, details: $details}';
   }
+}
+
+/// This exception is thrown when passkey-related APIs are called on an unsupported Android version (API < 28).
+///
+/// Platforms: Android
+///
+/// Suggestions:
+/// - Check the device's Android version before calling passkey APIs, or handle this exception gracefully.
+class PasskeyUnsupportedException implements AuthenticatorException {
+  /// Constructor
+  PasskeyUnsupportedException([this.message]);
+
+  /// The error message, if any.
+  final String? message;
+
+  @override
+  String toString() =>
+      message ?? 'Passkeys are only supported on Android API 28 and above.';
 }

@@ -28,6 +28,8 @@ String getFriendlyErrorMessage(AuthenticatorException exception) {
     return exception.toString();
   } else if (exception is UnhandledAuthenticatorException) {
     return 'An unexpected error occurred (Code: ${exception.code}). Please contact support.';
+  } else if (exception is PasskeyUnsupportedException) {
+    return 'This device does not support passkeys (requires at least Android SDK 28). Please update your OS.';
   } else {
     return 'An unknown error occurred. Please try again later.';
   }

@@ -84,6 +84,10 @@ public class MessageHandler implements Messages.PasskeysApi {
             @NonNull List<Messages.ExcludeCredential> excludeCredentials,
             @NonNull Messages.Result<Messages.RegisterResponse> result
     ) {
+        if (android.os.Build.VERSION.SDK_INT < 28) {
+            result.error(new Messages.FlutterError("android-passkey-unsupported", "Passkeys are only supported on Android API 28 and above.", null));
+            return;
+        }
 
         UserType userType = new UserType(user.getName(), user.getDisplayName(), user.getId(), user.getIcon());
         RelyingPartyType relyingPartyType = new RelyingPartyType(relyingParty.getId(), relyingParty.getName());
@@ -184,6 +188,10 @@ public class MessageHandler implements Messages.PasskeysApi {
 
     @Override
     public void authenticate(@NonNull String relyingPartyId, @NonNull String challenge, @Nullable Long timeout, @Nullable String userVerification, @Nullable List<Messages.AllowCredential> allowCredentials, @Nullable Boolean preferImmediatelyAvailableCredentials, @NonNull Messages.Result<Messages.AuthenticateResponse> result) {
+        if (android.os.Build.VERSION.SDK_INT < 28) {
+            result.error(new Messages.FlutterError("android-passkey-unsupported", "Passkeys are only supported on Android API 28 and above.", null));
+            return;
+        }
 
         List<AllowCredentialType> allowCredentialsType = new ArrayList<>();
         if (allowCredentials != null) {
