@@ -1,3 +1,6 @@
+## 2.10.0
+* Added new PasskeyUnsuportedException to detect if OS is too outdated for passkeys. (Android)
+
 ## 2.9.0
 * Added passkeys_doctor plugin to help with debugging passkey and configuration issues.
 * Added passkey JS bundle check to ensure the passkey JS bundle is loaded before initializing the PasskeyAuthenticator. (Web)
