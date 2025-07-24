@@ -132,10 +132,17 @@ public class MessageHandler implements Messages.PasskeysApi {
                                 JSONObject json = new JSONObject(resp);
                                 JSONObject response = json.getJSONObject("response");
 
-                                List<String> typedTransports = new ArrayList<>();
-                                JSONArray transports = response.getJSONArray("transports");
-                                for (int i = 0; i < transports.length(); i++) {
-                                    typedTransports.add(transports.getString(i));
+                                // Note: The "transports" field can be optional in the authenticator response.
+                                // While the WebAuthn spec (https://www.w3.org/TR/webauthn-2/#dom-authenticatorattestationresponse-gettransports)
+                                // does not strictly specify that "transports" must be omitted, we have observed several cases
+                                // where authenticators do not return it.
+                                JSONArray transports = response.optJSONArray("transports");
+                                if (transports != null) {
+                                    for (int i = 0; i < transports.length(); i++) {
+                                        typedTransports.add(transports.getString(i));
+                                    }
+                                } else {
+                                    typedTransports.add("");
                                 }
 
                                 result.success(new Messages.RegisterResponse.Builder()
