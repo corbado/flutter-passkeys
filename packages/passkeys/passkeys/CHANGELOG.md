@@ -1,3 +1,6 @@
+## 2.11.0
+* Fixes handling of optional `transports` field in registration response when authenticators don't provide it. (Android & iOS)
+
 ## 2.10.0
 * Added new PasskeyUnsuportedException to detect if OS is too outdated for passkeys. (Android)
 
