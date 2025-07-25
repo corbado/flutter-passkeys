@@ -1,3 +1,6 @@
+## 2.7.0
+* Fixes handling of optional `transports` field in registration response when authenticators don't provide it
+
 ## 2.6.1
 * Fixed issue with Base64Url encoded userIDs not being decoded correctly.
 

@@ -43,20 +43,25 @@ class RegisterController: NSObject, ASAuthorizationControllerDelegate, ASAuthori
             var transportStrings: [String] = []
             
             if #available(iOS 17.5, *) {
-                for transport in securityKeyRegistration.transports {
-                    switch transport {
-                    case .usb:
-                        transportStrings.append("usb")
-                    case .nfc:
-                        transportStrings.append("nfc")
-                    case .bluetooth:
-                        transportStrings.append("bluetooth")
-                    default:
-                        transportStrings.append("unknown")
+                // Note: The "transports" field can be optional in the authenticator response.
+                // While the WebAuthn spec (https://www.w3.org/TR/webauthn-2/#dom-authenticatorattestationresponse-gettransports)
+                // does not strictly specify that "transports" must be omitted, we have observed several cases
+                // where authenticators do not return it.
+                if let transports = (securityKeyRegistration.value(forKey: "transports") as? [ASAuthorizationSecurityKeyPublicKeyCredentialDescriptor.Transport]) {
+                        for transport in transports {
+                            switch transport {
+                            case .usb:
+                                transportStrings.append("usb")
+                            case .nfc:
+                                transportStrings.append("nfc")
+                            case .bluetooth:
+                                transportStrings.append("bluetooth")
+                            default:
+                                transportStrings.append("unknown")
+                        }
                     }
                 }
             }
-
                 
             let response = RegisterResponse(
                 id: securityKeyRegistration.credentialID.toBase64URL(),

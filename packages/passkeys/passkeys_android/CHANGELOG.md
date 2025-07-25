@@ -1,3 +1,6 @@
+## 2.9.0
+* Fixes handling of optional `transports` field in registration response when authenticators don't provide it
+
 ## 2.8.0
 * Downgrades minSDKVersion from 28 to 23
 * Adds new PasskeyUnsupportedException to handle when device has sdk version lower than 28
