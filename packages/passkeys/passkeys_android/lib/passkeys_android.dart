@@ -44,11 +44,12 @@ class PasskeysAndroid extends PasskeysPlatform {
   }
 
   @override
-  Future<bool> canAuthenticate() {
+  Future<bool> canAuthenticate() async {
     try {
-      return _api.canAuthenticate();
+      final r = await _api.canAuthenticate();
+      return r;
     } catch (e) {
-      return Future.value(false);
+      return false;
     }
   }
 
@@ -110,9 +111,10 @@ class PasskeysAndroid extends PasskeysPlatform {
     final hasPasskeySupport = await _api.hasPasskeySupport();
 
     return AvailabilityTypeAndroid(
-        hasPasskeySupport: hasPasskeySupport,
-        isUserVerifyingPlatformAuthenticatorAvailable:
-            isUserVerifyingPlatformAuthenticatorAvailable,
-        isNative: true);
+      hasPasskeySupport: hasPasskeySupport,
+      isUserVerifyingPlatformAuthenticatorAvailable:
+          isUserVerifyingPlatformAuthenticatorAvailable,
+      isNative: true,
+    );
   }
 }
