@@ -931,7 +931,7 @@ public class Messages {
 
       private @Nullable String userHandle;
 
-      public @NonNull Builder setUserHandle(@Nullable String setterArg) {
+      public @NonNull Builder setUserHandle(@NonNull String setterArg) {
         this.userHandle = setterArg;
         return this;
       }
@@ -1051,6 +1051,8 @@ public class Messages {
 
     void canAuthenticate(@NonNull Result<Boolean> result);
 
+    void hasPasskeySupport(@NonNull Result<Boolean> result);
+
     void register(@NonNull String challenge, @NonNull RelyingParty relyingParty, @NonNull User user, @NonNull AuthenticatorSelection authenticatorSelection, @Nullable List<PubKeyCredParam> pubKeyCredParams, @Nullable Long timeout, @Nullable String attestation, @NonNull List<ExcludeCredential> excludeCredentials, @NonNull Result<RegisterResponse> result);
 
     void authenticate(@NonNull String relyingPartyId, @NonNull String challenge, @Nullable Long timeout, @Nullable String userVerification, @Nullable List<AllowCredential> allowCredentials, @Nullable Boolean preferImmediatelyAvailableCredentials, @NonNull Result<AuthenticateResponse> result);
@@ -1085,6 +1087,33 @@ public class Messages {
                     };
 
                 api.canAuthenticate(resultCallback);
+              });
+        } else {
+          channel.setMessageHandler(null);
+        }
+      }
+      {
+        BasicMessageChannel<Object> channel =
+            new BasicMessageChannel<>(
+                binaryMessenger, "dev.flutter.pigeon.passkeys_android.PasskeysApi.hasPasskeySupport", getCodec());
+        if (api != null) {
+          channel.setMessageHandler(
+              (message, reply) -> {
+                ArrayList<Object> wrapped = new ArrayList<Object>();
+                Result<Boolean> resultCallback =
+                    new Result<Boolean>() {
+                      public void success(Boolean result) {
+                        wrapped.add(0, result);
+                        reply.reply(wrapped);
+                      }
+
+                      public void error(Throwable error) {
+                        ArrayList<Object> wrappedError = wrapError(error);
+                        reply.reply(wrappedError);
+                      }
+                    };
+
+                api.hasPasskeySupport(resultCallback);
               });
         } else {
           channel.setMessageHandler(null);

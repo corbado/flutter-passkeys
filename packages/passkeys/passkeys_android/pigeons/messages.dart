@@ -159,6 +159,9 @@ abstract class PasskeysApi {
   bool canAuthenticate();
 
   @async
+  bool hasPasskeySupport();
+
+  @async
   RegisterResponse register(
     String challenge,
     RelyingParty relyingParty,
