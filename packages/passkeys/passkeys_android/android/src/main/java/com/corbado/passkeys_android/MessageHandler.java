@@ -73,6 +73,13 @@ public class MessageHandler implements Messages.PasskeysApi {
     }
 
     @Override
+    public void hasPasskeySupport(@NonNull Messages.Result<Boolean> result) {
+        // Passkeys are supported on Android API 28 (Android 9.0) and above
+        boolean hasSupport = android.os.Build.VERSION.SDK_INT >= 28;
+        result.success(hasSupport);
+    }
+
+    @Override
     public void register(
             @NonNull String challenge,
             @NonNull Messages.RelyingParty relyingParty,

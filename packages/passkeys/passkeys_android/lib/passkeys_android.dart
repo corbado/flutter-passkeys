@@ -45,7 +45,11 @@ class PasskeysAndroid extends PasskeysPlatform {
 
   @override
   Future<bool> canAuthenticate() {
-    return _api.canAuthenticate();
+    try {
+      return _api.canAuthenticate();
+    } catch (e) {
+      return Future.value(false);
+    }
   }
 
   @override
@@ -100,10 +104,15 @@ class PasskeysAndroid extends PasskeysPlatform {
   // In case of android we link passkey support to the availability of the biometric authentication
   @override
   Future<AvailabilityTypeAndroid> getAvailability() async {
-    final isUserVerifyingPlatformAuthenticatorAvailable = await _api.canAuthenticate();
+    final isUserVerifyingPlatformAuthenticatorAvailable =
+        await canAuthenticate();
+
+    final hasPasskeySupport = await _api.hasPasskeySupport();
+
     return AvailabilityTypeAndroid(
-        hasPasskeySupport: true, // Android has passkey support for available Android Versions
-        isUserVerifyingPlatformAuthenticatorAvailable: isUserVerifyingPlatformAuthenticatorAvailable,
+        hasPasskeySupport: hasPasskeySupport,
+        isUserVerifyingPlatformAuthenticatorAvailable:
+            isUserVerifyingPlatformAuthenticatorAvailable,
         isNative: true);
   }
 }
