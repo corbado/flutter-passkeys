@@ -1,3 +1,7 @@
+## 2.12.0
+* `hasPasskeySupport` now verifies that the Android API level is 28 or higher. (Android)
+* Fixed an issue that occurred when running the app on Android devices without Google Play Services. (Android)
+
 ## 2.11.0
 * Fixes handling of optional `transports` field in registration response when authenticators don't provide it. (Android & iOS)
 
