@@ -98,7 +98,9 @@ enum AuthenticatorTransport {
   @JsonValue('usb')
   Usb,
   @JsonValue('bluetooth')
-  Bluetooth;
+  Bluetooth,
+  @JsonValue('ble')
+  BluetoothLowEnergy;
 
   factory AuthenticatorTransport.fromPlatformType(String value) {
     switch (value) {
@@ -112,6 +114,8 @@ enum AuthenticatorTransport {
         return AuthenticatorTransport.Nfc;
       case 'bluetooth':
         return AuthenticatorTransport.Bluetooth;
+      case 'ble':
+        return AuthenticatorTransport.BluetoothLowEnergy;
       default:
         throw ArgumentError.value(value);
     }
