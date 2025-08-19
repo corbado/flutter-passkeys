@@ -1,3 +1,6 @@
+## 2.13.0
+* Fixes UIWindow unwrapping issue when building iOS app with Flutter 3.35.0+. (iOS)
+
 ## 2.12.0
 * `hasPasskeySupport` now verifies that the Android API level is 28 or higher. (Android)
 * Fixed an issue that occurred when running the app on Android devices without Google Play Services. (Android)
