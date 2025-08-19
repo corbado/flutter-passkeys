@@ -1,3 +1,6 @@
+## 3.7.0
+* Bump up passkeys version to 2.13.0.
+
 ## 3.6.0
 * Bump up passkeys version to 2.9.0.
 * Added support for passkeys doctor tool.
