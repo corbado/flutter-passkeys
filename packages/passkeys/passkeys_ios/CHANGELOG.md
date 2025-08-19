@@ -1,3 +1,6 @@
+## 2.8.0
+* Fixes UIWindow unwrapping issue when building iOS app with Flutter 3.35.0+
+
 ## 2.7.0
 * Fixes handling of optional `transports` field in registration response when authenticators don't provide it
 
