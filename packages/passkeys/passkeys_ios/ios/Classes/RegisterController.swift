@@ -96,13 +96,7 @@ class RegisterController: NSObject, ASAuthorizationControllerDelegate, ASAuthori
                 return window
             }
 
-        // Fallback to the first available window from the connected scenes
-        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-           let window = windowScene.windows.first {
-            return window
-        }
-
-        // Last resort: create a new window
+        // Fallback: create a new window (shouldn't be reached if app is well configured)
         return UIWindow()
     }
     
