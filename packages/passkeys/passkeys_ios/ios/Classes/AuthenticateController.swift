@@ -80,13 +80,19 @@ class AuthenticateController: NSObject, ASAuthorizationControllerDelegate, ASAut
     }
 
     func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
-        let delegate = UIApplication.shared.delegate
+        if let flutterDelegate = UIApplication.shared.delegate as? FlutterAppDelegate,
+            let window = flutterDelegate.window {
+                return window
+            }
 
-        if let flutterDelegate = delegate as? FlutterAppDelegate {
-            return flutterDelegate.window
+        // Fallback to the first available window from the connected scenes
+        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+           let window = windowScene.windows.first {
+            return window
         }
 
-        return (delegate?.window!!)!
+        // Last resort: create a new window
+        return UIWindow()
     }
     
     func cancel() {
