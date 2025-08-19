@@ -48,6 +48,8 @@ It adds additional functionalities to make it simpler to use passkey authenticat
 A Flutter package that builds on the corbado_auth and the passkeys package.
 It helps you to integrate passkey authentication into your Flutter app that uses Firebase as a backend.
 
+> **Note:** This package is currently broken and will be fixed in the future. There is no specific ETA on when the fix will be available.
+
 #### Features
 
 - allow new users to sign up and log in using passkeys

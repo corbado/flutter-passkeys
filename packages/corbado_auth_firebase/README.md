@@ -2,6 +2,8 @@
 
 # Corbado Auth Firebase for Flutter
 
+> **⚠️ Important Note:** This package is currently broken and will be fixed in the future. There is no specific ETA on when the fix will be available.
+
 A Flutter package that allows you to make use of passkeys together with Firebase.
 This package should be used in addition to [firebase_auth](https://pub.dev/packages/firebase_auth).
 It can be used to add passkeys support to an existing Firebase project (with already existing users)
