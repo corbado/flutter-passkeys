@@ -1,22 +1,28 @@
-import Flutter
-import UIKit
 import AuthenticationServices
 import LocalAuthentication
 import Foundation
 import Combine
 
+#if os(iOS)
+import Flutter
+#elseif os(macOS)
+import FlutterMacOS
+#else
+#error("Unsupported platform.")
+#endif
+
 protocol Cancellable {
     func cancel()
 }
 
-@available(iOS 16.0, *)
+@available(macOS 13.5, iOS 16.0, *)
 public class PasskeysPlugin: NSObject, FlutterPlugin, PasskeysApi {
     var inFlightController: Cancellable?
     let lock = NSLock()
     
     public static func register(with registrar: FlutterPluginRegistrar) {
         let instance = PasskeysPlugin()
-        PasskeysApiSetup.setUp(binaryMessenger: registrar.messenger(), api: instance)
+        PasskeysApiSetup.setUp(binaryMessenger: registrar.messenger, api: instance)
     }
     
     func canAuthenticate() throws -> Bool {

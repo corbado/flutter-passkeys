@@ -1,9 +1,16 @@
 import AuthenticationServices
 import LocalAuthentication
-import Flutter
 import Foundation
 
-@available(iOS 16.0, *)
+#if os(iOS)
+import Flutter
+#elseif os(macOS)
+import FlutterMacOS
+#else
+#error("Unsupported platform.")
+#endif
+
+@available(macOS 13.5, iOS 16.0, *)
 class RegisterController: NSObject, ASAuthorizationControllerDelegate, ASAuthorizationControllerPresentationContextProviding, Cancellable {
     private var completion: ((Result<RegisterResponse, Error>) -> Void)?
     private var cancelAuthorization: (() -> Void)?;
@@ -91,13 +98,20 @@ class RegisterController: NSObject, ASAuthorizationControllerDelegate, ASAuthori
     }
 
     func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
+#if os(iOS)
         if let flutterDelegate = UIApplication.shared.delegate as? FlutterAppDelegate,
             let window = flutterDelegate.window {
                 return window
-            }
-
+        }
         // Fallback: create a new window (shouldn't be reached if app is well configured)
         return UIWindow()
+#elseif os(macOS)
+        if let window = NSApplication.shared.windows.first {
+            return window
+        }
+        // Fallback: create a new window (shouldn't be reached if app is well configured)
+        return NSWindow()
+#endif
     }
     
     func cancel() {

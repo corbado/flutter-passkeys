@@ -1,18 +1,18 @@
 import 'package:flutter/foundation.dart';
-import 'package:passkeys_ios/messages.g.dart';
+import 'package:passkeys_darwin/messages.g.dart';
 import 'package:passkeys_platform_interface/passkeys_platform_interface.dart';
 import 'package:passkeys_platform_interface/types/types.dart';
 
-/// The iOS implementation of [PasskeysPlatform].
-class PasskeysIOS extends PasskeysPlatform {
+/// The iOS/macOS implementation of [PasskeysPlatform].
+class PasskeysDarwin extends PasskeysPlatform {
   /// Creates a new plugin implementation instance.
-  PasskeysIOS({
+  PasskeysDarwin({
     @visibleForTesting PasskeysApi? api,
   }) : _api = api ?? PasskeysApi();
 
-  /// Registers this class as the default instance of [PasskeysIOS].
+  /// Registers this class as the default instance of [PasskeysDarwin].
   static void registerWith() {
-    PasskeysPlatform.instance = PasskeysIOS();
+    PasskeysPlatform.instance = PasskeysDarwin();
   }
 
   final PasskeysApi _api;

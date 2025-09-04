@@ -2,19 +2,17 @@
 # To learn more about a Podspec see http://guides.cocoapods.org/syntax/podspec.html
 #
 Pod::Spec.new do |s|
-  s.name             = 'passkeys_ios'
+  s.name             = 'passkeys_darwin'
   s.version          = '0.0.1'
-  s.summary          = 'An iOS implementation of the passkeys plugin.'
+  s.summary          = 'An iOS/macOS implementation of the passkeys plugin.'
   s.description      = <<-DESC
-  An iOS implementation of the passkeys plugin.
+  An iOS and macOS implementation of the passkeys plugin.
                        DESC
   s.homepage         = 'http://example.com'
   s.license          = { :type => 'BSD', :file => '../LICENSE' }
   s.author           = { 'Your Company' => 'email@example.com' }
   s.source           = { :path => '.' }  
   s.source_files = 'Classes/**/*'
-  s.dependency 'Flutter'
-  s.platform = :ios, '9.0'
 
   # Flutter.framework does not contain a i386 slice.
   s.pod_target_xcconfig = {
@@ -24,4 +22,9 @@ Pod::Spec.new do |s|
     'LD_RUNPATH_SEARCH_PATHS' => '/usr/lib/swift',
   }
   s.swift_version = '5.0'
+
+  s.ios.dependency 'Flutter'
+  s.osx.dependency 'FlutterMacOS'
+  s.ios.deployment_target = '9.0'
+  s.osx.deployment_target = '13.5'
 end
