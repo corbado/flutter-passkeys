@@ -4,7 +4,7 @@ import 'package:pigeon/pigeon.dart';
 @ConfigurePigeon(
   PigeonOptions(
     dartOut: 'lib/messages.g.dart',
-    swiftOut: 'ios/Classes/messages.swift',
+    swiftOut: 'darwin/Classes/messages.swift',
   ),
 )
 class RelyingParty {

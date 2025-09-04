@@ -1,6 +1,13 @@
 import Foundation
-import Flutter
 import AuthenticationServices
+
+#if os(iOS)
+import Flutter
+#elseif os(macOS)
+import FlutterMacOS
+#else
+#error("Unsupported platform.")
+#endif
 
 @available(iOS 13.0, *)
 extension FlutterError: Error {

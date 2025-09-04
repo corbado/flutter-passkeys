@@ -1,9 +1,16 @@
 import AuthenticationServices
 import LocalAuthentication
-import Flutter
 import Foundation
 
-@available(iOS 16.0, *)
+#if os(iOS)
+import Flutter
+#elseif os(macOS)
+import FlutterMacOS
+#else
+#error("Unsupported platform.")
+#endif
+
+@available(macOS 13.5, iOS 16.0, *)
 class AuthenticateController: NSObject, ASAuthorizationControllerDelegate, ASAuthorizationControllerPresentationContextProviding, Cancellable {
     public var completion: ((Result<AuthenticateResponse, Error>) -> Void)?
     private var innerCancel: (() -> Void)?;
@@ -18,7 +25,11 @@ class AuthenticateController: NSObject, ASAuthorizationControllerDelegate, ASAut
         authorizationController.presentationContextProvider = self
         
         if (conditionalUI) {
+#if os(iOS)
             authorizationController.performAutoFillAssistedRequests()
+#elseif os(macOS)
+            authorizationController.performRequests()
+#endif
         } else {
             // The `.preferImmediatelyAvailableCredentials` option in `ASAuthorizationController`
             // does not distinguish between `true` and `false` values. If the option is included
@@ -80,13 +91,20 @@ class AuthenticateController: NSObject, ASAuthorizationControllerDelegate, ASAut
     }
 
     func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
+#if os(iOS)
         if let flutterDelegate = UIApplication.shared.delegate as? FlutterAppDelegate,
             let window = flutterDelegate.window {
                 return window
-            }
-
+        }
         // Fallback: create a new window (shouldn't be reached if app is well configured)
         return UIWindow()
+#elseif os(macOS)
+        if let window = NSApplication.shared.windows.first {
+            return window
+        }
+        // Fallback: create a new window (shouldn't be reached if app is well configured)
+        return NSWindow()
+#endif
     }
     
     func cancel() {
