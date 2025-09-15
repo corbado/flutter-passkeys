@@ -278,7 +278,7 @@ class PasskeysApiSetup {
   static var codec: FlutterStandardMessageCodec { PasskeysApiCodec.shared }
   /// Sets up an instance of `PasskeysApi` to handle messages through the `binaryMessenger`.
   static func setUp(binaryMessenger: FlutterBinaryMessenger, api: PasskeysApi?) {
-    let canAuthenticateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.passkeys_ios.PasskeysApi.canAuthenticate", binaryMessenger: binaryMessenger, codec: codec)
+    let canAuthenticateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.passkeys_darwin.PasskeysApi.canAuthenticate", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       canAuthenticateChannel.setMessageHandler { _, reply in
         do {
@@ -291,7 +291,7 @@ class PasskeysApiSetup {
     } else {
       canAuthenticateChannel.setMessageHandler(nil)
     }
-    let hasBiometricsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.passkeys_ios.PasskeysApi.hasBiometrics", binaryMessenger: binaryMessenger, codec: codec)
+    let hasBiometricsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.passkeys_darwin.PasskeysApi.hasBiometrics", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       hasBiometricsChannel.setMessageHandler { _, reply in
         do {
@@ -304,7 +304,7 @@ class PasskeysApiSetup {
     } else {
       hasBiometricsChannel.setMessageHandler(nil)
     }
-    let registerChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.passkeys_ios.PasskeysApi.register", binaryMessenger: binaryMessenger, codec: codec)
+    let registerChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.passkeys_darwin.PasskeysApi.register", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       registerChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -327,7 +327,7 @@ class PasskeysApiSetup {
     } else {
       registerChannel.setMessageHandler(nil)
     }
-    let authenticateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.passkeys_ios.PasskeysApi.authenticate", binaryMessenger: binaryMessenger, codec: codec)
+    let authenticateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.passkeys_darwin.PasskeysApi.authenticate", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       authenticateChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -348,7 +348,7 @@ class PasskeysApiSetup {
     } else {
       authenticateChannel.setMessageHandler(nil)
     }
-    let cancelCurrentAuthenticatorOperationChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.passkeys_ios.PasskeysApi.cancelCurrentAuthenticatorOperation", binaryMessenger: binaryMessenger, codec: codec)
+    let cancelCurrentAuthenticatorOperationChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.passkeys_darwin.PasskeysApi.cancelCurrentAuthenticatorOperation", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       cancelCurrentAuthenticatorOperationChannel.setMessageHandler { _, reply in
         api.cancelCurrentAuthenticatorOperation() { result in

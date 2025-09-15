@@ -255,7 +255,7 @@ class PasskeysApi {
 
   Future<bool> canAuthenticate() async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.passkeys_ios.PasskeysApi.canAuthenticate', codec,
+        'dev.flutter.pigeon.passkeys_darwin.PasskeysApi.canAuthenticate', codec,
         binaryMessenger: _binaryMessenger);
     final List<Object?>? replyList =
         await channel.send(null) as List<Object?>?;
@@ -282,7 +282,7 @@ class PasskeysApi {
 
   Future<bool> hasBiometrics() async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.passkeys_ios.PasskeysApi.hasBiometrics', codec,
+        'dev.flutter.pigeon.passkeys_darwin.PasskeysApi.hasBiometrics', codec,
         binaryMessenger: _binaryMessenger);
     final List<Object?>? replyList =
         await channel.send(null) as List<Object?>?;
@@ -309,7 +309,7 @@ class PasskeysApi {
 
   Future<RegisterResponse> register(String arg_challenge, RelyingParty arg_relyingParty, User arg_user, List<CredentialType?> arg_excludeCredentials, List<int?> arg_pubKeyCredValues, bool arg_canBePlatformAuthenticator, bool arg_canBeSecurityKey) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.passkeys_ios.PasskeysApi.register', codec,
+        'dev.flutter.pigeon.passkeys_darwin.PasskeysApi.register', codec,
         binaryMessenger: _binaryMessenger);
     final List<Object?>? replyList =
         await channel.send(<Object?>[arg_challenge, arg_relyingParty, arg_user, arg_excludeCredentials, arg_pubKeyCredValues, arg_canBePlatformAuthenticator, arg_canBeSecurityKey]) as List<Object?>?;
@@ -336,7 +336,7 @@ class PasskeysApi {
 
   Future<AuthenticateResponse> authenticate(String arg_relyingPartyId, String arg_challenge, bool arg_conditionalUI, List<CredentialType?> arg_allowedCredentials, bool arg_preferImmediatelyAvailableCredentials) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.passkeys_ios.PasskeysApi.authenticate', codec,
+        'dev.flutter.pigeon.passkeys_darwin.PasskeysApi.authenticate', codec,
         binaryMessenger: _binaryMessenger);
     final List<Object?>? replyList =
         await channel.send(<Object?>[arg_relyingPartyId, arg_challenge, arg_conditionalUI, arg_allowedCredentials, arg_preferImmediatelyAvailableCredentials]) as List<Object?>?;
@@ -363,7 +363,7 @@ class PasskeysApi {
 
   Future<void> cancelCurrentAuthenticatorOperation() async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.passkeys_ios.PasskeysApi.cancelCurrentAuthenticatorOperation', codec,
+        'dev.flutter.pigeon.passkeys_darwin.PasskeysApi.cancelCurrentAuthenticatorOperation', codec,
         binaryMessenger: _binaryMessenger);
     final List<Object?>? replyList =
         await channel.send(null) as List<Object?>?;
