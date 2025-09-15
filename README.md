@@ -4,9 +4,9 @@
 
 Flutter packages to enable passkey authentication (based on WebAuthn / FIDO2).
 
-|             | Android            | iOS                | Linux | macOS | Web                | Windows |
-| ----------- | ------------------ | ------------------ | ----- | ----- | ------------------ | ------- |
-| **Support** | :white_check_mark: | :white_check_mark: | :x:   | :x:   | :white_check_mark: | :x:     |
+|             | Android            | iOS                | Linux | macOS              | Web                | Windows |
+|-------------|--------------------|--------------------|-------|--------------------|--------------------|---------|
+| **Support** | :white_check_mark: | :white_check_mark: | :x:   | :white_check_mark: | :white_check_mark: | :x:     |
 
 <img src="https://raw.githubusercontent.com/corbado/flutter-passkeys/main/packages/passkeys/passkeys/doc/ios_sign_up.gif" alt="passkey-signup" height="500">
 
