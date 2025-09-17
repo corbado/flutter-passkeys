@@ -30,7 +30,7 @@ class PublicKey {
   final UserType user;
   final String challenge;
   final List<PubKeyCredParamType> pubKeyCredParams;
-  final AuthenticatorSelectionType authenticatorSelection;
+  final AuthenticatorSelectionType? authenticatorSelection;
   final List<CredentialType> excludeCredentials;
   final int? timeout;
 
