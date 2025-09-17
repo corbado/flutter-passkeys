@@ -1053,7 +1053,7 @@ public class Messages {
 
     void hasPasskeySupport(@NonNull Result<Boolean> result);
 
-    void register(@NonNull String challenge, @NonNull RelyingParty relyingParty, @NonNull User user, @NonNull AuthenticatorSelection authenticatorSelection, @Nullable List<PubKeyCredParam> pubKeyCredParams, @Nullable Long timeout, @Nullable String attestation, @NonNull List<ExcludeCredential> excludeCredentials, @NonNull Result<RegisterResponse> result);
+    void register(@NonNull String challenge, @NonNull RelyingParty relyingParty, @NonNull User user, @Nullable AuthenticatorSelection authenticatorSelection, @Nullable List<PubKeyCredParam> pubKeyCredParams, @Nullable Long timeout, @Nullable String attestation, @NonNull List<ExcludeCredential> excludeCredentials, @NonNull Result<RegisterResponse> result);
 
     void authenticate(@NonNull String relyingPartyId, @NonNull String challenge, @Nullable Long timeout, @Nullable String userVerification, @Nullable List<AllowCredential> allowCredentials, @Nullable Boolean preferImmediatelyAvailableCredentials, @NonNull Result<AuthenticateResponse> result);
 

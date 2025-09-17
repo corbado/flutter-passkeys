@@ -166,7 +166,7 @@ abstract class PasskeysApi {
     String challenge,
     RelyingParty relyingParty,
     User user,
-    AuthenticatorSelection authenticatorSelection,
+    AuthenticatorSelection? authenticatorSelection,
     List<PubKeyCredParam>? pubKeyCredParams,
     int? timeout,
     String? attestation,
@@ -175,13 +175,12 @@ abstract class PasskeysApi {
 
   @async
   AuthenticateResponse authenticate(
-    String relyingPartyId,
-    String challenge,
-    int? timeout,
-    String? userVerification,
-    List<AllowCredential>? allowCredentials,
-    bool? preferImmediatelyAvailableCredentials
-  );
+      String relyingPartyId,
+      String challenge,
+      int? timeout,
+      String? userVerification,
+      List<AllowCredential>? allowCredentials,
+      bool? preferImmediatelyAvailableCredentials);
 
   @async
   void cancelCurrentAuthenticatorOperation();
