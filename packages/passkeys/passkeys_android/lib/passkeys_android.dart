@@ -66,12 +66,19 @@ class PasskeysAndroid extends PasskeysPlatform {
     );
 
     final a = request.authSelectionType;
-    final authSelection = AuthenticatorSelection(
-      authenticatorAttachment: a.authenticatorAttachment,
-      requireResidentKey: a.requireResidentKey,
-      residentKey: a.residentKey,
-      userVerification: a.userVerification,
-    );
+
+    AuthenticatorSelection? authSelection;
+
+    if (a == null) {
+      authSelection = null;
+    } else {
+      authSelection = AuthenticatorSelection(
+        authenticatorAttachment: a.authenticatorAttachment,
+        requireResidentKey: a.requireResidentKey,
+        residentKey: a.residentKey,
+        userVerification: a.userVerification,
+      );
+    }
 
     final r = await _api.register(
         request.challenge,

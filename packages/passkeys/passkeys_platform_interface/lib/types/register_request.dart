@@ -12,8 +12,8 @@ class RegisterRequestType {
     required this.challenge,
     required this.relyingParty,
     required this.user,
-    required this.authSelectionType,
     required this.excludeCredentials,
+    this.authSelectionType,
     this.pubKeyCredParams,
     this.timeout,
     this.attestation,
@@ -29,7 +29,7 @@ class RegisterRequestType {
   final UserType user;
 
   /// The authenticator selection type.
-  final AuthenticatorSelectionType authSelectionType;
+  final AuthenticatorSelectionType? authSelectionType;
 
   /// A list of public key credential parameters.
   final List<PubKeyCredParamType>? pubKeyCredParams;

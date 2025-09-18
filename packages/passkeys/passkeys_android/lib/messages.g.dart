@@ -432,7 +432,7 @@ class PasskeysApi {
     }
   }
 
-  Future<RegisterResponse> register(String arg_challenge, RelyingParty arg_relyingParty, User arg_user, AuthenticatorSelection arg_authenticatorSelection, List<PubKeyCredParam?>? arg_pubKeyCredParams, int? arg_timeout, String? arg_attestation, List<ExcludeCredential?> arg_excludeCredentials) async {
+  Future<RegisterResponse> register(String arg_challenge, RelyingParty arg_relyingParty, User arg_user, AuthenticatorSelection? arg_authenticatorSelection, List<PubKeyCredParam?>? arg_pubKeyCredParams, int? arg_timeout, String? arg_attestation, List<ExcludeCredential?> arg_excludeCredentials) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
         'dev.flutter.pigeon.passkeys_android.PasskeysApi.register', codec,
         binaryMessenger: _binaryMessenger);
