@@ -23,7 +23,8 @@ class PasskeyAuthenticator {
   final bool debugMode;
 
   /// Returns true only if passkeys are supported by the platform.
-  @deprecated
+  @Deprecated('Use PasskeyAvailability.isAvailable instead. '
+      'This method will be removed in a future release.')
   Future<bool> canAuthenticate() {
     return _platform.canAuthenticate();
   }
