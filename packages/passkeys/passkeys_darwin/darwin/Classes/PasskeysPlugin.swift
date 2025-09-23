@@ -22,7 +22,13 @@ public class PasskeysPlugin: NSObject, FlutterPlugin, PasskeysApi {
     
     public static func register(with registrar: FlutterPluginRegistrar) {
         let instance = PasskeysPlugin()
-        PasskeysApiSetup.setUp(binaryMessenger: registrar.messenger, api: instance)
+        // Workaround for https://github.com/flutter/flutter/issues/118103.
+#if os(iOS)
+        let messenger = registrar.messenger()
+#else
+        let messenger = registrar.messenger
+#endif
+        PasskeysApiSetup.setUp(binaryMessenger: messenger, api: instance)
     }
     
     func canAuthenticate() throws -> Bool {
