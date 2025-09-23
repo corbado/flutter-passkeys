@@ -37,8 +37,11 @@ class PasskeysDarwin extends PasskeysPlatform {
               CredentialType(type: e.type, id: e.id, transports: e.transports))
           .toList(),
       request.pubKeyCredParams?.map((e) => e.alg).toList() ?? [],
-      request.authSelectionType.authenticatorAttachment != 'cross-platform',
-      request.authSelectionType.authenticatorAttachment != 'platform',
+      request.authSelectionType == null ||
+          request.authSelectionType!.authenticatorAttachment !=
+              'cross-platform',
+      request.authSelectionType == null ||
+          request.authSelectionType!.authenticatorAttachment != 'platform',
     );
 
     return RegisterResponseType(
