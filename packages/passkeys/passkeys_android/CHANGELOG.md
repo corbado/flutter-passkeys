@@ -1,3 +1,6 @@
+## 2.11.0
+* Makes `authSelectionType` optional.
+
 ## 2.10.0
 * `hasPasskeySupport` now verifies that the Android API level is 28 or higher.
 * Fixed an issue that occurred when running the app on Android devices without Google Play Services.

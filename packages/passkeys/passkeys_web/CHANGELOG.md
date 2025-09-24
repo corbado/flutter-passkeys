@@ -1,3 +1,7 @@
+## 2.7.0
+* Made `authSelectionType` optional.
+* Added new `suppressedError`.
+
 ## 2.6.0
 * Added passkey JS bundle check to ensure the passkey JS bundle is loaded before initializing the PasskeyAuthenticator.
 
