@@ -286,7 +286,7 @@ var PasskeyAuthenticator = (function (exports) {
                     error = PlatformError.unknownError(e.toString());
                 }
                 else if (e === ABORTED_BY_USER) {
-                    error = PlatformError.cancelled();
+                    error = PlatformError.suppressedError(e);
                 }
                 else {
                     error = PlatformError.unknownError('-');
@@ -322,6 +322,9 @@ var PasskeyAuthenticator = (function (exports) {
         }
         static cancelled() {
             return new PlatformError('cancelled', 'operation was cancelled by the user.', '');
+        }
+        static suppressedError(error) {
+            return new PlatformError('suppressed', error, '');
         }
     }
 

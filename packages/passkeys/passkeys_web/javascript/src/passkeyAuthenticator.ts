@@ -52,7 +52,7 @@ export class PasskeyAuthenticator {
             } else if (e instanceof String) {
                 error = PlatformError.unknownError(e.toString())
             } else if (e === ABORTED_BY_USER) {
-                error = PlatformError.cancelled();
+                error = PlatformError.suppressedError(e);
             } else {
                 error = PlatformError.unknownError('-')
             }
@@ -97,6 +97,10 @@ class PlatformError {
 
     static cancelled(): PlatformError {
         return new PlatformError('cancelled', 'operation was cancelled by the user.', '');
+    }
+
+    static suppressedError(error: string): PlatformError {
+        return new PlatformError('suppressed', error, '');
     }
 }
 

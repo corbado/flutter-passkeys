@@ -59,6 +59,10 @@ class PasskeysDoctor {
   Stream<Result> get resultStream => _streamController.stream;
 
   recordException(PlatformException exception) {
+    if (exception.code == 'suppressed') {
+      return;
+    }
+
     _lastException.value = exception;
   }
 
