@@ -1,3 +1,6 @@
+## 2.9.0
+* Makes `authSelectionType` optional
+
 ## 2.8.0
 * Fixes UIWindow unwrapping issue when building iOS app with Flutter 3.35.0+
 

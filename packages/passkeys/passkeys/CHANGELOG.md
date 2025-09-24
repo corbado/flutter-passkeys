@@ -1,3 +1,7 @@
+## 2.14.0
+* Fixes doctor syncing issues on Web. (Web)
+* Makes `authSelectionType` optional. (Android, iOS & Web)
+
 ## 2.13.0
 * Fixes UIWindow unwrapping issue when building iOS app with Flutter 3.35.0+. (iOS)
 
