@@ -23,11 +23,11 @@ public class PasskeysPlugin: NSObject, FlutterPlugin, PasskeysApi {
     public static func register(with registrar: FlutterPluginRegistrar) {
         let instance = PasskeysPlugin()
         // Workaround for https://github.com/flutter/flutter/issues/118103.
-#if os(iOS)
-        let messenger = registrar.messenger()
-#else
-        let messenger = registrar.messenger
-#endif
+        #if os(iOS)
+                let messenger = registrar.messenger()
+        #else
+                let messenger = registrar.messenger
+        #endif
         PasskeysApiSetup.setUp(binaryMessenger: messenger, api: instance)
     }
     
@@ -150,7 +150,8 @@ public class PasskeysPlugin: NSObject, FlutterPlugin, PasskeysApi {
         requests.append(platformRequest)
         
         // We should not show the security key flow when preferImmediatelyAvailable is set to true
-        if !preferImmediatelyAvailableCredentials {
+        // Also skip security key requests when using conditional UI, which doesn't support them
+        if !preferImmediatelyAvailableCredentials && !conditionalUI {
             let securityKeyProvider = ASAuthorizationSecurityKeyPublicKeyCredentialProvider(relyingPartyIdentifier: relyingPartyId)
             let externalRequest = securityKeyProvider.createCredentialAssertionRequest(challenge: decodedChallenge)
             externalRequest.allowedCredentials = parseSecurityKeyCredentials(credentials: allowedCredentials)
