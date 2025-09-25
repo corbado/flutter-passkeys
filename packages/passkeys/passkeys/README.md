@@ -317,6 +317,18 @@ On a simulator, this can be done under _Features_ => _Face ID_ by clicking on "E
 <img src="https://raw.githubusercontent.com/corbado/flutter-passkeys/main/packages/passkeys/passkeys/doc/ios_error_enrolled_biometrics.png" style="width: 200px" calt="ios_enrolled_biometrics">
 </details>
 
+### macOS
+
+<details>
+<summary>1. Configure Apple App Site Association (AASA) and Associated Domains</summary>
+
+- Make sure your relying server serves a valid Apple App Site Association (AASA) file at `https://<your-domain>/.well-known/apple-app-site-association`.
+- The AASA must include your app's `appID` entries, which are composed of your Apple Team ID and the macOS bundle identifier (`<TeamID>.<BundleID>`). Example reference file: `https://flutter.corbado.io/.well-known/apple-app-site-association`.
+- Add the Associated Domains entitlement to your macOS target and include your relying server domain using the `webcredentials:` prefix (e.g., `webcredentials:your-domain`), so the system can match your app to the relying party.
+- Ensure the AASA is hosted without redirects and with the correct content type.
+
+</details>
+
 ### Web
 
 <details>
