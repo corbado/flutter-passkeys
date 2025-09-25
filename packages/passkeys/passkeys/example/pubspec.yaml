@@ -36,3 +36,6 @@ dev_dependencies:
 flutter:
   uses-material-design: true
 
+pubspec_overrides:
+  passkeys-darwin:
+    url: ../passkeys_darwin

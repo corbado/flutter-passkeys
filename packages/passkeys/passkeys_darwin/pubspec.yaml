@@ -1,0 +1,34 @@
+name: passkeys_darwin
+description: Shared Darwin implementation (iOS & macOS) of the Corbado passkeys plugin. Manages passkey creation on Apple devices.
+homepage: https://docs.corbado.com/overview/welcome
+repository: https://github.com/corbado/flutter-passkeys/tree/main/packages/passkeys/passkeys_darwin
+version: 0.1.0
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+  flutter: ">=3.0.0"
+
+flutter:
+  plugin:
+    implements: passkeys
+    platforms:
+      ios:
+        pluginClass: PasskeysPlugin
+        dartPluginClass: PasskeysDarwin
+        sharedDarwinSource: true
+      macos:
+        pluginClass: PasskeysPlugin
+        dartPluginClass: PasskeysDarwin
+        sharedDarwinSource: true
+
+dependencies:
+  flutter:
+    sdk: flutter
+  passkeys_platform_interface: ^2.4.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  pigeon: ^11.0.1
+  plugin_platform_interface: ^2.0.0
+  very_good_analysis: ^5.0.0
