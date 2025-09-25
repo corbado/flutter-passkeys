@@ -1,3 +1,6 @@
+## 2.15.1
+* Fixes conditional ui failing because of security keys. (iOS)
+
 ## 2.15.0
 * Adds support for macOS.
 
