@@ -35,6 +35,18 @@ development team id of "0000000000" and a Bundle Identifier of "com.corbado.pass
 <img src="https://raw.githubusercontent.com/corbado/flutter-passkeys/main/packages/passkeys/passkeys/doc/xcode-team-unknown-name.png" style="width: 50%" calt="ios_enrolled_biometrics">
 
 
+### macOS
+
+When running the example on macOS, you must configure code signing with your Apple Developer account in Xcode, otherwise the app will fail to build or run:
+
+1. Open the macOS Runner project in Xcode (open `macos/Runner.xcworkspace`).
+2. Go to the Runner target → Signing & Capabilities.
+3. Select your Team (Apple ID) and ensure a unique Bundle Identifier.
+4. Let Xcode manage signing (Enable "Automatically manage signing").
+
+After setting your developer account, rebuild and run the app.
+
+
 # How to run automatic tests of the example
 
 ## Requirements

@@ -1,6 +1,6 @@
-# passkeys_ios
+# passkeys_darwin
 
-The iOS implementation of `passkeys`.
+The iOS & macOS implementation of `passkeys`.
 
 ## Usage
 
