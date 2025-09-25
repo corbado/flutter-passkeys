@@ -13,8 +13,6 @@ dependencies:
   # in the plugin and to avoid any build issues in the deployment.
   passkeys:
     path: ../
-  passkeys_darwin:
-    path: ../../passkeys_darwin
   go_router: ^10.1.2
   flutter_hooks: ^0.20.3
   riverpod: ^2.3.10

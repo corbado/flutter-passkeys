@@ -27,8 +27,8 @@ dependencies:
     sdk: flutter
   json_annotation: ^4.8.1
   passkeys_android: ^2.11.0
+  passkeys_darwin: ^0.1.0
   passkeys_doctor: ^1.2.0
-  passkeys_darwin: ^2.9.0
   passkeys_platform_interface: ^2.4.0
   passkeys_web: ^2.7.0
   ua_client_hints: ^1.1.3
