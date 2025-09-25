@@ -1,3 +1,6 @@
+## 2.15.0
+* Adds support for macOS.
+
 ## 2.14.0
 * Fixes doctor syncing issues on Web. (Web)
 * Makes `authSelectionType` optional. (Android, iOS & Web)
