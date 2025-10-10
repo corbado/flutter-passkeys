@@ -23,7 +23,8 @@ class PasskeysWeb extends PasskeysPlatform {
       final _ = window['PasskeyAuthenticator'];
     } catch (_) {
       debugPrint(
-          'Error: Passkeys Web SDK not loaded. Please include the Passkeys Web SDK (bundle.js) in your HTML file. You can find it on https://github.com/corbado/flutter-passkeys/releases/download/2.4.0/bundle.js');
+        'Error: Passkeys Web SDK not loaded. Please include the Passkeys Web SDK (bundle.js) in your HTML file. You can find it on https://github.com/corbado/flutter-passkeys/releases/download/2.4.0/bundle.js',
+      );
       // We need to close the window to prevent the app from running afterwards thus causing runtime errors
       // This is a workaround for the fact that we cannot throw an exception in the web platform
       // because it will not be caught by the Flutter framework
@@ -49,8 +50,9 @@ class PasskeysWeb extends PasskeysPlatform {
 
     try {
       final serializedRequest = jsonEncode(r.toJson());
-      final response =
-          await authenticatorRegister(serializedRequest.toJS).toDart;
+      final response = await authenticatorRegister(
+        serializedRequest.toJS,
+      ).toDart;
       final decodedResponse =
           jsonDecode(response.toDart) as Map<String, dynamic>;
       final typedResponse = PasskeySignUpResponse.fromJson(decodedResponse);
@@ -63,14 +65,15 @@ class PasskeysWeb extends PasskeysPlatform {
         transports: typedResponse.response.transports,
       );
     } catch (e) {
-      final exception = _parseException(e as String);
+      final exception = _parseException(e.toString());
       throw exception;
     }
   }
 
   @override
   Future<AuthenticateResponseType> authenticate(
-      AuthenticateRequestType request) async {
+    AuthenticateRequestType request,
+  ) async {
     final r = PasskeyLoginRequest.fromPlatformType(
       request.relyingPartyId,
       request.challenge,
@@ -89,7 +92,7 @@ class PasskeysWeb extends PasskeysPlatform {
 
       return typedResponse.toAuthenticateResponseType();
     } catch (e) {
-      final exception = _parseException(e as String);
+      final exception = _parseException(e.toString());
       throw exception;
     }
   }
@@ -123,8 +126,9 @@ class PasskeysWeb extends PasskeysPlatform {
 
     return AvailabilityTypeWeb(
       hasPasskeySupport: passkeySupport,
-      isUserVerifyingPlatformAuthenticatorAvailable:
-          v1.isUndefinedOrNull ? null : v1!.toDart,
+      isUserVerifyingPlatformAuthenticatorAvailable: v1.isUndefinedOrNull
+          ? null
+          : v1!.toDart,
       isConditionalMediationAvailable: v2.isUndefinedOrNull ? null : v2!.toDart,
       isNative: false,
     );
