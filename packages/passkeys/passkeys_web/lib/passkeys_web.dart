@@ -44,6 +44,7 @@ class PasskeysWeb extends PasskeysPlatform {
         request.authSelectionType,
         request.excludeCredentials,
         request.timeout,
+        request.attestation,
       ),
     );
 
