@@ -22,4 +22,5 @@ Map<String, dynamic> _$PublicKeyToJson(PublicKey instance) => <String, dynamic>{
       'excludeCredentials':
           instance.excludeCredentials.map((e) => e.toJson()).toList(),
       'timeout': instance.timeout,
+      'attestation': instance.attestation,
     };
