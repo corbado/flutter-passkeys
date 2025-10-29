@@ -1,3 +1,7 @@
+## 2.8.0
+* Fixed Attestation not being passed correctly to the register function
+* Fixed potential JSValue not being string exception
+
 ## 2.7.0
 * Made `authSelectionType` optional.
 * Added new `suppressedError`.
