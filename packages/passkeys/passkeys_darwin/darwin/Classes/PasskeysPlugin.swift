@@ -51,6 +51,8 @@ public class PasskeysPlugin: NSObject, FlutterPlugin, PasskeysApi {
         pubKeyCredValues: [Int64],
         canBePlatformAuthenticator: Bool = true,
         canBeSecurityKey: Bool = true,
+        residentKeyPreference: String,
+        attestationPreference: String,
         completion: @escaping (Result<RegisterResponse, Error>) -> Void
     ) {
         guard (try? canAuthenticate()) == true else {
@@ -79,7 +81,7 @@ public class PasskeysPlugin: NSObject, FlutterPlugin, PasskeysApi {
                 name: user.name,
                 userID: decodedUserId
             )
-            
+
             if #available(iOS 17.4, *) {
                 let excluded = parseCredentials(credentials: excludeCredentials)
                 platformRequest.excludedCredentials = excluded
@@ -97,6 +99,25 @@ public class PasskeysPlugin: NSObject, FlutterPlugin, PasskeysApi {
                 name: user.name,
                 userID: decodedUserId
             )
+
+            switch residentKeyPreference {
+                case "preferred":
+                    platformRequest.residentKeyPreference = .preferred
+                case "required":
+                    platformRequest.residentKeyPreference = .required
+                default:
+            }
+
+            switch attestationPreference {
+                case "none":
+                    platformRequest.attestationPreference = .none
+                case "indirect":
+                    platformRequest.attestationPreference = .indirect
+                case "direct":
+                    platformRequest.attestationPreference = .direct
+                default:
+            }
+            
             
             if #available(iOS 17.4, *) {
                 let excludedSecurityKeys = parseSecurityKeyCredentials(credentials: excludeCredentials)
