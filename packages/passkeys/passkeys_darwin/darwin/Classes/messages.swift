@@ -267,7 +267,7 @@ class PasskeysApiCodec: FlutterStandardMessageCodec {
 protocol PasskeysApi {
   func canAuthenticate() throws -> Bool
   func hasBiometrics() throws -> Bool
-  func register(challenge: String, relyingParty: RelyingParty, user: User, excludeCredentials: [CredentialType], pubKeyCredValues: [Int64], canBePlatformAuthenticator: Bool, canBeSecurityKey: Bool, residentKeyPreference: String, attestationPreference: String, completion: @escaping (Result<RegisterResponse, Error>) -> Void)
+  func register(challenge: String, relyingParty: RelyingParty, user: User, excludeCredentials: [CredentialType], pubKeyCredValues: [Int64], canBePlatformAuthenticator: Bool, canBeSecurityKey: Bool, residentKeyPreference: String?, attestationPreference: String?, completion: @escaping (Result<RegisterResponse, Error>) -> Void)
   func authenticate(relyingPartyId: String, challenge: String, conditionalUI: Bool, allowedCredentials: [CredentialType], preferImmediatelyAvailableCredentials: Bool, completion: @escaping (Result<AuthenticateResponse, Error>) -> Void)
   func cancelCurrentAuthenticatorOperation(completion: @escaping (Result<Void, Error>) -> Void)
 }
@@ -315,8 +315,8 @@ class PasskeysApiSetup {
         let pubKeyCredValuesArg = args[4] as! [Int64]
         let canBePlatformAuthenticatorArg = args[5] as! Bool
         let canBeSecurityKeyArg = args[6] as! Bool
-        let residentKeyPreferenceArg = args[7] as! String
-        let attestationPreferenceArg = args[8] as! String
+        let residentKeyPreferenceArg: String? = nilOrValue(args[7])
+        let attestationPreferenceArg: String? = nilOrValue(args[8])
         api.register(challenge: challengeArg, relyingParty: relyingPartyArg, user: userArg, excludeCredentials: excludeCredentialsArg, pubKeyCredValues: pubKeyCredValuesArg, canBePlatformAuthenticator: canBePlatformAuthenticatorArg, canBeSecurityKey: canBeSecurityKeyArg, residentKeyPreference: residentKeyPreferenceArg, attestationPreference: attestationPreferenceArg) { result in
           switch result {
             case .success(let res):

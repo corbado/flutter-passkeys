@@ -307,7 +307,7 @@ class PasskeysApi {
     }
   }
 
-  Future<RegisterResponse> register(String arg_challenge, RelyingParty arg_relyingParty, User arg_user, List<CredentialType?> arg_excludeCredentials, List<int?> arg_pubKeyCredValues, bool arg_canBePlatformAuthenticator, bool arg_canBeSecurityKey, String arg_residentKeyPreference, String arg_attestationPreference) async {
+  Future<RegisterResponse> register(String arg_challenge, RelyingParty arg_relyingParty, User arg_user, List<CredentialType?> arg_excludeCredentials, List<int?> arg_pubKeyCredValues, bool arg_canBePlatformAuthenticator, bool arg_canBeSecurityKey, String? arg_residentKeyPreference, String? arg_attestationPreference) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
         'dev.flutter.pigeon.passkeys_darwin.PasskeysApi.register', codec,
         binaryMessenger: _binaryMessenger);

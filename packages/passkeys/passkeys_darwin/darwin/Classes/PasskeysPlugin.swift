@@ -51,8 +51,8 @@ public class PasskeysPlugin: NSObject, FlutterPlugin, PasskeysApi {
         pubKeyCredValues: [Int64],
         canBePlatformAuthenticator: Bool = true,
         canBeSecurityKey: Bool = true,
-        residentKeyPreference: String,
-        attestationPreference: String,
+        residentKeyPreference: String?,
+        attestationPreference: String?,
         completion: @escaping (Result<RegisterResponse, Error>) -> Void
     ) {
         guard (try? canAuthenticate()) == true else {
@@ -83,13 +83,14 @@ public class PasskeysPlugin: NSObject, FlutterPlugin, PasskeysApi {
             )
 
             switch attestationPreference {
-                case "none":
-                    externalRequest.attestationPreference = .none
-                case "indirect":
-                    externalRequest.attestationPreference = .indirect
-                case "direct":
-                    externalRequest.attestationPreference = .direct
-                default:
+            case .some("none"):
+                platformRequest.attestationPreference = .none
+            case .some("indirect"):
+                platformRequest.attestationPreference = .indirect
+            case .some("direct"):
+                platformRequest.attestationPreference = .direct
+            default:
+                break
             }
             
 
@@ -112,21 +113,23 @@ public class PasskeysPlugin: NSObject, FlutterPlugin, PasskeysApi {
             )
 
             switch residentKeyPreference {
-                case "preferred":
-                    externalRequest.residentKeyPreference = .preferred
-                case "required":
-                    externalRequest.residentKeyPreference = .required
-                default:
+            case .some("preferred"):
+                externalRequest.residentKeyPreference = .preferred
+            case .some("required"):
+                externalRequest.residentKeyPreference = .required
+            default:
+                break
             }
 
             switch attestationPreference {
-                case "none":
-                    externalRequest.attestationPreference = .none
-                case "indirect":
-                    externalRequest.attestationPreference = .indirect
-                case "direct":
-                    externalRequest.attestationPreference = .direct
-                default:
+            case .some("none"):
+                externalRequest.attestationPreference = .none
+            case .some("indirect"):
+                externalRequest.attestationPreference = .indirect
+            case .some("direct"):
+                externalRequest.attestationPreference = .direct
+            default:
+                break
             }
             
             

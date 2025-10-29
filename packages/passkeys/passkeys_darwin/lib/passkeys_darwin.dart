@@ -42,8 +42,8 @@ class PasskeysDarwin extends PasskeysPlatform {
               'cross-platform',
       request.authSelectionType == null ||
           request.authSelectionType!.authenticatorAttachment != 'platform',
-      request.authSelectionType?.residentKey ?? 'preferred',
-      request.attestation ?? 'none',
+      request.authSelectionType?.residentKey,
+      request.attestation,
     );
 
     return RegisterResponseType(
