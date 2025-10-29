@@ -82,6 +82,17 @@ public class PasskeysPlugin: NSObject, FlutterPlugin, PasskeysApi {
                 userID: decodedUserId
             )
 
+            switch attestationPreference {
+                case "none":
+                    externalRequest.attestationPreference = .none
+                case "indirect":
+                    externalRequest.attestationPreference = .indirect
+                case "direct":
+                    externalRequest.attestationPreference = .direct
+                default:
+            }
+            
+
             if #available(iOS 17.4, *) {
                 let excluded = parseCredentials(credentials: excludeCredentials)
                 platformRequest.excludedCredentials = excluded
@@ -102,19 +113,19 @@ public class PasskeysPlugin: NSObject, FlutterPlugin, PasskeysApi {
 
             switch residentKeyPreference {
                 case "preferred":
-                    platformRequest.residentKeyPreference = .preferred
+                    externalRequest.residentKeyPreference = .preferred
                 case "required":
-                    platformRequest.residentKeyPreference = .required
+                    externalRequest.residentKeyPreference = .required
                 default:
             }
 
             switch attestationPreference {
                 case "none":
-                    platformRequest.attestationPreference = .none
+                    externalRequest.attestationPreference = .none
                 case "indirect":
-                    platformRequest.attestationPreference = .indirect
+                    externalRequest.attestationPreference = .indirect
                 case "direct":
-                    platformRequest.attestationPreference = .direct
+                    externalRequest.attestationPreference = .direct
                 default:
             }
             
