@@ -1,3 +1,8 @@
+## 2.16.0
+* Fixes `Attestation` not being passed to the register function. (Web)
+* Passes `Attestation` and `ResidentKey` params to Security Key Register Handler. (iOS & macOS)
+* Handles empty `userID` returned by authenticators. (iOS & macOS)
+
 ## 2.15.1
 * Fixes conditional ui failing because of security keys. (iOS)
 
