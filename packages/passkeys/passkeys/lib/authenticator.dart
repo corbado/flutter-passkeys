@@ -29,10 +29,12 @@ class PasskeyAuthenticator {
     return _platform.canAuthenticate();
   }
 
+  /// Cancels the current authenticator operation.
   Future<void> cancelCurrentAuthenticatorOperation() {
     return _platform.cancelCurrentAuthenticatorOperation();
   }
 
+  /// Returns a stream of results from the debugging doctor.
   Stream<Result> get resultStream => _doctor.resultStream;
 
   /// Creates a new passkey and stores it on the device.

@@ -176,7 +176,7 @@ struct AuthenticateResponse {
   var authenticatorData: String
   /// Signed challenge
   var signature: String
-  var userHandle: String
+  var userHandle: String? = nil
 
   static func fromList(_ list: [Any?]) -> AuthenticateResponse? {
     let id = list[0] as! String
@@ -184,7 +184,7 @@ struct AuthenticateResponse {
     let clientDataJSON = list[2] as! String
     let authenticatorData = list[3] as! String
     let signature = list[4] as! String
-    let userHandle = list[5] as! String
+    let userHandle: String? = nilOrValue(list[5])
 
     return AuthenticateResponse(
       id: id,
@@ -267,7 +267,7 @@ class PasskeysApiCodec: FlutterStandardMessageCodec {
 protocol PasskeysApi {
   func canAuthenticate() throws -> Bool
   func hasBiometrics() throws -> Bool
-  func register(challenge: String, relyingParty: RelyingParty, user: User, excludeCredentials: [CredentialType], pubKeyCredValues: [Int64], canBePlatformAuthenticator: Bool, canBeSecurityKey: Bool, completion: @escaping (Result<RegisterResponse, Error>) -> Void)
+  func register(challenge: String, relyingParty: RelyingParty, user: User, excludeCredentials: [CredentialType], pubKeyCredValues: [Int64], canBePlatformAuthenticator: Bool, canBeSecurityKey: Bool, residentKeyPreference: String?, attestationPreference: String?, completion: @escaping (Result<RegisterResponse, Error>) -> Void)
   func authenticate(relyingPartyId: String, challenge: String, conditionalUI: Bool, allowedCredentials: [CredentialType], preferImmediatelyAvailableCredentials: Bool, completion: @escaping (Result<AuthenticateResponse, Error>) -> Void)
   func cancelCurrentAuthenticatorOperation(completion: @escaping (Result<Void, Error>) -> Void)
 }
@@ -315,7 +315,9 @@ class PasskeysApiSetup {
         let pubKeyCredValuesArg = args[4] as! [Int64]
         let canBePlatformAuthenticatorArg = args[5] as! Bool
         let canBeSecurityKeyArg = args[6] as! Bool
-        api.register(challenge: challengeArg, relyingParty: relyingPartyArg, user: userArg, excludeCredentials: excludeCredentialsArg, pubKeyCredValues: pubKeyCredValuesArg, canBePlatformAuthenticator: canBePlatformAuthenticatorArg, canBeSecurityKey: canBeSecurityKeyArg) { result in
+        let residentKeyPreferenceArg: String? = nilOrValue(args[7])
+        let attestationPreferenceArg: String? = nilOrValue(args[8])
+        api.register(challenge: challengeArg, relyingParty: relyingPartyArg, user: userArg, excludeCredentials: excludeCredentialsArg, pubKeyCredValues: pubKeyCredValuesArg, canBePlatformAuthenticator: canBePlatformAuthenticatorArg, canBeSecurityKey: canBeSecurityKeyArg, residentKeyPreference: residentKeyPreferenceArg, attestationPreference: attestationPreferenceArg) { result in
           switch result {
             case .success(let res):
               reply(wrapResult(res))

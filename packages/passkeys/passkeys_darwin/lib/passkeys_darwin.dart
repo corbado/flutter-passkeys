@@ -42,6 +42,8 @@ class PasskeysDarwin extends PasskeysPlatform {
               'cross-platform',
       request.authSelectionType == null ||
           request.authSelectionType!.authenticatorAttachment != 'platform',
+      request.authSelectionType?.residentKey,
+      request.attestation,
     );
 
     return RegisterResponseType(
@@ -80,7 +82,7 @@ class PasskeysDarwin extends PasskeysPlatform {
       clientDataJSON: r.clientDataJSON,
       authenticatorData: r.authenticatorData,
       signature: r.signature,
-      userHandle: r.userHandle,
+      userHandle: r.userHandle ?? '',
     );
   }
 

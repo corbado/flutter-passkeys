@@ -32,7 +32,7 @@ class AuthenticateResponseType {
   /// The signature.
   final String signature;
 
-  /// The user handle.
+  /// The user handle. Can be empty if the user handle is not available.
   final String userHandle;
 
   /// Converts this instance to a JSON map.

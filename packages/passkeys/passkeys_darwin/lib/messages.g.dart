@@ -156,7 +156,7 @@ class AuthenticateResponse {
     required this.clientDataJSON,
     required this.authenticatorData,
     required this.signature,
-    required this.userHandle,
+    this.userHandle,
   });
 
   /// The ID
@@ -174,7 +174,7 @@ class AuthenticateResponse {
   /// Signed challenge
   String signature;
 
-  String userHandle;
+  String? userHandle;
 
   Object encode() {
     return <Object?>[
@@ -195,7 +195,7 @@ class AuthenticateResponse {
       clientDataJSON: result[2]! as String,
       authenticatorData: result[3]! as String,
       signature: result[4]! as String,
-      userHandle: result[5]! as String,
+      userHandle: result[5] as String?,
     );
   }
 }
@@ -307,12 +307,12 @@ class PasskeysApi {
     }
   }
 
-  Future<RegisterResponse> register(String arg_challenge, RelyingParty arg_relyingParty, User arg_user, List<CredentialType?> arg_excludeCredentials, List<int?> arg_pubKeyCredValues, bool arg_canBePlatformAuthenticator, bool arg_canBeSecurityKey) async {
+  Future<RegisterResponse> register(String arg_challenge, RelyingParty arg_relyingParty, User arg_user, List<CredentialType?> arg_excludeCredentials, List<int?> arg_pubKeyCredValues, bool arg_canBePlatformAuthenticator, bool arg_canBeSecurityKey, String? arg_residentKeyPreference, String? arg_attestationPreference) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
         'dev.flutter.pigeon.passkeys_darwin.PasskeysApi.register', codec,
         binaryMessenger: _binaryMessenger);
     final List<Object?>? replyList =
-        await channel.send(<Object?>[arg_challenge, arg_relyingParty, arg_user, arg_excludeCredentials, arg_pubKeyCredValues, arg_canBePlatformAuthenticator, arg_canBeSecurityKey]) as List<Object?>?;
+        await channel.send(<Object?>[arg_challenge, arg_relyingParty, arg_user, arg_excludeCredentials, arg_pubKeyCredValues, arg_canBePlatformAuthenticator, arg_canBeSecurityKey, arg_residentKeyPreference, arg_attestationPreference]) as List<Object?>?;
     if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',

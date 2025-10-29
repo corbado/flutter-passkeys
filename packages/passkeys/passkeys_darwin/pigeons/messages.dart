@@ -85,7 +85,7 @@ class AuthenticateResponse {
     required this.clientDataJSON,
     required this.authenticatorData,
     required this.signature,
-    required this.userHandle,
+    this.userHandle,
   });
 
   /// The ID
@@ -103,7 +103,7 @@ class AuthenticateResponse {
   /// Signed challenge
   final String signature;
 
-  final String userHandle;
+  final String? userHandle;
 }
 
 @HostApi()
@@ -121,6 +121,8 @@ abstract class PasskeysApi {
     List<int> pubKeyCredValues,
     bool canBePlatformAuthenticator,
     bool canBeSecurityKey,
+    String? residentKeyPreference,
+    String? attestationPreference,
   );
 
   @async
