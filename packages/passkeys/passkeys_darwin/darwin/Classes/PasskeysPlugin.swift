@@ -81,17 +81,6 @@ public class PasskeysPlugin: NSObject, FlutterPlugin, PasskeysApi {
                 name: user.name,
                 userID: decodedUserId
             )
-
-            switch attestationPreference {
-            case .some("none"):
-                platformRequest.attestationPreference = .none
-            case .some("indirect"):
-                platformRequest.attestationPreference = .indirect
-            case .some("direct"):
-                platformRequest.attestationPreference = .direct
-            default:
-                break
-            }
             
 
             if #available(iOS 17.4, *) {
