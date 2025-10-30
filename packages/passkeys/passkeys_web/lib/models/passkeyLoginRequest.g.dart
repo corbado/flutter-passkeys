@@ -89,6 +89,7 @@ const _$AuthenticatorTransportEnumMap = {
   AuthenticatorTransport.Nfc: 'nfc',
   AuthenticatorTransport.Usb: 'usb',
   AuthenticatorTransport.Bluetooth: 'bluetooth',
+  AuthenticatorTransport.BluetoothLowEnergy: 'ble',
 };
 
 LoginExtensions _$LoginExtensionsFromJson(Map<String, dynamic> json) =>
