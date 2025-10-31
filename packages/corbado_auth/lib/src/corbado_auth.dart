@@ -59,8 +59,15 @@ class CorbadoAuth {
   late CorbadoService _corbadoService;
   late final SessionService _sessionService;
   late final String _projectId;
+  bool _isInitialized = false;
 
   Future<void> initProcessHandler() async {
+    if (_isInitialized) {
+      return;
+    }
+
+    _isInitialized = true;
+
     final res = await _corbadoService.initAuthProcess();
 
     if(res.common.environment != 'dev'){
@@ -157,6 +164,8 @@ class CorbadoAuth {
     await _sessionService.signOut();
 
     _passkeysStreamController.add([]);
+    
+    _isInitialized = false;
   }
 
   /// Create a new passkey for an existing and logged in user
