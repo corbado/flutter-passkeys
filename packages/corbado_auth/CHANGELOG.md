@@ -1,3 +1,6 @@
+## 3.7.1
+* Fix init call triggering twice.
+
 ## 3.7.0
 * Bump up passkeys version to 2.13.0.
 

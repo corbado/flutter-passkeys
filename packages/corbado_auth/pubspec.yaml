@@ -3,7 +3,7 @@ description: Flutter package for Corbado Auth. Enables authentication on Android
 homepage: https://docs.corbado.com/overview/welcome
 repository: https://github.com/corbado/flutter-passkeys/tree/main/packages/corbado_auth
 ### NOTE: Make sure to update the version in the CHANGELOG.md file as well as in telemetry.dart.
-version: 3.7.0
+version: 3.7.1
 
 environment:
   sdk: ">=3.0.0 <4.0.0"

@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:corbado_telemetry_api_client/corbado_telemetry_api_client.dart';
 import 'package:flutter/foundation.dart';
 
-const String sdkVersion = "3.6.0";
+const String sdkVersion = "3.7.1";
 const String sdkName = "Flutter SDK";
 
 // The TelemetryService manages the collection of telemetry events and
