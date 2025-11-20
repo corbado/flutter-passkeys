@@ -1,0 +1,5 @@
+analysis_options.yaml
+.dart_tool/
+.packages
+build/
+pubspec.lock
