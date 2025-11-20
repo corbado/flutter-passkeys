@@ -79,3 +79,23 @@ class AvailabilityTypeIOS extends AvailabilityType {
   /// Indicates if the iOS device has biometric support.
   final bool hasBiometrics;
 }
+
+/// Represents the availability information specific to Windows platforms.
+///
+/// Extends [AvailabilityType] with Windows-specific attributes.
+class AvailabilityTypeWindows extends AvailabilityType {
+  /// Constructs an instance of [AvailabilityTypeWindows].
+  ///
+  /// - [hasPasskeySupport]: Indicates if the platform supports passkeys.
+  /// - [isNative]: Should be `true` for Windows platforms.
+  /// - [isUserVerifyingPlatformAuthenticatorAvailable]: Required; whether
+  ///   Windows Hello or other platform authenticators are available.
+  AvailabilityTypeWindows({
+    required super.hasPasskeySupport,
+    required super.isNative,
+    required this.isUserVerifyingPlatformAuthenticatorAvailable,
+  });
+
+  /// Indicates if Windows Hello or other platform authenticators are available.
+  final bool isUserVerifyingPlatformAuthenticatorAvailable;
+}
