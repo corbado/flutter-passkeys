@@ -1,5 +1,6 @@
 import 'package:passkeys/authenticator.dart';
 import 'package:passkeys/availability.dart';
+import 'package:passkeys/types.dart';
 import 'package:passkeys_example/local_relying_party_server.dart';
 
 class Configuration {
@@ -53,23 +54,36 @@ class AuthService {
   final PasskeyAuthenticator authenticator;
 
   Future<void> loginWithPasskey({required String email}) async {
-    final rps1 =
+    final jsonRequest =
         rps.startPasskeyLogin(name: email, configuration: loginConfiguration);
-    final authenticatorRes = await authenticator.authenticate(rps1);
-    rps.finishPasskeyLogin(response: authenticatorRes);
+
+    final request = AuthenticateRequestType.fromJson(
+      jsonRequest,
+    );
+    final authenticatorRes = await authenticator.authenticate(request);
+
+    rps.finishPasskeyLogin(response: authenticatorRes.toJson());
   }
 
   Future<void> loginWithPasskeyConditionalUI() async {
-    final rps1 = rps.startPasskeyLoginConditionalU();
-    final authenticatorRes = await authenticator.authenticate(rps1);
-    rps.finishPasskeyLoginConditionalUI(response: authenticatorRes);
+    final jsonRequest = rps.startPasskeyLoginConditionalU();
+
+    final request = AuthenticateRequestType.fromJson(
+      jsonRequest,
+    );
+    final authenticatorRes = await authenticator.authenticate(request);
+
+    rps.finishPasskeyLoginConditionalUI(response: authenticatorRes.toJson());
   }
 
   Future<void> signupWithPasskey({required String email}) async {
-    final rps1 = rps.startPasskeyRegister(
+    final jsonRequest = rps.startPasskeyRegister(
         name: email, configuration: signUpConfiguration);
-    final authenticatorRes = await authenticator.register(rps1);
-    rps.finishPasskeyRegister(response: authenticatorRes);
+
+    final request = RegisterRequestType.fromJson(jsonRequest);
+    final authenticatorRes = await authenticator.register(request);
+
+    rps.finishPasskeyRegister(response: authenticatorRes.toJson());
   }
 
   GetAvailability getAvailability() {
