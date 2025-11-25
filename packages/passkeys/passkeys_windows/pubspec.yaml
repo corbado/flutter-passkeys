@@ -3,6 +3,7 @@ description: Windows implementation of the passkeys plugin. Manages the creation
 homepage: https://docs.corbado.com/overview/welcome
 repository: https://github.com/corbado/flutter-passkeys/tree/main/packages/passkeys/passkeys_windows
 version: 0.1.0
+publish_to: none
 
 environment:
   sdk: ">=3.0.0 <4.0.0"
