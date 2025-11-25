@@ -1,11 +1,10 @@
+import 'dart:convert';
+
 import 'package:passkeys_platform_interface/types/credential.dart';
 import 'package:passkeys_platform_interface/types/mediation.dart';
 
 /// The [AuthenticateRequestType] is used to create an authentication request and send it to the
 /// platform.
-///
-/// This class supports the standard WebAuthn JSON format used by
-/// `PublicKeyCredential.parseRequestOptionsFromJSON()` on web platforms.
 class AuthenticateRequestType {
   /// Constructs a new instance.
   const AuthenticateRequestType({
@@ -18,25 +17,20 @@ class AuthenticateRequestType {
     this.allowCredentials,
   });
 
-  /// Constructs a new instance from a standard WebAuthn JSON map.
-  ///
-  /// This factory parses the JSON format produced by server-side WebAuthn
-  /// implementations (like .NET 10) that is compatible with
-  /// `PublicKeyCredential.parseRequestOptionsFromJSON()`.
-  ///
-  /// Expected JSON structure:
-  /// ```json
-  /// {
-  ///   "challenge": "base64url...",
-  ///   "timeout": 60000,
-  ///   "rpId": "example.com",
-  ///   "allowCredentials": [{ "type": "public-key", "id": "base64url...", "transports": ["internal"] }],
-  ///   "userVerification": "required"
-  /// }
-  /// ```
-  ///
-  /// The [mediation] and [preferImmediatelyAvailableCredentials] parameters have
-  /// sensible defaults since they are not part of the standard WebAuthn JSON format.
+  /// Constructs a new instance from a JSON string.
+  factory AuthenticateRequestType.fromJsonString(
+    String jsonString, {
+    MediationType mediation = MediationType.Optional,
+    bool preferImmediatelyAvailableCredentials = true,
+  }) =>
+      AuthenticateRequestType.fromJson(
+        jsonDecode(jsonString) as Map<String, dynamic>,
+        mediation: mediation,
+        preferImmediatelyAvailableCredentials:
+            preferImmediatelyAvailableCredentials,
+      );
+
+  /// Constructs a new instance from a JSON map.
   factory AuthenticateRequestType.fromJson(
     Map<String, dynamic> json, {
     MediationType mediation = MediationType.Optional,
@@ -53,7 +47,8 @@ class AuthenticateRequestType {
           ?.map((e) => CredentialType.fromJson(e as Map<String, dynamic>))
           .toList(),
       mediation: mediation,
-      preferImmediatelyAvailableCredentials: preferImmediatelyAvailableCredentials,
+      preferImmediatelyAvailableCredentials:
+          preferImmediatelyAvailableCredentials,
     );
   }
 
@@ -93,9 +88,10 @@ class AuthenticateRequestType {
   /// immediately available, such as those that are stored on the device.
   final bool preferImmediatelyAvailableCredentials;
 
-  /// Converts this instance to the standard WebAuthn JSON format.
-  ///
-  /// The output is compatible with `PublicKeyCredential.parseRequestOptionsFromJSON()`.
+  /// Converts this instance to a JSON string.
+  String toJsonString() => jsonEncode(toJson());
+
+  /// Converts this instance to a JSON map.
   Map<String, dynamic> toJson() {
     return {
       'challenge': challenge,

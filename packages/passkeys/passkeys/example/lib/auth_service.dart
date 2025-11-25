@@ -54,36 +54,34 @@ class AuthService {
   final PasskeyAuthenticator authenticator;
 
   Future<void> loginWithPasskey({required String email}) async {
-    final jsonRequest =
+    final jsonRequestString =
         rps.startPasskeyLogin(name: email, configuration: loginConfiguration);
 
-    final request = AuthenticateRequestType.fromJson(
-      jsonRequest,
-    );
+    final request = AuthenticateRequestType.fromJsonString(jsonRequestString);
     final authenticatorRes = await authenticator.authenticate(request);
 
-    rps.finishPasskeyLogin(response: authenticatorRes.toJson());
+    rps.finishPasskeyLogin(response: authenticatorRes.toJsonString());
   }
 
   Future<void> loginWithPasskeyConditionalUI() async {
-    final jsonRequest = rps.startPasskeyLoginConditionalU();
+    final jsonRequestString = rps.startPasskeyLoginConditionalU();
 
-    final request = AuthenticateRequestType.fromJson(
-      jsonRequest,
-    );
+    final request = AuthenticateRequestType.fromJsonString(jsonRequestString);
     final authenticatorRes = await authenticator.authenticate(request);
 
-    rps.finishPasskeyLoginConditionalUI(response: authenticatorRes.toJson());
+    rps.finishPasskeyLoginConditionalUI(
+        response: authenticatorRes.toJsonString());
   }
 
   Future<void> signupWithPasskey({required String email}) async {
-    final jsonRequest = rps.startPasskeyRegister(
+    // Simulate backend API call - server returns JSON string
+    final jsonRequestString = rps.startPasskeyRegister(
         name: email, configuration: signUpConfiguration);
 
-    final request = RegisterRequestType.fromJson(jsonRequest);
+    final request = RegisterRequestType.fromJsonString(jsonRequestString);
     final authenticatorRes = await authenticator.register(request);
 
-    rps.finishPasskeyRegister(response: authenticatorRes.toJson());
+    rps.finishPasskeyRegister(response: authenticatorRes.toJsonString());
   }
 
   GetAvailability getAvailability() {

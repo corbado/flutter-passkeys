@@ -35,11 +35,11 @@ class LocalRelyingPartyServer {
   final Map<String, LocalUser> _inFlightChallenges = HashMap();
   final Random _random = Random();
 
-  /// Starts a passkey registration and returns a standard WebAuthn JSON request.
+  /// Starts a passkey registration and returns a standard WebAuthn JSON request as a string.
   ///
   /// This simulates backend server logic that returns standard WebAuthn JSON
   /// format compatible with `PublicKeyCredential.parseCreationOptionsFromJSON()`.
-  Map<String, dynamic> startPasskeyRegister(
+  String startPasskeyRegister(
       {required String name, Configuration? configuration}) {
     if (_users.containsKey(name)) {
       throw Exception('User $name already exists. Please log in instead');
@@ -86,10 +86,11 @@ class LocalRelyingPartyServer {
           .toList();
     }
 
-    return request;
+    // Return as JSON string (simulating backend API response)
+    return jsonEncode(request);
   }
 
-  /// Finishes passkey registration by processing a standard WebAuthn JSON response.
+  /// Finishes passkey registration by processing a standard WebAuthn JSON response string.
   ///
   /// This simulates backend server logic that receives standard WebAuthn JSON
   /// format from the authenticator.
@@ -110,11 +111,12 @@ class LocalRelyingPartyServer {
   ///
   /// Note: we don't implement a full relying party server here.
   /// To save effort we don't verify the response from the authenticator.
-  LocalUser finishPasskeyRegister({required Map<String, dynamic> response}) {
-    // Parse standard WebAuthn JSON response format
-    final responseData = response['response'] as Map<String, dynamic>;
+  LocalUser finishPasskeyRegister({required String response}) {
+    // Parse JSON string (simulating backend receiving JSON from client)
+    final responseMap = jsonDecode(response) as Map<String, dynamic>;
+    final responseData = responseMap['response'] as Map<String, dynamic>;
     final clientDataJSON = responseData['clientDataJSON'] as String;
-    final id = response['id'] as String;
+    final id = responseMap['id'] as String;
     final transports = responseData['transports'] as List<dynamic>?;
 
     // Decode and parse clientDataJSON to extract challenge
@@ -138,11 +140,11 @@ class LocalRelyingPartyServer {
     return user;
   }
 
-  /// Starts a passkey login and returns a standard WebAuthn JSON request.
+  /// Starts a passkey login and returns a standard WebAuthn JSON request as a string.
   ///
   /// This simulates backend server logic that returns standard WebAuthn JSON
   /// format compatible with `PublicKeyCredential.parseRequestOptionsFromJSON()`.
-  Map<String, dynamic> startPasskeyLogin(
+  String startPasskeyLogin(
       {required String name, Configuration? configuration}) {
     if (!_users.containsKey(name)) {
       throw Exception('User $name does not exist. Please register first');
@@ -178,10 +180,11 @@ class LocalRelyingPartyServer {
       ];
     }
 
-    return request;
+    // Return as JSON string (simulating backend API response)
+    return jsonEncode(request);
   }
 
-  /// Finishes passkey login by processing a standard WebAuthn JSON response.
+  /// Finishes passkey login by processing a standard WebAuthn JSON response string.
   ///
   /// This simulates backend server logic that receives standard WebAuthn JSON
   /// format from the authenticator.
@@ -203,9 +206,9 @@ class LocalRelyingPartyServer {
   ///
   /// Note: we don't implement a full relying party server here.
   /// To save effort we don't verify the response from the authenticator.
-  LocalUser finishPasskeyLogin({required Map<String, dynamic> response}) {
-    // Parse standard WebAuthn JSON response format
-    final responseData = response['response'] as Map<String, dynamic>;
+  LocalUser finishPasskeyLogin({required String response}) {
+    final responseMap = jsonDecode(response) as Map<String, dynamic>;
+    final responseData = responseMap['response'] as Map<String, dynamic>;
     final clientDataJSON = responseData['clientDataJSON'] as String;
 
     // Decode and parse clientDataJSON to extract challenge
@@ -221,23 +224,23 @@ class LocalRelyingPartyServer {
     return user;
   }
 
-  /// Starts a conditional UI passkey login and returns a standard WebAuthn JSON request.
+  /// Starts a conditional UI passkey login and returns a standard WebAuthn JSON request as a string.
   ///
   /// This simulates backend server logic that returns standard WebAuthn JSON
   /// format compatible with `PublicKeyCredential.parseRequestOptionsFromJSON()`.
-  Map<String, dynamic> startPasskeyLoginConditionalU() {
+  String startPasskeyLoginConditionalU() {
     final challenge = generateChallenge();
 
     // Build standard WebAuthn JSON format (as a backend server would)
-    // Note: mediation and preferImmediatelyAvailableCredentials are Flutter-specific
-    // and not part of the standard WebAuthn JSON format
-    return {
+    final request = {
       'challenge': challenge,
       'rpId': rpID,
     };
+
+    return jsonEncode(request);
   }
 
-  /// Finishes conditional UI passkey login by processing a standard WebAuthn JSON response.
+  /// Finishes conditional UI passkey login by processing a standard WebAuthn JSON response string.
   ///
   /// This simulates backend server logic that receives standard WebAuthn JSON
   /// format from the authenticator.
@@ -259,10 +262,9 @@ class LocalRelyingPartyServer {
   ///
   /// Note: we don't implement a full relying party server here.
   /// To save effort we don't verify the response from the authenticator.
-  LocalUser finishPasskeyLoginConditionalUI(
-      {required Map<String, dynamic> response}) {
-    // Parse standard WebAuthn JSON response format
-    final id = response['id'] as String;
+  LocalUser finishPasskeyLoginConditionalUI({required String response}) {
+    final responseMap = jsonDecode(response) as Map<String, dynamic>;
+    final id = responseMap['id'] as String;
 
     LocalUser? existingUser;
     for (final user in _users.values) {

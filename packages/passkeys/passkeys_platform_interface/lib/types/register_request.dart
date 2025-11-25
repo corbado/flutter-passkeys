@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:passkeys_platform_interface/types/authenticator_selection.dart';
 import 'package:passkeys_platform_interface/types/credential.dart';
 import 'package:passkeys_platform_interface/types/pubkeycred_param.dart';
@@ -6,9 +8,6 @@ import 'package:passkeys_platform_interface/types/user.dart';
 
 /// The [RegisterRequestType] is used to create a registration request and send it to the
 /// platform.
-///
-/// This class supports the standard WebAuthn JSON format used by
-/// `PublicKeyCredential.parseCreationOptionsFromJSON()` on web platforms.
 class RegisterRequestType {
   /// Constructs a new instance.
   const RegisterRequestType({
@@ -22,25 +21,12 @@ class RegisterRequestType {
     this.attestation,
   });
 
-  /// Constructs a new instance from a standard WebAuthn JSON map.
-  ///
-  /// This factory parses the JSON format produced by server-side WebAuthn
-  /// implementations (like .NET 10) that is compatible with
-  /// `PublicKeyCredential.parseCreationOptionsFromJSON()`.
-  ///
-  /// Expected JSON structure:
-  /// ```json
-  /// {
-  ///   "rp": { "name": "Example", "id": "example.com" },
-  ///   "user": { "id": "base64url...", "name": "user@example.com", "displayName": "User Name" },
-  ///   "challenge": "base64url...",
-  ///   "pubKeyCredParams": [{ "type": "public-key", "alg": -7 }],
-  ///   "timeout": 60000,
-  ///   "excludeCredentials": [{ "type": "public-key", "id": "base64url...", "transports": ["internal"] }],
-  ///   "authenticatorSelection": { ... },
-  ///   "attestation": "none"
-  /// }
-  /// ```
+  /// Constructs a new instance from a JSON string.
+  factory RegisterRequestType.fromJsonString(String jsonString) =>
+      RegisterRequestType.fromJson(
+          jsonDecode(jsonString) as Map<String, dynamic>);
+
+  /// Constructs a new instance from a JSON map.
   factory RegisterRequestType.fromJson(Map<String, dynamic> json) {
     final excludeCredentials = json['excludeCredentials'] as List<dynamic>?;
 
@@ -99,9 +85,10 @@ class RegisterRequestType {
   /// - "direct"/"enterprise": Conveys unaltered attestation information
   final String? attestation;
 
-  /// Converts this instance to the standard WebAuthn JSON format.
-  ///
-  /// The output is compatible with `PublicKeyCredential.parseCreationOptionsFromJSON()`.
+  /// Converts this instance to a JSON string.
+  String toJsonString() => jsonEncode(toJson());
+
+  /// Converts this instance to a JSON map.
   Map<String, dynamic> toJson() {
     return {
       'challenge': challenge,
