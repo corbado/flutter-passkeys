@@ -1,3 +1,6 @@
+## 2.5.0
+* Adds support for Windows interface.
+
 ## 2.4.0
 * Made authSelectionType optional.
 
