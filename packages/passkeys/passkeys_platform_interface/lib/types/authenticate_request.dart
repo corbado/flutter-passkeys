@@ -22,13 +22,18 @@ class AuthenticateRequestType {
     String jsonString, {
     MediationType mediation = MediationType.Optional,
     bool preferImmediatelyAvailableCredentials = true,
-  }) =>
-      AuthenticateRequestType.fromJson(
-        jsonDecode(jsonString) as Map<String, dynamic>,
-        mediation: mediation,
-        preferImmediatelyAvailableCredentials:
-            preferImmediatelyAvailableCredentials,
-      );
+  }) {
+    final decoded = jsonDecode(jsonString);
+    if (decoded is! Map<String, dynamic>) {
+      throw FormatException('Expected JSON object, got ${decoded.runtimeType}');
+    }
+    return AuthenticateRequestType.fromJson(
+      decoded,
+      mediation: mediation,
+      preferImmediatelyAvailableCredentials:
+          preferImmediatelyAvailableCredentials,
+    );
+  }
 
   /// Constructs a new instance from a JSON map.
   factory AuthenticateRequestType.fromJson(
@@ -39,13 +44,16 @@ class AuthenticateRequestType {
     final allowCredentials = json['allowCredentials'] as List<dynamic>?;
 
     return AuthenticateRequestType(
-      challenge: json['challenge'] as String,
-      relyingPartyId: json['rpId'] as String,
+      challenge: json['challenge'] as String? ?? '',
+      relyingPartyId: json['rpId'] as String? ?? '',
       timeout: json['timeout'] as int?,
       userVerification: json['userVerification'] as String?,
-      allowCredentials: allowCredentials
-          ?.map((e) => CredentialType.fromJson(e as Map<String, dynamic>))
-          .toList(),
+      allowCredentials: allowCredentials != null && allowCredentials.isNotEmpty
+          ? allowCredentials
+              .whereType<Map<String, dynamic>>()
+              .map((e) => CredentialType.fromJson(e))
+              .toList()
+          : null,
       mediation: mediation,
       preferImmediatelyAvailableCredentials:
           preferImmediatelyAvailableCredentials,

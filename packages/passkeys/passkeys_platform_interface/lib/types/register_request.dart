@@ -22,32 +22,47 @@ class RegisterRequestType {
   });
 
   /// Constructs a new instance from a JSON string.
-  factory RegisterRequestType.fromJsonString(String jsonString) =>
-      RegisterRequestType.fromJson(
-          jsonDecode(jsonString) as Map<String, dynamic>);
+  factory RegisterRequestType.fromJsonString(String jsonString) {
+    final decoded = jsonDecode(jsonString);
+    if (decoded is! Map<String, dynamic>) {
+      throw FormatException('Expected JSON object, got ${decoded.runtimeType}');
+    }
+    return RegisterRequestType.fromJson(decoded);
+  }
 
   /// Constructs a new instance from a JSON map.
   factory RegisterRequestType.fromJson(Map<String, dynamic> json) {
     final excludeCredentials = json['excludeCredentials'] as List<dynamic>?;
+    final rp = json['rp'];
+    final user = json['user'];
+    final authenticatorSelection = json['authenticatorSelection'];
+    final pubKeyCredParams = json['pubKeyCredParams'] as List<dynamic>?;
+
+    if (rp is! Map<String, dynamic>) {
+      throw FormatException('Expected "rp" to be a Map, got ${rp.runtimeType}');
+    }
+    if (user is! Map<String, dynamic>) {
+      throw FormatException(
+          'Expected "user" to be a Map, got ${user.runtimeType}');
+    }
 
     return RegisterRequestType(
-      challenge: json['challenge'] as String,
-      relyingParty:
-          RelyingPartyType.fromJson(json['rp'] as Map<String, dynamic>),
-      user: UserType.fromJson(json['user'] as Map<String, dynamic>),
+      challenge: json['challenge'] as String? ?? '',
+      relyingParty: RelyingPartyType.fromJson(rp),
+      user: UserType.fromJson(user),
       excludeCredentials: excludeCredentials != null
           ? excludeCredentials
-              .map((e) => CredentialType.fromJson(e as Map<String, dynamic>))
+              .whereType<Map<String, dynamic>>()
+              .map((e) => CredentialType.fromJson(e))
               .toList()
           : [],
-      authSelectionType: json['authenticatorSelection'] != null
-          ? AuthenticatorSelectionType.fromJson(
-              json['authenticatorSelection'] as Map<String, dynamic>)
+      authSelectionType: authenticatorSelection is Map<String, dynamic>
+          ? AuthenticatorSelectionType.fromJson(authenticatorSelection)
           : null,
-      pubKeyCredParams: json['pubKeyCredParams'] != null
-          ? (json['pubKeyCredParams'] as List<dynamic>)
-              .map((e) =>
-                  PubKeyCredParamType.fromJson(e as Map<String, dynamic>))
+      pubKeyCredParams: pubKeyCredParams != null
+          ? pubKeyCredParams
+              .whereType<Map<String, dynamic>>()
+              .map((e) => PubKeyCredParamType.fromJson(e))
               .toList()
           : null,
       timeout: json['timeout'] as int?,

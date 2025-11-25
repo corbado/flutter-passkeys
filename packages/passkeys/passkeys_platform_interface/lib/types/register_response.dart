@@ -10,20 +10,28 @@ class RegisterResponseType {
   });
 
   /// Constructs a new instance from a JSON string.
-  factory RegisterResponseType.fromJsonString(String jsonString) =>
-      RegisterResponseType.fromJson(
-          jsonDecode(jsonString) as Map<String, dynamic>);
+  factory RegisterResponseType.fromJsonString(String jsonString) {
+    final decoded = jsonDecode(jsonString);
+    if (decoded is! Map<String, dynamic>) {
+      throw FormatException('Expected JSON object, got ${decoded.runtimeType}');
+    }
+    return RegisterResponseType.fromJson(decoded);
+  }
 
   /// Constructs a new instance from a JSON map.
   factory RegisterResponseType.fromJson(Map<String, dynamic> json) {
-    final response = json['response'] as Map<String, dynamic>;
+    final response = json['response'];
+    if (response is! Map<String, dynamic>) {
+      throw FormatException(
+          'Expected "response" to be a Map, got ${response.runtimeType}');
+    }
     final transports = response['transports'] as List<dynamic>?;
 
     return RegisterResponseType(
-      id: json['id'] as String,
-      rawId: json['rawId'] as String,
-      clientDataJSON: response['clientDataJSON'] as String,
-      attestationObject: response['attestationObject'] as String,
+      id: json['id'] as String? ?? '',
+      rawId: json['rawId'] as String? ?? '',
+      clientDataJSON: response['clientDataJSON'] as String? ?? '',
+      attestationObject: response['attestationObject'] as String? ?? '',
       transports: transports?.map((e) => e as String?).toList() ?? [],
     );
   }
