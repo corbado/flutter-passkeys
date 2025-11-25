@@ -40,4 +40,9 @@ class GetAvailability {
   Future<AvailabilityTypeIOS> iOS() {
     return _platform.getAvailability() as Future<AvailabilityTypeIOS>;
   }
+
+  /// Queries the availability of passkeys for Windows platforms.
+  Future<AvailabilityTypeWindows> windows() {
+    return _platform.getAvailability() as Future<AvailabilityTypeWindows>;
+  }
 }
