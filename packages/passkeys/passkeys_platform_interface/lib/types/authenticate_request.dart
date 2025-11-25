@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:passkeys_platform_interface/types/credential.dart';
 import 'package:passkeys_platform_interface/types/mediation.dart';
 
@@ -14,6 +16,49 @@ class AuthenticateRequestType {
     this.userVerification,
     this.allowCredentials,
   });
+
+  /// Constructs a new instance from a JSON string.
+  factory AuthenticateRequestType.fromJsonString(
+    String jsonString, {
+    MediationType mediation = MediationType.Optional,
+    bool preferImmediatelyAvailableCredentials = true,
+  }) {
+    final decoded = jsonDecode(jsonString);
+    if (decoded is! Map<String, dynamic>) {
+      throw FormatException('Expected JSON object, got ${decoded.runtimeType}');
+    }
+    return AuthenticateRequestType.fromJson(
+      decoded,
+      mediation: mediation,
+      preferImmediatelyAvailableCredentials:
+          preferImmediatelyAvailableCredentials,
+    );
+  }
+
+  /// Constructs a new instance from a JSON map.
+  factory AuthenticateRequestType.fromJson(
+    Map<String, dynamic> json, {
+    MediationType mediation = MediationType.Optional,
+    bool preferImmediatelyAvailableCredentials = true,
+  }) {
+    final allowCredentials = json['allowCredentials'] as List<dynamic>?;
+
+    return AuthenticateRequestType(
+      challenge: json['challenge'] as String? ?? '',
+      relyingPartyId: json['rpId'] as String? ?? '',
+      timeout: json['timeout'] as int?,
+      userVerification: json['userVerification'] as String?,
+      allowCredentials: allowCredentials != null && allowCredentials.isNotEmpty
+          ? allowCredentials
+              .whereType<Map<String, dynamic>>()
+              .map((e) => CredentialType.fromJson(e))
+              .toList()
+          : null,
+      mediation: mediation,
+      preferImmediatelyAvailableCredentials:
+          preferImmediatelyAvailableCredentials,
+    );
+  }
 
   /// The relying party ID.
   /// This is typically the domain of the website that is requesting authentication.
@@ -50,4 +95,19 @@ class AuthenticateRequestType {
   /// If this value is `true`, the platform will prefer credentials that are
   /// immediately available, such as those that are stored on the device.
   final bool preferImmediatelyAvailableCredentials;
+
+  /// Converts this instance to a JSON string.
+  String toJsonString() => jsonEncode(toJson());
+
+  /// Converts this instance to a JSON map.
+  Map<String, dynamic> toJson() {
+    return {
+      'challenge': challenge,
+      'rpId': relyingPartyId,
+      if (timeout != null) 'timeout': timeout,
+      if (allowCredentials != null && allowCredentials!.isNotEmpty)
+        'allowCredentials': allowCredentials!.map((e) => e.toJson()).toList(),
+      if (userVerification != null) 'userVerification': userVerification,
+    };
+  }
 }

@@ -1,5 +1,6 @@
 import 'package:passkeys/authenticator.dart';
 import 'package:passkeys/availability.dart';
+import 'package:passkeys/types.dart';
 import 'package:passkeys_example/local_relying_party_server.dart';
 
 class Configuration {
@@ -53,23 +54,34 @@ class AuthService {
   final PasskeyAuthenticator authenticator;
 
   Future<void> loginWithPasskey({required String email}) async {
-    final rps1 =
+    final jsonRequestString =
         rps.startPasskeyLogin(name: email, configuration: loginConfiguration);
-    final authenticatorRes = await authenticator.authenticate(rps1);
-    rps.finishPasskeyLogin(response: authenticatorRes);
+
+    final request = AuthenticateRequestType.fromJsonString(jsonRequestString);
+    final authenticatorRes = await authenticator.authenticate(request);
+
+    rps.finishPasskeyLogin(response: authenticatorRes.toJsonString());
   }
 
   Future<void> loginWithPasskeyConditionalUI() async {
-    final rps1 = rps.startPasskeyLoginConditionalU();
-    final authenticatorRes = await authenticator.authenticate(rps1);
-    rps.finishPasskeyLoginConditionalUI(response: authenticatorRes);
+    final jsonRequestString = rps.startPasskeyLoginConditionalU();
+
+    final request = AuthenticateRequestType.fromJsonString(jsonRequestString);
+    final authenticatorRes = await authenticator.authenticate(request);
+
+    rps.finishPasskeyLoginConditionalUI(
+        response: authenticatorRes.toJsonString());
   }
 
   Future<void> signupWithPasskey({required String email}) async {
-    final rps1 = rps.startPasskeyRegister(
+    // Simulate backend API call - server returns JSON string
+    final jsonRequestString = rps.startPasskeyRegister(
         name: email, configuration: signUpConfiguration);
-    final authenticatorRes = await authenticator.register(rps1);
-    rps.finishPasskeyRegister(response: authenticatorRes);
+
+    final request = RegisterRequestType.fromJsonString(jsonRequestString);
+    final authenticatorRes = await authenticator.register(request);
+
+    rps.finishPasskeyRegister(response: authenticatorRes.toJsonString());
   }
 
   GetAvailability getAvailability() {

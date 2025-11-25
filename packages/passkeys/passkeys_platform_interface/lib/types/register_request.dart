@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:passkeys_platform_interface/types/authenticator_selection.dart';
 import 'package:passkeys_platform_interface/types/credential.dart';
 import 'package:passkeys_platform_interface/types/pubkeycred_param.dart';
@@ -18,6 +20,55 @@ class RegisterRequestType {
     this.timeout,
     this.attestation,
   });
+
+  /// Constructs a new instance from a JSON string.
+  factory RegisterRequestType.fromJsonString(String jsonString) {
+    final decoded = jsonDecode(jsonString);
+    if (decoded is! Map<String, dynamic>) {
+      throw FormatException('Expected JSON object, got ${decoded.runtimeType}');
+    }
+    return RegisterRequestType.fromJson(decoded);
+  }
+
+  /// Constructs a new instance from a JSON map.
+  factory RegisterRequestType.fromJson(Map<String, dynamic> json) {
+    final excludeCredentials = json['excludeCredentials'] as List<dynamic>?;
+    final rp = json['rp'];
+    final user = json['user'];
+    final authenticatorSelection = json['authenticatorSelection'];
+    final pubKeyCredParams = json['pubKeyCredParams'] as List<dynamic>?;
+
+    if (rp is! Map<String, dynamic>) {
+      throw FormatException('Expected "rp" to be a Map, got ${rp.runtimeType}');
+    }
+    if (user is! Map<String, dynamic>) {
+      throw FormatException(
+          'Expected "user" to be a Map, got ${user.runtimeType}');
+    }
+
+    return RegisterRequestType(
+      challenge: json['challenge'] as String? ?? '',
+      relyingParty: RelyingPartyType.fromJson(rp),
+      user: UserType.fromJson(user),
+      excludeCredentials: excludeCredentials != null
+          ? excludeCredentials
+              .whereType<Map<String, dynamic>>()
+              .map((e) => CredentialType.fromJson(e))
+              .toList()
+          : [],
+      authSelectionType: authenticatorSelection is Map<String, dynamic>
+          ? AuthenticatorSelectionType.fromJson(authenticatorSelection)
+          : null,
+      pubKeyCredParams: pubKeyCredParams != null
+          ? pubKeyCredParams
+              .whereType<Map<String, dynamic>>()
+              .map((e) => PubKeyCredParamType.fromJson(e))
+              .toList()
+          : null,
+      timeout: json['timeout'] as int?,
+      attestation: json['attestation'] as String?,
+    );
+  }
 
   /// The Base64URL encoded challenge _without_ padding.
   final String challenge;
@@ -48,4 +99,25 @@ class RegisterRequestType {
   /// - "indirect": May replace attestation data with privacy-friendly versions
   /// - "direct"/"enterprise": Conveys unaltered attestation information
   final String? attestation;
+
+  /// Converts this instance to a JSON string.
+  String toJsonString() => jsonEncode(toJson());
+
+  /// Converts this instance to a JSON map.
+  Map<String, dynamic> toJson() {
+    return {
+      'challenge': challenge,
+      'rp': relyingParty.toJson(),
+      'user': user.toJson(),
+      if (pubKeyCredParams != null)
+        'pubKeyCredParams': pubKeyCredParams!.map((e) => e.toJson()).toList(),
+      if (timeout != null) 'timeout': timeout,
+      if (excludeCredentials.isNotEmpty)
+        'excludeCredentials':
+            excludeCredentials.map((e) => e.toJson()).toList(),
+      if (authSelectionType != null)
+        'authenticatorSelection': authSelectionType!.toJson(),
+      if (attestation != null) 'attestation': attestation,
+    };
+  }
 }

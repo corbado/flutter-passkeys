@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter/foundation.dart';
-import 'package:passkeys/types.dart';
 import 'package:passkeys_example/auth_service.dart';
 
 class LocalUser {
@@ -36,7 +35,11 @@ class LocalRelyingPartyServer {
   final Map<String, LocalUser> _inFlightChallenges = HashMap();
   final Random _random = Random();
 
-  RegisterRequestType startPasskeyRegister(
+  /// Starts a passkey registration and returns a standard WebAuthn JSON request as a string.
+  ///
+  /// This simulates backend server logic that returns standard WebAuthn JSON
+  /// format compatible with `PublicKeyCredential.parseCreationOptionsFromJSON()`.
+  String startPasskeyRegister(
       {required String name, Configuration? configuration}) {
     if (_users.containsKey(name)) {
       throw Exception('User $name already exists. Please log in instead');
@@ -47,64 +50,101 @@ class LocalRelyingPartyServer {
     final challenge = generateChallenge();
     _inFlightChallenges[challenge] = newUser;
 
-    final rp = RelyingPartyType(name: 'local-relying-party-server', id: rpID);
-    final user = UserType(
-      displayName: name,
-      name: name,
-      id: base64Url.encode(userID.codeUnits),
-    );
-    final authenticatorSelection = AuthenticatorSelectionType(
-      requireResidentKey: false,
-      residentKey: 'required',
-      userVerification: 'preferred',
-    );
-
-    return RegisterRequestType(
-      challenge: challenge,
-      relyingParty: rp,
-      user: user,
-      authSelectionType: authenticatorSelection,
-      pubKeyCredParams: [
-        PubKeyCredParamType(type: 'public-key', alg: -7),
-        PubKeyCredParamType(type: 'public-key', alg: -257),
+    // Build standard WebAuthn JSON format (as a backend server would)
+    final request = <String, dynamic>{
+      'challenge': challenge,
+      'rp': {
+        'name': 'local-relying-party-server',
+        'id': rpID,
+      },
+      'user': {
+        'id': base64Url.encode(userID.codeUnits),
+        'name': name,
+        'displayName': name,
+      },
+      'pubKeyCredParams': [
+        {'type': 'public-key', 'alg': -7},
+        {'type': 'public-key', 'alg': -257},
       ],
-      excludeCredentials: configuration?.excludeCredentials == true
-          ? _users.values
-              .map((e) => CredentialType(
-                    type: 'public-key',
-                    id: e.credentialID!,
-                    transports: ['internal'],
-                  ))
-              .toList()
-          : [],
-      timeout: configuration?.timeout ?? 60000,
-    );
+      'authenticatorSelection': {
+        'requireResidentKey': false,
+        'residentKey': 'required',
+        'userVerification': 'preferred',
+      },
+      'timeout': configuration?.timeout ?? 60000,
+    };
+
+    // Add excludeCredentials if configured
+    if (configuration?.excludeCredentials == true && _users.values.isNotEmpty) {
+      request['excludeCredentials'] = _users.values
+          .where((e) => e.credentialID != null)
+          .map((e) => {
+                'type': 'public-key',
+                'id': e.credentialID!,
+                'transports': ['internal'],
+              })
+          .toList();
+    }
+
+    // Return as JSON string (simulating backend API response)
+    return jsonEncode(request);
   }
 
+  /// Finishes passkey registration by processing a standard WebAuthn JSON response string.
+  ///
+  /// This simulates backend server logic that receives standard WebAuthn JSON
+  /// format from the authenticator.
+  ///
+  /// Expected JSON structure:
+  /// ```json
+  /// {
+  ///   "id": "base64url...",
+  ///   "rawId": "base64url...",
+  ///   "type": "public-key",
+  ///   "response": {
+  ///     "clientDataJSON": "base64url...",
+  ///     "attestationObject": "base64url...",
+  ///     "transports": ["internal"]
+  ///   }
+  /// }
+  /// ```
+  ///
   /// Note: we don't implement a full relying party server here.
-  /// To safe effort we don't verify the response from the authenticator.
-  LocalUser finishPasskeyRegister({required RegisterResponseType response}) {
-    final raw = addBase64Padding(response.clientDataJSON);
-    final json = jsonDecode(String.fromCharCodes(base64.decode(raw)));
+  /// To save effort we don't verify the response from the authenticator.
+  LocalUser finishPasskeyRegister({required String response}) {
+    // Parse JSON string (simulating backend receiving JSON from client)
+    final responseMap = jsonDecode(response) as Map<String, dynamic>;
+    final responseData = responseMap['response'] as Map<String, dynamic>;
+    final clientDataJSON = responseData['clientDataJSON'] as String;
+    final id = responseMap['id'] as String;
+    final transports = responseData['transports'] as List<dynamic>?;
 
-    final challenge = json['challenge'];
+    // Decode and parse clientDataJSON to extract challenge
+    final raw = addBase64Padding(clientDataJSON);
+    final clientData = jsonDecode(String.fromCharCodes(base64.decode(raw)));
+
+    final challenge = clientData['challenge'] as String;
     final user = _inFlightChallenges[challenge];
     if (user == null) {
       throw Exception('invalid state: user does not exist');
     }
 
     user
-      ..credentialID = response.id
-      ..transports = response.transports.isEmpty
+      ..credentialID = id
+      ..transports = (transports?.isEmpty ?? true)
           // When using FaceID or TouchID, the transports are empty.
           ? ['internal', 'hybrid']
-          : response.transports as List<String>;
+          : transports!.map((e) => e as String).toList();
     _users[user.name] = user;
 
     return user;
   }
 
-  AuthenticateRequestType startPasskeyLogin(
+  /// Starts a passkey login and returns a standard WebAuthn JSON request as a string.
+  ///
+  /// This simulates backend server logic that returns standard WebAuthn JSON
+  /// format compatible with `PublicKeyCredential.parseRequestOptionsFromJSON()`.
+  String startPasskeyLogin(
       {required String name, Configuration? configuration}) {
     if (!_users.containsKey(name)) {
       throw Exception('User $name does not exist. Please register first');
@@ -113,43 +153,69 @@ class LocalRelyingPartyServer {
     final challenge = generateChallenge();
     _inFlightChallenges[challenge] = _users[name]!;
 
-    return AuthenticateRequestType(
-      relyingPartyId: rpID,
-      challenge: challenge,
-      mediation: MediationType.Optional,
-      userVerification: 'preferred',
-      preferImmediatelyAvailableCredentials:
-          configuration?.preferImmediatelyAvailableCredentials == true
-              ? true
-              : false,
-      allowCredentials: configuration?.allowCredentials == true
-          ? [
-              CredentialType(
-                type: 'public-key',
-                id: 'id',
-                transports: ['internal'],
-              )
-            ]
-          : _users[name]!.credentialID != null
-              ? [
-                  CredentialType(
-                    type: 'public-key',
-                    id: _users[name]!.credentialID!,
-                    transports: _users[name]!.transports,
-                  ),
-                ]
-              : null,
-      timeout: configuration?.timeout ?? 60000,
-    );
+    // Build standard WebAuthn JSON format (as a backend server would)
+    final request = <String, dynamic>{
+      'challenge': challenge,
+      'rpId': rpID,
+      'userVerification': 'preferred',
+      'timeout': configuration?.timeout ?? 60000,
+    };
+
+    // Add allowCredentials if configured or if user has a credential
+    if (configuration?.allowCredentials == true) {
+      request['allowCredentials'] = [
+        {
+          'type': 'public-key',
+          'id': 'id',
+          'transports': ['internal'],
+        }
+      ];
+    } else if (_users[name]!.credentialID != null) {
+      request['allowCredentials'] = [
+        {
+          'type': 'public-key',
+          'id': _users[name]!.credentialID!,
+          'transports': _users[name]!.transports,
+        },
+      ];
+    }
+
+    // Return as JSON string (simulating backend API response)
+    return jsonEncode(request);
   }
 
+  /// Finishes passkey login by processing a standard WebAuthn JSON response string.
+  ///
+  /// This simulates backend server logic that receives standard WebAuthn JSON
+  /// format from the authenticator.
+  ///
+  /// Expected JSON structure:
+  /// ```json
+  /// {
+  ///   "id": "base64url...",
+  ///   "rawId": "base64url...",
+  ///   "type": "public-key",
+  ///   "response": {
+  ///     "clientDataJSON": "base64url...",
+  ///     "authenticatorData": "base64url...",
+  ///     "signature": "base64url...",
+  ///     "userHandle": "base64url..."
+  ///   }
+  /// }
+  /// ```
+  ///
   /// Note: we don't implement a full relying party server here.
-  /// To safe effort we don't verify the response from the authenticator.
-  LocalUser finishPasskeyLogin({required AuthenticateResponseType response}) {
-    final raw = addBase64Padding(response.clientDataJSON);
-    final json = jsonDecode(String.fromCharCodes(base64.decode(raw)));
+  /// To save effort we don't verify the response from the authenticator.
+  LocalUser finishPasskeyLogin({required String response}) {
+    final responseMap = jsonDecode(response) as Map<String, dynamic>;
+    final responseData = responseMap['response'] as Map<String, dynamic>;
+    final clientDataJSON = responseData['clientDataJSON'] as String;
 
-    final challenge = json['challenge'];
+    // Decode and parse clientDataJSON to extract challenge
+    final raw = addBase64Padding(clientDataJSON);
+    final clientData = jsonDecode(String.fromCharCodes(base64.decode(raw)));
+
+    final challenge = clientData['challenge'] as String;
     final user = _inFlightChallenges[challenge];
     if (user == null) {
       throw Exception('invalid state: user does not exist');
@@ -158,24 +224,51 @@ class LocalRelyingPartyServer {
     return user;
   }
 
-  AuthenticateRequestType startPasskeyLoginConditionalU() {
+  /// Starts a conditional UI passkey login and returns a standard WebAuthn JSON request as a string.
+  ///
+  /// This simulates backend server logic that returns standard WebAuthn JSON
+  /// format compatible with `PublicKeyCredential.parseRequestOptionsFromJSON()`.
+  String startPasskeyLoginConditionalU() {
     final challenge = generateChallenge();
 
-    return AuthenticateRequestType(
-      relyingPartyId: rpID,
-      challenge: challenge,
-      mediation: MediationType.Conditional,
-      preferImmediatelyAvailableCredentials: false,
-    );
+    // Build standard WebAuthn JSON format (as a backend server would)
+    final request = {
+      'challenge': challenge,
+      'rpId': rpID,
+    };
+
+    return jsonEncode(request);
   }
 
+  /// Finishes conditional UI passkey login by processing a standard WebAuthn JSON response string.
+  ///
+  /// This simulates backend server logic that receives standard WebAuthn JSON
+  /// format from the authenticator.
+  ///
+  /// Expected JSON structure:
+  /// ```json
+  /// {
+  ///   "id": "base64url...",
+  ///   "rawId": "base64url...",
+  ///   "type": "public-key",
+  ///   "response": {
+  ///     "clientDataJSON": "base64url...",
+  ///     "authenticatorData": "base64url...",
+  ///     "signature": "base64url...",
+  ///     "userHandle": "base64url..."
+  ///   }
+  /// }
+  /// ```
+  ///
   /// Note: we don't implement a full relying party server here.
-  /// To safe effort we don't verify the response from the authenticator.
-  LocalUser finishPasskeyLoginConditionalUI(
-      {required AuthenticateResponseType response}) {
+  /// To save effort we don't verify the response from the authenticator.
+  LocalUser finishPasskeyLoginConditionalUI({required String response}) {
+    final responseMap = jsonDecode(response) as Map<String, dynamic>;
+    final id = responseMap['id'] as String;
+
     LocalUser? existingUser;
     for (final user in _users.values) {
-      if (user.credentialID != null && user.credentialID == response.id) {
+      if (user.credentialID != null && user.credentialID == id) {
         existingUser = user;
       }
     }
