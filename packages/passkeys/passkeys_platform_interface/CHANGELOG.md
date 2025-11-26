@@ -1,3 +1,6 @@
+## 2.6.0
+* Adds support for Serliazable JSON Strings.
+
 ## 2.5.0
 * Adds support for Windows interface.
 
