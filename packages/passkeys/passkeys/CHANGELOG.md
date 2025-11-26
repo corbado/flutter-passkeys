@@ -1,3 +1,7 @@
+## 2.17.0
+* Adds support for Windows.
+* Adds JSON String serliazation to platform interfaces.
+
 ## 2.16.0
 * Fixes `Attestation` not being passed to the register function. (Web)
 * Passes `Attestation` and `ResidentKey` params to Security Key Register Handler. (iOS & macOS)
