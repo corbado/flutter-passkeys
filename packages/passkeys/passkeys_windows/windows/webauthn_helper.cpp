@@ -94,15 +94,24 @@ namespace passkeys_windows
     }
 
     std::string base64(base64_size, 0);
+    DWORD written_size = base64_size;
     if (!CryptBinaryToStringA(data, static_cast<DWORD>(size),
                               CRYPT_STRING_BASE64 | CRYPT_STRING_NOCRLF,
-                              &base64[0], &base64_size))
+                              &base64[0], &written_size))
     {
       throw std::runtime_error("Failed to encode base64");
     }
 
-    // Remove null terminator
-    base64.resize(base64_size - 1);
+    // Resize to actual content length (excluding null terminator if present)
+    // CryptBinaryToStringA writes 'written_size' chars which may include null terminator
+    if (written_size > 0 && base64[written_size - 1] == '\0')
+    {
+      base64.resize(written_size - 1);
+    }
+    else
+    {
+      base64.resize(written_size);
+    }
 
     // Base64 to Base64url conversion
     for (char &c : base64)
