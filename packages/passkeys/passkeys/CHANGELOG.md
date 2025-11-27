@@ -1,3 +1,7 @@
+## 2.17.1
+* Officially adds support for Windows.
+* Fixes minor issues.
+
 ## 2.17.0
 * Adds support for Windows.
 * Adds JSON String serliazation to platform interfaces.
