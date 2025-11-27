@@ -7,9 +7,9 @@ A Flutter package to enable authentication through passkeys (based on WebAuthn /
 Take a look at https://passkeys.flutter.corbado.io for a **live demo** (this is a Flutter web deployment of the example
 on Vercel).
 
-|             | Android            | iOS                | Linux | macOS              | Web                | Windows |
-| ----------- | ------------------ | ------------------ | ----- | ------------------ | ------------------ | ------- |
-| **Support** | :white_check_mark: | :white_check_mark: | :x:   | :white_check_mark: | :white_check_mark: | :x:     |
+|             | Android            | iOS                | Linux | macOS              | Web                | Windows            |
+| ----------- | ------------------ | ------------------ | ----- | ------------------ | ------------------ | ------------------ |
+| **Support** | :white_check_mark: | :white_check_mark: | :x:   | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 
 ## Features
 
