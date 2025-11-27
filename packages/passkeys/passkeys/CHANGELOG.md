@@ -1,3 +1,6 @@
+## 2.17.2
+* Fixes minor issues.
+
 ## 2.17.1
 * Officially adds support for Windows.
 * Fixes minor issues.
