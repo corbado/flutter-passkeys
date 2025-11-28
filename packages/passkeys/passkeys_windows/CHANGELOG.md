@@ -1,3 +1,7 @@
+## 0.1.1
+
+- Fix Base64URL encoding truncation in Windows WebAuthn helper
+
 ## 0.1.0
 
 - Initial release of Windows platform implementation
