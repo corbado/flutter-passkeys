@@ -1,3 +1,6 @@
+## 2.17.3
+* Fixes Base64URL encoding truncation in Windows WebAuthn helper. (Windows)
+
 ## 2.17.2
 * Fixes minor issues.
 
