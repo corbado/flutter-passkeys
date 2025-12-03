@@ -1,3 +1,6 @@
+## 2.17.4
+* Fixes web plugin registration bug preventing automatic inclusion in Flutter's plugin registrant. (Web)
+
 ## 2.17.3
 * Fixes Base64URL encoding truncation in Windows WebAuthn helper. (Windows)
 
