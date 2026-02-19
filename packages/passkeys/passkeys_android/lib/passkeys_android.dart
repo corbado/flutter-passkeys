@@ -106,7 +106,7 @@ class PasskeysAndroid extends PasskeysPlatform {
   //
   @override
   Future<void> cancelCurrentAuthenticatorOperation() async {
-    return;
+    return _api.cancelCurrentAuthenticatorOperation();
   }
 
   // In case of android we link passkey support to the availability of the biometric authentication
