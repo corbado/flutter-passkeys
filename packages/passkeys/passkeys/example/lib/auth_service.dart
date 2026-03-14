@@ -9,13 +9,15 @@ class Configuration {
       this.timeout,
       this.excludeCredentials,
       this.allowCredentials,
-      this.preferImmediatelyAvailableCredentials});
+      this.preferImmediatelyAvailableCredentials,
+      this.authenticatorAttachment});
 
   final String name;
   final int? timeout;
   final bool? excludeCredentials;
   final bool? allowCredentials;
   final bool? preferImmediatelyAvailableCredentials;
+  final String? authenticatorAttachment;
 }
 
 List<Configuration> SIGNUP_ANDROID_CONFIGURATIONS = [

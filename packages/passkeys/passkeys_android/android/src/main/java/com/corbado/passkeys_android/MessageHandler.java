@@ -180,7 +180,12 @@ public class MessageHandler implements Messages.PasskeysApi {
                                 platformException = new Messages.FlutterError("cancelled", e.getMessage(), "");
                             } else if (e instanceof CreateCredentialCancellationException) {
                                 platformException = new Messages.FlutterError("cancelled", e.getMessage(), "");
-                            } else if (e instanceof CreatePublicKeyCredentialDomException) {
+                            // TODO: Refactor CreatePublicKeyCredentialDomException handling to use
+                    //  ((CreatePublicKeyCredentialDomException) e).getDomError().getType()
+                    //  instead of matching on e.getMessage() strings, which are fragile and
+                    //  can change across Google Play Services versions.
+                    //  See: https://www.corbado.com/blog/google-play-services-passkey-error-codes
+                    } else if (e instanceof CreatePublicKeyCredentialDomException) {
                                 if (Objects.equals(e.getMessage(), "User is unable to create passkeys.")) {
                                     platformException = new Messages.FlutterError("android-missing-google-sign-in",
                                             e.getMessage(), MISSING_GOOGLE_SIGN_IN_ERROR);
