@@ -3,6 +3,7 @@ description: Android implementation of the Corbado passkeys plugin. Manages the 
 homepage: https://docs.corbado.com/overview/welcome
 repository: https://github.com/corbado/flutter-passkeys/tree/main/packages/passkeys/passkeys_android
 version: 2.11.0
+resolution: workspace
 
 environment:
   sdk: ">=3.0.0 <4.0.0"

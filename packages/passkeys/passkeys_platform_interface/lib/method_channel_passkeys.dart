@@ -8,16 +8,10 @@ class MethodChannelPasskeys extends PasskeysPlatform {
   Future<bool> canAuthenticate() async => throw UnimplementedError();
 
   @override
-  Future<RegisterResponseType> register(
-    RegisterRequestType request,
-  ) async =>
-      throw UnimplementedError();
+  Future<RegisterResponseType> register(RegisterRequestType request, String? salt) async => throw UnimplementedError();
 
   @override
-  Future<AuthenticateResponseType> authenticate(
-    AuthenticateRequestType request,
-  ) =>
-      throw UnimplementedError();
+  Future<AuthenticateResponseType> authenticate(AuthenticateRequestType request, String? salt) => throw UnimplementedError();
 
   @override
   Future<void> cancelCurrentAuthenticatorOperation() {

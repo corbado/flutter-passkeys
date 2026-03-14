@@ -63,13 +63,25 @@ class AuthenticateController: NSObject, ASAuthorizationControllerDelegate, ASAut
             completion?(.success(response))
             break
         case let r as ASAuthorizationPlatformPublicKeyCredentialAssertion:
+            var prf: String? = nil
+            if #available(iOS 18.0, *),
+               let credPrf = r.prf {
+                let prfBytes = credPrf.first.withUnsafeBytes({ Data($0) })
+                prf = prfBytes.base64EncodedString()
+            }
+            
             let response = AuthenticateResponse(
                 id: r.credentialID.toBase64URL(),
                 rawId: r.credentialID.toBase64URL(),
                 clientDataJSON: r.rawClientDataJSON.toBase64URL(),
                 authenticatorData: r.rawAuthenticatorData.toBase64URL(),
                 signature: r.signature.toBase64URL(),
-                userHandle: r.userID?.toBase64URL()
+                userHandle: r.userID?.toBase64URL(),
+                clientExtensionResults: prf == nil ? nil : ["prf" :
+                                                                ["enabled": true,
+                                                                 "results": ["first": prf]
+                                                                ]
+                                                           ]
             )
 
             completion?(.success(response))

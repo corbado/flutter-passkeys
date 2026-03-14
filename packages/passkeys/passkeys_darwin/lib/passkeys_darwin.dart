@@ -21,7 +21,7 @@ class PasskeysDarwin extends PasskeysPlatform {
   Future<bool> canAuthenticate() async => _api.canAuthenticate();
 
   @override
-  Future<RegisterResponseType> register(RegisterRequestType request) async {
+  Future<RegisterResponseType> register(RegisterRequestType request, String? salt) async {
     final userArg = User(name: request.user.name, id: request.user.id);
     final relyingPartyArg = RelyingParty(
       name: request.relyingParty.name,
@@ -32,21 +32,17 @@ class PasskeysDarwin extends PasskeysPlatform {
       request.challenge,
       relyingPartyArg,
       userArg,
-      request.excludeCredentials
-          .map((e) =>
-              CredentialType(type: e.type, id: e.id, transports: e.transports))
-          .toList(),
+      request.excludeCredentials.map((e) => CredentialType(type: e.type, id: e.id, transports: e.transports ?? [])).toList(),
       request.pubKeyCredParams?.map((e) => e.alg).toList() ?? [],
-      request.authSelectionType == null ||
-          request.authSelectionType!.authenticatorAttachment !=
-              'cross-platform',
-      request.authSelectionType == null ||
-          request.authSelectionType!.authenticatorAttachment != 'platform',
+      request.authSelectionType == null || request.authSelectionType!.authenticatorAttachment != 'cross-platform',
+      request.authSelectionType == null || request.authSelectionType!.authenticatorAttachment != 'platform',
       request.authSelectionType?.residentKey,
       request.attestation,
+      salt,
     );
 
     return RegisterResponseType(
+      clientExtensionResults: r.clientExtensionResults,
       id: r.id,
       rawId: r.rawId,
       clientDataJSON: r.clientDataJSON,
@@ -56,9 +52,7 @@ class PasskeysDarwin extends PasskeysPlatform {
   }
 
   @override
-  Future<AuthenticateResponseType> authenticate(
-    AuthenticateRequestType request,
-  ) async {
+  Future<AuthenticateResponseType> authenticate(AuthenticateRequestType request, String? salt) async {
     var conditionalUI = false;
     if (request.mediation == MediationType.Conditional) {
       conditionalUI = true;
@@ -68,12 +62,9 @@ class PasskeysDarwin extends PasskeysPlatform {
       request.relyingPartyId,
       request.challenge,
       conditionalUI,
-      request.allowCredentials
-              ?.map((e) => CredentialType(
-                  type: e.type, id: e.id, transports: e.transports))
-              .toList() ??
-          [],
+      request.allowCredentials?.map((e) => CredentialType(type: e.type, id: e.id, transports: e.transports ?? [])).toList() ?? [],
       request.preferImmediatelyAvailableCredentials,
+      salt,
     );
 
     return AuthenticateResponseType(
@@ -83,12 +74,12 @@ class PasskeysDarwin extends PasskeysPlatform {
       authenticatorData: r.authenticatorData,
       signature: r.signature,
       userHandle: r.userHandle ?? '',
+      clientExtensionResults: r.clientExtensionResults,
     );
   }
 
   @override
-  Future<void> cancelCurrentAuthenticatorOperation() =>
-      _api.cancelCurrentAuthenticatorOperation();
+  Future<void> cancelCurrentAuthenticatorOperation() => _api.cancelCurrentAuthenticatorOperation();
 
   @override
   Future<AvailabilityTypeIOS> getAvailability() async {

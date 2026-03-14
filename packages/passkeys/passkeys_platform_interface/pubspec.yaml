@@ -5,8 +5,7 @@ repository: https://github.com/corbado/flutter-passkeys/tree/main/packages/passk
 version: 2.6.0
 
 environment:
-  sdk: ">=3.0.0 <4.0.0"
-
+  sdk: '>=3.8.0 <4.0.0'
 dependencies:
   flutter:
     sdk: flutter

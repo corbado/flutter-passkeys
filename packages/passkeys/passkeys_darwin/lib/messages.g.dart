@@ -109,6 +109,7 @@ class RegisterResponse {
     required this.clientDataJSON,
     required this.attestationObject,
     required this.transports,
+    this.clientExtensionResults,
   });
 
   /// The ID
@@ -126,6 +127,9 @@ class RegisterResponse {
   /// The supported transports for the authenticator
   List<String?> transports;
 
+  /// The clientExtensionResults - PRF results
+  Map<String?, Object?>? clientExtensionResults;
+
   Object encode() {
     return <Object?>[
       id,
@@ -133,6 +137,7 @@ class RegisterResponse {
       clientDataJSON,
       attestationObject,
       transports,
+      clientExtensionResults,
     ];
   }
 
@@ -144,6 +149,7 @@ class RegisterResponse {
       clientDataJSON: result[2]! as String,
       attestationObject: result[3]! as String,
       transports: (result[4] as List<Object?>?)!.cast<String?>(),
+      clientExtensionResults: (result[5] as Map<Object?, Object?>?)?.cast<String?, Object?>(),
     );
   }
 }
@@ -157,6 +163,7 @@ class AuthenticateResponse {
     required this.authenticatorData,
     required this.signature,
     this.userHandle,
+    this.clientExtensionResults,
   });
 
   /// The ID
@@ -176,6 +183,9 @@ class AuthenticateResponse {
 
   String? userHandle;
 
+  /// The clientExtensionResults - PRF results
+  Map<String?, Object?>? clientExtensionResults;
+
   Object encode() {
     return <Object?>[
       id,
@@ -184,6 +194,7 @@ class AuthenticateResponse {
       authenticatorData,
       signature,
       userHandle,
+      clientExtensionResults,
     ];
   }
 
@@ -196,6 +207,7 @@ class AuthenticateResponse {
       authenticatorData: result[3]! as String,
       signature: result[4]! as String,
       userHandle: result[5] as String?,
+      clientExtensionResults: (result[6] as Map<Object?, Object?>?)?.cast<String?, Object?>(),
     );
   }
 }
@@ -307,12 +319,12 @@ class PasskeysApi {
     }
   }
 
-  Future<RegisterResponse> register(String arg_challenge, RelyingParty arg_relyingParty, User arg_user, List<CredentialType?> arg_excludeCredentials, List<int?> arg_pubKeyCredValues, bool arg_canBePlatformAuthenticator, bool arg_canBeSecurityKey, String? arg_residentKeyPreference, String? arg_attestationPreference) async {
+  Future<RegisterResponse> register(String arg_challenge, RelyingParty arg_relyingParty, User arg_user, List<CredentialType?> arg_excludeCredentials, List<int?> arg_pubKeyCredValues, bool arg_canBePlatformAuthenticator, bool arg_canBeSecurityKey, String? arg_residentKeyPreference, String? arg_attestationPreference, String? arg_salt) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
         'dev.flutter.pigeon.passkeys_darwin.PasskeysApi.register', codec,
         binaryMessenger: _binaryMessenger);
     final List<Object?>? replyList =
-        await channel.send(<Object?>[arg_challenge, arg_relyingParty, arg_user, arg_excludeCredentials, arg_pubKeyCredValues, arg_canBePlatformAuthenticator, arg_canBeSecurityKey, arg_residentKeyPreference, arg_attestationPreference]) as List<Object?>?;
+        await channel.send(<Object?>[arg_challenge, arg_relyingParty, arg_user, arg_excludeCredentials, arg_pubKeyCredValues, arg_canBePlatformAuthenticator, arg_canBeSecurityKey, arg_residentKeyPreference, arg_attestationPreference, arg_salt]) as List<Object?>?;
     if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
@@ -334,12 +346,12 @@ class PasskeysApi {
     }
   }
 
-  Future<AuthenticateResponse> authenticate(String arg_relyingPartyId, String arg_challenge, bool arg_conditionalUI, List<CredentialType?> arg_allowedCredentials, bool arg_preferImmediatelyAvailableCredentials) async {
+  Future<AuthenticateResponse> authenticate(String arg_relyingPartyId, String arg_challenge, bool arg_conditionalUI, List<CredentialType?> arg_allowedCredentials, bool arg_preferImmediatelyAvailableCredentials, String? arg_salt) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
         'dev.flutter.pigeon.passkeys_darwin.PasskeysApi.authenticate', codec,
         binaryMessenger: _binaryMessenger);
     final List<Object?>? replyList =
-        await channel.send(<Object?>[arg_relyingPartyId, arg_challenge, arg_conditionalUI, arg_allowedCredentials, arg_preferImmediatelyAvailableCredentials]) as List<Object?>?;
+        await channel.send(<Object?>[arg_relyingPartyId, arg_challenge, arg_conditionalUI, arg_allowedCredentials, arg_preferImmediatelyAvailableCredentials, arg_salt]) as List<Object?>?;
     if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',

@@ -7,13 +7,7 @@ part of 'relying_party.dart';
 // **************************************************************************
 
 RelyingPartyType _$RelyingPartyTypeFromJson(Map<String, dynamic> json) =>
-    RelyingPartyType(
-      name: json['name'] as String,
-      id: json['id'] as String,
-    );
+    RelyingPartyType(name: json['name'] as String, id: json['id'] as String);
 
 Map<String, dynamic> _$RelyingPartyTypeToJson(RelyingPartyType instance) =>
-    <String, dynamic>{
-      'name': instance.name,
-      'id': instance.id,
-    };
+    <String, dynamic>{'name': instance.name, 'id': instance.id};

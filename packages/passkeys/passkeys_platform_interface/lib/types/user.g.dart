@@ -7,13 +7,13 @@ part of 'user.dart';
 // **************************************************************************
 
 UserType _$UserTypeFromJson(Map<String, dynamic> json) => UserType(
-      displayName: json['displayName'] as String,
-      name: json['name'] as String,
-      id: json['id'] as String,
-    );
+  displayName: json['displayName'] as String,
+  name: json['name'] as String,
+  id: json['id'] as String,
+);
 
 Map<String, dynamic> _$UserTypeToJson(UserType instance) => <String, dynamic>{
-      'displayName': instance.displayName,
-      'name': instance.name,
-      'id': instance.id,
-    };
+  'displayName': instance.displayName,
+  'name': instance.name,
+  'id': instance.id,
+};

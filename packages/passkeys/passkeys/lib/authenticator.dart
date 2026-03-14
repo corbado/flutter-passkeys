@@ -9,9 +9,7 @@ import 'package:passkeys_platform_interface/passkeys_platform_interface.dart';
 /// flow.
 class PasskeyAuthenticator {
   /// Constructor
-  PasskeyAuthenticator({bool? debugMode})
-      : _platform = PasskeysPlatform.instance,
-        debugMode = debugMode ?? false;
+  PasskeyAuthenticator({bool? debugMode}) : _platform = PasskeysPlatform.instance, debugMode = debugMode ?? false;
 
   /// The [PasskeysDoctor] instance for debugging and checking passkeys
   final _doctor = PasskeysDoctor();
@@ -23,8 +21,10 @@ class PasskeyAuthenticator {
   final bool debugMode;
 
   /// Returns true only if passkeys are supported by the platform.
-  @Deprecated('Use PasskeyAvailability.isAvailable instead. '
-      'This method will be removed in a future release.')
+  @Deprecated(
+    'Use PasskeyAvailability.isAvailable instead. '
+    'This method will be removed in a future release.',
+  )
   Future<bool> canAuthenticate() {
     return _platform.canAuthenticate();
   }
@@ -40,7 +40,7 @@ class PasskeyAuthenticator {
   /// Creates a new passkey and stores it on the device.
   /// Returns [RegisterResponseType] which must be sent to the relying party
   /// server.
-  Future<RegisterResponseType> register(RegisterRequestType request) async {
+  Future<RegisterResponseType> register(RegisterRequestType request, {String? salt}) async {
     if (debugMode) {
       await _doctor.check(request.relyingParty.id);
     }
@@ -56,7 +56,7 @@ class PasskeyAuthenticator {
         _isValidCredentialID(credential.id);
       }
 
-      final r = await _platform.register(request);
+      final r = await _platform.register(request, salt);
 
       return r;
     } on PlatformException catch (e) {
@@ -92,9 +92,7 @@ class PasskeyAuthenticator {
   /// Authenticates a user with a passkey.
   /// Returns [AuthenticateResponseType] which must be sent to the relying party
   /// server.
-  Future<AuthenticateResponseType> authenticate(
-    AuthenticateRequestType request,
-  ) async {
+  Future<AuthenticateResponseType> authenticate(AuthenticateRequestType request, {String? salt}) async {
     if (debugMode) {
       await _doctor.check(request.relyingPartyId);
     }
@@ -110,7 +108,7 @@ class PasskeyAuthenticator {
         }
       }
 
-      final r = await _platform.authenticate(request);
+      final r = await _platform.authenticate(request, salt);
 
       return r;
     } on PlatformException catch (e) {
@@ -174,9 +172,7 @@ class PasskeyAuthenticator {
   void _isValidChallenge(String challenge) {
     if (!_isValidBase64Url(input: challenge)) {
       if (debugMode) {
-        _doctor.recordException(
-          PlatformException(code: 'malformed-base64-url-challenge'),
-        );
+        _doctor.recordException(PlatformException(code: 'malformed-base64-url-challenge'));
       }
       throw MalformedBase64UrlChallenge();
     }
@@ -186,9 +182,7 @@ class PasskeyAuthenticator {
   void _isValidCredentialID(String credentialID) {
     if (!_isValidBase64Url(input: credentialID)) {
       if (debugMode) {
-        _doctor.recordException(
-          PlatformException(code: 'malformed-base64-url-credential-id'),
-        );
+        _doctor.recordException(PlatformException(code: 'malformed-base64-url-credential-id'));
       }
       throw MalformedBase64UrlCredentialID();
     }
@@ -198,9 +192,7 @@ class PasskeyAuthenticator {
   void _isValidUserID(String userID) {
     if (!_isValidBase64Url(input: userID, allowPadding: true)) {
       if (debugMode) {
-        _doctor.recordException(
-          PlatformException(code: 'malformed-base64-url-user-id'),
-        );
+        _doctor.recordException(PlatformException(code: 'malformed-base64-url-user-id'));
       }
       throw MalformedBase64UrlUserID();
     }
@@ -227,8 +219,7 @@ class PasskeyAuthenticator {
     if (!base64UrlRegex.hasMatch(input)) return false;
 
     try {
-      String normalized =
-          input.padRight(input.length + (4 - input.length % 4) % 4, '=');
+      String normalized = input.padRight(input.length + (4 - input.length % 4) % 4, '=');
       base64Url.decode(normalized);
 
       return true;

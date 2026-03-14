@@ -37,13 +37,26 @@ class RegisterController: NSObject, ASAuthorizationControllerDelegate, ASAuthori
     func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
         switch authorization.credential {
         case let credentialRegistration as ASAuthorizationPlatformPublicKeyCredentialRegistration:
+            var prf: String? = nil
+            if #available(iOS 18.0, *),
+               let credPrf = credentialRegistration.prf,
+               let prfBytes = credPrf.first?.withUnsafeBytes({ Data($0) }) {
+                prf = prfBytes.base64EncodedString()
+            }
+            
             let response = RegisterResponse(
                 id: credentialRegistration.credentialID.toBase64URL(),
                 rawId: credentialRegistration.credentialID.toBase64URL(),
                 clientDataJSON: credentialRegistration.rawClientDataJSON.toBase64URL(),
                 attestationObject: credentialRegistration.rawAttestationObject!.toBase64URL(),
-                transports: []
+                transports: [],
+                clientExtensionResults: prf == nil ? nil : ["prf" :
+                                                                ["enabled": true,
+                                                                 "results": ["first": prf]
+                                                                ]
+                                                           ]
             )
+            
             completion?(.success(response))
             break
         case let securityKeyRegistration as ASAuthorizationSecurityKeyPublicKeyCredentialRegistration:

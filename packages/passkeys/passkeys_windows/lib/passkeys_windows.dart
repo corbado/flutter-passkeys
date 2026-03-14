@@ -16,9 +16,7 @@ class PasskeysWindows extends PasskeysPlatform {
   final PasskeysApi _api;
 
   @override
-  Future<AuthenticateResponseType> authenticate(
-    AuthenticateRequestType request,
-  ) async {
+  Future<AuthenticateResponseType> authenticate(AuthenticateRequestType request, String? salt) async {
     final authenticateResponse = await _api.authenticate(
       request.relyingPartyId,
       request.challenge,
@@ -29,7 +27,7 @@ class PasskeysWindows extends PasskeysPlatform {
             (e) => AllowCredential(
               type: e.type,
               id: e.id,
-              transports: e.transports,
+              transports: e.transports ?? [],
             ),
           )
           .toList(),
@@ -57,7 +55,7 @@ class PasskeysWindows extends PasskeysPlatform {
   }
 
   @override
-  Future<RegisterResponseType> register(RegisterRequestType request) async {
+  Future<RegisterResponseType> register(RegisterRequestType request, String? salt) async {
     final userArg = User(
       displayName: request.user.displayName,
       name: request.user.name,
@@ -74,8 +72,7 @@ class PasskeysWindows extends PasskeysPlatform {
 
     if (requestAuthSelectionType != null) {
       authSelection = AuthenticatorSelection(
-        authenticatorAttachment:
-            requestAuthSelectionType.authenticatorAttachment,
+        authenticatorAttachment: requestAuthSelectionType.authenticatorAttachment,
         requireResidentKey: requestAuthSelectionType.requireResidentKey,
         residentKey: requestAuthSelectionType.residentKey,
         userVerification: requestAuthSelectionType.userVerification,
@@ -87,14 +84,10 @@ class PasskeysWindows extends PasskeysPlatform {
       relyingPartyArg,
       userArg,
       authSelection,
-      request.pubKeyCredParams
-          ?.map((e) => PubKeyCredParam(type: e.type, alg: e.alg))
-          .toList(),
+      request.pubKeyCredParams?.map((e) => PubKeyCredParam(type: e.type, alg: e.alg)).toList(),
       request.timeout,
       request.attestation,
-      request.excludeCredentials
-          .map((e) => ExcludeCredential(type: e.type, id: e.id))
-          .toList(),
+      request.excludeCredentials.map((e) => ExcludeCredential(type: e.type, id: e.id)).toList(),
     );
 
     return RegisterResponseType(
@@ -107,20 +100,17 @@ class PasskeysWindows extends PasskeysPlatform {
   }
 
   @override
-  Future<void> cancelCurrentAuthenticatorOperation() =>
-      _api.cancelCurrentAuthenticatorOperation();
+  Future<void> cancelCurrentAuthenticatorOperation() => _api.cancelCurrentAuthenticatorOperation();
 
   @override
   Future<AvailabilityTypeWindows> getAvailability() async {
-    final isUserVerifyingPlatformAuthenticatorAvailable =
-        await canAuthenticate();
+    final isUserVerifyingPlatformAuthenticatorAvailable = await canAuthenticate();
 
     final hasPasskeySupport = await _api.hasPasskeySupport();
 
     return AvailabilityTypeWindows(
       hasPasskeySupport: hasPasskeySupport,
-      isUserVerifyingPlatformAuthenticatorAvailable:
-          isUserVerifyingPlatformAuthenticatorAvailable,
+      isUserVerifyingPlatformAuthenticatorAvailable: isUserVerifyingPlatformAuthenticatorAvailable,
       isNative: true,
     );
   }

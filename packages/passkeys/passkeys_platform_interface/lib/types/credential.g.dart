@@ -10,8 +10,8 @@ CredentialType _$CredentialTypeFromJson(Map<String, dynamic> json) =>
     CredentialType(
       type: json['type'] as String,
       id: json['id'] as String,
-      transports: (json['transports'] as List<dynamic>)
-          .map((e) => e as String)
+      transports: (json['transports'] as List<dynamic>?)
+          ?.map((e) => e as String)
           .toList(),
     );
 

@@ -16,9 +16,7 @@ class PasskeysAndroid extends PasskeysPlatform {
   final PasskeysApi _api;
 
   @override
-  Future<AuthenticateResponseType> authenticate(
-    AuthenticateRequestType request,
-  ) async {
+  Future<AuthenticateResponseType> authenticate(AuthenticateRequestType request, String? salt) async {
     final r = await _api.authenticate(
       request.relyingPartyId,
       request.challenge,
@@ -28,10 +26,11 @@ class PasskeysAndroid extends PasskeysPlatform {
         return AllowCredential(
           id: e.id,
           type: e.type,
-          transports: e.transports,
+          transports: e.transports ?? [],
         );
       }).toList(),
       request.preferImmediatelyAvailableCredentials,
+      salt,
     );
 
     return AuthenticateResponseType(
@@ -40,7 +39,8 @@ class PasskeysAndroid extends PasskeysPlatform {
         clientDataJSON: r.clientDataJSON,
         authenticatorData: r.authenticatorData,
         signature: r.signature,
-        userHandle: r.userHandle);
+        userHandle: r.userHandle,
+        clientExtensionResults: r.clientExtensionResults);
   }
 
   @override
@@ -54,7 +54,7 @@ class PasskeysAndroid extends PasskeysPlatform {
   }
 
   @override
-  Future<RegisterResponseType> register(RegisterRequestType request) async {
+  Future<RegisterResponseType> register(RegisterRequestType request, String? salt) async {
     final userArg = User(
       displayName: request.user.displayName,
       name: request.user.name,
@@ -85,14 +85,11 @@ class PasskeysAndroid extends PasskeysPlatform {
         relyingPartyArg,
         userArg,
         authSelection,
-        request.pubKeyCredParams
-            ?.map((e) => PubKeyCredParam(alg: e.alg, type: e.type))
-            .toList(),
+        request.pubKeyCredParams?.map((e) => PubKeyCredParam(alg: e.alg, type: e.type)).toList(),
         request.timeout,
         request.attestation,
-        request.excludeCredentials
-            .map((e) => ExcludeCredential(id: e.id, type: e.type))
-            .toList());
+        request.excludeCredentials.map((e) => ExcludeCredential(id: e.id, type: e.type)).toList(),
+        salt);
 
     return RegisterResponseType(
       id: r.id,
@@ -100,6 +97,7 @@ class PasskeysAndroid extends PasskeysPlatform {
       clientDataJSON: r.clientDataJSON,
       attestationObject: r.attestationObject,
       transports: r.transports.whereType<String>().toList(),
+      clientExtensionResults: r.clientExtensionResults,
     );
   }
 
@@ -112,15 +110,13 @@ class PasskeysAndroid extends PasskeysPlatform {
   // In case of android we link passkey support to the availability of the biometric authentication
   @override
   Future<AvailabilityTypeAndroid> getAvailability() async {
-    final isUserVerifyingPlatformAuthenticatorAvailable =
-        await canAuthenticate();
+    final isUserVerifyingPlatformAuthenticatorAvailable = await canAuthenticate();
 
     final hasPasskeySupport = await _api.hasPasskeySupport();
 
     return AvailabilityTypeAndroid(
       hasPasskeySupport: hasPasskeySupport,
-      isUserVerifyingPlatformAuthenticatorAvailable:
-          isUserVerifyingPlatformAuthenticatorAvailable,
+      isUserVerifyingPlatformAuthenticatorAvailable: isUserVerifyingPlatformAuthenticatorAvailable,
       isNative: true,
     );
   }

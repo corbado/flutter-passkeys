@@ -2,6 +2,7 @@ package com.corbado.passkeys_android;
 
 import android.app.Activity;
 import android.os.CancellationSignal;
+import android.util.Base64;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -41,7 +42,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -89,7 +92,9 @@ public class MessageHandler implements Messages.PasskeysApi {
             @Nullable Long timeout,
             @Nullable String attestation,
             @NonNull List<Messages.ExcludeCredential> excludeCredentials,
-            @NonNull Messages.Result<Messages.RegisterResponse> result) {
+            @Nullable String salt,
+            @NonNull Messages.Result<Messages.RegisterResponse> result
+            ) {
         if (android.os.Build.VERSION.SDK_INT < 28) {
             result.error(new Messages.FlutterError("android-passkey-unsupported",
                     "Passkeys are only supported on Android API 28 and above.", null));
@@ -123,7 +128,24 @@ public class MessageHandler implements Messages.PasskeysApi {
                 excludeCredentialsType);
 
         try {
-            String options = createCredentialOptions.toJSON().toString();
+            JSONObject optionsJson = createCredentialOptions.toJSON();
+
+            // PRF extension if salt provided
+            if (salt != null && !salt.isEmpty()) {
+                String saltBase64Url = hexToBase64Url(salt);
+                JSONObject extensions = optionsJson.optJSONObject("extensions");
+                if (extensions == null) extensions = new JSONObject();
+
+                JSONObject prf = new JSONObject();
+                JSONObject eval = new JSONObject();
+                eval.put("first", saltBase64Url);
+                prf.put("eval", eval);
+
+                extensions.put("prf", prf);
+                optionsJson.put("extensions", extensions);
+            }
+            String options = optionsJson.toString();
+            Log.i("Passkeys", "options = " + options);
 
             Activity activity = plugin.requireActivity();
             CredentialManager credentialManager = CredentialManager.create(activity);
@@ -158,12 +180,32 @@ public class MessageHandler implements Messages.PasskeysApi {
                                     typedTransports.add("");
                                 }
 
+                                JSONObject ext = json.optJSONObject("clientExtensionResults");
+                                Map<String, Object> extMap = null;
+
+                                if (ext != null) {
+                                    extMap = new HashMap<>();
+
+                                    JSONObject prf = ext.optJSONObject("prf");
+                                    if (prf != null) {
+                                        JSONObject results = prf.optJSONObject("results");
+                                        if (results != null) {
+                                            String first = results.optString("first", "");
+                                            Map<String, Object> resultsMap = new HashMap<>();
+                                            resultsMap.put("first", first);
+                                            Map<String, Object> prfMap = new HashMap<>();
+                                            prfMap.put("results", resultsMap);
+                                            extMap.put("prf", prfMap);
+                                        }
+                                    }
+                                }
                                 result.success(new Messages.RegisterResponse.Builder()
                                         .setId(json.getString("id"))
                                         .setRawId(json.getString("rawId"))
                                         .setClientDataJSON(response.getString("clientDataJSON"))
                                         .setAttestationObject(response.getString("attestationObject"))
                                         .setTransports(typedTransports)
+                                        .setClientExtensionResults(extMap)
                                         .build());
                             } catch (JSONException e) {
                                 Log.e(TAG, "Error parsing response: " + resp, e);
@@ -219,6 +261,7 @@ public class MessageHandler implements Messages.PasskeysApi {
     public void authenticate(@NonNull String relyingPartyId, @NonNull String challenge, @Nullable Long timeout,
             @Nullable String userVerification, @Nullable List<Messages.AllowCredential> allowCredentials,
             @Nullable Boolean preferImmediatelyAvailableCredentials,
+            @Nullable String salt,
             @NonNull Messages.Result<Messages.AuthenticateResponse> result) {
         if (android.os.Build.VERSION.SDK_INT < 28) {
             result.error(new Messages.FlutterError("android-passkey-unsupported",
@@ -235,8 +278,24 @@ public class MessageHandler implements Messages.PasskeysApi {
         GetCredentialOptions getCredentialOptions = new GetCredentialOptions(challenge, timeout, relyingPartyId,
                 allowCredentialsType, userVerification);
         try {
-            String options = getCredentialOptions.toJSON().toString();
+            JSONObject optionsJson = getCredentialOptions.toJSON();
+            // PRF extension if salt provided
+            if (salt != null && !salt.isEmpty()) {
+                String saltBase64Url = hexToBase64Url(salt);
+                Log.i("Passkey", "salt provided auth" + saltBase64Url);
+                JSONObject extensions = optionsJson.optJSONObject("extensions");
+                if (extensions == null) extensions = new JSONObject();
 
+                JSONObject prf = new JSONObject();
+                JSONObject eval = new JSONObject();
+                eval.put("first", saltBase64Url);
+                prf.put("eval", eval);
+
+                extensions.put("prf", prf);
+                optionsJson.put("extensions", extensions);
+            }
+            String options = optionsJson.toString();
+            Log.i("Passkeys", "options = " + options);
             Activity activity = plugin.requireActivity();
 
             CredentialManager credentialManager = CredentialManager.create(activity);
@@ -275,9 +334,30 @@ public class MessageHandler implements Messages.PasskeysApi {
                                     final String signature = response.getString("signature");
                                     final String authenticatorData = response.getString("authenticatorData");
 
+                                    JSONObject ext = json.optJSONObject("clientExtensionResults");
+                                    Map<String, Object> extMap = null;
+
+                                    if (ext != null) {
+                                        extMap = new HashMap<>();
+
+                                        JSONObject prf = ext.optJSONObject("prf");
+                                        if (prf != null) {
+                                            JSONObject results = prf.optJSONObject("results");
+                                            if (results != null) {
+                                                String first = results.optString("first", "");
+                                                Map<String, Object> resultsMap = new HashMap<>();
+                                                resultsMap.put("first", first);
+                                                Map<String, Object> prfMap = new HashMap<>();
+                                                prfMap.put("results", resultsMap);
+                                                extMap.put("prf", prfMap);
+                                            }
+                                        }
+                                    }
                                     final Messages.AuthenticateResponse msg = new Messages.AuthenticateResponse.Builder()
                                             .setId(id).setRawId(rawId).setClientDataJSON(clientDataJSON)
-                                            .setAuthenticatorData(authenticatorData).setSignature(signature)
+                                            .setAuthenticatorData(authenticatorData)
+                                            .setSignature(signature)
+                                            .setClientExtensionResults(extMap)
                                             .setUserHandle(userHandle).build();
 
                                     result.success(msg);
@@ -338,5 +418,18 @@ public class MessageHandler implements Messages.PasskeysApi {
         }
 
         result.success(null);
+    }
+
+    ///  `hexToBase64Url`
+    public static String hexToBase64Url(String hex) {
+        int len = hex.length();
+        byte[] bytes = new byte[len / 2];
+        for (int i = 0; i < len; i += 2) {
+            bytes[i / 2] = (byte) Integer.parseInt(hex.substring(i, i + 2), 16);
+        }
+        return Base64.encodeToString(
+                bytes,
+                Base64.URL_SAFE | Base64.NO_PADDING | Base64.NO_WRAP
+        );
     }
 }

@@ -53,6 +53,7 @@ public class PasskeysPlugin: NSObject, FlutterPlugin, PasskeysApi {
         canBeSecurityKey: Bool = true,
         residentKeyPreference: String?,
         attestationPreference: String?,
+        salt: String?,
         completion: @escaping (Result<RegisterResponse, Error>) -> Void
     ) {
         guard (try? canAuthenticate()) == true else {
@@ -86,6 +87,15 @@ public class PasskeysPlugin: NSObject, FlutterPlugin, PasskeysApi {
             if #available(iOS 17.4, *) {
                 let excluded = parseCredentials(credentials: excludeCredentials)
                 platformRequest.excludedCredentials = excluded
+            }
+
+            // PRF
+            if #available(iOS 18.0, *) {
+                guard let salt = salt, let saltData = Data(hex: salt) else {
+                return
+            }
+            let values = ASAuthorizationPublicKeyCredentialPRFAssertionInput.InputValues(saltInput1: saltData)
+                platformRequest.prf = ASAuthorizationPublicKeyCredentialPRFRegistrationInput.inputValues(values)
             }
             
             requests.append(platformRequest)
@@ -154,6 +164,7 @@ public class PasskeysPlugin: NSObject, FlutterPlugin, PasskeysApi {
         conditionalUI: Bool,
         allowedCredentials: [CredentialType],
         preferImmediatelyAvailableCredentials: Bool,
+        salt: String?,
         completion: @escaping (Result<AuthenticateResponse, Error>) -> Void
     ) {
         guard (try? canAuthenticate()) == true else {
@@ -171,6 +182,14 @@ public class PasskeysPlugin: NSObject, FlutterPlugin, PasskeysApi {
         let platformProvider = ASAuthorizationPlatformPublicKeyCredentialProvider(relyingPartyIdentifier: relyingPartyId)
         let platformRequest = platformProvider.createCredentialAssertionRequest(challenge: decodedChallenge)
         platformRequest.allowedCredentials = parseCredentials(credentials: allowedCredentials)
+        
+        // PRF
+        if #available(iOS 18.0, *) {
+            guard let salt = salt, let saltData = Data(hex: salt) else { return }
+        let values = ASAuthorizationPublicKeyCredentialPRFAssertionInput.InputValues(saltInput1: saltData)
+            platformRequest.prf = ASAuthorizationPublicKeyCredentialPRFAssertionInput.inputValues(values)
+        }
+        
         requests.append(platformRequest)
         
         // We should not show the security key flow when preferImmediatelyAvailable is set to true
@@ -284,9 +303,37 @@ public extension Data {
         return fromBase64(base64String)
     }
 
+    func toBase64URL() -> String {
+        var result = self.base64EncodedString()
+        result = result.replacingOccurrences(of: "+", with: "-")
+        result = result.replacingOccurrences(of: "/", with: "_")
+        result = result.replacingOccurrences(of: "=", with: "")
+        return result
+    }
+
     private static func base64UrlToBase64(base64Url: String) -> String {
         return base64Url.replacingOccurrences(of: "-", with: "+")
                          .replacingOccurrences(of: "_", with: "/")
+    }
+    
+    
+    /// init    - https://stackoverflow.com/questions/26501276/converting-hex-string-to-nsdata-in-swift
+    init?(hex: String) {
+        let hex = hex.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard hex.count % 2 == 0 else { return nil }
+
+        var data = Data(capacity: hex.count / 2)
+        var index = hex.startIndex
+
+        while index < hex.endIndex {
+            let nextIndex = hex.index(index, offsetBy: 2)
+            let byteString = hex[index..<nextIndex]
+            guard let byte = UInt8(byteString, radix: 16) else { return nil }
+            data.append(byte)
+            index = nextIndex
+        }
+
+        self = data
     }
 }
 
@@ -299,12 +346,3 @@ public extension String {
     }
 }
 
-extension Data {
-    func toBase64URL() -> String {
-        var result = self.base64EncodedString()
-        result = result.replacingOccurrences(of: "+", with: "-")
-        result = result.replacingOccurrences(of: "/", with: "_")
-        result = result.replacingOccurrences(of: "=", with: "")
-        return result
-    }
-}

@@ -135,6 +135,8 @@ struct RegisterResponse {
   var attestationObject: String
   /// The supported transports for the authenticator
   var transports: [String?]
+  /// The clientExtensionResults - PRF results
+  var clientExtensionResults: [String?: Any?]? = nil
 
   static func fromList(_ list: [Any?]) -> RegisterResponse? {
     let id = list[0] as! String
@@ -142,13 +144,15 @@ struct RegisterResponse {
     let clientDataJSON = list[2] as! String
     let attestationObject = list[3] as! String
     let transports = list[4] as! [String?]
+    let clientExtensionResults: [String?: Any?]? = nilOrValue(list[5])
 
     return RegisterResponse(
       id: id,
       rawId: rawId,
       clientDataJSON: clientDataJSON,
       attestationObject: attestationObject,
-      transports: transports
+      transports: transports,
+      clientExtensionResults: clientExtensionResults
     )
   }
   func toList() -> [Any?] {
@@ -158,6 +162,7 @@ struct RegisterResponse {
       clientDataJSON,
       attestationObject,
       transports,
+      clientExtensionResults,
     ]
   }
 }
@@ -177,6 +182,8 @@ struct AuthenticateResponse {
   /// Signed challenge
   var signature: String
   var userHandle: String? = nil
+  /// The clientExtensionResults - PRF results
+  var clientExtensionResults: [String?: Any?]? = nil
 
   static func fromList(_ list: [Any?]) -> AuthenticateResponse? {
     let id = list[0] as! String
@@ -185,6 +192,7 @@ struct AuthenticateResponse {
     let authenticatorData = list[3] as! String
     let signature = list[4] as! String
     let userHandle: String? = nilOrValue(list[5])
+    let clientExtensionResults: [String?: Any?]? = nilOrValue(list[6])
 
     return AuthenticateResponse(
       id: id,
@@ -192,7 +200,8 @@ struct AuthenticateResponse {
       clientDataJSON: clientDataJSON,
       authenticatorData: authenticatorData,
       signature: signature,
-      userHandle: userHandle
+      userHandle: userHandle,
+      clientExtensionResults: clientExtensionResults
     )
   }
   func toList() -> [Any?] {
@@ -203,6 +212,7 @@ struct AuthenticateResponse {
       authenticatorData,
       signature,
       userHandle,
+      clientExtensionResults,
     ]
   }
 }
@@ -267,8 +277,8 @@ class PasskeysApiCodec: FlutterStandardMessageCodec {
 protocol PasskeysApi {
   func canAuthenticate() throws -> Bool
   func hasBiometrics() throws -> Bool
-  func register(challenge: String, relyingParty: RelyingParty, user: User, excludeCredentials: [CredentialType], pubKeyCredValues: [Int64], canBePlatformAuthenticator: Bool, canBeSecurityKey: Bool, residentKeyPreference: String?, attestationPreference: String?, completion: @escaping (Result<RegisterResponse, Error>) -> Void)
-  func authenticate(relyingPartyId: String, challenge: String, conditionalUI: Bool, allowedCredentials: [CredentialType], preferImmediatelyAvailableCredentials: Bool, completion: @escaping (Result<AuthenticateResponse, Error>) -> Void)
+  func register(challenge: String, relyingParty: RelyingParty, user: User, excludeCredentials: [CredentialType], pubKeyCredValues: [Int64], canBePlatformAuthenticator: Bool, canBeSecurityKey: Bool, residentKeyPreference: String?, attestationPreference: String?, salt: String?, completion: @escaping (Result<RegisterResponse, Error>) -> Void)
+  func authenticate(relyingPartyId: String, challenge: String, conditionalUI: Bool, allowedCredentials: [CredentialType], preferImmediatelyAvailableCredentials: Bool, salt: String?, completion: @escaping (Result<AuthenticateResponse, Error>) -> Void)
   func cancelCurrentAuthenticatorOperation(completion: @escaping (Result<Void, Error>) -> Void)
 }
 
@@ -317,7 +327,8 @@ class PasskeysApiSetup {
         let canBeSecurityKeyArg = args[6] as! Bool
         let residentKeyPreferenceArg: String? = nilOrValue(args[7])
         let attestationPreferenceArg: String? = nilOrValue(args[8])
-        api.register(challenge: challengeArg, relyingParty: relyingPartyArg, user: userArg, excludeCredentials: excludeCredentialsArg, pubKeyCredValues: pubKeyCredValuesArg, canBePlatformAuthenticator: canBePlatformAuthenticatorArg, canBeSecurityKey: canBeSecurityKeyArg, residentKeyPreference: residentKeyPreferenceArg, attestationPreference: attestationPreferenceArg) { result in
+        let saltArg: String? = nilOrValue(args[9])
+        api.register(challenge: challengeArg, relyingParty: relyingPartyArg, user: userArg, excludeCredentials: excludeCredentialsArg, pubKeyCredValues: pubKeyCredValuesArg, canBePlatformAuthenticator: canBePlatformAuthenticatorArg, canBeSecurityKey: canBeSecurityKeyArg, residentKeyPreference: residentKeyPreferenceArg, attestationPreference: attestationPreferenceArg, salt: saltArg) { result in
           switch result {
             case .success(let res):
               reply(wrapResult(res))
@@ -338,7 +349,8 @@ class PasskeysApiSetup {
         let conditionalUIArg = args[2] as! Bool
         let allowedCredentialsArg = args[3] as! [CredentialType]
         let preferImmediatelyAvailableCredentialsArg = args[4] as! Bool
-        api.authenticate(relyingPartyId: relyingPartyIdArg, challenge: challengeArg, conditionalUI: conditionalUIArg, allowedCredentials: allowedCredentialsArg, preferImmediatelyAvailableCredentials: preferImmediatelyAvailableCredentialsArg) { result in
+        let saltArg: String? = nilOrValue(args[5])
+        api.authenticate(relyingPartyId: relyingPartyIdArg, challenge: challengeArg, conditionalUI: conditionalUIArg, allowedCredentials: allowedCredentialsArg, preferImmediatelyAvailableCredentials: preferImmediatelyAvailableCredentialsArg, salt: saltArg) { result in
           switch result {
             case .success(let res):
               reply(wrapResult(res))

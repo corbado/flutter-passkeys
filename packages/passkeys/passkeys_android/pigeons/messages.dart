@@ -80,8 +80,7 @@ class ExcludeCredential {
 /// Represents an authenticator selection
 class AuthenticatorSelection {
   /// Constructor
-  const AuthenticatorSelection(this.authenticatorAttachment,
-      this.requireResidentKey, this.residentKey, this.userVerification);
+  const AuthenticatorSelection(this.authenticatorAttachment, this.requireResidentKey, this.residentKey, this.userVerification);
 
   /// The authenticator attachment
   final String? authenticatorAttachment;
@@ -105,6 +104,7 @@ class RegisterResponse {
     required this.clientDataJSON,
     required this.attestationObject,
     required this.transports,
+    this.clientExtensionResults = const {},
   });
 
   /// The ID
@@ -121,6 +121,9 @@ class RegisterResponse {
 
   /// The supported transports for the authenticator
   final List<String?> transports;
+
+  /// The clientExtensionResults - PRF results
+  final Map<String?, Object?>? clientExtensionResults;
 }
 
 /// Represents an authenticate response
@@ -133,6 +136,7 @@ class AuthenticateResponse {
     required this.authenticatorData,
     required this.signature,
     required this.userHandle,
+    this.clientExtensionResults = const {},
   });
 
   /// The ID
@@ -150,7 +154,11 @@ class AuthenticateResponse {
   /// The signature
   final String signature;
 
+  /// The userHandle
   final String userHandle;
+
+  /// The clientExtensionResults - PRF results
+  final Map<String?, Object?>? clientExtensionResults;
 }
 
 @HostApi()
@@ -171,16 +179,19 @@ abstract class PasskeysApi {
     int? timeout,
     String? attestation,
     List<ExcludeCredential> excludeCredentials,
+    String? salt,
   );
 
   @async
   AuthenticateResponse authenticate(
-      String relyingPartyId,
-      String challenge,
-      int? timeout,
-      String? userVerification,
-      List<AllowCredential>? allowCredentials,
-      bool? preferImmediatelyAvailableCredentials);
+    String relyingPartyId,
+    String challenge,
+    int? timeout,
+    String? userVerification,
+    List<AllowCredential>? allowCredentials,
+    bool? preferImmediatelyAvailableCredentials,
+    String? salt,
+  );
 
   @async
   void cancelCurrentAuthenticatorOperation();
