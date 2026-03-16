@@ -1,3 +1,7 @@
+## 2.12.0
+* Adds `NoCreateOptionException` handling for register flow.
+* Unstubs `cancelCurrentAuthenticatorOperation` implementation.
+
 ## 2.11.0
 * Makes `authSelectionType` optional.
 

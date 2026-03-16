@@ -1,3 +1,7 @@
+## 1.3.0
+
+* Updates `package_info_plus` dependency to `^9.0.0`.
+
 ## 1.2.0
 
 * Fixes a bug where conditional UI abortion on Web is considered as a PlatformAuthenticationCancellation Exception.

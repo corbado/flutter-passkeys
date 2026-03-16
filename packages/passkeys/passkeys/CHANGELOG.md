@@ -1,3 +1,8 @@
+## 2.18.0
+* Adds `NoCreateOptionException` handling for register flow. (Android)
+* Updates `passkeys_doctor` dependency to `^1.3.0`.
+* Updates `passkeys_android` dependency to `^2.12.0`.
+
 ## 2.17.4
 * Fixes web plugin registration bug preventing automatic inclusion in Flutter's plugin registrant. (Web)
 
