@@ -1,0 +1,7 @@
+---
+description: Project-wide rules for Flutter Passkeys monorepo
+globs:
+alwaysApply: true
+---
+
+Read and follow all instructions in @CLAUDE.md — it is the single source of truth for project rules.
