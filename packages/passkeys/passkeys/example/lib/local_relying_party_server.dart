@@ -70,6 +70,8 @@ class LocalRelyingPartyServer {
         'requireResidentKey': false,
         'residentKey': 'required',
         'userVerification': 'preferred',
+        if (configuration?.authenticatorAttachment != null)
+          'authenticatorAttachment': configuration!.authenticatorAttachment,
       },
       'timeout': configuration?.timeout ?? 60000,
     };

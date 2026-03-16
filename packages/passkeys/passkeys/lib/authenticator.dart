@@ -79,6 +79,8 @@ class PasskeyAuthenticator {
           throw DeviceNotSupportedException();
         case 'android-passkey-unsupported':
           throw PasskeyUnsupportedException(e.message);
+        case 'android-no-create-option':
+          throw NoCreateOptionException(e.message);
         case 'android-timeout':
           throw TimeoutException(e.message);
         case 'ios-security-key-timeout':
