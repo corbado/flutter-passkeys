@@ -1,3 +1,6 @@
+## 2.19.0
+* Updates `passkeys_darwin` dependency to `^0.4.0` to add Swift Package Manager support for iOS/macOS.
+
 ## 2.18.0
 * Adds `NoCreateOptionException` handling for register flow. (Android)
 * Updates `passkeys_doctor` dependency to `^1.3.0`.
