@@ -1,3 +1,7 @@
+## 0.4.0
+
+- Adds Swift Package Manager support for the Darwin plugin (iOS & macOS).
+
 ## 0.3.0
 
 - Passes `Attestation` and `ResidentKey` params to Security Key Register Handler
