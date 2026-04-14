@@ -192,8 +192,10 @@ public class MessageHandler implements Messages.PasskeysApi {
                                 } else if (Objects.equals(e.getMessage(), "Unable to get sync account.")) {
                                     platformException = new Messages.FlutterError("android-sync-account-not-available",
                                             e.getMessage(), SYNC_ACCOUNT_NOT_AVAILABLE_ERROR);
-                                } else if (Objects.equals(e.getMessage(),
-                                        "One of the excluded credentials exists on the local device")) {
+                                } else if (e.getMessage() != null && e.getMessage().toLowerCase().contains("excluded credentials")) {
+                                    // Match excluded credentials error by substring instead of exact match,
+                                    // as the error message may vary across Android / Google Play Services versions.
+                                    // Also handles TYPE_INVALID_STATE_ERROR with excluded credentials message.
                                     platformException = new Messages.FlutterError("exclude-credentials-match",
                                             e.getMessage(), EXCLUDE_CREDENTIALS_MATCH_ERROR);
                                 } else if (Objects.equals(e.getMessage(), "[15] Flow has timed out.")) {
