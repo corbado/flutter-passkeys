@@ -23,8 +23,10 @@ class PasskeyAuthenticator {
   final bool debugMode;
 
   /// Returns true only if passkeys are supported by the platform.
-  @Deprecated('Use PasskeyAvailability.isAvailable instead. '
-      'This method will be removed in a future release.')
+  @Deprecated(
+    'Use PasskeyAvailability.isAvailable instead. '
+    'This method will be removed in a future release.',
+  )
   Future<bool> canAuthenticate() {
     return _platform.canAuthenticate();
   }
@@ -86,7 +88,13 @@ class PasskeyAuthenticator {
         case 'ios-security-key-timeout':
           throw TimeoutException(e.message);
         default:
-          rethrow;
+          if (e.code.startsWith('android-unhandled')) {
+            throw UnhandledAuthenticatorException(e.code, e.message, e.details);
+          } else if (e.code.startsWith('ios-unhandled')) {
+            throw UnhandledAuthenticatorException(e.code, e.message, e.details);
+          } else {
+            rethrow;
+          }
       }
     }
   }
@@ -229,8 +237,10 @@ class PasskeyAuthenticator {
     if (!base64UrlRegex.hasMatch(input)) return false;
 
     try {
-      String normalized =
-          input.padRight(input.length + (4 - input.length % 4) % 4, '=');
+      String normalized = input.padRight(
+        input.length + (4 - input.length % 4) % 4,
+        '=',
+      );
       base64Url.decode(normalized);
 
       return true;
