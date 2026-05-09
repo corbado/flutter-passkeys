@@ -28,6 +28,7 @@ Melos monorepo. `melos bootstrap` to set up, then `melos run <script>` (see `mel
 - **Web JS changes**: `melos run build-passkeys-web-javascript` (builds TS, copies bundle to example)
 - **Before committing**: `melos run format:check && melos run analyze`
 - **PR titles**: Conventional Commits, e.g. `fix(passkeys_android): fixed a bug!`
+- **`passkeys_darwin` dual-build**: ships both SwiftPM (`darwin/passkeys_darwin/Package.swift`) and CocoaPods (`darwin/passkeys_darwin.podspec`). When changing source layout, paths, or platform minimums, update **both** manifests and verify each path builds: `flutter config --enable-swift-package-manager` then `flutter build ios` (SwiftPM); `--no-enable-swift-package-manager` then `flutter build ios` (pods, must show `Running pod install`). Keep deployment targets aligned between the two; runtime API gating belongs in `@available`, not deployment target.
 
 ## Release order
 
