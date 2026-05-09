@@ -1,3 +1,7 @@
+## 1.3.1
+
+* Widens `device_info_plus` constraint to `>=11.2.0 <14.0.0` to unblock consumers on `device_info_plus` 12.x.
+
 ## 1.3.0
 
 * Updates `package_info_plus` dependency to `^9.0.0`.
