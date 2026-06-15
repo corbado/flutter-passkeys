@@ -1,3 +1,6 @@
+## 2.9.0
+* Raises minimum Dart SDK to `3.4.0` to match the `web ^1.1.1` requirement.
+
 ## 2.8.1
 * Fixed plugin registration bug where `implements: test_plugin` prevented `PasskeysWeb` from being automatically included in Flutter's generated `web_plugin_registrant.dart`. Changed to `implements: passkeys` to match other platform implementations. This fixes `UnimplementedError` when calling passkey methods on web without manual registration.
 

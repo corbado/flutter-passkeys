@@ -1,3 +1,6 @@
+## 2.20.0
+* Raises minimum Dart SDK to `3.4.0`.
+
 ## 2.19.0
 * Updates `passkeys_darwin` dependency to `^0.4.0` (adds Swift Package Manager support for iOS/macOS).
 
