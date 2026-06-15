@@ -1,6 +1,7 @@
 ## 1.4.0
 
 * Widens `package_info_plus` constraint to `>=9.0.0 <11.0.0` to unblock consumers on `package_info_plus` 10.x. The only call site (`PackageInfo.fromPlatform().packageName`) is API-stable across the 9 → 10 bump. Unblocks downstream apps that need `share_plus 13.x` / `win32 ^6.0.1`. See https://github.com/corbado/flutter-passkeys/issues/240.
+* Removes the unused `passkeys_ios` dependency (the package was renamed to `passkeys_darwin` and was never imported here).
 
 ## 1.3.1
 

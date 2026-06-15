@@ -22,7 +22,6 @@ dependencies:
   # for the downstream win32-6 chain this unblocks.
   package_info_plus: ">=9.0.0 <11.0.0"
   passkeys_platform_interface: ^2.4.0
-  passkeys_ios: ^2.6.1
 
 dev_dependencies:
   pigeon: ^25.3.1
