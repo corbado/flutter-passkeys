@@ -32,8 +32,12 @@ class AssertionResponse {
   factory AssertionResponse.fromJson(Map<String, dynamic> json) =>
       _$AssertionResponseFromJson(json);
 
-  AssertionResponse(this.clientDataJSON, this.authenticatorData, this.signature,
-      this.userHandle);
+  AssertionResponse(
+    this.clientDataJSON,
+    this.authenticatorData,
+    this.signature,
+    this.userHandle,
+  );
 
   final String clientDataJSON;
   final String authenticatorData;

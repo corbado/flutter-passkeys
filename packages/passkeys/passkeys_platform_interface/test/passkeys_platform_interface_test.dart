@@ -16,8 +16,7 @@ class PasskeysMock extends PasskeysPlatform {
   @override
   Future<AuthenticateResponseType> authenticate(
     AuthenticateRequestType authenticateResponseType,
-  ) =>
-      throw UnimplementedError();
+  ) => throw UnimplementedError();
 
   @override
   Future<void> cancelCurrentAuthenticatorOperation() {

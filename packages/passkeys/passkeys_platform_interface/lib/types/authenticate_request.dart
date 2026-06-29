@@ -50,9 +50,9 @@ class AuthenticateRequestType {
       userVerification: json['userVerification'] as String?,
       allowCredentials: allowCredentials != null && allowCredentials.isNotEmpty
           ? allowCredentials
-              .whereType<Map<String, dynamic>>()
-              .map((e) => CredentialType.fromJson(e))
-              .toList()
+                .whereType<Map<String, dynamic>>()
+                .map((e) => CredentialType.fromJson(e))
+                .toList()
           : null,
       mediation: mediation,
       preferImmediatelyAvailableCredentials:

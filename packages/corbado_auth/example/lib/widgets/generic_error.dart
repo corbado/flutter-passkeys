@@ -12,11 +12,8 @@ class MaybeGenericError extends StatelessWidget {
     }
 
     return Text(
-        message!,
-        style: const TextStyle(
-          color: Colors.red,
-          fontSize: 14,
-      ),
+      message!,
+      style: const TextStyle(color: Colors.red, fontSize: 14),
     );
   }
 }

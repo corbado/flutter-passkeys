@@ -6,7 +6,6 @@ part 'user.g.dart';
 /// The central user object of the Corbado Auth SDK.
 @JsonSerializable(explicitToJson: true)
 class User {
-
   /// Constructor
   User({required this.idToken, required this.decoded});
 
@@ -45,8 +44,17 @@ class User {
 @JsonSerializable()
 class IdToken {
   /// Constructor
-  IdToken(this.iss, this.sub, this.exp, this.nbf, this.iat, this.name,
-      this.orig, this.version, {this.email = ''});
+  IdToken(
+    this.iss,
+    this.sub,
+    this.exp,
+    this.nbf,
+    this.iat,
+    this.name,
+    this.orig,
+    this.version, {
+    this.email = '',
+  });
 
   /// Deserialize token.
   factory IdToken.fromJson(Map<String, dynamic> json) =>

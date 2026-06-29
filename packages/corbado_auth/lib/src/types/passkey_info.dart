@@ -19,7 +19,8 @@ class PasskeyInfo {
     );
   }
 
-  factory PasskeyInfo.fromJson(Map<String, dynamic> json) => _$PasskeyInfoFromJson(json);
+  factory PasskeyInfo.fromJson(Map<String, dynamic> json) =>
+      _$PasskeyInfoFromJson(json);
 
   PasskeyInfo(
     this.id,

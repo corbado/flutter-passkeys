@@ -28,14 +28,14 @@ StartLoginPublicKey _$StartLoginPublicKeyFromJson(Map<String, dynamic> json) =>
     );
 
 Map<String, dynamic> _$StartLoginPublicKeyToJson(
-        StartLoginPublicKey instance) =>
-    <String, dynamic>{
-      'rpId': instance.rpId,
-      'challenge': instance.challenge,
-      'timeout': instance.timeout,
-      'userVerification': instance.userVerification,
-      'allowCredentials': instance.allowCredentials,
-    };
+  StartLoginPublicKey instance,
+) => <String, dynamic>{
+  'rpId': instance.rpId,
+  'challenge': instance.challenge,
+  'timeout': instance.timeout,
+  'userVerification': instance.userVerification,
+  'allowCredentials': instance.allowCredentials,
+};
 
 AllowCredential _$AllowCredentialFromJson(Map<String, dynamic> json) =>
     AllowCredential(
@@ -58,7 +58,8 @@ FinishLoginRequest _$FinishLoginRequestFromJson(Map<String, dynamic> json) =>
       id: json['id'] as String,
       rawId: json['rawId'] as String,
       response: FinishLoginPlatformResponse.fromJson(
-          json['response'] as Map<String, dynamic>),
+        json['response'] as Map<String, dynamic>,
+      ),
       type: json['type'] as String? ?? 'public-key',
     );
 
@@ -71,19 +72,19 @@ Map<String, dynamic> _$FinishLoginRequestToJson(FinishLoginRequest instance) =>
     };
 
 FinishLoginPlatformResponse _$FinishLoginPlatformResponseFromJson(
-        Map<String, dynamic> json) =>
-    FinishLoginPlatformResponse(
-      clientDataJSON: json['clientDataJSON'] as String,
-      authenticatorData: json['authenticatorData'] as String,
-      signature: json['signature'] as String,
-      userHandle: json['userHandle'] as String,
-    );
+  Map<String, dynamic> json,
+) => FinishLoginPlatformResponse(
+  clientDataJSON: json['clientDataJSON'] as String,
+  authenticatorData: json['authenticatorData'] as String,
+  signature: json['signature'] as String,
+  userHandle: json['userHandle'] as String,
+);
 
 Map<String, dynamic> _$FinishLoginPlatformResponseToJson(
-        FinishLoginPlatformResponse instance) =>
-    <String, dynamic>{
-      'clientDataJSON': instance.clientDataJSON,
-      'authenticatorData': instance.authenticatorData,
-      'signature': instance.signature,
-      'userHandle': instance.userHandle,
-    };
+  FinishLoginPlatformResponse instance,
+) => <String, dynamic>{
+  'clientDataJSON': instance.clientDataJSON,
+  'authenticatorData': instance.authenticatorData,
+  'signature': instance.signature,
+  'userHandle': instance.userHandle,
+};

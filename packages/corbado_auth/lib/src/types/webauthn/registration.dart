@@ -22,7 +22,8 @@ class StartRegisterResponse {
     final authenticatorSelection = AuthenticatorSelectionType(
       authenticatorAttachment:
           publicKey.authenticatorSelection.authenticatorAttachment,
-      requireResidentKey: publicKey.authenticatorSelection.requireResidentKey ?? false,
+      requireResidentKey:
+          publicKey.authenticatorSelection.requireResidentKey ?? false,
       residentKey: publicKey.authenticatorSelection.residentKey,
       userVerification: publicKey.authenticatorSelection.userVerification,
     );
@@ -46,8 +47,14 @@ class StartRegisterResponse {
 @JsonSerializable()
 class StartRegisterPublicKey {
   StartRegisterPublicKey(
-      this.rp, this.user, this.challenge, this.authenticatorSelection,
-      {this.pubKeyCredParams, this.timeout, this.attestation});
+    this.rp,
+    this.user,
+    this.challenge,
+    this.authenticatorSelection, {
+    this.pubKeyCredParams,
+    this.timeout,
+    this.attestation,
+  });
 
   factory StartRegisterPublicKey.fromJson(Map<String, dynamic> json) =>
       _$StartRegisterPublicKeyFromJson(json);
@@ -76,8 +83,12 @@ class StartRegisterPubKeyCredParam {
 
 @JsonSerializable()
 class CorbadoAuthenticatorSelection {
-  CorbadoAuthenticatorSelection(this.authenticatorAttachment,
-      this.requireResidentKey, this.residentKey, this.userVerification);
+  CorbadoAuthenticatorSelection(
+    this.authenticatorAttachment,
+    this.requireResidentKey,
+    this.residentKey,
+    this.userVerification,
+  );
 
   factory CorbadoAuthenticatorSelection.fromJson(Map<String, dynamic> json) =>
       _$CorbadoAuthenticatorSelectionFromJson(json);
@@ -141,8 +152,7 @@ class FinishRegisterRequest {
 
   factory FinishRegisterRequest.fromJson(
     Map<String, dynamic> json,
-  ) =>
-      _$FinishRegisterRequestFromJson(json);
+  ) => _$FinishRegisterRequestFromJson(json);
   final String id;
   final String rawId;
   final FinishRegisterPlatformResponse response;
@@ -161,8 +171,7 @@ class FinishRegisterPlatformResponse {
 
   factory FinishRegisterPlatformResponse.fromJson(
     Map<String, dynamic> json,
-  ) =>
-      _$FinishRegisterPlatformResponseFromJson(json);
+  ) => _$FinishRegisterPlatformResponseFromJson(json);
   final String clientDataJSON;
   final String attestationObject;
   final List<String> transports;

@@ -19,8 +19,8 @@ class AuthResponse {
     return contentType != null &&
             contentType.toLowerCase().startsWith('application/json')
         ? response.bodyBytes.isEmpty
-            ? ''
-            : utf8.decode(response.bodyBytes)
+              ? ''
+              : utf8.decode(response.bodyBytes)
         : response.body;
   }
 

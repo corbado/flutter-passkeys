@@ -19,7 +19,8 @@ class PasskeyLoginRequest {
     List<CredentialType>? platformAllowCredentials,
     MediationType platformMediation,
   ) {
-    final allowCredentials = platformAllowCredentials?.map((e) {
+    final allowCredentials =
+        platformAllowCredentials?.map((e) {
           return PasskeyLoginAllowCredentialType(
             e.type,
             e.id,
@@ -34,13 +35,15 @@ class PasskeyLoginRequest {
       rpId: relyingPartyId,
       userVerification: platformUserVerification != null
           ? UserVerificationRequirement.fromPlatformType(
-              platformUserVerification)
+              platformUserVerification,
+            )
           : null,
       allowCredentials: allowCredentials,
     );
 
-    final mediation =
-        PasskeyLoginMediationType.fromPlatformType(platformMediation);
+    final mediation = PasskeyLoginMediationType.fromPlatformType(
+      platformMediation,
+    );
     return PasskeyLoginRequest(publicKey, mediation);
   }
 
@@ -52,13 +55,14 @@ class PasskeyLoginRequest {
 
 @JsonSerializable(explicitToJson: true)
 class PasskeyLoginPublicKey {
-  PasskeyLoginPublicKey(
-      {required this.challenge,
-      this.timeout,
-      this.rpId,
-      this.allowCredentials,
-      this.userVerification,
-      this.loginExtensions});
+  PasskeyLoginPublicKey({
+    required this.challenge,
+    this.timeout,
+    this.rpId,
+    this.allowCredentials,
+    this.userVerification,
+    this.loginExtensions,
+  });
 
   factory PasskeyLoginPublicKey.fromJson(Map<String, dynamic> json) =>
       _$PasskeyLoginPublicKeyFromJson(json);

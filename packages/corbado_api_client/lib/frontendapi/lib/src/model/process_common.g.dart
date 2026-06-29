@@ -89,8 +89,7 @@ class ProcessCommonBuilder
 
   String? _environment;
   String? get environment => _$this._environment;
-  set environment(String? environment) =>
-      _$this._environment = environment;
+  set environment(String? environment) => _$this._environment = environment;
 
   ProcessCommonBuilder() {
     ProcessCommon._defaults(this);
@@ -137,7 +136,6 @@ class ProcessCommonBuilder
     replace(_$result);
     return _$result;
   }
-
 }
 
 // ignore_for_file: deprecated_member_use_from_same_package,type=lint

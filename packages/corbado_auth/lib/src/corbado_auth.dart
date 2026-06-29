@@ -44,8 +44,8 @@ class CorbadoAuth {
   String get projectId => _projectId;
 
   // Returns the currently used RPid
-  late final Future<String?> _rpIdFuture =
-      _sessionService.rpIdChanges.firstWhere((value) => value != null);
+  late final Future<String?> _rpIdFuture = _sessionService.rpIdChanges
+      .firstWhere((value) => value != null);
 
   Future<String?> get rpId => _rpIdFuture;
 
@@ -70,7 +70,7 @@ class CorbadoAuth {
 
     final res = await _corbadoService.initAuthProcess();
 
-    if(res.common.environment != 'dev'){
+    if (res.common.environment != 'dev') {
       TelemetryService.instance.disableTelemetry();
     }
 
@@ -91,8 +91,11 @@ class CorbadoAuth {
     bool? telemetryDebugModeEnabled,
   }) async {
     final passkeyAuthenticator = PasskeyAuthenticator(debugMode: debugMode);
-    _corbadoService = await createClient(projectId,
-        passkeyAuthenticator: passkeyAuthenticator, customDomain: customDomain);
+    _corbadoService = await createClient(
+      projectId,
+      passkeyAuthenticator: passkeyAuthenticator,
+      customDomain: customDomain,
+    );
     _sessionService = _buildSessionService(
       projectId,
       _corbadoService.frontendAPIClient,
@@ -100,13 +103,12 @@ class CorbadoAuth {
 
     _projectId = projectId;
 
-      TelemetryService.init(
-        projectId: projectId,
-        debugMode: telemetryDebugModeEnabled,
-        isDoctorEnabled: debugMode ?? false,
-        isEnabled: telemetryDisabled != true,
-      );
-
+    TelemetryService.init(
+      projectId: projectId,
+      debugMode: telemetryDebugModeEnabled,
+      isDoctorEnabled: debugMode ?? false,
+      isEnabled: telemetryDisabled != true,
+    );
 
     final frontEndApiUrl = await _sessionService.getFrontEndApiUrl();
 
@@ -138,12 +140,14 @@ class CorbadoAuth {
   }
 
   /// Load all passkeys that are available to the currently logged in user.
-  Future<List<PasskeyInfo>> _loadPasskeys(
-      {String? explicitRefreshToken}) async {
+  Future<List<PasskeyInfo>> _loadPasskeys({
+    String? explicitRefreshToken,
+  }) async {
     final refreshToken =
         explicitRefreshToken ?? await _sessionService.getRefreshToken();
-    final passkeys =
-        await _corbadoService.sessionListPasskeys(token: refreshToken);
+    final passkeys = await _corbadoService.sessionListPasskeys(
+      token: refreshToken,
+    );
     final mapped = passkeys.map((p) => PasskeyInfo.fromResponse(p)).toList();
 
     _passkeysStreamController.sink.add(mapped);
@@ -164,7 +168,7 @@ class CorbadoAuth {
     await _sessionService.signOut();
 
     _passkeysStreamController.add([]);
-    
+
     _isInitialized = false;
   }
 

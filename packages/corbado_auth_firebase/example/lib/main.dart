@@ -12,7 +12,10 @@ import 'package:cloud_functions/cloud_functions.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await Firebase.initializeApp(name: 'corbado_auth_example', options: DefaultFirebaseOptions.currentPlatform);
+  await Firebase.initializeApp(
+    name: 'corbado_auth_example',
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 
   // FirebaseFunctions.instance.useFunctionsEmulator('localhost', 5001);
   // await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
@@ -29,12 +32,12 @@ void main() async {
 
   // Finally we override the providers that needed initialization.
   // Now the real app can be loaded.
-  runApp(ProviderScope(
-    overrides: [
-      corbadoAuthProvider.overrideWithValue(corbadoAuth),
-    ],
-    child: MyApp(),
-  ));
+  runApp(
+    ProviderScope(
+      overrides: [corbadoAuthProvider.overrideWithValue(corbadoAuth)],
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends ConsumerWidget {

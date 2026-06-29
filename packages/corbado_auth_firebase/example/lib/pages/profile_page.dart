@@ -33,49 +33,42 @@ class ProfilePage extends HookConsumerWidget {
     }
 
     return BasePage(
-        child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
           const Padding(
             padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
             child: Text(
               'Welcome',
-              style: TextStyle(
-                fontSize: 40,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
             ),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
             child: Text(
               user.value?.displayName ?? '',
-              style: const TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
           ),
           const Text(
             'You are currently logged in.',
             style: TextStyle(fontSize: 20),
           ),
-          const Text(
-            'Your passkeys:',
-            style: TextStyle(fontSize: 20),
-          ),
+          const Text('Your passkeys:', style: TextStyle(fontSize: 20)),
           const SizedBox(height: 5),
           Column(
             children: passkeys.value
-                .map((e) => Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10),
-                      child: PasskeyListItem(e, (String passkeyId) async {
-                        clearErrors();
-                        await authService.deletePasskey(passkeyId);
-                        passkeys.value = await authService.getPasskeys();
-                      }),
-                    ))
+                .map(
+                  (e) => Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: PasskeyListItem(e, (String passkeyId) async {
+                      clearErrors();
+                      await authService.deletePasskey(passkeyId);
+                      passkeys.value = await authService.getPasskeys();
+                    }),
+                  ),
+                )
                 .toList(),
           ),
           SizedBox(
@@ -124,6 +117,8 @@ class ProfilePage extends HookConsumerWidget {
               content: 'sign out',
             ),
           ),
-        ]));
+        ],
+      ),
+    );
   }
 }

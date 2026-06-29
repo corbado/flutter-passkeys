@@ -3,7 +3,8 @@ import 'package:corbado_auth/src/blocks/email_verify_block.dart';
 import 'package:corbado_auth/src/blocks/types.dart';
 import 'package:corbado_auth/src/process_handler.dart';
 import 'package:corbado_auth/src/services/telemetry/telemetry.dart';
-import 'package:corbado_frontend_api_client/corbado_frontend_api_client.dart' as Api;
+import 'package:corbado_frontend_api_client/corbado_frontend_api_client.dart'
+    as Api;
 
 class PasskeyVerifyBlockData {
   List<PasskeyFallback> availableFallbacks;
@@ -11,7 +12,9 @@ class PasskeyVerifyBlockData {
   PasskeyFallback? preferredFallback;
   bool primaryLoading = false;
 
-  factory PasskeyVerifyBlockData.fromProcessResponse(Api.GeneralBlockPasskeyVerify typed) {
+  factory PasskeyVerifyBlockData.fromProcessResponse(
+    Api.GeneralBlockPasskeyVerify typed,
+  ) {
     return PasskeyVerifyBlockData(
       availableFallbacks: [],
       identifierValue: typed.identifierValue,
@@ -26,15 +29,17 @@ class PasskeyVerifyBlockData {
 }
 
 class PasskeyVerifyBlock extends Block<PasskeyVerifyBlockData> {
-  PasskeyVerifyBlock({required ProcessHandler processHandler, required PasskeyVerifyBlockData data})
-      : super(
-          processHandler: processHandler,
-          initialScreen: ScreenNames.PasskeyVerify,
-          type: Api.BlockType.passkeyVerify,
-          alternatives: [],
-          data: data,
-          authProcessType: AuthProcessType.Login,
-        );
+  PasskeyVerifyBlock({
+    required ProcessHandler processHandler,
+    required PasskeyVerifyBlockData data,
+  }) : super(
+         processHandler: processHandler,
+         initialScreen: ScreenNames.PasskeyVerify,
+         type: Api.BlockType.passkeyVerify,
+         alternatives: [],
+         data: data,
+         authProcessType: AuthProcessType.Login,
+       );
 
   init() {
     data.availableFallbacks = alternatives.map((alternative) {

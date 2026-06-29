@@ -9,8 +9,7 @@ class StartLoginResponse {
 
   factory StartLoginResponse.fromJson(
     Map<String, dynamic> json,
-  ) =>
-      _$StartLoginResponseFromJson(json);
+  ) => _$StartLoginResponseFromJson(json);
 
   final StartLoginPublicKey publicKey;
 
@@ -32,8 +31,11 @@ class StartLoginResponse {
             ),
           )
           .toList(),
-      mediation: conditional ? MediationType.Conditional : MediationType.Optional,
-      preferImmediatelyAvailableCredentials: preferImmediatelyAvailableCredentials,
+      mediation: conditional
+          ? MediationType.Conditional
+          : MediationType.Optional,
+      preferImmediatelyAvailableCredentials:
+          preferImmediatelyAvailableCredentials,
     );
   }
 
@@ -53,8 +55,7 @@ class StartLoginPublicKey {
 
   factory StartLoginPublicKey.fromJson(
     Map<String, dynamic> json,
-  ) =>
-      _$StartLoginPublicKeyFromJson(json);
+  ) => _$StartLoginPublicKeyFromJson(json);
 
   /// The relying party id
   final String rpId;
@@ -95,8 +96,7 @@ class AllowCredential {
 
   factory AllowCredential.fromJson(
     Map<String, dynamic> json,
-  ) =>
-      _$AllowCredentialFromJson(json);
+  ) => _$AllowCredentialFromJson(json);
 
   Map<String, dynamic> toJson() => _$AllowCredentialToJson(this);
 }
@@ -128,8 +128,7 @@ class FinishLoginRequest {
 
   factory FinishLoginRequest.fromJson(
     Map<String, dynamic> json,
-  ) =>
-      _$FinishLoginRequestFromJson(json);
+  ) => _$FinishLoginRequestFromJson(json);
 
   /// The id
   final String id;

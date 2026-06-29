@@ -12,17 +12,8 @@ class Routes {
 final GoRouter router = GoRouter(
   initialLocation: Routes.signUp,
   routes: [
-    GoRoute(
-      path: Routes.signUp,
-      builder: (context, state) => SignUpPage(),
-    ),
-    GoRoute(
-      path: Routes.signIn,
-      builder: (context, state) => SignInPage(),
-    ),
-    GoRoute(
-      path: Routes.profile,
-      builder: (context, state) => ProfilePage(),
-    ),
+    GoRoute(path: Routes.signUp, builder: (context, state) => SignUpPage()),
+    GoRoute(path: Routes.signIn, builder: (context, state) => SignInPage()),
+    GoRoute(path: Routes.profile, builder: (context, state) => ProfilePage()),
   ],
 );

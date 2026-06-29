@@ -26,7 +26,11 @@ class CorbadoError {
   final String translatedError;
   final dynamic original;
 
-  const CorbadoError({required this.errorCode, required this.translatedError, this.original});
+  const CorbadoError({
+    required this.errorCode,
+    required this.translatedError,
+    this.original,
+  });
 
   String detailedError() {
     return 'error ($errorCode): $original';

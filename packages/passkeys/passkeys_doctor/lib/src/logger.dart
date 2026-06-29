@@ -41,7 +41,9 @@ class Logger {
   }
 
   Future<void> _printException(
-      PlatformException error, List<Checkpoint> checkpoints) async {
+    PlatformException error,
+    List<Checkpoint> checkpoints,
+  ) async {
     print('Latest Exception:');
 
     final info = await getExceptionInfo(error, checkpoints);

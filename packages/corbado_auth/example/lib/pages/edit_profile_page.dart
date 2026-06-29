@@ -49,10 +49,7 @@ class EditProfilePage extends HookConsumerWidget {
               children: [
                 const Text(
                   'Edit your profile',
-                  style: TextStyle(
-                    fontSize: 40,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 20),
                 Padding(
@@ -95,15 +92,13 @@ class EditProfilePage extends HookConsumerWidget {
                         await corbado.changeUsername(fullName: fullName.text);
 
                         showSimpleNotification(
-                            const Text(
-                              'Full name has been changed successfully.',
-                              style: TextStyle(color: Colors.white),
-                            ),
-                            leading: const Icon(
-                              Icons.check,
-                              color: Colors.green,
-                            ),
-                            background: Theme.of(context).colorScheme.primary);
+                          const Text(
+                            'Full name has been changed successfully.',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          leading: const Icon(Icons.check, color: Colors.green),
+                          background: Theme.of(context).colorScheme.primary,
+                        );
                       } on CorbadoError catch (e) {
                         error.value = e.translatedError;
                       } catch (e) {

@@ -27,10 +27,7 @@ class ProfilePage extends ConsumerWidget {
               children: [
                 const Text(
                   'Welcome',
-                  style: TextStyle(
-                    fontSize: 40,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 10),
                 Text(
@@ -43,9 +40,7 @@ class ProfilePage extends ConsumerWidget {
                 const SizedBox(height: 10),
                 const Text(
                   'You are currently logged in. You have a JWT token that you can use to make calls to your backend.',
-                  style: TextStyle(
-                    fontSize: 20,
-                  ),
+                  style: TextStyle(fontSize: 20),
                 ),
                 const SizedBox(height: 10),
                 SizedBox(

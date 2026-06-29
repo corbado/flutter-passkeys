@@ -6,11 +6,12 @@ import 'package:flutter/foundation.dart';
 import 'package:passkeys_example/auth_service.dart';
 
 class LocalUser {
-  LocalUser(
-      {required this.name,
-      required this.id,
-      this.credentialID,
-      required this.transports});
+  LocalUser({
+    required this.name,
+    required this.id,
+    this.credentialID,
+    required this.transports,
+  });
 
   final String name;
   final String id;
@@ -18,7 +19,8 @@ class LocalUser {
   List<String> transports;
 }
 
-const rpID = kIsWeb &&
+const rpID =
+    kIsWeb &&
         String.fromEnvironment('IS_VERCEL', defaultValue: 'false') != 'true'
     ? 'localhost'
     : 'flutter.corbado.io';
@@ -39,8 +41,10 @@ class LocalRelyingPartyServer {
   ///
   /// This simulates backend server logic that returns standard WebAuthn JSON
   /// format compatible with `PublicKeyCredential.parseCreationOptionsFromJSON()`.
-  String startPasskeyRegister(
-      {required String name, Configuration? configuration}) {
+  String startPasskeyRegister({
+    required String name,
+    Configuration? configuration,
+  }) {
     if (_users.containsKey(name)) {
       throw Exception('User $name already exists. Please log in instead');
     }
@@ -53,10 +57,7 @@ class LocalRelyingPartyServer {
     // Build standard WebAuthn JSON format (as a backend server would)
     final request = <String, dynamic>{
       'challenge': challenge,
-      'rp': {
-        'name': 'local-relying-party-server',
-        'id': rpID,
-      },
+      'rp': {'name': 'local-relying-party-server', 'id': rpID},
       'user': {
         'id': base64Url.encode(userID.codeUnits),
         'name': name,
@@ -80,11 +81,13 @@ class LocalRelyingPartyServer {
     if (configuration?.excludeCredentials == true && _users.values.isNotEmpty) {
       request['excludeCredentials'] = _users.values
           .where((e) => e.credentialID != null)
-          .map((e) => {
-                'type': 'public-key',
-                'id': e.credentialID!,
-                'transports': ['internal'],
-              })
+          .map(
+            (e) => {
+              'type': 'public-key',
+              'id': e.credentialID!,
+              'transports': ['internal'],
+            },
+          )
           .toList();
     }
 
@@ -146,8 +149,10 @@ class LocalRelyingPartyServer {
   ///
   /// This simulates backend server logic that returns standard WebAuthn JSON
   /// format compatible with `PublicKeyCredential.parseRequestOptionsFromJSON()`.
-  String startPasskeyLogin(
-      {required String name, Configuration? configuration}) {
+  String startPasskeyLogin({
+    required String name,
+    Configuration? configuration,
+  }) {
     if (!_users.containsKey(name)) {
       throw Exception('User $name does not exist. Please register first');
     }
@@ -170,7 +175,7 @@ class LocalRelyingPartyServer {
           'type': 'public-key',
           'id': 'id',
           'transports': ['internal'],
-        }
+        },
       ];
     } else if (_users[name]!.credentialID != null) {
       request['allowCredentials'] = [
@@ -234,10 +239,7 @@ class LocalRelyingPartyServer {
     final challenge = generateChallenge();
 
     // Build standard WebAuthn JSON format (as a backend server would)
-    final request = {
-      'challenge': challenge,
-      'rpId': rpID,
-    };
+    final request = {'challenge': challenge, 'rpId': rpID};
 
     return jsonEncode(request);
   }

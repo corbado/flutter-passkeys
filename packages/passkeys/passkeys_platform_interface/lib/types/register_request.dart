@@ -43,7 +43,8 @@ class RegisterRequestType {
     }
     if (user is! Map<String, dynamic>) {
       throw FormatException(
-          'Expected "user" to be a Map, got ${user.runtimeType}');
+        'Expected "user" to be a Map, got ${user.runtimeType}',
+      );
     }
 
     return RegisterRequestType(
@@ -52,18 +53,18 @@ class RegisterRequestType {
       user: UserType.fromJson(user),
       excludeCredentials: excludeCredentials != null
           ? excludeCredentials
-              .whereType<Map<String, dynamic>>()
-              .map((e) => CredentialType.fromJson(e))
-              .toList()
+                .whereType<Map<String, dynamic>>()
+                .map((e) => CredentialType.fromJson(e))
+                .toList()
           : [],
       authSelectionType: authenticatorSelection is Map<String, dynamic>
           ? AuthenticatorSelectionType.fromJson(authenticatorSelection)
           : null,
       pubKeyCredParams: pubKeyCredParams != null
           ? pubKeyCredParams
-              .whereType<Map<String, dynamic>>()
-              .map((e) => PubKeyCredParamType.fromJson(e))
-              .toList()
+                .whereType<Map<String, dynamic>>()
+                .map((e) => PubKeyCredParamType.fromJson(e))
+                .toList()
           : null,
       timeout: json['timeout'] as int?,
       attestation: json['attestation'] as String?,
@@ -113,8 +114,9 @@ class RegisterRequestType {
         'pubKeyCredParams': pubKeyCredParams!.map((e) => e.toJson()).toList(),
       if (timeout != null) 'timeout': timeout,
       if (excludeCredentials.isNotEmpty)
-        'excludeCredentials':
-            excludeCredentials.map((e) => e.toJson()).toList(),
+        'excludeCredentials': excludeCredentials
+            .map((e) => e.toJson())
+            .toList(),
       if (authSelectionType != null)
         'authenticatorSelection': authSelectionType!.toJson(),
       if (attestation != null) 'attestation': attestation,

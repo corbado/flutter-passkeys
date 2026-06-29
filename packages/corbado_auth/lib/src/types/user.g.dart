@@ -7,35 +7,35 @@ part of 'user.dart';
 // **************************************************************************
 
 User _$UserFromJson(Map<String, dynamic> json) => User(
-      idToken: json['idToken'] as String,
-      decoded: IdToken.fromJson(json['decoded'] as Map<String, dynamic>),
-    );
+  idToken: json['idToken'] as String,
+  decoded: IdToken.fromJson(json['decoded'] as Map<String, dynamic>),
+);
 
 Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
-      'idToken': instance.idToken,
-      'decoded': instance.decoded.toJson(),
-    };
+  'idToken': instance.idToken,
+  'decoded': instance.decoded.toJson(),
+};
 
 IdToken _$IdTokenFromJson(Map<String, dynamic> json) => IdToken(
-      json['iss'] as String,
-      json['sub'] as String,
-      (json['exp'] as num).toInt(),
-      (json['nbf'] as num).toInt(),
-      (json['iat'] as num).toInt(),
-      json['name'] as String?,
-      json['orig'] as String,
-      (json['version'] as num).toInt(),
-      email: json['email'] as String? ?? '',
-    );
+  json['iss'] as String,
+  json['sub'] as String,
+  (json['exp'] as num).toInt(),
+  (json['nbf'] as num).toInt(),
+  (json['iat'] as num).toInt(),
+  json['name'] as String?,
+  json['orig'] as String,
+  (json['version'] as num).toInt(),
+  email: json['email'] as String? ?? '',
+);
 
 Map<String, dynamic> _$IdTokenToJson(IdToken instance) => <String, dynamic>{
-      'iss': instance.iss,
-      'sub': instance.sub,
-      'exp': instance.exp,
-      'nbf': instance.nbf,
-      'iat': instance.iat,
-      'name': instance.name,
-      'orig': instance.orig,
-      'email': instance.email,
-      'version': instance.version,
-    };
+  'iss': instance.iss,
+  'sub': instance.sub,
+  'exp': instance.exp,
+  'nbf': instance.nbf,
+  'iat': instance.iat,
+  'name': instance.name,
+  'orig': instance.orig,
+  'email': instance.email,
+  'version': instance.version,
+};

@@ -2,13 +2,14 @@ import 'dart:convert';
 
 class AuthenticateResponseType {
   /// Constructs a new instance.
-  const AuthenticateResponseType(
-      {required this.id,
-      required this.rawId,
-      required this.clientDataJSON,
-      required this.authenticatorData,
-      required this.signature,
-      required this.userHandle});
+  const AuthenticateResponseType({
+    required this.id,
+    required this.rawId,
+    required this.clientDataJSON,
+    required this.authenticatorData,
+    required this.signature,
+    required this.userHandle,
+  });
 
   /// Constructs a new instance from a JSON string.
   factory AuthenticateResponseType.fromJsonString(String jsonString) {
@@ -28,7 +29,8 @@ class AuthenticateResponseType {
       final response = json['response'];
       if (response is! Map<String, dynamic>) {
         throw FormatException(
-            'Expected "response" to be a Map, got ${response.runtimeType}');
+          'Expected "response" to be a Map, got ${response.runtimeType}',
+        );
       }
       return AuthenticateResponseType(
         id: json['id'] as String? ?? '',

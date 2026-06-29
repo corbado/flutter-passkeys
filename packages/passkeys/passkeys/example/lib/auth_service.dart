@@ -4,13 +4,14 @@ import 'package:passkeys/types.dart';
 import 'package:passkeys_example/local_relying_party_server.dart';
 
 class Configuration {
-  Configuration(
-      {required this.name,
-      this.timeout,
-      this.excludeCredentials,
-      this.allowCredentials,
-      this.preferImmediatelyAvailableCredentials,
-      this.authenticatorAttachment});
+  Configuration({
+    required this.name,
+    this.timeout,
+    this.excludeCredentials,
+    this.allowCredentials,
+    this.preferImmediatelyAvailableCredentials,
+    this.authenticatorAttachment,
+  });
 
   final String name;
   final int? timeout;
@@ -36,17 +37,19 @@ List<Configuration> LOGIN_ANDROID_CONFIGURATIONS = [
   Configuration(name: '5s Timeout', timeout: 5000),
   Configuration(name: 'AllowCredentials', allowCredentials: true),
   Configuration(
-      name: 'PreferImmediatelyAvailableCredentials',
-      preferImmediatelyAvailableCredentials: true,
-      allowCredentials: true),
+    name: 'PreferImmediatelyAvailableCredentials',
+    preferImmediatelyAvailableCredentials: true,
+    allowCredentials: true,
+  ),
 ];
 
 List<Configuration> LOGIN_IOS_CONFIGURATIONS = [
   Configuration(name: 'Default'),
   Configuration(
-      name: 'AllowCredentials And PreferImmediatelyAvailableCredentials',
-      allowCredentials: true,
-      preferImmediatelyAvailableCredentials: true),
+    name: 'AllowCredentials And PreferImmediatelyAvailableCredentials',
+    allowCredentials: true,
+    preferImmediatelyAvailableCredentials: true,
+  ),
 ];
 
 class AuthService {
@@ -56,8 +59,10 @@ class AuthService {
   final PasskeyAuthenticator authenticator;
 
   Future<void> loginWithPasskey({required String email}) async {
-    final jsonRequestString =
-        rps.startPasskeyLogin(name: email, configuration: loginConfiguration);
+    final jsonRequestString = rps.startPasskeyLogin(
+      name: email,
+      configuration: loginConfiguration,
+    );
 
     final request = AuthenticateRequestType.fromJsonString(jsonRequestString);
     final authenticatorRes = await authenticator.authenticate(request);
@@ -72,13 +77,16 @@ class AuthService {
     final authenticatorRes = await authenticator.authenticate(request);
 
     rps.finishPasskeyLoginConditionalUI(
-        response: authenticatorRes.toJsonString());
+      response: authenticatorRes.toJsonString(),
+    );
   }
 
   Future<void> signupWithPasskey({required String email}) async {
     // Simulate backend API call - server returns JSON string
     final jsonRequestString = rps.startPasskeyRegister(
-        name: email, configuration: signUpConfiguration);
+      name: email,
+      configuration: signUpConfiguration,
+    );
 
     final request = RegisterRequestType.fromJsonString(jsonRequestString);
     final authenticatorRes = await authenticator.register(request);

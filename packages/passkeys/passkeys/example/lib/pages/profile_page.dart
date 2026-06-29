@@ -19,29 +19,21 @@ class ProfilePage extends ConsumerWidget {
             padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
             child: Text(
               'Welcome',
-              style: TextStyle(
-                fontSize: 40,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
             ),
           ),
           const Padding(
             padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
             child: Text(
               '',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
           ),
           const Padding(
             padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
             child: Text(
               'You are currently logged in. You can log out and log back in using a passkey.',
-              style: TextStyle(
-                fontSize: 20,
-              ),
+              style: TextStyle(fontSize: 20),
             ),
           ),
           SizedBox(
@@ -50,9 +42,12 @@ class ProfilePage extends ConsumerWidget {
             height: 50,
             child: OutlinedButton(
               style: OutlinedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                  side: BorderSide(
-                      width: 2, color: Theme.of(context).primaryColor)),
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                side: BorderSide(
+                  width: 2,
+                  color: Theme.of(context).primaryColor,
+                ),
+              ),
               onPressed: () {
                 context.go(Routes.signUp);
               },

@@ -35,12 +35,13 @@ class PasskeysAndroid extends PasskeysPlatform {
     );
 
     return AuthenticateResponseType(
-        id: r.id,
-        rawId: r.rawId,
-        clientDataJSON: r.clientDataJSON,
-        authenticatorData: r.authenticatorData,
-        signature: r.signature,
-        userHandle: r.userHandle);
+      id: r.id,
+      rawId: r.rawId,
+      clientDataJSON: r.clientDataJSON,
+      authenticatorData: r.authenticatorData,
+      signature: r.signature,
+      userHandle: r.userHandle,
+    );
   }
 
   @override
@@ -81,18 +82,19 @@ class PasskeysAndroid extends PasskeysPlatform {
     }
 
     final r = await _api.register(
-        request.challenge,
-        relyingPartyArg,
-        userArg,
-        authSelection,
-        request.pubKeyCredParams
-            ?.map((e) => PubKeyCredParam(alg: e.alg, type: e.type))
-            .toList(),
-        request.timeout,
-        request.attestation,
-        request.excludeCredentials
-            .map((e) => ExcludeCredential(id: e.id, type: e.type))
-            .toList());
+      request.challenge,
+      relyingPartyArg,
+      userArg,
+      authSelection,
+      request.pubKeyCredParams
+          ?.map((e) => PubKeyCredParam(alg: e.alg, type: e.type))
+          .toList(),
+      request.timeout,
+      request.attestation,
+      request.excludeCredentials
+          .map((e) => ExcludeCredential(id: e.id, type: e.type))
+          .toList(),
+    );
 
     return RegisterResponseType(
       id: r.id,
