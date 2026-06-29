@@ -1,7 +1,6 @@
 ## 0.1.2
 
- - **FIX**: check if last char if null terminator before exclude. ([726f6ea2](https://github.com/corbado/flutter-passkeys/commit/726f6ea2e682ba90ea6f770cb9642b187eaecbd9))
- - **FEAT**(passkeys_windows): add windows implementation. ([99f9b8ff](https://github.com/corbado/flutter-passkeys/commit/99f9b8ff333fe448b06769532de51c3612d858a2))
+ - Update a dependency to the latest release.
 
 ## 0.1.1
 
