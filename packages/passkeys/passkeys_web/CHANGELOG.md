@@ -1,3 +1,7 @@
+## 2.9.1
+
+ - **FIX**: Avoid JSValue is not a String exception when building wasm. ([515172e5](https://github.com/corbado/flutter-passkeys/commit/515172e5d40b1ae82042d7d58f0d265c5e16e9ae))
+
 ## 2.9.0
 * Raises minimum Dart SDK to `3.4.0` to match the `web ^1.1.1` requirement.
 

@@ -1,3 +1,7 @@
+## 0.4.1
+
+ - **FEAT**(passkeys_darwin): add SwiftPM support. ([23fd8ac4](https://github.com/corbado/flutter-passkeys/commit/23fd8ac46208746fd83a2161de3f4482c12fcb7d))
+
 ## 0.4.0
 
 - Adds Swift Package Manager (SwiftPM) support for iOS and macOS. CocoaPods continues to work in parallel.

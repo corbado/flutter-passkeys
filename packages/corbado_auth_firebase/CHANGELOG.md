@@ -1,3 +1,7 @@
+## 2.0.6
+
+ - Update a dependency to the latest release.
+
 ## 2.0.5
 * Bump versions of passkeys, corbado_auth and corbado_frontend_api_client
 
