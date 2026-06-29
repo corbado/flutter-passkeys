@@ -1,6 +1,5 @@
 import 'package:corbado_auth/src/blocks/translator.dart';
 import 'package:corbado_auth/src/blocks/types.dart';
-import 'package:corbado_auth/src/process_handler.dart';
 import 'package:corbado_auth/src/services/telemetry/telemetry.dart';
 import 'package:corbado_auth/src/types/screen_names.dart';
 import 'package:corbado_frontend_api_client/corbado_frontend_api_client.dart'
@@ -18,12 +17,6 @@ class EmailVerifyBlockData {
     required this.retryNotBefore,
     required this.isPostLoginVerification,
   });
-
-  final String email;
-  final VerificationMethod verificationMethod;
-  DateTime? retryNotBefore;
-  final bool? isPostLoginVerification;
-  bool primaryLoading = false;
 
   factory EmailVerifyBlockData.fromProcessResponse(
     Api.GeneralBlockVerifyIdentifier typed,
@@ -47,29 +40,34 @@ class EmailVerifyBlockData {
       isPostLoginVerification: typed.isPostLoginVerification,
     );
   }
+
+  final String email;
+  final VerificationMethod verificationMethod;
+  DateTime? retryNotBefore;
+  final bool? isPostLoginVerification;
+  bool primaryLoading = false;
 }
 
 class EmailVerifyBlock extends Block<EmailVerifyBlockData> {
   EmailVerifyBlock({
-    required ProcessHandler processHandler,
-    required EmailVerifyBlockData data,
+    required super.processHandler,
+    required super.data,
     required Api.AuthType authType,
   }) : super(
-         processHandler: processHandler,
          type: Api.BlockType.emailVerify,
          alternatives: [],
          initialScreen: ScreenNames.EmailVerifyOTP,
-         data: data,
          authProcessType: authType == Api.AuthType.login
              ? AuthProcessType.Login
              : AuthProcessType.Signup,
        );
 
-  init() {
+  @override
+  void init() {
     // navigateToVerifyEmail();
   }
 
-  navigateToEditEmail() {
+  void navigateToEditEmail() {
     TelemetryService.instance.logMethodCalled(
       'navigateToEditEmail',
       'EmailVerifyBlock',
@@ -79,7 +77,7 @@ class EmailVerifyBlock extends Block<EmailVerifyBlockData> {
     processHandler.updateCurrentScreen(ScreenNames.EmailEdit);
   }
 
-  navigateToVerifyEmail() {
+  void navigateToVerifyEmail() {
     TelemetryService.instance.logMethodCalled(
       'navigateToVerifyEmail',
       'EmailVerifyBlock',
@@ -94,7 +92,7 @@ class EmailVerifyBlock extends Block<EmailVerifyBlockData> {
     }
   }
 
-  submitOtpCode(String otpCode) async {
+  Future<void> submitOtpCode(String otpCode) async {
     TelemetryService.instance.logMethodCalled(
       'submitOtpCode',
       'EmailVerifyBlock',
@@ -112,7 +110,7 @@ class EmailVerifyBlock extends Block<EmailVerifyBlockData> {
     }
   }
 
-  resendEmail() async {
+  Future<void> resendEmail() async {
     TelemetryService.instance.logMethodCalled(
       'resendEmail',
       'EmailVerifyBlock',
@@ -135,7 +133,7 @@ class EmailVerifyBlock extends Block<EmailVerifyBlockData> {
     }
   }
 
-  updateEmail(String newValue) async {
+  Future<void> updateEmail(String newValue) async {
     TelemetryService.instance.logMethodCalled(
       'updateEmail',
       'EmailVerifyBlock',

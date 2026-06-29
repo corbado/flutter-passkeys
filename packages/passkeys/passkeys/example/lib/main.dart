@@ -8,7 +8,7 @@ import 'package:overlay_support/overlay_support.dart';
 import 'package:passkeys_example/router.dart';
 
 void main() async {
-  bool isTestMode = const bool.fromEnvironment('TEST_MODE');
+  const isTestMode = bool.fromEnvironment('TEST_MODE');
   if (isTestMode) {
     enableFlutterDriverExtension();
   }
@@ -43,8 +43,6 @@ class MyApp extends StatelessWidget {
             onSecondary: Colors.black,
             error: Colors.redAccent,
             onError: Colors.white,
-            background: Color(0xFF1953ff),
-            onBackground: Colors.white,
             surface: Color(0xFF1953ff),
             onSurface: Color(0xFF1953ff),
           ),

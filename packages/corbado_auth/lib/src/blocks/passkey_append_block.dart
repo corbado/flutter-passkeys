@@ -1,19 +1,17 @@
 import 'package:corbado_auth/corbado_auth.dart';
-import 'package:corbado_auth/src/blocks/email_verify_block.dart';
-import 'package:corbado_auth/src/blocks/types.dart';
-import 'package:corbado_auth/src/process_handler.dart';
 import 'package:corbado_auth/src/services/telemetry/telemetry.dart';
 import 'package:corbado_frontend_api_client/corbado_frontend_api_client.dart'
     as Api;
 
 class PasskeyAppendBlockData {
-  List<PasskeyFallback> availableFallbacks;
-  bool canBeSkipped;
-  final String identifierValue;
-  final Api.LoginIdentifierType identifierType;
-  PasskeyFallback? preferredFallback;
-  final bool autoSubmit;
-  bool primaryLoading = false;
+  PasskeyAppendBlockData({
+    required this.identifierValue,
+    required this.identifierType,
+    required this.autoSubmit,
+    this.availableFallbacks = const [],
+    this.canBeSkipped = false,
+    this.preferredFallback,
+  });
 
   factory PasskeyAppendBlockData.fromProcessResponse(
     Api.GeneralBlockPasskeyAppend typed,
@@ -25,34 +23,31 @@ class PasskeyAppendBlockData {
       autoSubmit: true,
     );
   }
-
-  PasskeyAppendBlockData({
-    this.availableFallbacks = const [],
-    this.canBeSkipped = false,
-    required this.identifierValue,
-    required this.identifierType,
-    this.preferredFallback,
-    required this.autoSubmit,
-  });
+  List<PasskeyFallback> availableFallbacks;
+  bool canBeSkipped;
+  final String identifierValue;
+  final Api.LoginIdentifierType identifierType;
+  PasskeyFallback? preferredFallback;
+  final bool autoSubmit;
+  bool primaryLoading = false;
 }
 
 class PasskeyAppendBlock extends Block<PasskeyAppendBlockData> {
   PasskeyAppendBlock({
-    required ProcessHandler processHandler,
-    required PasskeyAppendBlockData data,
+    required super.processHandler,
+    required super.data,
     required Api.AuthType authType,
   }) : super(
-         processHandler: processHandler,
          initialScreen: ScreenNames.PasskeyAppend,
          type: Api.BlockType.passkeyAppend,
          alternatives: [],
-         data: data,
          authProcessType: authType == Api.AuthType.login
              ? AuthProcessType.Login
              : AuthProcessType.Signup,
        );
 
-  init() {
+  @override
+  void init() {
     const allowedAlternatives = [
       Api.BlockType.emailVerify,
       Api.BlockType.phoneVerify,
@@ -101,7 +96,7 @@ class PasskeyAppendBlock extends Block<PasskeyAppendBlockData> {
     }
   }
 
-  passkeyAppend() async {
+  Future<void> passkeyAppend() async {
     TelemetryService.instance.logMethodCalled(
       'passkeyAppend',
       'PasskeyAppendBlock',
@@ -134,7 +129,7 @@ class PasskeyAppendBlock extends Block<PasskeyAppendBlockData> {
     }
   }
 
-  skipPasskeyAppend() async {
+  Future<void> skipPasskeyAppend() async {
     TelemetryService.instance.logMethodCalled(
       'skipPasskeyAppend',
       'PasskeyAppendBlock',

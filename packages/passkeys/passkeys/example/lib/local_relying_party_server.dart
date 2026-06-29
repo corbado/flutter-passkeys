@@ -9,8 +9,8 @@ class LocalUser {
   LocalUser({
     required this.name,
     required this.id,
-    this.credentialID,
     required this.transports,
+    this.credentialID,
   });
 
   final String name;
@@ -78,7 +78,8 @@ class LocalRelyingPartyServer {
     };
 
     // Add excludeCredentials if configured
-    if (configuration?.excludeCredentials == true && _users.values.isNotEmpty) {
+    if ((configuration?.excludeCredentials ?? false) &&
+        _users.values.isNotEmpty) {
       request['excludeCredentials'] = _users.values
           .where((e) => e.credentialID != null)
           .map(
@@ -169,7 +170,7 @@ class LocalRelyingPartyServer {
     };
 
     // Add allowCredentials if configured or if user has a credential
-    if (configuration?.allowCredentials == true) {
+    if (configuration?.allowCredentials ?? false) {
       request['allowCredentials'] = [
         {
           'type': 'public-key',

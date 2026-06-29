@@ -3,8 +3,8 @@ import 'dart:io';
 import 'package:corbado_telemetry_api_client/corbado_telemetry_api_client.dart';
 import 'package:flutter/foundation.dart';
 
-const String sdkVersion = "3.7.1";
-const String sdkName = "Flutter SDK";
+const String sdkVersion = '3.7.1';
+const String sdkName = 'Flutter SDK';
 
 // The TelemetryService manages the collection of telemetry events and
 // is enabled by default. It can be disabled by setting isEnabled=false
@@ -26,9 +26,9 @@ class TelemetryService {
 
   static void init({
     required String projectId,
+    required bool isDoctorEnabled,
     bool? isEnabled = true,
     bool? debugMode = false,
-    required bool isDoctorEnabled,
   }) {
     if (_instance != null) {
       throw StateError('TelemetryService.init() was already called.');
@@ -78,7 +78,7 @@ class TelemetryService {
   }
 
   void disableTelemetry() {
-    this.isEnabled = false;
+    isEnabled = false;
   }
 
   void logPackageMetadata() {

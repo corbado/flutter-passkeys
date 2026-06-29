@@ -1,8 +1,5 @@
 import 'package:corbado_auth/corbado_auth.dart';
-import 'package:corbado_auth/src/blocks/types.dart';
-import 'package:corbado_auth/src/process_handler.dart';
 import 'package:corbado_auth/src/services/telemetry/telemetry.dart';
-import 'package:corbado_auth/src/types/screen_names.dart';
 import 'package:corbado_frontend_api_client/corbado_frontend_api_client.dart';
 
 class LoginInitBlockData {
@@ -16,15 +13,6 @@ class LoginInitBlockData {
     required this.phoneEnabled,
   });
 
-  final String loginIdentifier;
-  final CorbadoError? loginIdentifierError;
-  final String? conditionalUIChallenge;
-  final bool isPhoneFocused;
-  final bool emailEnabled;
-  final bool usernameEnabled;
-  final bool phoneEnabled;
-  bool primaryLoading = false;
-
   factory LoginInitBlockData.fromProcessResponse(GeneralBlockLoginInit typed) {
     return LoginInitBlockData(
       loginIdentifier: typed.identifierValue,
@@ -36,26 +24,34 @@ class LoginInitBlockData {
       phoneEnabled: typed.isPhoneAvailable,
     );
   }
+
+  final String loginIdentifier;
+  final CorbadoError? loginIdentifierError;
+  final String? conditionalUIChallenge;
+  final bool isPhoneFocused;
+  final bool emailEnabled;
+  final bool usernameEnabled;
+  final bool phoneEnabled;
+  bool primaryLoading = false;
 }
 
 class LoginInitBlock extends Block<LoginInitBlockData> {
   LoginInitBlock({
-    required ProcessHandler processHandler,
-    required LoginInitBlockData data,
+    required super.processHandler,
+    required super.data,
   }) : super(
-         processHandler: processHandler,
          type: BlockType.loginInit,
          alternatives: [],
          initialScreen: ScreenNames.LoginInit,
-         data: data,
          authProcessType: AuthProcessType.Login,
        );
 
-  init() {
+  @override
+  void init() {
     initConditionalUI();
   }
 
-  navigateToSignup() {
+  void navigateToSignup() {
     TelemetryService.instance.logMethodCalled(
       'navigateToSignup',
       'LoginInitBlock',
@@ -67,7 +63,10 @@ class LoginInitBlock extends Block<LoginInitBlockData> {
     processHandler.updateBlockFromClient(newPrimaryBlock, newAlternatives);
   }
 
-  submitLogin({required String loginIdentifier, bool isPhone = false}) async {
+  Future<void> submitLogin({
+    required String loginIdentifier,
+    bool isPhone = false,
+  }) async {
     TelemetryService.instance.logMethodCalled(
       'submitLogin',
       'LoginInitBlock',
@@ -85,7 +84,7 @@ class LoginInitBlock extends Block<LoginInitBlockData> {
     }
   }
 
-  initConditionalUI() async {
+  Future<void> initConditionalUI() async {
     TelemetryService.instance.logMethodCalled(
       'initConditionalUI',
       'LoginInitBlock',
@@ -105,7 +104,7 @@ class LoginInitBlock extends Block<LoginInitBlockData> {
       processHandler.updateBlockFromServer(response);
     } on CorbadoError catch (e) {
       processHandler.updateBlockFromError(e);
-    } on AuthenticatorException catch (e) {
+    } on AuthenticatorException {
       // all authenticator exceptions that have not been translated to errors are handled silently here
       return;
     }

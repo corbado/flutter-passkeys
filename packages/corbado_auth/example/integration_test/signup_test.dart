@@ -12,9 +12,9 @@ void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
     final corbadoAuth = CorbadoAuth();
     await corbadoAuth.init(
-      projectId: "pro-4268394291597054564",
+      projectId: 'pro-4268394291597054564',
       customDomain:
-          "https://pro-4268394291597054564.frontendapi.cloud.corbado.io",
+          'https://pro-4268394291597054564.frontendapi.cloud.corbado.io',
     );
 
     await tester.pumpWidget(
@@ -26,20 +26,20 @@ void main() {
 
     await tester.pumpAndSettle();
 
-    await Future.delayed(Duration(seconds: 3));
+    await Future.delayed(const Duration(seconds: 3));
     expect(find.text('Sign up'), findsOneWidget);
 
-    final textField = find.byKey(ValueKey('textfield-email'));
+    final textField = find.byKey(const ValueKey('textfield-email'));
     await tester.enterText(textField, 'martin+21s4@corbado.com');
 
     // Tap the '+' icon and trigger a frame.
     await tester.tap(find.text('Sign up'));
     await tester.pumpAndSettle();
 
-    await Future.delayed(Duration(seconds: 1));
+    await Future.delayed(const Duration(seconds: 1));
 
     await tester.tap(find.text('Continue'));
 
-    await Future.delayed(Duration(seconds: 5));
+    await Future.delayed(const Duration(seconds: 5));
   });
 }

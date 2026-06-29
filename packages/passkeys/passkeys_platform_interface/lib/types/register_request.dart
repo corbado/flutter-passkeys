@@ -54,18 +54,16 @@ class RegisterRequestType {
       excludeCredentials: excludeCredentials != null
           ? excludeCredentials
                 .whereType<Map<String, dynamic>>()
-                .map((e) => CredentialType.fromJson(e))
+                .map(CredentialType.fromJson)
                 .toList()
           : [],
       authSelectionType: authenticatorSelection is Map<String, dynamic>
           ? AuthenticatorSelectionType.fromJson(authenticatorSelection)
           : null,
-      pubKeyCredParams: pubKeyCredParams != null
-          ? pubKeyCredParams
-                .whereType<Map<String, dynamic>>()
-                .map((e) => PubKeyCredParamType.fromJson(e))
-                .toList()
-          : null,
+      pubKeyCredParams: pubKeyCredParams
+          ?.whereType<Map<String, dynamic>>()
+          .map(PubKeyCredParamType.fromJson)
+          .toList(),
       timeout: json['timeout'] as int?,
       attestation: json['attestation'] as String?,
     );

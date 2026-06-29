@@ -1,6 +1,5 @@
 import 'package:corbado_auth/corbado_auth.dart';
 import 'package:corbado_auth/src/process_handler.dart';
-import 'package:corbado_auth/src/types/process_handler.dart';
 import 'package:flutter/material.dart';
 
 class CorbadoScreens {
@@ -27,15 +26,15 @@ class CorbadoScreens {
 // CorbadoAuthComponent listens to a Stream<Widget> and rebuilds itself
 // whenever a new widget is emitted.
 class CorbadoAuthComponent extends StatefulWidget {
+  const CorbadoAuthComponent({
+    required this.corbadoAuth,
+    required this.components,
+    super.key,
+    this.loading,
+  });
   final CorbadoAuth corbadoAuth;
   final CorbadoScreens components;
   final Widget? loading;
-
-  CorbadoAuthComponent({
-    required this.corbadoAuth,
-    required this.components,
-    this.loading,
-  });
 
   @override
   _CorbadoAuthComponentState createState() => _CorbadoAuthComponentState();
@@ -84,7 +83,7 @@ class _CorbadoAuthComponentState extends State<CorbadoAuthComponent> {
           }
         } else {
           if (widget.loading != null) return widget.loading!;
-          return Center(child: CircularProgressIndicator());
+          return const Center(child: CircularProgressIndicator());
         }
       },
     );

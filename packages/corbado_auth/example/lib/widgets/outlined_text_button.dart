@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
 
 class OutlinedTextButton extends StatelessWidget {
+  const OutlinedTextButton({
+    required this.content,
+    required this.onTap,
+    super.key,
+    this.disabled = false,
+    this.isLoading = false,
+  });
   final VoidCallback onTap;
   final String content;
   final bool disabled;
   final bool isLoading;
-
-  const OutlinedTextButton({
-    super.key,
-    required this.content,
-    required this.onTap,
-    this.disabled = false,
-    this.isLoading = false,
-  });
 
   void onPressed() {
     if (isLoading) {
@@ -33,7 +32,7 @@ class OutlinedTextButton extends StatelessWidget {
       style: OutlinedButton.styleFrom(
         shape: RoundedRectangleBorder(
           side: BorderSide(color: Theme.of(context).colorScheme.primary),
-          borderRadius: BorderRadius.circular(10.0),
+          borderRadius: BorderRadius.circular(10),
         ),
         backgroundColor: Theme.of(context).colorScheme.secondary,
         padding: const EdgeInsets.all(15),

@@ -26,6 +26,7 @@ class ProfilePage extends HookConsumerWidget {
       }
 
       authService.getPasskeys().then((value) => passkeys.value = value);
+      return null;
     }, [authService]);
 
     clearErrors() {

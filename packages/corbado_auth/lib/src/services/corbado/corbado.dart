@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'package:built_collection/built_collection.dart';
 import 'package:corbado_auth/corbado_auth.dart';
-import 'package:corbado_auth/src/blocks/types.dart';
 import 'package:corbado_auth/src/services/storage/storage.dart';
 import 'package:corbado_frontend_api_client/corbado_frontend_api_client.dart'
     as api;
@@ -202,7 +201,7 @@ abstract class CorbadoService {
     }
 
     final body =
-        startRes.blockBody.data.oneOf.value as api.GeneralBlockPasskeyAppend;
+        startRes.blockBody.data.oneOf.value! as api.GeneralBlockPasskeyAppend;
     final json = jsonDecode(body.challenge) as Map<String, dynamic>;
 
     final authenticatorReq = StartRegisterResponse.fromJson(
@@ -315,7 +314,7 @@ abstract class CorbadoService {
     }
 
     final body =
-        startRes.blockBody.data.oneOf.value as api.GeneralBlockPasskeyVerify;
+        startRes.blockBody.data.oneOf.value! as api.GeneralBlockPasskeyVerify;
     final json = jsonDecode(body.challenge) as Map<String, dynamic>;
 
     final authenticatorReq = StartLoginResponse.fromJson(json).toPlatformType(

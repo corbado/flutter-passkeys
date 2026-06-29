@@ -8,10 +8,11 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 
 class SignupInitScreen extends HookWidget
     implements CorbadoScreen<SignupInitBlock> {
+  const SignupInitScreen(this.block, {super.key});
+  @override
   final SignupInitBlock block;
 
-  SignupInitScreen(this.block);
-
+  @override
   Widget build(BuildContext context) {
     final email = block.data.email;
     final fullName = block.data.fullName;
@@ -31,6 +32,7 @@ class SignupInitScreen extends HookWidget
           showNotificationError(context, maybeError.translatedError);
         }
       });
+      return null;
     }, [block.error]);
 
     return Column(

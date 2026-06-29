@@ -231,7 +231,7 @@ class PasskeyAuthenticator {
     if (!base64UrlRegex.hasMatch(input)) return false;
 
     try {
-      String normalized = input.padRight(
+      final normalized = input.padRight(
         input.length + (4 - input.length % 4) % 4,
         '=',
       );

@@ -14,7 +14,6 @@ import 'package:corbado_auth/src/services/telemetry/telemetry.dart';
 import 'package:corbado_frontend_api_client/corbado_frontend_api_client.dart';
 import 'package:flutter/foundation.dart';
 import 'package:passkeys/authenticator.dart';
-import 'package:passkeys/types.dart';
 
 /// The Cobardo Auth SDK helps you with bringing passkey authentication to your
 /// app.
@@ -148,7 +147,7 @@ class CorbadoAuth {
     final passkeys = await _corbadoService.sessionListPasskeys(
       token: refreshToken,
     );
-    final mapped = passkeys.map((p) => PasskeyInfo.fromResponse(p)).toList();
+    final mapped = passkeys.map(PasskeyInfo.fromResponse).toList();
 
     _passkeysStreamController.sink.add(mapped);
 

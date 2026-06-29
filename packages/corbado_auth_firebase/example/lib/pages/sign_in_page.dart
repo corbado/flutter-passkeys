@@ -24,6 +24,7 @@ class SignInPage extends HookConsumerWidget {
 
     useEffect(() {
       authService.signInWithAutocomplete();
+      return null;
     }, []);
 
     return BasePage(

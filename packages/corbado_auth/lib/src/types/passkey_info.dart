@@ -5,6 +5,17 @@ part 'passkey_info.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 class PasskeyInfo {
+  PasskeyInfo(
+    this.id,
+    this.aaguid,
+    this.sourceOS,
+    this.sourceBrowser,
+    this.attestationType,
+    this.transport,
+    this.backupEligible,
+    this.backupState,
+    this.created,
+  );
   factory PasskeyInfo.fromResponse(Passkey p) {
     return PasskeyInfo(
       p.id,
@@ -21,18 +32,6 @@ class PasskeyInfo {
 
   factory PasskeyInfo.fromJson(Map<String, dynamic> json) =>
       _$PasskeyInfoFromJson(json);
-
-  PasskeyInfo(
-    this.id,
-    this.aaguid,
-    this.sourceOS,
-    this.sourceBrowser,
-    this.attestationType,
-    this.transport,
-    this.backupEligible,
-    this.backupState,
-    this.created,
-  );
 
   final String id;
   final String aaguid;

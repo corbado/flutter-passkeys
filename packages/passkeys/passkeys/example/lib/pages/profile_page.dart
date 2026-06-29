@@ -37,7 +37,7 @@ class ProfilePage extends ConsumerWidget {
             ),
           ),
           SizedBox(
-            key: Key('sign-out-button'),
+            key: const Key('sign-out-button'),
             width: double.infinity,
             height: 50,
             child: OutlinedButton(

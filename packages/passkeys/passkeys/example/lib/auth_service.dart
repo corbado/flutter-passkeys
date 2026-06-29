@@ -99,8 +99,8 @@ class AuthService {
   }
 
   // This is only related to testing and testing configurations.
-  Configuration? signUpConfiguration = null;
-  Configuration? loginConfiguration = null;
+  Configuration? signUpConfiguration;
+  Configuration? loginConfiguration;
 
   void setSignupConfiguration(Configuration? configuration) {
     signUpConfiguration = configuration;

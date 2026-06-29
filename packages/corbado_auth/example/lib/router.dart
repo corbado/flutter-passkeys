@@ -52,19 +52,19 @@ final routerProvider = Provider<GoRouter>((ref) {
     routes: [
       _defaultTransitionGoRoute(
         path: Routes.auth,
-        builder: (context, state) => AuthPage(),
+        builder: (context, state) => const AuthPage(),
       ),
       _defaultTransitionGoRoute(
         path: Routes.profile,
-        builder: (context, state) => ProfilePage(),
+        builder: (context, state) => const ProfilePage(),
       ),
       _defaultTransitionGoRoute(
         path: Routes.editProfile,
-        builder: (context, state) => EditProfilePage(),
+        builder: (context, state) => const EditProfilePage(),
       ),
       _defaultTransitionGoRoute(
         path: Routes.passkeyList,
-        builder: (context, state) => PasskeyListPage(),
+        builder: (context, state) => const PasskeyListPage(),
       ),
     ],
     redirect: (BuildContext context, GoRouterState state) {

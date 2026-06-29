@@ -9,10 +9,11 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 
 class LoginInitScreen extends HookWidget
     implements CorbadoScreen<LoginInitBlock> {
+  const LoginInitScreen(this.block, {super.key});
+  @override
   final LoginInitBlock block;
 
-  LoginInitScreen(this.block);
-
+  @override
   Widget build(BuildContext context) {
     final emailController = useTextEditingController(
       text: block.data.loginIdentifier,
@@ -25,6 +26,7 @@ class LoginInitScreen extends HookWidget
           showNotificationError(context, maybeError.translatedError);
         }
       });
+      return null;
     }, [block.error]);
 
     return Column(

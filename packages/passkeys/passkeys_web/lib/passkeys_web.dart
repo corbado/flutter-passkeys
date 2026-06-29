@@ -1,8 +1,7 @@
 import 'dart:convert';
-import 'package:flutter/cupertino.dart';
-import 'package:web/web.dart';
 import 'dart:js_interop';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:passkeys_platform_interface/passkeys_platform_interface.dart';
 import 'package:passkeys_platform_interface/types/types.dart';
@@ -11,6 +10,7 @@ import 'package:passkeys_web/models/passkeyLoginRequest.dart';
 import 'package:passkeys_web/models/passkeyLoginResponse.dart';
 import 'package:passkeys_web/models/passkeySignUpRequest.dart';
 import 'package:passkeys_web/models/passkeySignUpResponse.dart';
+import 'package:web/web.dart';
 
 /// The Web implementation of [PasskeysPlatform].
 class PasskeysWeb extends PasskeysPlatform {

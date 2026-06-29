@@ -11,7 +11,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:overlay_support/overlay_support.dart';
 
 class PasskeyListPage extends HookConsumerWidget {
-  PasskeyListPage({super.key});
+  const PasskeyListPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

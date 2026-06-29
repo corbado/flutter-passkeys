@@ -4,10 +4,9 @@ part 'passkeySignUpResponse.g.dart';
 
 @JsonSerializable()
 class PasskeySignUpResponse {
+  PasskeySignUpResponse(this.id, this.rawId, this.response);
   factory PasskeySignUpResponse.fromJson(Map<String, dynamic> json) =>
       _$PasskeySignUpResponseFromJson(json);
-
-  PasskeySignUpResponse(this.id, this.rawId, this.response);
 
   final String id;
   final String rawId;
@@ -18,14 +17,13 @@ class PasskeySignUpResponse {
 
 @JsonSerializable(explicitToJson: true)
 class AttestationResponse {
-  factory AttestationResponse.fromJson(Map<String, dynamic> json) =>
-      _$AttestationResponseFromJson(json);
-
   AttestationResponse(
     this.clientDataJSON,
     this.attestationObject,
     this.transports,
   );
+  factory AttestationResponse.fromJson(Map<String, dynamic> json) =>
+      _$AttestationResponseFromJson(json);
 
   final String clientDataJSON;
   final String attestationObject;

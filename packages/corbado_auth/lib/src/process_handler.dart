@@ -3,18 +3,17 @@ import 'dart:async';
 import 'package:corbado_auth/corbado_auth.dart';
 import 'package:corbado_auth/src/blocks/completed_block.dart';
 import 'package:corbado_auth/src/blocks/translator.dart';
-import 'package:corbado_auth/src/blocks/types.dart';
 import 'package:corbado_auth/src/services/corbado/corbado.dart';
 import 'package:corbado_frontend_api_client/corbado_frontend_api_client.dart';
 
 class ComponentWithData {
+  ComponentWithData(this.screenName, this.block);
   final ScreenNames screenName;
   final Block<dynamic> block;
-
-  ComponentWithData(this.screenName, this.block);
 }
 
 class ProcessHandler {
+  ProcessHandler({required this.corbadoService, required this.onLoggedIn});
   final CorbadoService corbadoService;
 
   final void Function(String shortSession, String? longSession) onLoggedIn;
@@ -27,9 +26,7 @@ class ProcessHandler {
   Stream<ComponentWithData> get componentWithDataStream =>
       _componentWithDataStream.stream;
 
-  ProcessHandler({required this.corbadoService, required this.onLoggedIn});
-
-  updateBlockFromServer(ProcessResponse processResponse) {
+  void updateBlockFromServer(ProcessResponse processResponse) {
     final newPrimaryBlock = _parseBlockData(
       processResponse.blockBody,
       processResponse.common,
@@ -44,7 +41,7 @@ class ProcessHandler {
     _updatePrimaryBlock(newPrimaryBlock);
   }
 
-  updateBlockFromClient(
+  void updateBlockFromClient(
     Block<dynamic> newPrimaryBlock,
     List<Block<dynamic>> newAlternatives,
   ) {
@@ -52,9 +49,9 @@ class ProcessHandler {
     _updatePrimaryBlock(newPrimaryBlock);
   }
 
-  updateBlockFromError(CorbadoError error) {
+  void updateBlockFromError(CorbadoError error) {
     if (_currentBlock == null) {
-      return null;
+      return;
     }
 
     _currentBlock!.error = error;
@@ -62,9 +59,9 @@ class ProcessHandler {
     _updatePrimaryBlock(_currentBlock!);
   }
 
-  updateCurrentScreen(ScreenNames screen) {
+  void updateCurrentScreen(ScreenNames screen) {
     if (_currentBlock == null) {
-      return null;
+      return;
     }
 
     _currentScreen = screen;
@@ -140,7 +137,7 @@ class ProcessHandler {
 
   void notifyCurrentScreen() {
     if (_currentBlock == null) {
-      return null;
+      return;
     }
 
     final event = ComponentWithData(_currentScreen, _currentBlock!);

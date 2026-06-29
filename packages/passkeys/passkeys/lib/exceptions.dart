@@ -67,11 +67,11 @@ class NoCredentialsAvailableException implements AuthenticatorException {
 }
 
 class DomainNotAssociatedException implements AuthenticatorException {
-  final String? message;
-
   /// Constructor
   DomainNotAssociatedException(this.message);
+  final String? message;
 
+  @override
   String toString() => message ?? '';
 }
 
@@ -93,11 +93,11 @@ class DeviceNotSupportedException implements AuthenticatorException {
 /// - use a fallback method (e.g. redirect the user to the device settings)
 /// - ask the user to enable passkeys in the device settings
 class NoCreateOptionException implements AuthenticatorException {
-  final String? message;
-
   /// Constructor
   NoCreateOptionException(this.message);
+  final String? message;
 
+  @override
   String toString() => message ?? '';
 }
 
@@ -109,17 +109,18 @@ class NoCreateOptionException implements AuthenticatorException {
 /// Suggestions:
 /// - ask the user to try again
 class TimeoutException implements AuthenticatorException {
-  final String? message;
-
   /// Constructor
   TimeoutException(this.message);
+  final String? message;
 
+  @override
   String toString() => message ?? '';
 }
 
 /// This exception is thrown when a string is not a valid Base64URL encoded
 /// string.
 abstract class MalformedBase64Url implements AuthenticatorException {
+  @override
   String toString();
 }
 
@@ -132,8 +133,9 @@ abstract class MalformedBase64Url implements AuthenticatorException {
 class MalformedBase64UrlChallenge implements MalformedBase64Url {
   MalformedBase64UrlChallenge();
 
+  @override
   String toString() =>
-      "Please make sure that the Challenge is a valid Base64URL encoded string without padding.";
+      'Please make sure that the Challenge is a valid Base64URL encoded string without padding.';
 }
 
 /// This exception is thrown when the user tries to login or register but the
@@ -145,8 +147,9 @@ class MalformedBase64UrlChallenge implements MalformedBase64Url {
 class MalformedBase64UrlCredentialID implements MalformedBase64Url {
   MalformedBase64UrlCredentialID();
 
+  @override
   String toString() =>
-      "Please make sure that all the CredentialIDs are a valid Base64URL encoded string without padding.";
+      'Please make sure that all the CredentialIDs are a valid Base64URL encoded string without padding.';
 }
 
 /// This exception is thrown when the user tries to login or register but the
@@ -158,8 +161,9 @@ class MalformedBase64UrlCredentialID implements MalformedBase64Url {
 class MalformedBase64UrlUserID implements MalformedBase64Url {
   MalformedBase64UrlUserID();
 
+  @override
   String toString() =>
-      "Please make sure that all the UserID is a valid Base64URL encoded string.";
+      'Please make sure that all the UserID is a valid Base64URL encoded string.';
 }
 
 /// This exception is thrown when an exception is thrown by the authenticator

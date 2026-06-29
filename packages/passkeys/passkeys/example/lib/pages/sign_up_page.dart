@@ -1,8 +1,8 @@
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -57,7 +57,7 @@ class SignUpPage extends HookConsumerWidget {
     final authService = ref.watch(authServiceProvider);
     final authenticatorAttachment = useState<String?>(null);
 
-    bool isTestMode = const bool.fromEnvironment('TEST_MODE');
+    const isTestMode = bool.fromEnvironment('TEST_MODE');
 
     // You need to first check for the web platform because on Web calling
     // Platform will cause an exception

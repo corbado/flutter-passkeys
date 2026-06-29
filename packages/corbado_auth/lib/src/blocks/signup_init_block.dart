@@ -1,15 +1,9 @@
 import 'package:corbado_auth/src/blocks/types.dart';
-import 'package:corbado_auth/src/process_handler.dart';
 import 'package:corbado_auth/src/services/telemetry/telemetry.dart';
 import 'package:corbado_auth/src/types/screen_names.dart';
 import 'package:corbado_frontend_api_client/corbado_frontend_api_client.dart';
 
 class SignupInitBlockData {
-  final TextFieldWithError? fullName;
-  final TextFieldWithError? email;
-
-  bool primaryLoading = false;
-
   SignupInitBlockData({this.fullName, this.email});
 
   factory SignupInitBlockData.fromProcessResponse(
@@ -41,22 +35,24 @@ class SignupInitBlockData {
       email: email,
     );
   }
+  final TextFieldWithError? fullName;
+  final TextFieldWithError? email;
+
+  bool primaryLoading = false;
 }
 
 class SignupInitBlock extends Block<SignupInitBlockData> {
   SignupInitBlock({
-    required ProcessHandler processHandler,
-    required SignupInitBlockData data,
+    required super.processHandler,
+    required super.data,
   }) : super(
-         processHandler: processHandler,
          type: BlockType.signupInit,
          alternatives: [],
          initialScreen: ScreenNames.SignupInit,
-         data: data,
          authProcessType: AuthProcessType.Signup,
        );
 
-  navigateToLogin() {
+  void navigateToLogin() {
     TelemetryService.instance.logMethodCalled(
       'navigateToLogin',
       'SignupInitBlock',
@@ -68,7 +64,7 @@ class SignupInitBlock extends Block<SignupInitBlockData> {
     processHandler.updateBlockFromClient(newPrimaryBlock, newAlternatives);
   }
 
-  submitSignupInit({String? email, String? fullName}) async {
+  Future<void> submitSignupInit({String? email, String? fullName}) async {
     TelemetryService.instance.logMethodCalled(
       'submitSignupInit',
       'SignupInitBlock',

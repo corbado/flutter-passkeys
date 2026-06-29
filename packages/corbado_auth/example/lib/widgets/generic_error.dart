@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 
 class MaybeGenericError extends StatelessWidget {
+  const MaybeGenericError({required this.message, super.key});
   final String? message;
-
-  const MaybeGenericError({super.key, required this.message});
 
   @override
   Widget build(BuildContext context) {

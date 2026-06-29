@@ -83,8 +83,6 @@ class MyApp extends ConsumerWidget {
             onSecondary: Color(0xFF1953ff),
             error: Colors.redAccent,
             onError: Colors.white,
-            background: Color(0xFF1953ff),
-            onBackground: Colors.white,
             surface: Color(0xFF1953ff),
             onSurface: Color(0xFF1953ff),
           ),

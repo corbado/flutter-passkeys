@@ -8,10 +8,9 @@ import 'package:meta/meta.dart';
 enum AuthProcessType { Login, Signup }
 
 class TextFieldWithError {
+  const TextFieldWithError({required this.value, this.error});
   final String value;
   final CorbadoError? error;
-
-  const TextFieldWithError({required this.value, this.error});
 }
 
 class PasskeyFallback {
@@ -22,19 +21,11 @@ class PasskeyFallback {
 }
 
 class CorbadoError {
-  final String errorCode;
-  final String translatedError;
-  final dynamic original;
-
   const CorbadoError({
     required this.errorCode,
     required this.translatedError,
     this.original,
   });
-
-  String detailedError() {
-    return 'error ($errorCode): $original';
-  }
 
   factory CorbadoError.fromMissingServerResponse() {
     const code = 'missing_server_response';
@@ -53,6 +44,13 @@ class CorbadoError {
       translatedError: Translator.error(code),
       original: e,
     );
+  }
+  final String errorCode;
+  final String translatedError;
+  final dynamic original;
+
+  String detailedError() {
+    return 'error ($errorCode): $original';
   }
 
   static CorbadoError? fromRequestError(RequestError? error) {
@@ -100,6 +98,14 @@ class CorbadoError {
 }
 
 class Block<T> {
+  Block({
+    required this.processHandler,
+    required this.type,
+    required this.alternatives,
+    required this.data,
+    required this.authProcessType,
+    this.initialScreen,
+  });
   @protected
   final ProcessHandler processHandler;
   @protected
@@ -116,17 +122,8 @@ class Block<T> {
   @protected
   CorbadoService get corbadoService => processHandler.corbadoService;
 
-  Block({
-    required this.processHandler,
-    required this.type,
-    this.initialScreen,
-    required this.alternatives,
-    required this.data,
-    required this.authProcessType,
-  });
-
   @protected
-  init() {}
+  void init() {}
 
   Future<void> resetProcess() async {
     try {

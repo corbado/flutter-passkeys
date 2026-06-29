@@ -85,6 +85,10 @@ class AllowCredential {
     required this.transports,
   });
 
+  factory AllowCredential.fromJson(
+    Map<String, dynamic> json,
+  ) => _$AllowCredentialFromJson(json);
+
   /// The type
   final String type;
 
@@ -93,10 +97,6 @@ class AllowCredential {
 
   /// The transports
   final List<String> transports;
-
-  factory AllowCredential.fromJson(
-    Map<String, dynamic> json,
-  ) => _$AllowCredentialFromJson(json);
 
   Map<String, dynamic> toJson() => _$AllowCredentialToJson(this);
 }
@@ -155,6 +155,10 @@ class FinishLoginPlatformResponse {
     required this.userHandle,
   });
 
+  /// Parses a json object
+  factory FinishLoginPlatformResponse.fromJson(Map<String, dynamic> json) =>
+      _$FinishLoginPlatformResponseFromJson(json);
+
   /// The client data json
   final String clientDataJSON;
 
@@ -165,10 +169,6 @@ class FinishLoginPlatformResponse {
   final String signature;
 
   final String userHandle;
-
-  /// Parses a json object
-  factory FinishLoginPlatformResponse.fromJson(Map<String, dynamic> json) =>
-      _$FinishLoginPlatformResponseFromJson(json);
 
   Map<String, dynamic> toJson() => _$FinishLoginPlatformResponseToJson(this);
 }

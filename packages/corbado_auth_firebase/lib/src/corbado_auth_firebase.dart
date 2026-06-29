@@ -34,7 +34,7 @@ class CorbadoAuthFirebase {
         ua,
       );
     } catch (e) {
-      throw e;
+      rethrow;
     }
   }
 

@@ -10,6 +10,7 @@ class CorbadoException implements Exception {
 
   final String _message;
 
+  @override
   String toString() => _message;
 }
 

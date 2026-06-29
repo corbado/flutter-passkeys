@@ -16,7 +16,7 @@ const identifierErrorMap = {
   },
   'identifier_invalid_format': {
     LoginIdentifierType.username:
-        'Username must be between 4 and 32 characters long and may only consist of alphanumeric characters and \"-\" or \"_\".',
+        'Username must be between 4 and 32 characters long and may only consist of alphanumeric characters and "-" or "_".',
     LoginIdentifierType.email: 'Please enter a valid email address.',
     LoginIdentifierType.phone: 'Please enter a valid phone number',
   },

@@ -1,16 +1,14 @@
 import 'package:corbado_auth/corbado_auth.dart';
-import 'package:corbado_auth/src/blocks/email_verify_block.dart';
-import 'package:corbado_auth/src/blocks/types.dart';
-import 'package:corbado_auth/src/process_handler.dart';
 import 'package:corbado_auth/src/services/telemetry/telemetry.dart';
 import 'package:corbado_frontend_api_client/corbado_frontend_api_client.dart'
     as Api;
 
 class PasskeyVerifyBlockData {
-  List<PasskeyFallback> availableFallbacks;
-  final String identifierValue;
-  PasskeyFallback? preferredFallback;
-  bool primaryLoading = false;
+  PasskeyVerifyBlockData({
+    required this.identifierValue,
+    this.availableFallbacks = const [],
+    this.preferredFallback,
+  });
 
   factory PasskeyVerifyBlockData.fromProcessResponse(
     Api.GeneralBlockPasskeyVerify typed,
@@ -20,28 +18,25 @@ class PasskeyVerifyBlockData {
       identifierValue: typed.identifierValue,
     );
   }
-
-  PasskeyVerifyBlockData({
-    this.availableFallbacks = const [],
-    required this.identifierValue,
-    this.preferredFallback,
-  });
+  List<PasskeyFallback> availableFallbacks;
+  final String identifierValue;
+  PasskeyFallback? preferredFallback;
+  bool primaryLoading = false;
 }
 
 class PasskeyVerifyBlock extends Block<PasskeyVerifyBlockData> {
   PasskeyVerifyBlock({
-    required ProcessHandler processHandler,
-    required PasskeyVerifyBlockData data,
+    required super.processHandler,
+    required super.data,
   }) : super(
-         processHandler: processHandler,
          initialScreen: ScreenNames.PasskeyVerify,
          type: Api.BlockType.passkeyVerify,
          alternatives: [],
-         data: data,
          authProcessType: AuthProcessType.Login,
        );
 
-  init() {
+  @override
+  void init() {
     data.availableFallbacks = alternatives.map((alternative) {
       switch (alternative.type) {
         case Api.BlockType.emailVerify:
@@ -75,7 +70,7 @@ class PasskeyVerifyBlock extends Block<PasskeyVerifyBlockData> {
     passkeyVerify();
   }
 
-  passkeyVerify() async {
+  Future<void> passkeyVerify() async {
     TelemetryService.instance.logMethodCalled(
       'passkeyVerify',
       'PasskeyVerifyBlock',

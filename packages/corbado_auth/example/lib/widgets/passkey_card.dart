@@ -2,11 +2,9 @@ import 'package:corbado_auth/corbado_auth.dart';
 import 'package:flutter/material.dart';
 
 class PasskeyCard extends StatelessWidget {
+  const PasskeyCard({required this.passkey, required this.onDelete, super.key});
   final PasskeyInfo passkey;
   final void Function(String) onDelete;
-
-  const PasskeyCard({Key? key, required this.passkey, required this.onDelete})
-    : super(key: key);
 
   // Helper method to display a bottom sheet with options.
   void _showOptions(BuildContext context) {
@@ -39,7 +37,7 @@ class PasskeyCard extends StatelessWidget {
       onLongPress: () => _showOptions(context),
       child: Card(
         child: Padding(
-          padding: const EdgeInsets.all(15.0),
+          padding: const EdgeInsets.all(15),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

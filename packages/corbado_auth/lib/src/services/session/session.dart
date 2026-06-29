@@ -1,12 +1,12 @@
 import 'dart:async';
 
 import 'package:corbado_auth/corbado_auth.dart';
-import 'package:corbado_auth/src/blocks/types.dart';
 import 'package:corbado_auth/src/services/storage/storage.dart';
 import 'package:corbado_frontend_api_client/corbado_frontend_api_client.dart';
 import 'package:flutter/foundation.dart';
 
 class SessionService {
+  SessionService(this._storageService, this.frontendAPIClient);
   final StorageService _storageService;
   final CorbadoFrontendApiClient frontendAPIClient;
 
@@ -27,8 +27,6 @@ class SessionService {
 
   final _preemptiveRefreshDuration = const Duration(seconds: 60);
   Timer? _refreshTimer;
-
-  SessionService(this._storageService, this.frontendAPIClient);
 
   Future<User?> init() async {
     await _handleRefreshRequest();
