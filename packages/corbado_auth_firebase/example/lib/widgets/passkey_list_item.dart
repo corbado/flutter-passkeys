@@ -15,10 +15,8 @@ class PasskeyListItem extends HookWidget {
 
     return Container(
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(5),
-          border: Border.all(color: Theme
-              .of(context)
-              .primaryColorDark, width: 2)
+        borderRadius: BorderRadius.circular(5),
+        border: Border.all(color: Theme.of(context).primaryColorDark, width: 2),
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
@@ -30,31 +28,19 @@ class PasskeyListItem extends HookWidget {
                 children: [
                   Text(
                     'ID: ${passkeyInfo.id}',
-                    style: Theme
-                        .of(context)
-                        .textTheme
-                        .bodySmall,
+                    style: Theme.of(context).textTheme.bodySmall,
                   ),
                   Text(
-                    'Device: ${passkeyInfo.userAgent}',
-                    style: Theme
-                        .of(context)
-                        .textTheme
-                        .bodySmall,
+                    'Device: ${passkeyInfo.sourceBrowser} on ${passkeyInfo.sourceOS}',
+                    style: Theme.of(context).textTheme.bodySmall,
                   ),
                   Text(
                     'Created: ${passkeyInfo.created}',
-                    style: Theme
-                        .of(context)
-                        .textTheme
-                        .bodySmall,
+                    style: Theme.of(context).textTheme.bodySmall,
                   ),
                   Text(
                     'Synced: ${passkeyInfo.backupState}',
-                    style: Theme
-                        .of(context)
-                        .textTheme
-                        .bodySmall,
+                    style: Theme.of(context).textTheme.bodySmall,
                   ),
                 ],
               ),

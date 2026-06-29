@@ -12,35 +12,36 @@ class ErrorPage extends StatelessWidget {
     return MaterialApp(
       home: Scaffold(
         body: Center(
-            child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text(
-              'Attention',
-              style: TextStyle(
-                fontSize: 40,
-                fontWeight: FontWeight.bold,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text(
+                'Attention',
+                style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
               ),
-            ),
-            const Text('We could not load this example app'),
-            Text('Details: $error'),
-            if (hint != null)
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const SizedBox(height: 20),
-                  const Text(
-                    'How can you solve this?',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
+              const Text('We could not load this example app'),
+              Text('Details: $error'),
+              if (hint != null)
+                Column(
+                  children: [
+                    const SizedBox(height: 20),
+                    const Text(
+                      'How can you solve this?',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                  Text(hint!, textAlign: TextAlign.center, style: TextStyle(fontSize: 12),),
-                ],
-              ),
-          ],
-        )),
+                    Text(
+                      hint!,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(fontSize: 12),
+                    ),
+                  ],
+                ),
+            ],
+          ),
+        ),
       ),
     );
   }

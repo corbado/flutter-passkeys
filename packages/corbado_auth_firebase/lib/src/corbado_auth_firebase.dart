@@ -6,6 +6,7 @@ import 'package:corbado_auth_firebase/src/services/corbado.dart';
 import 'package:passkeys/authenticator.dart';
 import 'package:ua_client_hints/ua_client_hints.dart';
 
+/// Entry point that connects Firebase Functions with Corbado passkey flows.
 class CorbadoAuthFirebase {
   /// Constructor
   CorbadoAuthFirebase();
@@ -20,6 +21,7 @@ class CorbadoAuthFirebase {
     _corbadoService = CorbadoService(functions);
   }
 
+  /// Registers a new user with a passkey and returns a Firebase auth token.
   Future<String> signUpWithPasskey({
     required String email,
     String? fullName,
@@ -30,22 +32,31 @@ class CorbadoAuthFirebase {
       final platformResponse = await _authenticator.register(challenge);
 
       return await _corbadoService.finishSignUpWithPasskey(
-          platformResponse, ua);
+        platformResponse,
+        ua,
+      );
     } catch (e) {
-      throw e;
+      rethrow;
     }
   }
 
+  /// Adds an additional passkey to the already signed in user.
   Future<bool> appendPasskey(String firebaseToken) async {
     final ua = await userAgent();
-    final challenge =
-        await _corbadoService.startPasskeyAppend(firebaseToken, ua);
+    final challenge = await _corbadoService.startPasskeyAppend(
+      firebaseToken,
+      ua,
+    );
     final platformResponse = await _authenticator.register(challenge);
 
     return _corbadoService.finishPasskeyAppend(
-        firebaseToken, platformResponse, ua);
+      firebaseToken,
+      platformResponse,
+      ua,
+    );
   }
 
+  /// Cancels any passkey ceremony that is currently in progress.
   Future<void> cancelAuthenticatorOperation() {
     return _authenticator.cancelCurrentAuthenticatorOperation();
   }
@@ -70,22 +81,28 @@ class CorbadoAuthFirebase {
     return _loginWithPasskey(email);
   }
 
+  /// Starts an email one-time-password login by sending a code to [email].
   Future<void> startLoginWithEmailOTP(String email) async {
     return _corbadoService.startLoginWithEmailOTP(email);
   }
 
+  /// Completes an email one-time-password login using the received [code] and
+  /// returns a Firebase auth token.
   Future<String> finishLoginWithEmailOTP(String code) async {
     return _corbadoService.finishLoginWithEmailOTP(code);
   }
 
+  /// Returns all passkeys registered for the signed in user.
   Future<List<PasskeyInfo>> getPasskeys(String firebaseToken) async {
     return _corbadoService.getPasskeys(firebaseToken);
   }
 
+  /// Deletes the passkey identified by [passkeyId] for the signed in user.
   Future<void> deletePasskey(String firebaseToken, String passkeyId) async {
     return _corbadoService.deletePasskey(firebaseToken, passkeyId);
   }
 
+  /// Deletes the signed in user and all of their associated passkeys.
   Future<void> deleteUser(String firebaseToken) async {
     try {
       return await _corbadoService.deleteUser(firebaseToken);

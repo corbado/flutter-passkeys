@@ -12,7 +12,7 @@ final authServiceProvider = Provider<AuthService>((ref) {
   return AuthService(rps: rps, authenticator: authenticator);
 });
 
-final doctorProvider = StreamProvider<Result>((ref) async*{
+final doctorProvider = StreamProvider<Result>((ref) async* {
   final authService = ref.watch(authServiceProvider);
 
   await for (final value in authService.authenticator.resultStream) {

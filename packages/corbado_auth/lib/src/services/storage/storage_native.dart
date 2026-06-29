@@ -15,10 +15,13 @@ const _clientEnvHandleKey = 'client_env_handle';
 /// - frontEndApiUrl
 /// - clientEnvHandle (needed for passkey intelligence)
 class NativeStorageService implements StorageService {
+  /// Creates a [NativeStorageService] scoped to the given project id.
   NativeStorageService(this._projectId);
 
   final String _projectId;
-  final storage = FlutterSecureStorage();
+
+  /// The secure storage backend used to persist session data.
+  final storage = const FlutterSecureStorage();
 
   String _generateKey(String key) => '$key-$_projectId';
 

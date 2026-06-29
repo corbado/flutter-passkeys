@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -39,10 +38,14 @@ class _SignInPageState extends ConsumerState<SignInPage> {
         authService.authenticator.getAvailability().web().then((value) {
           debugPrint('Web');
           debugPrint('hasPasskeySupport: ${value.hasPasskeySupport}');
-          debugPrint('isUserVerifyingPlatformAuthenticatorAvailable: '
-              '${value.isUserVerifyingPlatformAuthenticatorAvailable}');
-          debugPrint('isConditionalMediationAvailable: '
-              '${value.isConditionalMediationAvailable}');
+          debugPrint(
+            'isUserVerifyingPlatformAuthenticatorAvailable: '
+            '${value.isUserVerifyingPlatformAuthenticatorAvailable}',
+          );
+          debugPrint(
+            'isConditionalMediationAvailable: '
+            '${value.isConditionalMediationAvailable}',
+          );
           debugPrint('isNative: ${value.isNative}');
         });
       } else if (Platform.isIOS) {
@@ -56,8 +59,10 @@ class _SignInPageState extends ConsumerState<SignInPage> {
         authService.authenticator.getAvailability().android().then((value) {
           debugPrint('Android');
           debugPrint('hasPasskeySupport: ${value.hasPasskeySupport}');
-          debugPrint('isUserVerifyingPlatformAuthenticatorAvailable:'
-              ' ${value.isUserVerifyingPlatformAuthenticatorAvailable}');
+          debugPrint(
+            'isUserVerifyingPlatformAuthenticatorAvailable:'
+            ' ${value.isUserVerifyingPlatformAuthenticatorAvailable}',
+          );
           debugPrint('isNative: ${value.isNative}');
         });
       }
@@ -66,18 +71,21 @@ class _SignInPageState extends ConsumerState<SignInPage> {
       // sign in.
       authService
           .loginWithPasskeyConditionalUI()
-          .then((value) => context.go(Routes.profile))
-          .onError(
-        (error, stackTrace) {
-          if (error is PasskeyAuthCancelledException) {
-            debugPrint(
-                'user cancelled authentication. This is not a problem. It can just be started again.');
-            return;
-          }
+          .then((value) {
+            if (!mounted) return;
+            context.go(Routes.profile);
+          })
+          .onError((error, stackTrace) {
+            if (error is PasskeyAuthCancelledException) {
+              debugPrint(
+                'user cancelled authentication. This is not a problem. '
+                'It can just be started again.',
+              );
+              return;
+            }
 
-          debugPrint('error: $error');
-        },
-      );
+            debugPrint('error: $error');
+          });
     });
   }
 
@@ -94,19 +102,14 @@ class _SignInPageState extends ConsumerState<SignInPage> {
             padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
             child: Text(
               'Tired of passwords?',
-              style: TextStyle(
-                fontSize: 40,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
             ),
           ),
           const Padding(
             padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             child: Text(
               'Sign in using your biometrics like fingerprint or face.',
-              style: TextStyle(
-                fontSize: 20,
-              ),
+              style: TextStyle(fontSize: 20),
             ),
           ),
           Padding(
@@ -140,6 +143,7 @@ class _SignInPageState extends ConsumerState<SignInPage> {
                 try {
                   final email = _emailController.value.text;
                   await authService.loginWithPasskey(email: email);
+                  if (!context.mounted) return;
                   context.go(Routes.profile);
                 } catch (e) {
                   if (e is AuthenticatorException) {
@@ -161,8 +165,10 @@ class _SignInPageState extends ConsumerState<SignInPage> {
               key: const Key('go-to-sign-up-button'),
               style: OutlinedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(vertical: 10),
-                side:
-                    BorderSide(width: 2, color: Theme.of(context).primaryColor),
+                side: BorderSide(
+                  width: 2,
+                  color: Theme.of(context).primaryColor,
+                ),
               ),
               onPressed: () => context.go(Routes.signUp),
               child: const Text('I want to create a new account'),

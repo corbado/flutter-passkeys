@@ -41,7 +41,8 @@ class SyncAccountNotAvailableException implements AuthenticatorException {
   SyncAccountNotAvailableException();
 }
 
-/// Thrown when the user tries to register but one of the excluded credentials matches an existing one on your local device.
+/// Thrown when the user tries to register but one of the excluded credentials
+/// matches an existing one on your local device.
 ///
 /// Platforms: Android
 ///
@@ -66,12 +67,15 @@ class NoCredentialsAvailableException implements AuthenticatorException {
   NoCredentialsAvailableException();
 }
 
+/// Thrown when the relying party domain is not associated with the app.
 class DomainNotAssociatedException implements AuthenticatorException {
-  final String? message;
-
   /// Constructor
   DomainNotAssociatedException(this.message);
 
+  /// The error message describing the association failure.
+  final String? message;
+
+  @override
   String toString() => message ?? '';
 }
 
@@ -93,11 +97,13 @@ class DeviceNotSupportedException implements AuthenticatorException {
 /// - use a fallback method (e.g. redirect the user to the device settings)
 /// - ask the user to enable passkeys in the device settings
 class NoCreateOptionException implements AuthenticatorException {
-  final String? message;
-
   /// Constructor
   NoCreateOptionException(this.message);
 
+  /// The error message describing why no creation option was available.
+  final String? message;
+
+  @override
   String toString() => message ?? '';
 }
 
@@ -109,17 +115,20 @@ class NoCreateOptionException implements AuthenticatorException {
 /// Suggestions:
 /// - ask the user to try again
 class TimeoutException implements AuthenticatorException {
-  final String? message;
-
   /// Constructor
   TimeoutException(this.message);
 
+  /// The error message describing the timeout.
+  final String? message;
+
+  @override
   String toString() => message ?? '';
 }
 
 /// This exception is thrown when a string is not a valid Base64URL encoded
 /// string.
 abstract class MalformedBase64Url implements AuthenticatorException {
+  @override
   String toString();
 }
 
@@ -128,12 +137,16 @@ abstract class MalformedBase64Url implements AuthenticatorException {
 ///
 /// Platforms: Android, iOS, Web
 /// Suggestions:
-/// - make sure that the challenge is a valid Base64URL encoded string without padding
+/// - make sure that the challenge is a valid Base64URL encoded string without
+///   padding
 class MalformedBase64UrlChallenge implements MalformedBase64Url {
+  /// Constructor
   MalformedBase64UrlChallenge();
 
+  @override
   String toString() =>
-      "Please make sure that the Challenge is a valid Base64URL encoded string without padding.";
+      'Please make sure that the Challenge is a valid Base64URL encoded '
+      'string without padding.';
 }
 
 /// This exception is thrown when the user tries to login or register but the
@@ -141,12 +154,16 @@ class MalformedBase64UrlChallenge implements MalformedBase64Url {
 ///
 /// Platforms: Android, iOS, Web
 /// Suggestions:
-/// - make sure that the credential ID is a valid Base64URL encoded string without padding
+/// - make sure that the credential ID is a valid Base64URL encoded string
+///   without padding
 class MalformedBase64UrlCredentialID implements MalformedBase64Url {
+  /// Constructor
   MalformedBase64UrlCredentialID();
 
+  @override
   String toString() =>
-      "Please make sure that all the CredentialIDs are a valid Base64URL encoded string without padding.";
+      'Please make sure that all the CredentialIDs are a valid Base64URL '
+      'encoded string without padding.';
 }
 
 /// This exception is thrown when the user tries to login or register but the
@@ -156,10 +173,13 @@ class MalformedBase64UrlCredentialID implements MalformedBase64Url {
 /// Suggestions:
 /// - make sure that the user ID is a valid Base64URL encoded string
 class MalformedBase64UrlUserID implements MalformedBase64Url {
+  /// Constructor
   MalformedBase64UrlUserID();
 
+  @override
   String toString() =>
-      "Please make sure that all the UserID is a valid Base64URL encoded string.";
+      'Please make sure that all the UserID is a valid Base64URL encoded '
+      'string.';
 }
 
 /// This exception is thrown when an exception is thrown by the authenticator
@@ -185,17 +205,19 @@ class UnhandledAuthenticatorException implements AuthenticatorException {
   /// Returns a string representation of the exception
   @override
   String toString() {
-    return 'Please report this exception to the package authors'
+    return 'Please report this exception to the package authors '
         '(code: $code, message: $message, details: $details}';
   }
 }
 
-/// This exception is thrown when passkey-related APIs are called on an unsupported Android version (API < 28).
+/// This exception is thrown when passkey-related APIs are called on an
+/// unsupported Android version (API < 28).
 ///
 /// Platforms: Android
 ///
 /// Suggestions:
-/// - Check the device's Android version before calling passkey APIs, or handle this exception gracefully.
+/// - Check the device's Android version before calling passkey APIs, or handle
+///   this exception gracefully.
 class PasskeyUnsupportedException implements AuthenticatorException {
   /// Constructor
   PasskeyUnsupportedException([this.message]);

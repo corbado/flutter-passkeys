@@ -9,7 +9,7 @@ class DebugOverlay {
   static void show(BuildContext context) {
     if (_currentEntry != null) return;
     _currentEntry = OverlayEntry(builder: (_) => _DebugOverlayWidget());
-    Overlay.of(context)!.insert(_currentEntry!);
+    Overlay.of(context).insert(_currentEntry!);
   }
 
   static void hide() {
@@ -32,7 +32,7 @@ class _DebugOverlayWidget extends HookConsumerWidget {
         color: Colors.transparent,
         child: Container(
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.9),
+            color: Colors.white.withValues(alpha: 0.9),
             borderRadius: BorderRadius.circular(8),
           ),
           padding: const EdgeInsets.all(12),
@@ -59,7 +59,8 @@ class _DebugOverlayWidget extends HookConsumerWidget {
                 ...result.value!.checkpoints.map(_buildItem),
               ] else ...[
                 const Text(
-                  'Please try registering a passkey or using a passkey for the debugger tool to work',
+                  'Please try registering a passkey or using a passkey '
+                  'for the debugger tool to work',
                 ),
               ],
               if (result.value?.exception != null) ...[
@@ -96,15 +97,15 @@ class _DebugOverlayWidget extends HookConsumerWidget {
                           ),
                         ),
                         const SizedBox(height: 2),
-                        Text(info.description,
-                            style: const TextStyle(fontSize: 12),),
+                        Text(
+                          info.description,
+                          style: const TextStyle(fontSize: 12),
+                        ),
                         if (info.platforms.isNotEmpty) ...[
                           const SizedBox(height: 4),
                           Text(
                             'Platforms: ${info.platforms.join(', ')}',
-                            style: const TextStyle(
-                              fontSize: 12,
-                            ),
+                            style: const TextStyle(fontSize: 12),
                           ),
                         ],
                         if (info.suggestions.isNotEmpty) ...[
@@ -116,16 +117,15 @@ class _DebugOverlayWidget extends HookConsumerWidget {
                               fontSize: 12,
                             ),
                           ),
-                          ...info.suggestions.map((s) => Padding(
-                                padding:
-                                    const EdgeInsets.only(left: 8.0, top: 2),
-                                child: Text(
-                                  '• $s',
-                                  style: const TextStyle(
-                                    fontSize: 12,
-                                  ),
-                                ),
-                              )),
+                          ...info.suggestions.map(
+                            (s) => Padding(
+                              padding: const EdgeInsets.only(left: 8, top: 2),
+                              child: Text(
+                                '• $s',
+                                style: const TextStyle(fontSize: 12),
+                              ),
+                            ),
+                          ),
                         ],
                       ],
                     );
@@ -147,15 +147,12 @@ Widget _buildItem(Checkpoint cp) {
     case CheckpointType.success:
       iconData = Icons.check;
       color = Colors.green;
-      break;
     case CheckpointType.warning:
       iconData = Icons.warning_amber;
       color = Colors.orange;
-      break;
     case CheckpointType.error:
       iconData = Icons.close;
       color = Colors.red;
-      break;
   }
 
   return Container(
@@ -170,17 +167,17 @@ Widget _buildItem(Checkpoint cp) {
             border: Border.all(color: color, width: 2),
             borderRadius: BorderRadius.circular(4),
           ),
-          child: Center(
-            child: Icon(iconData, size: 16, color: color),
-          ),
+          child: Center(child: Icon(iconData, size: 16, color: color)),
         ),
         const SizedBox(width: 8),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(cp.name,
-                  style: const TextStyle(fontWeight: FontWeight.bold)),
+              Text(
+                cp.name,
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
               Text(cp.description, style: const TextStyle(fontSize: 12)),
             ],
           ),
