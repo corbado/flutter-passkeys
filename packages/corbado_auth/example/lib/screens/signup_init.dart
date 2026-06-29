@@ -37,26 +37,19 @@ class SignupInitScreen extends HookWidget
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         MaybeGenericError(message: block.error?.translatedError),
-        const SizedBox(
-          height: 10,
-        ),
+        const SizedBox(height: 10),
         const Padding(
           padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
           child: Text(
             'Tired of passwords?',
-            style: TextStyle(
-              fontSize: 40,
-              fontWeight: FontWeight.bold,
-            ),
+            style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
           ),
         ),
         const Padding(
           padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           child: Text(
             'Sign up using your biometrics like fingerprint or face.',
-            style: TextStyle(
-              fontSize: 20,
-            ),
+            style: TextStyle(fontSize: 20),
           ),
         ),
         Padding(

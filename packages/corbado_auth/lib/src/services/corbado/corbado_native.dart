@@ -20,9 +20,10 @@ Future<CorbadoService> createClient(
   final uaData = await userAgentData();
 
   final apiClient = CorbadoFrontendApiClient(
-      basePathOverride: basePath,
-      sdkVersion: '3.2.0',
-      languageVersion: Platform.version);
+    basePathOverride: basePath,
+    sdkVersion: '3.2.0',
+    languageVersion: Platform.version,
+  );
   apiClient.dio.options.headers.addAll({
     'X-Corbado-ProjectID': projectId,
     'User-Agent': _buildUserAgent(uaData),

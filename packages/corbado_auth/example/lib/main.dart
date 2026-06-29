@@ -36,33 +36,29 @@ void main() async {
   runApp(const LoadingPage());
 
   // Now we do the initialization.
-  final projectId =
-      envProjectId == 'none' ? calculateProjectID() : envProjectId;
+  final projectId = envProjectId == 'none'
+      ? calculateProjectID()
+      : envProjectId;
 
   final corbadoAuth = CorbadoAuth();
-  await corbadoAuth.init(
-    projectId: projectId,
-    debugMode: true,
-  );
+  await corbadoAuth.init(projectId: projectId, debugMode: true);
 
   // Telemetry is used to help us understand how the example is used.
-  unawaited(CorbadoTelemetryApiClient(
-    projectId: projectId,
-  ).sendEvent(
-    type: TelemetryEventType.EXAMPLE_APPLICATION_OPENED,
-    payload: {
-      'exampleName': 'corbado/flutter-passkeys/corbado_auth_example',
-    },
-  ));
+  unawaited(
+    CorbadoTelemetryApiClient(projectId: projectId).sendEvent(
+      type: TelemetryEventType.EXAMPLE_APPLICATION_OPENED,
+      payload: {'exampleName': 'corbado/flutter-passkeys/corbado_auth_example'},
+    ),
+  );
 
   // Finally we override the providers that needed initialization.
   // Now the real app can be loaded.
-  runApp(ProviderScope(
-    overrides: [
-      corbadoProvider.overrideWithValue(corbadoAuth),
-    ],
-    child: const MyApp(),
-  ));
+  runApp(
+    ProviderScope(
+      overrides: [corbadoProvider.overrideWithValue(corbadoAuth)],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends ConsumerWidget {

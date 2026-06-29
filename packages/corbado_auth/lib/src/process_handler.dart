@@ -19,26 +19,35 @@ class ProcessHandler {
 
   final void Function(String shortSession, String? longSession) onLoggedIn;
 
-  final _componentWithDataStream = StreamController<ComponentWithData>.broadcast();
+  final _componentWithDataStream =
+      StreamController<ComponentWithData>.broadcast();
   ScreenNames _currentScreen = ScreenNames.SignupInit;
   Block<dynamic>? _currentBlock;
 
-  Stream<ComponentWithData> get componentWithDataStream => _componentWithDataStream.stream;
+  Stream<ComponentWithData> get componentWithDataStream =>
+      _componentWithDataStream.stream;
 
   ProcessHandler({required this.corbadoService, required this.onLoggedIn});
 
   updateBlockFromServer(ProcessResponse processResponse) {
-    final newPrimaryBlock = _parseBlockData(processResponse.blockBody, processResponse.common);
-    final alternatives = (processResponse.blockBody.alternatives?.toList() ?? [])
-        .map((BlockBody e) => _parseBlockData(e, processResponse.common))
-        .toList();
+    final newPrimaryBlock = _parseBlockData(
+      processResponse.blockBody,
+      processResponse.common,
+    );
+    final alternatives =
+        (processResponse.blockBody.alternatives?.toList() ?? [])
+            .map((BlockBody e) => _parseBlockData(e, processResponse.common))
+            .toList();
 
     newPrimaryBlock.alternatives = alternatives;
 
     _updatePrimaryBlock(newPrimaryBlock);
   }
 
-  updateBlockFromClient(Block<dynamic> newPrimaryBlock, List<Block<dynamic>> newAlternatives) {
+  updateBlockFromClient(
+    Block<dynamic> newPrimaryBlock,
+    List<Block<dynamic>> newAlternatives,
+  ) {
     newPrimaryBlock.alternatives = newAlternatives;
     _updatePrimaryBlock(newPrimaryBlock);
   }
@@ -59,7 +68,9 @@ class ProcessHandler {
     }
 
     _currentScreen = screen;
-    _componentWithDataStream.add(ComponentWithData(_currentScreen, _currentBlock!));
+    _componentWithDataStream.add(
+      ComponentWithData(_currentScreen, _currentBlock!),
+    );
   }
 
   Block<dynamic> _parseBlockData(BlockBody body, ProcessCommon common) {
@@ -76,7 +87,10 @@ class ProcessHandler {
 
       case BlockType.loginInit:
         final typed = body.data.oneOf.value! as GeneralBlockLoginInit;
-        block = LoginInitBlock(processHandler: this, data: LoginInitBlockData.fromProcessResponse(typed));
+        block = LoginInitBlock(
+          processHandler: this,
+          data: LoginInitBlockData.fromProcessResponse(typed),
+        );
         block.error = CorbadoError.fromRequestError(typed.error);
 
       case BlockType.emailVerify:

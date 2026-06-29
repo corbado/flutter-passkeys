@@ -45,16 +45,14 @@ class _SelectTestConfigurationState extends State<SelectTestConfiguration> {
       elevation: 16,
       style: const TextStyle(color: Colors.deepPurple),
       hint: Text("Select Configuration"),
-      underline: Container(
-        height: 2,
-        color: Colors.deepPurpleAccent,
-      ),
+      underline: Container(height: 2, color: Colors.deepPurpleAccent),
       items: widget.configurations
           .map(
-              (Configuration configuration) => DropdownMenuItem<Configuration?>(
-                    value: configuration,
-                    child: Text(configuration.name),
-                  ))
+            (Configuration configuration) => DropdownMenuItem<Configuration?>(
+              value: configuration,
+              child: Text(configuration.name),
+            ),
+          )
           .toList(),
       onChanged: (Configuration? newValue) {
         setState(() {

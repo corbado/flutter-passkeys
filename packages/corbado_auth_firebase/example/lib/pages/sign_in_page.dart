@@ -27,115 +27,113 @@ class SignInPage extends HookConsumerWidget {
     }, []);
 
     return BasePage(
-        child: SingleChildScrollView(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-            child: Text(
-              'Tired of passwords?',
-              style: TextStyle(
-                fontSize: 40,
-                fontWeight: FontWeight.bold,
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+              child: Text(
+                'Tired of passwords?',
+                style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
               ),
             ),
-          ),
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            child: Text(
-              'Sign in using your biometrics like fingerprint or face.',
-              style: TextStyle(
-                fontSize: 20,
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              child: Text(
+                'Sign in using your biometrics like fingerprint or face.',
+                style: TextStyle(fontSize: 20),
               ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 4),
-            child: TextField(
-              autofillHints: const [AutofillHints.username],
-              controller: _emailController,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: 'email address',
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 4),
+              child: TextField(
+                autofillHints: const [AutofillHints.username],
+                controller: _emailController,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  hintText: 'email address',
+                ),
               ),
             ),
-          ),
-          usePasskeys.value
-              ? Container()
-              : Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 4),
-                  child: TextField(
-                    controller: _passwordController,
-                    obscureText: true,
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      hintText: 'password',
+            usePasskeys.value
+                ? Container()
+                : Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 4),
+                    child: TextField(
+                      controller: _passwordController,
+                      obscureText: true,
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                        hintText: 'password',
+                      ),
                     ),
                   ),
-                ),
-          error.value != null
-              ? Text(
-                  error.value!,
-                  style: TextStyle(color: Theme.of(context).colorScheme.error),
-                )
-              : Container(),
-          const SizedBox(height: 20),
-          SizedBox(
-            width: double.infinity,
-            height: 50,
-            child: FilledTextButton(
-              onTap: () async {
-                final email = _emailController.value.text;
-                if (usePasskeys.value) {
-                  try {
-                    loading.value = true;
-                    await authService.signIn(email: email);
-                  } on UnknownUserException {
-                    loading.value = false;
-                    usePasskeys.value = false;
-                  } on NoPasskeyForDeviceException {
+            error.value != null
+                ? Text(
+                    error.value!,
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.error,
+                    ),
+                  )
+                : Container(),
+            const SizedBox(height: 20),
+            SizedBox(
+              width: double.infinity,
+              height: 50,
+              child: FilledTextButton(
+                onTap: () async {
+                  final email = _emailController.value.text;
+                  if (usePasskeys.value) {
                     try {
-                      await authService.startLoginWithEmailOTP(email);
-                      if (!context.mounted) return;
-
+                      loading.value = true;
+                      await authService.signIn(email: email);
+                    } on UnknownUserException {
                       loading.value = false;
-                      context.push(Routes.buildEmailOtp(email));
+                      usePasskeys.value = false;
+                    } on NoPasskeyForDeviceException {
+                      try {
+                        await authService.startLoginWithEmailOTP(email);
+                        if (!context.mounted) return;
+
+                        loading.value = false;
+                        context.push(Routes.buildEmailOtp(email));
+                      } catch (error) {
+                        loading.value = false;
+                        debugPrint('error: $error');
+                      }
                     } catch (error) {
                       loading.value = false;
                       debugPrint('error: $error');
                     }
-                  } catch (error) {
-                    loading.value = false;
-                    debugPrint('error: $error');
+                  } else {
+                    loading.value = true;
+                    final password = _passwordController.value.text;
+                    final maybeError = await authService
+                        .signInWithEmailAndPassword(email, password);
+                    if (maybeError != null) {
+                      loading.value = false;
+                      error.value = maybeError;
+                      return;
+                    }
                   }
-                } else {
-                  loading.value = true;
-                  final password = _passwordController.value.text;
-                  final maybeError = await authService
-                      .signInWithEmailAndPassword(email, password);
-                  if (maybeError != null) {
-                    loading.value = false;
-                    error.value = maybeError;
-                    return;
-                  }
-                }
-              },
-              isLoading: loading.value,
-              content: 'sign in',
+                },
+                isLoading: loading.value,
+                content: 'sign in',
+              ),
             ),
-          ),
-          const SizedBox(height: 10),
-          SizedBox(
-            width: double.infinity,
-            height: 50,
-            child: OutlinedTextButton(
-              onTap: () => context.go(Routes.signUp),
-              content: 'I want to create a new account',
+            const SizedBox(height: 10),
+            SizedBox(
+              width: double.infinity,
+              height: 50,
+              child: OutlinedTextButton(
+                onTap: () => context.go(Routes.signUp),
+                content: 'I want to create a new account',
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
-    ));
+    );
   }
 }

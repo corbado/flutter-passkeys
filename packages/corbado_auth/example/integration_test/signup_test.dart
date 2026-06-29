@@ -12,16 +12,17 @@ void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
     final corbadoAuth = CorbadoAuth();
     await corbadoAuth.init(
-        projectId: "pro-4268394291597054564",
-        customDomain: "https://pro-4268394291597054564.frontendapi.cloud.corbado.io");
+      projectId: "pro-4268394291597054564",
+      customDomain:
+          "https://pro-4268394291597054564.frontendapi.cloud.corbado.io",
+    );
 
     await tester.pumpWidget(
-        ProviderScope(
-          overrides: [
-            corbadoProvider.overrideWithValue(corbadoAuth),
-          ],
-          child: const MyApp(),
-        ));
+      ProviderScope(
+        overrides: [corbadoProvider.overrideWithValue(corbadoAuth)],
+        child: const MyApp(),
+      ),
+    );
 
     await tester.pumpAndSettle();
 

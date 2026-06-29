@@ -17,7 +17,8 @@ enum CorbadoField {
         return CorbadoField.code;
       default:
         throw Exception(
-            'Could not create CorbadoField because value $v is not known.');
+          'Could not create CorbadoField because value $v is not known.',
+        );
     }
   }
 }

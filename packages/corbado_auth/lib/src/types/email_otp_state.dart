@@ -1,7 +1,4 @@
-enum EmailOTPFlow {
-  SignIn,
-  SignUp
-}
+enum EmailOTPFlow { SignIn, SignUp }
 
 /// Holds all information regarding an ongoing email based OTP flow.
 class EmailOTPState {

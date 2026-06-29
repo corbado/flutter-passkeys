@@ -29,26 +29,19 @@ class EmailEditScreen extends HookWidget
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const SizedBox(
-          height: 10,
-        ),
+        const SizedBox(height: 10),
         const Padding(
           padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
           child: Text(
             'Edit the email address',
-            style: TextStyle(
-              fontSize: 40,
-              fontWeight: FontWeight.bold,
-            ),
+            style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
           ),
         ),
         const Padding(
           padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           child: Text(
             'Insert the new email address below.',
-            style: TextStyle(
-              fontSize: 20,
-            ),
+            style: TextStyle(fontSize: 20),
           ),
         ),
         Padding(
@@ -68,7 +61,7 @@ class EmailEditScreen extends HookWidget
           child: FilledTextButton(
             isLoading: block.data.primaryLoading,
             onTap: () async {
-                await block.updateEmail(emailController.text);
+              await block.updateEmail(emailController.text);
             },
             content: 'Edit email',
           ),

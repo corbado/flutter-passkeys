@@ -32,8 +32,9 @@ void _showNoCreateOptionDialog(BuildContext context) {
           TextButton(
             onPressed: () {
               Navigator.of(context).pop();
-              const MethodChannel('com.example.passkeys/settings')
-                  .invokeMethod('openCredentialProviderSettings');
+              const MethodChannel(
+                'com.example.passkeys/settings',
+              ).invokeMethod('openCredentialProviderSettings');
             },
             child: const Text('Open Settings'),
           ),
@@ -64,10 +65,14 @@ class SignUpPage extends HookConsumerWidget {
       authService.authenticator.getAvailability().web().then((value) {
         debugPrint('Web');
         debugPrint('hasPasskeySupport: ${value.hasPasskeySupport}');
-        debugPrint('isUserVerifyingPlatformAuthenticatorAvailable: '
-            '${value.isUserVerifyingPlatformAuthenticatorAvailable}');
-        debugPrint('isConditionalMediationAvailable: '
-            '${value.isConditionalMediationAvailable}');
+        debugPrint(
+          'isUserVerifyingPlatformAuthenticatorAvailable: '
+          '${value.isUserVerifyingPlatformAuthenticatorAvailable}',
+        );
+        debugPrint(
+          'isConditionalMediationAvailable: '
+          '${value.isConditionalMediationAvailable}',
+        );
         debugPrint('isNative: ${value.isNative}');
       });
     } else if (Platform.isIOS) {
@@ -81,8 +86,10 @@ class SignUpPage extends HookConsumerWidget {
       authService.authenticator.getAvailability().android().then((value) {
         debugPrint('Android');
         debugPrint('hasPasskeySupport: ${value.hasPasskeySupport}');
-        debugPrint('isUserVerifyingPlatformAuthenticatorAvailable:'
-            ' ${value.isUserVerifyingPlatformAuthenticatorAvailable}');
+        debugPrint(
+          'isUserVerifyingPlatformAuthenticatorAvailable:'
+          ' ${value.isUserVerifyingPlatformAuthenticatorAvailable}',
+        );
         debugPrint('isNative: ${value.isNative}');
       });
     }
@@ -95,19 +102,14 @@ class SignUpPage extends HookConsumerWidget {
             padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
             child: Text(
               'Tired of passwords?',
-              style: TextStyle(
-                fontSize: 40,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
             ),
           ),
           const Padding(
             padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             child: Text(
               'Sign up using your biometrics like fingerprint or face.',
-              style: TextStyle(
-                fontSize: 20,
-              ),
+              style: TextStyle(fontSize: 20),
             ),
           ),
           Padding(
@@ -171,8 +173,10 @@ class SignUpPage extends HookConsumerWidget {
               key: const Key('go-to-login-button'),
               style: OutlinedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(vertical: 10),
-                side:
-                    BorderSide(width: 2, color: Theme.of(context).primaryColor),
+                side: BorderSide(
+                  width: 2,
+                  color: Theme.of(context).primaryColor,
+                ),
               ),
               onPressed: () => context.go(Routes.signIn),
               child: const Text('I already have an account'),
@@ -184,10 +188,7 @@ class SignUpPage extends HookConsumerWidget {
               alignment: Alignment.centerLeft,
               child: Text(
                 'Authenticator Attachment',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 13,
-                ),
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
               ),
             ),
             const SizedBox(height: 6),
@@ -196,7 +197,9 @@ class SignUpPage extends HookConsumerWidget {
                 ButtonSegment(value: 'none', label: Text('None')),
                 ButtonSegment(value: 'platform', label: Text('Platform')),
                 ButtonSegment(
-                    value: 'cross-platform', label: Text('Cross-plat.')),
+                  value: 'cross-platform',
+                  label: Text('Cross-plat.'),
+                ),
               ],
               selected: {authenticatorAttachment.value ?? 'none'},
               onSelectionChanged: (selected) {

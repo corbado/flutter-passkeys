@@ -14,12 +14,14 @@ class CompletedBlockData {
 }
 
 class CompletedBlock extends Block<CompletedBlockData> {
-  CompletedBlock({required ProcessHandler processHandler, required CompletedBlockData data})
-      : super(
-          processHandler: processHandler,
-          type: BlockType.completed,
-          alternatives: [],
-          data: data,
-          authProcessType: AuthProcessType.Login,
-        );
+  CompletedBlock({
+    required ProcessHandler processHandler,
+    required CompletedBlockData data,
+  }) : super(
+         processHandler: processHandler,
+         type: BlockType.completed,
+         alternatives: [],
+         data: data,
+         authProcessType: AuthProcessType.Login,
+       );
 }

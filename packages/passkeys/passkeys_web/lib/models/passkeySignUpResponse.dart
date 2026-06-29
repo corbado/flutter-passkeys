@@ -22,10 +22,10 @@ class AttestationResponse {
       _$AttestationResponseFromJson(json);
 
   AttestationResponse(
-      this.clientDataJSON,
-      this.attestationObject,
-      this.transports,
-      );
+    this.clientDataJSON,
+    this.attestationObject,
+    this.transports,
+  );
 
   final String clientDataJSON;
   final String attestationObject;

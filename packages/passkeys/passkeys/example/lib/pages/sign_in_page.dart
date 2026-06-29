@@ -39,10 +39,14 @@ class _SignInPageState extends ConsumerState<SignInPage> {
         authService.authenticator.getAvailability().web().then((value) {
           debugPrint('Web');
           debugPrint('hasPasskeySupport: ${value.hasPasskeySupport}');
-          debugPrint('isUserVerifyingPlatformAuthenticatorAvailable: '
-              '${value.isUserVerifyingPlatformAuthenticatorAvailable}');
-          debugPrint('isConditionalMediationAvailable: '
-              '${value.isConditionalMediationAvailable}');
+          debugPrint(
+            'isUserVerifyingPlatformAuthenticatorAvailable: '
+            '${value.isUserVerifyingPlatformAuthenticatorAvailable}',
+          );
+          debugPrint(
+            'isConditionalMediationAvailable: '
+            '${value.isConditionalMediationAvailable}',
+          );
           debugPrint('isNative: ${value.isNative}');
         });
       } else if (Platform.isIOS) {
@@ -56,8 +60,10 @@ class _SignInPageState extends ConsumerState<SignInPage> {
         authService.authenticator.getAvailability().android().then((value) {
           debugPrint('Android');
           debugPrint('hasPasskeySupport: ${value.hasPasskeySupport}');
-          debugPrint('isUserVerifyingPlatformAuthenticatorAvailable:'
-              ' ${value.isUserVerifyingPlatformAuthenticatorAvailable}');
+          debugPrint(
+            'isUserVerifyingPlatformAuthenticatorAvailable:'
+            ' ${value.isUserVerifyingPlatformAuthenticatorAvailable}',
+          );
           debugPrint('isNative: ${value.isNative}');
         });
       }
@@ -67,17 +73,16 @@ class _SignInPageState extends ConsumerState<SignInPage> {
       authService
           .loginWithPasskeyConditionalUI()
           .then((value) => context.go(Routes.profile))
-          .onError(
-        (error, stackTrace) {
-          if (error is PasskeyAuthCancelledException) {
-            debugPrint(
-                'user cancelled authentication. This is not a problem. It can just be started again.');
-            return;
-          }
+          .onError((error, stackTrace) {
+            if (error is PasskeyAuthCancelledException) {
+              debugPrint(
+                'user cancelled authentication. This is not a problem. It can just be started again.',
+              );
+              return;
+            }
 
-          debugPrint('error: $error');
-        },
-      );
+            debugPrint('error: $error');
+          });
     });
   }
 
@@ -94,19 +99,14 @@ class _SignInPageState extends ConsumerState<SignInPage> {
             padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
             child: Text(
               'Tired of passwords?',
-              style: TextStyle(
-                fontSize: 40,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
             ),
           ),
           const Padding(
             padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             child: Text(
               'Sign in using your biometrics like fingerprint or face.',
-              style: TextStyle(
-                fontSize: 20,
-              ),
+              style: TextStyle(fontSize: 20),
             ),
           ),
           Padding(
@@ -161,8 +161,10 @@ class _SignInPageState extends ConsumerState<SignInPage> {
               key: const Key('go-to-sign-up-button'),
               style: OutlinedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(vertical: 10),
-                side:
-                    BorderSide(width: 2, color: Theme.of(context).primaryColor),
+                side: BorderSide(
+                  width: 2,
+                  color: Theme.of(context).primaryColor,
+                ),
               ),
               onPressed: () => context.go(Routes.signUp),
               child: const Text('I want to create a new account'),

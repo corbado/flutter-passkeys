@@ -32,16 +32,15 @@ class UnknownUserException implements Exception {
 class InvalidUsernameException extends CorbadoException {
   /// Constructor
   InvalidUsernameException()
-      : super(
-            'The username you entered is invalid. Please check it once again.');
+    : super('The username you entered is invalid. Please check it once again.');
 }
 
 /// Exception thrown when one of the required fields is empty
 class RequiredFieldEmptyException extends CorbadoException {
   /// Constructor
   RequiredFieldEmptyException(String rawField)
-      : field = CorbadoField.fromString(rawField),
-        super('Required field "$rawField" can not be empty.');
+    : field = CorbadoField.fromString(rawField),
+      super('Required field "$rawField" can not be empty.');
 
   /// Field name
   final CorbadoField field;
@@ -51,9 +50,10 @@ class RequiredFieldEmptyException extends CorbadoException {
 class FieldWithInvalidValueException extends CorbadoException {
   /// Constructor
   FieldWithInvalidValueException(String rawField)
-      : field = CorbadoField.fromString(rawField),
-        super(
-            'Please check the field "$rawField", it contains an invalid value.');
+    : field = CorbadoField.fromString(rawField),
+      super(
+        'Please check the field "$rawField", it contains an invalid value.',
+      );
 
   final CorbadoField field;
 }
@@ -62,22 +62,23 @@ class FieldWithInvalidValueException extends CorbadoException {
 class InvalidOTPCodeException extends CorbadoException {
   /// Constructor
   InvalidOTPCodeException()
-      : super('The 6-digit code is wrong. Please check it once again.');
+    : super('The 6-digit code is wrong. Please check it once again.');
 }
 
 /// Exception thrown when the submitted OTP code is wrong
 class NoOTPChallengeStartedException extends CorbadoException {
   /// Constructor
   NoOTPChallengeStartedException()
-      : super('No OTP challenge has been started yet.');
+    : super('No OTP challenge has been started yet.');
 }
 
 /// Exception thrown when the submitted OTP code is wrong
 class InvalidPasskeyException extends CorbadoException {
   /// Constructor
   InvalidPasskeyException()
-      : super(
-            'The passkey you used has been deleted from your profile. Please enter your email and continue with manual login.');
+    : super(
+        'The passkey you used has been deleted from your profile. Please enter your email and continue with manual login.',
+      );
 }
 
 /// Exception thrown when the user already has a passkey that is available
@@ -85,8 +86,9 @@ class InvalidPasskeyException extends CorbadoException {
 class PasskeyAlreadyExistsException extends CorbadoException {
   /// Constructor
   PasskeyAlreadyExistsException()
-      : super(
-            'You have already set up a passkey that can be used on this device.');
+    : super(
+        'You have already set up a passkey that can be used on this device.',
+      );
 }
 
 /// Exception thrown when a user that has not yet confirmed his account wants
@@ -94,8 +96,7 @@ class PasskeyAlreadyExistsException extends CorbadoException {
 class ConditionalUiUnconfirmedCredential extends CorbadoException {
   /// Constructor
   ConditionalUiUnconfirmedCredential()
-      : super(
-            'You can only use passkeys after you have confirmed your account.');
+    : super('You can only use passkeys after you have confirmed your account.');
 }
 
 /// Exception thrown when the backend returns an unexpected response
@@ -125,8 +126,9 @@ class ExceptionFactory {
       return UnexpectedBackendException(operation, message);
     }
 
-    final backendMessage =
-        BackendMessage.fromJson(decoded['error'] as Map<String, dynamic>);
+    final backendMessage = BackendMessage.fromJson(
+      decoded['error'] as Map<String, dynamic>,
+    );
     switch (backendMessage.type) {
       case 'validation_error':
         final err = backendMessage.validation;
@@ -205,8 +207,7 @@ class BackendMessage {
   /// Deserializes a BackendMessage
   factory BackendMessage.fromJson(
     Map<String, dynamic> json,
-  ) =>
-      _$BackendMessageFromJson(json);
+  ) => _$BackendMessageFromJson(json);
 
   /// Message type
   final String type;
@@ -233,8 +234,7 @@ class BackendValidationError {
   /// Deserializes a BackendValidationError
   factory BackendValidationError.fromJson(
     Map<String, dynamic> json,
-  ) =>
-      _$BackendValidationErrorFromJson(json);
+  ) => _$BackendValidationErrorFromJson(json);
 
   /// The field
   final String field;

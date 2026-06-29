@@ -11,7 +11,8 @@ BackendMessage _$BackendMessageFromJson(Map<String, dynamic> json) =>
       type: json['type'] as String,
       validation: (json['validation'] as List<dynamic>?)
           ?.map(
-              (e) => BackendValidationError.fromJson(e as Map<String, dynamic>))
+            (e) => BackendValidationError.fromJson(e as Map<String, dynamic>),
+          )
           .toList(),
       details: json['details'] as String?,
     );
@@ -24,15 +25,15 @@ Map<String, dynamic> _$BackendMessageToJson(BackendMessage instance) =>
     };
 
 BackendValidationError _$BackendValidationErrorFromJson(
-        Map<String, dynamic> json) =>
-    BackendValidationError(
-      field: json['field'] as String,
-      message: json['message'] as String,
-    );
+  Map<String, dynamic> json,
+) => BackendValidationError(
+  field: json['field'] as String,
+  message: json['message'] as String,
+);
 
 Map<String, dynamic> _$BackendValidationErrorToJson(
-        BackendValidationError instance) =>
-    <String, dynamic>{
-      'field': instance.field,
-      'message': instance.message,
-    };
+  BackendValidationError instance,
+) => <String, dynamic>{
+  'field': instance.field,
+  'message': instance.message,
+};

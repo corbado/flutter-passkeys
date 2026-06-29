@@ -48,49 +48,48 @@ final routerProvider = Provider<GoRouter>((ref) {
   final authState = ref.watch(authStateProvider);
 
   return GoRouter(
-      initialLocation: Routes.auth,
-      routes: [
-        _defaultTransitionGoRoute(
-          path: Routes.auth,
-          builder: (context, state) => AuthPage(),
-        ),
-        _defaultTransitionGoRoute(
-          path: Routes.profile,
-          builder: (context, state) => ProfilePage(),
-        ),
-        _defaultTransitionGoRoute(
-          path: Routes.editProfile,
-          builder: (context, state) => EditProfilePage(),
-        ),
-        _defaultTransitionGoRoute(
-          path: Routes.passkeyList,
-          builder: (context, state) => PasskeyListPage(),
-        ),
-      ],
-      redirect: (BuildContext context, GoRouterState state) {
-        final onLoggedOutRoutes = [
-          Routes.auth,
-        ].contains(state.fullPath);
+    initialLocation: Routes.auth,
+    routes: [
+      _defaultTransitionGoRoute(
+        path: Routes.auth,
+        builder: (context, state) => AuthPage(),
+      ),
+      _defaultTransitionGoRoute(
+        path: Routes.profile,
+        builder: (context, state) => ProfilePage(),
+      ),
+      _defaultTransitionGoRoute(
+        path: Routes.editProfile,
+        builder: (context, state) => EditProfilePage(),
+      ),
+      _defaultTransitionGoRoute(
+        path: Routes.passkeyList,
+        builder: (context, state) => PasskeyListPage(),
+      ),
+    ],
+    redirect: (BuildContext context, GoRouterState state) {
+      final onLoggedOutRoutes = [Routes.auth].contains(state.fullPath);
 
-        if (authState.value == null) {
-          return null;
-        }
-
-        switch (authState.value!) {
-          case AuthState.None:
-            // if the user is not logged in but currently on a page that should
-            // only be visible for logged in users => redirect to signIn page.
-            if (!onLoggedOutRoutes) {
-              return Routes.auth;
-            }
-          case AuthState.SignedIn:
-            // if the user is logged in but currently on a page that should
-            // only be visible for logged out users => redirect to profile page.
-            if (onLoggedOutRoutes) {
-              return Routes.profile;
-            }
-        }
-
+      if (authState.value == null) {
         return null;
-      });
+      }
+
+      switch (authState.value!) {
+        case AuthState.None:
+          // if the user is not logged in but currently on a page that should
+          // only be visible for logged in users => redirect to signIn page.
+          if (!onLoggedOutRoutes) {
+            return Routes.auth;
+          }
+        case AuthState.SignedIn:
+          // if the user is logged in but currently on a page that should
+          // only be visible for logged out users => redirect to profile page.
+          if (onLoggedOutRoutes) {
+            return Routes.profile;
+          }
+      }
+
+      return null;
+    },
+  );
 });

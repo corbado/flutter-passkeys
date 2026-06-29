@@ -45,10 +45,7 @@ class PasskeyListPage extends HookConsumerWidget {
               children: [
                 const Text(
                   'Check your passkeys',
-                  style: TextStyle(
-                    fontSize: 40,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 20),
                 Column(
@@ -71,16 +68,18 @@ class PasskeyListPage extends HookConsumerWidget {
                                 );
 
                                 showSimpleNotification(
-                                    const Text(
-                                      'Passkey has been deleted successfully.',
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                    leading: const Icon(
-                                      Icons.check,
-                                      color: Colors.green,
-                                    ),
-                                    background:
-                                        Theme.of(context).colorScheme.primary);
+                                  const Text(
+                                    'Passkey has been deleted successfully.',
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                  leading: const Icon(
+                                    Icons.check,
+                                    color: Colors.green,
+                                  ),
+                                  background: Theme.of(
+                                    context,
+                                  ).colorScheme.primary,
+                                );
                               } on CorbadoError catch (e) {
                                 error.value = e.translatedError;
                               } catch (e) {
@@ -110,15 +109,13 @@ class PasskeyListPage extends HookConsumerWidget {
                       try {
                         await corbado.appendPasskey();
                         showSimpleNotification(
-                            const Text(
-                              'Passkey has been created successfully.',
-                              style: TextStyle(color: Colors.white),
-                            ),
-                            leading: const Icon(
-                              Icons.check,
-                              color: Colors.green,
-                            ),
-                            background: Theme.of(context).colorScheme.primary);
+                          const Text(
+                            'Passkey has been created successfully.',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          leading: const Icon(Icons.check, color: Colors.green),
+                          background: Theme.of(context).colorScheme.primary,
+                        );
                       } on CorbadoError catch (e) {
                         error.value = e.translatedError;
                       } catch (e) {

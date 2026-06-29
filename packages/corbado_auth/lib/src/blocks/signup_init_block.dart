@@ -13,7 +13,8 @@ class SignupInitBlockData {
   SignupInitBlockData({this.fullName, this.email});
 
   factory SignupInitBlockData.fromProcessResponse(
-      GeneralBlockSignupInit typed) {
+    GeneralBlockSignupInit typed,
+  ) {
     TextFieldWithError? fullName;
     if (typed.fullName != null) {
       fullName = TextFieldWithError(
@@ -26,9 +27,12 @@ class SignupInitBlockData {
     for (final identifier in typed.identifiers) {
       if (identifier.type == LoginIdentifierType.email) {
         email = TextFieldWithError(
-            value: identifier.identifier,
-            error: CorbadoError.fromRequestErrorWithIdentifier(
-                identifier.error, identifier.type));
+          value: identifier.identifier,
+          error: CorbadoError.fromRequestErrorWithIdentifier(
+            identifier.error,
+            identifier.type,
+          ),
+        );
       }
     }
 
@@ -40,17 +44,17 @@ class SignupInitBlockData {
 }
 
 class SignupInitBlock extends Block<SignupInitBlockData> {
-  SignupInitBlock(
-      {required ProcessHandler processHandler,
-      required SignupInitBlockData data})
-      : super(
-          processHandler: processHandler,
-          type: BlockType.signupInit,
-          alternatives: [],
-          initialScreen: ScreenNames.SignupInit,
-          data: data,
-          authProcessType: AuthProcessType.Signup,
-        );
+  SignupInitBlock({
+    required ProcessHandler processHandler,
+    required SignupInitBlockData data,
+  }) : super(
+         processHandler: processHandler,
+         type: BlockType.signupInit,
+         alternatives: [],
+         initialScreen: ScreenNames.SignupInit,
+         data: data,
+         authProcessType: AuthProcessType.Signup,
+       );
 
   navigateToLogin() {
     TelemetryService.instance.logMethodCalled(
@@ -74,8 +78,10 @@ class SignupInitBlock extends Block<SignupInitBlockData> {
       data.primaryLoading = true;
       processHandler.notifyCurrentScreen();
 
-      final res =
-          await corbadoService.signupInit(email: email, fullName: fullName);
+      final res = await corbadoService.signupInit(
+        email: email,
+        fullName: fullName,
+      );
       processHandler.updateBlockFromServer(res);
     } on CorbadoError catch (e) {
       data.primaryLoading = false;

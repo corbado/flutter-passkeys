@@ -25,8 +25,10 @@ class AuthService {
 
   Future<String?> register({required String email}) async {
     try {
-      final passkeyToken =
-          await _corbadoAuth.signUpWithPasskey(email: email, fullName: email);
+      final passkeyToken = await _corbadoAuth.signUpWithPasskey(
+        email: email,
+        fullName: email,
+      );
       await _firebaseAuth.signInWithCustomToken(passkeyToken);
 
       return null;
@@ -35,8 +37,10 @@ class AuthService {
     }
   }
 
-  Future<String?> registerWithEmailAndPassword(
-      {required String email, required String password}) async {
+  Future<String?> registerWithEmailAndPassword({
+    required String email,
+    required String password,
+  }) async {
     try {
       final credential = await _firebaseAuth.createUserWithEmailAndPassword(
         email: email,
@@ -50,7 +54,9 @@ class AuthService {
   }
 
   Future<String?> signInWithEmailAndPassword(
-      String email, String password) async {
+    String email,
+    String password,
+  ) async {
     try {
       await _firebaseAuth.signInWithEmailAndPassword(
         email: email,

@@ -23,7 +23,8 @@ class RegisterResponseType {
     final response = json['response'];
     if (response is! Map<String, dynamic>) {
       throw FormatException(
-          'Expected "response" to be a Map, got ${response.runtimeType}');
+        'Expected "response" to be a Map, got ${response.runtimeType}',
+      );
     }
     final transports = response['transports'] as List<dynamic>?;
 

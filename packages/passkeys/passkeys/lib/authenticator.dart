@@ -10,8 +10,8 @@ import 'package:passkeys_platform_interface/passkeys_platform_interface.dart';
 class PasskeyAuthenticator {
   /// Constructor
   PasskeyAuthenticator({bool? debugMode})
-      : _platform = PasskeysPlatform.instance,
-        debugMode = debugMode ?? false;
+    : _platform = PasskeysPlatform.instance,
+      debugMode = debugMode ?? false;
 
   /// The [PasskeysDoctor] instance for debugging and checking passkeys
   final _doctor = PasskeysDoctor();
@@ -23,8 +23,10 @@ class PasskeyAuthenticator {
   final bool debugMode;
 
   /// Returns true only if passkeys are supported by the platform.
-  @Deprecated('Use PasskeyAvailability.isAvailable instead. '
-      'This method will be removed in a future release.')
+  @Deprecated(
+    'Use PasskeyAvailability.isAvailable instead. '
+    'This method will be removed in a future release.',
+  )
   Future<bool> canAuthenticate() {
     return _platform.canAuthenticate();
   }
@@ -229,8 +231,10 @@ class PasskeyAuthenticator {
     if (!base64UrlRegex.hasMatch(input)) return false;
 
     try {
-      String normalized =
-          input.padRight(input.length + (4 - input.length % 4) % 4, '=');
+      String normalized = input.padRight(
+        input.length + (4 - input.length % 4) % 4,
+        '=',
+      );
       base64Url.decode(normalized);
 
       return true;

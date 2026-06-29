@@ -39,17 +39,17 @@ class LoginInitBlockData {
 }
 
 class LoginInitBlock extends Block<LoginInitBlockData> {
-  LoginInitBlock(
-      {required ProcessHandler processHandler,
-      required LoginInitBlockData data})
-      : super(
-          processHandler: processHandler,
-          type: BlockType.loginInit,
-          alternatives: [],
-          initialScreen: ScreenNames.LoginInit,
-          data: data,
-          authProcessType: AuthProcessType.Login,
-        );
+  LoginInitBlock({
+    required ProcessHandler processHandler,
+    required LoginInitBlockData data,
+  }) : super(
+         processHandler: processHandler,
+         type: BlockType.loginInit,
+         alternatives: [],
+         initialScreen: ScreenNames.LoginInit,
+         data: data,
+         authProcessType: AuthProcessType.Login,
+       );
 
   init() {
     initConditionalUI();
@@ -98,8 +98,10 @@ class LoginInitBlock extends Block<LoginInitBlockData> {
     }
 
     try {
-      final response =
-          await corbadoService.verifyPasskeyConditional(challenge, true);
+      final response = await corbadoService.verifyPasskeyConditional(
+        challenge,
+        true,
+      );
       processHandler.updateBlockFromServer(response);
     } on CorbadoError catch (e) {
       processHandler.updateBlockFromError(e);

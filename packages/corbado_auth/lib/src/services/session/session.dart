@@ -23,7 +23,7 @@ class SessionService {
       StreamController<AuthState>();
 
   final StreamController<String?> _rpIdStreamController =
-  StreamController<String?>();
+      StreamController<String?>();
 
   final _preemptiveRefreshDuration = const Duration(seconds: 60);
   Timer? _refreshTimer;
@@ -159,8 +159,9 @@ class SessionService {
           'Bearer $refreshToken';
     }
 
-    final response =
-        await frontendAPIClient.getUsersApi().currentUserSessionRefresh();
+    final response = await frontendAPIClient
+        .getUsersApi()
+        .currentUserSessionRefresh();
     if (response.data == null) {
       throw CorbadoError.fromMissingServerResponse();
     }

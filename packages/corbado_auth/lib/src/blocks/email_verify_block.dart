@@ -12,11 +12,12 @@ enum VerificationMethod {
 }
 
 class EmailVerifyBlockData {
-  EmailVerifyBlockData(
-      {required this.email,
-      required this.verificationMethod,
-      required this.retryNotBefore,
-      required this.isPostLoginVerification});
+  EmailVerifyBlockData({
+    required this.email,
+    required this.verificationMethod,
+    required this.retryNotBefore,
+    required this.isPostLoginVerification,
+  });
 
   final String email;
   final VerificationMethod verificationMethod;
@@ -25,16 +26,18 @@ class EmailVerifyBlockData {
   bool primaryLoading = false;
 
   factory EmailVerifyBlockData.fromProcessResponse(
-      Api.GeneralBlockVerifyIdentifier typed) {
+    Api.GeneralBlockVerifyIdentifier typed,
+  ) {
     final verificationMethod =
         typed.verificationMethod == Api.VerificationMethod.emailOtp
-            ? VerificationMethod.emailOTP
-            : VerificationMethod.emailLink;
+        ? VerificationMethod.emailOTP
+        : VerificationMethod.emailLink;
 
     DateTime? retryNotBefore;
     if (typed.retryNotBefore != null) {
-      retryNotBefore =
-          DateTime.fromMillisecondsSinceEpoch(typed.retryNotBefore! * 1000);
+      retryNotBefore = DateTime.fromMillisecondsSinceEpoch(
+        typed.retryNotBefore! * 1000,
+      );
     }
 
     return EmailVerifyBlockData(
@@ -47,20 +50,20 @@ class EmailVerifyBlockData {
 }
 
 class EmailVerifyBlock extends Block<EmailVerifyBlockData> {
-  EmailVerifyBlock(
-      {required ProcessHandler processHandler,
-      required EmailVerifyBlockData data,
-      required Api.AuthType authType})
-      : super(
-          processHandler: processHandler,
-          type: Api.BlockType.emailVerify,
-          alternatives: [],
-          initialScreen: ScreenNames.EmailVerifyOTP,
-          data: data,
-          authProcessType: authType == Api.AuthType.login
-              ? AuthProcessType.Login
-              : AuthProcessType.Signup,
-        );
+  EmailVerifyBlock({
+    required ProcessHandler processHandler,
+    required EmailVerifyBlockData data,
+    required Api.AuthType authType,
+  }) : super(
+         processHandler: processHandler,
+         type: Api.BlockType.emailVerify,
+         alternatives: [],
+         initialScreen: ScreenNames.EmailVerifyOTP,
+         data: data,
+         authProcessType: authType == Api.AuthType.login
+             ? AuthProcessType.Login
+             : AuthProcessType.Signup,
+       );
 
   init() {
     // navigateToVerifyEmail();

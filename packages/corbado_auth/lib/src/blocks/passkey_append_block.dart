@@ -16,7 +16,8 @@ class PasskeyAppendBlockData {
   bool primaryLoading = false;
 
   factory PasskeyAppendBlockData.fromProcessResponse(
-      Api.GeneralBlockPasskeyAppend typed) {
+    Api.GeneralBlockPasskeyAppend typed,
+  ) {
     return PasskeyAppendBlockData(
       availableFallbacks: [],
       identifierValue: typed.identifierValue,
@@ -36,20 +37,20 @@ class PasskeyAppendBlockData {
 }
 
 class PasskeyAppendBlock extends Block<PasskeyAppendBlockData> {
-  PasskeyAppendBlock(
-      {required ProcessHandler processHandler,
-      required PasskeyAppendBlockData data,
-      required Api.AuthType authType})
-      : super(
-          processHandler: processHandler,
-          initialScreen: ScreenNames.PasskeyAppend,
-          type: Api.BlockType.passkeyAppend,
-          alternatives: [],
-          data: data,
-          authProcessType: authType == Api.AuthType.login
-              ? AuthProcessType.Login
-              : AuthProcessType.Signup,
-        );
+  PasskeyAppendBlock({
+    required ProcessHandler processHandler,
+    required PasskeyAppendBlockData data,
+    required Api.AuthType authType,
+  }) : super(
+         processHandler: processHandler,
+         initialScreen: ScreenNames.PasskeyAppend,
+         type: Api.BlockType.passkeyAppend,
+         alternatives: [],
+         data: data,
+         authProcessType: authType == Api.AuthType.login
+             ? AuthProcessType.Login
+             : AuthProcessType.Signup,
+       );
 
   init() {
     const allowedAlternatives = [
@@ -59,26 +60,27 @@ class PasskeyAppendBlock extends Block<PasskeyAppendBlockData> {
     data.availableFallbacks = alternatives
         .where((alternative) => allowedAlternatives.contains(alternative.type))
         .map((alternative) {
-      switch (alternative.type) {
-        case Api.BlockType.emailVerify:
-          final typed = alternative.data as EmailVerifyBlockData;
-          if (typed.verificationMethod == VerificationMethod.emailLink) {
-            throw Exception('Currently not supported');
+          switch (alternative.type) {
+            case Api.BlockType.emailVerify:
+              final typed = alternative.data as EmailVerifyBlockData;
+              if (typed.verificationMethod == VerificationMethod.emailLink) {
+                throw Exception('Currently not supported');
+              }
+
+              return PasskeyFallback(
+                label: 'Email verification',
+                onTap: initFallbackEmailOtp,
+              );
+
+            case Api.BlockType.completed:
+            case Api.BlockType.phoneVerify:
+              throw Exception('Currently not supported');
+
+            default:
+              throw Exception('Currently not supported');
           }
-
-          return PasskeyFallback(
-            label: 'Email verification',
-            onTap: initFallbackEmailOtp,
-          );
-
-        case Api.BlockType.completed:
-        case Api.BlockType.phoneVerify:
-          throw Exception('Currently not supported');
-
-        default:
-          throw Exception('Currently not supported');
-      }
-    }).toList();
+        })
+        .toList();
 
     switch (data.availableFallbacks.length) {
       case 0:
@@ -89,8 +91,9 @@ class PasskeyAppendBlock extends Block<PasskeyAppendBlockData> {
         throw Exception('Currently not supported');
     }
 
-    data.canBeSkipped =
-        alternatives.any((a) => a.type == Api.BlockType.completed);
+    data.canBeSkipped = alternatives.any(
+      (a) => a.type == Api.BlockType.completed,
+    );
 
     // depending on data.canBeSkipped is only a short term fix
     if (data.autoSubmit && !data.canBeSkipped) {

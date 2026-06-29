@@ -30,7 +30,9 @@ class CorbadoAuthFirebase {
       final platformResponse = await _authenticator.register(challenge);
 
       return await _corbadoService.finishSignUpWithPasskey(
-          platformResponse, ua);
+        platformResponse,
+        ua,
+      );
     } catch (e) {
       throw e;
     }
@@ -38,12 +40,17 @@ class CorbadoAuthFirebase {
 
   Future<bool> appendPasskey(String firebaseToken) async {
     final ua = await userAgent();
-    final challenge =
-        await _corbadoService.startPasskeyAppend(firebaseToken, ua);
+    final challenge = await _corbadoService.startPasskeyAppend(
+      firebaseToken,
+      ua,
+    );
     final platformResponse = await _authenticator.register(challenge);
 
     return _corbadoService.finishPasskeyAppend(
-        firebaseToken, platformResponse, ua);
+      firebaseToken,
+      platformResponse,
+      ua,
+    );
   }
 
   Future<void> cancelAuthenticatorOperation() {

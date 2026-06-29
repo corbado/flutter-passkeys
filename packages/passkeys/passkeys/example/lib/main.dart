@@ -15,20 +15,14 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // Telemetry is used to help us understand how the example is used.
-  unawaited(CorbadoTelemetryApiClient(
-    projectId: 'passkeys_example',
-  ).sendEvent(
-    type: TelemetryEventType.EXAMPLE_APPLICATION_OPENED,
-    payload: {
-      'exampleName': 'corbado/flutter_passkeys/passkeys_example',
-    },
-  ));
-
-  runApp(
-    const ProviderScope(
-      child: MyApp(),
+  unawaited(
+    CorbadoTelemetryApiClient(projectId: 'passkeys_example').sendEvent(
+      type: TelemetryEventType.EXAMPLE_APPLICATION_OPENED,
+      payload: {'exampleName': 'corbado/flutter_passkeys/passkeys_example'},
     ),
   );
+
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
