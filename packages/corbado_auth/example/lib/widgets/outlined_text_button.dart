@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
+/// An outlined button with a loading and disabled state.
 class OutlinedTextButton extends StatelessWidget {
+  /// Creates an outlined text button.
   const OutlinedTextButton({
     required this.content,
     required this.onTap,
@@ -8,11 +10,20 @@ class OutlinedTextButton extends StatelessWidget {
     this.disabled = false,
     this.isLoading = false,
   });
+
+  /// Called when the button is tapped and not loading.
   final VoidCallback onTap;
+
+  /// The button label.
   final String content;
+
+  /// Whether the button is disabled.
   final bool disabled;
+
+  /// Whether the button shows a loading indicator instead of its label.
   final bool isLoading;
 
+  /// Invokes [onTap] unless the button is currently loading.
   void onPressed() {
     if (isLoading) {
       return;

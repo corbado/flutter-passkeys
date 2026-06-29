@@ -59,7 +59,8 @@ class _DebugOverlayWidget extends HookConsumerWidget {
                 ...result.value!.checkpoints.map(_buildItem),
               ] else ...[
                 const Text(
-                  'Please try registering a passkey or using a passkey for the debugger tool to work',
+                  'Please try registering a passkey or using a passkey '
+                  'for the debugger tool to work',
                 ),
               ],
               if (result.value?.exception != null) ...[

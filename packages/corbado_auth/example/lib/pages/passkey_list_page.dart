@@ -10,7 +10,9 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:overlay_support/overlay_support.dart';
 
+/// Page that lists the user's passkeys and lets them add or delete passkeys.
 class PasskeyListPage extends HookConsumerWidget {
+  /// Creates the passkey list page.
   const PasskeyListPage({super.key});
 
   @override
@@ -67,6 +69,9 @@ class PasskeyListPage extends HookConsumerWidget {
                                   credentialID: credentialID,
                                 );
 
+                                if (!context.mounted) {
+                                  return;
+                                }
                                 showSimpleNotification(
                                   const Text(
                                     'Passkey has been deleted successfully.',
@@ -108,6 +113,9 @@ class PasskeyListPage extends HookConsumerWidget {
 
                       try {
                         await corbado.appendPasskey();
+                        if (!context.mounted) {
+                          return;
+                        }
                         showSimpleNotification(
                           const Text(
                             'Passkey has been created successfully.',

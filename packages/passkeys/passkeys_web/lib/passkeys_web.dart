@@ -25,9 +25,10 @@ class PasskeysWeb extends PasskeysPlatform {
       debugPrint(
         'Error: Passkeys Web SDK not loaded. Please include the Passkeys Web SDK (bundle.js) in your HTML file. You can find it on https://github.com/corbado/flutter-passkeys/releases/download/2.4.0/bundle.js',
       );
-      // We need to close the window to prevent the app from running afterwards thus causing runtime errors
-      // This is a workaround for the fact that we cannot throw an exception in the web platform
-      // because it will not be caught by the Flutter framework
+      // We need to close the window to prevent the app from running
+      // afterwards thus causing runtime errors.
+      // This is a workaround for the fact that we cannot throw an exception in
+      // the web platform because it will not be caught by Flutter.
       window.close();
     }
 

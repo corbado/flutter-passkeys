@@ -15,7 +15,7 @@ import 'package:passkeys_example/router.dart';
 import 'package:passkeys_example/widgets/select_test_configuration.dart';
 
 void _showNoCreateOptionDialog(BuildContext context) {
-  showDialog(
+  showDialog<void>(
     context: context,
     builder: (context) => AlertDialog(
       title: const Text('Passkey cannot be created'),
@@ -151,8 +151,10 @@ class SignUpPage extends HookConsumerWidget {
                 );
                 try {
                   await authService.signupWithPasskey(email: email);
+                  if (!context.mounted) return;
                   context.go(Routes.profile);
                 } catch (e) {
+                  if (!context.mounted) return;
                   if (e is NoCreateOptionException) {
                     _showNoCreateOptionDialog(context);
                   } else if (e is AuthenticatorException) {

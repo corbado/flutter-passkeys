@@ -111,7 +111,8 @@ class PasskeysAndroid extends PasskeysPlatform {
     return _api.cancelCurrentAuthenticatorOperation();
   }
 
-  // In case of android we link passkey support to the availability of the biometric authentication
+  // In case of android we link passkey support to the availability of the
+  // biometric authentication
   @override
   Future<AvailabilityTypeAndroid> getAvailability() async {
     final isUserVerifyingPlatformAuthenticatorAvailable =

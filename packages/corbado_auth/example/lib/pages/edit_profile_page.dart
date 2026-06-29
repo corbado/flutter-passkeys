@@ -9,7 +9,9 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:overlay_support/overlay_support.dart';
 
+/// Page that lets the user edit their profile information.
 class EditProfilePage extends HookConsumerWidget {
+  /// Creates the edit profile page.
   const EditProfilePage({super.key});
 
   @override
@@ -90,6 +92,9 @@ class EditProfilePage extends HookConsumerWidget {
                       try {
                         await corbado.changeUsername(fullName: fullName.text);
 
+                        if (!context.mounted) {
+                          return;
+                        }
                         showSimpleNotification(
                           const Text(
                             'Full name has been changed successfully.',

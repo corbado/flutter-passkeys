@@ -39,15 +39,17 @@ class CorbadoAuth {
   /// Returns the current value of the user object.
   Future<User?> get currentUser => _sessionService.userChanges.first;
 
-  // Returns the currently used projectId
+  /// Returns the currently used projectId.
   String get projectId => _projectId;
 
   // Returns the currently used RPid
   late final Future<String?> _rpIdFuture = _sessionService.rpIdChanges
       .firstWhere((value) => value != null);
 
+  /// Returns the currently used relying party id.
   Future<String?> get rpId => _rpIdFuture;
 
+  /// Emits the component and data to render as the auth process advances.
   Stream<ComponentWithData> get componentWithDataStream =>
       _processHandler.componentWithDataStream;
 
@@ -60,6 +62,7 @@ class CorbadoAuth {
   late final String _projectId;
   bool _isInitialized = false;
 
+  /// Initializes the process handler and loads the initial auth block.
   Future<void> initProcessHandler() async {
     if (_isInitialized) {
       return;
@@ -84,7 +87,8 @@ class CorbadoAuth {
   /// the user has already signed in before and then closed the app).
   Future<void> init({
     required String projectId,
-    @deprecated String? customDomain,
+    @Deprecated('customDomain is no longer used and will be removed.')
+    String? customDomain,
     bool? debugMode,
     bool? telemetryDisabled,
     bool? telemetryDebugModeEnabled,

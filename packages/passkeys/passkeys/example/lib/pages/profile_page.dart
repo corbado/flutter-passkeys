@@ -32,7 +32,8 @@ class ProfilePage extends ConsumerWidget {
           const Padding(
             padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
             child: Text(
-              'You are currently logged in. You can log out and log back in using a passkey.',
+              'You are currently logged in. '
+              'You can log out and log back in using a passkey.',
               style: TextStyle(fontSize: 20),
             ),
           ),

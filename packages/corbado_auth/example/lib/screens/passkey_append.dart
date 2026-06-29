@@ -5,9 +5,13 @@ import 'package:corbado_auth_example/widgets/outlined_text_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
+/// Screen that prompts the user to create (append) a passkey.
 class PasskeyAppendScreen extends HookWidget
     implements CorbadoScreen<PasskeyAppendBlock> {
+  /// Creates the passkey append screen for the given [block].
   const PasskeyAppendScreen(this.block, {super.key});
+
+  /// The block driving the passkey append flow.
   @override
   final PasskeyAppendBlock block;
 
@@ -37,7 +41,8 @@ class PasskeyAppendScreen extends HookWidget
         const Padding(
           padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           child: Text(
-            'Quick and secure login using Apple Touch ID or Face ID instead of passwords.',
+            'Quick and secure login using Apple Touch ID or Face ID instead '
+            'of passwords.',
             style: TextStyle(fontSize: 20),
           ),
         ),

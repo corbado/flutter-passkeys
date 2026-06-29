@@ -28,7 +28,8 @@ const rpID =
 /// This is a local version of a relying party server.
 ///
 /// Note:
-/// The concept of a local relying party server works just in examples. It does not work in practice.
+/// The concept of a local relying party server works just in examples.
+/// It does not work in practice.
 /// Usually a relying party server is party of your backend.
 class LocalRelyingPartyServer {
   LocalRelyingPartyServer();
@@ -37,10 +38,12 @@ class LocalRelyingPartyServer {
   final Map<String, LocalUser> _inFlightChallenges = HashMap();
   final Random _random = Random();
 
-  /// Starts a passkey registration and returns a standard WebAuthn JSON request as a string.
+  /// Starts a passkey registration and returns a standard WebAuthn JSON
+  /// request as a string.
   ///
   /// This simulates backend server logic that returns standard WebAuthn JSON
-  /// format compatible with `PublicKeyCredential.parseCreationOptionsFromJSON()`.
+  /// format compatible with
+  /// `PublicKeyCredential.parseCreationOptionsFromJSON()`.
   String startPasskeyRegister({
     required String name,
     Configuration? configuration,
@@ -96,7 +99,8 @@ class LocalRelyingPartyServer {
     return jsonEncode(request);
   }
 
-  /// Finishes passkey registration by processing a standard WebAuthn JSON response string.
+  /// Finishes passkey registration by processing a standard WebAuthn JSON
+  /// response string.
   ///
   /// This simulates backend server logic that receives standard WebAuthn JSON
   /// format from the authenticator.
@@ -127,7 +131,9 @@ class LocalRelyingPartyServer {
 
     // Decode and parse clientDataJSON to extract challenge
     final raw = addBase64Padding(clientDataJSON);
-    final clientData = jsonDecode(String.fromCharCodes(base64.decode(raw)));
+    final clientData =
+        jsonDecode(String.fromCharCodes(base64.decode(raw)))
+            as Map<String, dynamic>;
 
     final challenge = clientData['challenge'] as String;
     final user = _inFlightChallenges[challenge];
@@ -146,10 +152,12 @@ class LocalRelyingPartyServer {
     return user;
   }
 
-  /// Starts a passkey login and returns a standard WebAuthn JSON request as a string.
+  /// Starts a passkey login and returns a standard WebAuthn JSON request
+  /// as a string.
   ///
   /// This simulates backend server logic that returns standard WebAuthn JSON
-  /// format compatible with `PublicKeyCredential.parseRequestOptionsFromJSON()`.
+  /// format compatible with
+  /// `PublicKeyCredential.parseRequestOptionsFromJSON()`.
   String startPasskeyLogin({
     required String name,
     Configuration? configuration,
@@ -192,7 +200,8 @@ class LocalRelyingPartyServer {
     return jsonEncode(request);
   }
 
-  /// Finishes passkey login by processing a standard WebAuthn JSON response string.
+  /// Finishes passkey login by processing a standard WebAuthn JSON
+  /// response string.
   ///
   /// This simulates backend server logic that receives standard WebAuthn JSON
   /// format from the authenticator.
@@ -221,7 +230,9 @@ class LocalRelyingPartyServer {
 
     // Decode and parse clientDataJSON to extract challenge
     final raw = addBase64Padding(clientDataJSON);
-    final clientData = jsonDecode(String.fromCharCodes(base64.decode(raw)));
+    final clientData =
+        jsonDecode(String.fromCharCodes(base64.decode(raw)))
+            as Map<String, dynamic>;
 
     final challenge = clientData['challenge'] as String;
     final user = _inFlightChallenges[challenge];
@@ -232,10 +243,12 @@ class LocalRelyingPartyServer {
     return user;
   }
 
-  /// Starts a conditional UI passkey login and returns a standard WebAuthn JSON request as a string.
+  /// Starts a conditional UI passkey login and returns a standard WebAuthn
+  /// JSON request as a string.
   ///
   /// This simulates backend server logic that returns standard WebAuthn JSON
-  /// format compatible with `PublicKeyCredential.parseRequestOptionsFromJSON()`.
+  /// format compatible with
+  /// `PublicKeyCredential.parseRequestOptionsFromJSON()`.
   String startPasskeyLoginConditionalU() {
     final challenge = generateChallenge();
 
@@ -245,7 +258,8 @@ class LocalRelyingPartyServer {
     return jsonEncode(request);
   }
 
-  /// Finishes conditional UI passkey login by processing a standard WebAuthn JSON response string.
+  /// Finishes conditional UI passkey login by processing a standard WebAuthn
+  /// JSON response string.
   ///
   /// This simulates backend server logic that receives standard WebAuthn JSON
   /// format from the authenticator.
@@ -288,12 +302,12 @@ class LocalRelyingPartyServer {
   String generateChallenge() {
     const chars =
         'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    var rawChallenge = '';
+    final rawChallenge = StringBuffer();
     for (var i = 0; i < 32; i++) {
-      rawChallenge += chars[_random.nextInt(chars.length)];
+      rawChallenge.write(chars[_random.nextInt(chars.length)]);
     }
 
-    final a = base64Url.encode(rawChallenge.codeUnits);
+    final a = base64Url.encode(rawChallenge.toString().codeUnits);
 
     return a.substring(0, a.length - 1);
   }

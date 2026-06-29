@@ -8,10 +8,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+/// Named route paths used throughout the example app.
 class Routes {
+  /// Route showing the authentication (sign up / login) flow.
   static const auth = '/auth';
+
+  /// Route showing the logged in user's profile.
   static const profile = '/profile';
+
+  /// Route for editing the user's profile.
   static const editProfile = '/edit-profile';
+
+  /// Route listing the user's passkeys.
   static const passkeyList = '/passkey-list';
 }
 
@@ -44,6 +52,7 @@ Page<dynamic> _customPageBuilder(
   );
 }
 
+/// Provides the [GoRouter] that drives navigation for the example app.
 final routerProvider = Provider<GoRouter>((ref) {
   final authState = ref.watch(authStateProvider);
 

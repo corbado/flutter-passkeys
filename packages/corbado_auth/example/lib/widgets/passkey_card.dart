@@ -1,14 +1,20 @@
 import 'package:corbado_auth/corbado_auth.dart';
 import 'package:flutter/material.dart';
 
+/// Card showing details of a single passkey with a delete option.
 class PasskeyCard extends StatelessWidget {
+  /// Creates a card for the given [passkey].
   const PasskeyCard({required this.passkey, required this.onDelete, super.key});
+
+  /// The passkey to display.
   final PasskeyInfo passkey;
+
+  /// Called with the credential ID when the passkey should be deleted.
   final void Function(String) onDelete;
 
   // Helper method to display a bottom sheet with options.
   void _showOptions(BuildContext context) {
-    showModalBottomSheet(
+    showModalBottomSheet<void>(
       context: context,
       builder: (BuildContext context) {
         return Wrap(

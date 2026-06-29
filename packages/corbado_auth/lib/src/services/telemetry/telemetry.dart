@@ -3,7 +3,10 @@ import 'dart:io';
 import 'package:corbado_telemetry_api_client/corbado_telemetry_api_client.dart';
 import 'package:flutter/foundation.dart';
 
+/// The version of this SDK reported in telemetry events.
 const String sdkVersion = '3.7.1';
+
+/// The name of this SDK reported in telemetry events.
 const String sdkName = 'Flutter SDK';
 
 // The TelemetryService manages the collection of telemetry events and
@@ -13,6 +16,7 @@ const String sdkName = 'Flutter SDK';
 // For more details, please refer to our telemetry documentation
 // at https://docs.corbado.com/corbado-complete/other/telemetry.
 
+/// Collects and sends telemetry events for the Corbado SDK.
 class TelemetryService {
   TelemetryService._internal({
     required this.projectId,
@@ -24,6 +28,7 @@ class TelemetryService {
 
   static TelemetryService? _instance;
 
+  /// Initializes the singleton [TelemetryService]. Must be called once.
   static void init({
     required String projectId,
     required bool isDoctorEnabled,
@@ -50,6 +55,7 @@ class TelemetryService {
     );
   }
 
+  /// Returns the singleton instance. Throws if [init] has not been called.
   static TelemetryService get instance {
     if (_instance == null) {
       throw StateError('TelemetryService.init() must be called first.');
@@ -57,13 +63,25 @@ class TelemetryService {
     return _instance!;
   }
 
+  /// The Corbado project id.
   final String projectId;
+
+  /// Whether telemetry collection is currently enabled.
   bool isEnabled;
+
+  /// Whether the telemetry API client runs in debug mode.
   final bool debugMode;
+
+  /// Whether the Corbado doctor is enabled.
   final bool isDoctorEnabled;
+
+  /// Whether the package metadata event has already been sent.
   bool telemetryPacketMetadataSent = false;
+
+  /// The client used to send telemetry events.
   final CorbadoTelemetryApiClient api;
 
+  /// Logs that a method was called on a given screen.
   void logMethodCalled(String methodName, String screenName) {
     if (!isEnabled) {
       return;
@@ -77,10 +95,12 @@ class TelemetryService {
     api.sendEvent(type: TelemetryEventType.METHOD_CALLED, payload: payload);
   }
 
+  /// Disables telemetry collection.
   void disableTelemetry() {
     isEnabled = false;
   }
 
+  /// Logs package metadata once per session.
   void logPackageMetadata() {
     if (!isEnabled || telemetryPacketMetadataSent) {
       return;

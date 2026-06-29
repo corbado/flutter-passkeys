@@ -20,7 +20,8 @@ class RelyingPartyType {
   final String name;
 
   /// The identifier of the relying party.
-  /// This is typically the domain of the website that is requesting authentication.
+  /// This is typically the domain of the website that is requesting
+  /// authentication.
   final String id;
 
   /// Converts this instance to a JSON map.

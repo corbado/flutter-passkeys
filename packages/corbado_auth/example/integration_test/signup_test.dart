@@ -3,6 +3,7 @@ import 'package:corbado_auth_example/auth_provider.dart';
 import 'package:corbado_auth_example/main.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+// ignore: depend_on_referenced_packages
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 
@@ -13,6 +14,7 @@ void main() {
     final corbadoAuth = CorbadoAuth();
     await corbadoAuth.init(
       projectId: 'pro-4268394291597054564',
+      // ignore: deprecated_member_use
       customDomain:
           'https://pro-4268394291597054564.frontendapi.cloud.corbado.io',
     );
@@ -26,7 +28,7 @@ void main() {
 
     await tester.pumpAndSettle();
 
-    await Future.delayed(const Duration(seconds: 3));
+    await Future<void>.delayed(const Duration(seconds: 3));
     expect(find.text('Sign up'), findsOneWidget);
 
     final textField = find.byKey(const ValueKey('textfield-email'));
@@ -36,10 +38,10 @@ void main() {
     await tester.tap(find.text('Sign up'));
     await tester.pumpAndSettle();
 
-    await Future.delayed(const Duration(seconds: 1));
+    await Future<void>.delayed(const Duration(seconds: 1));
 
     await tester.tap(find.text('Continue'));
 
-    await Future.delayed(const Duration(seconds: 5));
+    await Future<void>.delayed(const Duration(seconds: 5));
   });
 }

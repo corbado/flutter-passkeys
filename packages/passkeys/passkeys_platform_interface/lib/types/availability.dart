@@ -38,7 +38,10 @@ class AvailabilityTypeWeb extends AvailabilityType {
     required this.isConditionalMediationAvailable,
   });
 
+  /// Whether a user-verifying platform authenticator is available.
   final bool? isUserVerifyingPlatformAuthenticatorAvailable;
+
+  /// Whether conditional mediation is available on the web platform.
   final bool? isConditionalMediationAvailable;
 }
 
@@ -58,6 +61,7 @@ class AvailabilityTypeAndroid extends AvailabilityType {
     required this.isUserVerifyingPlatformAuthenticatorAvailable,
   });
 
+  /// Whether a user-verifying platform authenticator is available.
   final bool? isUserVerifyingPlatformAuthenticatorAvailable;
 }
 
@@ -69,7 +73,8 @@ class AvailabilityTypeIOS extends AvailabilityType {
   ///
   /// - [hasPasskeySupport]: Indicates if the platform supports passkeys.
   /// - [isNative]: Should be `true` for iOS platforms.
-  /// - [hasBiometrics]: Required; indicates if the device has biometric support.
+  /// - [hasBiometrics]: Required; indicates if the device has biometric
+  ///   support.
   AvailabilityTypeIOS({
     required super.hasPasskeySupport,
     required super.isNative,

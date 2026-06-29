@@ -5,15 +5,25 @@ import 'package:corbado_auth/src/services/storage/storage.dart';
 import 'package:corbado_frontend_api_client/corbado_frontend_api_client.dart';
 import 'package:flutter/foundation.dart';
 
+// ignore_for_file: only_throw_errors
+
+/// Manages the user session, including token refresh and auth state streams.
 class SessionService {
+  /// Creates a [SessionService] backed by the given storage service and
+  /// frontend API client.
   SessionService(this._storageService, this.frontendAPIClient);
   final StorageService _storageService;
+
+  /// The client used to communicate with the Corbado frontend API.
   final CorbadoFrontendApiClient frontendAPIClient;
 
+  /// Emits the current user whenever it changes.
   Stream<User?> get userChanges => _userStreamController.stream;
 
+  /// Emits the authentication state whenever it changes.
   Stream<AuthState> get authStateChanges => _authStateStreamController.stream;
 
+  /// Emits the relying party id whenever it changes.
   Stream<String?> get rpIdChanges => _rpIdStreamController.stream;
 
   final StreamController<User?> _userStreamController =
@@ -28,6 +38,7 @@ class SessionService {
   final _preemptiveRefreshDuration = const Duration(seconds: 60);
   Timer? _refreshTimer;
 
+  /// Initializes the session, restoring the user and scheduling token refresh.
   Future<User?> init() async {
     await _handleRefreshRequest();
 
@@ -55,10 +66,12 @@ class SessionService {
     return user;
   }
 
+  /// Returns the stored refresh token if it has been set.
   Future<String?> getRefreshToken() {
     return _storageService.getRefreshToken();
   }
 
+  /// Stores the refresh token and schedules a token refresh.
   Future<void> setRefreshToken(String? value) async {
     if (value != null) {
       frontendAPIClient.dio.options.headers['Authorization'] = 'Bearer $value';
@@ -68,10 +81,12 @@ class SessionService {
     _scheduleRefreshRoutine();
   }
 
+  /// Returns the stored user if it has been set.
   Future<User?> getUser() {
     return _storageService.getUser();
   }
 
+  /// Stores the user and updates the user and auth state streams.
   Future<void> setUser(User value) {
     _userStreamController.add(value);
     _authStateStreamController.add(AuthState.SignedIn);
@@ -79,10 +94,12 @@ class SessionService {
     return _storageService.setUser(value);
   }
 
+  /// Returns the stored front-end API URL if it has been set.
   Future<String?> getFrontEndApiUrl() {
     return _storageService.getFrontEndApiUrl();
   }
 
+  /// Stores the front-end API URL and updates the API client base URL.
   Future<void> setFrontEndApiUrl(String? value) async {
     if (value != null) {
       frontendAPIClient.dio.options.baseUrl = value;
@@ -95,6 +112,7 @@ class SessionService {
     return;
   }
 
+  /// Signs the user out, clearing stored data and stopping token refresh.
   Future<void> signOut() async {
     _refreshTimer?.cancel();
     _userStreamController.add(null);
@@ -102,6 +120,7 @@ class SessionService {
     await _storageService.clear();
   }
 
+  /// Explicitly triggers a token refresh.
   Future<void> explicitlyTriggerTokenRefresh() => _refreshToken();
 
   void _scheduleRefreshRoutine() {
@@ -170,6 +189,7 @@ class SessionService {
     return user;
   }
 
+  /// Marks the passkey append process as finished and updates the auth state.
   void finishPasskeyAppendProcess() {
     _authStateStreamController.add(AuthState.SignedIn);
   }

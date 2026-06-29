@@ -6,9 +6,13 @@ import 'package:corbado_auth_example/widgets/outlined_text_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
+/// Screen that starts the sign up flow by collecting the user's details.
 class SignupInitScreen extends HookWidget
     implements CorbadoScreen<SignupInitBlock> {
+  /// Creates the sign up init screen for the given [block].
   const SignupInitScreen(this.block, {super.key});
+
+  /// The block driving the sign up flow.
   @override
   final SignupInitBlock block;
 

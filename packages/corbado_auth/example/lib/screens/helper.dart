@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:overlay_support/overlay_support.dart';
 
+/// Shows an error notification with the given [message] using the app theme.
 void showNotificationError(BuildContext context, String message) {
   showSimpleNotification(
     Text(

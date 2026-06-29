@@ -5,9 +5,13 @@ import 'package:corbado_auth_example/widgets/outlined_text_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
+/// Screen that lets the user enter the email verification OTP code.
 class EmailVerifyOtpScreen extends HookWidget
     implements CorbadoScreen<EmailVerifyBlock> {
+  /// Creates the email OTP verification screen for the given [block].
   const EmailVerifyOtpScreen(this.block, {super.key});
+
+  /// The block driving the email verification flow.
   @override
   final EmailVerifyBlock block;
 
@@ -39,7 +43,8 @@ class EmailVerifyOtpScreen extends HookWidget
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           child: Text(
-            'We have sent you a 6 digit code to ${block.data.email}. Please enter the code below.',
+            'We have sent you a 6 digit code to ${block.data.email}. '
+            'Please enter the code below.',
             style: const TextStyle(fontSize: 20),
           ),
         ),

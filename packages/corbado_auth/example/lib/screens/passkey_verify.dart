@@ -6,9 +6,13 @@ import 'package:corbado_auth_example/widgets/outlined_text_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
+/// Screen that prompts the user to log in with an existing passkey.
 class PasskeyVerifyScreen extends HookWidget
     implements CorbadoScreen<PasskeyVerifyBlock> {
+  /// Creates the passkey verify screen for the given [block].
   const PasskeyVerifyScreen(this.block, {super.key});
+
+  /// The block driving the passkey verification flow.
   @override
   final PasskeyVerifyBlock block;
 

@@ -6,8 +6,8 @@ import 'package:passkeys_platform_interface/types/pubkeycred_param.dart';
 import 'package:passkeys_platform_interface/types/relying_party.dart';
 import 'package:passkeys_platform_interface/types/user.dart';
 
-/// The [RegisterRequestType] is used to create a registration request and send it to the
-/// platform.
+/// The [RegisterRequestType] is used to create a registration request and send
+/// it to the platform.
 class RegisterRequestType {
   /// Constructs a new instance.
   const RegisterRequestType({
@@ -92,8 +92,9 @@ class RegisterRequestType {
   /// The timeout in milliseconds.
   final int? timeout;
 
-  /// The requested attestation level. Controls how the authenticator's attestation
-  /// information is conveyed to the relying party. Possible values are:
+  /// The requested attestation level. Controls how the authenticator's
+  /// attestation information is conveyed to the relying party. Possible values
+  /// are:
   /// - "none": Replaces identifying information with non-identifying versions
   /// - "indirect": May replace attestation data with privacy-friendly versions
   /// - "direct"/"enterprise": Conveys unaltered attestation information

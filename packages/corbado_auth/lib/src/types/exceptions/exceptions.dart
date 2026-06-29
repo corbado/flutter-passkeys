@@ -5,7 +5,9 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'exceptions.g.dart';
 
+/// Base class for all exceptions thrown by the Corbado Auth SDK.
 class CorbadoException implements Exception {
+  /// Constructor
   CorbadoException(this._message);
 
   final String _message;
@@ -56,6 +58,7 @@ class FieldWithInvalidValueException extends CorbadoException {
         'Please check the field "$rawField", it contains an invalid value.',
       );
 
+  /// Field name
   final CorbadoField field;
 }
 
@@ -78,7 +81,8 @@ class InvalidPasskeyException extends CorbadoException {
   /// Constructor
   InvalidPasskeyException()
     : super(
-        'The passkey you used has been deleted from your profile. Please enter your email and continue with manual login.',
+        'The passkey you used has been deleted from your profile. '
+        'Please enter your email and continue with manual login.',
       );
 }
 
@@ -120,7 +124,7 @@ class UnexpectedBackendException implements Exception {
 
 /// Factory for creating exceptions from backend messages
 class ExceptionFactory {
-  ///
+  /// Creates a typed exception from a raw backend error [message].
   static Exception fromBackendMessage(String operation, String message) {
     final decoded = jsonDecode(message);
     if (decoded is! Map<String, dynamic> || !decoded.containsKey('error')) {
