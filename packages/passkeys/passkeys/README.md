@@ -235,7 +235,33 @@ The doctor will automatically perform checks and provide feedback through the Pa
 ### Android
 
 <details>
-<summary>1. Make sure that you have logged into a Google account.</summary>
+<summary>1. Configure Digital Asset Links (assetlinks.json)</summary>
+
+- Make sure your relying server serves a valid Digital Asset Links file at `https://<your-domain>/.well-known/assetlinks.json`.
+- The file must include a statement that grants the `delegate_permission/common.get_login_creds` relation to your app, identified by its package name and the SHA-256 fingerprint of its signing certificate (use the fingerprint of every certificate your app is signed with, including the Play Store upload key):
+
+```json
+[
+  {
+    "relation": ["delegate_permission/common.get_login_creds"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.example.yourapp",
+      "sha256_cert_fingerprints": [
+        "AA:BB:CC:..."
+      ]
+    }
+  }
+]
+```
+
+- The relying party id (RPID) you use must match the domain that hosts the `assetlinks.json` file.
+- Ensure the file is hosted without redirects and served with the `application/json` content type.
+
+</details>
+
+<details>
+<summary>2. Make sure that you have logged into a Google account.</summary>
 
 Google backs up all your passkeys so you need to be logged into a Google account to use passkeys.
 If you are not logged in, you will see the following message: "Sign in to your Google Account to
@@ -248,7 +274,7 @@ then on "Sign in to your Google Account".
 </details>
 
 <details>
-<summary>2. Make sure that you have set up a screen lock or biometrics on your device.</summary>
+<summary>3. Make sure that you have set up a screen lock or biometrics on your device.</summary>
 
 If you run the application in an emulator and it says that you can't create a passkey, you have to
 log into your Google account and properly set up a screen lock or biometrics on the device.
@@ -260,7 +286,7 @@ as well as a fingerprint as shown below (PIN is required for fingerprint):
 </details>
 
 <details>
-<summary>3. In case of using an emulator, make sure that is has Play Store support.</summary>
+<summary>4. In case of using an emulator, make sure that is has Play Store support.</summary>
 
 During our implementation and testing, we detected some bugs when using specific API versions /
 devices of Android emulator (physical devices worked at any time though).
