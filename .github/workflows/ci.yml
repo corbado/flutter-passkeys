@@ -16,7 +16,7 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: "3.27.4"
+          flutter-version: "3.32.0"
 
       - name: Set up melos
         uses: bluefireteam/melos-action@v3
