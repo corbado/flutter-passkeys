@@ -1,3 +1,4 @@
+// ignore_for_file: avoid_positional_boolean_parameters
 import 'package:pigeon/pigeon.dart';
 
 /// Represents a relying party
@@ -80,8 +81,12 @@ class ExcludeCredential {
 /// Represents an authenticator selection
 class AuthenticatorSelection {
   /// Constructor
-  const AuthenticatorSelection(this.authenticatorAttachment,
-      this.requireResidentKey, this.residentKey, this.userVerification);
+  const AuthenticatorSelection(
+    this.authenticatorAttachment,
+    this.requireResidentKey,
+    this.residentKey,
+    this.userVerification,
+  );
 
   /// The authenticator attachment
   final String? authenticatorAttachment;
@@ -175,12 +180,13 @@ abstract class PasskeysApi {
 
   @async
   AuthenticateResponse authenticate(
-      String relyingPartyId,
-      String challenge,
-      int? timeout,
-      String? userVerification,
-      List<AllowCredential>? allowCredentials,
-      bool? preferImmediatelyAvailableCredentials);
+    String relyingPartyId,
+    String challenge,
+    int? timeout,
+    String? userVerification,
+    List<AllowCredential>? allowCredentials,
+    bool? preferImmediatelyAvailableCredentials,
+  );
 
   @async
   void cancelCurrentAuthenticatorOperation();

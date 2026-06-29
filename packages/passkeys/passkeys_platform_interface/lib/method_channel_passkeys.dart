@@ -1,5 +1,4 @@
 import 'package:passkeys_platform_interface/passkeys_platform_interface.dart';
-import 'package:passkeys_platform_interface/types/availability.dart';
 import 'package:passkeys_platform_interface/types/types.dart';
 
 /// An implementation of [PasskeysPlatform] that uses method channels.
@@ -10,14 +9,12 @@ class MethodChannelPasskeys extends PasskeysPlatform {
   @override
   Future<RegisterResponseType> register(
     RegisterRequestType request,
-  ) async =>
-      throw UnimplementedError();
+  ) async => throw UnimplementedError();
 
   @override
   Future<AuthenticateResponseType> authenticate(
     AuthenticateRequestType request,
-  ) =>
-      throw UnimplementedError();
+  ) => throw UnimplementedError();
 
   @override
   Future<void> cancelCurrentAuthenticatorOperation() {

@@ -33,8 +33,13 @@ class PasskeysDarwin extends PasskeysPlatform {
       relyingPartyArg,
       userArg,
       request.excludeCredentials
-          .map((e) =>
-              CredentialType(type: e.type, id: e.id, transports: e.transports))
+          .map(
+            (e) => CredentialType(
+              type: e.type,
+              id: e.id,
+              transports: e.transports,
+            ),
+          )
           .toList(),
       request.pubKeyCredParams?.map((e) => e.alg).toList() ?? [],
       request.authSelectionType == null ||
@@ -69,8 +74,13 @@ class PasskeysDarwin extends PasskeysPlatform {
       request.challenge,
       conditionalUI,
       request.allowCredentials
-              ?.map((e) => CredentialType(
-                  type: e.type, id: e.id, transports: e.transports))
+              ?.map(
+                (e) => CredentialType(
+                  type: e.type,
+                  id: e.id,
+                  transports: e.transports,
+                ),
+              )
               .toList() ??
           [],
       request.preferImmediatelyAvailableCredentials,

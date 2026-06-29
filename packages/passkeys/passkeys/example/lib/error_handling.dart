@@ -2,7 +2,8 @@ import 'package:passkeys/exceptions.dart';
 
 /// error_handling.dart
 
-/// Returns a user-friendly error message for the given [AuthenticatorException].
+/// Returns a user-friendly error message for the given
+/// [AuthenticatorException].
 String getFriendlyErrorMessage(AuthenticatorException exception) {
   if (exception is PasskeyAuthCancelledException) {
     return 'Authentication was cancelled. Please try again.';
@@ -11,25 +12,31 @@ String getFriendlyErrorMessage(AuthenticatorException exception) {
   } else if (exception is SyncAccountNotAvailableException) {
     return 'Your sync account is not available. Please sign in and try again.';
   } else if (exception is ExcludeCredentialsCanNotBeRegisteredException) {
-    return 'Some credentials cannot be registered. Please check and try again.';
+    return 'Some credentials cannot be registered. '
+        'Please check and try again.';
   } else if (exception is NoCredentialsAvailableException) {
-    return 'No credentials available. Try another login method, such as email OTP.';
+    return 'No credentials available. '
+        'Try another login method, such as email OTP.';
   } else if (exception is DomainNotAssociatedException) {
     return exception.message ??
-        'This domain is not correctly associated. Please check your configuration.';
+        'This domain is not correctly associated. '
+            'Please check your configuration.';
   } else if (exception is DeviceNotSupportedException) {
     return 'This device does not support passkeys. Please update your OS.';
   } else if (exception is NoCreateOptionException) {
     return exception.message ??
-        'No viable options found to create a credential. Check device settings.';
+        'No viable options found to create a credential. '
+            'Check device settings.';
   } else if (exception is TimeoutException) {
     return exception.message ?? 'The operation timed out. Please try again.';
   } else if (exception is MalformedBase64Url) {
     return exception.toString();
   } else if (exception is UnhandledAuthenticatorException) {
-    return 'An unexpected error occurred (Code: ${exception.code}). Please contact support.';
+    return 'An unexpected error occurred (Code: ${exception.code}). '
+        'Please contact support.';
   } else if (exception is PasskeyUnsupportedException) {
-    return 'This device does not support passkeys (requires at least Android SDK 28). Please update your OS.';
+    return 'This device does not support passkeys '
+        '(requires at least Android SDK 28). Please update your OS.';
   } else {
     return 'An unknown error occurred. Please try again later.';
   }

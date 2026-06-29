@@ -1,14 +1,14 @@
 import 'package:corbado_auth/src/services/corbado/corbado.dart';
-import 'package:corbado_auth/src/services/storage/storage.dart';
 import 'package:corbado_auth/src/services/storage/storage_web.dart';
 import 'package:corbado_frontend_api_client/corbado_frontend_api_client.dart';
-import 'package:http/browser_client.dart';
 import 'package:passkeys/authenticator.dart';
 
+/// Creates a [CorbadoService] for the web platform.
 Future<CorbadoService> createClient(
   String projectId, {
   required PasskeyAuthenticator passkeyAuthenticator,
-  @deprecated String? customDomain,
+  @Deprecated('Use the default Corbado frontend API domain instead.')
+  String? customDomain,
 }) async {
   final basePath = CorbadoService.getFrontendAPIDomain(
     projectId,
@@ -16,9 +16,10 @@ Future<CorbadoService> createClient(
   );
 
   final apiClient = CorbadoFrontendApiClient(
-      basePathOverride: basePath,
-      sdkVersion: '3.2.0',
-      languageVersion: "Flutter Web");
+    basePathOverride: basePath,
+    sdkVersion: '3.2.0',
+    languageVersion: 'Flutter Web',
+  );
   apiClient.dio.options.headers.addAll({
     'X-Corbado-ProjectID': projectId,
   });
@@ -31,11 +32,12 @@ Future<CorbadoService> createClient(
   );
 }
 
+/// A [CorbadoService] implementation for the web platform.
 class WebCorbadoService extends CorbadoService {
-  ///
+  /// Creates a [WebCorbadoService].
   WebCorbadoService(
-    CorbadoFrontendApiClient frontendAPIClient,
-    PasskeyAuthenticator passkeyAuthenticator,
-    StorageService storageService,
-  ) : super(frontendAPIClient, passkeyAuthenticator, storageService);
+    super.frontendAPIClient,
+    super.passkeyAuthenticator,
+    super.storageService,
+  );
 }

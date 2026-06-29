@@ -3,17 +3,21 @@ import 'package:passkeys/types.dart';
 
 part 'authentication.g.dart';
 
+/// Response returned when a passkey login is started.
 @JsonSerializable()
 class StartLoginResponse {
+  /// Constructor
   StartLoginResponse(this.publicKey);
 
+  /// Creates a [StartLoginResponse] from json.
   factory StartLoginResponse.fromJson(
     Map<String, dynamic> json,
-  ) =>
-      _$StartLoginResponseFromJson(json);
+  ) => _$StartLoginResponseFromJson(json);
 
+  /// Public key options used to assert the credential.
   final StartLoginPublicKey publicKey;
 
+  /// Converts this response into the platform authenticate request type.
   AuthenticateRequestType toPlatformType({
     required bool conditional,
     bool preferImmediatelyAvailableCredentials = true,
@@ -32,14 +36,19 @@ class StartLoginResponse {
             ),
           )
           .toList(),
-      mediation: conditional ? MediationType.Conditional : MediationType.Optional,
-      preferImmediatelyAvailableCredentials: preferImmediatelyAvailableCredentials,
+      mediation: conditional
+          ? MediationType.Conditional
+          : MediationType.Optional,
+      preferImmediatelyAvailableCredentials:
+          preferImmediatelyAvailableCredentials,
     );
   }
 
+  /// Serializes object to json
   Map<String, dynamic> toJson() => _$StartLoginResponseToJson(this);
 }
 
+/// Public key credential request options.
 @JsonSerializable()
 class StartLoginPublicKey {
   /// Constructor
@@ -51,10 +60,10 @@ class StartLoginPublicKey {
     this.allowCredentials,
   });
 
+  /// Creates a [StartLoginPublicKey] from json.
   factory StartLoginPublicKey.fromJson(
     Map<String, dynamic> json,
-  ) =>
-      _$StartLoginPublicKeyFromJson(json);
+  ) => _$StartLoginPublicKeyFromJson(json);
 
   /// The relying party id
   final String rpId;
@@ -75,6 +84,7 @@ class StartLoginPublicKey {
   Map<String, dynamic> toJson() => _$StartLoginPublicKeyToJson(this);
 }
 
+/// A credential the authenticator is allowed to use.
 @JsonSerializable()
 class AllowCredential {
   /// Constructor
@@ -83,6 +93,11 @@ class AllowCredential {
     required this.id,
     required this.transports,
   });
+
+  /// Creates an [AllowCredential] from json.
+  factory AllowCredential.fromJson(
+    Map<String, dynamic> json,
+  ) => _$AllowCredentialFromJson(json);
 
   /// The type
   final String type;
@@ -93,14 +108,11 @@ class AllowCredential {
   /// The transports
   final List<String> transports;
 
-  factory AllowCredential.fromJson(
-    Map<String, dynamic> json,
-  ) =>
-      _$AllowCredentialFromJson(json);
-
+  /// Serializes object to json
   Map<String, dynamic> toJson() => _$AllowCredentialToJson(this);
 }
 
+/// Request sent to complete a passkey login.
 @JsonSerializable(explicitToJson: true)
 class FinishLoginRequest {
   /// Constructor
@@ -111,6 +123,7 @@ class FinishLoginRequest {
     this.type = 'public-key',
   });
 
+  /// Creates a [FinishLoginRequest] from a platform authenticate response.
   factory FinishLoginRequest.fromPlatformType(
     AuthenticateResponseType r,
   ) {
@@ -126,10 +139,10 @@ class FinishLoginRequest {
     );
   }
 
+  /// Creates a [FinishLoginRequest] from json.
   factory FinishLoginRequest.fromJson(
     Map<String, dynamic> json,
-  ) =>
-      _$FinishLoginRequestFromJson(json);
+  ) => _$FinishLoginRequestFromJson(json);
 
   /// The id
   final String id;
@@ -143,9 +156,11 @@ class FinishLoginRequest {
   /// The type
   final String type;
 
+  /// Serializes object to json
   Map<String, dynamic> toJson() => _$FinishLoginRequestToJson(this);
 }
 
+/// Platform assertion response for a login.
 @JsonSerializable()
 class FinishLoginPlatformResponse {
   /// Constructor
@@ -156,6 +171,10 @@ class FinishLoginPlatformResponse {
     required this.userHandle,
   });
 
+  /// Parses a json object
+  factory FinishLoginPlatformResponse.fromJson(Map<String, dynamic> json) =>
+      _$FinishLoginPlatformResponseFromJson(json);
+
   /// The client data json
   final String clientDataJSON;
 
@@ -165,11 +184,9 @@ class FinishLoginPlatformResponse {
   /// The signature
   final String signature;
 
+  /// The user handle
   final String userHandle;
 
-  /// Parses a json object
-  factory FinishLoginPlatformResponse.fromJson(Map<String, dynamic> json) =>
-      _$FinishLoginPlatformResponseFromJson(json);
-
+  /// Serializes object to json
   Map<String, dynamic> toJson() => _$FinishLoginPlatformResponseToJson(this);
 }

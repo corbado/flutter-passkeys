@@ -8,10 +8,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+/// Named route paths used throughout the example app.
 class Routes {
+  /// Route showing the authentication (sign up / login) flow.
   static const auth = '/auth';
+
+  /// Route showing the logged in user's profile.
   static const profile = '/profile';
+
+  /// Route for editing the user's profile.
   static const editProfile = '/edit-profile';
+
+  /// Route listing the user's passkeys.
   static const passkeyList = '/passkey-list';
 }
 
@@ -44,53 +52,53 @@ Page<dynamic> _customPageBuilder(
   );
 }
 
+/// Provides the [GoRouter] that drives navigation for the example app.
 final routerProvider = Provider<GoRouter>((ref) {
   final authState = ref.watch(authStateProvider);
 
   return GoRouter(
-      initialLocation: Routes.auth,
-      routes: [
-        _defaultTransitionGoRoute(
-          path: Routes.auth,
-          builder: (context, state) => AuthPage(),
-        ),
-        _defaultTransitionGoRoute(
-          path: Routes.profile,
-          builder: (context, state) => ProfilePage(),
-        ),
-        _defaultTransitionGoRoute(
-          path: Routes.editProfile,
-          builder: (context, state) => EditProfilePage(),
-        ),
-        _defaultTransitionGoRoute(
-          path: Routes.passkeyList,
-          builder: (context, state) => PasskeyListPage(),
-        ),
-      ],
-      redirect: (BuildContext context, GoRouterState state) {
-        final onLoggedOutRoutes = [
-          Routes.auth,
-        ].contains(state.fullPath);
+    initialLocation: Routes.auth,
+    routes: [
+      _defaultTransitionGoRoute(
+        path: Routes.auth,
+        builder: (context, state) => const AuthPage(),
+      ),
+      _defaultTransitionGoRoute(
+        path: Routes.profile,
+        builder: (context, state) => const ProfilePage(),
+      ),
+      _defaultTransitionGoRoute(
+        path: Routes.editProfile,
+        builder: (context, state) => const EditProfilePage(),
+      ),
+      _defaultTransitionGoRoute(
+        path: Routes.passkeyList,
+        builder: (context, state) => const PasskeyListPage(),
+      ),
+    ],
+    redirect: (BuildContext context, GoRouterState state) {
+      final onLoggedOutRoutes = [Routes.auth].contains(state.fullPath);
 
-        if (authState.value == null) {
-          return null;
-        }
-
-        switch (authState.value!) {
-          case AuthState.None:
-            // if the user is not logged in but currently on a page that should
-            // only be visible for logged in users => redirect to signIn page.
-            if (!onLoggedOutRoutes) {
-              return Routes.auth;
-            }
-          case AuthState.SignedIn:
-            // if the user is logged in but currently on a page that should
-            // only be visible for logged out users => redirect to profile page.
-            if (onLoggedOutRoutes) {
-              return Routes.profile;
-            }
-        }
-
+      if (authState.value == null) {
         return null;
-      });
+      }
+
+      switch (authState.value!) {
+        case AuthState.None:
+          // if the user is not logged in but currently on a page that should
+          // only be visible for logged in users => redirect to signIn page.
+          if (!onLoggedOutRoutes) {
+            return Routes.auth;
+          }
+        case AuthState.SignedIn:
+          // if the user is logged in but currently on a page that should
+          // only be visible for logged out users => redirect to profile page.
+          if (onLoggedOutRoutes) {
+            return Routes.profile;
+          }
+      }
+
+      return null;
+    },
+  );
 });

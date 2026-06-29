@@ -7,20 +7,20 @@ part of 'passkeySignUpResponse.dart';
 // **************************************************************************
 
 PasskeySignUpResponse _$PasskeySignUpResponseFromJson(
-        Map<String, dynamic> json) =>
-    PasskeySignUpResponse(
-      json['id'] as String,
-      json['rawId'] as String,
-      AttestationResponse.fromJson(json['response'] as Map<String, dynamic>),
-    );
+  Map<String, dynamic> json,
+) => PasskeySignUpResponse(
+  json['id'] as String,
+  json['rawId'] as String,
+  AttestationResponse.fromJson(json['response'] as Map<String, dynamic>),
+);
 
 Map<String, dynamic> _$PasskeySignUpResponseToJson(
-        PasskeySignUpResponse instance) =>
-    <String, dynamic>{
-      'id': instance.id,
-      'rawId': instance.rawId,
-      'response': instance.response,
-    };
+  PasskeySignUpResponse instance,
+) => <String, dynamic>{
+  'id': instance.id,
+  'rawId': instance.rawId,
+  'response': instance.response,
+};
 
 AttestationResponse _$AttestationResponseFromJson(Map<String, dynamic> json) =>
     AttestationResponse(
@@ -30,9 +30,9 @@ AttestationResponse _$AttestationResponseFromJson(Map<String, dynamic> json) =>
     );
 
 Map<String, dynamic> _$AttestationResponseToJson(
-        AttestationResponse instance) =>
-    <String, dynamic>{
-      'clientDataJSON': instance.clientDataJSON,
-      'attestationObject': instance.attestationObject,
-      'transports': instance.transports,
-    };
+  AttestationResponse instance,
+) => <String, dynamic>{
+  'clientDataJSON': instance.clientDataJSON,
+  'attestationObject': instance.attestationObject,
+  'transports': instance.transports,
+};

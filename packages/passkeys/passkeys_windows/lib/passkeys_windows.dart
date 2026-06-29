@@ -6,9 +6,8 @@ import 'package:passkeys_windows/messages.g.dart';
 /// The Windows implementation of [PasskeysPlatform].
 class PasskeysWindows extends PasskeysPlatform {
   /// The method channel used to interact with the native platform.
-  PasskeysWindows({
-    @visibleForTesting PasskeysApi? api,
-  }) : _api = api ?? PasskeysApi();
+  PasskeysWindows({@visibleForTesting PasskeysApi? api})
+    : _api = api ?? PasskeysApi();
 
   /// Registers this class as the default instance of [PasskeysPlatform]
   static void registerWith() => PasskeysPlatform.instance = PasskeysWindows();

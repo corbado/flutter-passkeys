@@ -6,11 +6,17 @@ import 'package:corbado_auth_example/widgets/outlined_text_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
-class PasskeyVerifyScreen extends HookWidget implements CorbadoScreen<PasskeyVerifyBlock> {
+/// Screen that prompts the user to log in with an existing passkey.
+class PasskeyVerifyScreen extends HookWidget
+    implements CorbadoScreen<PasskeyVerifyBlock> {
+  /// Creates the passkey verify screen for the given [block].
+  const PasskeyVerifyScreen(this.block, {super.key});
+
+  /// The block driving the passkey verification flow.
+  @override
   final PasskeyVerifyBlock block;
 
-  PasskeyVerifyScreen(this.block);
-
+  @override
   Widget build(BuildContext context) {
     useEffect(() {
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -19,6 +25,7 @@ class PasskeyVerifyScreen extends HookWidget implements CorbadoScreen<PasskeyVer
           showNotificationError(context, maybeError.translatedError);
         }
       });
+      return null;
     }, [block.error]);
 
     return Column(
@@ -30,10 +37,7 @@ class PasskeyVerifyScreen extends HookWidget implements CorbadoScreen<PasskeyVer
           padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
           child: Text(
             'Login with your passkey',
-            style: TextStyle(
-              fontSize: 40,
-              fontWeight: FontWeight.bold,
-            ),
+            style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
           ),
         ),
         const SizedBox(height: 20),
@@ -49,14 +53,17 @@ class PasskeyVerifyScreen extends HookWidget implements CorbadoScreen<PasskeyVer
           ),
         ),
         const SizedBox(height: 10),
-        if (block.data.preferredFallback != null) SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: OutlinedTextButton(
-                  onTap: () => block.data.preferredFallback!.onTap(),
-                  content: block.data.preferredFallback!.label,
-                ),
-              ) else Container(),
+        if (block.data.preferredFallback != null)
+          SizedBox(
+            width: double.infinity,
+            height: 50,
+            child: OutlinedTextButton(
+              onTap: () => block.data.preferredFallback!.onTap(),
+              content: block.data.preferredFallback!.label,
+            ),
+          )
+        else
+          Container(),
         const SizedBox(height: 10),
       ],
     );
