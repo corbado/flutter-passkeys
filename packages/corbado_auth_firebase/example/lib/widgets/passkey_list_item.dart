@@ -31,7 +31,7 @@ class PasskeyListItem extends HookWidget {
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
                   Text(
-                    'Device: ${passkeyInfo.userAgent}',
+                    'Device: ${passkeyInfo.sourceBrowser} on ${passkeyInfo.sourceOS}',
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
                   Text(
