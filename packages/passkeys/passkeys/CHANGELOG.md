@@ -1,3 +1,7 @@
+## 2.21.0
+
+ - **FEAT**: add PasskeyAuthenticatorInterface implemented by PasskeyAuthenticator ([#247](https://github.com/corbado/flutter-passkeys/issues/247)). ([bcc028fc](https://github.com/corbado/flutter-passkeys/commit/bcc028fc94c8875ed3240b8ebf76755f16dcc7ac))
+
 ## 2.20.0
 * Raises minimum Dart SDK to `3.4.0`.
 

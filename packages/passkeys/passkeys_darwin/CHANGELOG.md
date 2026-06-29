@@ -1,3 +1,7 @@
+## 0.4.1
+
+ - Update a dependency to the latest release.
+
 ## 0.4.0
 
 - Adds Swift Package Manager (SwiftPM) support for iOS and macOS. CocoaPods continues to work in parallel.

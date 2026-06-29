@@ -1,3 +1,7 @@
+## 2.7.0
+
+ - **FEAT**: add PasskeyAuthenticatorInterface implemented by PasskeyAuthenticator ([#247](https://github.com/corbado/flutter-passkeys/issues/247)). ([bcc028fc](https://github.com/corbado/flutter-passkeys/commit/bcc028fc94c8875ed3240b8ebf76755f16dcc7ac))
+
 ## 2.6.0
 * Adds support for Serliazable JSON Strings.
 
