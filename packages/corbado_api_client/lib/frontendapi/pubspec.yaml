@@ -4,7 +4,7 @@ description: Client for the Corbado Frontend API
 homepage: https://docs.corbado.com/overview/welcome
 
 environment:
-  sdk: '>=2.15.0 <4.0.0'
+  sdk: '>=3.8.0 <4.0.0'
 
 dependencies:
   dio: '^5.2.0'
