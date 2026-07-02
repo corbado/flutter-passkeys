@@ -6,8 +6,8 @@ repository: https://github.com/corbado/flutter-passkeys/tree/main/packages/corba
 version: 3.7.2
 
 environment:
-  sdk: ">=3.0.0 <4.0.0"
-  flutter: ">=3.0.0"
+  sdk: ">=3.8.0 <4.0.0"
+  flutter: ">=3.32.0"
 
 dependencies:
   built_collection: ^5.1.1

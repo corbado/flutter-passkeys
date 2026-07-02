@@ -375,7 +375,7 @@ You can also take a look at this package's example to see how it is done there.
 
 #### Requirements
 
-- This package requires Flutter 3.19.0 or later.
+- This package requires Dart 3.8.0 / Flutter 3.32.0 or later.
 
 #### Additional Details
 
