@@ -1,3 +1,22 @@
+## 2.21.1
+
+ - **DOCS**(passkeys): document Android Digital Asset Links setup ([#256](https://github.com/corbado/flutter-passkeys/issues/256)). ([1777f145](https://github.com/corbado/flutter-passkeys/commit/1777f1451fc4a650deb1768cc2910237d8cca2db))
+
+## 2.21.0
+
+ - **FEAT**: add PasskeyAuthenticatorInterface implemented by PasskeyAuthenticator ([#247](https://github.com/corbado/flutter-passkeys/issues/247)). ([bcc028fc](https://github.com/corbado/flutter-passkeys/commit/bcc028fc94c8875ed3240b8ebf76755f16dcc7ac))
+
+## 2.20.0
+* Raises minimum Dart SDK to `3.4.0`.
+
+## 2.19.0
+* Updates `passkeys_darwin` dependency to `^0.4.0` (adds Swift Package Manager support for iOS/macOS).
+
+## 2.18.0
+* Adds `NoCreateOptionException` handling for register flow. (Android)
+* Updates `passkeys_doctor` dependency to `^1.3.0`.
+* Updates `passkeys_android` dependency to `^2.12.0`.
+
 ## 2.17.4
 * Fixes web plugin registration bug preventing automatic inclusion in Flutter's plugin registrant. (Web)
 

@@ -177,9 +177,9 @@ namespace passkeys_windows
         }
 
         WEBAUTHN_CREDENTIAL_LIST exclude_list = {};
+        std::vector<PWEBAUTHN_CREDENTIAL_EX> exclude_ptrs;
         if (!exclude_creds.empty())
         {
-          std::vector<PWEBAUTHN_CREDENTIAL_EX> exclude_ptrs;
           for (auto &cred : exclude_creds)
           {
             exclude_ptrs.push_back(&cred);
@@ -565,7 +565,11 @@ namespace passkeys_windows
 
   PasskeysWindowsPlugin::~PasskeysWindowsPlugin()
   {
-    PasskeysApi::SetUp(registrar_->messenger(), nullptr);
+    // Do not unregister the channels here. Plugin destruction runs inside
+    // FlutterWindowsEngine::Stop(), where the messenger's engine pointer is
+    // already null, so calling PasskeysApi::SetUp(messenger, nullptr) would
+    // dereference null and crash the host app on window close. The engine
+    // tears down the channels itself.
   }
 
   void PasskeysWindowsPlugin::RegisterWithRegistrar(

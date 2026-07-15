@@ -7,7 +7,7 @@ import 'package:passkeys_platform_interface/passkeys_platform_interface.dart';
 
 /// Handles platform dependent parts of the registration and authentication
 /// flow.
-class PasskeyAuthenticator {
+class PasskeyAuthenticator implements PasskeyAuthenticatorInterface {
   /// Constructor
   PasskeyAuthenticator({bool? debugMode}) : _platform = PasskeysPlatform.instance, debugMode = debugMode ?? false;
 
@@ -79,6 +79,8 @@ class PasskeyAuthenticator {
           throw DeviceNotSupportedException();
         case 'android-passkey-unsupported':
           throw PasskeyUnsupportedException(e.message);
+        case 'android-no-create-option':
+          throw NoCreateOptionException(e.message);
         case 'android-timeout':
           throw TimeoutException(e.message);
         case 'ios-security-key-timeout':

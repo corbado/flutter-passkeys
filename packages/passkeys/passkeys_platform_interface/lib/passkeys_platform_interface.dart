@@ -3,6 +3,8 @@ import 'package:passkeys_platform_interface/types/availability.dart';
 import 'package:passkeys_platform_interface/types/types.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
+export 'package:passkeys_platform_interface/passkey_authenticator_interface.dart';
+
 /// The interface that implementations of passkeys must implement.
 ///
 /// Platform implementations should extend this class

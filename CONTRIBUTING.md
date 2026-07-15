@@ -133,19 +133,19 @@ Once your PR is open:
 
 
 ## 7. Release Process (For Maintainers)
-This project uses Melos to handle versioning and publishing. Once changes in main are ready to release:
+This project uses Melos together with GitHub Actions to handle versioning and publishing. Once changes in main are ready to release:
 
-1. Pull the latest main branch locally.
-2. For the changed packages, update the version in the `pubspec.yaml` file. The version should follow the [Semantic Versioning](https://semver.org/) guidelines.
-3. Update the `CHANGELOG.md` file with the new version and a list of changes. The changes should be grouped by package and follow the format of the previous entries.
-4. Dry run publish:
-  ```bash
-    melos publish
-   ```
-5. If everything looks good, publish:
-  ```bash
-    melos publish --no-dry-run
-  ```
+1. Run the [`Prepare Release`](../../actions/workflows/release-prepare.yml) workflow via `workflow_dispatch` (`gh workflow run release-prepare.yml`). This bumps versions and updates `CHANGELOG.md` for all changed packages, based on their conventional commit history, and opens a `chore(release): publish packages` pull request.
+   - Use the `prerelease` input to cut a prerelease instead of a stable version.
+   - Use the `graduate` input to graduate existing prereleases to stable.
+2. Review the generated pull request (versions, changelog entries) and merge it into main.
+3. Merging triggers [`Create Release Tags`](../../actions/workflows/release-tag.yml), which tags each changed package and triggers [`Publish Packages`](../../actions/workflows/release-publish.yml) for it.
+4. `Publish Packages` runs `melos publish` for that package (via pub.dev trusted publishing) and creates the matching GitHub release. No local publish steps or stored pub.dev credentials are needed.
+
+You can still dry-run a version bump locally before triggering the workflow:
+```bash
+  melos version --no-changelog
+```
 
 ## 8. Contributing Documentation
 If you’d like to improve or add documentation:

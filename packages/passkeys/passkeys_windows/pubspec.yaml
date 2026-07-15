@@ -2,11 +2,11 @@ name: passkeys_windows
 description: Windows implementation of the passkeys plugin. Manages the creation of passkeys on Windows devices using Windows Hello and WebAuthn API.
 homepage: https://docs.corbado.com/overview/welcome
 repository: https://github.com/corbado/flutter-passkeys/tree/main/packages/passkeys/passkeys_windows
-version: 0.1.1
+version: 0.1.2+1
 
 environment:
-  sdk: ">=3.0.0 <4.0.0"
-  flutter: ">=3.0.0"
+  sdk: ">=3.8.0 <4.0.0"
+  flutter: ">=3.32.0"
 
 flutter:
   plugin:
@@ -19,7 +19,7 @@ flutter:
 dependencies:
   flutter:
     sdk: flutter
-  passkeys_platform_interface: ^2.5.0
+  passkeys_platform_interface: ^2.8.0
 
 dev_dependencies:
   flutter_test:

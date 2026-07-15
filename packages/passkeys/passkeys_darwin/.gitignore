@@ -1,0 +1,4 @@
+# SwiftPM
+.build/
+.swiftpm/
+Package.resolved

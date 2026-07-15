@@ -14,20 +14,23 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    # Secrets are not available to pull_request workflows from forks, so the
+    # Vercel deploy would fail. Skip the job for those PRs instead.
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Set up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
 
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
           # Pin to a Flutter version that your app supports
           # or omit to use the default stable version
-          flutter-version: "3.27.4"
+          flutter-version: "3.32.0"
 
       - name: Normalize branch name
         if: github.event_name == 'pull_request'
