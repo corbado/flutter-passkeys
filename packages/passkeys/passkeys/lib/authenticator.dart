@@ -9,7 +9,9 @@ import 'package:passkeys_platform_interface/passkeys_platform_interface.dart';
 /// flow.
 class PasskeyAuthenticator implements PasskeyAuthenticatorInterface {
   /// Constructor
-  PasskeyAuthenticator({bool? debugMode}) : _platform = PasskeysPlatform.instance, debugMode = debugMode ?? false;
+  PasskeyAuthenticator({bool? debugMode})
+      : _platform = PasskeysPlatform.instance,
+        debugMode = debugMode ?? false;
 
   /// The [PasskeysDoctor] instance for debugging and checking passkeys
   final _doctor = PasskeysDoctor();
@@ -40,7 +42,7 @@ class PasskeyAuthenticator implements PasskeyAuthenticatorInterface {
   /// Creates a new passkey and stores it on the device.
   /// Returns [RegisterResponseType] which must be sent to the relying party
   /// server.
-  Future<RegisterResponseType> register(RegisterRequestType request, {String? salt}) async {
+  Future<RegisterResponseType> register(RegisterRequestType request) async {
     if (debugMode) {
       await _doctor.check(request.relyingParty.id);
     }
@@ -56,7 +58,7 @@ class PasskeyAuthenticator implements PasskeyAuthenticatorInterface {
         _isValidCredentialID(credential.id);
       }
 
-      final r = await _platform.register(request, salt);
+      final r = await _platform.register(request);
 
       return r;
     } on PlatformException catch (e) {
@@ -86,7 +88,13 @@ class PasskeyAuthenticator implements PasskeyAuthenticatorInterface {
         case 'ios-security-key-timeout':
           throw TimeoutException(e.message);
         default:
-          rethrow;
+          if (e.code.startsWith('android-unhandled')) {
+            throw UnhandledAuthenticatorException(e.code, e.message, e.details);
+          } else if (e.code.startsWith('ios-unhandled')) {
+            throw UnhandledAuthenticatorException(e.code, e.message, e.details);
+          } else {
+            rethrow;
+          }
       }
     }
   }
@@ -94,7 +102,9 @@ class PasskeyAuthenticator implements PasskeyAuthenticatorInterface {
   /// Authenticates a user with a passkey.
   /// Returns [AuthenticateResponseType] which must be sent to the relying party
   /// server.
-  Future<AuthenticateResponseType> authenticate(AuthenticateRequestType request, {String? salt}) async {
+  Future<AuthenticateResponseType> authenticate(
+    AuthenticateRequestType request,
+  ) async {
     if (debugMode) {
       await _doctor.check(request.relyingPartyId);
     }
@@ -110,7 +120,7 @@ class PasskeyAuthenticator implements PasskeyAuthenticatorInterface {
         }
       }
 
-      final r = await _platform.authenticate(request, salt);
+      final r = await _platform.authenticate(request);
 
       return r;
     } on PlatformException catch (e) {
@@ -174,7 +184,9 @@ class PasskeyAuthenticator implements PasskeyAuthenticatorInterface {
   void _isValidChallenge(String challenge) {
     if (!_isValidBase64Url(input: challenge)) {
       if (debugMode) {
-        _doctor.recordException(PlatformException(code: 'malformed-base64-url-challenge'));
+        _doctor.recordException(
+          PlatformException(code: 'malformed-base64-url-challenge'),
+        );
       }
       throw MalformedBase64UrlChallenge();
     }
@@ -184,7 +196,9 @@ class PasskeyAuthenticator implements PasskeyAuthenticatorInterface {
   void _isValidCredentialID(String credentialID) {
     if (!_isValidBase64Url(input: credentialID)) {
       if (debugMode) {
-        _doctor.recordException(PlatformException(code: 'malformed-base64-url-credential-id'));
+        _doctor.recordException(
+          PlatformException(code: 'malformed-base64-url-credential-id'),
+        );
       }
       throw MalformedBase64UrlCredentialID();
     }
@@ -194,7 +208,9 @@ class PasskeyAuthenticator implements PasskeyAuthenticatorInterface {
   void _isValidUserID(String userID) {
     if (!_isValidBase64Url(input: userID, allowPadding: true)) {
       if (debugMode) {
-        _doctor.recordException(PlatformException(code: 'malformed-base64-url-user-id'));
+        _doctor.recordException(
+          PlatformException(code: 'malformed-base64-url-user-id'),
+        );
       }
       throw MalformedBase64UrlUserID();
     }
@@ -221,7 +237,10 @@ class PasskeyAuthenticator implements PasskeyAuthenticatorInterface {
     if (!base64UrlRegex.hasMatch(input)) return false;
 
     try {
-      String normalized = input.padRight(input.length + (4 - input.length % 4) % 4, '=');
+      String normalized = input.padRight(
+        input.length + (4 - input.length % 4) % 4,
+        '=',
+      );
       base64Url.decode(normalized);
 
       return true;
