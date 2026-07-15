@@ -10,19 +10,22 @@ class _$PasskeyAppendFinishReq extends PasskeyAppendFinishReq {
   @override
   final String signedChallenge;
 
-  factory _$PasskeyAppendFinishReq(
-          [void Function(PasskeyAppendFinishReqBuilder)? updates]) =>
-      (new PasskeyAppendFinishReqBuilder()..update(updates))._build();
+  factory _$PasskeyAppendFinishReq([
+    void Function(PasskeyAppendFinishReqBuilder)? updates,
+  ]) => (new PasskeyAppendFinishReqBuilder()..update(updates))._build();
 
   _$PasskeyAppendFinishReq._({required this.signedChallenge}) : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        signedChallenge, r'PasskeyAppendFinishReq', 'signedChallenge');
+      signedChallenge,
+      r'PasskeyAppendFinishReq',
+      'signedChallenge',
+    );
   }
 
   @override
   PasskeyAppendFinishReq rebuild(
-          void Function(PasskeyAppendFinishReqBuilder) updates) =>
-      (toBuilder()..update(updates)).build();
+    void Function(PasskeyAppendFinishReqBuilder) updates,
+  ) => (toBuilder()..update(updates)).build();
 
   @override
   PasskeyAppendFinishReqBuilder toBuilder() =>
@@ -45,9 +48,9 @@ class _$PasskeyAppendFinishReq extends PasskeyAppendFinishReq {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper(r'PasskeyAppendFinishReq')
-          ..add('signedChallenge', signedChallenge))
-        .toString();
+    return (newBuiltValueToStringHelper(
+      r'PasskeyAppendFinishReq',
+    )..add('signedChallenge', signedChallenge)).toString();
   }
 }
 
@@ -88,10 +91,15 @@ class PasskeyAppendFinishReqBuilder
   PasskeyAppendFinishReq build() => _build();
 
   _$PasskeyAppendFinishReq _build() {
-    final _$result = _$v ??
+    final _$result =
+        _$v ??
         new _$PasskeyAppendFinishReq._(
-            signedChallenge: BuiltValueNullFieldError.checkNotNull(
-                signedChallenge, r'PasskeyAppendFinishReq', 'signedChallenge'));
+          signedChallenge: BuiltValueNullFieldError.checkNotNull(
+            signedChallenge,
+            r'PasskeyAppendFinishReq',
+            'signedChallenge',
+          ),
+        );
     replace(_$result);
     return _$result;
   }

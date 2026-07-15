@@ -51,9 +51,9 @@ abstract class GeneralBlockPasskeyAppend
 
   GeneralBlockPasskeyAppend._();
 
-  factory GeneralBlockPasskeyAppend(
-          [void updates(GeneralBlockPasskeyAppendBuilder b)]) =
-      _$GeneralBlockPasskeyAppend;
+  factory GeneralBlockPasskeyAppend([
+    void updates(GeneralBlockPasskeyAppendBuilder b),
+  ]) = _$GeneralBlockPasskeyAppend;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(GeneralBlockPasskeyAppendBuilder b) => b;
@@ -68,7 +68,7 @@ class _$GeneralBlockPasskeyAppendSerializer
   @override
   final Iterable<Type> types = const [
     GeneralBlockPasskeyAppend,
-    _$GeneralBlockPasskeyAppend
+    _$GeneralBlockPasskeyAppend,
   ];
 
   @override
@@ -122,9 +122,11 @@ class _$GeneralBlockPasskeyAppendSerializer
     GeneralBlockPasskeyAppend object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(
+      serializers,
+      object,
+      specifiedType: specifiedType,
+    ).toList();
   }
 
   void _deserializeProperties(
@@ -140,52 +142,68 @@ class _$GeneralBlockPasskeyAppendSerializer
       final value = serializedList[i + 1];
       switch (key) {
         case r'blockType':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(String),
-          ) as String;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(String),
+                  )
+                  as String;
           result.blockType = valueDes;
           break;
         case r'challenge':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(String),
-          ) as String;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(String),
+                  )
+                  as String;
           result.challenge = valueDes;
           break;
         case r'identifierValue':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(String),
-          ) as String;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(String),
+                  )
+                  as String;
           result.identifierValue = valueDes;
           break;
         case r'identifierType':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(LoginIdentifierType),
-          ) as LoginIdentifierType;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(LoginIdentifierType),
+                  )
+                  as LoginIdentifierType;
           result.identifierType = valueDes;
           break;
         case r'autoSubmit':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(bool),
-          ) as bool;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(bool),
+                  )
+                  as bool;
           result.autoSubmit = valueDes;
           break;
         case r'passkeyIconSet':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(PasskeyIconSet),
-          ) as PasskeyIconSet;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(PasskeyIconSet),
+                  )
+                  as PasskeyIconSet;
           result.passkeyIconSet = valueDes;
           break;
         case r'variant':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(GeneralBlockPasskeyAppendVariantEnum),
-          ) as GeneralBlockPasskeyAppendVariantEnum;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(
+                      GeneralBlockPasskeyAppendVariantEnum,
+                    ),
+                  )
+                  as GeneralBlockPasskeyAppendVariantEnum;
           result.variant = valueDes;
           break;
         default:

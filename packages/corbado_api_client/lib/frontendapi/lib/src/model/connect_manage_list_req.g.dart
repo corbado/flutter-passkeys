@@ -10,19 +10,22 @@ class _$ConnectManageListReq extends ConnectManageListReq {
   @override
   final String connectToken;
 
-  factory _$ConnectManageListReq(
-          [void Function(ConnectManageListReqBuilder)? updates]) =>
-      (new ConnectManageListReqBuilder()..update(updates))._build();
+  factory _$ConnectManageListReq([
+    void Function(ConnectManageListReqBuilder)? updates,
+  ]) => (new ConnectManageListReqBuilder()..update(updates))._build();
 
   _$ConnectManageListReq._({required this.connectToken}) : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        connectToken, r'ConnectManageListReq', 'connectToken');
+      connectToken,
+      r'ConnectManageListReq',
+      'connectToken',
+    );
   }
 
   @override
   ConnectManageListReq rebuild(
-          void Function(ConnectManageListReqBuilder) updates) =>
-      (toBuilder()..update(updates)).build();
+    void Function(ConnectManageListReqBuilder) updates,
+  ) => (toBuilder()..update(updates)).build();
 
   @override
   ConnectManageListReqBuilder toBuilder() =>
@@ -44,9 +47,9 @@ class _$ConnectManageListReq extends ConnectManageListReq {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper(r'ConnectManageListReq')
-          ..add('connectToken', connectToken))
-        .toString();
+    return (newBuiltValueToStringHelper(
+      r'ConnectManageListReq',
+    )..add('connectToken', connectToken)).toString();
   }
 }
 
@@ -86,10 +89,15 @@ class ConnectManageListReqBuilder
   ConnectManageListReq build() => _build();
 
   _$ConnectManageListReq _build() {
-    final _$result = _$v ??
+    final _$result =
+        _$v ??
         new _$ConnectManageListReq._(
-            connectToken: BuiltValueNullFieldError.checkNotNull(
-                connectToken, r'ConnectManageListReq', 'connectToken'));
+          connectToken: BuiltValueNullFieldError.checkNotNull(
+            connectToken,
+            r'ConnectManageListReq',
+            'connectToken',
+          ),
+        );
     replace(_$result);
     return _$result;
   }

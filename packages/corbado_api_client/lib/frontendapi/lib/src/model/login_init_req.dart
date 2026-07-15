@@ -63,9 +63,11 @@ class _$LoginInitReqSerializer implements PrimitiveSerializer<LoginInitReq> {
     LoginInitReq object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(
+      serializers,
+      object,
+      specifiedType: specifiedType,
+    ).toList();
   }
 
   void _deserializeProperties(
@@ -81,17 +83,21 @@ class _$LoginInitReqSerializer implements PrimitiveSerializer<LoginInitReq> {
       final value = serializedList[i + 1];
       switch (key) {
         case r'identifierValue':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(String),
-          ) as String;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(String),
+                  )
+                  as String;
           result.identifierValue = valueDes;
           break;
         case r'isPhone':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(bool),
-          ) as bool;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(bool),
+                  )
+                  as bool;
           result.isPhone = valueDes;
           break;
         default:

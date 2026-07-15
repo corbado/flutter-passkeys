@@ -42,7 +42,7 @@ class _$UserDetailsConfigRspSerializer
   @override
   final Iterable<Type> types = const [
     UserDetailsConfigRsp,
-    _$UserDetailsConfigRsp
+    _$UserDetailsConfigRsp,
   ];
 
   @override
@@ -61,8 +61,9 @@ class _$UserDetailsConfigRspSerializer
     yield r'identifiers';
     yield serializers.serialize(
       object.identifiers,
-      specifiedType:
-          const FullType(BuiltList, [FullType(LoginIdentifierConfig)]),
+      specifiedType: const FullType(BuiltList, [
+        FullType(LoginIdentifierConfig),
+      ]),
     );
   }
 
@@ -72,9 +73,11 @@ class _$UserDetailsConfigRspSerializer
     UserDetailsConfigRsp object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(
+      serializers,
+      object,
+      specifiedType: specifiedType,
+    ).toList();
   }
 
   void _deserializeProperties(
@@ -90,18 +93,23 @@ class _$UserDetailsConfigRspSerializer
       final value = serializedList[i + 1];
       switch (key) {
         case r'fullNameRequired':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(bool),
-          ) as bool;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(bool),
+                  )
+                  as bool;
           result.fullNameRequired = valueDes;
           break;
         case r'identifiers':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType:
-                const FullType(BuiltList, [FullType(LoginIdentifierConfig)]),
-          ) as BuiltList<LoginIdentifierConfig>;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(BuiltList, [
+                      FullType(LoginIdentifierConfig),
+                    ]),
+                  )
+                  as BuiltList<LoginIdentifierConfig>;
           result.identifiers.replace(valueDes);
           break;
         default:

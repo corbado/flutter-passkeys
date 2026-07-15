@@ -23,7 +23,6 @@ class ErrorPage extends StatelessWidget {
               Text('Details: $error'),
               if (hint != null)
                 Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     const SizedBox(height: 20),
                     const Text(
@@ -36,7 +35,7 @@ class ErrorPage extends StatelessWidget {
                     Text(
                       hint!,
                       textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 12),
+                      style: const TextStyle(fontSize: 12),
                     ),
                   ],
                 ),

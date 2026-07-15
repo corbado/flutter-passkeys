@@ -1,3 +1,6 @@
+// ignore_for_file: non_constant_identifier_names
+// ignore_for_file: use_setters_to_change_properties
+
 import 'package:passkeys/authenticator.dart';
 import 'package:passkeys/availability.dart';
 import 'package:passkeys/types.dart';
@@ -99,8 +102,8 @@ class AuthService {
   }
 
   // This is only related to testing and testing configurations.
-  Configuration? signUpConfiguration = null;
-  Configuration? loginConfiguration = null;
+  Configuration? signUpConfiguration;
+  Configuration? loginConfiguration;
 
   void setSignupConfiguration(Configuration? configuration) {
     signUpConfiguration = configuration;

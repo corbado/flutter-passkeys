@@ -23,12 +23,9 @@ SocialProviderType _$valueOf(String name) {
   }
 }
 
-final BuiltSet<SocialProviderType> _$values =
-    new BuiltSet<SocialProviderType>(const <SocialProviderType>[
-  _$google,
-  _$microsoft,
-  _$github,
-]);
+final BuiltSet<SocialProviderType> _$values = new BuiltSet<SocialProviderType>(
+  const <SocialProviderType>[_$google, _$microsoft, _$github],
+);
 
 class _$SocialProviderTypeMeta {
   const _$SocialProviderTypeMeta();
@@ -67,15 +64,20 @@ class _$SocialProviderTypeSerializer
   final String wireName = 'SocialProviderType';
 
   @override
-  Object serialize(Serializers serializers, SocialProviderType object,
-          {FullType specifiedType = FullType.unspecified}) =>
-      _toWire[object.name] ?? object.name;
+  Object serialize(
+    Serializers serializers,
+    SocialProviderType object, {
+    FullType specifiedType = FullType.unspecified,
+  }) => _toWire[object.name] ?? object.name;
 
   @override
-  SocialProviderType deserialize(Serializers serializers, Object serialized,
-          {FullType specifiedType = FullType.unspecified}) =>
-      SocialProviderType.valueOf(
-          _fromWire[serialized] ?? (serialized is String ? serialized : ''));
+  SocialProviderType deserialize(
+    Serializers serializers,
+    Object serialized, {
+    FullType specifiedType = FullType.unspecified,
+  }) => SocialProviderType.valueOf(
+    _fromWire[serialized] ?? (serialized is String ? serialized : ''),
+  );
 }
 
 // ignore_for_file: deprecated_member_use_from_same_package,type=lint

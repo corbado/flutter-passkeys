@@ -1,22 +1,36 @@
+// ignore_for_file: invalid_use_of_protected_member, no_default_cases
+
 import 'dart:async';
 
 import 'package:corbado_auth/corbado_auth.dart';
 import 'package:corbado_auth/src/blocks/completed_block.dart';
 import 'package:corbado_auth/src/blocks/translator.dart';
-import 'package:corbado_auth/src/blocks/types.dart';
 import 'package:corbado_auth/src/services/corbado/corbado.dart';
 import 'package:corbado_frontend_api_client/corbado_frontend_api_client.dart';
 
+/// Pairs the screen that should be shown with the block holding its data.
 class ComponentWithData {
-  final ScreenNames screenName;
-  final Block<dynamic> block;
-
+  /// Creates a [ComponentWithData] for the given [screenName] and [block].
   ComponentWithData(this.screenName, this.block);
+
+  /// The screen that should currently be displayed.
+  final ScreenNames screenName;
+
+  /// The block holding the data backing the current screen.
+  final Block<dynamic> block;
 }
 
+/// Drives the authentication process by turning server and client updates
+/// into the blocks and screens that should be shown to the user.
 class ProcessHandler {
+  /// Creates a [ProcessHandler] using the given [corbadoService] and the
+  /// [onLoggedIn] callback that is invoked once authentication completes.
+  ProcessHandler({required this.corbadoService, required this.onLoggedIn});
+
+  /// The service used to communicate with the Corbado backend.
   final CorbadoService corbadoService;
 
+  /// Called with the session tokens once the authentication process completes.
   final void Function(String shortSession, String? longSession) onLoggedIn;
 
   final _componentWithDataStream =
@@ -24,12 +38,12 @@ class ProcessHandler {
   ScreenNames _currentScreen = ScreenNames.SignupInit;
   Block<dynamic>? _currentBlock;
 
+  /// Emits the component and data to render whenever the process advances.
   Stream<ComponentWithData> get componentWithDataStream =>
       _componentWithDataStream.stream;
 
-  ProcessHandler({required this.corbadoService, required this.onLoggedIn});
-
-  updateBlockFromServer(ProcessResponse processResponse) {
+  /// Updates the current block from a server [processResponse].
+  void updateBlockFromServer(ProcessResponse processResponse) {
     final newPrimaryBlock = _parseBlockData(
       processResponse.blockBody,
       processResponse.common,
@@ -44,7 +58,9 @@ class ProcessHandler {
     _updatePrimaryBlock(newPrimaryBlock);
   }
 
-  updateBlockFromClient(
+  /// Updates the current block from a client-driven [newPrimaryBlock] and its
+  /// [newAlternatives].
+  void updateBlockFromClient(
     Block<dynamic> newPrimaryBlock,
     List<Block<dynamic>> newAlternatives,
   ) {
@@ -52,9 +68,10 @@ class ProcessHandler {
     _updatePrimaryBlock(newPrimaryBlock);
   }
 
-  updateBlockFromError(CorbadoError error) {
+  /// Attaches the given [error] to the current block and re-emits it.
+  void updateBlockFromError(CorbadoError error) {
     if (_currentBlock == null) {
-      return null;
+      return;
     }
 
     _currentBlock!.error = error;
@@ -62,9 +79,10 @@ class ProcessHandler {
     _updatePrimaryBlock(_currentBlock!);
   }
 
-  updateCurrentScreen(ScreenNames screen) {
+  /// Switches the currently displayed [screen] for the active block.
+  void updateCurrentScreen(ScreenNames screen) {
     if (_currentBlock == null) {
-      return null;
+      return;
     }
 
     _currentScreen = screen;
@@ -138,9 +156,10 @@ class ProcessHandler {
     return block;
   }
 
+  /// Re-emits the current screen and block to listeners.
   void notifyCurrentScreen() {
     if (_currentBlock == null) {
-      return null;
+      return;
     }
 
     final event = ComponentWithData(_currentScreen, _currentBlock!);

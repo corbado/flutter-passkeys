@@ -23,12 +23,9 @@ VerificationMethod _$valueOf(String name) {
   }
 }
 
-final BuiltSet<VerificationMethod> _$values =
-    new BuiltSet<VerificationMethod>(const <VerificationMethod>[
-  _$emailLink,
-  _$emailOtp,
-  _$phoneOtp,
-]);
+final BuiltSet<VerificationMethod> _$values = new BuiltSet<VerificationMethod>(
+  const <VerificationMethod>[_$emailLink, _$emailOtp, _$phoneOtp],
+);
 
 class _$VerificationMethodMeta {
   const _$VerificationMethodMeta();
@@ -67,15 +64,20 @@ class _$VerificationMethodSerializer
   final String wireName = 'VerificationMethod';
 
   @override
-  Object serialize(Serializers serializers, VerificationMethod object,
-          {FullType specifiedType = FullType.unspecified}) =>
-      _toWire[object.name] ?? object.name;
+  Object serialize(
+    Serializers serializers,
+    VerificationMethod object, {
+    FullType specifiedType = FullType.unspecified,
+  }) => _toWire[object.name] ?? object.name;
 
   @override
-  VerificationMethod deserialize(Serializers serializers, Object serialized,
-          {FullType specifiedType = FullType.unspecified}) =>
-      VerificationMethod.valueOf(
-          _fromWire[serialized] ?? (serialized is String ? serialized : ''));
+  VerificationMethod deserialize(
+    Serializers serializers,
+    Object serialized, {
+    FullType specifiedType = FullType.unspecified,
+  }) => VerificationMethod.valueOf(
+    _fromWire[serialized] ?? (serialized is String ? serialized : ''),
+  );
 }
 
 // ignore_for_file: deprecated_member_use_from_same_package,type=lint

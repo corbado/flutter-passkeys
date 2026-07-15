@@ -8,10 +8,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+/// Named route paths used throughout the example app.
 class Routes {
+  /// Route showing the authentication (sign up / login) flow.
   static const auth = '/auth';
+
+  /// Route showing the logged in user's profile.
   static const profile = '/profile';
+
+  /// Route for editing the user's profile.
   static const editProfile = '/edit-profile';
+
+  /// Route listing the user's passkeys.
   static const passkeyList = '/passkey-list';
 }
 
@@ -44,6 +52,7 @@ Page<dynamic> _customPageBuilder(
   );
 }
 
+/// Provides the [GoRouter] that drives navigation for the example app.
 final routerProvider = Provider<GoRouter>((ref) {
   final authState = ref.watch(authStateProvider);
 
@@ -52,19 +61,19 @@ final routerProvider = Provider<GoRouter>((ref) {
     routes: [
       _defaultTransitionGoRoute(
         path: Routes.auth,
-        builder: (context, state) => AuthPage(),
+        builder: (context, state) => const AuthPage(),
       ),
       _defaultTransitionGoRoute(
         path: Routes.profile,
-        builder: (context, state) => ProfilePage(),
+        builder: (context, state) => const ProfilePage(),
       ),
       _defaultTransitionGoRoute(
         path: Routes.editProfile,
-        builder: (context, state) => EditProfilePage(),
+        builder: (context, state) => const EditProfilePage(),
       ),
       _defaultTransitionGoRoute(
         path: Routes.passkeyList,
-        builder: (context, state) => PasskeyListPage(),
+        builder: (context, state) => const PasskeyListPage(),
       ),
     ],
     redirect: (BuildContext context, GoRouterState state) {

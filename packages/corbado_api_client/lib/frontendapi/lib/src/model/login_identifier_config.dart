@@ -22,8 +22,9 @@ abstract class LoginIdentifierConfig
 
   LoginIdentifierConfig._();
 
-  factory LoginIdentifierConfig(
-      [void updates(LoginIdentifierConfigBuilder b)]) = _$LoginIdentifierConfig;
+  factory LoginIdentifierConfig([
+    void updates(LoginIdentifierConfigBuilder b),
+  ]) = _$LoginIdentifierConfig;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(LoginIdentifierConfigBuilder b) => b;
@@ -38,7 +39,7 @@ class _$LoginIdentifierConfigSerializer
   @override
   final Iterable<Type> types = const [
     LoginIdentifierConfig,
-    _$LoginIdentifierConfig
+    _$LoginIdentifierConfig,
   ];
 
   @override
@@ -62,9 +63,11 @@ class _$LoginIdentifierConfigSerializer
     LoginIdentifierConfig object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(
+      serializers,
+      object,
+      specifiedType: specifiedType,
+    ).toList();
   }
 
   void _deserializeProperties(
@@ -80,10 +83,12 @@ class _$LoginIdentifierConfigSerializer
       final value = serializedList[i + 1];
       switch (key) {
         case r'type':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(LoginIdentifierType),
-          ) as LoginIdentifierType;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(LoginIdentifierType),
+                  )
+                  as LoginIdentifierType;
           result.type = valueDes;
           break;
         default:

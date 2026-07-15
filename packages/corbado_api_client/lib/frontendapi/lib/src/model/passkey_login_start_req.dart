@@ -37,7 +37,7 @@ class _$PasskeyLoginStartReqSerializer
   @override
   final Iterable<Type> types = const [
     PasskeyLoginStartReq,
-    _$PasskeyLoginStartReq
+    _$PasskeyLoginStartReq,
   ];
 
   @override
@@ -63,9 +63,11 @@ class _$PasskeyLoginStartReqSerializer
     PasskeyLoginStartReq object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(
+      serializers,
+      object,
+      specifiedType: specifiedType,
+    ).toList();
   }
 
   void _deserializeProperties(
@@ -81,10 +83,12 @@ class _$PasskeyLoginStartReqSerializer
       final value = serializedList[i + 1];
       switch (key) {
         case r'clientInformation':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(ClientInformation),
-          ) as ClientInformation;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(ClientInformation),
+                  )
+                  as ClientInformation;
           result.clientInformation.replace(valueDes);
           break;
         default:

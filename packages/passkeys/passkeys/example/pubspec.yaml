@@ -8,23 +8,24 @@ environment:
   flutter: ">=3.32.0"
 
 dependencies:
+  corbado_telemetry_api_client: ^1.0.2
   flutter:
     sdk: flutter
+  flutter_hooks: ^0.20.3
+  flutter_localization: ^0.2.1
+  flutter_riverpod: ^2.3.10
+  go_router: ^10.1.2
+  hooks_riverpod: ^2.4.0
+  jwt_decoder: ^2.0.1
+  overlay_support: ^2.1.0
   # We will be using the passkeys package from the local path. So that the example deployment reflects the recent changes
   # in the plugin and to avoid any build issues in the deployment.
   passkeys:
     path: ../
-  go_router: ^10.1.2
-  flutter_hooks: ^0.20.3
   riverpod: ^2.3.10
-  flutter_riverpod: ^2.3.10
-  hooks_riverpod: ^2.4.0
-  flutter_localization: ^0.2.1
-  jwt_decoder: ^2.0.1
-  overlay_support: ^2.1.0
-  corbado_telemetry_api_client: ^1.0.2
 
 dev_dependencies:
+  appium_flutter_server: ^0.0.20
   flutter_driver:
     sdk: flutter
   flutter_test:
@@ -32,7 +33,6 @@ dev_dependencies:
   integration_test:
     sdk: flutter
   very_good_analysis: ^5.0.0
-  appium_flutter_server: ^0.0.20
 
 flutter:
   uses-material-design: true

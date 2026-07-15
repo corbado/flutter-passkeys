@@ -21,9 +21,9 @@ abstract class GeneralBlockPasskeyAppended
 
   GeneralBlockPasskeyAppended._();
 
-  factory GeneralBlockPasskeyAppended(
-          [void updates(GeneralBlockPasskeyAppendedBuilder b)]) =
-      _$GeneralBlockPasskeyAppended;
+  factory GeneralBlockPasskeyAppended([
+    void updates(GeneralBlockPasskeyAppendedBuilder b),
+  ]) = _$GeneralBlockPasskeyAppended;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(GeneralBlockPasskeyAppendedBuilder b) => b;
@@ -38,7 +38,7 @@ class _$GeneralBlockPasskeyAppendedSerializer
   @override
   final Iterable<Type> types = const [
     GeneralBlockPasskeyAppended,
-    _$GeneralBlockPasskeyAppended
+    _$GeneralBlockPasskeyAppended,
   ];
 
   @override
@@ -62,9 +62,11 @@ class _$GeneralBlockPasskeyAppendedSerializer
     GeneralBlockPasskeyAppended object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(
+      serializers,
+      object,
+      specifiedType: specifiedType,
+    ).toList();
   }
 
   void _deserializeProperties(
@@ -80,10 +82,12 @@ class _$GeneralBlockPasskeyAppendedSerializer
       final value = serializedList[i + 1];
       switch (key) {
         case r'blockType':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(String),
-          ) as String;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(String),
+                  )
+                  as String;
           result.blockType = valueDes;
           break;
         default:

@@ -12,23 +12,30 @@ class _$IdentifierVerifyStartReq extends IdentifierVerifyStartReq {
   @override
   final VerificationMethod verificationType;
 
-  factory _$IdentifierVerifyStartReq(
-          [void Function(IdentifierVerifyStartReqBuilder)? updates]) =>
-      (new IdentifierVerifyStartReqBuilder()..update(updates))._build();
+  factory _$IdentifierVerifyStartReq([
+    void Function(IdentifierVerifyStartReqBuilder)? updates,
+  ]) => (new IdentifierVerifyStartReqBuilder()..update(updates))._build();
 
-  _$IdentifierVerifyStartReq._(
-      {required this.identifierType, required this.verificationType})
-      : super._() {
+  _$IdentifierVerifyStartReq._({
+    required this.identifierType,
+    required this.verificationType,
+  }) : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        identifierType, r'IdentifierVerifyStartReq', 'identifierType');
+      identifierType,
+      r'IdentifierVerifyStartReq',
+      'identifierType',
+    );
     BuiltValueNullFieldError.checkNotNull(
-        verificationType, r'IdentifierVerifyStartReq', 'verificationType');
+      verificationType,
+      r'IdentifierVerifyStartReq',
+      'verificationType',
+    );
   }
 
   @override
   IdentifierVerifyStartReq rebuild(
-          void Function(IdentifierVerifyStartReqBuilder) updates) =>
-      (toBuilder()..update(updates)).build();
+    void Function(IdentifierVerifyStartReqBuilder) updates,
+  ) => (toBuilder()..update(updates)).build();
 
   @override
   IdentifierVerifyStartReqBuilder toBuilder() =>
@@ -104,14 +111,20 @@ class IdentifierVerifyStartReqBuilder
   IdentifierVerifyStartReq build() => _build();
 
   _$IdentifierVerifyStartReq _build() {
-    final _$result = _$v ??
+    final _$result =
+        _$v ??
         new _$IdentifierVerifyStartReq._(
-            identifierType: BuiltValueNullFieldError.checkNotNull(
-                identifierType, r'IdentifierVerifyStartReq', 'identifierType'),
-            verificationType: BuiltValueNullFieldError.checkNotNull(
-                verificationType,
-                r'IdentifierVerifyStartReq',
-                'verificationType'));
+          identifierType: BuiltValueNullFieldError.checkNotNull(
+            identifierType,
+            r'IdentifierVerifyStartReq',
+            'identifierType',
+          ),
+          verificationType: BuiltValueNullFieldError.checkNotNull(
+            verificationType,
+            r'IdentifierVerifyStartReq',
+            'verificationType',
+          ),
+        );
     replace(_$result);
     return _$result;
   }

@@ -22,8 +22,9 @@ abstract class ContinueOnOtherDevice
 
   ContinueOnOtherDevice._();
 
-  factory ContinueOnOtherDevice(
-      [void updates(ContinueOnOtherDeviceBuilder b)]) = _$ContinueOnOtherDevice;
+  factory ContinueOnOtherDevice([
+    void updates(ContinueOnOtherDeviceBuilder b),
+  ]) = _$ContinueOnOtherDevice;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(ContinueOnOtherDeviceBuilder b) => b;
@@ -38,7 +39,7 @@ class _$ContinueOnOtherDeviceSerializer
   @override
   final Iterable<Type> types = const [
     ContinueOnOtherDevice,
-    _$ContinueOnOtherDevice
+    _$ContinueOnOtherDevice,
   ];
 
   @override
@@ -62,9 +63,11 @@ class _$ContinueOnOtherDeviceSerializer
     ContinueOnOtherDevice object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(
+      serializers,
+      object,
+      specifiedType: specifiedType,
+    ).toList();
   }
 
   void _deserializeProperties(
@@ -80,10 +83,14 @@ class _$ContinueOnOtherDeviceSerializer
       final value = serializedList[i + 1];
       switch (key) {
         case r'reason':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(ContinueOnOtherDeviceReasonEnum),
-          ) as ContinueOnOtherDeviceReasonEnum;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(
+                      ContinueOnOtherDeviceReasonEnum,
+                    ),
+                  )
+                  as ContinueOnOtherDeviceReasonEnum;
           result.reason = valueDes;
           break;
         default:

@@ -21,8 +21,9 @@ abstract class PasskeyAppendStartReq
 
   PasskeyAppendStartReq._();
 
-  factory PasskeyAppendStartReq(
-      [void updates(PasskeyAppendStartReqBuilder b)]) = _$PasskeyAppendStartReq;
+  factory PasskeyAppendStartReq([
+    void updates(PasskeyAppendStartReqBuilder b),
+  ]) = _$PasskeyAppendStartReq;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(PasskeyAppendStartReqBuilder b) => b;
@@ -37,7 +38,7 @@ class _$PasskeyAppendStartReqSerializer
   @override
   final Iterable<Type> types = const [
     PasskeyAppendStartReq,
-    _$PasskeyAppendStartReq
+    _$PasskeyAppendStartReq,
   ];
 
   @override
@@ -63,9 +64,11 @@ class _$PasskeyAppendStartReqSerializer
     PasskeyAppendStartReq object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(
+      serializers,
+      object,
+      specifiedType: specifiedType,
+    ).toList();
   }
 
   void _deserializeProperties(
@@ -81,10 +84,12 @@ class _$PasskeyAppendStartReqSerializer
       final value = serializedList[i + 1];
       switch (key) {
         case r'clientInformation':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(ClientInformation),
-          ) as ClientInformation;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(ClientInformation),
+                  )
+                  as ClientInformation;
           result.clientInformation.replace(valueDes);
           break;
         default:

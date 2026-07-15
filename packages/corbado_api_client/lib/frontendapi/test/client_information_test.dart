@@ -29,10 +29,12 @@ void main() {
     });
 
     // bool isUserVerifyingPlatformAuthenticatorAvailable
-    test('to test the property `isUserVerifyingPlatformAuthenticatorAvailable`',
-        () async {
-      // TODO
-    });
+    test(
+      'to test the property `isUserVerifyingPlatformAuthenticatorAvailable`',
+      () async {
+        // TODO
+      },
+    );
 
     // bool isConditionalMediationAvailable
     test('to test the property `isConditionalMediationAvailable`', () async {

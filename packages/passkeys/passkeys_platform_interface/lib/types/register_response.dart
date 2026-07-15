@@ -1,6 +1,8 @@
 import 'dart:convert';
 
+/// The response returned by the platform after a registration flow.
 class RegisterResponseType {
+  /// Constructs a new instance.
   const RegisterResponseType({
     required this.id,
     required this.rawId,
@@ -37,10 +39,19 @@ class RegisterResponseType {
     );
   }
 
+  /// The ID of the newly created credential.
   final String id;
+
+  /// The raw ID of the newly created credential.
   final String rawId;
+
+  /// The client data JSON.
   final String clientDataJSON;
+
+  /// The attestation object containing the credential public key.
   final String attestationObject;
+
+  /// The transports supported by the authenticator.
   final List<String?> transports;
 
   /// Converts this instance to a JSON string.

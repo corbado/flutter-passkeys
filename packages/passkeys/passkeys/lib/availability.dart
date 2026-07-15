@@ -4,12 +4,13 @@ import 'package:passkeys_platform_interface/types/types.dart';
 /// Provides platform-specific methods to query the availability of passkeys.
 ///
 /// The [GetAvailability] class acts as a wrapper around the [PasskeysPlatform]
-/// interface, exposing methods to check the availability of passkeys on different platforms.
+/// interface, exposing methods to check the availability of passkeys on
+/// different platforms.
 ///
 /// Supported methods:
-/// - [Web]: Queries availability for web-based platforms.
-/// - [Android]: Queries availability for Android platforms.
-/// - [IOS]: Queries availability for iOS platforms.
+/// - Web: Queries availability for web-based platforms.
+/// - Android: Queries availability for Android platforms.
+/// - iOS: Queries availability for iOS platforms.
 ///
 /// ### Example Usage
 /// ```dart
@@ -22,6 +23,7 @@ import 'package:passkeys_platform_interface/types/types.dart';
 /// ### Constructor
 /// - [GetAvailability]: Requires a [PasskeysPlatform] instance to function.
 class GetAvailability {
+  /// Creates a [GetAvailability] that queries the given [platform].
   GetAvailability({required PasskeysPlatform platform}) : _platform = platform;
 
   final PasskeysPlatform _platform;

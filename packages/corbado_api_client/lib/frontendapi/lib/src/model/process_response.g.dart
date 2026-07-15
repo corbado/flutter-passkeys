@@ -17,11 +17,16 @@ class _$ProcessResponse extends ProcessResponse {
   factory _$ProcessResponse([void Function(ProcessResponseBuilder)? updates]) =>
       (new ProcessResponseBuilder()..update(updates))._build();
 
-  _$ProcessResponse._(
-      {required this.blockBody, required this.common, this.newProcess})
-      : super._() {
+  _$ProcessResponse._({
+    required this.blockBody,
+    required this.common,
+    this.newProcess,
+  }) : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        blockBody, r'ProcessResponse', 'blockBody');
+      blockBody,
+      r'ProcessResponse',
+      'blockBody',
+    );
     BuiltValueNullFieldError.checkNotNull(common, r'ProcessResponse', 'common');
   }
 
@@ -114,11 +119,13 @@ class ProcessResponseBuilder
   _$ProcessResponse _build() {
     _$ProcessResponse _$result;
     try {
-      _$result = _$v ??
+      _$result =
+          _$v ??
           new _$ProcessResponse._(
-              blockBody: blockBody.build(),
-              common: common.build(),
-              newProcess: _newProcess?.build());
+            blockBody: blockBody.build(),
+            common: common.build(),
+            newProcess: _newProcess?.build(),
+          );
     } catch (_) {
       late String _$failedField;
       try {
@@ -130,7 +137,10 @@ class ProcessResponseBuilder
         _newProcess?.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            r'ProcessResponse', _$failedField, e.toString());
+          r'ProcessResponse',
+          _$failedField,
+          e.toString(),
+        );
       }
       rethrow;
     }

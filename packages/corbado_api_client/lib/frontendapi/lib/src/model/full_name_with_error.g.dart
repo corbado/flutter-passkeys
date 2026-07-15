@@ -12,13 +12,16 @@ class _$FullNameWithError extends FullNameWithError {
   @override
   final RequestError? error;
 
-  factory _$FullNameWithError(
-          [void Function(FullNameWithErrorBuilder)? updates]) =>
-      (new FullNameWithErrorBuilder()..update(updates))._build();
+  factory _$FullNameWithError([
+    void Function(FullNameWithErrorBuilder)? updates,
+  ]) => (new FullNameWithErrorBuilder()..update(updates))._build();
 
   _$FullNameWithError._({required this.fullName, this.error}) : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        fullName, r'FullNameWithError', 'fullName');
+      fullName,
+      r'FullNameWithError',
+      'fullName',
+    );
   }
 
   @override
@@ -98,11 +101,16 @@ class FullNameWithErrorBuilder
   _$FullNameWithError _build() {
     _$FullNameWithError _$result;
     try {
-      _$result = _$v ??
+      _$result =
+          _$v ??
           new _$FullNameWithError._(
-              fullName: BuiltValueNullFieldError.checkNotNull(
-                  fullName, r'FullNameWithError', 'fullName'),
-              error: _error?.build());
+            fullName: BuiltValueNullFieldError.checkNotNull(
+              fullName,
+              r'FullNameWithError',
+              'fullName',
+            ),
+            error: _error?.build(),
+          );
     } catch (_) {
       late String _$failedField;
       try {
@@ -110,7 +118,10 @@ class FullNameWithErrorBuilder
         _error?.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            r'FullNameWithError', _$failedField, e.toString());
+          r'FullNameWithError',
+          _$failedField,
+          e.toString(),
+        );
       }
       rethrow;
     }

@@ -13,6 +13,7 @@ const _clientEnvHandleKey = 'client_env_handle';
 /// - refreshToken (longSession)
 /// - user (shortSession)
 class WebStorageService implements StorageService {
+  /// Creates a [WebStorageService] scoped to the given project id.
   WebStorageService(this._projectId);
 
   final String _projectId;

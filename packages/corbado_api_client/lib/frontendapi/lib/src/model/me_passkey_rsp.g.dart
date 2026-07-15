@@ -17,7 +17,10 @@ class _$MePasskeyRsp extends MePasskeyRsp {
 
   _$MePasskeyRsp._({required this.passkeys, required this.paging}) : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        passkeys, r'MePasskeyRsp', 'passkeys');
+      passkeys,
+      r'MePasskeyRsp',
+      'passkeys',
+    );
     BuiltValueNullFieldError.checkNotNull(paging, r'MePasskeyRsp', 'paging');
   }
 
@@ -98,9 +101,12 @@ class MePasskeyRspBuilder
   _$MePasskeyRsp _build() {
     _$MePasskeyRsp _$result;
     try {
-      _$result = _$v ??
+      _$result =
+          _$v ??
           new _$MePasskeyRsp._(
-              passkeys: passkeys.build(), paging: paging.build());
+            passkeys: passkeys.build(),
+            paging: paging.build(),
+          );
     } catch (_) {
       late String _$failedField;
       try {
@@ -110,7 +116,10 @@ class MePasskeyRspBuilder
         paging.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            r'MePasskeyRsp', _$failedField, e.toString());
+          r'MePasskeyRsp',
+          _$failedField,
+          e.toString(),
+        );
       }
       rethrow;
     }

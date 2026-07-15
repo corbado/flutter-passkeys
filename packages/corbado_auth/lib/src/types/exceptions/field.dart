@@ -5,8 +5,11 @@ enum CorbadoField {
 
   /// email field
   email,
+
+  /// OTP code field
   code;
 
+  /// Creates a [CorbadoField] from its backend string representation.
   factory CorbadoField.fromString(String v) {
     switch (v) {
       case 'username':
@@ -23,4 +26,5 @@ enum CorbadoField {
   }
 }
 
+/// Convenience helpers for [CorbadoField].
 extension CorbadoFieldFactory on CorbadoField {}

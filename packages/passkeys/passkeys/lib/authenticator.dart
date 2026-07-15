@@ -88,7 +88,13 @@ class PasskeyAuthenticator implements PasskeyAuthenticatorInterface {
         case 'ios-security-key-timeout':
           throw TimeoutException(e.message);
         default:
-          rethrow;
+          if (e.code.startsWith('android-unhandled')) {
+            throw UnhandledAuthenticatorException(e.code, e.message, e.details);
+          } else if (e.code.startsWith('ios-unhandled')) {
+            throw UnhandledAuthenticatorException(e.code, e.message, e.details);
+          } else {
+            rethrow;
+          }
       }
     }
   }
@@ -212,11 +218,12 @@ class PasskeyAuthenticator implements PasskeyAuthenticatorInterface {
 
   /// Validates if the given string is a valid Base64URL encoded string.
   bool _isValidBase64Url({required String input, bool allowPadding = false}) {
+    var value = input;
     // If padding is allowed, remove trailing '=' characters, but only up to two
     if (allowPadding) {
       var i = 0;
-      while (input.endsWith('=') && i < 3) {
-        input = input.substring(0, input.length - 1);
+      while (value.endsWith('=') && i < 3) {
+        value = value.substring(0, value.length - 1);
         i++;
       }
 
@@ -228,11 +235,11 @@ class PasskeyAuthenticator implements PasskeyAuthenticatorInterface {
     // Base64URL should only contain A-Z, a-z, 0-9, -, _
     final base64UrlRegex = RegExp(r'^[A-Za-z0-9\-_]+$');
 
-    if (!base64UrlRegex.hasMatch(input)) return false;
+    if (!base64UrlRegex.hasMatch(value)) return false;
 
     try {
-      String normalized = input.padRight(
-        input.length + (4 - input.length % 4) % 4,
+      final normalized = value.padRight(
+        value.length + (4 - value.length % 4) % 4,
         '=',
       );
       base64Url.decode(normalized);

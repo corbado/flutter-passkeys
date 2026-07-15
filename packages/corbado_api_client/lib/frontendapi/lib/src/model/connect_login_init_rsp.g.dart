@@ -22,35 +22,50 @@ class _$ConnectLoginInitRsp extends ConnectLoginInitRsp {
   @override
   final String? conditionalUIChallenge;
 
-  factory _$ConnectLoginInitRsp(
-          [void Function(ConnectLoginInitRspBuilder)? updates]) =>
-      (new ConnectLoginInitRspBuilder()..update(updates))._build();
+  factory _$ConnectLoginInitRsp([
+    void Function(ConnectLoginInitRspBuilder)? updates,
+  ]) => (new ConnectLoginInitRspBuilder()..update(updates))._build();
 
-  _$ConnectLoginInitRsp._(
-      {required this.token,
-      required this.expiresAt,
-      required this.frontendApiUrl,
-      required this.loginAllowed,
-      required this.flags,
-      this.newClientEnvHandle,
-      this.conditionalUIChallenge})
-      : super._() {
+  _$ConnectLoginInitRsp._({
+    required this.token,
+    required this.expiresAt,
+    required this.frontendApiUrl,
+    required this.loginAllowed,
+    required this.flags,
+    this.newClientEnvHandle,
+    this.conditionalUIChallenge,
+  }) : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        token, r'ConnectLoginInitRsp', 'token');
+      token,
+      r'ConnectLoginInitRsp',
+      'token',
+    );
     BuiltValueNullFieldError.checkNotNull(
-        expiresAt, r'ConnectLoginInitRsp', 'expiresAt');
+      expiresAt,
+      r'ConnectLoginInitRsp',
+      'expiresAt',
+    );
     BuiltValueNullFieldError.checkNotNull(
-        frontendApiUrl, r'ConnectLoginInitRsp', 'frontendApiUrl');
+      frontendApiUrl,
+      r'ConnectLoginInitRsp',
+      'frontendApiUrl',
+    );
     BuiltValueNullFieldError.checkNotNull(
-        loginAllowed, r'ConnectLoginInitRsp', 'loginAllowed');
+      loginAllowed,
+      r'ConnectLoginInitRsp',
+      'loginAllowed',
+    );
     BuiltValueNullFieldError.checkNotNull(
-        flags, r'ConnectLoginInitRsp', 'flags');
+      flags,
+      r'ConnectLoginInitRsp',
+      'flags',
+    );
   }
 
   @override
   ConnectLoginInitRsp rebuild(
-          void Function(ConnectLoginInitRspBuilder) updates) =>
-      (toBuilder()..update(updates)).build();
+    void Function(ConnectLoginInitRspBuilder) updates,
+  ) => (toBuilder()..update(updates)).build();
 
   @override
   ConnectLoginInitRspBuilder toBuilder() =>
@@ -169,19 +184,33 @@ class ConnectLoginInitRspBuilder
   _$ConnectLoginInitRsp _build() {
     _$ConnectLoginInitRsp _$result;
     try {
-      _$result = _$v ??
+      _$result =
+          _$v ??
           new _$ConnectLoginInitRsp._(
-              token: BuiltValueNullFieldError.checkNotNull(
-                  token, r'ConnectLoginInitRsp', 'token'),
-              expiresAt: BuiltValueNullFieldError.checkNotNull(
-                  expiresAt, r'ConnectLoginInitRsp', 'expiresAt'),
-              frontendApiUrl: BuiltValueNullFieldError.checkNotNull(
-                  frontendApiUrl, r'ConnectLoginInitRsp', 'frontendApiUrl'),
-              loginAllowed: BuiltValueNullFieldError.checkNotNull(
-                  loginAllowed, r'ConnectLoginInitRsp', 'loginAllowed'),
-              flags: flags.build(),
-              newClientEnvHandle: newClientEnvHandle,
-              conditionalUIChallenge: conditionalUIChallenge);
+            token: BuiltValueNullFieldError.checkNotNull(
+              token,
+              r'ConnectLoginInitRsp',
+              'token',
+            ),
+            expiresAt: BuiltValueNullFieldError.checkNotNull(
+              expiresAt,
+              r'ConnectLoginInitRsp',
+              'expiresAt',
+            ),
+            frontendApiUrl: BuiltValueNullFieldError.checkNotNull(
+              frontendApiUrl,
+              r'ConnectLoginInitRsp',
+              'frontendApiUrl',
+            ),
+            loginAllowed: BuiltValueNullFieldError.checkNotNull(
+              loginAllowed,
+              r'ConnectLoginInitRsp',
+              'loginAllowed',
+            ),
+            flags: flags.build(),
+            newClientEnvHandle: newClientEnvHandle,
+            conditionalUIChallenge: conditionalUIChallenge,
+          );
     } catch (_) {
       late String _$failedField;
       try {
@@ -189,7 +218,10 @@ class ConnectLoginInitRspBuilder
         flags.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            r'ConnectLoginInitRsp', _$failedField, e.toString());
+          r'ConnectLoginInitRsp',
+          _$failedField,
+          e.toString(),
+        );
       }
       rethrow;
     }

@@ -5,13 +5,14 @@ import 'package:corbado_auth_example/widgets/filled_text_button.dart';
 import 'package:corbado_auth_example/widgets/outlined_text_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:overlay_support/overlay_support.dart';
 
+/// Page that lets the user edit their profile information.
 class EditProfilePage extends HookConsumerWidget {
-  EditProfilePage({super.key});
+  /// Creates the edit profile page.
+  const EditProfilePage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -91,6 +92,9 @@ class EditProfilePage extends HookConsumerWidget {
                       try {
                         await corbado.changeUsername(fullName: fullName.text);
 
+                        if (!context.mounted) {
+                          return;
+                        }
                         showSimpleNotification(
                           const Text(
                             'Full name has been changed successfully.',

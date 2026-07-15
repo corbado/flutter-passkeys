@@ -16,9 +16,12 @@ class _$LoginInitReq extends LoginInitReq {
       (new LoginInitReqBuilder()..update(updates))._build();
 
   _$LoginInitReq._({required this.identifierValue, required this.isPhone})
-      : super._() {
+    : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        identifierValue, r'LoginInitReq', 'identifierValue');
+      identifierValue,
+      r'LoginInitReq',
+      'identifierValue',
+    );
     BuiltValueNullFieldError.checkNotNull(isPhone, r'LoginInitReq', 'isPhone');
   }
 
@@ -97,12 +100,20 @@ class LoginInitReqBuilder
   LoginInitReq build() => _build();
 
   _$LoginInitReq _build() {
-    final _$result = _$v ??
+    final _$result =
+        _$v ??
         new _$LoginInitReq._(
-            identifierValue: BuiltValueNullFieldError.checkNotNull(
-                identifierValue, r'LoginInitReq', 'identifierValue'),
-            isPhone: BuiltValueNullFieldError.checkNotNull(
-                isPhone, r'LoginInitReq', 'isPhone'));
+          identifierValue: BuiltValueNullFieldError.checkNotNull(
+            identifierValue,
+            r'LoginInitReq',
+            'identifierValue',
+          ),
+          isPhone: BuiltValueNullFieldError.checkNotNull(
+            isPhone,
+            r'LoginInitReq',
+            'isPhone',
+          ),
+        );
     replace(_$result);
     return _$result;
   }

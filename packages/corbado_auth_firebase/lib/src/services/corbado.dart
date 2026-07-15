@@ -6,6 +6,7 @@ import 'package:corbado_auth_firebase/src/exceptions.dart';
 import 'package:passkeys/types.dart';
 
 class CorbadoService {
+  CorbadoService(FirebaseFunctions functions) : _functions = functions;
   final FirebaseFunctions _functions;
   static final _functionOptions = HttpsCallableOptions(
     timeout: const Duration(seconds: 10),
@@ -14,8 +15,6 @@ class CorbadoService {
   String? _ongoingEmailOTPCodeID;
 
   static CorbadoService? _instance;
-
-  CorbadoService(FirebaseFunctions functions) : _functions = functions;
 
   static CorbadoService getInstance() {
     _instance ??= CorbadoService(FirebaseFunctions.instance);

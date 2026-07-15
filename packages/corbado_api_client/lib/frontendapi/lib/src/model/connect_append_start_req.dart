@@ -28,8 +28,9 @@ abstract class ConnectAppendStartReq
 
   ConnectAppendStartReq._();
 
-  factory ConnectAppendStartReq(
-      [void updates(ConnectAppendStartReqBuilder b)]) = _$ConnectAppendStartReq;
+  factory ConnectAppendStartReq([
+    void updates(ConnectAppendStartReqBuilder b),
+  ]) = _$ConnectAppendStartReq;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(ConnectAppendStartReqBuilder b) => b;
@@ -44,7 +45,7 @@ class _$ConnectAppendStartReqSerializer
   @override
   final Iterable<Type> types = const [
     ConnectAppendStartReq,
-    _$ConnectAppendStartReq
+    _$ConnectAppendStartReq,
   ];
 
   @override
@@ -80,9 +81,11 @@ class _$ConnectAppendStartReqSerializer
     ConnectAppendStartReq object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(
+      serializers,
+      object,
+      specifiedType: specifiedType,
+    ).toList();
   }
 
   void _deserializeProperties(
@@ -98,24 +101,27 @@ class _$ConnectAppendStartReqSerializer
       final value = serializedList[i + 1];
       switch (key) {
         case r'appendTokenValue':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(String),
-          ) as String;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(String),
+                  )
+                  as String;
           result.appendTokenValue = valueDes;
           break;
         case r'loadedMs':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(int),
-          ) as int;
+          final valueDes =
+              serializers.deserialize(value, specifiedType: const FullType(int))
+                  as int;
           result.loadedMs = valueDes;
           break;
         case r'forcePasskeyAppend':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(bool),
-          ) as bool;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(bool),
+                  )
+                  as bool;
           result.forcePasskeyAppend = valueDes;
           break;
         default:

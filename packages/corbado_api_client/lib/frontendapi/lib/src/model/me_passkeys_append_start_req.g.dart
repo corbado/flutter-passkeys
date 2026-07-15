@@ -10,19 +10,22 @@ class _$MePasskeysAppendStartReq extends MePasskeysAppendStartReq {
   @override
   final ClientInformation clientInformation;
 
-  factory _$MePasskeysAppendStartReq(
-          [void Function(MePasskeysAppendStartReqBuilder)? updates]) =>
-      (new MePasskeysAppendStartReqBuilder()..update(updates))._build();
+  factory _$MePasskeysAppendStartReq([
+    void Function(MePasskeysAppendStartReqBuilder)? updates,
+  ]) => (new MePasskeysAppendStartReqBuilder()..update(updates))._build();
 
   _$MePasskeysAppendStartReq._({required this.clientInformation}) : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        clientInformation, r'MePasskeysAppendStartReq', 'clientInformation');
+      clientInformation,
+      r'MePasskeysAppendStartReq',
+      'clientInformation',
+    );
   }
 
   @override
   MePasskeysAppendStartReq rebuild(
-          void Function(MePasskeysAppendStartReqBuilder) updates) =>
-      (toBuilder()..update(updates)).build();
+    void Function(MePasskeysAppendStartReqBuilder) updates,
+  ) => (toBuilder()..update(updates)).build();
 
   @override
   MePasskeysAppendStartReqBuilder toBuilder() =>
@@ -45,9 +48,9 @@ class _$MePasskeysAppendStartReq extends MePasskeysAppendStartReq {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper(r'MePasskeysAppendStartReq')
-          ..add('clientInformation', clientInformation))
-        .toString();
+    return (newBuiltValueToStringHelper(
+      r'MePasskeysAppendStartReq',
+    )..add('clientInformation', clientInformation)).toString();
   }
 }
 
@@ -92,9 +95,11 @@ class MePasskeysAppendStartReqBuilder
   _$MePasskeysAppendStartReq _build() {
     _$MePasskeysAppendStartReq _$result;
     try {
-      _$result = _$v ??
+      _$result =
+          _$v ??
           new _$MePasskeysAppendStartReq._(
-              clientInformation: clientInformation.build());
+            clientInformation: clientInformation.build(),
+          );
     } catch (_) {
       late String _$failedField;
       try {
@@ -102,7 +107,10 @@ class MePasskeysAppendStartReqBuilder
         clientInformation.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            r'MePasskeysAppendStartReq', _$failedField, e.toString());
+          r'MePasskeysAppendStartReq',
+          _$failedField,
+          e.toString(),
+        );
       }
       rethrow;
     }

@@ -94,9 +94,11 @@ class _$ProcessInitReqSerializer
     ProcessInitReq object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(
+      serializers,
+      object,
+      specifiedType: specifiedType,
+    ).toList();
   }
 
   void _deserializeProperties(
@@ -112,31 +114,36 @@ class _$ProcessInitReqSerializer
       final value = serializedList[i + 1];
       switch (key) {
         case r'clientInformation':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(ClientInformation),
-          ) as ClientInformation;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(ClientInformation),
+                  )
+                  as ClientInformation;
           result.clientInformation.replace(valueDes);
           break;
         case r'passkeyAppendShown':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(int),
-          ) as int;
+          final valueDes =
+              serializers.deserialize(value, specifiedType: const FullType(int))
+                  as int;
           result.passkeyAppendShown = valueDes;
           break;
         case r'optOutOfPasskeyAppendAfterHybrid':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(bool),
-          ) as bool;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(bool),
+                  )
+                  as bool;
           result.optOutOfPasskeyAppendAfterHybrid = valueDes;
           break;
         case r'preferredBlock':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(BlockType),
-          ) as BlockType;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(BlockType),
+                  )
+                  as BlockType;
           result.preferredBlock = valueDes;
           break;
         default:

@@ -10,19 +10,22 @@ class _$MeIdentifierDeleteReq extends MeIdentifierDeleteReq {
   @override
   final String identifierID;
 
-  factory _$MeIdentifierDeleteReq(
-          [void Function(MeIdentifierDeleteReqBuilder)? updates]) =>
-      (new MeIdentifierDeleteReqBuilder()..update(updates))._build();
+  factory _$MeIdentifierDeleteReq([
+    void Function(MeIdentifierDeleteReqBuilder)? updates,
+  ]) => (new MeIdentifierDeleteReqBuilder()..update(updates))._build();
 
   _$MeIdentifierDeleteReq._({required this.identifierID}) : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        identifierID, r'MeIdentifierDeleteReq', 'identifierID');
+      identifierID,
+      r'MeIdentifierDeleteReq',
+      'identifierID',
+    );
   }
 
   @override
   MeIdentifierDeleteReq rebuild(
-          void Function(MeIdentifierDeleteReqBuilder) updates) =>
-      (toBuilder()..update(updates)).build();
+    void Function(MeIdentifierDeleteReqBuilder) updates,
+  ) => (toBuilder()..update(updates)).build();
 
   @override
   MeIdentifierDeleteReqBuilder toBuilder() =>
@@ -44,9 +47,9 @@ class _$MeIdentifierDeleteReq extends MeIdentifierDeleteReq {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper(r'MeIdentifierDeleteReq')
-          ..add('identifierID', identifierID))
-        .toString();
+    return (newBuiltValueToStringHelper(
+      r'MeIdentifierDeleteReq',
+    )..add('identifierID', identifierID)).toString();
   }
 }
 
@@ -86,10 +89,15 @@ class MeIdentifierDeleteReqBuilder
   MeIdentifierDeleteReq build() => _build();
 
   _$MeIdentifierDeleteReq _build() {
-    final _$result = _$v ??
+    final _$result =
+        _$v ??
         new _$MeIdentifierDeleteReq._(
-            identifierID: BuiltValueNullFieldError.checkNotNull(
-                identifierID, r'MeIdentifierDeleteReq', 'identifierID'));
+          identifierID: BuiltValueNullFieldError.checkNotNull(
+            identifierID,
+            r'MeIdentifierDeleteReq',
+            'identifierID',
+          ),
+        );
     replace(_$result);
     return _$result;
   }

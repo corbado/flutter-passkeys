@@ -26,13 +26,9 @@ PasskeyIconSet _$valueOf(String name) {
   }
 }
 
-final BuiltSet<PasskeyIconSet> _$values =
-    new BuiltSet<PasskeyIconSet>(const <PasskeyIconSet>[
-  _$default_,
-  _$apple,
-  _$android,
-  _$windows,
-]);
+final BuiltSet<PasskeyIconSet> _$values = new BuiltSet<PasskeyIconSet>(
+  const <PasskeyIconSet>[_$default_, _$apple, _$android, _$windows],
+);
 
 class _$PasskeyIconSetMeta {
   const _$PasskeyIconSetMeta();
@@ -73,15 +69,20 @@ class _$PasskeyIconSetSerializer
   final String wireName = 'PasskeyIconSet';
 
   @override
-  Object serialize(Serializers serializers, PasskeyIconSet object,
-          {FullType specifiedType = FullType.unspecified}) =>
-      _toWire[object.name] ?? object.name;
+  Object serialize(
+    Serializers serializers,
+    PasskeyIconSet object, {
+    FullType specifiedType = FullType.unspecified,
+  }) => _toWire[object.name] ?? object.name;
 
   @override
-  PasskeyIconSet deserialize(Serializers serializers, Object serialized,
-          {FullType specifiedType = FullType.unspecified}) =>
-      PasskeyIconSet.valueOf(
-          _fromWire[serialized] ?? (serialized is String ? serialized : ''));
+  PasskeyIconSet deserialize(
+    Serializers serializers,
+    Object serialized, {
+    FullType specifiedType = FullType.unspecified,
+  }) => PasskeyIconSet.valueOf(
+    _fromWire[serialized] ?? (serialized is String ? serialized : ''),
+  );
 }
 
 // ignore_for_file: deprecated_member_use_from_same_package,type=lint

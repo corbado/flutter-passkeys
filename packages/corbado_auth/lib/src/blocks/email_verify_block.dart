@@ -1,17 +1,24 @@
+// ignore_for_file: library_prefixes, avoid_positional_boolean_parameters
+
 import 'package:corbado_auth/src/blocks/translator.dart';
 import 'package:corbado_auth/src/blocks/types.dart';
-import 'package:corbado_auth/src/process_handler.dart';
 import 'package:corbado_auth/src/services/telemetry/telemetry.dart';
 import 'package:corbado_auth/src/types/screen_names.dart';
 import 'package:corbado_frontend_api_client/corbado_frontend_api_client.dart'
     as Api;
 
+/// The method used to verify an email address.
 enum VerificationMethod {
+  /// Verification via a one-time password sent by email.
   emailOTP,
+
+  /// Verification via a magic link sent by email.
   emailLink,
 }
 
+/// Data backing the email verification step of an authentication process.
 class EmailVerifyBlockData {
+  /// Creates the data describing the email to verify and how to verify it.
   EmailVerifyBlockData({
     required this.email,
     required this.verificationMethod,
@@ -19,12 +26,7 @@ class EmailVerifyBlockData {
     required this.isPostLoginVerification,
   });
 
-  final String email;
-  final VerificationMethod verificationMethod;
-  DateTime? retryNotBefore;
-  final bool? isPostLoginVerification;
-  bool primaryLoading = false;
-
+  /// Builds the data from a server [Api.GeneralBlockVerifyIdentifier] response.
   factory EmailVerifyBlockData.fromProcessResponse(
     Api.GeneralBlockVerifyIdentifier typed,
   ) {
@@ -47,29 +49,46 @@ class EmailVerifyBlockData {
       isPostLoginVerification: typed.isPostLoginVerification,
     );
   }
+
+  /// The email address that needs to be verified.
+  final String email;
+
+  /// The verification method to use for this email.
+  final VerificationMethod verificationMethod;
+
+  /// The earliest time at which a verification can be retried.
+  DateTime? retryNotBefore;
+
+  /// Whether this verification happens after the user has already logged in.
+  final bool? isPostLoginVerification;
+
+  /// Whether the primary action is currently loading.
+  bool primaryLoading = false;
 }
 
+/// Block that drives the email verification step of an authentication process.
 class EmailVerifyBlock extends Block<EmailVerifyBlockData> {
+  /// Creates the block for the given [authType], process handler and data.
   EmailVerifyBlock({
-    required ProcessHandler processHandler,
-    required EmailVerifyBlockData data,
+    required super.processHandler,
+    required super.data,
     required Api.AuthType authType,
   }) : super(
-         processHandler: processHandler,
          type: Api.BlockType.emailVerify,
          alternatives: [],
          initialScreen: ScreenNames.EmailVerifyOTP,
-         data: data,
          authProcessType: authType == Api.AuthType.login
              ? AuthProcessType.Login
              : AuthProcessType.Signup,
        );
 
-  init() {
+  @override
+  void init() {
     // navigateToVerifyEmail();
   }
 
-  navigateToEditEmail() {
+  /// Navigates to the screen for editing the email address.
+  void navigateToEditEmail() {
     TelemetryService.instance.logMethodCalled(
       'navigateToEditEmail',
       'EmailVerifyBlock',
@@ -79,7 +98,8 @@ class EmailVerifyBlock extends Block<EmailVerifyBlockData> {
     processHandler.updateCurrentScreen(ScreenNames.EmailEdit);
   }
 
-  navigateToVerifyEmail() {
+  /// Navigates to the screen for verifying the email address.
+  void navigateToVerifyEmail() {
     TelemetryService.instance.logMethodCalled(
       'navigateToVerifyEmail',
       'EmailVerifyBlock',
@@ -94,7 +114,8 @@ class EmailVerifyBlock extends Block<EmailVerifyBlockData> {
     }
   }
 
-  submitOtpCode(String otpCode) async {
+  /// Submits the entered [otpCode] to verify the email address.
+  Future<void> submitOtpCode(String otpCode) async {
     TelemetryService.instance.logMethodCalled(
       'submitOtpCode',
       'EmailVerifyBlock',
@@ -112,7 +133,8 @@ class EmailVerifyBlock extends Block<EmailVerifyBlockData> {
     }
   }
 
-  resendEmail() async {
+  /// Resends the verification email using the configured method.
+  Future<void> resendEmail() async {
     TelemetryService.instance.logMethodCalled(
       'resendEmail',
       'EmailVerifyBlock',
@@ -135,7 +157,8 @@ class EmailVerifyBlock extends Block<EmailVerifyBlockData> {
     }
   }
 
-  updateEmail(String newValue) async {
+  /// Updates the email to [newValue] and restarts the verification flow.
+  Future<void> updateEmail(String newValue) async {
     TelemetryService.instance.logMethodCalled(
       'updateEmail',
       'EmailVerifyBlock',
@@ -143,6 +166,7 @@ class EmailVerifyBlock extends Block<EmailVerifyBlockData> {
 
     try {
       if (newValue == data.email) {
+        // ignore: only_throw_errors
         throw CorbadoError(
           errorCode: 'new_identifier_same_as_old',
           translatedError: Translator.error('new_identifier_same_as_old'),
@@ -159,6 +183,7 @@ class EmailVerifyBlock extends Block<EmailVerifyBlockData> {
       if (error != null) {
         data.primaryLoading = false;
 
+        // ignore: only_throw_errors
         throw error;
       }
 

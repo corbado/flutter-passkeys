@@ -27,14 +27,14 @@ abstract class MePasskeysAppendStartRsp
 
   @BuiltValueField(wireName: r'appendNotAllowedReason')
   MePasskeysAppendStartRspAppendNotAllowedReasonEnum?
-      get appendNotAllowedReason;
+  get appendNotAllowedReason;
   // enum appendNotAllowedReasonEnum {  passkey_already_exists,  passkeys_not_supported,  };
 
   MePasskeysAppendStartRsp._();
 
-  factory MePasskeysAppendStartRsp(
-          [void updates(MePasskeysAppendStartRspBuilder b)]) =
-      _$MePasskeysAppendStartRsp;
+  factory MePasskeysAppendStartRsp([
+    void updates(MePasskeysAppendStartRspBuilder b),
+  ]) = _$MePasskeysAppendStartRsp;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(MePasskeysAppendStartRspBuilder b) => b;
@@ -49,7 +49,7 @@ class _$MePasskeysAppendStartRspSerializer
   @override
   final Iterable<Type> types = const [
     MePasskeysAppendStartRsp,
-    _$MePasskeysAppendStartRsp
+    _$MePasskeysAppendStartRsp,
   ];
 
   @override
@@ -76,8 +76,9 @@ class _$MePasskeysAppendStartRspSerializer
       yield r'appendNotAllowedReason';
       yield serializers.serialize(
         object.appendNotAllowedReason,
-        specifiedType:
-            const FullType(MePasskeysAppendStartRspAppendNotAllowedReasonEnum),
+        specifiedType: const FullType(
+          MePasskeysAppendStartRspAppendNotAllowedReasonEnum,
+        ),
       );
     }
   }
@@ -88,9 +89,11 @@ class _$MePasskeysAppendStartRspSerializer
     MePasskeysAppendStartRsp object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(
+      serializers,
+      object,
+      specifiedType: specifiedType,
+    ).toList();
   }
 
   void _deserializeProperties(
@@ -106,25 +109,32 @@ class _$MePasskeysAppendStartRspSerializer
       final value = serializedList[i + 1];
       switch (key) {
         case r'attestationOptions':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(String),
-          ) as String;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(String),
+                  )
+                  as String;
           result.attestationOptions = valueDes;
           break;
         case r'newClientEnvHandle':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(String),
-          ) as String;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(String),
+                  )
+                  as String;
           result.newClientEnvHandle = valueDes;
           break;
         case r'appendNotAllowedReason':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(
-                MePasskeysAppendStartRspAppendNotAllowedReasonEnum),
-          ) as MePasskeysAppendStartRspAppendNotAllowedReasonEnum;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(
+                      MePasskeysAppendStartRspAppendNotAllowedReasonEnum,
+                    ),
+                  )
+                  as MePasskeysAppendStartRspAppendNotAllowedReasonEnum;
           result.appendNotAllowedReason = valueDes;
           break;
         default:
@@ -159,23 +169,23 @@ class _$MePasskeysAppendStartRspSerializer
 class MePasskeysAppendStartRspAppendNotAllowedReasonEnum extends EnumClass {
   @BuiltValueEnumConst(wireName: r'passkey_already_exists')
   static const MePasskeysAppendStartRspAppendNotAllowedReasonEnum
-      passkeyAlreadyExists =
+  passkeyAlreadyExists =
       _$mePasskeysAppendStartRspAppendNotAllowedReasonEnum_passkeyAlreadyExists;
   @BuiltValueEnumConst(wireName: r'passkeys_not_supported', fallback: true)
   static const MePasskeysAppendStartRspAppendNotAllowedReasonEnum
-      passkeysNotSupported =
+  passkeysNotSupported =
       _$mePasskeysAppendStartRspAppendNotAllowedReasonEnum_passkeysNotSupported;
 
   static Serializer<MePasskeysAppendStartRspAppendNotAllowedReasonEnum>
-      get serializer =>
-          _$mePasskeysAppendStartRspAppendNotAllowedReasonEnumSerializer;
+  get serializer =>
+      _$mePasskeysAppendStartRspAppendNotAllowedReasonEnumSerializer;
 
   const MePasskeysAppendStartRspAppendNotAllowedReasonEnum._(String name)
-      : super(name);
+    : super(name);
 
   static BuiltSet<MePasskeysAppendStartRspAppendNotAllowedReasonEnum>
-      get values => _$mePasskeysAppendStartRspAppendNotAllowedReasonEnumValues;
+  get values => _$mePasskeysAppendStartRspAppendNotAllowedReasonEnumValues;
   static MePasskeysAppendStartRspAppendNotAllowedReasonEnum valueOf(
-          String name) =>
-      _$mePasskeysAppendStartRspAppendNotAllowedReasonEnumValueOf(name);
+    String name,
+  ) => _$mePasskeysAppendStartRspAppendNotAllowedReasonEnumValueOf(name);
 }

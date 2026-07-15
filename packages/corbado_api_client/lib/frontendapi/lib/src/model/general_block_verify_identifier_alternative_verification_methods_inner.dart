@@ -17,8 +17,10 @@ part 'general_block_verify_identifier_alternative_verification_methods_inner.g.d
 @BuiltValue()
 abstract class GeneralBlockVerifyIdentifierAlternativeVerificationMethodsInner
     implements
-        Built<GeneralBlockVerifyIdentifierAlternativeVerificationMethodsInner,
-            GeneralBlockVerifyIdentifierAlternativeVerificationMethodsInnerBuilder> {
+        Built<
+          GeneralBlockVerifyIdentifierAlternativeVerificationMethodsInner,
+          GeneralBlockVerifyIdentifierAlternativeVerificationMethodsInnerBuilder
+        > {
   @BuiltValueField(wireName: r'verificationMethod')
   VerificationMethod get verificationMethod;
   // enum verificationMethodEnum {  email-link,  email-otp,  phone-otp,  };
@@ -28,33 +30,34 @@ abstract class GeneralBlockVerifyIdentifierAlternativeVerificationMethodsInner
 
   GeneralBlockVerifyIdentifierAlternativeVerificationMethodsInner._();
 
-  factory GeneralBlockVerifyIdentifierAlternativeVerificationMethodsInner(
-          [void updates(
-              GeneralBlockVerifyIdentifierAlternativeVerificationMethodsInnerBuilder
-                  b)]) =
-      _$GeneralBlockVerifyIdentifierAlternativeVerificationMethodsInner;
+  factory GeneralBlockVerifyIdentifierAlternativeVerificationMethodsInner([
+    void updates(
+      GeneralBlockVerifyIdentifierAlternativeVerificationMethodsInnerBuilder b,
+    ),
+  ]) = _$GeneralBlockVerifyIdentifierAlternativeVerificationMethodsInner;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(
-          GeneralBlockVerifyIdentifierAlternativeVerificationMethodsInnerBuilder
-              b) =>
-      b;
+    GeneralBlockVerifyIdentifierAlternativeVerificationMethodsInnerBuilder b,
+  ) => b;
 
   @BuiltValueSerializer(custom: true)
   static Serializer<
-          GeneralBlockVerifyIdentifierAlternativeVerificationMethodsInner>
-      get serializer =>
-          _$GeneralBlockVerifyIdentifierAlternativeVerificationMethodsInnerSerializer();
+    GeneralBlockVerifyIdentifierAlternativeVerificationMethodsInner
+  >
+  get serializer =>
+      _$GeneralBlockVerifyIdentifierAlternativeVerificationMethodsInnerSerializer();
 }
 
 class _$GeneralBlockVerifyIdentifierAlternativeVerificationMethodsInnerSerializer
     implements
         PrimitiveSerializer<
-            GeneralBlockVerifyIdentifierAlternativeVerificationMethodsInner> {
+          GeneralBlockVerifyIdentifierAlternativeVerificationMethodsInner
+        > {
   @override
   final Iterable<Type> types = const [
     GeneralBlockVerifyIdentifierAlternativeVerificationMethodsInner,
-    _$GeneralBlockVerifyIdentifierAlternativeVerificationMethodsInner
+    _$GeneralBlockVerifyIdentifierAlternativeVerificationMethodsInner,
   ];
 
   @override
@@ -84,9 +87,11 @@ class _$GeneralBlockVerifyIdentifierAlternativeVerificationMethodsInnerSerialize
     GeneralBlockVerifyIdentifierAlternativeVerificationMethodsInner object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(
+      serializers,
+      object,
+      specifiedType: specifiedType,
+    ).toList();
   }
 
   void _deserializeProperties(
@@ -95,7 +100,7 @@ class _$GeneralBlockVerifyIdentifierAlternativeVerificationMethodsInnerSerialize
     FullType specifiedType = FullType.unspecified,
     required List<Object?> serializedList,
     required GeneralBlockVerifyIdentifierAlternativeVerificationMethodsInnerBuilder
-        result,
+    result,
     required List<Object?> unhandled,
   }) {
     for (var i = 0; i < serializedList.length; i += 2) {
@@ -103,17 +108,21 @@ class _$GeneralBlockVerifyIdentifierAlternativeVerificationMethodsInnerSerialize
       final value = serializedList[i + 1];
       switch (key) {
         case r'verificationMethod':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(VerificationMethod),
-          ) as VerificationMethod;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(VerificationMethod),
+                  )
+                  as VerificationMethod;
           result.verificationMethod = valueDes;
           break;
         case r'identifier':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(String),
-          ) as String;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(String),
+                  )
+                  as String;
           result.identifier = valueDes;
           break;
         default:

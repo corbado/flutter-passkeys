@@ -41,9 +41,9 @@ abstract class GeneralBlockSignupInit
 
   GeneralBlockSignupInit._();
 
-  factory GeneralBlockSignupInit(
-          [void updates(GeneralBlockSignupInitBuilder b)]) =
-      _$GeneralBlockSignupInit;
+  factory GeneralBlockSignupInit([
+    void updates(GeneralBlockSignupInitBuilder b),
+  ]) = _$GeneralBlockSignupInit;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(GeneralBlockSignupInitBuilder b) => b;
@@ -58,7 +58,7 @@ class _$GeneralBlockSignupInitSerializer
   @override
   final Iterable<Type> types = const [
     GeneralBlockSignupInit,
-    _$GeneralBlockSignupInit
+    _$GeneralBlockSignupInit,
   ];
 
   @override
@@ -77,8 +77,9 @@ class _$GeneralBlockSignupInitSerializer
     yield r'identifiers';
     yield serializers.serialize(
       object.identifiers,
-      specifiedType:
-          const FullType(BuiltList, [FullType(LoginIdentifierWithError)]),
+      specifiedType: const FullType(BuiltList, [
+        FullType(LoginIdentifierWithError),
+      ]),
     );
     if (object.fullName != null) {
       yield r'fullName';
@@ -109,9 +110,11 @@ class _$GeneralBlockSignupInitSerializer
     GeneralBlockSignupInit object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(
+      serializers,
+      object,
+      specifiedType: specifiedType,
+    ).toList();
   }
 
   void _deserializeProperties(
@@ -127,39 +130,50 @@ class _$GeneralBlockSignupInitSerializer
       final value = serializedList[i + 1];
       switch (key) {
         case r'blockType':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(String),
-          ) as String;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(String),
+                  )
+                  as String;
           result.blockType = valueDes;
           break;
         case r'identifiers':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType:
-                const FullType(BuiltList, [FullType(LoginIdentifierWithError)]),
-          ) as BuiltList<LoginIdentifierWithError>;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(BuiltList, [
+                      FullType(LoginIdentifierWithError),
+                    ]),
+                  )
+                  as BuiltList<LoginIdentifierWithError>;
           result.identifiers.replace(valueDes);
           break;
         case r'fullName':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(FullNameWithError),
-          ) as FullNameWithError;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(FullNameWithError),
+                  )
+                  as FullNameWithError;
           result.fullName.replace(valueDes);
           break;
         case r'socialData':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(SocialData),
-          ) as SocialData;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(SocialData),
+                  )
+                  as SocialData;
           result.socialData.replace(valueDes);
           break;
         case r'error':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(RequestError),
-          ) as RequestError;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(RequestError),
+                  )
+                  as RequestError;
           result.error.replace(valueDes);
           break;
         default:

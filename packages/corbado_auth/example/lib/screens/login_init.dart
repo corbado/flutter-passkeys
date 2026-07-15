@@ -7,12 +7,17 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
+/// Screen that starts the login flow by collecting the user's identifier.
 class LoginInitScreen extends HookWidget
     implements CorbadoScreen<LoginInitBlock> {
+  /// Creates the login init screen for the given [block].
+  const LoginInitScreen(this.block, {super.key});
+
+  /// The block driving the login flow.
+  @override
   final LoginInitBlock block;
 
-  LoginInitScreen(this.block);
-
+  @override
   Widget build(BuildContext context) {
     final emailController = useTextEditingController(
       text: block.data.loginIdentifier,
@@ -25,6 +30,7 @@ class LoginInitScreen extends HookWidget
           showNotificationError(context, maybeError.translatedError);
         }
       });
+      return null;
     }, [block.error]);
 
     return Column(

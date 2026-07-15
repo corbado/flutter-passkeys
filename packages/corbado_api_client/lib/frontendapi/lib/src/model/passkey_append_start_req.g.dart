@@ -10,16 +10,16 @@ class _$PasskeyAppendStartReq extends PasskeyAppendStartReq {
   @override
   final ClientInformation? clientInformation;
 
-  factory _$PasskeyAppendStartReq(
-          [void Function(PasskeyAppendStartReqBuilder)? updates]) =>
-      (new PasskeyAppendStartReqBuilder()..update(updates))._build();
+  factory _$PasskeyAppendStartReq([
+    void Function(PasskeyAppendStartReqBuilder)? updates,
+  ]) => (new PasskeyAppendStartReqBuilder()..update(updates))._build();
 
   _$PasskeyAppendStartReq._({this.clientInformation}) : super._();
 
   @override
   PasskeyAppendStartReq rebuild(
-          void Function(PasskeyAppendStartReqBuilder) updates) =>
-      (toBuilder()..update(updates)).build();
+    void Function(PasskeyAppendStartReqBuilder) updates,
+  ) => (toBuilder()..update(updates)).build();
 
   @override
   PasskeyAppendStartReqBuilder toBuilder() =>
@@ -42,9 +42,9 @@ class _$PasskeyAppendStartReq extends PasskeyAppendStartReq {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper(r'PasskeyAppendStartReq')
-          ..add('clientInformation', clientInformation))
-        .toString();
+    return (newBuiltValueToStringHelper(
+      r'PasskeyAppendStartReq',
+    )..add('clientInformation', clientInformation)).toString();
   }
 }
 
@@ -88,9 +88,11 @@ class PasskeyAppendStartReqBuilder
   _$PasskeyAppendStartReq _build() {
     _$PasskeyAppendStartReq _$result;
     try {
-      _$result = _$v ??
+      _$result =
+          _$v ??
           new _$PasskeyAppendStartReq._(
-              clientInformation: _clientInformation?.build());
+            clientInformation: _clientInformation?.build(),
+          );
     } catch (_) {
       late String _$failedField;
       try {
@@ -98,7 +100,10 @@ class PasskeyAppendStartReqBuilder
         _clientInformation?.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            r'PasskeyAppendStartReq', _$failedField, e.toString());
+          r'PasskeyAppendStartReq',
+          _$failedField,
+          e.toString(),
+        );
       }
       rethrow;
     }

@@ -80,9 +80,11 @@ class _$SessionConfigRspSerializer
     SessionConfigRsp object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(
+      serializers,
+      object,
+      specifiedType: specifiedType,
+    ).toList();
   }
 
   void _deserializeProperties(
@@ -98,24 +100,30 @@ class _$SessionConfigRspSerializer
       final value = serializedList[i + 1];
       switch (key) {
         case r'useSessionManagement':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(bool),
-          ) as bool;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(bool),
+                  )
+                  as bool;
           result.useSessionManagement = valueDes;
           break;
         case r'shortSessionCookieConfig':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(ShortSessionCookieConfig),
-          ) as ShortSessionCookieConfig;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(ShortSessionCookieConfig),
+                  )
+                  as ShortSessionCookieConfig;
           result.shortSessionCookieConfig.replace(valueDes);
           break;
         case r'frontendApiUrl':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(String),
-          ) as String;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(String),
+                  )
+                  as String;
           result.frontendApiUrl = valueDes;
           break;
         default:

@@ -40,9 +40,9 @@ class _$MeUpdateReq extends MeUpdateReq {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper(r'MeUpdateReq')
-          ..add('fullName', fullName))
-        .toString();
+    return (newBuiltValueToStringHelper(
+      r'MeUpdateReq',
+    )..add('fullName', fullName)).toString();
   }
 }
 
@@ -81,10 +81,15 @@ class MeUpdateReqBuilder implements Builder<MeUpdateReq, MeUpdateReqBuilder> {
   MeUpdateReq build() => _build();
 
   _$MeUpdateReq _build() {
-    final _$result = _$v ??
+    final _$result =
+        _$v ??
         new _$MeUpdateReq._(
-            fullName: BuiltValueNullFieldError.checkNotNull(
-                fullName, r'MeUpdateReq', 'fullName'));
+          fullName: BuiltValueNullFieldError.checkNotNull(
+            fullName,
+            r'MeUpdateReq',
+            'fullName',
+          ),
+        );
     replace(_$result);
     return _$result;
   }

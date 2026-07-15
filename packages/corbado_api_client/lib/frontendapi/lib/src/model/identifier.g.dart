@@ -19,12 +19,12 @@ class _$Identifier extends Identifier {
   factory _$Identifier([void Function(IdentifierBuilder)? updates]) =>
       (new IdentifierBuilder()..update(updates))._build();
 
-  _$Identifier._(
-      {required this.id,
-      required this.value,
-      required this.type,
-      required this.status})
-      : super._() {
+  _$Identifier._({
+    required this.id,
+    required this.value,
+    required this.type,
+    required this.status,
+  }) : super._() {
     BuiltValueNullFieldError.checkNotNull(id, r'Identifier', 'id');
     BuiltValueNullFieldError.checkNotNull(value, r'Identifier', 'value');
     BuiltValueNullFieldError.checkNotNull(type, r'Identifier', 'type');
@@ -120,15 +120,26 @@ class IdentifierBuilder implements Builder<Identifier, IdentifierBuilder> {
   Identifier build() => _build();
 
   _$Identifier _build() {
-    final _$result = _$v ??
+    final _$result =
+        _$v ??
         new _$Identifier._(
-            id: BuiltValueNullFieldError.checkNotNull(id, r'Identifier', 'id'),
-            value: BuiltValueNullFieldError.checkNotNull(
-                value, r'Identifier', 'value'),
-            type: BuiltValueNullFieldError.checkNotNull(
-                type, r'Identifier', 'type'),
-            status: BuiltValueNullFieldError.checkNotNull(
-                status, r'Identifier', 'status'));
+          id: BuiltValueNullFieldError.checkNotNull(id, r'Identifier', 'id'),
+          value: BuiltValueNullFieldError.checkNotNull(
+            value,
+            r'Identifier',
+            'value',
+          ),
+          type: BuiltValueNullFieldError.checkNotNull(
+            type,
+            r'Identifier',
+            'type',
+          ),
+          status: BuiltValueNullFieldError.checkNotNull(
+            status,
+            r'Identifier',
+            'status',
+          ),
+        );
     replace(_$result);
     return _$result;
   }

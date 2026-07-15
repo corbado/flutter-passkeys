@@ -18,22 +18,22 @@ class _$ClientCapabilities extends ClientCapabilities {
   @override
   final bool? userVerifyingPlatformAuthenticator;
 
-  factory _$ClientCapabilities(
-          [void Function(ClientCapabilitiesBuilder)? updates]) =>
-      (new ClientCapabilitiesBuilder()..update(updates))._build();
+  factory _$ClientCapabilities([
+    void Function(ClientCapabilitiesBuilder)? updates,
+  ]) => (new ClientCapabilitiesBuilder()..update(updates))._build();
 
-  _$ClientCapabilities._(
-      {this.conditionalCreate,
-      this.conditionalMediation,
-      this.hybridTransport,
-      this.passkeyPlatformAuthenticator,
-      this.userVerifyingPlatformAuthenticator})
-      : super._();
+  _$ClientCapabilities._({
+    this.conditionalCreate,
+    this.conditionalMediation,
+    this.hybridTransport,
+    this.passkeyPlatformAuthenticator,
+    this.userVerifyingPlatformAuthenticator,
+  }) : super._();
 
   @override
   ClientCapabilities rebuild(
-          void Function(ClientCapabilitiesBuilder) updates) =>
-      (toBuilder()..update(updates)).build();
+    void Function(ClientCapabilitiesBuilder) updates,
+  ) => (toBuilder()..update(updates)).build();
 
   @override
   ClientCapabilitiesBuilder toBuilder() =>
@@ -70,8 +70,10 @@ class _$ClientCapabilities extends ClientCapabilities {
           ..add('conditionalMediation', conditionalMediation)
           ..add('hybridTransport', hybridTransport)
           ..add('passkeyPlatformAuthenticator', passkeyPlatformAuthenticator)
-          ..add('userVerifyingPlatformAuthenticator',
-              userVerifyingPlatformAuthenticator))
+          ..add(
+            'userVerifyingPlatformAuthenticator',
+            userVerifyingPlatformAuthenticator,
+          ))
         .toString();
   }
 }
@@ -105,9 +107,9 @@ class ClientCapabilitiesBuilder
   bool? get userVerifyingPlatformAuthenticator =>
       _$this._userVerifyingPlatformAuthenticator;
   set userVerifyingPlatformAuthenticator(
-          bool? userVerifyingPlatformAuthenticator) =>
-      _$this._userVerifyingPlatformAuthenticator =
-          userVerifyingPlatformAuthenticator;
+    bool? userVerifyingPlatformAuthenticator,
+  ) => _$this._userVerifyingPlatformAuthenticator =
+      userVerifyingPlatformAuthenticator;
 
   ClientCapabilitiesBuilder() {
     ClientCapabilities._defaults(this);
@@ -142,14 +144,16 @@ class ClientCapabilitiesBuilder
   ClientCapabilities build() => _build();
 
   _$ClientCapabilities _build() {
-    final _$result = _$v ??
+    final _$result =
+        _$v ??
         new _$ClientCapabilities._(
-            conditionalCreate: conditionalCreate,
-            conditionalMediation: conditionalMediation,
-            hybridTransport: hybridTransport,
-            passkeyPlatformAuthenticator: passkeyPlatformAuthenticator,
-            userVerifyingPlatformAuthenticator:
-                userVerifyingPlatformAuthenticator);
+          conditionalCreate: conditionalCreate,
+          conditionalMediation: conditionalMediation,
+          hybridTransport: hybridTransport,
+          passkeyPlatformAuthenticator: passkeyPlatformAuthenticator,
+          userVerifyingPlatformAuthenticator:
+              userVerifyingPlatformAuthenticator,
+        );
     replace(_$result);
     return _$result;
   }

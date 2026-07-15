@@ -1,13 +1,15 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 import 'package:passkeys_example/auth_service.dart';
-import 'package:passkeys_example/local_relying_party_server.dart';
 
 class SelectTestConfiguration extends StatefulWidget {
   const SelectTestConfiguration({
     required this.configurations,
     required this.selectedConfiguration,
     required this.onSelectConfiguration,
-  }) : super();
+    super.key,
+  });
 
   final void Function(Configuration?) onSelectConfiguration;
   final Configuration? selectedConfiguration;
@@ -40,11 +42,11 @@ class _SelectTestConfigurationState extends State<SelectTestConfiguration> {
   @override
   Widget build(BuildContext context) {
     return DropdownButton<Configuration?>(
-      key: Key("test-selector"),
+      key: const Key('test-selector'),
       value: _selectedConfiguration,
       elevation: 16,
       style: const TextStyle(color: Colors.deepPurple),
-      hint: Text("Select Configuration"),
+      hint: const Text('Select Configuration'),
       underline: Container(height: 2, color: Colors.deepPurpleAccent),
       items: widget.configurations
           .map(

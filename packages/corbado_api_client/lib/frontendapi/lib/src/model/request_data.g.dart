@@ -17,7 +17,10 @@ class _$RequestData extends RequestData {
 
   _$RequestData._({required this.requestID, required this.link}) : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        requestID, r'RequestData', 'requestID');
+      requestID,
+      r'RequestData',
+      'requestID',
+    );
     BuiltValueNullFieldError.checkNotNull(link, r'RequestData', 'link');
   }
 
@@ -94,12 +97,20 @@ class RequestDataBuilder implements Builder<RequestData, RequestDataBuilder> {
   RequestData build() => _build();
 
   _$RequestData _build() {
-    final _$result = _$v ??
+    final _$result =
+        _$v ??
         new _$RequestData._(
-            requestID: BuiltValueNullFieldError.checkNotNull(
-                requestID, r'RequestData', 'requestID'),
-            link: BuiltValueNullFieldError.checkNotNull(
-                link, r'RequestData', 'link'));
+          requestID: BuiltValueNullFieldError.checkNotNull(
+            requestID,
+            r'RequestData',
+            'requestID',
+          ),
+          link: BuiltValueNullFieldError.checkNotNull(
+            link,
+            r'RequestData',
+            'link',
+          ),
+        );
     replace(_$result);
     return _$result;
   }

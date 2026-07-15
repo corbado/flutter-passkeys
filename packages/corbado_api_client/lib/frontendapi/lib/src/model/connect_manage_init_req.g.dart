@@ -12,23 +12,30 @@ class _$ConnectManageInitReq extends ConnectManageInitReq {
   @override
   final BuiltMap<String, String> flags;
 
-  factory _$ConnectManageInitReq(
-          [void Function(ConnectManageInitReqBuilder)? updates]) =>
-      (new ConnectManageInitReqBuilder()..update(updates))._build();
+  factory _$ConnectManageInitReq([
+    void Function(ConnectManageInitReqBuilder)? updates,
+  ]) => (new ConnectManageInitReqBuilder()..update(updates))._build();
 
-  _$ConnectManageInitReq._(
-      {required this.clientInformation, required this.flags})
-      : super._() {
+  _$ConnectManageInitReq._({
+    required this.clientInformation,
+    required this.flags,
+  }) : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        clientInformation, r'ConnectManageInitReq', 'clientInformation');
+      clientInformation,
+      r'ConnectManageInitReq',
+      'clientInformation',
+    );
     BuiltValueNullFieldError.checkNotNull(
-        flags, r'ConnectManageInitReq', 'flags');
+      flags,
+      r'ConnectManageInitReq',
+      'flags',
+    );
   }
 
   @override
   ConnectManageInitReq rebuild(
-          void Function(ConnectManageInitReqBuilder) updates) =>
-      (toBuilder()..update(updates)).build();
+    void Function(ConnectManageInitReqBuilder) updates,
+  ) => (toBuilder()..update(updates)).build();
 
   @override
   ConnectManageInitReqBuilder toBuilder() =>
@@ -106,10 +113,12 @@ class ConnectManageInitReqBuilder
   _$ConnectManageInitReq _build() {
     _$ConnectManageInitReq _$result;
     try {
-      _$result = _$v ??
+      _$result =
+          _$v ??
           new _$ConnectManageInitReq._(
-              clientInformation: clientInformation.build(),
-              flags: flags.build());
+            clientInformation: clientInformation.build(),
+            flags: flags.build(),
+          );
     } catch (_) {
       late String _$failedField;
       try {
@@ -119,7 +128,10 @@ class ConnectManageInitReqBuilder
         flags.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            r'ConnectManageInitReq', _$failedField, e.toString());
+          r'ConnectManageInitReq',
+          _$failedField,
+          e.toString(),
+        );
       }
       rethrow;
     }

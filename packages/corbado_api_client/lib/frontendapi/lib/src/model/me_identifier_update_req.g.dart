@@ -14,27 +14,36 @@ class _$MeIdentifierUpdateReq extends MeIdentifierUpdateReq {
   @override
   final String value;
 
-  factory _$MeIdentifierUpdateReq(
-          [void Function(MeIdentifierUpdateReqBuilder)? updates]) =>
-      (new MeIdentifierUpdateReqBuilder()..update(updates))._build();
+  factory _$MeIdentifierUpdateReq([
+    void Function(MeIdentifierUpdateReqBuilder)? updates,
+  ]) => (new MeIdentifierUpdateReqBuilder()..update(updates))._build();
 
-  _$MeIdentifierUpdateReq._(
-      {required this.identifierID,
-      required this.identifierType,
-      required this.value})
-      : super._() {
+  _$MeIdentifierUpdateReq._({
+    required this.identifierID,
+    required this.identifierType,
+    required this.value,
+  }) : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        identifierID, r'MeIdentifierUpdateReq', 'identifierID');
+      identifierID,
+      r'MeIdentifierUpdateReq',
+      'identifierID',
+    );
     BuiltValueNullFieldError.checkNotNull(
-        identifierType, r'MeIdentifierUpdateReq', 'identifierType');
+      identifierType,
+      r'MeIdentifierUpdateReq',
+      'identifierType',
+    );
     BuiltValueNullFieldError.checkNotNull(
-        value, r'MeIdentifierUpdateReq', 'value');
+      value,
+      r'MeIdentifierUpdateReq',
+      'value',
+    );
   }
 
   @override
   MeIdentifierUpdateReq rebuild(
-          void Function(MeIdentifierUpdateReqBuilder) updates) =>
-      (toBuilder()..update(updates)).build();
+    void Function(MeIdentifierUpdateReqBuilder) updates,
+  ) => (toBuilder()..update(updates)).build();
 
   @override
   MeIdentifierUpdateReqBuilder toBuilder() =>
@@ -116,14 +125,25 @@ class MeIdentifierUpdateReqBuilder
   MeIdentifierUpdateReq build() => _build();
 
   _$MeIdentifierUpdateReq _build() {
-    final _$result = _$v ??
+    final _$result =
+        _$v ??
         new _$MeIdentifierUpdateReq._(
-            identifierID: BuiltValueNullFieldError.checkNotNull(
-                identifierID, r'MeIdentifierUpdateReq', 'identifierID'),
-            identifierType: BuiltValueNullFieldError.checkNotNull(
-                identifierType, r'MeIdentifierUpdateReq', 'identifierType'),
-            value: BuiltValueNullFieldError.checkNotNull(
-                value, r'MeIdentifierUpdateReq', 'value'));
+          identifierID: BuiltValueNullFieldError.checkNotNull(
+            identifierID,
+            r'MeIdentifierUpdateReq',
+            'identifierID',
+          ),
+          identifierType: BuiltValueNullFieldError.checkNotNull(
+            identifierType,
+            r'MeIdentifierUpdateReq',
+            'identifierType',
+          ),
+          value: BuiltValueNullFieldError.checkNotNull(
+            value,
+            r'MeIdentifierUpdateReq',
+            'value',
+          ),
+        );
     replace(_$result);
     return _$result;
   }

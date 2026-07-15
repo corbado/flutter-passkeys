@@ -89,9 +89,11 @@ class _$PasskeyOperationSerializer
     PasskeyOperation object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(
+      serializers,
+      object,
+      specifiedType: specifiedType,
+    ).toList();
   }
 
   void _deserializeProperties(
@@ -107,31 +109,43 @@ class _$PasskeyOperationSerializer
       final value = serializedList[i + 1];
       switch (key) {
         case r'operationType':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(PasskeyOperationOperationTypeEnum),
-          ) as PasskeyOperationOperationTypeEnum;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(
+                      PasskeyOperationOperationTypeEnum,
+                    ),
+                  )
+                  as PasskeyOperationOperationTypeEnum;
           result.operationType = valueDes;
           break;
         case r'identifierValue':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(String),
-          ) as String;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(String),
+                  )
+                  as String;
           result.identifierValue = valueDes;
           break;
         case r'identifierType':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(LoginIdentifierType),
-          ) as LoginIdentifierType;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(LoginIdentifierType),
+                  )
+                  as LoginIdentifierType;
           result.identifierType = valueDes;
           break;
         case r'ceremonyType':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(PasskeyOperationCeremonyTypeEnum),
-          ) as PasskeyOperationCeremonyTypeEnum;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(
+                      PasskeyOperationCeremonyTypeEnum,
+                    ),
+                  )
+                  as PasskeyOperationCeremonyTypeEnum;
           result.ceremonyType = valueDes;
           break;
         default:

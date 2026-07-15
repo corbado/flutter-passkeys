@@ -1,17 +1,21 @@
 import 'package:corbado_auth/corbado_auth.dart';
 import 'package:corbado_auth_example/screens/helper.dart';
 import 'package:corbado_auth_example/widgets/filled_text_button.dart';
-import 'package:corbado_auth_example/widgets/generic_error.dart';
 import 'package:corbado_auth_example/widgets/outlined_text_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
+/// Screen that lets the user change the email address being verified.
 class EmailEditScreen extends HookWidget
     implements CorbadoScreen<EmailVerifyBlock> {
+  /// Creates the email edit screen for the given [block].
+  const EmailEditScreen(this.block, {super.key});
+
+  /// The block driving the email verification flow.
+  @override
   final EmailVerifyBlock block;
 
-  EmailEditScreen(this.block);
-
+  @override
   Widget build(BuildContext context) {
     final email = block.data.email;
 
@@ -24,6 +28,7 @@ class EmailEditScreen extends HookWidget
           showNotificationError(context, maybeError.translatedError);
         }
       });
+      return null;
     }, [block.error]);
 
     return Column(

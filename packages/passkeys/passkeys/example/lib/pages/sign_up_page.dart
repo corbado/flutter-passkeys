@@ -1,8 +1,8 @@
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -15,7 +15,7 @@ import 'package:passkeys_example/router.dart';
 import 'package:passkeys_example/widgets/select_test_configuration.dart';
 
 void _showNoCreateOptionDialog(BuildContext context) {
-  showDialog(
+  showDialog<void>(
     context: context,
     builder: (context) => AlertDialog(
       title: const Text('Passkey cannot be created'),
@@ -57,7 +57,7 @@ class SignUpPage extends HookConsumerWidget {
     final authService = ref.watch(authServiceProvider);
     final authenticatorAttachment = useState<String?>(null);
 
-    bool isTestMode = const bool.fromEnvironment('TEST_MODE');
+    const isTestMode = bool.fromEnvironment('TEST_MODE');
 
     // You need to first check for the web platform because on Web calling
     // Platform will cause an exception
@@ -151,8 +151,10 @@ class SignUpPage extends HookConsumerWidget {
                 );
                 try {
                   await authService.signupWithPasskey(email: email);
+                  if (!context.mounted) return;
                   context.go(Routes.profile);
                 } catch (e) {
+                  if (!context.mounted) return;
                   if (e is NoCreateOptionException) {
                     _showNoCreateOptionDialog(context);
                   } else if (e is AuthenticatorException) {

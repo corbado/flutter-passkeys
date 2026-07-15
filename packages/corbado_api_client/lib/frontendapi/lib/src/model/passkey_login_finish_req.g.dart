@@ -10,19 +10,22 @@ class _$PasskeyLoginFinishReq extends PasskeyLoginFinishReq {
   @override
   final String signedChallenge;
 
-  factory _$PasskeyLoginFinishReq(
-          [void Function(PasskeyLoginFinishReqBuilder)? updates]) =>
-      (new PasskeyLoginFinishReqBuilder()..update(updates))._build();
+  factory _$PasskeyLoginFinishReq([
+    void Function(PasskeyLoginFinishReqBuilder)? updates,
+  ]) => (new PasskeyLoginFinishReqBuilder()..update(updates))._build();
 
   _$PasskeyLoginFinishReq._({required this.signedChallenge}) : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        signedChallenge, r'PasskeyLoginFinishReq', 'signedChallenge');
+      signedChallenge,
+      r'PasskeyLoginFinishReq',
+      'signedChallenge',
+    );
   }
 
   @override
   PasskeyLoginFinishReq rebuild(
-          void Function(PasskeyLoginFinishReqBuilder) updates) =>
-      (toBuilder()..update(updates)).build();
+    void Function(PasskeyLoginFinishReqBuilder) updates,
+  ) => (toBuilder()..update(updates)).build();
 
   @override
   PasskeyLoginFinishReqBuilder toBuilder() =>
@@ -45,9 +48,9 @@ class _$PasskeyLoginFinishReq extends PasskeyLoginFinishReq {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper(r'PasskeyLoginFinishReq')
-          ..add('signedChallenge', signedChallenge))
-        .toString();
+    return (newBuiltValueToStringHelper(
+      r'PasskeyLoginFinishReq',
+    )..add('signedChallenge', signedChallenge)).toString();
   }
 }
 
@@ -88,10 +91,15 @@ class PasskeyLoginFinishReqBuilder
   PasskeyLoginFinishReq build() => _build();
 
   _$PasskeyLoginFinishReq _build() {
-    final _$result = _$v ??
+    final _$result =
+        _$v ??
         new _$PasskeyLoginFinishReq._(
-            signedChallenge: BuiltValueNullFieldError.checkNotNull(
-                signedChallenge, r'PasskeyLoginFinishReq', 'signedChallenge'));
+          signedChallenge: BuiltValueNullFieldError.checkNotNull(
+            signedChallenge,
+            r'PasskeyLoginFinishReq',
+            'signedChallenge',
+          ),
+        );
     replace(_$result);
     return _$result;
   }

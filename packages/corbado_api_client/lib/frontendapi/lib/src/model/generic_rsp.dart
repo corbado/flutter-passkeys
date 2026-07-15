@@ -83,9 +83,11 @@ class _$GenericRspSerializer implements PrimitiveSerializer<GenericRsp> {
     GenericRsp object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(
+      serializers,
+      object,
+      specifiedType: specifiedType,
+    ).toList();
   }
 
   void _deserializeProperties(
@@ -101,31 +103,36 @@ class _$GenericRspSerializer implements PrimitiveSerializer<GenericRsp> {
       final value = serializedList[i + 1];
       switch (key) {
         case r'httpStatusCode':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(int),
-          ) as int;
+          final valueDes =
+              serializers.deserialize(value, specifiedType: const FullType(int))
+                  as int;
           result.httpStatusCode = valueDes;
           break;
         case r'message':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(String),
-          ) as String;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(String),
+                  )
+                  as String;
           result.message = valueDes;
           break;
         case r'requestData':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(RequestData),
-          ) as RequestData;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(RequestData),
+                  )
+                  as RequestData;
           result.requestData.replace(valueDes);
           break;
         case r'runtime':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(double),
-          ) as double;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(double),
+                  )
+                  as double;
           result.runtime = valueDes;
           break;
         default:

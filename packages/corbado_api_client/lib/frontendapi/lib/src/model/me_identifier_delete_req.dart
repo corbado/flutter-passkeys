@@ -20,8 +20,9 @@ abstract class MeIdentifierDeleteReq
 
   MeIdentifierDeleteReq._();
 
-  factory MeIdentifierDeleteReq(
-      [void updates(MeIdentifierDeleteReqBuilder b)]) = _$MeIdentifierDeleteReq;
+  factory MeIdentifierDeleteReq([
+    void updates(MeIdentifierDeleteReqBuilder b),
+  ]) = _$MeIdentifierDeleteReq;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(MeIdentifierDeleteReqBuilder b) => b;
@@ -36,7 +37,7 @@ class _$MeIdentifierDeleteReqSerializer
   @override
   final Iterable<Type> types = const [
     MeIdentifierDeleteReq,
-    _$MeIdentifierDeleteReq
+    _$MeIdentifierDeleteReq,
   ];
 
   @override
@@ -60,9 +61,11 @@ class _$MeIdentifierDeleteReqSerializer
     MeIdentifierDeleteReq object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(
+      serializers,
+      object,
+      specifiedType: specifiedType,
+    ).toList();
   }
 
   void _deserializeProperties(
@@ -78,10 +81,12 @@ class _$MeIdentifierDeleteReqSerializer
       final value = serializedList[i + 1];
       switch (key) {
         case r'identifierID':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(String),
-          ) as String;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(String),
+                  )
+                  as String;
           result.identifierID = valueDes;
           break;
         default:
