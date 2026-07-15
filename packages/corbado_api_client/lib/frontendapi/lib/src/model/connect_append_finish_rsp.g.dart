@@ -10,19 +10,22 @@ class _$ConnectAppendFinishRsp extends ConnectAppendFinishRsp {
   @override
   final PasskeyOperation passkeyOperation;
 
-  factory _$ConnectAppendFinishRsp(
-          [void Function(ConnectAppendFinishRspBuilder)? updates]) =>
-      (new ConnectAppendFinishRspBuilder()..update(updates))._build();
+  factory _$ConnectAppendFinishRsp([
+    void Function(ConnectAppendFinishRspBuilder)? updates,
+  ]) => (new ConnectAppendFinishRspBuilder()..update(updates))._build();
 
   _$ConnectAppendFinishRsp._({required this.passkeyOperation}) : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        passkeyOperation, r'ConnectAppendFinishRsp', 'passkeyOperation');
+      passkeyOperation,
+      r'ConnectAppendFinishRsp',
+      'passkeyOperation',
+    );
   }
 
   @override
   ConnectAppendFinishRsp rebuild(
-          void Function(ConnectAppendFinishRspBuilder) updates) =>
-      (toBuilder()..update(updates)).build();
+    void Function(ConnectAppendFinishRspBuilder) updates,
+  ) => (toBuilder()..update(updates)).build();
 
   @override
   ConnectAppendFinishRspBuilder toBuilder() =>
@@ -45,9 +48,9 @@ class _$ConnectAppendFinishRsp extends ConnectAppendFinishRsp {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper(r'ConnectAppendFinishRsp')
-          ..add('passkeyOperation', passkeyOperation))
-        .toString();
+    return (newBuiltValueToStringHelper(
+      r'ConnectAppendFinishRsp',
+    )..add('passkeyOperation', passkeyOperation)).toString();
   }
 }
 
@@ -91,9 +94,11 @@ class ConnectAppendFinishRspBuilder
   _$ConnectAppendFinishRsp _build() {
     _$ConnectAppendFinishRsp _$result;
     try {
-      _$result = _$v ??
+      _$result =
+          _$v ??
           new _$ConnectAppendFinishRsp._(
-              passkeyOperation: passkeyOperation.build());
+            passkeyOperation: passkeyOperation.build(),
+          );
     } catch (_) {
       late String _$failedField;
       try {
@@ -101,7 +106,10 @@ class ConnectAppendFinishRspBuilder
         passkeyOperation.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            r'ConnectAppendFinishRsp', _$failedField, e.toString());
+          r'ConnectAppendFinishRsp',
+          _$failedField,
+          e.toString(),
+        );
       }
       rethrow;
     }

@@ -14,17 +14,20 @@ class _$SessionConfigRsp extends SessionConfigRsp {
   @override
   final String? frontendApiUrl;
 
-  factory _$SessionConfigRsp(
-          [void Function(SessionConfigRspBuilder)? updates]) =>
-      (new SessionConfigRspBuilder()..update(updates))._build();
+  factory _$SessionConfigRsp([
+    void Function(SessionConfigRspBuilder)? updates,
+  ]) => (new SessionConfigRspBuilder()..update(updates))._build();
 
-  _$SessionConfigRsp._(
-      {required this.useSessionManagement,
-      this.shortSessionCookieConfig,
-      this.frontendApiUrl})
-      : super._() {
+  _$SessionConfigRsp._({
+    required this.useSessionManagement,
+    this.shortSessionCookieConfig,
+    this.frontendApiUrl,
+  }) : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        useSessionManagement, r'SessionConfigRsp', 'useSessionManagement');
+      useSessionManagement,
+      r'SessionConfigRsp',
+      'useSessionManagement',
+    );
   }
 
   @override
@@ -78,8 +81,8 @@ class SessionConfigRspBuilder
       _$this._shortSessionCookieConfig ??=
           new ShortSessionCookieConfigBuilder();
   set shortSessionCookieConfig(
-          ShortSessionCookieConfigBuilder? shortSessionCookieConfig) =>
-      _$this._shortSessionCookieConfig = shortSessionCookieConfig;
+    ShortSessionCookieConfigBuilder? shortSessionCookieConfig,
+  ) => _$this._shortSessionCookieConfig = shortSessionCookieConfig;
 
   String? _frontendApiUrl;
   String? get frontendApiUrl => _$this._frontendApiUrl;
@@ -118,14 +121,17 @@ class SessionConfigRspBuilder
   _$SessionConfigRsp _build() {
     _$SessionConfigRsp _$result;
     try {
-      _$result = _$v ??
+      _$result =
+          _$v ??
           new _$SessionConfigRsp._(
-              useSessionManagement: BuiltValueNullFieldError.checkNotNull(
-                  useSessionManagement,
-                  r'SessionConfigRsp',
-                  'useSessionManagement'),
-              shortSessionCookieConfig: _shortSessionCookieConfig?.build(),
-              frontendApiUrl: frontendApiUrl);
+            useSessionManagement: BuiltValueNullFieldError.checkNotNull(
+              useSessionManagement,
+              r'SessionConfigRsp',
+              'useSessionManagement',
+            ),
+            shortSessionCookieConfig: _shortSessionCookieConfig?.build(),
+            frontendApiUrl: frontendApiUrl,
+          );
     } catch (_) {
       late String _$failedField;
       try {
@@ -133,7 +139,10 @@ class SessionConfigRspBuilder
         _shortSessionCookieConfig?.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            r'SessionConfigRsp', _$failedField, e.toString());
+          r'SessionConfigRsp',
+          _$failedField,
+          e.toString(),
+        );
       }
       rethrow;
     }

@@ -66,9 +66,11 @@ class _$MePasskeyRspSerializer implements PrimitiveSerializer<MePasskeyRsp> {
     MePasskeyRsp object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(
+      serializers,
+      object,
+      specifiedType: specifiedType,
+    ).toList();
   }
 
   void _deserializeProperties(
@@ -84,17 +86,23 @@ class _$MePasskeyRspSerializer implements PrimitiveSerializer<MePasskeyRsp> {
       final value = serializedList[i + 1];
       switch (key) {
         case r'passkeys':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(BuiltList, [FullType(Passkey)]),
-          ) as BuiltList<Passkey>;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(BuiltList, [
+                      FullType(Passkey),
+                    ]),
+                  )
+                  as BuiltList<Passkey>;
           result.passkeys.replace(valueDes);
           break;
         case r'paging':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(Paging),
-          ) as Paging;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(Paging),
+                  )
+                  as Paging;
           result.paging.replace(valueDes);
           break;
         default:

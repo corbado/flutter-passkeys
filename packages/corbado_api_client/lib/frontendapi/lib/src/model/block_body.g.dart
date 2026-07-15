@@ -23,14 +23,14 @@ class _$BlockBody extends BlockBody {
   factory _$BlockBody([void Function(BlockBodyBuilder)? updates]) =>
       (new BlockBodyBuilder()..update(updates))._build();
 
-  _$BlockBody._(
-      {required this.block,
-      required this.authType,
-      required this.data,
-      this.alternatives,
-      this.error,
-      this.continueOnOtherDevice})
-      : super._() {
+  _$BlockBody._({
+    required this.block,
+    required this.authType,
+    required this.data,
+    this.alternatives,
+    this.error,
+    this.continueOnOtherDevice,
+  }) : super._() {
     BuiltValueNullFieldError.checkNotNull(block, r'BlockBody', 'block');
     BuiltValueNullFieldError.checkNotNull(authType, r'BlockBody', 'authType');
     BuiltValueNullFieldError.checkNotNull(data, r'BlockBody', 'data');
@@ -110,8 +110,8 @@ class BlockBodyBuilder implements Builder<BlockBody, BlockBodyBuilder> {
   ContinueOnOtherDeviceBuilder get continueOnOtherDevice =>
       _$this._continueOnOtherDevice ??= new ContinueOnOtherDeviceBuilder();
   set continueOnOtherDevice(
-          ContinueOnOtherDeviceBuilder? continueOnOtherDevice) =>
-      _$this._continueOnOtherDevice = continueOnOtherDevice;
+    ContinueOnOtherDeviceBuilder? continueOnOtherDevice,
+  ) => _$this._continueOnOtherDevice = continueOnOtherDevice;
 
   BlockBodyBuilder() {
     BlockBody._defaults(this);
@@ -148,16 +148,24 @@ class BlockBodyBuilder implements Builder<BlockBody, BlockBodyBuilder> {
   _$BlockBody _build() {
     _$BlockBody _$result;
     try {
-      _$result = _$v ??
+      _$result =
+          _$v ??
           new _$BlockBody._(
-              block: BuiltValueNullFieldError.checkNotNull(
-                  block, r'BlockBody', 'block'),
-              authType: BuiltValueNullFieldError.checkNotNull(
-                  authType, r'BlockBody', 'authType'),
-              data: data.build(),
-              alternatives: _alternatives?.build(),
-              error: _error?.build(),
-              continueOnOtherDevice: _continueOnOtherDevice?.build());
+            block: BuiltValueNullFieldError.checkNotNull(
+              block,
+              r'BlockBody',
+              'block',
+            ),
+            authType: BuiltValueNullFieldError.checkNotNull(
+              authType,
+              r'BlockBody',
+              'authType',
+            ),
+            data: data.build(),
+            alternatives: _alternatives?.build(),
+            error: _error?.build(),
+            continueOnOtherDevice: _continueOnOtherDevice?.build(),
+          );
     } catch (_) {
       late String _$failedField;
       try {
@@ -171,7 +179,10 @@ class BlockBodyBuilder implements Builder<BlockBody, BlockBodyBuilder> {
         _continueOnOtherDevice?.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            r'BlockBody', _$failedField, e.toString());
+          r'BlockBody',
+          _$failedField,
+          e.toString(),
+        );
       }
       rethrow;
     }

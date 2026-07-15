@@ -19,14 +19,17 @@ class _$ProcessInitReq extends ProcessInitReq {
   factory _$ProcessInitReq([void Function(ProcessInitReqBuilder)? updates]) =>
       (new ProcessInitReqBuilder()..update(updates))._build();
 
-  _$ProcessInitReq._(
-      {required this.clientInformation,
-      this.passkeyAppendShown,
-      this.optOutOfPasskeyAppendAfterHybrid,
-      this.preferredBlock})
-      : super._() {
+  _$ProcessInitReq._({
+    required this.clientInformation,
+    this.passkeyAppendShown,
+    this.optOutOfPasskeyAppendAfterHybrid,
+    this.preferredBlock,
+  }) : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        clientInformation, r'ProcessInitReq', 'clientInformation');
+      clientInformation,
+      r'ProcessInitReq',
+      'clientInformation',
+    );
   }
 
   @override
@@ -64,8 +67,10 @@ class _$ProcessInitReq extends ProcessInitReq {
     return (newBuiltValueToStringHelper(r'ProcessInitReq')
           ..add('clientInformation', clientInformation)
           ..add('passkeyAppendShown', passkeyAppendShown)
-          ..add('optOutOfPasskeyAppendAfterHybrid',
-              optOutOfPasskeyAppendAfterHybrid)
+          ..add(
+            'optOutOfPasskeyAppendAfterHybrid',
+            optOutOfPasskeyAppendAfterHybrid,
+          )
           ..add('preferredBlock', preferredBlock))
         .toString();
   }
@@ -90,9 +95,9 @@ class ProcessInitReqBuilder
   bool? get optOutOfPasskeyAppendAfterHybrid =>
       _$this._optOutOfPasskeyAppendAfterHybrid;
   set optOutOfPasskeyAppendAfterHybrid(
-          bool? optOutOfPasskeyAppendAfterHybrid) =>
-      _$this._optOutOfPasskeyAppendAfterHybrid =
-          optOutOfPasskeyAppendAfterHybrid;
+    bool? optOutOfPasskeyAppendAfterHybrid,
+  ) => _$this._optOutOfPasskeyAppendAfterHybrid =
+      optOutOfPasskeyAppendAfterHybrid;
 
   BlockType? _preferredBlock;
   BlockType? get preferredBlock => _$this._preferredBlock;
@@ -132,13 +137,14 @@ class ProcessInitReqBuilder
   _$ProcessInitReq _build() {
     _$ProcessInitReq _$result;
     try {
-      _$result = _$v ??
+      _$result =
+          _$v ??
           new _$ProcessInitReq._(
-              clientInformation: clientInformation.build(),
-              passkeyAppendShown: passkeyAppendShown,
-              optOutOfPasskeyAppendAfterHybrid:
-                  optOutOfPasskeyAppendAfterHybrid,
-              preferredBlock: preferredBlock);
+            clientInformation: clientInformation.build(),
+            passkeyAppendShown: passkeyAppendShown,
+            optOutOfPasskeyAppendAfterHybrid: optOutOfPasskeyAppendAfterHybrid,
+            preferredBlock: preferredBlock,
+          );
     } catch (_) {
       late String _$failedField;
       try {
@@ -146,7 +152,10 @@ class ProcessInitReqBuilder
         clientInformation.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            r'ProcessInitReq', _$failedField, e.toString());
+          r'ProcessInitReq',
+          _$failedField,
+          e.toString(),
+        );
       }
       rethrow;
     }

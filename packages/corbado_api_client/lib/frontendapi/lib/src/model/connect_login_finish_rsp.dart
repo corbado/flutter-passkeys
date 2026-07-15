@@ -25,8 +25,9 @@ abstract class ConnectLoginFinishRsp
 
   ConnectLoginFinishRsp._();
 
-  factory ConnectLoginFinishRsp(
-      [void updates(ConnectLoginFinishRspBuilder b)]) = _$ConnectLoginFinishRsp;
+  factory ConnectLoginFinishRsp([
+    void updates(ConnectLoginFinishRspBuilder b),
+  ]) = _$ConnectLoginFinishRsp;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(ConnectLoginFinishRspBuilder b) => b;
@@ -41,7 +42,7 @@ class _$ConnectLoginFinishRspSerializer
   @override
   final Iterable<Type> types = const [
     ConnectLoginFinishRsp,
-    _$ConnectLoginFinishRsp
+    _$ConnectLoginFinishRsp,
   ];
 
   @override
@@ -70,9 +71,11 @@ class _$ConnectLoginFinishRspSerializer
     ConnectLoginFinishRsp object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(
+      serializers,
+      object,
+      specifiedType: specifiedType,
+    ).toList();
   }
 
   void _deserializeProperties(
@@ -88,17 +91,21 @@ class _$ConnectLoginFinishRspSerializer
       final value = serializedList[i + 1];
       switch (key) {
         case r'passkeyOperation':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(PasskeyOperation),
-          ) as PasskeyOperation;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(PasskeyOperation),
+                  )
+                  as PasskeyOperation;
           result.passkeyOperation.replace(valueDes);
           break;
         case r'session':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(String),
-          ) as String;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(String),
+                  )
+                  as String;
           result.session = valueDes;
           break;
         default:

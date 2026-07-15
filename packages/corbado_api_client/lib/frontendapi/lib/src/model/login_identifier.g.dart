@@ -16,10 +16,13 @@ class _$LoginIdentifier extends LoginIdentifier {
       (new LoginIdentifierBuilder()..update(updates))._build();
 
   _$LoginIdentifier._({required this.type, required this.identifier})
-      : super._() {
+    : super._() {
     BuiltValueNullFieldError.checkNotNull(type, r'LoginIdentifier', 'type');
     BuiltValueNullFieldError.checkNotNull(
-        identifier, r'LoginIdentifier', 'identifier');
+      identifier,
+      r'LoginIdentifier',
+      'identifier',
+    );
   }
 
   @override
@@ -97,12 +100,20 @@ class LoginIdentifierBuilder
   LoginIdentifier build() => _build();
 
   _$LoginIdentifier _build() {
-    final _$result = _$v ??
+    final _$result =
+        _$v ??
         new _$LoginIdentifier._(
-            type: BuiltValueNullFieldError.checkNotNull(
-                type, r'LoginIdentifier', 'type'),
-            identifier: BuiltValueNullFieldError.checkNotNull(
-                identifier, r'LoginIdentifier', 'identifier'));
+          type: BuiltValueNullFieldError.checkNotNull(
+            type,
+            r'LoginIdentifier',
+            'type',
+          ),
+          identifier: BuiltValueNullFieldError.checkNotNull(
+            identifier,
+            r'LoginIdentifier',
+            'identifier',
+          ),
+        );
     replace(_$result);
     return _$result;
   }

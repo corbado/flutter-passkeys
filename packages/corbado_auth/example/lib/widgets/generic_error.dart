@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 
+/// Displays an error [message] in red, or nothing when the message is null.
 class MaybeGenericError extends StatelessWidget {
-  final String? message;
+  /// Creates a widget that optionally shows an error message.
+  const MaybeGenericError({required this.message, super.key});
 
-  const MaybeGenericError({super.key, required this.message});
+  /// The error message to display, or null to show nothing.
+  final String? message;
 
   @override
   Widget build(BuildContext context) {
@@ -12,11 +15,8 @@ class MaybeGenericError extends StatelessWidget {
     }
 
     return Text(
-        message!,
-        style: const TextStyle(
-          color: Colors.red,
-          fontSize: 14,
-      ),
+      message!,
+      style: const TextStyle(color: Colors.red, fontSize: 14),
     );
   }
 }

@@ -59,9 +59,11 @@ class _$EventCreateReqSerializer
     EventCreateReq object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(
+      serializers,
+      object,
+      specifiedType: specifiedType,
+    ).toList();
   }
 
   void _deserializeProperties(
@@ -77,10 +79,12 @@ class _$EventCreateReqSerializer
       final value = serializedList[i + 1];
       switch (key) {
         case r'eventType':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(PasskeyEventType),
-          ) as PasskeyEventType;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(PasskeyEventType),
+                  )
+                  as PasskeyEventType;
           result.eventType = valueDes;
           break;
         default:

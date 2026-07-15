@@ -24,8 +24,9 @@ abstract class ConnectLoginFinishReq
 
   ConnectLoginFinishReq._();
 
-  factory ConnectLoginFinishReq(
-      [void updates(ConnectLoginFinishReqBuilder b)]) = _$ConnectLoginFinishReq;
+  factory ConnectLoginFinishReq([
+    void updates(ConnectLoginFinishReqBuilder b),
+  ]) = _$ConnectLoginFinishReq;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(ConnectLoginFinishReqBuilder b) => b;
@@ -40,7 +41,7 @@ class _$ConnectLoginFinishReqSerializer
   @override
   final Iterable<Type> types = const [
     ConnectLoginFinishReq,
-    _$ConnectLoginFinishReq
+    _$ConnectLoginFinishReq,
   ];
 
   @override
@@ -69,9 +70,11 @@ class _$ConnectLoginFinishReqSerializer
     ConnectLoginFinishReq object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(
+      serializers,
+      object,
+      specifiedType: specifiedType,
+    ).toList();
   }
 
   void _deserializeProperties(
@@ -87,17 +90,21 @@ class _$ConnectLoginFinishReqSerializer
       final value = serializedList[i + 1];
       switch (key) {
         case r'isConditionalUI':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(bool),
-          ) as bool;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(bool),
+                  )
+                  as bool;
           result.isConditionalUI = valueDes;
           break;
         case r'assertionResponse':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(String),
-          ) as String;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(String),
+                  )
+                  as String;
           result.assertionResponse = valueDes;
           break;
         default:

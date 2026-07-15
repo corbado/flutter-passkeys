@@ -7,14 +7,15 @@ part of 'continue_on_other_device.dart';
 // **************************************************************************
 
 const ContinueOnOtherDeviceReasonEnum
-    _$continueOnOtherDeviceReasonEnum_emailLinkVerified =
+_$continueOnOtherDeviceReasonEnum_emailLinkVerified =
     const ContinueOnOtherDeviceReasonEnum._('emailLinkVerified');
 const ContinueOnOtherDeviceReasonEnum
-    _$continueOnOtherDeviceReasonEnum_processAlreadyCompleted =
+_$continueOnOtherDeviceReasonEnum_processAlreadyCompleted =
     const ContinueOnOtherDeviceReasonEnum._('processAlreadyCompleted');
 
 ContinueOnOtherDeviceReasonEnum _$continueOnOtherDeviceReasonEnumValueOf(
-    String name) {
+  String name,
+) {
   switch (name) {
     case 'emailLinkVerified':
       return _$continueOnOtherDeviceReasonEnum_emailLinkVerified;
@@ -26,14 +27,16 @@ ContinueOnOtherDeviceReasonEnum _$continueOnOtherDeviceReasonEnumValueOf(
 }
 
 final BuiltSet<ContinueOnOtherDeviceReasonEnum>
-    _$continueOnOtherDeviceReasonEnumValues = new BuiltSet<
-        ContinueOnOtherDeviceReasonEnum>(const <ContinueOnOtherDeviceReasonEnum>[
-  _$continueOnOtherDeviceReasonEnum_emailLinkVerified,
-  _$continueOnOtherDeviceReasonEnum_processAlreadyCompleted,
-]);
+_$continueOnOtherDeviceReasonEnumValues =
+    new BuiltSet<ContinueOnOtherDeviceReasonEnum>(
+      const <ContinueOnOtherDeviceReasonEnum>[
+        _$continueOnOtherDeviceReasonEnum_emailLinkVerified,
+        _$continueOnOtherDeviceReasonEnum_processAlreadyCompleted,
+      ],
+    );
 
 Serializer<ContinueOnOtherDeviceReasonEnum>
-    _$continueOnOtherDeviceReasonEnumSerializer =
+_$continueOnOtherDeviceReasonEnumSerializer =
     new _$ContinueOnOtherDeviceReasonEnumSerializer();
 
 class _$ContinueOnOtherDeviceReasonEnumSerializer
@@ -54,35 +57,41 @@ class _$ContinueOnOtherDeviceReasonEnumSerializer
 
   @override
   Object serialize(
-          Serializers serializers, ContinueOnOtherDeviceReasonEnum object,
-          {FullType specifiedType = FullType.unspecified}) =>
-      _toWire[object.name] ?? object.name;
+    Serializers serializers,
+    ContinueOnOtherDeviceReasonEnum object, {
+    FullType specifiedType = FullType.unspecified,
+  }) => _toWire[object.name] ?? object.name;
 
   @override
   ContinueOnOtherDeviceReasonEnum deserialize(
-          Serializers serializers, Object serialized,
-          {FullType specifiedType = FullType.unspecified}) =>
-      ContinueOnOtherDeviceReasonEnum.valueOf(
-          _fromWire[serialized] ?? (serialized is String ? serialized : ''));
+    Serializers serializers,
+    Object serialized, {
+    FullType specifiedType = FullType.unspecified,
+  }) => ContinueOnOtherDeviceReasonEnum.valueOf(
+    _fromWire[serialized] ?? (serialized is String ? serialized : ''),
+  );
 }
 
 class _$ContinueOnOtherDevice extends ContinueOnOtherDevice {
   @override
   final ContinueOnOtherDeviceReasonEnum reason;
 
-  factory _$ContinueOnOtherDevice(
-          [void Function(ContinueOnOtherDeviceBuilder)? updates]) =>
-      (new ContinueOnOtherDeviceBuilder()..update(updates))._build();
+  factory _$ContinueOnOtherDevice([
+    void Function(ContinueOnOtherDeviceBuilder)? updates,
+  ]) => (new ContinueOnOtherDeviceBuilder()..update(updates))._build();
 
   _$ContinueOnOtherDevice._({required this.reason}) : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        reason, r'ContinueOnOtherDevice', 'reason');
+      reason,
+      r'ContinueOnOtherDevice',
+      'reason',
+    );
   }
 
   @override
   ContinueOnOtherDevice rebuild(
-          void Function(ContinueOnOtherDeviceBuilder) updates) =>
-      (toBuilder()..update(updates)).build();
+    void Function(ContinueOnOtherDeviceBuilder) updates,
+  ) => (toBuilder()..update(updates)).build();
 
   @override
   ContinueOnOtherDeviceBuilder toBuilder() =>
@@ -104,9 +113,9 @@ class _$ContinueOnOtherDevice extends ContinueOnOtherDevice {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper(r'ContinueOnOtherDevice')
-          ..add('reason', reason))
-        .toString();
+    return (newBuiltValueToStringHelper(
+      r'ContinueOnOtherDevice',
+    )..add('reason', reason)).toString();
   }
 }
 
@@ -147,10 +156,15 @@ class ContinueOnOtherDeviceBuilder
   ContinueOnOtherDevice build() => _build();
 
   _$ContinueOnOtherDevice _build() {
-    final _$result = _$v ??
+    final _$result =
+        _$v ??
         new _$ContinueOnOtherDevice._(
-            reason: BuiltValueNullFieldError.checkNotNull(
-                reason, r'ContinueOnOtherDevice', 'reason'));
+          reason: BuiltValueNullFieldError.checkNotNull(
+            reason,
+            r'ContinueOnOtherDevice',
+            'reason',
+          ),
+        );
     replace(_$result);
     return _$result;
   }

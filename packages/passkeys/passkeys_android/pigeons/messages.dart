@@ -80,7 +80,12 @@ class ExcludeCredential {
 /// Represents an authenticator selection
 class AuthenticatorSelection {
   /// Constructor
-  const AuthenticatorSelection(this.authenticatorAttachment, this.requireResidentKey, this.residentKey, this.userVerification);
+  const AuthenticatorSelection(
+    this.authenticatorAttachment,
+    this.requireResidentKey,
+    this.residentKey,
+    this.userVerification,
+  );
 
   /// The authenticator attachment
   final String? authenticatorAttachment;

@@ -28,10 +28,10 @@ SocialDataStatusEnum _$socialDataStatusEnumValueOf(String name) {
 
 final BuiltSet<SocialDataStatusEnum> _$socialDataStatusEnumValues =
     new BuiltSet<SocialDataStatusEnum>(const <SocialDataStatusEnum>[
-  _$socialDataStatusEnum_initial,
-  _$socialDataStatusEnum_started,
-  _$socialDataStatusEnum_finished,
-]);
+      _$socialDataStatusEnum_initial,
+      _$socialDataStatusEnum_started,
+      _$socialDataStatusEnum_finished,
+    ]);
 
 Serializer<SocialDataStatusEnum> _$socialDataStatusEnumSerializer =
     new _$SocialDataStatusEnumSerializer();
@@ -55,15 +55,20 @@ class _$SocialDataStatusEnumSerializer
   final String wireName = 'SocialDataStatusEnum';
 
   @override
-  Object serialize(Serializers serializers, SocialDataStatusEnum object,
-          {FullType specifiedType = FullType.unspecified}) =>
-      _toWire[object.name] ?? object.name;
+  Object serialize(
+    Serializers serializers,
+    SocialDataStatusEnum object, {
+    FullType specifiedType = FullType.unspecified,
+  }) => _toWire[object.name] ?? object.name;
 
   @override
-  SocialDataStatusEnum deserialize(Serializers serializers, Object serialized,
-          {FullType specifiedType = FullType.unspecified}) =>
-      SocialDataStatusEnum.valueOf(
-          _fromWire[serialized] ?? (serialized is String ? serialized : ''));
+  SocialDataStatusEnum deserialize(
+    Serializers serializers,
+    Object serialized, {
+    FullType specifiedType = FullType.unspecified,
+  }) => SocialDataStatusEnum.valueOf(
+    _fromWire[serialized] ?? (serialized is String ? serialized : ''),
+  );
 }
 
 class _$SocialData extends SocialData {
@@ -79,14 +84,17 @@ class _$SocialData extends SocialData {
   factory _$SocialData([void Function(SocialDataBuilder)? updates]) =>
       (new SocialDataBuilder()..update(updates))._build();
 
-  _$SocialData._(
-      {required this.providers,
-      required this.status,
-      this.oauthUrl,
-      this.error})
-      : super._() {
+  _$SocialData._({
+    required this.providers,
+    required this.status,
+    this.oauthUrl,
+    this.error,
+  }) : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        providers, r'SocialData', 'providers');
+      providers,
+      r'SocialData',
+      'providers',
+    );
     BuiltValueNullFieldError.checkNotNull(status, r'SocialData', 'status');
   }
 
@@ -183,13 +191,18 @@ class SocialDataBuilder implements Builder<SocialData, SocialDataBuilder> {
   _$SocialData _build() {
     _$SocialData _$result;
     try {
-      _$result = _$v ??
+      _$result =
+          _$v ??
           new _$SocialData._(
-              providers: providers.build(),
-              status: BuiltValueNullFieldError.checkNotNull(
-                  status, r'SocialData', 'status'),
-              oauthUrl: oauthUrl,
-              error: _error?.build());
+            providers: providers.build(),
+            status: BuiltValueNullFieldError.checkNotNull(
+              status,
+              r'SocialData',
+              'status',
+            ),
+            oauthUrl: oauthUrl,
+            error: _error?.build(),
+          );
     } catch (_) {
       late String _$failedField;
       try {
@@ -200,7 +213,10 @@ class SocialDataBuilder implements Builder<SocialData, SocialDataBuilder> {
         _error?.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            r'SocialData', _$failedField, e.toString());
+          r'SocialData',
+          _$failedField,
+          e.toString(),
+        );
       }
       rethrow;
     }

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+/// The response returned by the platform after an authentication flow.
 class AuthenticateResponseType {
   /// Constructs a new instance.
   const AuthenticateResponseType({
@@ -92,6 +93,7 @@ class AuthenticateResponseType {
       'signature': signature,
     };
 
+    // Only include userHandle if it's not empty
     if (userHandle.isNotEmpty) {
       response['userHandle'] = userHandle;
     }

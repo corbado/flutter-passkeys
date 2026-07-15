@@ -12,23 +12,30 @@ class _$ConnectLoginFinishRsp extends ConnectLoginFinishRsp {
   @override
   final String session;
 
-  factory _$ConnectLoginFinishRsp(
-          [void Function(ConnectLoginFinishRspBuilder)? updates]) =>
-      (new ConnectLoginFinishRspBuilder()..update(updates))._build();
+  factory _$ConnectLoginFinishRsp([
+    void Function(ConnectLoginFinishRspBuilder)? updates,
+  ]) => (new ConnectLoginFinishRspBuilder()..update(updates))._build();
 
-  _$ConnectLoginFinishRsp._(
-      {required this.passkeyOperation, required this.session})
-      : super._() {
+  _$ConnectLoginFinishRsp._({
+    required this.passkeyOperation,
+    required this.session,
+  }) : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        passkeyOperation, r'ConnectLoginFinishRsp', 'passkeyOperation');
+      passkeyOperation,
+      r'ConnectLoginFinishRsp',
+      'passkeyOperation',
+    );
     BuiltValueNullFieldError.checkNotNull(
-        session, r'ConnectLoginFinishRsp', 'session');
+      session,
+      r'ConnectLoginFinishRsp',
+      'session',
+    );
   }
 
   @override
   ConnectLoginFinishRsp rebuild(
-          void Function(ConnectLoginFinishRspBuilder) updates) =>
-      (toBuilder()..update(updates)).build();
+    void Function(ConnectLoginFinishRspBuilder) updates,
+  ) => (toBuilder()..update(updates)).build();
 
   @override
   ConnectLoginFinishRspBuilder toBuilder() =>
@@ -105,11 +112,16 @@ class ConnectLoginFinishRspBuilder
   _$ConnectLoginFinishRsp _build() {
     _$ConnectLoginFinishRsp _$result;
     try {
-      _$result = _$v ??
+      _$result =
+          _$v ??
           new _$ConnectLoginFinishRsp._(
-              passkeyOperation: passkeyOperation.build(),
-              session: BuiltValueNullFieldError.checkNotNull(
-                  session, r'ConnectLoginFinishRsp', 'session'));
+            passkeyOperation: passkeyOperation.build(),
+            session: BuiltValueNullFieldError.checkNotNull(
+              session,
+              r'ConnectLoginFinishRsp',
+              'session',
+            ),
+          );
     } catch (_) {
       late String _$failedField;
       try {
@@ -117,7 +129,10 @@ class ConnectLoginFinishRspBuilder
         passkeyOperation.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            r'ConnectLoginFinishRsp', _$failedField, e.toString());
+          r'ConnectLoginFinishRsp',
+          _$failedField,
+          e.toString(),
+        );
       }
       rethrow;
     }

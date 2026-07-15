@@ -14,23 +14,31 @@ class _$LoginIdentifierWithError extends LoginIdentifierWithError {
   @override
   final RequestError? error;
 
-  factory _$LoginIdentifierWithError(
-          [void Function(LoginIdentifierWithErrorBuilder)? updates]) =>
-      (new LoginIdentifierWithErrorBuilder()..update(updates))._build();
+  factory _$LoginIdentifierWithError([
+    void Function(LoginIdentifierWithErrorBuilder)? updates,
+  ]) => (new LoginIdentifierWithErrorBuilder()..update(updates))._build();
 
-  _$LoginIdentifierWithError._(
-      {required this.type, required this.identifier, this.error})
-      : super._() {
+  _$LoginIdentifierWithError._({
+    required this.type,
+    required this.identifier,
+    this.error,
+  }) : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        type, r'LoginIdentifierWithError', 'type');
+      type,
+      r'LoginIdentifierWithError',
+      'type',
+    );
     BuiltValueNullFieldError.checkNotNull(
-        identifier, r'LoginIdentifierWithError', 'identifier');
+      identifier,
+      r'LoginIdentifierWithError',
+      'identifier',
+    );
   }
 
   @override
   LoginIdentifierWithError rebuild(
-          void Function(LoginIdentifierWithErrorBuilder) updates) =>
-      (toBuilder()..update(updates)).build();
+    void Function(LoginIdentifierWithErrorBuilder) updates,
+  ) => (toBuilder()..update(updates)).build();
 
   @override
   LoginIdentifierWithErrorBuilder toBuilder() =>
@@ -114,13 +122,21 @@ class LoginIdentifierWithErrorBuilder
   _$LoginIdentifierWithError _build() {
     _$LoginIdentifierWithError _$result;
     try {
-      _$result = _$v ??
+      _$result =
+          _$v ??
           new _$LoginIdentifierWithError._(
-              type: BuiltValueNullFieldError.checkNotNull(
-                  type, r'LoginIdentifierWithError', 'type'),
-              identifier: BuiltValueNullFieldError.checkNotNull(
-                  identifier, r'LoginIdentifierWithError', 'identifier'),
-              error: _error?.build());
+            type: BuiltValueNullFieldError.checkNotNull(
+              type,
+              r'LoginIdentifierWithError',
+              'type',
+            ),
+            identifier: BuiltValueNullFieldError.checkNotNull(
+              identifier,
+              r'LoginIdentifierWithError',
+              'identifier',
+            ),
+            error: _error?.build(),
+          );
     } catch (_) {
       late String _$failedField;
       try {
@@ -128,7 +144,10 @@ class LoginIdentifierWithErrorBuilder
         _error?.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            r'LoginIdentifierWithError', _$failedField, e.toString());
+          r'LoginIdentifierWithError',
+          _$failedField,
+          e.toString(),
+        );
       }
       rethrow;
     }

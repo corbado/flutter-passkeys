@@ -5,8 +5,5 @@ class Result {
   final List<Checkpoint> checkpoints;
   final PlatformException? exception;
 
-  Result({
-    required this.checkpoints,
-    this.exception,
-  });
+  Result({required this.checkpoints, this.exception});
 }

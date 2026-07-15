@@ -9,7 +9,6 @@ class BasePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     SchedulerBinding.instance.addPostFrameCallback((_) {
       if (!context.mounted) return;
       DebugOverlay.show(context);

@@ -28,10 +28,10 @@ BlockBodyDataVariantEnum _$blockBodyDataVariantEnumValueOf(String name) {
 
 final BuiltSet<BlockBodyDataVariantEnum> _$blockBodyDataVariantEnumValues =
     new BuiltSet<BlockBodyDataVariantEnum>(const <BlockBodyDataVariantEnum>[
-  _$blockBodyDataVariantEnum_default_,
-  _$blockBodyDataVariantEnum_afterHybrid,
-  _$blockBodyDataVariantEnum_afterError,
-]);
+      _$blockBodyDataVariantEnum_default_,
+      _$blockBodyDataVariantEnum_afterHybrid,
+      _$blockBodyDataVariantEnum_afterError,
+    ]);
 
 const BlockBodyDataLoginHintEnum _$blockBodyDataLoginHintEnum_cda =
     const BlockBodyDataLoginHintEnum._('cda');
@@ -47,8 +47,8 @@ BlockBodyDataLoginHintEnum _$blockBodyDataLoginHintEnumValueOf(String name) {
 
 final BuiltSet<BlockBodyDataLoginHintEnum> _$blockBodyDataLoginHintEnumValues =
     new BuiltSet<BlockBodyDataLoginHintEnum>(const <BlockBodyDataLoginHintEnum>[
-  _$blockBodyDataLoginHintEnum_cda,
-]);
+      _$blockBodyDataLoginHintEnum_cda,
+    ]);
 
 Serializer<BlockBodyDataVariantEnum> _$blockBodyDataVariantEnumSerializer =
     new _$BlockBodyDataVariantEnumSerializer();
@@ -74,16 +74,20 @@ class _$BlockBodyDataVariantEnumSerializer
   final String wireName = 'BlockBodyDataVariantEnum';
 
   @override
-  Object serialize(Serializers serializers, BlockBodyDataVariantEnum object,
-          {FullType specifiedType = FullType.unspecified}) =>
-      _toWire[object.name] ?? object.name;
+  Object serialize(
+    Serializers serializers,
+    BlockBodyDataVariantEnum object, {
+    FullType specifiedType = FullType.unspecified,
+  }) => _toWire[object.name] ?? object.name;
 
   @override
   BlockBodyDataVariantEnum deserialize(
-          Serializers serializers, Object serialized,
-          {FullType specifiedType = FullType.unspecified}) =>
-      BlockBodyDataVariantEnum.valueOf(
-          _fromWire[serialized] ?? (serialized is String ? serialized : ''));
+    Serializers serializers,
+    Object serialized, {
+    FullType specifiedType = FullType.unspecified,
+  }) => BlockBodyDataVariantEnum.valueOf(
+    _fromWire[serialized] ?? (serialized is String ? serialized : ''),
+  );
 }
 
 class _$BlockBodyDataLoginHintEnumSerializer
@@ -101,16 +105,20 @@ class _$BlockBodyDataLoginHintEnumSerializer
   final String wireName = 'BlockBodyDataLoginHintEnum';
 
   @override
-  Object serialize(Serializers serializers, BlockBodyDataLoginHintEnum object,
-          {FullType specifiedType = FullType.unspecified}) =>
-      _toWire[object.name] ?? object.name;
+  Object serialize(
+    Serializers serializers,
+    BlockBodyDataLoginHintEnum object, {
+    FullType specifiedType = FullType.unspecified,
+  }) => _toWire[object.name] ?? object.name;
 
   @override
   BlockBodyDataLoginHintEnum deserialize(
-          Serializers serializers, Object serialized,
-          {FullType specifiedType = FullType.unspecified}) =>
-      BlockBodyDataLoginHintEnum.valueOf(
-          _fromWire[serialized] ?? (serialized is String ? serialized : ''));
+    Serializers serializers,
+    Object serialized, {
+    FullType specifiedType = FullType.unspecified,
+  }) => BlockBodyDataLoginHintEnum.valueOf(
+    _fromWire[serialized] ?? (serialized is String ? serialized : ''),
+  );
 }
 
 class _$BlockBodyData extends BlockBodyData {
@@ -147,8 +155,9 @@ class _$BlockBodyData extends BlockBodyData {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper(r'BlockBodyData')..add('oneOf', oneOf))
-        .toString();
+    return (newBuiltValueToStringHelper(
+      r'BlockBodyData',
+    )..add('oneOf', oneOf)).toString();
   }
 }
 
@@ -188,10 +197,15 @@ class BlockBodyDataBuilder
   BlockBodyData build() => _build();
 
   _$BlockBodyData _build() {
-    final _$result = _$v ??
+    final _$result =
+        _$v ??
         new _$BlockBodyData._(
-            oneOf: BuiltValueNullFieldError.checkNotNull(
-                oneOf, r'BlockBodyData', 'oneOf'));
+          oneOf: BuiltValueNullFieldError.checkNotNull(
+            oneOf,
+            r'BlockBodyData',
+            'oneOf',
+          ),
+        );
     replace(_$result);
     return _$result;
   }

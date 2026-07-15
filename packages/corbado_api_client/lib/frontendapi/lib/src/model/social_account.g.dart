@@ -19,20 +19,32 @@ class _$SocialAccount extends SocialAccount {
   factory _$SocialAccount([void Function(SocialAccountBuilder)? updates]) =>
       (new SocialAccountBuilder()..update(updates))._build();
 
-  _$SocialAccount._(
-      {required this.providerType,
-      required this.identifierValue,
-      required this.avatarUrl,
-      required this.fullName})
-      : super._() {
+  _$SocialAccount._({
+    required this.providerType,
+    required this.identifierValue,
+    required this.avatarUrl,
+    required this.fullName,
+  }) : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        providerType, r'SocialAccount', 'providerType');
+      providerType,
+      r'SocialAccount',
+      'providerType',
+    );
     BuiltValueNullFieldError.checkNotNull(
-        identifierValue, r'SocialAccount', 'identifierValue');
+      identifierValue,
+      r'SocialAccount',
+      'identifierValue',
+    );
     BuiltValueNullFieldError.checkNotNull(
-        avatarUrl, r'SocialAccount', 'avatarUrl');
+      avatarUrl,
+      r'SocialAccount',
+      'avatarUrl',
+    );
     BuiltValueNullFieldError.checkNotNull(
-        fullName, r'SocialAccount', 'fullName');
+      fullName,
+      r'SocialAccount',
+      'fullName',
+    );
   }
 
   @override
@@ -127,16 +139,30 @@ class SocialAccountBuilder
   SocialAccount build() => _build();
 
   _$SocialAccount _build() {
-    final _$result = _$v ??
+    final _$result =
+        _$v ??
         new _$SocialAccount._(
-            providerType: BuiltValueNullFieldError.checkNotNull(
-                providerType, r'SocialAccount', 'providerType'),
-            identifierValue: BuiltValueNullFieldError.checkNotNull(
-                identifierValue, r'SocialAccount', 'identifierValue'),
-            avatarUrl: BuiltValueNullFieldError.checkNotNull(
-                avatarUrl, r'SocialAccount', 'avatarUrl'),
-            fullName: BuiltValueNullFieldError.checkNotNull(
-                fullName, r'SocialAccount', 'fullName'));
+          providerType: BuiltValueNullFieldError.checkNotNull(
+            providerType,
+            r'SocialAccount',
+            'providerType',
+          ),
+          identifierValue: BuiltValueNullFieldError.checkNotNull(
+            identifierValue,
+            r'SocialAccount',
+            'identifierValue',
+          ),
+          avatarUrl: BuiltValueNullFieldError.checkNotNull(
+            avatarUrl,
+            r'SocialAccount',
+            'avatarUrl',
+          ),
+          fullName: BuiltValueNullFieldError.checkNotNull(
+            fullName,
+            r'SocialAccount',
+            'fullName',
+          ),
+        );
     replace(_$result);
     return _$result;
   }

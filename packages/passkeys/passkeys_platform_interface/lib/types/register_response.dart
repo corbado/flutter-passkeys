@@ -1,6 +1,8 @@
 import 'dart:convert';
 
+/// The response returned by the platform after a registration flow.
 class RegisterResponseType {
+  /// Constructs a new instance.
   const RegisterResponseType({
     required this.id,
     required this.rawId,
@@ -39,10 +41,20 @@ class RegisterResponseType {
           json['clientExtensionResults'] as Map<String, dynamic>?,
     );
   }
+
+  /// The ID of the newly created credential.
   final String id;
+
+  /// The raw ID of the newly created credential.
   final String rawId;
+
+  /// The client data JSON.
   final String clientDataJSON;
+
+  /// The attestation object containing the credential public key.
   final String attestationObject;
+
+  /// The transports supported by the authenticator.
   final List<String?> transports;
 
   /// Raw WebAuthn client extension results, including the on-device PRF output.
@@ -58,6 +70,7 @@ class RegisterResponseType {
       'attestationObject': attestationObject,
     };
 
+    // Only include non-null transports
     final nonNullTransports = transports.whereType<String>().toList();
     if (nonNullTransports.isNotEmpty) {
       response['transports'] = nonNullTransports;

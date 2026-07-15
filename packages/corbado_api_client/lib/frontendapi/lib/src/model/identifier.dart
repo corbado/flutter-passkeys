@@ -82,9 +82,11 @@ class _$IdentifierSerializer implements PrimitiveSerializer<Identifier> {
     Identifier object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(
+      serializers,
+      object,
+      specifiedType: specifiedType,
+    ).toList();
   }
 
   void _deserializeProperties(
@@ -100,31 +102,39 @@ class _$IdentifierSerializer implements PrimitiveSerializer<Identifier> {
       final value = serializedList[i + 1];
       switch (key) {
         case r'id':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(String),
-          ) as String;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(String),
+                  )
+                  as String;
           result.id = valueDes;
           break;
         case r'value':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(String),
-          ) as String;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(String),
+                  )
+                  as String;
           result.value = valueDes;
           break;
         case r'type':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(LoginIdentifierType),
-          ) as LoginIdentifierType;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(LoginIdentifierType),
+                  )
+                  as LoginIdentifierType;
           result.type = valueDes;
           break;
         case r'status':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(String),
-          ) as String;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(String),
+                  )
+                  as String;
           result.status = valueDes;
           break;
         default:

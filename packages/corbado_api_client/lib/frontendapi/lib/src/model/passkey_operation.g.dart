@@ -7,14 +7,15 @@ part of 'passkey_operation.dart';
 // **************************************************************************
 
 const PasskeyOperationOperationTypeEnum
-    _$passkeyOperationOperationTypeEnum_append =
+_$passkeyOperationOperationTypeEnum_append =
     const PasskeyOperationOperationTypeEnum._('append');
 const PasskeyOperationOperationTypeEnum
-    _$passkeyOperationOperationTypeEnum_verify =
+_$passkeyOperationOperationTypeEnum_verify =
     const PasskeyOperationOperationTypeEnum._('verify');
 
 PasskeyOperationOperationTypeEnum _$passkeyOperationOperationTypeEnumValueOf(
-    String name) {
+  String name,
+) {
   switch (name) {
     case 'append':
       return _$passkeyOperationOperationTypeEnum_append;
@@ -26,23 +27,26 @@ PasskeyOperationOperationTypeEnum _$passkeyOperationOperationTypeEnumValueOf(
 }
 
 final BuiltSet<PasskeyOperationOperationTypeEnum>
-    _$passkeyOperationOperationTypeEnumValues = new BuiltSet<
-        PasskeyOperationOperationTypeEnum>(const <PasskeyOperationOperationTypeEnum>[
-  _$passkeyOperationOperationTypeEnum_append,
-  _$passkeyOperationOperationTypeEnum_verify,
-]);
+_$passkeyOperationOperationTypeEnumValues =
+    new BuiltSet<PasskeyOperationOperationTypeEnum>(
+      const <PasskeyOperationOperationTypeEnum>[
+        _$passkeyOperationOperationTypeEnum_append,
+        _$passkeyOperationOperationTypeEnum_verify,
+      ],
+    );
 
 const PasskeyOperationCeremonyTypeEnum
-    _$passkeyOperationCeremonyTypeEnum_local =
+_$passkeyOperationCeremonyTypeEnum_local =
     const PasskeyOperationCeremonyTypeEnum._('local');
 const PasskeyOperationCeremonyTypeEnum _$passkeyOperationCeremonyTypeEnum_cda =
     const PasskeyOperationCeremonyTypeEnum._('cda');
 const PasskeyOperationCeremonyTypeEnum
-    _$passkeyOperationCeremonyTypeEnum_securityKey =
+_$passkeyOperationCeremonyTypeEnum_securityKey =
     const PasskeyOperationCeremonyTypeEnum._('securityKey');
 
 PasskeyOperationCeremonyTypeEnum _$passkeyOperationCeremonyTypeEnumValueOf(
-    String name) {
+  String name,
+) {
   switch (name) {
     case 'local':
       return _$passkeyOperationCeremonyTypeEnum_local;
@@ -56,18 +60,20 @@ PasskeyOperationCeremonyTypeEnum _$passkeyOperationCeremonyTypeEnumValueOf(
 }
 
 final BuiltSet<PasskeyOperationCeremonyTypeEnum>
-    _$passkeyOperationCeremonyTypeEnumValues = new BuiltSet<
-        PasskeyOperationCeremonyTypeEnum>(const <PasskeyOperationCeremonyTypeEnum>[
-  _$passkeyOperationCeremonyTypeEnum_local,
-  _$passkeyOperationCeremonyTypeEnum_cda,
-  _$passkeyOperationCeremonyTypeEnum_securityKey,
-]);
+_$passkeyOperationCeremonyTypeEnumValues =
+    new BuiltSet<PasskeyOperationCeremonyTypeEnum>(
+      const <PasskeyOperationCeremonyTypeEnum>[
+        _$passkeyOperationCeremonyTypeEnum_local,
+        _$passkeyOperationCeremonyTypeEnum_cda,
+        _$passkeyOperationCeremonyTypeEnum_securityKey,
+      ],
+    );
 
 Serializer<PasskeyOperationOperationTypeEnum>
-    _$passkeyOperationOperationTypeEnumSerializer =
+_$passkeyOperationOperationTypeEnumSerializer =
     new _$PasskeyOperationOperationTypeEnumSerializer();
 Serializer<PasskeyOperationCeremonyTypeEnum>
-    _$passkeyOperationCeremonyTypeEnumSerializer =
+_$passkeyOperationCeremonyTypeEnumSerializer =
     new _$PasskeyOperationCeremonyTypeEnumSerializer();
 
 class _$PasskeyOperationOperationTypeEnumSerializer
@@ -88,16 +94,19 @@ class _$PasskeyOperationOperationTypeEnumSerializer
 
   @override
   Object serialize(
-          Serializers serializers, PasskeyOperationOperationTypeEnum object,
-          {FullType specifiedType = FullType.unspecified}) =>
-      _toWire[object.name] ?? object.name;
+    Serializers serializers,
+    PasskeyOperationOperationTypeEnum object, {
+    FullType specifiedType = FullType.unspecified,
+  }) => _toWire[object.name] ?? object.name;
 
   @override
   PasskeyOperationOperationTypeEnum deserialize(
-          Serializers serializers, Object serialized,
-          {FullType specifiedType = FullType.unspecified}) =>
-      PasskeyOperationOperationTypeEnum.valueOf(
-          _fromWire[serialized] ?? (serialized is String ? serialized : ''));
+    Serializers serializers,
+    Object serialized, {
+    FullType specifiedType = FullType.unspecified,
+  }) => PasskeyOperationOperationTypeEnum.valueOf(
+    _fromWire[serialized] ?? (serialized is String ? serialized : ''),
+  );
 }
 
 class _$PasskeyOperationCeremonyTypeEnumSerializer
@@ -120,16 +129,19 @@ class _$PasskeyOperationCeremonyTypeEnumSerializer
 
   @override
   Object serialize(
-          Serializers serializers, PasskeyOperationCeremonyTypeEnum object,
-          {FullType specifiedType = FullType.unspecified}) =>
-      _toWire[object.name] ?? object.name;
+    Serializers serializers,
+    PasskeyOperationCeremonyTypeEnum object, {
+    FullType specifiedType = FullType.unspecified,
+  }) => _toWire[object.name] ?? object.name;
 
   @override
   PasskeyOperationCeremonyTypeEnum deserialize(
-          Serializers serializers, Object serialized,
-          {FullType specifiedType = FullType.unspecified}) =>
-      PasskeyOperationCeremonyTypeEnum.valueOf(
-          _fromWire[serialized] ?? (serialized is String ? serialized : ''));
+    Serializers serializers,
+    Object serialized, {
+    FullType specifiedType = FullType.unspecified,
+  }) => PasskeyOperationCeremonyTypeEnum.valueOf(
+    _fromWire[serialized] ?? (serialized is String ? serialized : ''),
+  );
 }
 
 class _$PasskeyOperation extends PasskeyOperation {
@@ -142,24 +154,36 @@ class _$PasskeyOperation extends PasskeyOperation {
   @override
   final PasskeyOperationCeremonyTypeEnum ceremonyType;
 
-  factory _$PasskeyOperation(
-          [void Function(PasskeyOperationBuilder)? updates]) =>
-      (new PasskeyOperationBuilder()..update(updates))._build();
+  factory _$PasskeyOperation([
+    void Function(PasskeyOperationBuilder)? updates,
+  ]) => (new PasskeyOperationBuilder()..update(updates))._build();
 
-  _$PasskeyOperation._(
-      {required this.operationType,
-      required this.identifierValue,
-      required this.identifierType,
-      required this.ceremonyType})
-      : super._() {
+  _$PasskeyOperation._({
+    required this.operationType,
+    required this.identifierValue,
+    required this.identifierType,
+    required this.ceremonyType,
+  }) : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        operationType, r'PasskeyOperation', 'operationType');
+      operationType,
+      r'PasskeyOperation',
+      'operationType',
+    );
     BuiltValueNullFieldError.checkNotNull(
-        identifierValue, r'PasskeyOperation', 'identifierValue');
+      identifierValue,
+      r'PasskeyOperation',
+      'identifierValue',
+    );
     BuiltValueNullFieldError.checkNotNull(
-        identifierType, r'PasskeyOperation', 'identifierType');
+      identifierType,
+      r'PasskeyOperation',
+      'identifierType',
+    );
     BuiltValueNullFieldError.checkNotNull(
-        ceremonyType, r'PasskeyOperation', 'ceremonyType');
+      ceremonyType,
+      r'PasskeyOperation',
+      'ceremonyType',
+    );
   }
 
   @override
@@ -257,16 +281,30 @@ class PasskeyOperationBuilder
   PasskeyOperation build() => _build();
 
   _$PasskeyOperation _build() {
-    final _$result = _$v ??
+    final _$result =
+        _$v ??
         new _$PasskeyOperation._(
-            operationType: BuiltValueNullFieldError.checkNotNull(
-                operationType, r'PasskeyOperation', 'operationType'),
-            identifierValue: BuiltValueNullFieldError.checkNotNull(
-                identifierValue, r'PasskeyOperation', 'identifierValue'),
-            identifierType: BuiltValueNullFieldError.checkNotNull(
-                identifierType, r'PasskeyOperation', 'identifierType'),
-            ceremonyType: BuiltValueNullFieldError.checkNotNull(
-                ceremonyType, r'PasskeyOperation', 'ceremonyType'));
+          operationType: BuiltValueNullFieldError.checkNotNull(
+            operationType,
+            r'PasskeyOperation',
+            'operationType',
+          ),
+          identifierValue: BuiltValueNullFieldError.checkNotNull(
+            identifierValue,
+            r'PasskeyOperation',
+            'identifierValue',
+          ),
+          identifierType: BuiltValueNullFieldError.checkNotNull(
+            identifierType,
+            r'PasskeyOperation',
+            'identifierType',
+          ),
+          ceremonyType: BuiltValueNullFieldError.checkNotNull(
+            ceremonyType,
+            r'PasskeyOperation',
+            'ceremonyType',
+          ),
+        );
     replace(_$result);
     return _$result;
   }

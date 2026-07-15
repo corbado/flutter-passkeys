@@ -14,25 +14,31 @@ class _$ConnectAppendStartReq extends ConnectAppendStartReq {
   @override
   final bool? forcePasskeyAppend;
 
-  factory _$ConnectAppendStartReq(
-          [void Function(ConnectAppendStartReqBuilder)? updates]) =>
-      (new ConnectAppendStartReqBuilder()..update(updates))._build();
+  factory _$ConnectAppendStartReq([
+    void Function(ConnectAppendStartReqBuilder)? updates,
+  ]) => (new ConnectAppendStartReqBuilder()..update(updates))._build();
 
-  _$ConnectAppendStartReq._(
-      {required this.appendTokenValue,
-      required this.loadedMs,
-      this.forcePasskeyAppend})
-      : super._() {
+  _$ConnectAppendStartReq._({
+    required this.appendTokenValue,
+    required this.loadedMs,
+    this.forcePasskeyAppend,
+  }) : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        appendTokenValue, r'ConnectAppendStartReq', 'appendTokenValue');
+      appendTokenValue,
+      r'ConnectAppendStartReq',
+      'appendTokenValue',
+    );
     BuiltValueNullFieldError.checkNotNull(
-        loadedMs, r'ConnectAppendStartReq', 'loadedMs');
+      loadedMs,
+      r'ConnectAppendStartReq',
+      'loadedMs',
+    );
   }
 
   @override
   ConnectAppendStartReq rebuild(
-          void Function(ConnectAppendStartReqBuilder) updates) =>
-      (toBuilder()..update(updates)).build();
+    void Function(ConnectAppendStartReqBuilder) updates,
+  ) => (toBuilder()..update(updates)).build();
 
   @override
   ConnectAppendStartReqBuilder toBuilder() =>
@@ -115,13 +121,21 @@ class ConnectAppendStartReqBuilder
   ConnectAppendStartReq build() => _build();
 
   _$ConnectAppendStartReq _build() {
-    final _$result = _$v ??
+    final _$result =
+        _$v ??
         new _$ConnectAppendStartReq._(
-            appendTokenValue: BuiltValueNullFieldError.checkNotNull(
-                appendTokenValue, r'ConnectAppendStartReq', 'appendTokenValue'),
-            loadedMs: BuiltValueNullFieldError.checkNotNull(
-                loadedMs, r'ConnectAppendStartReq', 'loadedMs'),
-            forcePasskeyAppend: forcePasskeyAppend);
+          appendTokenValue: BuiltValueNullFieldError.checkNotNull(
+            appendTokenValue,
+            r'ConnectAppendStartReq',
+            'appendTokenValue',
+          ),
+          loadedMs: BuiltValueNullFieldError.checkNotNull(
+            loadedMs,
+            r'ConnectAppendStartReq',
+            'loadedMs',
+          ),
+          forcePasskeyAppend: forcePasskeyAppend,
+        );
     replace(_$result);
     return _$result;
   }

@@ -1,42 +1,58 @@
+// ignore_for_file: library_prefixes
+
 import 'package:corbado_auth/corbado_auth.dart';
-import 'package:corbado_auth/src/blocks/email_verify_block.dart';
-import 'package:corbado_auth/src/blocks/types.dart';
-import 'package:corbado_auth/src/process_handler.dart';
 import 'package:corbado_auth/src/services/telemetry/telemetry.dart';
-import 'package:corbado_frontend_api_client/corbado_frontend_api_client.dart' as Api;
+import 'package:corbado_frontend_api_client/corbado_frontend_api_client.dart'
+    as Api;
 
+/// Data backing the passkey verification step of an authentication process.
 class PasskeyVerifyBlockData {
-  List<PasskeyFallback> availableFallbacks;
-  final String identifierValue;
-  PasskeyFallback? preferredFallback;
-  bool primaryLoading = false;
+  /// Creates the data describing the identifier and fallback options.
+  PasskeyVerifyBlockData({
+    required this.identifierValue,
+    this.availableFallbacks = const [],
+    this.preferredFallback,
+  });
 
-  factory PasskeyVerifyBlockData.fromProcessResponse(Api.GeneralBlockPasskeyVerify typed) {
+  /// Builds the data from a server [Api.GeneralBlockPasskeyVerify] response.
+  factory PasskeyVerifyBlockData.fromProcessResponse(
+    Api.GeneralBlockPasskeyVerify typed,
+  ) {
     return PasskeyVerifyBlockData(
       availableFallbacks: [],
       identifierValue: typed.identifierValue,
     );
   }
 
-  PasskeyVerifyBlockData({
-    this.availableFallbacks = const [],
-    required this.identifierValue,
-    this.preferredFallback,
-  });
+  /// The fallback verification options available to the user.
+  List<PasskeyFallback> availableFallbacks;
+
+  /// The identifier value (e.g. email) being verified.
+  final String identifierValue;
+
+  /// The fallback that should be used by default, if any.
+  PasskeyFallback? preferredFallback;
+
+  /// Whether the primary action is currently loading.
+  bool primaryLoading = false;
 }
 
+/// Block that drives the passkey verification step of an authentication
+/// process.
 class PasskeyVerifyBlock extends Block<PasskeyVerifyBlockData> {
-  PasskeyVerifyBlock({required ProcessHandler processHandler, required PasskeyVerifyBlockData data})
-      : super(
-          processHandler: processHandler,
-          initialScreen: ScreenNames.PasskeyVerify,
-          type: Api.BlockType.passkeyVerify,
-          alternatives: [],
-          data: data,
-          authProcessType: AuthProcessType.Login,
-        );
+  /// Creates the block with the given process handler and data.
+  PasskeyVerifyBlock({
+    required super.processHandler,
+    required super.data,
+  }) : super(
+         initialScreen: ScreenNames.PasskeyVerify,
+         type: Api.BlockType.passkeyVerify,
+         alternatives: [],
+         authProcessType: AuthProcessType.Login,
+       );
 
-  init() {
+  @override
+  void init() {
     data.availableFallbacks = alternatives.map((alternative) {
       switch (alternative.type) {
         case Api.BlockType.emailVerify:
@@ -53,6 +69,7 @@ class PasskeyVerifyBlock extends Block<PasskeyVerifyBlockData> {
         case Api.BlockType.phoneVerify:
           throw Exception('Currently not supported');
 
+        // ignore: no_default_cases
         default:
           throw Exception('Currently not supported');
       }
@@ -70,7 +87,8 @@ class PasskeyVerifyBlock extends Block<PasskeyVerifyBlockData> {
     passkeyVerify();
   }
 
-  passkeyVerify() async {
+  /// Verifies the user with an existing passkey.
+  Future<void> passkeyVerify() async {
     TelemetryService.instance.logMethodCalled(
       'passkeyVerify',
       'PasskeyVerifyBlock',
@@ -90,6 +108,7 @@ class PasskeyVerifyBlock extends Block<PasskeyVerifyBlockData> {
     }
   }
 
+  /// Starts the email one-time password fallback verification.
   Future<void> initFallbackEmailOtp() async {
     TelemetryService.instance.logMethodCalled(
       'initFallbackEmailOtp',

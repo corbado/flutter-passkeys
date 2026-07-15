@@ -22,9 +22,9 @@ abstract class MePasskeysAppendStartReq
 
   MePasskeysAppendStartReq._();
 
-  factory MePasskeysAppendStartReq(
-          [void updates(MePasskeysAppendStartReqBuilder b)]) =
-      _$MePasskeysAppendStartReq;
+  factory MePasskeysAppendStartReq([
+    void updates(MePasskeysAppendStartReqBuilder b),
+  ]) = _$MePasskeysAppendStartReq;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(MePasskeysAppendStartReqBuilder b) => b;
@@ -39,7 +39,7 @@ class _$MePasskeysAppendStartReqSerializer
   @override
   final Iterable<Type> types = const [
     MePasskeysAppendStartReq,
-    _$MePasskeysAppendStartReq
+    _$MePasskeysAppendStartReq,
   ];
 
   @override
@@ -63,9 +63,11 @@ class _$MePasskeysAppendStartReqSerializer
     MePasskeysAppendStartReq object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(
+      serializers,
+      object,
+      specifiedType: specifiedType,
+    ).toList();
   }
 
   void _deserializeProperties(
@@ -81,10 +83,12 @@ class _$MePasskeysAppendStartReqSerializer
       final value = serializedList[i + 1];
       switch (key) {
         case r'clientInformation':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(ClientInformation),
-          ) as ClientInformation;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(ClientInformation),
+                  )
+                  as ClientInformation;
           result.clientInformation.replace(valueDes);
           break;
         default:

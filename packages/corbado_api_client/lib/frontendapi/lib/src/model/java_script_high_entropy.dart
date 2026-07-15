@@ -28,8 +28,9 @@ abstract class JavaScriptHighEntropy
 
   JavaScriptHighEntropy._();
 
-  factory JavaScriptHighEntropy(
-      [void updates(JavaScriptHighEntropyBuilder b)]) = _$JavaScriptHighEntropy;
+  factory JavaScriptHighEntropy([
+    void updates(JavaScriptHighEntropyBuilder b),
+  ]) = _$JavaScriptHighEntropy;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(JavaScriptHighEntropyBuilder b) => b;
@@ -44,7 +45,7 @@ class _$JavaScriptHighEntropySerializer
   @override
   final Iterable<Type> types = const [
     JavaScriptHighEntropy,
-    _$JavaScriptHighEntropy
+    _$JavaScriptHighEntropy,
   ];
 
   @override
@@ -78,9 +79,11 @@ class _$JavaScriptHighEntropySerializer
     JavaScriptHighEntropy object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(
+      serializers,
+      object,
+      specifiedType: specifiedType,
+    ).toList();
   }
 
   void _deserializeProperties(
@@ -96,24 +99,30 @@ class _$JavaScriptHighEntropySerializer
       final value = serializedList[i + 1];
       switch (key) {
         case r'platform':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(String),
-          ) as String;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(String),
+                  )
+                  as String;
           result.platform = valueDes;
           break;
         case r'platformVersion':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(String),
-          ) as String;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(String),
+                  )
+                  as String;
           result.platformVersion = valueDes;
           break;
         case r'mobile':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(bool),
-          ) as bool;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(bool),
+                  )
+                  as bool;
           result.mobile = valueDes;
           break;
         default:

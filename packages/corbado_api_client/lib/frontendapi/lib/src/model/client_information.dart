@@ -150,9 +150,11 @@ class _$ClientInformationSerializer
     ClientInformation object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(
+      serializers,
+      object,
+      specifiedType: specifiedType,
+    ).toList();
   }
 
   void _deserializeProperties(
@@ -168,66 +170,84 @@ class _$ClientInformationSerializer
       final value = serializedList[i + 1];
       switch (key) {
         case r'bluetoothAvailable':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(bool),
-          ) as bool;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(bool),
+                  )
+                  as bool;
           result.bluetoothAvailable = valueDes;
           break;
         case r'clientEnvHandle':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(String),
-          ) as String;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(String),
+                  )
+                  as String;
           result.clientEnvHandle = valueDes;
           break;
         case r'visitorId':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(String),
-          ) as String;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(String),
+                  )
+                  as String;
           result.visitorId = valueDes;
           break;
         case r'canUsePasskeys':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(bool),
-          ) as bool;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(bool),
+                  )
+                  as bool;
           result.canUsePasskeys = valueDes;
           break;
         case r'isUserVerifyingPlatformAuthenticatorAvailable':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(bool),
-          ) as bool;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(bool),
+                  )
+                  as bool;
           result.isUserVerifyingPlatformAuthenticatorAvailable = valueDes;
           break;
         case r'isConditionalMediationAvailable':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(bool),
-          ) as bool;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(bool),
+                  )
+                  as bool;
           result.isConditionalMediationAvailable = valueDes;
           break;
         case r'clientCapabilities':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(ClientCapabilities),
-          ) as ClientCapabilities;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(ClientCapabilities),
+                  )
+                  as ClientCapabilities;
           result.clientCapabilities.replace(valueDes);
           break;
         case r'javaScriptHighEntropy':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(JavaScriptHighEntropy),
-          ) as JavaScriptHighEntropy;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(JavaScriptHighEntropy),
+                  )
+                  as JavaScriptHighEntropy;
           result.javaScriptHighEntropy.replace(valueDes);
           break;
         case r'isNative':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(bool),
-          ) as bool;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(bool),
+                  )
+                  as bool;
           result.isNative = valueDes;
           break;
         default:

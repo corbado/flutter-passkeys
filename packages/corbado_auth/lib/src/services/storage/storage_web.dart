@@ -13,6 +13,7 @@ const _clientEnvHandleKey = 'client_env_handle';
 /// - refreshToken (longSession)
 /// - user (shortSession)
 class WebStorageService implements StorageService {
+  /// Creates a [WebStorageService] scoped to the given project id.
   WebStorageService(this._projectId);
 
   final String _projectId;
@@ -34,9 +35,9 @@ class WebStorageService implements StorageService {
   /// Sets the refresh token
   @override
   Future<void> setRefreshToken(String value) async => _put(
-        _refreshTokenKey,
-        value,
-      );
+    _refreshTokenKey,
+    value,
+  );
 
   /// Returns the user if it has been set
   @override
@@ -64,16 +65,16 @@ class WebStorageService implements StorageService {
   /// Sets the front end API URL
   @override
   Future<void> setFrontEndApiUrl(String value) async => _put(
-        _frontEndApiUrlKey,
-        value,
-      );
+    _frontEndApiUrlKey,
+    value,
+  );
 
   /// Sets the client environment handle
   @override
   Future<void> setClientEnvHandle(String value) async => _put(
-        _clientEnvHandleKey,
-        value,
-      );
+    _clientEnvHandleKey,
+    value,
+  );
 
   /// Returns the client environment handle if it has been set
   @override

@@ -18,27 +18,33 @@ class _$GeneralBlockSignupInit extends GeneralBlockSignupInit {
   @override
   final RequestError? error;
 
-  factory _$GeneralBlockSignupInit(
-          [void Function(GeneralBlockSignupInitBuilder)? updates]) =>
-      (new GeneralBlockSignupInitBuilder()..update(updates))._build();
+  factory _$GeneralBlockSignupInit([
+    void Function(GeneralBlockSignupInitBuilder)? updates,
+  ]) => (new GeneralBlockSignupInitBuilder()..update(updates))._build();
 
-  _$GeneralBlockSignupInit._(
-      {required this.blockType,
-      required this.identifiers,
-      this.fullName,
-      this.socialData,
-      this.error})
-      : super._() {
+  _$GeneralBlockSignupInit._({
+    required this.blockType,
+    required this.identifiers,
+    this.fullName,
+    this.socialData,
+    this.error,
+  }) : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        blockType, r'GeneralBlockSignupInit', 'blockType');
+      blockType,
+      r'GeneralBlockSignupInit',
+      'blockType',
+    );
     BuiltValueNullFieldError.checkNotNull(
-        identifiers, r'GeneralBlockSignupInit', 'identifiers');
+      identifiers,
+      r'GeneralBlockSignupInit',
+      'identifiers',
+    );
   }
 
   @override
   GeneralBlockSignupInit rebuild(
-          void Function(GeneralBlockSignupInitBuilder) updates) =>
-      (toBuilder()..update(updates)).build();
+    void Function(GeneralBlockSignupInitBuilder) updates,
+  ) => (toBuilder()..update(updates)).build();
 
   @override
   GeneralBlockSignupInitBuilder toBuilder() =>
@@ -143,14 +149,19 @@ class GeneralBlockSignupInitBuilder
   _$GeneralBlockSignupInit _build() {
     _$GeneralBlockSignupInit _$result;
     try {
-      _$result = _$v ??
+      _$result =
+          _$v ??
           new _$GeneralBlockSignupInit._(
-              blockType: BuiltValueNullFieldError.checkNotNull(
-                  blockType, r'GeneralBlockSignupInit', 'blockType'),
-              identifiers: identifiers.build(),
-              fullName: _fullName?.build(),
-              socialData: _socialData?.build(),
-              error: _error?.build());
+            blockType: BuiltValueNullFieldError.checkNotNull(
+              blockType,
+              r'GeneralBlockSignupInit',
+              'blockType',
+            ),
+            identifiers: identifiers.build(),
+            fullName: _fullName?.build(),
+            socialData: _socialData?.build(),
+            error: _error?.build(),
+          );
     } catch (_) {
       late String _$failedField;
       try {
@@ -164,7 +175,10 @@ class GeneralBlockSignupInitBuilder
         _error?.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            r'GeneralBlockSignupInit', _$failedField, e.toString());
+          r'GeneralBlockSignupInit',
+          _$failedField,
+          e.toString(),
+        );
       }
       rethrow;
     }

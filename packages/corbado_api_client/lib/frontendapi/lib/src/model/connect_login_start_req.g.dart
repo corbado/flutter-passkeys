@@ -9,17 +9,18 @@ part of 'connect_login_start_req.dart';
 const ConnectLoginStartReqSource_Enum _$connectLoginStartReqSourceEnum_oneTap =
     const ConnectLoginStartReqSource_Enum._('oneTap');
 const ConnectLoginStartReqSource_Enum
-    _$connectLoginStartReqSourceEnum_textField =
+_$connectLoginStartReqSourceEnum_textField =
     const ConnectLoginStartReqSource_Enum._('textField');
 const ConnectLoginStartReqSource_Enum
-    _$connectLoginStartReqSourceEnum_errorSoft =
+_$connectLoginStartReqSourceEnum_errorSoft =
     const ConnectLoginStartReqSource_Enum._('errorSoft');
 const ConnectLoginStartReqSource_Enum
-    _$connectLoginStartReqSourceEnum_errorHard =
+_$connectLoginStartReqSourceEnum_errorHard =
     const ConnectLoginStartReqSource_Enum._('errorHard');
 
 ConnectLoginStartReqSource_Enum _$connectLoginStartReqSourceEnumValueOf(
-    String name) {
+  String name,
+) {
   switch (name) {
     case 'oneTap':
       return _$connectLoginStartReqSourceEnum_oneTap;
@@ -35,16 +36,18 @@ ConnectLoginStartReqSource_Enum _$connectLoginStartReqSourceEnumValueOf(
 }
 
 final BuiltSet<ConnectLoginStartReqSource_Enum>
-    _$connectLoginStartReqSourceEnumValues = new BuiltSet<
-        ConnectLoginStartReqSource_Enum>(const <ConnectLoginStartReqSource_Enum>[
-  _$connectLoginStartReqSourceEnum_oneTap,
-  _$connectLoginStartReqSourceEnum_textField,
-  _$connectLoginStartReqSourceEnum_errorSoft,
-  _$connectLoginStartReqSourceEnum_errorHard,
-]);
+_$connectLoginStartReqSourceEnumValues =
+    new BuiltSet<ConnectLoginStartReqSource_Enum>(
+      const <ConnectLoginStartReqSource_Enum>[
+        _$connectLoginStartReqSourceEnum_oneTap,
+        _$connectLoginStartReqSourceEnum_textField,
+        _$connectLoginStartReqSourceEnum_errorSoft,
+        _$connectLoginStartReqSourceEnum_errorHard,
+      ],
+    );
 
 Serializer<ConnectLoginStartReqSource_Enum>
-    _$connectLoginStartReqSourceEnumSerializer =
+_$connectLoginStartReqSourceEnumSerializer =
     new _$ConnectLoginStartReqSource_EnumSerializer();
 
 class _$ConnectLoginStartReqSource_EnumSerializer
@@ -69,16 +72,19 @@ class _$ConnectLoginStartReqSource_EnumSerializer
 
   @override
   Object serialize(
-          Serializers serializers, ConnectLoginStartReqSource_Enum object,
-          {FullType specifiedType = FullType.unspecified}) =>
-      _toWire[object.name] ?? object.name;
+    Serializers serializers,
+    ConnectLoginStartReqSource_Enum object, {
+    FullType specifiedType = FullType.unspecified,
+  }) => _toWire[object.name] ?? object.name;
 
   @override
   ConnectLoginStartReqSource_Enum deserialize(
-          Serializers serializers, Object serialized,
-          {FullType specifiedType = FullType.unspecified}) =>
-      ConnectLoginStartReqSource_Enum.valueOf(
-          _fromWire[serialized] ?? (serialized is String ? serialized : ''));
+    Serializers serializers,
+    Object serialized, {
+    FullType specifiedType = FullType.unspecified,
+  }) => ConnectLoginStartReqSource_Enum.valueOf(
+    _fromWire[serialized] ?? (serialized is String ? serialized : ''),
+  );
 }
 
 class _$ConnectLoginStartReq extends ConnectLoginStartReq {
@@ -89,25 +95,36 @@ class _$ConnectLoginStartReq extends ConnectLoginStartReq {
   @override
   final int loadedMs;
 
-  factory _$ConnectLoginStartReq(
-          [void Function(ConnectLoginStartReqBuilder)? updates]) =>
-      (new ConnectLoginStartReqBuilder()..update(updates))._build();
+  factory _$ConnectLoginStartReq([
+    void Function(ConnectLoginStartReqBuilder)? updates,
+  ]) => (new ConnectLoginStartReqBuilder()..update(updates))._build();
 
-  _$ConnectLoginStartReq._(
-      {required this.identifier, required this.source_, required this.loadedMs})
-      : super._() {
+  _$ConnectLoginStartReq._({
+    required this.identifier,
+    required this.source_,
+    required this.loadedMs,
+  }) : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        identifier, r'ConnectLoginStartReq', 'identifier');
+      identifier,
+      r'ConnectLoginStartReq',
+      'identifier',
+    );
     BuiltValueNullFieldError.checkNotNull(
-        source_, r'ConnectLoginStartReq', 'source_');
+      source_,
+      r'ConnectLoginStartReq',
+      'source_',
+    );
     BuiltValueNullFieldError.checkNotNull(
-        loadedMs, r'ConnectLoginStartReq', 'loadedMs');
+      loadedMs,
+      r'ConnectLoginStartReq',
+      'loadedMs',
+    );
   }
 
   @override
   ConnectLoginStartReq rebuild(
-          void Function(ConnectLoginStartReqBuilder) updates) =>
-      (toBuilder()..update(updates)).build();
+    void Function(ConnectLoginStartReqBuilder) updates,
+  ) => (toBuilder()..update(updates)).build();
 
   @override
   ConnectLoginStartReqBuilder toBuilder() =>
@@ -189,14 +206,25 @@ class ConnectLoginStartReqBuilder
   ConnectLoginStartReq build() => _build();
 
   _$ConnectLoginStartReq _build() {
-    final _$result = _$v ??
+    final _$result =
+        _$v ??
         new _$ConnectLoginStartReq._(
-            identifier: BuiltValueNullFieldError.checkNotNull(
-                identifier, r'ConnectLoginStartReq', 'identifier'),
-            source_: BuiltValueNullFieldError.checkNotNull(
-                source_, r'ConnectLoginStartReq', 'source_'),
-            loadedMs: BuiltValueNullFieldError.checkNotNull(
-                loadedMs, r'ConnectLoginStartReq', 'loadedMs'));
+          identifier: BuiltValueNullFieldError.checkNotNull(
+            identifier,
+            r'ConnectLoginStartReq',
+            'identifier',
+          ),
+          source_: BuiltValueNullFieldError.checkNotNull(
+            source_,
+            r'ConnectLoginStartReq',
+            'source_',
+          ),
+          loadedMs: BuiltValueNullFieldError.checkNotNull(
+            loadedMs,
+            r'ConnectLoginStartReq',
+            'loadedMs',
+          ),
+        );
     replace(_$result);
     return _$result;
   }

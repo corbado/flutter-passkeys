@@ -10,19 +10,22 @@ class _$ConnectAppendFinishReq extends ConnectAppendFinishReq {
   @override
   final String attestationResponse;
 
-  factory _$ConnectAppendFinishReq(
-          [void Function(ConnectAppendFinishReqBuilder)? updates]) =>
-      (new ConnectAppendFinishReqBuilder()..update(updates))._build();
+  factory _$ConnectAppendFinishReq([
+    void Function(ConnectAppendFinishReqBuilder)? updates,
+  ]) => (new ConnectAppendFinishReqBuilder()..update(updates))._build();
 
   _$ConnectAppendFinishReq._({required this.attestationResponse}) : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        attestationResponse, r'ConnectAppendFinishReq', 'attestationResponse');
+      attestationResponse,
+      r'ConnectAppendFinishReq',
+      'attestationResponse',
+    );
   }
 
   @override
   ConnectAppendFinishReq rebuild(
-          void Function(ConnectAppendFinishReqBuilder) updates) =>
-      (toBuilder()..update(updates)).build();
+    void Function(ConnectAppendFinishReqBuilder) updates,
+  ) => (toBuilder()..update(updates)).build();
 
   @override
   ConnectAppendFinishReqBuilder toBuilder() =>
@@ -45,9 +48,9 @@ class _$ConnectAppendFinishReq extends ConnectAppendFinishReq {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper(r'ConnectAppendFinishReq')
-          ..add('attestationResponse', attestationResponse))
-        .toString();
+    return (newBuiltValueToStringHelper(
+      r'ConnectAppendFinishReq',
+    )..add('attestationResponse', attestationResponse)).toString();
   }
 }
 
@@ -88,12 +91,15 @@ class ConnectAppendFinishReqBuilder
   ConnectAppendFinishReq build() => _build();
 
   _$ConnectAppendFinishReq _build() {
-    final _$result = _$v ??
+    final _$result =
+        _$v ??
         new _$ConnectAppendFinishReq._(
-            attestationResponse: BuiltValueNullFieldError.checkNotNull(
-                attestationResponse,
-                r'ConnectAppendFinishReq',
-                'attestationResponse'));
+          attestationResponse: BuiltValueNullFieldError.checkNotNull(
+            attestationResponse,
+            r'ConnectAppendFinishReq',
+            'attestationResponse',
+          ),
+        );
     replace(_$result);
     return _$result;
   }

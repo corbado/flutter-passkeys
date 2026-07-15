@@ -3,22 +3,13 @@
 //
 
 // ignore_for_file: unused_element
-import 'package:corbado_frontend_api_client/src/model/social_data.dart';
 import 'package:corbado_frontend_api_client/src/model/general_block_login_init.dart';
-import 'package:corbado_frontend_api_client/src/model/general_block_verify_identifier_alternative_verification_methods_inner.dart';
-import 'package:corbado_frontend_api_client/src/model/full_name_with_error.dart';
 import 'package:corbado_frontend_api_client/src/model/general_block_passkey_append.dart';
-import 'package:corbado_frontend_api_client/src/model/login_identifier_with_error.dart';
-import 'package:corbado_frontend_api_client/src/model/passkey_icon_set.dart';
-import 'package:corbado_frontend_api_client/src/model/verification_method.dart';
-import 'package:corbado_frontend_api_client/src/model/passkey_operation.dart';
 import 'package:corbado_frontend_api_client/src/model/general_block_completed.dart';
 import 'package:corbado_frontend_api_client/src/model/general_block_verify_identifier.dart';
 import 'package:corbado_frontend_api_client/src/model/general_block_passkey_appended.dart';
 import 'package:corbado_frontend_api_client/src/model/general_block_signup_init.dart';
 import 'package:built_collection/built_collection.dart';
-import 'package:corbado_frontend_api_client/src/model/request_error.dart';
-import 'package:corbado_frontend_api_client/src/model/login_identifier_type.dart';
 import 'package:corbado_frontend_api_client/src/model/general_block_passkey_verify.dart';
 import 'package:corbado_frontend_api_client/src/model/general_block_post_signup_email_verify.dart';
 import 'package:built_value/built_value.dart';
@@ -157,9 +148,8 @@ class _$BlockBodyDataSerializer implements PrimitiveSerializer<BlockBodyData> {
 
   Iterable<Object?> _serializeProperties(
     Serializers serializers,
-    BlockBodyData object, {
-    FullType specifiedType = FullType.unspecified,
-  }) sync* {}
+    BlockBodyData object,
+  ) sync* {}
 
   @override
   Object serialize(
@@ -168,8 +158,10 @@ class _$BlockBodyDataSerializer implements PrimitiveSerializer<BlockBodyData> {
     FullType specifiedType = FullType.unspecified,
   }) {
     final oneOf = object.oneOf;
-    return serializers.serialize(oneOf.value,
-        specifiedType: FullType(oneOf.valueType))!;
+    return serializers.serialize(
+      oneOf.value,
+      specifiedType: FullType(oneOf.valueType),
+    )!;
   }
 
   @override
@@ -183,8 +175,12 @@ class _$BlockBodyDataSerializer implements PrimitiveSerializer<BlockBodyData> {
     final serializedList = (serialized as Iterable<Object?>).toList();
     final discIndex =
         serializedList.indexOf(BlockBodyData.discriminatorFieldName) + 1;
-    final discValue = serializers.deserialize(serializedList[discIndex],
-        specifiedType: FullType(String)) as String;
+    final discValue =
+        serializers.deserialize(
+              serializedList[discIndex],
+              specifiedType: FullType(String),
+            )
+            as String;
     oneOfDataSrc = serialized;
     final oneOfTypes = [
       GeneralBlockCompleted,
@@ -200,69 +196,87 @@ class _$BlockBodyDataSerializer implements PrimitiveSerializer<BlockBodyData> {
     Type oneOfType;
     switch (discValue) {
       case r'generalBlockCompleted':
-        oneOfResult = serializers.deserialize(
-          oneOfDataSrc,
-          specifiedType: FullType(GeneralBlockCompleted),
-        ) as GeneralBlockCompleted;
+        oneOfResult =
+            serializers.deserialize(
+                  oneOfDataSrc,
+                  specifiedType: FullType(GeneralBlockCompleted),
+                )
+                as GeneralBlockCompleted;
         oneOfType = GeneralBlockCompleted;
         break;
       case r'generalBlockLoginInit':
-        oneOfResult = serializers.deserialize(
-          oneOfDataSrc,
-          specifiedType: FullType(GeneralBlockLoginInit),
-        ) as GeneralBlockLoginInit;
+        oneOfResult =
+            serializers.deserialize(
+                  oneOfDataSrc,
+                  specifiedType: FullType(GeneralBlockLoginInit),
+                )
+                as GeneralBlockLoginInit;
         oneOfType = GeneralBlockLoginInit;
         break;
       case r'generalBlockPasskeyAppend':
-        oneOfResult = serializers.deserialize(
-          oneOfDataSrc,
-          specifiedType: FullType(GeneralBlockPasskeyAppend),
-        ) as GeneralBlockPasskeyAppend;
+        oneOfResult =
+            serializers.deserialize(
+                  oneOfDataSrc,
+                  specifiedType: FullType(GeneralBlockPasskeyAppend),
+                )
+                as GeneralBlockPasskeyAppend;
         oneOfType = GeneralBlockPasskeyAppend;
         break;
       case r'generalBlockPasskeyAppended':
-        oneOfResult = serializers.deserialize(
-          oneOfDataSrc,
-          specifiedType: FullType(GeneralBlockPasskeyAppended),
-        ) as GeneralBlockPasskeyAppended;
+        oneOfResult =
+            serializers.deserialize(
+                  oneOfDataSrc,
+                  specifiedType: FullType(GeneralBlockPasskeyAppended),
+                )
+                as GeneralBlockPasskeyAppended;
         oneOfType = GeneralBlockPasskeyAppended;
         break;
       case r'generalBlockPasskeyVerify':
-        oneOfResult = serializers.deserialize(
-          oneOfDataSrc,
-          specifiedType: FullType(GeneralBlockPasskeyVerify),
-        ) as GeneralBlockPasskeyVerify;
+        oneOfResult =
+            serializers.deserialize(
+                  oneOfDataSrc,
+                  specifiedType: FullType(GeneralBlockPasskeyVerify),
+                )
+                as GeneralBlockPasskeyVerify;
         oneOfType = GeneralBlockPasskeyVerify;
         break;
       case r'generalBlockPostSignupEmailVerify':
-        oneOfResult = serializers.deserialize(
-          oneOfDataSrc,
-          specifiedType: FullType(GeneralBlockPostSignupEmailVerify),
-        ) as GeneralBlockPostSignupEmailVerify;
+        oneOfResult =
+            serializers.deserialize(
+                  oneOfDataSrc,
+                  specifiedType: FullType(GeneralBlockPostSignupEmailVerify),
+                )
+                as GeneralBlockPostSignupEmailVerify;
         oneOfType = GeneralBlockPostSignupEmailVerify;
         break;
       case r'generalBlockSignupInit':
-        oneOfResult = serializers.deserialize(
-          oneOfDataSrc,
-          specifiedType: FullType(GeneralBlockSignupInit),
-        ) as GeneralBlockSignupInit;
+        oneOfResult =
+            serializers.deserialize(
+                  oneOfDataSrc,
+                  specifiedType: FullType(GeneralBlockSignupInit),
+                )
+                as GeneralBlockSignupInit;
         oneOfType = GeneralBlockSignupInit;
         break;
       case r'generalBlockVerifyIdentifier':
-        oneOfResult = serializers.deserialize(
-          oneOfDataSrc,
-          specifiedType: FullType(GeneralBlockVerifyIdentifier),
-        ) as GeneralBlockVerifyIdentifier;
+        oneOfResult =
+            serializers.deserialize(
+                  oneOfDataSrc,
+                  specifiedType: FullType(GeneralBlockVerifyIdentifier),
+                )
+                as GeneralBlockVerifyIdentifier;
         oneOfType = GeneralBlockVerifyIdentifier;
         break;
       default:
         throw UnsupportedError(
-            "Couldn't deserialize oneOf for the discriminator value: ${discValue}");
+          "Couldn't deserialize oneOf for the discriminator value: ${discValue}",
+        );
     }
     result.oneOf = OneOfDynamic(
-        typeIndex: oneOfTypes.indexOf(oneOfType),
-        types: oneOfTypes,
-        value: oneOfResult);
+      typeIndex: oneOfTypes.indexOf(oneOfType),
+      types: oneOfTypes,
+      value: oneOfResult,
+    );
     return result.build();
   }
 }

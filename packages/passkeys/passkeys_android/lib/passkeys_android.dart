@@ -6,8 +6,9 @@ import 'package:passkeys_platform_interface/types/types.dart';
 /// The Android implementation of [PasskeysPlatform].
 class PasskeysAndroid extends PasskeysPlatform {
   /// The method channel used to interact with the native platform.
-  PasskeysAndroid({@visibleForTesting PasskeysApi? api})
-    : _api = api ?? PasskeysApi();
+  PasskeysAndroid({
+    @visibleForTesting PasskeysApi? api,
+  }) : _api = api ?? PasskeysApi();
 
   /// Registers this class as the default instance of [PasskeysPlatform]
   static void registerWith() => PasskeysPlatform.instance = PasskeysAndroid();
@@ -27,7 +28,7 @@ class PasskeysAndroid extends PasskeysPlatform {
         return AllowCredential(
           id: e.id,
           type: e.type,
-          transports: e.transports ?? [],
+          transports: e.transports,
         );
       }).toList(),
       request.preferImmediatelyAvailableCredentials,
@@ -114,7 +115,8 @@ class PasskeysAndroid extends PasskeysPlatform {
     return _api.cancelCurrentAuthenticatorOperation();
   }
 
-  // In case of android we link passkey support to the availability of the biometric authentication
+  // In case of android we link passkey support to the availability of the
+  // biometric authentication
   @override
   Future<AvailabilityTypeAndroid> getAvailability() async {
     final isUserVerifyingPlatformAuthenticatorAvailable =

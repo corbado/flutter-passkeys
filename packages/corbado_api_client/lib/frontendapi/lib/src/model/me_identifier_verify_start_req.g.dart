@@ -12,23 +12,30 @@ class _$MeIdentifierVerifyStartReq extends MeIdentifierVerifyStartReq {
   @override
   final ClientInformation clientInformation;
 
-  factory _$MeIdentifierVerifyStartReq(
-          [void Function(MeIdentifierVerifyStartReqBuilder)? updates]) =>
-      (new MeIdentifierVerifyStartReqBuilder()..update(updates))._build();
+  factory _$MeIdentifierVerifyStartReq([
+    void Function(MeIdentifierVerifyStartReqBuilder)? updates,
+  ]) => (new MeIdentifierVerifyStartReqBuilder()..update(updates))._build();
 
-  _$MeIdentifierVerifyStartReq._(
-      {required this.identifierID, required this.clientInformation})
-      : super._() {
+  _$MeIdentifierVerifyStartReq._({
+    required this.identifierID,
+    required this.clientInformation,
+  }) : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        identifierID, r'MeIdentifierVerifyStartReq', 'identifierID');
+      identifierID,
+      r'MeIdentifierVerifyStartReq',
+      'identifierID',
+    );
     BuiltValueNullFieldError.checkNotNull(
-        clientInformation, r'MeIdentifierVerifyStartReq', 'clientInformation');
+      clientInformation,
+      r'MeIdentifierVerifyStartReq',
+      'clientInformation',
+    );
   }
 
   @override
   MeIdentifierVerifyStartReq rebuild(
-          void Function(MeIdentifierVerifyStartReqBuilder) updates) =>
-      (toBuilder()..update(updates)).build();
+    void Function(MeIdentifierVerifyStartReqBuilder) updates,
+  ) => (toBuilder()..update(updates)).build();
 
   @override
   MeIdentifierVerifyStartReqBuilder toBuilder() =>
@@ -106,11 +113,16 @@ class MeIdentifierVerifyStartReqBuilder
   _$MeIdentifierVerifyStartReq _build() {
     _$MeIdentifierVerifyStartReq _$result;
     try {
-      _$result = _$v ??
+      _$result =
+          _$v ??
           new _$MeIdentifierVerifyStartReq._(
-              identifierID: BuiltValueNullFieldError.checkNotNull(
-                  identifierID, r'MeIdentifierVerifyStartReq', 'identifierID'),
-              clientInformation: clientInformation.build());
+            identifierID: BuiltValueNullFieldError.checkNotNull(
+              identifierID,
+              r'MeIdentifierVerifyStartReq',
+              'identifierID',
+            ),
+            clientInformation: clientInformation.build(),
+          );
     } catch (_) {
       late String _$failedField;
       try {
@@ -118,7 +130,10 @@ class MeIdentifierVerifyStartReqBuilder
         clientInformation.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            r'MeIdentifierVerifyStartReq', _$failedField, e.toString());
+          r'MeIdentifierVerifyStartReq',
+          _$failedField,
+          e.toString(),
+        );
       }
       rethrow;
     }

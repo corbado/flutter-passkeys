@@ -14,4 +14,7 @@ PubKeyCredParamType _$PubKeyCredParamTypeFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$PubKeyCredParamTypeToJson(
   PubKeyCredParamType instance,
-) => <String, dynamic>{'type': instance.type, 'alg': instance.alg};
+) => <String, dynamic>{
+  'type': instance.type,
+  'alg': instance.alg,
+};

@@ -54,16 +54,10 @@ class UsersApi {
     final _path = r'/v2/me';
     final _options = Options(
       method: r'DELETE',
-      headers: <String, dynamic>{
-        ...?headers,
-      },
+      headers: <String, dynamic>{...?headers},
       extra: <String, dynamic>{
         'secure': <Map<String, String>>[
-          {
-            'type': 'http',
-            'scheme': 'bearer',
-            'name': 'bearerAuth',
-          },
+          {'type': 'http', 'scheme': 'bearer', 'name': 'bearerAuth'},
           {
             'type': 'apiKey',
             'name': 'projectID',
@@ -91,9 +85,10 @@ class UsersApi {
       _responseData = rawResponse == null
           ? null
           : _serializers.deserialize(
-              rawResponse,
-              specifiedType: const FullType(GenericRsp),
-            ) as GenericRsp;
+                  rawResponse,
+                  specifiedType: const FullType(GenericRsp),
+                )
+                as GenericRsp;
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _response.requestOptions,
@@ -140,16 +135,10 @@ class UsersApi {
     final _path = r'/v2/me';
     final _options = Options(
       method: r'GET',
-      headers: <String, dynamic>{
-        ...?headers,
-      },
+      headers: <String, dynamic>{...?headers},
       extra: <String, dynamic>{
         'secure': <Map<String, String>>[
-          {
-            'type': 'http',
-            'scheme': 'bearer',
-            'name': 'bearerAuth',
-          },
+          {'type': 'http', 'scheme': 'bearer', 'name': 'bearerAuth'},
           {
             'type': 'apiKey',
             'name': 'projectID',
@@ -177,9 +166,10 @@ class UsersApi {
       _responseData = rawResponse == null
           ? null
           : _serializers.deserialize(
-              rawResponse,
-              specifiedType: const FullType(MeRsp),
-            ) as MeRsp;
+                  rawResponse,
+                  specifiedType: const FullType(MeRsp),
+                )
+                as MeRsp;
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _response.requestOptions,
@@ -228,16 +218,10 @@ class UsersApi {
     final _path = r'/v2/me/identifier';
     final _options = Options(
       method: r'POST',
-      headers: <String, dynamic>{
-        ...?headers,
-      },
+      headers: <String, dynamic>{...?headers},
       extra: <String, dynamic>{
         'secure': <Map<String, String>>[
-          {
-            'type': 'http',
-            'scheme': 'bearer',
-            'name': 'bearerAuth',
-          },
+          {'type': 'http', 'scheme': 'bearer', 'name': 'bearerAuth'},
           {
             'type': 'apiKey',
             'name': 'projectID',
@@ -255,14 +239,13 @@ class UsersApi {
 
     try {
       const _type = FullType(MeIdentifierCreateReq);
-      _bodyData =
-          _serializers.serialize(meIdentifierCreateReq, specifiedType: _type);
+      _bodyData = _serializers.serialize(
+        meIdentifierCreateReq,
+        specifiedType: _type,
+      );
     } catch (error, stackTrace) {
       throw DioException(
-        requestOptions: _options.compose(
-          _dio.options,
-          _path,
-        ),
+        requestOptions: _options.compose(_dio.options, _path),
         type: DioExceptionType.unknown,
         error: error,
         stackTrace: stackTrace,
@@ -285,9 +268,10 @@ class UsersApi {
       _responseData = rawResponse == null
           ? null
           : _serializers.deserialize(
-              rawResponse,
-              specifiedType: const FullType(GenericRsp),
-            ) as GenericRsp;
+                  rawResponse,
+                  specifiedType: const FullType(GenericRsp),
+                )
+                as GenericRsp;
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _response.requestOptions,
@@ -336,16 +320,10 @@ class UsersApi {
     final _path = r'/v2/me/identifier';
     final _options = Options(
       method: r'DELETE',
-      headers: <String, dynamic>{
-        ...?headers,
-      },
+      headers: <String, dynamic>{...?headers},
       extra: <String, dynamic>{
         'secure': <Map<String, String>>[
-          {
-            'type': 'http',
-            'scheme': 'bearer',
-            'name': 'bearerAuth',
-          },
+          {'type': 'http', 'scheme': 'bearer', 'name': 'bearerAuth'},
           {
             'type': 'apiKey',
             'name': 'projectID',
@@ -363,14 +341,13 @@ class UsersApi {
 
     try {
       const _type = FullType(MeIdentifierDeleteReq);
-      _bodyData =
-          _serializers.serialize(meIdentifierDeleteReq, specifiedType: _type);
+      _bodyData = _serializers.serialize(
+        meIdentifierDeleteReq,
+        specifiedType: _type,
+      );
     } catch (error, stackTrace) {
       throw DioException(
-        requestOptions: _options.compose(
-          _dio.options,
-          _path,
-        ),
+        requestOptions: _options.compose(_dio.options, _path),
         type: DioExceptionType.unknown,
         error: error,
         stackTrace: stackTrace,
@@ -393,9 +370,10 @@ class UsersApi {
       _responseData = rawResponse == null
           ? null
           : _serializers.deserialize(
-              rawResponse,
-              specifiedType: const FullType(GenericRsp),
-            ) as GenericRsp;
+                  rawResponse,
+                  specifiedType: const FullType(GenericRsp),
+                )
+                as GenericRsp;
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _response.requestOptions,
@@ -444,16 +422,10 @@ class UsersApi {
     final _path = r'/v2/me/identifier';
     final _options = Options(
       method: r'PATCH',
-      headers: <String, dynamic>{
-        ...?headers,
-      },
+      headers: <String, dynamic>{...?headers},
       extra: <String, dynamic>{
         'secure': <Map<String, String>>[
-          {
-            'type': 'http',
-            'scheme': 'bearer',
-            'name': 'bearerAuth',
-          },
+          {'type': 'http', 'scheme': 'bearer', 'name': 'bearerAuth'},
           {
             'type': 'apiKey',
             'name': 'projectID',
@@ -471,14 +443,13 @@ class UsersApi {
 
     try {
       const _type = FullType(MeIdentifierUpdateReq);
-      _bodyData =
-          _serializers.serialize(meIdentifierUpdateReq, specifiedType: _type);
+      _bodyData = _serializers.serialize(
+        meIdentifierUpdateReq,
+        specifiedType: _type,
+      );
     } catch (error, stackTrace) {
       throw DioException(
-        requestOptions: _options.compose(
-          _dio.options,
-          _path,
-        ),
+        requestOptions: _options.compose(_dio.options, _path),
         type: DioExceptionType.unknown,
         error: error,
         stackTrace: stackTrace,
@@ -501,9 +472,10 @@ class UsersApi {
       _responseData = rawResponse == null
           ? null
           : _serializers.deserialize(
-              rawResponse,
-              specifiedType: const FullType(GenericRsp),
-            ) as GenericRsp;
+                  rawResponse,
+                  specifiedType: const FullType(GenericRsp),
+                )
+                as GenericRsp;
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _response.requestOptions,
@@ -552,16 +524,10 @@ class UsersApi {
     final _path = r'/v2/me/identifier/verify/finish';
     final _options = Options(
       method: r'POST',
-      headers: <String, dynamic>{
-        ...?headers,
-      },
+      headers: <String, dynamic>{...?headers},
       extra: <String, dynamic>{
         'secure': <Map<String, String>>[
-          {
-            'type': 'http',
-            'scheme': 'bearer',
-            'name': 'bearerAuth',
-          },
+          {'type': 'http', 'scheme': 'bearer', 'name': 'bearerAuth'},
           {
             'type': 'apiKey',
             'name': 'projectID',
@@ -579,14 +545,13 @@ class UsersApi {
 
     try {
       const _type = FullType(MeIdentifierVerifyFinishReq);
-      _bodyData = _serializers.serialize(meIdentifierVerifyFinishReq,
-          specifiedType: _type);
+      _bodyData = _serializers.serialize(
+        meIdentifierVerifyFinishReq,
+        specifiedType: _type,
+      );
     } catch (error, stackTrace) {
       throw DioException(
-        requestOptions: _options.compose(
-          _dio.options,
-          _path,
-        ),
+        requestOptions: _options.compose(_dio.options, _path),
         type: DioExceptionType.unknown,
         error: error,
         stackTrace: stackTrace,
@@ -609,9 +574,10 @@ class UsersApi {
       _responseData = rawResponse == null
           ? null
           : _serializers.deserialize(
-              rawResponse,
-              specifiedType: const FullType(GenericRsp),
-            ) as GenericRsp;
+                  rawResponse,
+                  specifiedType: const FullType(GenericRsp),
+                )
+                as GenericRsp;
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _response.requestOptions,
@@ -660,16 +626,10 @@ class UsersApi {
     final _path = r'/v2/me/identifier/verify/start';
     final _options = Options(
       method: r'POST',
-      headers: <String, dynamic>{
-        ...?headers,
-      },
+      headers: <String, dynamic>{...?headers},
       extra: <String, dynamic>{
         'secure': <Map<String, String>>[
-          {
-            'type': 'http',
-            'scheme': 'bearer',
-            'name': 'bearerAuth',
-          },
+          {'type': 'http', 'scheme': 'bearer', 'name': 'bearerAuth'},
           {
             'type': 'apiKey',
             'name': 'projectID',
@@ -687,14 +647,13 @@ class UsersApi {
 
     try {
       const _type = FullType(MeIdentifierVerifyStartReq);
-      _bodyData = _serializers.serialize(meIdentifierVerifyStartReq,
-          specifiedType: _type);
+      _bodyData = _serializers.serialize(
+        meIdentifierVerifyStartReq,
+        specifiedType: _type,
+      );
     } catch (error, stackTrace) {
       throw DioException(
-        requestOptions: _options.compose(
-          _dio.options,
-          _path,
-        ),
+        requestOptions: _options.compose(_dio.options, _path),
         type: DioExceptionType.unknown,
         error: error,
         stackTrace: stackTrace,
@@ -717,9 +676,10 @@ class UsersApi {
       _responseData = rawResponse == null
           ? null
           : _serializers.deserialize(
-              rawResponse,
-              specifiedType: const FullType(GenericRsp),
-            ) as GenericRsp;
+                  rawResponse,
+                  specifiedType: const FullType(GenericRsp),
+                )
+                as GenericRsp;
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _response.requestOptions,
@@ -768,16 +728,10 @@ class UsersApi {
     final _path = r'/v2/me/passkeys/append/finish';
     final _options = Options(
       method: r'POST',
-      headers: <String, dynamic>{
-        ...?headers,
-      },
+      headers: <String, dynamic>{...?headers},
       extra: <String, dynamic>{
         'secure': <Map<String, String>>[
-          {
-            'type': 'http',
-            'scheme': 'bearer',
-            'name': 'bearerAuth',
-          },
+          {'type': 'http', 'scheme': 'bearer', 'name': 'bearerAuth'},
           {
             'type': 'apiKey',
             'name': 'projectID',
@@ -795,14 +749,13 @@ class UsersApi {
 
     try {
       const _type = FullType(MePasskeysAppendFinishReq);
-      _bodyData = _serializers.serialize(mePasskeysAppendFinishReq,
-          specifiedType: _type);
+      _bodyData = _serializers.serialize(
+        mePasskeysAppendFinishReq,
+        specifiedType: _type,
+      );
     } catch (error, stackTrace) {
       throw DioException(
-        requestOptions: _options.compose(
-          _dio.options,
-          _path,
-        ),
+        requestOptions: _options.compose(_dio.options, _path),
         type: DioExceptionType.unknown,
         error: error,
         stackTrace: stackTrace,
@@ -847,16 +800,10 @@ class UsersApi {
     final _path = r'/v2/me/passkeys/append/start';
     final _options = Options(
       method: r'POST',
-      headers: <String, dynamic>{
-        ...?headers,
-      },
+      headers: <String, dynamic>{...?headers},
       extra: <String, dynamic>{
         'secure': <Map<String, String>>[
-          {
-            'type': 'http',
-            'scheme': 'bearer',
-            'name': 'bearerAuth',
-          },
+          {'type': 'http', 'scheme': 'bearer', 'name': 'bearerAuth'},
           {
             'type': 'apiKey',
             'name': 'projectID',
@@ -874,14 +821,13 @@ class UsersApi {
 
     try {
       const _type = FullType(MePasskeysAppendStartReq);
-      _bodyData = _serializers.serialize(mePasskeysAppendStartReq,
-          specifiedType: _type);
+      _bodyData = _serializers.serialize(
+        mePasskeysAppendStartReq,
+        specifiedType: _type,
+      );
     } catch (error, stackTrace) {
       throw DioException(
-        requestOptions: _options.compose(
-          _dio.options,
-          _path,
-        ),
+        requestOptions: _options.compose(_dio.options, _path),
         type: DioExceptionType.unknown,
         error: error,
         stackTrace: stackTrace,
@@ -904,9 +850,10 @@ class UsersApi {
       _responseData = rawResponse == null
           ? null
           : _serializers.deserialize(
-              rawResponse,
-              specifiedType: const FullType(MePasskeysAppendStartRsp),
-            ) as MePasskeysAppendStartRsp;
+                  rawResponse,
+                  specifiedType: const FullType(MePasskeysAppendStartRsp),
+                )
+                as MePasskeysAppendStartRsp;
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _response.requestOptions,
@@ -953,21 +900,21 @@ class UsersApi {
     ProgressCallback? onReceiveProgress,
   }) async {
     final _path = r'/v2/me/passkeys/{credentialID}'.replaceAll(
-        '{' r'credentialID' '}',
-        encodeQueryParameter(_serializers, credentialID, const FullType(String))
-            .toString());
+      '{'
+      r'credentialID'
+      '}',
+      encodeQueryParameter(
+        _serializers,
+        credentialID,
+        const FullType(String),
+      ).toString(),
+    );
     final _options = Options(
       method: r'DELETE',
-      headers: <String, dynamic>{
-        ...?headers,
-      },
+      headers: <String, dynamic>{...?headers},
       extra: <String, dynamic>{
         'secure': <Map<String, String>>[
-          {
-            'type': 'http',
-            'scheme': 'bearer',
-            'name': 'bearerAuth',
-          },
+          {'type': 'http', 'scheme': 'bearer', 'name': 'bearerAuth'},
           {
             'type': 'apiKey',
             'name': 'projectID',
@@ -995,9 +942,10 @@ class UsersApi {
       _responseData = rawResponse == null
           ? null
           : _serializers.deserialize(
-              rawResponse,
-              specifiedType: const FullType(MePasskeyDeleteRsp),
-            ) as MePasskeyDeleteRsp;
+                  rawResponse,
+                  specifiedType: const FullType(MePasskeyDeleteRsp),
+                )
+                as MePasskeyDeleteRsp;
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _response.requestOptions,
@@ -1044,16 +992,10 @@ class UsersApi {
     final _path = r'/v2/me/passkeys';
     final _options = Options(
       method: r'GET',
-      headers: <String, dynamic>{
-        ...?headers,
-      },
+      headers: <String, dynamic>{...?headers},
       extra: <String, dynamic>{
         'secure': <Map<String, String>>[
-          {
-            'type': 'http',
-            'scheme': 'bearer',
-            'name': 'bearerAuth',
-          },
+          {'type': 'http', 'scheme': 'bearer', 'name': 'bearerAuth'},
           {
             'type': 'apiKey',
             'name': 'projectID',
@@ -1081,9 +1023,10 @@ class UsersApi {
       _responseData = rawResponse == null
           ? null
           : _serializers.deserialize(
-              rawResponse,
-              specifiedType: const FullType(MePasskeyRsp),
-            ) as MePasskeyRsp;
+                  rawResponse,
+                  specifiedType: const FullType(MePasskeyRsp),
+                )
+                as MePasskeyRsp;
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _response.requestOptions,
@@ -1130,16 +1073,10 @@ class UsersApi {
     final _path = r'/v2/me/logout';
     final _options = Options(
       method: r'POST',
-      headers: <String, dynamic>{
-        ...?headers,
-      },
+      headers: <String, dynamic>{...?headers},
       extra: <String, dynamic>{
         'secure': <Map<String, String>>[
-          {
-            'type': 'http',
-            'scheme': 'bearer',
-            'name': 'bearerAuth',
-          },
+          {'type': 'http', 'scheme': 'bearer', 'name': 'bearerAuth'},
           {
             'type': 'apiKey',
             'name': 'projectID',
@@ -1187,16 +1124,10 @@ class UsersApi {
     final _path = r'/v2/me/refresh';
     final _options = Options(
       method: r'POST',
-      headers: <String, dynamic>{
-        ...?headers,
-      },
+      headers: <String, dynamic>{...?headers},
       extra: <String, dynamic>{
         'secure': <Map<String, String>>[
-          {
-            'type': 'http',
-            'scheme': 'bearer',
-            'name': 'bearerAuth',
-          },
+          {'type': 'http', 'scheme': 'bearer', 'name': 'bearerAuth'},
           {
             'type': 'apiKey',
             'name': 'projectID',
@@ -1224,9 +1155,10 @@ class UsersApi {
       _responseData = rawResponse == null
           ? null
           : _serializers.deserialize(
-              rawResponse,
-              specifiedType: const FullType(MeRefreshRsp),
-            ) as MeRefreshRsp;
+                  rawResponse,
+                  specifiedType: const FullType(MeRefreshRsp),
+                )
+                as MeRefreshRsp;
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _response.requestOptions,
@@ -1275,16 +1207,10 @@ class UsersApi {
     final _path = r'/v2/me';
     final _options = Options(
       method: r'PATCH',
-      headers: <String, dynamic>{
-        ...?headers,
-      },
+      headers: <String, dynamic>{...?headers},
       extra: <String, dynamic>{
         'secure': <Map<String, String>>[
-          {
-            'type': 'http',
-            'scheme': 'bearer',
-            'name': 'bearerAuth',
-          },
+          {'type': 'http', 'scheme': 'bearer', 'name': 'bearerAuth'},
           {
             'type': 'apiKey',
             'name': 'projectID',
@@ -1305,10 +1231,7 @@ class UsersApi {
       _bodyData = _serializers.serialize(meUpdateReq, specifiedType: _type);
     } catch (error, stackTrace) {
       throw DioException(
-        requestOptions: _options.compose(
-          _dio.options,
-          _path,
-        ),
+        requestOptions: _options.compose(_dio.options, _path),
         type: DioExceptionType.unknown,
         error: error,
         stackTrace: stackTrace,
@@ -1331,9 +1254,10 @@ class UsersApi {
       _responseData = rawResponse == null
           ? null
           : _serializers.deserialize(
-              rawResponse,
-              specifiedType: const FullType(GenericRsp),
-            ) as GenericRsp;
+                  rawResponse,
+                  specifiedType: const FullType(GenericRsp),
+                )
+                as GenericRsp;
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _response.requestOptions,

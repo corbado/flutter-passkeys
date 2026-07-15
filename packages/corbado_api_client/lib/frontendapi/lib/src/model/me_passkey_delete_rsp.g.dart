@@ -10,9 +10,9 @@ class _$MePasskeyDeleteRsp extends MePasskeyDeleteRsp {
   @override
   final String id;
 
-  factory _$MePasskeyDeleteRsp(
-          [void Function(MePasskeyDeleteRspBuilder)? updates]) =>
-      (new MePasskeyDeleteRspBuilder()..update(updates))._build();
+  factory _$MePasskeyDeleteRsp([
+    void Function(MePasskeyDeleteRspBuilder)? updates,
+  ]) => (new MePasskeyDeleteRspBuilder()..update(updates))._build();
 
   _$MePasskeyDeleteRsp._({required this.id}) : super._() {
     BuiltValueNullFieldError.checkNotNull(id, r'MePasskeyDeleteRsp', 'id');
@@ -20,8 +20,8 @@ class _$MePasskeyDeleteRsp extends MePasskeyDeleteRsp {
 
   @override
   MePasskeyDeleteRsp rebuild(
-          void Function(MePasskeyDeleteRspBuilder) updates) =>
-      (toBuilder()..update(updates)).build();
+    void Function(MePasskeyDeleteRspBuilder) updates,
+  ) => (toBuilder()..update(updates)).build();
 
   @override
   MePasskeyDeleteRspBuilder toBuilder() =>
@@ -43,8 +43,9 @@ class _$MePasskeyDeleteRsp extends MePasskeyDeleteRsp {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper(r'MePasskeyDeleteRsp')..add('id', id))
-        .toString();
+    return (newBuiltValueToStringHelper(
+      r'MePasskeyDeleteRsp',
+    )..add('id', id)).toString();
   }
 }
 
@@ -84,10 +85,15 @@ class MePasskeyDeleteRspBuilder
   MePasskeyDeleteRsp build() => _build();
 
   _$MePasskeyDeleteRsp _build() {
-    final _$result = _$v ??
+    final _$result =
+        _$v ??
         new _$MePasskeyDeleteRsp._(
-            id: BuiltValueNullFieldError.checkNotNull(
-                id, r'MePasskeyDeleteRsp', 'id'));
+          id: BuiltValueNullFieldError.checkNotNull(
+            id,
+            r'MePasskeyDeleteRsp',
+            'id',
+          ),
+        );
     replace(_$result);
     return _$result;
   }

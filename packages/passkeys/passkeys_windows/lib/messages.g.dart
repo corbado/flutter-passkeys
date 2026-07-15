@@ -10,10 +10,7 @@ import 'package:flutter/services.dart';
 
 /// Represents a relying party
 class RelyingParty {
-  RelyingParty({
-    required this.name,
-    required this.id,
-  });
+  RelyingParty({required this.name, required this.id});
 
   /// Name of the relying party
   String name;
@@ -22,27 +19,18 @@ class RelyingParty {
   String id;
 
   Object encode() {
-    return <Object?>[
-      name,
-      id,
-    ];
+    return <Object?>[name, id];
   }
 
   static RelyingParty decode(Object result) {
     result as List<Object?>;
-    return RelyingParty(
-      name: result[0]! as String,
-      id: result[1]! as String,
-    );
+    return RelyingParty(name: result[0]! as String, id: result[1]! as String);
   }
 }
 
 /// Represents a public key credential parameter
 class PubKeyCredParam {
-  PubKeyCredParam({
-    required this.type,
-    required this.alg,
-  });
+  PubKeyCredParam({required this.type, required this.alg});
 
   /// The type
   String type;
@@ -51,18 +39,12 @@ class PubKeyCredParam {
   int alg;
 
   Object encode() {
-    return <Object?>[
-      type,
-      alg,
-    ];
+    return <Object?>[type, alg];
   }
 
   static PubKeyCredParam decode(Object result) {
     result as List<Object?>;
-    return PubKeyCredParam(
-      type: result[0]! as String,
-      alg: result[1]! as int,
-    );
+    return PubKeyCredParam(type: result[0]! as String, alg: result[1]! as int);
   }
 }
 
@@ -88,12 +70,7 @@ class User {
   String? icon;
 
   Object encode() {
-    return <Object?>[
-      displayName,
-      name,
-      id,
-      icon,
-    ];
+    return <Object?>[displayName, name, id, icon];
   }
 
   static User decode(Object result) {
@@ -125,11 +102,7 @@ class AllowCredential {
   List<String?> transports;
 
   Object encode() {
-    return <Object?>[
-      type,
-      id,
-      transports,
-    ];
+    return <Object?>[type, id, transports];
   }
 
   static AllowCredential decode(Object result) {
@@ -144,10 +117,7 @@ class AllowCredential {
 
 /// Represents an exclude credential
 class ExcludeCredential {
-  ExcludeCredential({
-    required this.type,
-    required this.id,
-  });
+  ExcludeCredential({required this.type, required this.id});
 
   /// The type
   String type;
@@ -156,10 +126,7 @@ class ExcludeCredential {
   String id;
 
   Object encode() {
-    return <Object?>[
-      type,
-      id,
-    ];
+    return <Object?>[type, id];
   }
 
   static ExcludeCredential decode(Object result) {
@@ -238,13 +205,7 @@ class RegisterResponse {
   List<String?> transports;
 
   Object encode() {
-    return <Object?>[
-      id,
-      rawId,
-      clientDataJSON,
-      attestationObject,
-      transports,
-    ];
+    return <Object?>[id, rawId, clientDataJSON, attestationObject, transports];
   }
 
   static RegisterResponse decode(Object result) {
@@ -374,14 +335,18 @@ class PasskeysApi {
   /// Constructor for [PasskeysApi].  The [binaryMessenger] named argument is
   /// available for dependency injection.  If it is left null, the default
   /// BinaryMessenger will be used which routes to the host platform.
-  PasskeysApi({BinaryMessenger? binaryMessenger}) : _binaryMessenger = binaryMessenger;
+  PasskeysApi({BinaryMessenger? binaryMessenger})
+    : _binaryMessenger = binaryMessenger;
   final BinaryMessenger? _binaryMessenger;
 
   static const MessageCodec<Object?> codec = _PasskeysApiCodec();
 
   Future<bool> canAuthenticate() async {
-    final BasicMessageChannel<Object?> channel =
-        BasicMessageChannel<Object?>('dev.flutter.pigeon.passkeys_windows.PasskeysApi.canAuthenticate', codec, binaryMessenger: _binaryMessenger);
+    final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
+      'dev.flutter.pigeon.passkeys_windows.PasskeysApi.canAuthenticate',
+      codec,
+      binaryMessenger: _binaryMessenger,
+    );
     final List<Object?>? replyList = await channel.send(null) as List<Object?>?;
     if (replyList == null) {
       throw PlatformException(
@@ -405,8 +370,11 @@ class PasskeysApi {
   }
 
   Future<bool> hasPasskeySupport() async {
-    final BasicMessageChannel<Object?> channel =
-        BasicMessageChannel<Object?>('dev.flutter.pigeon.passkeys_windows.PasskeysApi.hasPasskeySupport', codec, binaryMessenger: _binaryMessenger);
+    final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
+      'dev.flutter.pigeon.passkeys_windows.PasskeysApi.hasPasskeySupport',
+      codec,
+      binaryMessenger: _binaryMessenger,
+    );
     final List<Object?>? replyList = await channel.send(null) as List<Object?>?;
     if (replyList == null) {
       throw PlatformException(
@@ -429,20 +397,33 @@ class PasskeysApi {
     }
   }
 
-  Future<RegisterResponse> register(String arg_challenge, RelyingParty arg_relyingParty, User arg_user, AuthenticatorSelection? arg_authenticatorSelection,
-      List<PubKeyCredParam?>? arg_pubKeyCredParams, int? arg_timeout, String? arg_attestation, List<ExcludeCredential?> arg_excludeCredentials) async {
-    final BasicMessageChannel<Object?> channel =
-        BasicMessageChannel<Object?>('dev.flutter.pigeon.passkeys_windows.PasskeysApi.register', codec, binaryMessenger: _binaryMessenger);
-    final List<Object?>? replyList = await channel.send(<Object?>[
-      arg_challenge,
-      arg_relyingParty,
-      arg_user,
-      arg_authenticatorSelection,
-      arg_pubKeyCredParams,
-      arg_timeout,
-      arg_attestation,
-      arg_excludeCredentials
-    ]) as List<Object?>?;
+  Future<RegisterResponse> register(
+    String arg_challenge,
+    RelyingParty arg_relyingParty,
+    User arg_user,
+    AuthenticatorSelection? arg_authenticatorSelection,
+    List<PubKeyCredParam?>? arg_pubKeyCredParams,
+    int? arg_timeout,
+    String? arg_attestation,
+    List<ExcludeCredential?> arg_excludeCredentials,
+  ) async {
+    final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
+      'dev.flutter.pigeon.passkeys_windows.PasskeysApi.register',
+      codec,
+      binaryMessenger: _binaryMessenger,
+    );
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[
+              arg_challenge,
+              arg_relyingParty,
+              arg_user,
+              arg_authenticatorSelection,
+              arg_pubKeyCredParams,
+              arg_timeout,
+              arg_attestation,
+              arg_excludeCredentials,
+            ])
+            as List<Object?>?;
     if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
@@ -464,13 +445,29 @@ class PasskeysApi {
     }
   }
 
-  Future<AuthenticateResponse> authenticate(String arg_relyingPartyId, String arg_challenge, int? arg_timeout, String? arg_userVerification,
-      List<AllowCredential?>? arg_allowCredentials, bool? arg_preferImmediatelyAvailableCredentials) async {
-    final BasicMessageChannel<Object?> channel =
-        BasicMessageChannel<Object?>('dev.flutter.pigeon.passkeys_windows.PasskeysApi.authenticate', codec, binaryMessenger: _binaryMessenger);
-    final List<Object?>? replyList = await channel.send(
-            <Object?>[arg_relyingPartyId, arg_challenge, arg_timeout, arg_userVerification, arg_allowCredentials, arg_preferImmediatelyAvailableCredentials])
-        as List<Object?>?;
+  Future<AuthenticateResponse> authenticate(
+    String arg_relyingPartyId,
+    String arg_challenge,
+    int? arg_timeout,
+    String? arg_userVerification,
+    List<AllowCredential?>? arg_allowCredentials,
+    bool? arg_preferImmediatelyAvailableCredentials,
+  ) async {
+    final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
+      'dev.flutter.pigeon.passkeys_windows.PasskeysApi.authenticate',
+      codec,
+      binaryMessenger: _binaryMessenger,
+    );
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[
+              arg_relyingPartyId,
+              arg_challenge,
+              arg_timeout,
+              arg_userVerification,
+              arg_allowCredentials,
+              arg_preferImmediatelyAvailableCredentials,
+            ])
+            as List<Object?>?;
     if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
@@ -494,8 +491,10 @@ class PasskeysApi {
 
   Future<void> cancelCurrentAuthenticatorOperation() async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.passkeys_windows.PasskeysApi.cancelCurrentAuthenticatorOperation', codec,
-        binaryMessenger: _binaryMessenger);
+      'dev.flutter.pigeon.passkeys_windows.PasskeysApi.cancelCurrentAuthenticatorOperation',
+      codec,
+      binaryMessenger: _binaryMessenger,
+    );
     final List<Object?>? replyList = await channel.send(null) as List<Object?>?;
     if (replyList == null) {
       throw PlatformException(

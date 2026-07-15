@@ -26,8 +26,9 @@ abstract class ConnectAppendStartRsp
 
   ConnectAppendStartRsp._();
 
-  factory ConnectAppendStartRsp(
-      [void updates(ConnectAppendStartRspBuilder b)]) = _$ConnectAppendStartRsp;
+  factory ConnectAppendStartRsp([
+    void updates(ConnectAppendStartRspBuilder b),
+  ]) = _$ConnectAppendStartRsp;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(ConnectAppendStartRspBuilder b) => b;
@@ -42,7 +43,7 @@ class _$ConnectAppendStartRspSerializer
   @override
   final Iterable<Type> types = const [
     ConnectAppendStartRsp,
-    _$ConnectAppendStartRsp
+    _$ConnectAppendStartRsp,
   ];
 
   @override
@@ -71,9 +72,11 @@ class _$ConnectAppendStartRspSerializer
     ConnectAppendStartRsp object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(
+      serializers,
+      object,
+      specifiedType: specifiedType,
+    ).toList();
   }
 
   void _deserializeProperties(
@@ -89,17 +92,23 @@ class _$ConnectAppendStartRspSerializer
       final value = serializedList[i + 1];
       switch (key) {
         case r'attestationOptions':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(String),
-          ) as String;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(String),
+                  )
+                  as String;
           result.attestationOptions = valueDes;
           break;
         case r'variant':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(ConnectAppendStartRspVariantEnum),
-          ) as ConnectAppendStartRspVariantEnum;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(
+                      ConnectAppendStartRspVariantEnum,
+                    ),
+                  )
+                  as ConnectAppendStartRspVariantEnum;
           result.variant = valueDes;
           break;
         default:

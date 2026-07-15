@@ -42,7 +42,7 @@ class _$ConnectAppendInitReqSerializer
   @override
   final Iterable<Type> types = const [
     ConnectAppendInitReq,
-    _$ConnectAppendInitReq
+    _$ConnectAppendInitReq,
   ];
 
   @override
@@ -61,8 +61,10 @@ class _$ConnectAppendInitReqSerializer
     yield r'flags';
     yield serializers.serialize(
       object.flags,
-      specifiedType:
-          const FullType(BuiltMap, [FullType(String), FullType(String)]),
+      specifiedType: const FullType(BuiltMap, [
+        FullType(String),
+        FullType(String),
+      ]),
     );
   }
 
@@ -72,9 +74,11 @@ class _$ConnectAppendInitReqSerializer
     ConnectAppendInitReq object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(
+      serializers,
+      object,
+      specifiedType: specifiedType,
+    ).toList();
   }
 
   void _deserializeProperties(
@@ -90,18 +94,24 @@ class _$ConnectAppendInitReqSerializer
       final value = serializedList[i + 1];
       switch (key) {
         case r'clientInformation':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(ClientInformation),
-          ) as ClientInformation;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(ClientInformation),
+                  )
+                  as ClientInformation;
           result.clientInformation.replace(valueDes);
           break;
         case r'flags':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType:
-                const FullType(BuiltMap, [FullType(String), FullType(String)]),
-          ) as BuiltMap<String, String>;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(BuiltMap, [
+                      FullType(String),
+                      FullType(String),
+                    ]),
+                  )
+                  as BuiltMap<String, String>;
           result.flags.replace(valueDes);
           break;
         default:

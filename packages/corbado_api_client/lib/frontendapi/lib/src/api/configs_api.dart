@@ -41,16 +41,10 @@ class ConfigsApi {
     final _path = r'/v2/session-config';
     final _options = Options(
       method: r'GET',
-      headers: <String, dynamic>{
-        ...?headers,
-      },
+      headers: <String, dynamic>{...?headers},
       extra: <String, dynamic>{
         'secure': <Map<String, String>>[
-          {
-            'type': 'http',
-            'scheme': 'bearer',
-            'name': 'bearerAuth',
-          },
+          {'type': 'http', 'scheme': 'bearer', 'name': 'bearerAuth'},
           {
             'type': 'apiKey',
             'name': 'projectID',
@@ -78,9 +72,10 @@ class ConfigsApi {
       _responseData = rawResponse == null
           ? null
           : _serializers.deserialize(
-              rawResponse,
-              specifiedType: const FullType(SessionConfigRsp),
-            ) as SessionConfigRsp;
+                  rawResponse,
+                  specifiedType: const FullType(SessionConfigRsp),
+                )
+                as SessionConfigRsp;
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _response.requestOptions,
@@ -127,16 +122,10 @@ class ConfigsApi {
     final _path = r'/v2/user-details-config';
     final _options = Options(
       method: r'GET',
-      headers: <String, dynamic>{
-        ...?headers,
-      },
+      headers: <String, dynamic>{...?headers},
       extra: <String, dynamic>{
         'secure': <Map<String, String>>[
-          {
-            'type': 'http',
-            'scheme': 'bearer',
-            'name': 'bearerAuth',
-          },
+          {'type': 'http', 'scheme': 'bearer', 'name': 'bearerAuth'},
           {
             'type': 'apiKey',
             'name': 'projectID',
@@ -164,9 +153,10 @@ class ConfigsApi {
       _responseData = rawResponse == null
           ? null
           : _serializers.deserialize(
-              rawResponse,
-              specifiedType: const FullType(UserDetailsConfigRsp),
-            ) as UserDetailsConfigRsp;
+                  rawResponse,
+                  specifiedType: const FullType(UserDetailsConfigRsp),
+                )
+                as UserDetailsConfigRsp;
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _response.requestOptions,

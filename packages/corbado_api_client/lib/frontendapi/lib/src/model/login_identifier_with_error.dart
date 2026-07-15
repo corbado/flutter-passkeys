@@ -32,9 +32,9 @@ abstract class LoginIdentifierWithError
 
   LoginIdentifierWithError._();
 
-  factory LoginIdentifierWithError(
-          [void updates(LoginIdentifierWithErrorBuilder b)]) =
-      _$LoginIdentifierWithError;
+  factory LoginIdentifierWithError([
+    void updates(LoginIdentifierWithErrorBuilder b),
+  ]) = _$LoginIdentifierWithError;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(LoginIdentifierWithErrorBuilder b) => b;
@@ -49,7 +49,7 @@ class _$LoginIdentifierWithErrorSerializer
   @override
   final Iterable<Type> types = const [
     LoginIdentifierWithError,
-    _$LoginIdentifierWithError
+    _$LoginIdentifierWithError,
   ];
 
   @override
@@ -85,9 +85,11 @@ class _$LoginIdentifierWithErrorSerializer
     LoginIdentifierWithError object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(
+      serializers,
+      object,
+      specifiedType: specifiedType,
+    ).toList();
   }
 
   void _deserializeProperties(
@@ -103,24 +105,30 @@ class _$LoginIdentifierWithErrorSerializer
       final value = serializedList[i + 1];
       switch (key) {
         case r'type':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(LoginIdentifierType),
-          ) as LoginIdentifierType;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(LoginIdentifierType),
+                  )
+                  as LoginIdentifierType;
           result.type = valueDes;
           break;
         case r'identifier':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(String),
-          ) as String;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(String),
+                  )
+                  as String;
           result.identifier = valueDes;
           break;
         case r'error':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(RequestError),
-          ) as RequestError;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(RequestError),
+                  )
+                  as RequestError;
           result.error.replace(valueDes);
           break;
         default:

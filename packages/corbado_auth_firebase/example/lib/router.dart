@@ -50,57 +50,60 @@ Page<dynamic> _customPageBuilder(
 final routerProvider = Provider<GoRouter>((ref) {
   final authState = ref.watch(authStateProvider);
   return GoRouter(
-      initialLocation: Routes.signIn,
-      routes: [
-        _defaultTransitionGoRoute(
-          path: Routes.signUp,
-          builder: (context, state) => SignUpPage(),
-        ),
-        _defaultTransitionGoRoute(
-          path: Routes.signIn,
-          builder: (context, state) => SignInPage(),
-        ),
-        _defaultTransitionGoRoute(
-          path: Routes.profile,
-          builder: (context, state) => const ProfilePage(),
-        ),
-        _defaultTransitionGoRoute(
-          path: Routes.loading,
-          builder: (context, state) => const LoadingPage(),
-        ),
-        GoRoute(
-            path: Routes.emailOtp,
-            pageBuilder: (context, state) {
-              final email = state.pathParameters['email'];
-              if (email == null) {
-                throw Exception();
-              }
+    initialLocation: Routes.signIn,
+    routes: [
+      _defaultTransitionGoRoute(
+        path: Routes.signUp,
+        builder: (context, state) => SignUpPage(),
+      ),
+      _defaultTransitionGoRoute(
+        path: Routes.signIn,
+        builder: (context, state) => SignInPage(),
+      ),
+      _defaultTransitionGoRoute(
+        path: Routes.profile,
+        builder: (context, state) => const ProfilePage(),
+      ),
+      _defaultTransitionGoRoute(
+        path: Routes.loading,
+        builder: (context, state) => const LoadingPage(),
+      ),
+      GoRoute(
+        path: Routes.emailOtp,
+        pageBuilder: (context, state) {
+          final email = state.pathParameters['email'];
+          if (email == null) {
+            throw Exception();
+          }
 
-              return _customPageBuilder(
-                  (context, state) => EmailOTPPage(email: email),
-                  context,
-                  state);
-            }),
-      ],
-      redirect: (BuildContext context, GoRouterState state) {
-        final onLoggedOutRoutes = [
-          Routes.signIn,
-          Routes.signUp,
-          Routes.emailOtp,
-        ].contains(state.fullPath);
+          return _customPageBuilder(
+            (context, state) => EmailOTPPage(email: email),
+            context,
+            state,
+          );
+        },
+      ),
+    ],
+    redirect: (BuildContext context, GoRouterState state) {
+      final onLoggedOutRoutes = [
+        Routes.signIn,
+        Routes.signUp,
+        Routes.emailOtp,
+      ].contains(state.fullPath);
 
-        if (authState.isLoading) {
-          return Routes.loading;
-        }
+      if (authState.isLoading) {
+        return Routes.loading;
+      }
 
-        if (authState.value == null && !onLoggedOutRoutes) {
-          return Routes.signIn;
-        }
+      if (authState.value == null && !onLoggedOutRoutes) {
+        return Routes.signIn;
+      }
 
-        if (authState.value != null && onLoggedOutRoutes) {
-          return Routes.profile;
-        }
+      if (authState.value != null && onLoggedOutRoutes) {
+        return Routes.profile;
+      }
 
-        return null;
-      });
+      return null;
+    },
+  );
 });

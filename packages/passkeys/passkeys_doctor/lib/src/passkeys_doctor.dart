@@ -20,33 +20,29 @@ class PasskeysDoctor {
   PasskeysDoctor() : _platform = PasskeysPlatform.instance {
     Logger(_streamController.stream.distinct());
 
-    _checkpoints.addListener(
-      () {
-        _streamController.add(
-          Result(
-            checkpoints: _checkpoints.value,
-            exception: _lastException.value,
-          ),
-        );
-      },
-    );
+    _checkpoints.addListener(() {
+      _streamController.add(
+        Result(
+          checkpoints: _checkpoints.value,
+          exception: _lastException.value,
+        ),
+      );
+    });
 
-    _lastException.addListener(
-      () {
-        if (_lastException.value == null) {
-          return;
-        }
+    _lastException.addListener(() {
+      if (_lastException.value == null) {
+        return;
+      }
 
-        _streamController.add(
-          Result(
-            checkpoints: _checkpoints.value,
-            exception: _lastException.value,
-          ),
-        );
+      _streamController.add(
+        Result(
+          checkpoints: _checkpoints.value,
+          exception: _lastException.value,
+        ),
+      );
 
-        _lastException.value = null;
-      },
-    );
+      _lastException.value = null;
+    });
   }
 
   final WebCredentialsApi _api = WebCredentialsApi();
@@ -66,9 +62,7 @@ class PasskeysDoctor {
     _lastException.value = exception;
   }
 
-  check(
-    String rpId,
-  ) async {
+  check(String rpId) async {
     final List<Checkpoint> checkpoints = [];
 
     try {
@@ -119,7 +113,8 @@ class PasskeysDoctor {
         throw DoctorException(
           blockingCheckpoint: Checkpoint(
             name: 'RPID check',
-            description: 'RPID must be just a hostname, not a URL. '
+            description:
+                'RPID must be just a hostname, not a URL. '
                 'Did you mean "$host"?',
             type: CheckpointType.error,
           ),
@@ -162,8 +157,9 @@ class PasskeysDoctor {
   }
 
   Future<Checkpoint> _checkAASAFile(String rpid) async {
-    final uri =
-        Uri.parse('https://$rpid/.well-known/apple-app-site-association');
+    final uri = Uri.parse(
+      'https://$rpid/.well-known/apple-app-site-association',
+    );
 
     http.Response response;
     try {
@@ -360,7 +356,8 @@ class PasskeysDoctor {
   }
 
   Future<Checkpoint?> _checkIosAvailability(
-      AvailabilityTypeIOS iosAvailability) async {
+    AvailabilityTypeIOS iosAvailability,
+  ) async {
     final info = await DeviceInfoPlugin().iosInfo;
 
     if (!iosAvailability.hasBiometrics && !info.isPhysicalDevice) {

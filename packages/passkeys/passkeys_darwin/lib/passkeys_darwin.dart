@@ -6,8 +6,9 @@ import 'package:passkeys_platform_interface/types/types.dart';
 /// The iOS/macOS implementation of [PasskeysPlatform].
 class PasskeysDarwin extends PasskeysPlatform {
   /// Creates a new plugin implementation instance.
-  PasskeysDarwin({@visibleForTesting PasskeysApi? api})
-    : _api = api ?? PasskeysApi();
+  PasskeysDarwin({
+    @visibleForTesting PasskeysApi? api,
+  }) : _api = api ?? PasskeysApi();
 
   /// Registers this class as the default instance of [PasskeysDarwin].
   static void registerWith() {
@@ -36,7 +37,7 @@ class PasskeysDarwin extends PasskeysPlatform {
             (e) => CredentialType(
               type: e.type,
               id: e.id,
-              transports: e.transports ?? [],
+              transports: e.transports,
             ),
           )
           .toList(),
@@ -52,12 +53,12 @@ class PasskeysDarwin extends PasskeysPlatform {
     );
 
     return RegisterResponseType(
-      clientExtensionResults: r.clientExtensionResults,
       id: r.id,
       rawId: r.rawId,
       clientDataJSON: r.clientDataJSON,
       attestationObject: r.attestationObject,
       transports: r.transports.whereType<String>().toList(),
+      clientExtensionResults: r.clientExtensionResults,
     );
   }
 
@@ -79,7 +80,7 @@ class PasskeysDarwin extends PasskeysPlatform {
                 (e) => CredentialType(
                   type: e.type,
                   id: e.id,
-                  transports: e.transports ?? [],
+                  transports: e.transports,
                 ),
               )
               .toList() ??

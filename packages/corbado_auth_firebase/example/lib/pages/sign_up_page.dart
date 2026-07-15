@@ -30,19 +30,14 @@ class SignUpPage extends HookConsumerWidget {
               padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
               child: Text(
                 'Tired of passwords?',
-                style: TextStyle(
-                  fontSize: 40,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
               ),
             ),
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               child: Text(
                 'Sign up using your biometrics like fingerprint or face.',
-                style: TextStyle(
-                  fontSize: 20,
-                ),
+                style: TextStyle(fontSize: 20),
               ),
             ),
             Padding(
@@ -70,8 +65,9 @@ class SignUpPage extends HookConsumerWidget {
             error.value != null
                 ? Text(
                     error.value!,
-                    style:
-                        TextStyle(color: Theme.of(context).colorScheme.error),
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.error,
+                    ),
                   )
                 : Container(),
             const SizedBox(height: 20),
@@ -88,9 +84,10 @@ class SignUpPage extends HookConsumerWidget {
                     maybeError = await authService.register(email: email);
                   } else {
                     final password = _passwordController.value.text;
-                    maybeError =
-                        await authService.registerWithEmailAndPassword(
-                            email: email, password: password);
+                    maybeError = await authService.registerWithEmailAndPassword(
+                      email: email,
+                      password: password,
+                    );
                     if (maybeError != null) {
                       loading.value = false;
                       error.value = maybeError;
@@ -108,7 +105,7 @@ class SignUpPage extends HookConsumerWidget {
               children: [
                 Switch(
                   value: usePasskeys.value,
-                  activeColor: Theme.of(context).primaryColor,
+                  activeThumbColor: Theme.of(context).primaryColor,
                   onChanged: (bool value) {
                     usePasskeys.value = value;
                   },
@@ -116,7 +113,7 @@ class SignUpPage extends HookConsumerWidget {
                 Text(
                   'Use passkeys for sign up',
                   style: Theme.of(context).textTheme.bodyMedium,
-                )
+                ),
               ],
             ),
             const SizedBox(height: 10),

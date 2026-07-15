@@ -6,11 +6,12 @@ import 'package:flutter/foundation.dart';
 import 'package:passkeys_example/auth_service.dart';
 
 class LocalUser {
-  LocalUser(
-      {required this.name,
-      required this.id,
-      this.credentialID,
-      required this.transports});
+  LocalUser({
+    required this.name,
+    required this.id,
+    required this.transports,
+    this.credentialID,
+  });
 
   final String name;
   final String id;
@@ -18,7 +19,8 @@ class LocalUser {
   List<String> transports;
 }
 
-const rpID = kIsWeb &&
+const rpID =
+    kIsWeb &&
         String.fromEnvironment('IS_VERCEL', defaultValue: 'false') != 'true'
     ? 'localhost'
     : 'flutter.corbado.io';
@@ -26,7 +28,8 @@ const rpID = kIsWeb &&
 /// This is a local version of a relying party server.
 ///
 /// Note:
-/// The concept of a local relying party server works just in examples. It does not work in practice.
+/// The concept of a local relying party server works just in examples.
+/// It does not work in practice.
 /// Usually a relying party server is party of your backend.
 class LocalRelyingPartyServer {
   LocalRelyingPartyServer();
@@ -35,12 +38,16 @@ class LocalRelyingPartyServer {
   final Map<String, LocalUser> _inFlightChallenges = HashMap();
   final Random _random = Random();
 
-  /// Starts a passkey registration and returns a standard WebAuthn JSON request as a string.
+  /// Starts a passkey registration and returns a standard WebAuthn JSON
+  /// request as a string.
   ///
   /// This simulates backend server logic that returns standard WebAuthn JSON
-  /// format compatible with `PublicKeyCredential.parseCreationOptionsFromJSON()`.
-  String startPasskeyRegister(
-      {required String name, Configuration? configuration}) {
+  /// format compatible with
+  /// `PublicKeyCredential.parseCreationOptionsFromJSON()`.
+  String startPasskeyRegister({
+    required String name,
+    Configuration? configuration,
+  }) {
     if (_users.containsKey(name)) {
       throw Exception('User $name already exists. Please log in instead');
     }
@@ -53,10 +60,7 @@ class LocalRelyingPartyServer {
     // Build standard WebAuthn JSON format (as a backend server would)
     final request = <String, dynamic>{
       'challenge': challenge,
-      'rp': {
-        'name': 'local-relying-party-server',
-        'id': rpID,
-      },
+      'rp': {'name': 'local-relying-party-server', 'id': rpID},
       'user': {
         'id': base64Url.encode(userID.codeUnits),
         'name': name,
@@ -77,14 +81,17 @@ class LocalRelyingPartyServer {
     };
 
     // Add excludeCredentials if configured
-    if (configuration?.excludeCredentials == true && _users.values.isNotEmpty) {
+    if ((configuration?.excludeCredentials ?? false) &&
+        _users.values.isNotEmpty) {
       request['excludeCredentials'] = _users.values
           .where((e) => e.credentialID != null)
-          .map((e) => {
-                'type': 'public-key',
-                'id': e.credentialID!,
-                'transports': ['internal'],
-              })
+          .map(
+            (e) => {
+              'type': 'public-key',
+              'id': e.credentialID!,
+              'transports': ['internal'],
+            },
+          )
           .toList();
     }
 
@@ -92,7 +99,8 @@ class LocalRelyingPartyServer {
     return jsonEncode(request);
   }
 
-  /// Finishes passkey registration by processing a standard WebAuthn JSON response string.
+  /// Finishes passkey registration by processing a standard WebAuthn JSON
+  /// response string.
   ///
   /// This simulates backend server logic that receives standard WebAuthn JSON
   /// format from the authenticator.
@@ -123,7 +131,9 @@ class LocalRelyingPartyServer {
 
     // Decode and parse clientDataJSON to extract challenge
     final raw = addBase64Padding(clientDataJSON);
-    final clientData = jsonDecode(String.fromCharCodes(base64.decode(raw)));
+    final clientData =
+        jsonDecode(String.fromCharCodes(base64.decode(raw)))
+            as Map<String, dynamic>;
 
     final challenge = clientData['challenge'] as String;
     final user = _inFlightChallenges[challenge];
@@ -142,12 +152,16 @@ class LocalRelyingPartyServer {
     return user;
   }
 
-  /// Starts a passkey login and returns a standard WebAuthn JSON request as a string.
+  /// Starts a passkey login and returns a standard WebAuthn JSON request
+  /// as a string.
   ///
   /// This simulates backend server logic that returns standard WebAuthn JSON
-  /// format compatible with `PublicKeyCredential.parseRequestOptionsFromJSON()`.
-  String startPasskeyLogin(
-      {required String name, Configuration? configuration}) {
+  /// format compatible with
+  /// `PublicKeyCredential.parseRequestOptionsFromJSON()`.
+  String startPasskeyLogin({
+    required String name,
+    Configuration? configuration,
+  }) {
     if (!_users.containsKey(name)) {
       throw Exception('User $name does not exist. Please register first');
     }
@@ -164,13 +178,13 @@ class LocalRelyingPartyServer {
     };
 
     // Add allowCredentials if configured or if user has a credential
-    if (configuration?.allowCredentials == true) {
+    if (configuration?.allowCredentials ?? false) {
       request['allowCredentials'] = [
         {
           'type': 'public-key',
           'id': 'id',
           'transports': ['internal'],
-        }
+        },
       ];
     } else if (_users[name]!.credentialID != null) {
       request['allowCredentials'] = [
@@ -186,7 +200,8 @@ class LocalRelyingPartyServer {
     return jsonEncode(request);
   }
 
-  /// Finishes passkey login by processing a standard WebAuthn JSON response string.
+  /// Finishes passkey login by processing a standard WebAuthn JSON
+  /// response string.
   ///
   /// This simulates backend server logic that receives standard WebAuthn JSON
   /// format from the authenticator.
@@ -215,7 +230,9 @@ class LocalRelyingPartyServer {
 
     // Decode and parse clientDataJSON to extract challenge
     final raw = addBase64Padding(clientDataJSON);
-    final clientData = jsonDecode(String.fromCharCodes(base64.decode(raw)));
+    final clientData =
+        jsonDecode(String.fromCharCodes(base64.decode(raw)))
+            as Map<String, dynamic>;
 
     final challenge = clientData['challenge'] as String;
     final user = _inFlightChallenges[challenge];
@@ -226,23 +243,23 @@ class LocalRelyingPartyServer {
     return user;
   }
 
-  /// Starts a conditional UI passkey login and returns a standard WebAuthn JSON request as a string.
+  /// Starts a conditional UI passkey login and returns a standard WebAuthn
+  /// JSON request as a string.
   ///
   /// This simulates backend server logic that returns standard WebAuthn JSON
-  /// format compatible with `PublicKeyCredential.parseRequestOptionsFromJSON()`.
+  /// format compatible with
+  /// `PublicKeyCredential.parseRequestOptionsFromJSON()`.
   String startPasskeyLoginConditionalU() {
     final challenge = generateChallenge();
 
     // Build standard WebAuthn JSON format (as a backend server would)
-    final request = {
-      'challenge': challenge,
-      'rpId': rpID,
-    };
+    final request = {'challenge': challenge, 'rpId': rpID};
 
     return jsonEncode(request);
   }
 
-  /// Finishes conditional UI passkey login by processing a standard WebAuthn JSON response string.
+  /// Finishes conditional UI passkey login by processing a standard WebAuthn
+  /// JSON response string.
   ///
   /// This simulates backend server logic that receives standard WebAuthn JSON
   /// format from the authenticator.
@@ -285,12 +302,12 @@ class LocalRelyingPartyServer {
   String generateChallenge() {
     const chars =
         'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    var rawChallenge = '';
+    final rawChallenge = StringBuffer();
     for (var i = 0; i < 32; i++) {
-      rawChallenge += chars[_random.nextInt(chars.length)];
+      rawChallenge.write(chars[_random.nextInt(chars.length)]);
     }
 
-    final a = base64Url.encode(rawChallenge.codeUnits);
+    final a = base64Url.encode(rawChallenge.toString().codeUnits);
 
     return a.substring(0, a.length - 1);
   }

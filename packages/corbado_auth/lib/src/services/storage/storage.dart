@@ -24,10 +24,10 @@ abstract class StorageService {
   /// sets the user
   Future<void> setFrontEndApiUrl(String value);
 
-  // sets the client env handle
+  /// sets the client env handle
   Future<void> setClientEnvHandle(String value);
 
-  // gets the client env handle
+  /// gets the client env handle
   Future<String?> getClientEnvHandle();
 
   /// removes all data from (full clear)

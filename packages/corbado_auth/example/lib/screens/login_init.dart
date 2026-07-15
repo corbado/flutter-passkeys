@@ -7,13 +7,21 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
-class LoginInitScreen extends HookWidget implements CorbadoScreen<LoginInitBlock> {
+/// Screen that starts the login flow by collecting the user's identifier.
+class LoginInitScreen extends HookWidget
+    implements CorbadoScreen<LoginInitBlock> {
+  /// Creates the login init screen for the given [block].
+  const LoginInitScreen(this.block, {super.key});
+
+  /// The block driving the login flow.
+  @override
   final LoginInitBlock block;
 
-  LoginInitScreen(this.block);
-
+  @override
   Widget build(BuildContext context) {
-    final emailController = useTextEditingController(text: block.data.loginIdentifier);
+    final emailController = useTextEditingController(
+      text: block.data.loginIdentifier,
+    );
 
     useEffect(() {
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -22,31 +30,25 @@ class LoginInitScreen extends HookWidget implements CorbadoScreen<LoginInitBlock
           showNotificationError(context, maybeError.translatedError);
         }
       });
+      return null;
     }, [block.error]);
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const SizedBox(
-          height: 10,
-        ),
+        const SizedBox(height: 10),
         const Padding(
           padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
           child: Text(
             'Welcome back',
-            style: TextStyle(
-              fontSize: 40,
-              fontWeight: FontWeight.bold,
-            ),
+            style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
           ),
         ),
         const Padding(
           padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           child: Text(
             'Enter your email address to log in with passkeys or email OTP.',
-            style: TextStyle(
-              fontSize: 20,
-            ),
+            style: TextStyle(fontSize: 20),
           ),
         ),
         Padding(
@@ -60,7 +62,9 @@ class LoginInitScreen extends HookWidget implements CorbadoScreen<LoginInitBlock
             ),
           ),
         ),
-        MaybeGenericError(message: block.data.loginIdentifierError?.translatedError),
+        MaybeGenericError(
+          message: block.data.loginIdentifierError?.translatedError,
+        ),
         const SizedBox(height: 20),
         SizedBox(
           width: double.infinity,

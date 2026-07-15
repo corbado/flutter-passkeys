@@ -16,30 +16,42 @@ class _$IdentifierVerifyFinishReq extends IdentifierVerifyFinishReq {
   @override
   final bool isNewDevice;
 
-  factory _$IdentifierVerifyFinishReq(
-          [void Function(IdentifierVerifyFinishReqBuilder)? updates]) =>
-      (new IdentifierVerifyFinishReqBuilder()..update(updates))._build();
+  factory _$IdentifierVerifyFinishReq([
+    void Function(IdentifierVerifyFinishReqBuilder)? updates,
+  ]) => (new IdentifierVerifyFinishReqBuilder()..update(updates))._build();
 
-  _$IdentifierVerifyFinishReq._(
-      {required this.code,
-      required this.identifierType,
-      required this.verificationType,
-      required this.isNewDevice})
-      : super._() {
+  _$IdentifierVerifyFinishReq._({
+    required this.code,
+    required this.identifierType,
+    required this.verificationType,
+    required this.isNewDevice,
+  }) : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        code, r'IdentifierVerifyFinishReq', 'code');
+      code,
+      r'IdentifierVerifyFinishReq',
+      'code',
+    );
     BuiltValueNullFieldError.checkNotNull(
-        identifierType, r'IdentifierVerifyFinishReq', 'identifierType');
+      identifierType,
+      r'IdentifierVerifyFinishReq',
+      'identifierType',
+    );
     BuiltValueNullFieldError.checkNotNull(
-        verificationType, r'IdentifierVerifyFinishReq', 'verificationType');
+      verificationType,
+      r'IdentifierVerifyFinishReq',
+      'verificationType',
+    );
     BuiltValueNullFieldError.checkNotNull(
-        isNewDevice, r'IdentifierVerifyFinishReq', 'isNewDevice');
+      isNewDevice,
+      r'IdentifierVerifyFinishReq',
+      'isNewDevice',
+    );
   }
 
   @override
   IdentifierVerifyFinishReq rebuild(
-          void Function(IdentifierVerifyFinishReqBuilder) updates) =>
-      (toBuilder()..update(updates)).build();
+    void Function(IdentifierVerifyFinishReqBuilder) updates,
+  ) => (toBuilder()..update(updates)).build();
 
   @override
   IdentifierVerifyFinishReqBuilder toBuilder() =>
@@ -131,18 +143,30 @@ class IdentifierVerifyFinishReqBuilder
   IdentifierVerifyFinishReq build() => _build();
 
   _$IdentifierVerifyFinishReq _build() {
-    final _$result = _$v ??
+    final _$result =
+        _$v ??
         new _$IdentifierVerifyFinishReq._(
-            code: BuiltValueNullFieldError.checkNotNull(
-                code, r'IdentifierVerifyFinishReq', 'code'),
-            identifierType: BuiltValueNullFieldError.checkNotNull(
-                identifierType, r'IdentifierVerifyFinishReq', 'identifierType'),
-            verificationType: BuiltValueNullFieldError.checkNotNull(
-                verificationType,
-                r'IdentifierVerifyFinishReq',
-                'verificationType'),
-            isNewDevice: BuiltValueNullFieldError.checkNotNull(
-                isNewDevice, r'IdentifierVerifyFinishReq', 'isNewDevice'));
+          code: BuiltValueNullFieldError.checkNotNull(
+            code,
+            r'IdentifierVerifyFinishReq',
+            'code',
+          ),
+          identifierType: BuiltValueNullFieldError.checkNotNull(
+            identifierType,
+            r'IdentifierVerifyFinishReq',
+            'identifierType',
+          ),
+          verificationType: BuiltValueNullFieldError.checkNotNull(
+            verificationType,
+            r'IdentifierVerifyFinishReq',
+            'verificationType',
+          ),
+          isNewDevice: BuiltValueNullFieldError.checkNotNull(
+            isNewDevice,
+            r'IdentifierVerifyFinishReq',
+            'isNewDevice',
+          ),
+        );
     replace(_$result);
     return _$result;
   }

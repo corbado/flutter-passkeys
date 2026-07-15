@@ -29,9 +29,9 @@ abstract class IdentifierVerifyStartReq
 
   IdentifierVerifyStartReq._();
 
-  factory IdentifierVerifyStartReq(
-          [void updates(IdentifierVerifyStartReqBuilder b)]) =
-      _$IdentifierVerifyStartReq;
+  factory IdentifierVerifyStartReq([
+    void updates(IdentifierVerifyStartReqBuilder b),
+  ]) = _$IdentifierVerifyStartReq;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(IdentifierVerifyStartReqBuilder b) => b;
@@ -46,7 +46,7 @@ class _$IdentifierVerifyStartReqSerializer
   @override
   final Iterable<Type> types = const [
     IdentifierVerifyStartReq,
-    _$IdentifierVerifyStartReq
+    _$IdentifierVerifyStartReq,
   ];
 
   @override
@@ -75,9 +75,11 @@ class _$IdentifierVerifyStartReqSerializer
     IdentifierVerifyStartReq object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(
+      serializers,
+      object,
+      specifiedType: specifiedType,
+    ).toList();
   }
 
   void _deserializeProperties(
@@ -93,17 +95,21 @@ class _$IdentifierVerifyStartReqSerializer
       final value = serializedList[i + 1];
       switch (key) {
         case r'identifierType':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(LoginIdentifierType),
-          ) as LoginIdentifierType;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(LoginIdentifierType),
+                  )
+                  as LoginIdentifierType;
           result.identifierType = valueDes;
           break;
         case r'verificationType':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(VerificationMethod),
-          ) as VerificationMethod;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(VerificationMethod),
+                  )
+                  as VerificationMethod;
           result.verificationType = valueDes;
           break;
         default:

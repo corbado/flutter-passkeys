@@ -19,19 +19,28 @@ class _$ProcessCommon extends ProcessCommon {
   factory _$ProcessCommon([void Function(ProcessCommonBuilder)? updates]) =>
       (new ProcessCommonBuilder()..update(updates))._build();
 
-  _$ProcessCommon._(
-      {required this.appName,
-      required this.frontendApiUrl,
-      required this.hideBadge,
-      required this.environment})
-      : super._() {
+  _$ProcessCommon._({
+    required this.appName,
+    required this.frontendApiUrl,
+    required this.hideBadge,
+    required this.environment,
+  }) : super._() {
     BuiltValueNullFieldError.checkNotNull(appName, r'ProcessCommon', 'appName');
     BuiltValueNullFieldError.checkNotNull(
-        frontendApiUrl, r'ProcessCommon', 'frontendApiUrl');
+      frontendApiUrl,
+      r'ProcessCommon',
+      'frontendApiUrl',
+    );
     BuiltValueNullFieldError.checkNotNull(
-        hideBadge, r'ProcessCommon', 'hideBadge');
+      hideBadge,
+      r'ProcessCommon',
+      'hideBadge',
+    );
     BuiltValueNullFieldError.checkNotNull(
-        environment, r'ProcessCommon', 'environment');
+      environment,
+      r'ProcessCommon',
+      'environment',
+    );
   }
 
   @override
@@ -89,8 +98,7 @@ class ProcessCommonBuilder
 
   String? _environment;
   String? get environment => _$this._environment;
-  set environment(String? environment) =>
-      _$this._environment = environment;
+  set environment(String? environment) => _$this._environment = environment;
 
   ProcessCommonBuilder() {
     ProcessCommon._defaults(this);
@@ -123,21 +131,33 @@ class ProcessCommonBuilder
   ProcessCommon build() => _build();
 
   _$ProcessCommon _build() {
-    final _$result = _$v ??
+    final _$result =
+        _$v ??
         new _$ProcessCommon._(
           appName: BuiltValueNullFieldError.checkNotNull(
-              appName, r'ProcessCommon', 'appName'),
+            appName,
+            r'ProcessCommon',
+            'appName',
+          ),
           frontendApiUrl: BuiltValueNullFieldError.checkNotNull(
-              frontendApiUrl, r'ProcessCommon', 'frontendApiUrl'),
+            frontendApiUrl,
+            r'ProcessCommon',
+            'frontendApiUrl',
+          ),
           hideBadge: BuiltValueNullFieldError.checkNotNull(
-              hideBadge, r'ProcessCommon', 'hideBadge'),
+            hideBadge,
+            r'ProcessCommon',
+            'hideBadge',
+          ),
           environment: BuiltValueNullFieldError.checkNotNull(
-              environment, r'ProcessCommon', 'environment'),
+            environment,
+            r'ProcessCommon',
+            'environment',
+          ),
         );
     replace(_$result);
     return _$result;
   }
-
 }
 
 // ignore_for_file: deprecated_member_use_from_same_package,type=lint

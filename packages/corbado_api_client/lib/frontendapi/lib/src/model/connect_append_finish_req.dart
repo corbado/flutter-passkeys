@@ -20,9 +20,9 @@ abstract class ConnectAppendFinishReq
 
   ConnectAppendFinishReq._();
 
-  factory ConnectAppendFinishReq(
-          [void updates(ConnectAppendFinishReqBuilder b)]) =
-      _$ConnectAppendFinishReq;
+  factory ConnectAppendFinishReq([
+    void updates(ConnectAppendFinishReqBuilder b),
+  ]) = _$ConnectAppendFinishReq;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(ConnectAppendFinishReqBuilder b) => b;
@@ -37,7 +37,7 @@ class _$ConnectAppendFinishReqSerializer
   @override
   final Iterable<Type> types = const [
     ConnectAppendFinishReq,
-    _$ConnectAppendFinishReq
+    _$ConnectAppendFinishReq,
   ];
 
   @override
@@ -61,9 +61,11 @@ class _$ConnectAppendFinishReqSerializer
     ConnectAppendFinishReq object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(
+      serializers,
+      object,
+      specifiedType: specifiedType,
+    ).toList();
   }
 
   void _deserializeProperties(
@@ -79,10 +81,12 @@ class _$ConnectAppendFinishReqSerializer
       final value = serializedList[i + 1];
       switch (key) {
         case r'attestationResponse':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(String),
-          ) as String;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(String),
+                  )
+                  as String;
           result.attestationResponse = valueDes;
           break;
         default:

@@ -34,8 +34,9 @@ abstract class GeneralBlockCompleted
 
   GeneralBlockCompleted._();
 
-  factory GeneralBlockCompleted(
-      [void updates(GeneralBlockCompletedBuilder b)]) = _$GeneralBlockCompleted;
+  factory GeneralBlockCompleted([
+    void updates(GeneralBlockCompletedBuilder b),
+  ]) = _$GeneralBlockCompleted;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(GeneralBlockCompletedBuilder b) => b;
@@ -50,7 +51,7 @@ class _$GeneralBlockCompletedSerializer
   @override
   final Iterable<Type> types = const [
     GeneralBlockCompleted,
-    _$GeneralBlockCompleted
+    _$GeneralBlockCompleted,
   ];
 
   @override
@@ -93,9 +94,11 @@ class _$GeneralBlockCompletedSerializer
     GeneralBlockCompleted object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(
+      serializers,
+      object,
+      specifiedType: specifiedType,
+    ).toList();
   }
 
   void _deserializeProperties(
@@ -111,31 +114,39 @@ class _$GeneralBlockCompletedSerializer
       final value = serializedList[i + 1];
       switch (key) {
         case r'blockType':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(String),
-          ) as String;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(String),
+                  )
+                  as String;
           result.blockType = valueDes;
           break;
         case r'shortSession':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(String),
-          ) as String;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(String),
+                  )
+                  as String;
           result.shortSession = valueDes;
           break;
         case r'longSession':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(String),
-          ) as String;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(String),
+                  )
+                  as String;
           result.longSession = valueDes;
           break;
         case r'passkeyOperation':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(PasskeyOperation),
-          ) as PasskeyOperation;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(PasskeyOperation),
+                  )
+                  as PasskeyOperation;
           result.passkeyOperation.replace(valueDes);
           break;
         default:

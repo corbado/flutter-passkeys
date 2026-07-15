@@ -7,17 +7,18 @@ part of 'connect_append_start_rsp.dart';
 // **************************************************************************
 
 const ConnectAppendStartRspVariantEnum
-    _$connectAppendStartRspVariantEnum_default_ =
+_$connectAppendStartRspVariantEnum_default_ =
     const ConnectAppendStartRspVariantEnum._('default_');
 const ConnectAppendStartRspVariantEnum
-    _$connectAppendStartRspVariantEnum_afterHybrid =
+_$connectAppendStartRspVariantEnum_afterHybrid =
     const ConnectAppendStartRspVariantEnum._('afterHybrid');
 const ConnectAppendStartRspVariantEnum
-    _$connectAppendStartRspVariantEnum_afterError =
+_$connectAppendStartRspVariantEnum_afterError =
     const ConnectAppendStartRspVariantEnum._('afterError');
 
 ConnectAppendStartRspVariantEnum _$connectAppendStartRspVariantEnumValueOf(
-    String name) {
+  String name,
+) {
   switch (name) {
     case 'default_':
       return _$connectAppendStartRspVariantEnum_default_;
@@ -31,15 +32,17 @@ ConnectAppendStartRspVariantEnum _$connectAppendStartRspVariantEnumValueOf(
 }
 
 final BuiltSet<ConnectAppendStartRspVariantEnum>
-    _$connectAppendStartRspVariantEnumValues = new BuiltSet<
-        ConnectAppendStartRspVariantEnum>(const <ConnectAppendStartRspVariantEnum>[
-  _$connectAppendStartRspVariantEnum_default_,
-  _$connectAppendStartRspVariantEnum_afterHybrid,
-  _$connectAppendStartRspVariantEnum_afterError,
-]);
+_$connectAppendStartRspVariantEnumValues =
+    new BuiltSet<ConnectAppendStartRspVariantEnum>(
+      const <ConnectAppendStartRspVariantEnum>[
+        _$connectAppendStartRspVariantEnum_default_,
+        _$connectAppendStartRspVariantEnum_afterHybrid,
+        _$connectAppendStartRspVariantEnum_afterError,
+      ],
+    );
 
 Serializer<ConnectAppendStartRspVariantEnum>
-    _$connectAppendStartRspVariantEnumSerializer =
+_$connectAppendStartRspVariantEnumSerializer =
     new _$ConnectAppendStartRspVariantEnumSerializer();
 
 class _$ConnectAppendStartRspVariantEnumSerializer
@@ -62,16 +65,19 @@ class _$ConnectAppendStartRspVariantEnumSerializer
 
   @override
   Object serialize(
-          Serializers serializers, ConnectAppendStartRspVariantEnum object,
-          {FullType specifiedType = FullType.unspecified}) =>
-      _toWire[object.name] ?? object.name;
+    Serializers serializers,
+    ConnectAppendStartRspVariantEnum object, {
+    FullType specifiedType = FullType.unspecified,
+  }) => _toWire[object.name] ?? object.name;
 
   @override
   ConnectAppendStartRspVariantEnum deserialize(
-          Serializers serializers, Object serialized,
-          {FullType specifiedType = FullType.unspecified}) =>
-      ConnectAppendStartRspVariantEnum.valueOf(
-          _fromWire[serialized] ?? (serialized is String ? serialized : ''));
+    Serializers serializers,
+    Object serialized, {
+    FullType specifiedType = FullType.unspecified,
+  }) => ConnectAppendStartRspVariantEnum.valueOf(
+    _fromWire[serialized] ?? (serialized is String ? serialized : ''),
+  );
 }
 
 class _$ConnectAppendStartRsp extends ConnectAppendStartRsp {
@@ -80,23 +86,30 @@ class _$ConnectAppendStartRsp extends ConnectAppendStartRsp {
   @override
   final ConnectAppendStartRspVariantEnum variant;
 
-  factory _$ConnectAppendStartRsp(
-          [void Function(ConnectAppendStartRspBuilder)? updates]) =>
-      (new ConnectAppendStartRspBuilder()..update(updates))._build();
+  factory _$ConnectAppendStartRsp([
+    void Function(ConnectAppendStartRspBuilder)? updates,
+  ]) => (new ConnectAppendStartRspBuilder()..update(updates))._build();
 
-  _$ConnectAppendStartRsp._(
-      {required this.attestationOptions, required this.variant})
-      : super._() {
+  _$ConnectAppendStartRsp._({
+    required this.attestationOptions,
+    required this.variant,
+  }) : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        attestationOptions, r'ConnectAppendStartRsp', 'attestationOptions');
+      attestationOptions,
+      r'ConnectAppendStartRsp',
+      'attestationOptions',
+    );
     BuiltValueNullFieldError.checkNotNull(
-        variant, r'ConnectAppendStartRsp', 'variant');
+      variant,
+      r'ConnectAppendStartRsp',
+      'variant',
+    );
   }
 
   @override
   ConnectAppendStartRsp rebuild(
-          void Function(ConnectAppendStartRspBuilder) updates) =>
-      (toBuilder()..update(updates)).build();
+    void Function(ConnectAppendStartRspBuilder) updates,
+  ) => (toBuilder()..update(updates)).build();
 
   @override
   ConnectAppendStartRspBuilder toBuilder() =>
@@ -171,14 +184,20 @@ class ConnectAppendStartRspBuilder
   ConnectAppendStartRsp build() => _build();
 
   _$ConnectAppendStartRsp _build() {
-    final _$result = _$v ??
+    final _$result =
+        _$v ??
         new _$ConnectAppendStartRsp._(
-            attestationOptions: BuiltValueNullFieldError.checkNotNull(
-                attestationOptions,
-                r'ConnectAppendStartRsp',
-                'attestationOptions'),
-            variant: BuiltValueNullFieldError.checkNotNull(
-                variant, r'ConnectAppendStartRsp', 'variant'));
+          attestationOptions: BuiltValueNullFieldError.checkNotNull(
+            attestationOptions,
+            r'ConnectAppendStartRsp',
+            'attestationOptions',
+          ),
+          variant: BuiltValueNullFieldError.checkNotNull(
+            variant,
+            r'ConnectAppendStartRsp',
+            'variant',
+          ),
+        );
     replace(_$result);
     return _$result;
   }

@@ -10,16 +10,16 @@ class _$PasskeyLoginStartReq extends PasskeyLoginStartReq {
   @override
   final ClientInformation? clientInformation;
 
-  factory _$PasskeyLoginStartReq(
-          [void Function(PasskeyLoginStartReqBuilder)? updates]) =>
-      (new PasskeyLoginStartReqBuilder()..update(updates))._build();
+  factory _$PasskeyLoginStartReq([
+    void Function(PasskeyLoginStartReqBuilder)? updates,
+  ]) => (new PasskeyLoginStartReqBuilder()..update(updates))._build();
 
   _$PasskeyLoginStartReq._({this.clientInformation}) : super._();
 
   @override
   PasskeyLoginStartReq rebuild(
-          void Function(PasskeyLoginStartReqBuilder) updates) =>
-      (toBuilder()..update(updates)).build();
+    void Function(PasskeyLoginStartReqBuilder) updates,
+  ) => (toBuilder()..update(updates)).build();
 
   @override
   PasskeyLoginStartReqBuilder toBuilder() =>
@@ -42,9 +42,9 @@ class _$PasskeyLoginStartReq extends PasskeyLoginStartReq {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper(r'PasskeyLoginStartReq')
-          ..add('clientInformation', clientInformation))
-        .toString();
+    return (newBuiltValueToStringHelper(
+      r'PasskeyLoginStartReq',
+    )..add('clientInformation', clientInformation)).toString();
   }
 }
 
@@ -88,9 +88,11 @@ class PasskeyLoginStartReqBuilder
   _$PasskeyLoginStartReq _build() {
     _$PasskeyLoginStartReq _$result;
     try {
-      _$result = _$v ??
+      _$result =
+          _$v ??
           new _$PasskeyLoginStartReq._(
-              clientInformation: _clientInformation?.build());
+            clientInformation: _clientInformation?.build(),
+          );
     } catch (_) {
       late String _$failedField;
       try {
@@ -98,7 +100,10 @@ class PasskeyLoginStartReqBuilder
         _clientInformation?.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            r'PasskeyLoginStartReq', _$failedField, e.toString());
+          r'PasskeyLoginStartReq',
+          _$failedField,
+          e.toString(),
+        );
       }
       rethrow;
     }

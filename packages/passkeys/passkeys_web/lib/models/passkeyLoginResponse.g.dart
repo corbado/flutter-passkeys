@@ -7,20 +7,20 @@ part of 'passkeyLoginResponse.dart';
 // **************************************************************************
 
 PasskeyLoginResponse _$PasskeyLoginResponseFromJson(
-        Map<String, dynamic> json) =>
-    PasskeyLoginResponse(
-      json['id'] as String,
-      json['rawId'] as String,
-      AssertionResponse.fromJson(json['response'] as Map<String, dynamic>),
-    );
+  Map<String, dynamic> json,
+) => PasskeyLoginResponse(
+  json['id'] as String,
+  json['rawId'] as String,
+  AssertionResponse.fromJson(json['response'] as Map<String, dynamic>),
+);
 
 Map<String, dynamic> _$PasskeyLoginResponseToJson(
-        PasskeyLoginResponse instance) =>
-    <String, dynamic>{
-      'id': instance.id,
-      'rawId': instance.rawId,
-      'response': instance.response,
-    };
+  PasskeyLoginResponse instance,
+) => <String, dynamic>{
+  'id': instance.id,
+  'rawId': instance.rawId,
+  'response': instance.response,
+};
 
 AssertionResponse _$AssertionResponseFromJson(Map<String, dynamic> json) =>
     AssertionResponse(

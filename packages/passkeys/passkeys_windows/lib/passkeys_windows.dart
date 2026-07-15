@@ -28,7 +28,7 @@ class PasskeysWindows extends PasskeysPlatform {
             (e) => AllowCredential(
               type: e.type,
               id: e.id,
-              transports: e.transports ?? [],
+              transports: e.transports,
             ),
           )
           .toList(),

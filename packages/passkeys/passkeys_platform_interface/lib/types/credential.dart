@@ -14,7 +14,8 @@ class CredentialType {
   });
 
   /// Constructs a new instance from a JSON map.
-  factory CredentialType.fromJson(Map<String, dynamic> json) => _$CredentialTypeFromJson(json);
+  factory CredentialType.fromJson(Map<String, dynamic> json) =>
+      _$CredentialTypeFromJson(json);
 
   /// The type of the credential.
   final String type;
@@ -23,7 +24,7 @@ class CredentialType {
   final String id;
 
   /// The transports of the credential.
-  final List<String>? transports;
+  final List<String> transports;
 
   /// Converts this instance to a JSON map.
   Map<String, dynamic> toJson() => _$CredentialTypeToJson(this);

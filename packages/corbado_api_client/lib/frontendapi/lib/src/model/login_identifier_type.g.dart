@@ -25,10 +25,10 @@ LoginIdentifierType _$valueOf(String name) {
 
 final BuiltSet<LoginIdentifierType> _$values =
     new BuiltSet<LoginIdentifierType>(const <LoginIdentifierType>[
-  _$email,
-  _$phone,
-  _$username,
-]);
+      _$email,
+      _$phone,
+      _$username,
+    ]);
 
 class _$LoginIdentifierTypeMeta {
   const _$LoginIdentifierTypeMeta();
@@ -67,15 +67,20 @@ class _$LoginIdentifierTypeSerializer
   final String wireName = 'LoginIdentifierType';
 
   @override
-  Object serialize(Serializers serializers, LoginIdentifierType object,
-          {FullType specifiedType = FullType.unspecified}) =>
-      _toWire[object.name] ?? object.name;
+  Object serialize(
+    Serializers serializers,
+    LoginIdentifierType object, {
+    FullType specifiedType = FullType.unspecified,
+  }) => _toWire[object.name] ?? object.name;
 
   @override
-  LoginIdentifierType deserialize(Serializers serializers, Object serialized,
-          {FullType specifiedType = FullType.unspecified}) =>
-      LoginIdentifierType.valueOf(
-          _fromWire[serialized] ?? (serialized is String ? serialized : ''));
+  LoginIdentifierType deserialize(
+    Serializers serializers,
+    Object serialized, {
+    FullType specifiedType = FullType.unspecified,
+  }) => LoginIdentifierType.valueOf(
+    _fromWire[serialized] ?? (serialized is String ? serialized : ''),
+  );
 }
 
 // ignore_for_file: deprecated_member_use_from_same_package,type=lint

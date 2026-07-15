@@ -26,8 +26,9 @@ abstract class MeIdentifierCreateReq
 
   MeIdentifierCreateReq._();
 
-  factory MeIdentifierCreateReq(
-      [void updates(MeIdentifierCreateReqBuilder b)]) = _$MeIdentifierCreateReq;
+  factory MeIdentifierCreateReq([
+    void updates(MeIdentifierCreateReqBuilder b),
+  ]) = _$MeIdentifierCreateReq;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(MeIdentifierCreateReqBuilder b) => b;
@@ -42,7 +43,7 @@ class _$MeIdentifierCreateReqSerializer
   @override
   final Iterable<Type> types = const [
     MeIdentifierCreateReq,
-    _$MeIdentifierCreateReq
+    _$MeIdentifierCreateReq,
   ];
 
   @override
@@ -71,9 +72,11 @@ class _$MeIdentifierCreateReqSerializer
     MeIdentifierCreateReq object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(
+      serializers,
+      object,
+      specifiedType: specifiedType,
+    ).toList();
   }
 
   void _deserializeProperties(
@@ -89,17 +92,21 @@ class _$MeIdentifierCreateReqSerializer
       final value = serializedList[i + 1];
       switch (key) {
         case r'identifierType':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(LoginIdentifierType),
-          ) as LoginIdentifierType;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(LoginIdentifierType),
+                  )
+                  as LoginIdentifierType;
           result.identifierType = valueDes;
           break;
         case r'value':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(String),
-          ) as String;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(String),
+                  )
+                  as String;
           result.value = valueDes;
           break;
         default:

@@ -19,17 +19,23 @@ class _$GenericRsp extends GenericRsp {
   factory _$GenericRsp([void Function(GenericRspBuilder)? updates]) =>
       (new GenericRspBuilder()..update(updates))._build();
 
-  _$GenericRsp._(
-      {required this.httpStatusCode,
-      required this.message,
-      required this.requestData,
-      required this.runtime})
-      : super._() {
+  _$GenericRsp._({
+    required this.httpStatusCode,
+    required this.message,
+    required this.requestData,
+    required this.runtime,
+  }) : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        httpStatusCode, r'GenericRsp', 'httpStatusCode');
+      httpStatusCode,
+      r'GenericRsp',
+      'httpStatusCode',
+    );
     BuiltValueNullFieldError.checkNotNull(message, r'GenericRsp', 'message');
     BuiltValueNullFieldError.checkNotNull(
-        requestData, r'GenericRsp', 'requestData');
+      requestData,
+      r'GenericRsp',
+      'requestData',
+    );
     BuiltValueNullFieldError.checkNotNull(runtime, r'GenericRsp', 'runtime');
   }
 
@@ -127,15 +133,26 @@ class GenericRspBuilder implements Builder<GenericRsp, GenericRspBuilder> {
   _$GenericRsp _build() {
     _$GenericRsp _$result;
     try {
-      _$result = _$v ??
+      _$result =
+          _$v ??
           new _$GenericRsp._(
-              httpStatusCode: BuiltValueNullFieldError.checkNotNull(
-                  httpStatusCode, r'GenericRsp', 'httpStatusCode'),
-              message: BuiltValueNullFieldError.checkNotNull(
-                  message, r'GenericRsp', 'message'),
-              requestData: requestData.build(),
-              runtime: BuiltValueNullFieldError.checkNotNull(
-                  runtime, r'GenericRsp', 'runtime'));
+            httpStatusCode: BuiltValueNullFieldError.checkNotNull(
+              httpStatusCode,
+              r'GenericRsp',
+              'httpStatusCode',
+            ),
+            message: BuiltValueNullFieldError.checkNotNull(
+              message,
+              r'GenericRsp',
+              'message',
+            ),
+            requestData: requestData.build(),
+            runtime: BuiltValueNullFieldError.checkNotNull(
+              runtime,
+              r'GenericRsp',
+              'runtime',
+            ),
+          );
     } catch (_) {
       late String _$failedField;
       try {
@@ -143,7 +160,10 @@ class GenericRspBuilder implements Builder<GenericRsp, GenericRspBuilder> {
         requestData.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            r'GenericRsp', _$failedField, e.toString());
+          r'GenericRsp',
+          _$failedField,
+          e.toString(),
+        );
       }
       rethrow;
     }

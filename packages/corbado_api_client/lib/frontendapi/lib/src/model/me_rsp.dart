@@ -83,9 +83,11 @@ class _$MeRspSerializer implements PrimitiveSerializer<MeRsp> {
     MeRsp object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(
+      serializers,
+      object,
+      specifiedType: specifiedType,
+    ).toList();
   }
 
   void _deserializeProperties(
@@ -101,31 +103,43 @@ class _$MeRspSerializer implements PrimitiveSerializer<MeRsp> {
       final value = serializedList[i + 1];
       switch (key) {
         case r'id':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(String),
-          ) as String;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(String),
+                  )
+                  as String;
           result.id = valueDes;
           break;
         case r'fullName':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(String),
-          ) as String;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(String),
+                  )
+                  as String;
           result.fullName = valueDes;
           break;
         case r'identifiers':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(BuiltList, [FullType(Identifier)]),
-          ) as BuiltList<Identifier>;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(BuiltList, [
+                      FullType(Identifier),
+                    ]),
+                  )
+                  as BuiltList<Identifier>;
           result.identifiers.replace(valueDes);
           break;
         case r'socialAccounts':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(BuiltList, [FullType(SocialAccount)]),
-          ) as BuiltList<SocialAccount>;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(BuiltList, [
+                      FullType(SocialAccount),
+                    ]),
+                  )
+                  as BuiltList<SocialAccount>;
           result.socialAccounts.replace(valueDes);
           break;
         default:
