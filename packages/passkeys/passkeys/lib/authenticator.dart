@@ -88,7 +88,13 @@ class PasskeyAuthenticator implements PasskeyAuthenticatorInterface {
         case 'ios-security-key-timeout':
           throw TimeoutException(e.message);
         default:
-          rethrow;
+          if (e.code.startsWith('android-unhandled')) {
+            throw UnhandledAuthenticatorException(e.code, e.message, e.details);
+          } else if (e.code.startsWith('ios-unhandled')) {
+            throw UnhandledAuthenticatorException(e.code, e.message, e.details);
+          } else {
+            rethrow;
+          }
       }
     }
   }
