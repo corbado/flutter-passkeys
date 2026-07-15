@@ -58,6 +58,66 @@ It helps you to integrate passkey authentication into your Flutter app that uses
 
 [Read more](./packages/corbado_auth_firebase/README.md)
 
+### 4. Supabase
+
+The `passkeys` package can be used as the platform authenticator for [supabase_flutter](https://pub.dev/packages/supabase_flutter).
+Supabase Auth acts as the relying party server, while `passkeys` handles the native passkey prompts on iOS, Android, macOS, Windows and Web.
+
+> **Note:** Passkey support in `supabase_flutter` is experimental and the API may change. It requires `supabase_flutter` 2.15.0 or later and `passkeys` 2.21.0 or later.
+
+#### Setup
+
+Add both packages to your `pubspec.yaml`:
+
+```yaml
+dependencies:
+  supabase_flutter: ^2.15.0
+  passkeys: ^2.21.0
+```
+
+Initialize Supabase as usual and create a `PasskeyAuthenticator` that you pass to the passkey methods:
+
+```dart
+import 'package:passkeys/authenticator.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+
+await Supabase.initialize(
+  url: supabaseUrl,
+  anonKey: supabaseAnonKey,
+);
+
+final supabase = Supabase.instance.client;
+final authenticator = PasskeyAuthenticator();
+```
+
+#### Registering a passkey
+
+Registering a passkey requires a signed in (non-anonymous) user. It adds a passkey to the current account:
+
+```dart
+try {
+  final passkey = await supabase.auth.registerPasskey(authenticator);
+  print('Registered passkey ${passkey.id}');
+} on AuthException catch (e) {
+  print(e);
+}
+```
+
+#### Signing in with a passkey
+
+```dart
+try {
+  final res = await supabase.auth.signInWithPasskey(authenticator);
+  print('Signed in as ${res.user?.email}');
+} on AuthException catch (e) {
+  print(e);
+}
+```
+
+For custom flows there is also a two-step API under the `supabase.auth.passkey` namespace (`startRegistration`/`verifyRegistration` and `startAuthentication`/`verifyAuthentication`), as well as methods to list, rename and delete passkeys.
+
+For the full guide and configuration steps, see the [Supabase passkeys documentation](https://supabase.com/docs/guides/auth/passkeys).
+
 ## Contributing
 
 We're happy to receive your pull requests. For major changes, please open an issue first to discuss what you would like to change.
