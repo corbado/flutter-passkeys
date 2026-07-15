@@ -1,3 +1,11 @@
+## 0.1.2+1
+
+ - Update a dependency to the latest release.
+
+## 0.1.2
+
+ - Update a dependency to the latest release.
+
 ## 0.1.1
 
 - Fix Base64URL encoding truncation in Windows WebAuthn helper
