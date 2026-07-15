@@ -722,6 +722,17 @@ public class Messages {
       this.transports = setterArg;
     }
 
+    /** The clientExtensionResults - PRF results */
+    private @Nullable Map<String, Object> clientExtensionResults;
+
+    public @Nullable Map<String, Object> getClientExtensionResults() {
+      return clientExtensionResults;
+    }
+
+    public void setClientExtensionResults(@Nullable Map<String, Object> setterArg) {
+      this.clientExtensionResults = setterArg;
+    }
+
     /** Constructor is non-public to enforce null safety; use Builder. */
     RegisterResponse() {}
 
@@ -762,6 +773,13 @@ public class Messages {
         return this;
       }
 
+      private @Nullable Map<String, Object> clientExtensionResults;
+
+      public @NonNull Builder setClientExtensionResults(@Nullable Map<String, Object> setterArg) {
+        this.clientExtensionResults = setterArg;
+        return this;
+      }
+
       public @NonNull RegisterResponse build() {
         RegisterResponse pigeonReturn = new RegisterResponse();
         pigeonReturn.setId(id);
@@ -769,18 +787,20 @@ public class Messages {
         pigeonReturn.setClientDataJSON(clientDataJSON);
         pigeonReturn.setAttestationObject(attestationObject);
         pigeonReturn.setTransports(transports);
+        pigeonReturn.setClientExtensionResults(clientExtensionResults);
         return pigeonReturn;
       }
     }
 
     @NonNull
     ArrayList<Object> toList() {
-      ArrayList<Object> toListResult = new ArrayList<Object>(5);
+      ArrayList<Object> toListResult = new ArrayList<Object>(6);
       toListResult.add(id);
       toListResult.add(rawId);
       toListResult.add(clientDataJSON);
       toListResult.add(attestationObject);
       toListResult.add(transports);
+      toListResult.add(clientExtensionResults);
       return toListResult;
     }
 
@@ -796,6 +816,8 @@ public class Messages {
       pigeonResult.setAttestationObject((String) attestationObject);
       Object transports = list.get(4);
       pigeonResult.setTransports((List<String>) transports);
+      Object clientExtensionResults = list.get(5);
+      pigeonResult.setClientExtensionResults((Map<String, Object>) clientExtensionResults);
       return pigeonResult;
     }
   }
@@ -876,6 +898,7 @@ public class Messages {
       this.signature = setterArg;
     }
 
+    /** The userHandle */
     private @NonNull String userHandle;
 
     public @NonNull String getUserHandle() {
@@ -887,6 +910,17 @@ public class Messages {
         throw new IllegalStateException("Nonnull field \"userHandle\" is null.");
       }
       this.userHandle = setterArg;
+    }
+
+    /** The clientExtensionResults - PRF results */
+    private @Nullable Map<String, Object> clientExtensionResults;
+
+    public @Nullable Map<String, Object> getClientExtensionResults() {
+      return clientExtensionResults;
+    }
+
+    public void setClientExtensionResults(@Nullable Map<String, Object> setterArg) {
+      this.clientExtensionResults = setterArg;
     }
 
     /** Constructor is non-public to enforce null safety; use Builder. */
@@ -936,6 +970,13 @@ public class Messages {
         return this;
       }
 
+      private @Nullable Map<String, Object> clientExtensionResults;
+
+      public @NonNull Builder setClientExtensionResults(@Nullable Map<String, Object> setterArg) {
+        this.clientExtensionResults = setterArg;
+        return this;
+      }
+
       public @NonNull AuthenticateResponse build() {
         AuthenticateResponse pigeonReturn = new AuthenticateResponse();
         pigeonReturn.setId(id);
@@ -944,19 +985,21 @@ public class Messages {
         pigeonReturn.setAuthenticatorData(authenticatorData);
         pigeonReturn.setSignature(signature);
         pigeonReturn.setUserHandle(userHandle);
+        pigeonReturn.setClientExtensionResults(clientExtensionResults);
         return pigeonReturn;
       }
     }
 
     @NonNull
     ArrayList<Object> toList() {
-      ArrayList<Object> toListResult = new ArrayList<Object>(6);
+      ArrayList<Object> toListResult = new ArrayList<Object>(7);
       toListResult.add(id);
       toListResult.add(rawId);
       toListResult.add(clientDataJSON);
       toListResult.add(authenticatorData);
       toListResult.add(signature);
       toListResult.add(userHandle);
+      toListResult.add(clientExtensionResults);
       return toListResult;
     }
 
@@ -974,6 +1017,8 @@ public class Messages {
       pigeonResult.setSignature((String) signature);
       Object userHandle = list.get(5);
       pigeonResult.setUserHandle((String) userHandle);
+      Object clientExtensionResults = list.get(6);
+      pigeonResult.setClientExtensionResults((Map<String, Object>) clientExtensionResults);
       return pigeonResult;
     }
   }
@@ -1053,9 +1098,9 @@ public class Messages {
 
     void hasPasskeySupport(@NonNull Result<Boolean> result);
 
-    void register(@NonNull String challenge, @NonNull RelyingParty relyingParty, @NonNull User user, @Nullable AuthenticatorSelection authenticatorSelection, @Nullable List<PubKeyCredParam> pubKeyCredParams, @Nullable Long timeout, @Nullable String attestation, @NonNull List<ExcludeCredential> excludeCredentials, @NonNull Result<RegisterResponse> result);
+    void register(@NonNull String challenge, @NonNull RelyingParty relyingParty, @NonNull User user, @Nullable AuthenticatorSelection authenticatorSelection, @Nullable List<PubKeyCredParam> pubKeyCredParams, @Nullable Long timeout, @Nullable String attestation, @NonNull List<ExcludeCredential> excludeCredentials, @Nullable String salt, @NonNull Result<RegisterResponse> result);
 
-    void authenticate(@NonNull String relyingPartyId, @NonNull String challenge, @Nullable Long timeout, @Nullable String userVerification, @Nullable List<AllowCredential> allowCredentials, @Nullable Boolean preferImmediatelyAvailableCredentials, @NonNull Result<AuthenticateResponse> result);
+    void authenticate(@NonNull String relyingPartyId, @NonNull String challenge, @Nullable Long timeout, @Nullable String userVerification, @Nullable List<AllowCredential> allowCredentials, @Nullable Boolean preferImmediatelyAvailableCredentials, @Nullable String salt, @NonNull Result<AuthenticateResponse> result);
 
     void cancelCurrentAuthenticatorOperation(@NonNull Result<Void> result);
 
@@ -1136,6 +1181,7 @@ public class Messages {
                 Number timeoutArg = (Number) args.get(5);
                 String attestationArg = (String) args.get(6);
                 List<ExcludeCredential> excludeCredentialsArg = (List<ExcludeCredential>) args.get(7);
+                String saltArg = (String) args.get(8);
                 Result<RegisterResponse> resultCallback =
                     new Result<RegisterResponse>() {
                       public void success(RegisterResponse result) {
@@ -1149,7 +1195,7 @@ public class Messages {
                       }
                     };
 
-                api.register(challengeArg, relyingPartyArg, userArg, authenticatorSelectionArg, pubKeyCredParamsArg, (timeoutArg == null) ? null : timeoutArg.longValue(), attestationArg, excludeCredentialsArg, resultCallback);
+                api.register(challengeArg, relyingPartyArg, userArg, authenticatorSelectionArg, pubKeyCredParamsArg, (timeoutArg == null) ? null : timeoutArg.longValue(), attestationArg, excludeCredentialsArg, saltArg, resultCallback);
               });
         } else {
           channel.setMessageHandler(null);
@@ -1170,6 +1216,7 @@ public class Messages {
                 String userVerificationArg = (String) args.get(3);
                 List<AllowCredential> allowCredentialsArg = (List<AllowCredential>) args.get(4);
                 Boolean preferImmediatelyAvailableCredentialsArg = (Boolean) args.get(5);
+                String saltArg = (String) args.get(6);
                 Result<AuthenticateResponse> resultCallback =
                     new Result<AuthenticateResponse>() {
                       public void success(AuthenticateResponse result) {
@@ -1183,7 +1230,7 @@ public class Messages {
                       }
                     };
 
-                api.authenticate(relyingPartyIdArg, challengeArg, (timeoutArg == null) ? null : timeoutArg.longValue(), userVerificationArg, allowCredentialsArg, preferImmediatelyAvailableCredentialsArg, resultCallback);
+                api.authenticate(relyingPartyIdArg, challengeArg, (timeoutArg == null) ? null : timeoutArg.longValue(), userVerificationArg, allowCredentialsArg, preferImmediatelyAvailableCredentialsArg, saltArg, resultCallback);
               });
         } else {
           channel.setMessageHandler(null);

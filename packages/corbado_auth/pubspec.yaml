@@ -18,7 +18,7 @@ dependencies:
     sdk: flutter
   flutter_secure_storage: "<=9.0.0 >8.0.0"
   http: ^1.1.2
-  json_annotation: ^4.8.1
+  json_annotation: ^4.10.0
   jwt_decoder: ^2.0.1
   meta: ^1.15.0
   passkeys: ^2.21.1

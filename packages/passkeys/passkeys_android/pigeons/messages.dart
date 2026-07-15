@@ -1,4 +1,3 @@
-// ignore_for_file: avoid_positional_boolean_parameters
 import 'package:pigeon/pigeon.dart';
 
 /// Represents a relying party
@@ -110,6 +109,7 @@ class RegisterResponse {
     required this.clientDataJSON,
     required this.attestationObject,
     required this.transports,
+    this.clientExtensionResults = const {},
   });
 
   /// The ID
@@ -126,6 +126,9 @@ class RegisterResponse {
 
   /// The supported transports for the authenticator
   final List<String?> transports;
+
+  /// The clientExtensionResults - PRF results
+  final Map<String?, Object?>? clientExtensionResults;
 }
 
 /// Represents an authenticate response
@@ -138,6 +141,7 @@ class AuthenticateResponse {
     required this.authenticatorData,
     required this.signature,
     required this.userHandle,
+    this.clientExtensionResults = const {},
   });
 
   /// The ID
@@ -155,7 +159,11 @@ class AuthenticateResponse {
   /// The signature
   final String signature;
 
+  /// The userHandle
   final String userHandle;
+
+  /// The clientExtensionResults - PRF results
+  final Map<String?, Object?>? clientExtensionResults;
 }
 
 @HostApi()
@@ -176,6 +184,7 @@ abstract class PasskeysApi {
     int? timeout,
     String? attestation,
     List<ExcludeCredential> excludeCredentials,
+    String? salt,
   );
 
   @async
@@ -186,6 +195,7 @@ abstract class PasskeysApi {
     String? userVerification,
     List<AllowCredential>? allowCredentials,
     bool? preferImmediatelyAvailableCredentials,
+    String? salt,
   );
 
   @async

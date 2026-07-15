@@ -219,6 +219,7 @@ class RegisterResponse {
     required this.clientDataJSON,
     required this.attestationObject,
     required this.transports,
+    this.clientExtensionResults,
   });
 
   /// The ID
@@ -236,6 +237,9 @@ class RegisterResponse {
   /// The supported transports for the authenticator
   List<String?> transports;
 
+  /// The clientExtensionResults - PRF results
+  Map<String?, Object?>? clientExtensionResults;
+
   Object encode() {
     return <Object?>[
       id,
@@ -243,6 +247,7 @@ class RegisterResponse {
       clientDataJSON,
       attestationObject,
       transports,
+      clientExtensionResults,
     ];
   }
 
@@ -254,6 +259,8 @@ class RegisterResponse {
       clientDataJSON: result[2]! as String,
       attestationObject: result[3]! as String,
       transports: (result[4] as List<Object?>?)!.cast<String?>(),
+      clientExtensionResults: (result[5] as Map<Object?, Object?>?)
+          ?.cast<String?, Object?>(),
     );
   }
 }
@@ -267,6 +274,7 @@ class AuthenticateResponse {
     required this.authenticatorData,
     required this.signature,
     required this.userHandle,
+    this.clientExtensionResults,
   });
 
   /// The ID
@@ -284,7 +292,11 @@ class AuthenticateResponse {
   /// The signature
   String signature;
 
+  /// The userHandle
   String userHandle;
+
+  /// The clientExtensionResults - PRF results
+  Map<String?, Object?>? clientExtensionResults;
 
   Object encode() {
     return <Object?>[
@@ -294,6 +306,7 @@ class AuthenticateResponse {
       authenticatorData,
       signature,
       userHandle,
+      clientExtensionResults,
     ];
   }
 
@@ -306,6 +319,8 @@ class AuthenticateResponse {
       authenticatorData: result[3]! as String,
       signature: result[4]! as String,
       userHandle: result[5]! as String,
+      clientExtensionResults: (result[6] as Map<Object?, Object?>?)
+          ?.cast<String?, Object?>(),
     );
   }
 }
@@ -443,6 +458,7 @@ class PasskeysApi {
     int? arg_timeout,
     String? arg_attestation,
     List<ExcludeCredential?> arg_excludeCredentials,
+    String? arg_salt,
   ) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
       'dev.flutter.pigeon.passkeys_android.PasskeysApi.register',
@@ -459,6 +475,7 @@ class PasskeysApi {
               arg_timeout,
               arg_attestation,
               arg_excludeCredentials,
+              arg_salt,
             ])
             as List<Object?>?;
     if (replyList == null) {
@@ -489,6 +506,7 @@ class PasskeysApi {
     String? arg_userVerification,
     List<AllowCredential?>? arg_allowCredentials,
     bool? arg_preferImmediatelyAvailableCredentials,
+    String? arg_salt,
   ) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
       'dev.flutter.pigeon.passkeys_android.PasskeysApi.authenticate',
@@ -503,6 +521,7 @@ class PasskeysApi {
               arg_userVerification,
               arg_allowCredentials,
               arg_preferImmediatelyAvailableCredentials,
+              arg_salt,
             ])
             as List<Object?>?;
     if (replyList == null) {

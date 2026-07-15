@@ -42,6 +42,7 @@ class PasskeyAuthenticator implements PasskeyAuthenticatorInterface {
   /// Creates a new passkey and stores it on the device.
   /// Returns [RegisterResponseType] which must be sent to the relying party
   /// server.
+  @override
   Future<RegisterResponseType> register(RegisterRequestType request) async {
     if (debugMode) {
       await _doctor.check(request.relyingParty.id);
@@ -102,6 +103,7 @@ class PasskeyAuthenticator implements PasskeyAuthenticatorInterface {
   /// Authenticates a user with a passkey.
   /// Returns [AuthenticateResponseType] which must be sent to the relying party
   /// server.
+  @override
   Future<AuthenticateResponseType> authenticate(
     AuthenticateRequestType request,
   ) async {

@@ -10,6 +10,7 @@ class AuthenticateResponseType {
     required this.authenticatorData,
     required this.signature,
     required this.userHandle,
+    this.clientExtensionResults,
   });
 
   /// Constructs a new instance from a JSON string.
@@ -40,6 +41,8 @@ class AuthenticateResponseType {
         authenticatorData: response['authenticatorData'] as String? ?? '',
         signature: response['signature'] as String? ?? '',
         userHandle: (response['userHandle'] as String?) ?? '',
+        clientExtensionResults:
+            json['clientExtensionResults'] as Map<String, dynamic>?,
       );
     }
 
@@ -51,6 +54,8 @@ class AuthenticateResponseType {
       authenticatorData: json['authenticatorData'] as String? ?? '',
       signature: json['signature'] as String? ?? '',
       userHandle: (json['userHandle'] as String?) ?? '',
+      clientExtensionResults:
+          json['clientExtensionResults'] as Map<String, dynamic>?,
     );
   }
 
@@ -71,6 +76,9 @@ class AuthenticateResponseType {
 
   /// The user handle. Can be empty if the user handle is not available.
   final String userHandle;
+
+  /// Raw WebAuthn client extension results, including the on-device PRF output.
+  final Map<String?, Object?>? clientExtensionResults;
 
   /// Converts this instance to a JSON string.
   String toJsonString() => jsonEncode(toJson());

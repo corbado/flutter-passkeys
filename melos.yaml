@@ -3,9 +3,6 @@ repository: https://github.com/corbado/flutter-passkeys
 packages:
   - packages/**
 
-command:
-  bootstrap:
-    usePubspecOverrides: true
 
 scripts:
   format:

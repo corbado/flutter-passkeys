@@ -9,6 +9,7 @@ class RegisterResponseType {
     required this.clientDataJSON,
     required this.attestationObject,
     required this.transports,
+    this.clientExtensionResults,
   });
 
   /// Constructs a new instance from a JSON string.
@@ -36,6 +37,8 @@ class RegisterResponseType {
       clientDataJSON: response['clientDataJSON'] as String? ?? '',
       attestationObject: response['attestationObject'] as String? ?? '',
       transports: transports?.map((e) => e as String?).toList() ?? [],
+      clientExtensionResults:
+          json['clientExtensionResults'] as Map<String, dynamic>?,
     );
   }
 
@@ -53,6 +56,9 @@ class RegisterResponseType {
 
   /// The transports supported by the authenticator.
   final List<String?> transports;
+
+  /// Raw WebAuthn client extension results, including the on-device PRF output.
+  final Map<String?, Object?>? clientExtensionResults;
 
   /// Converts this instance to a JSON string.
   String toJsonString() => jsonEncode(toJson());
@@ -75,7 +81,9 @@ class RegisterResponseType {
       'rawId': rawId,
       'type': 'public-key',
       'response': response,
-      'clientExtensionResults': <String, dynamic>{},
+      'clientExtensionResults': <String, dynamic>{
+        if (clientExtensionResults?['prf'] is Map) 'prf': {'enabled': true},
+      },
     };
   }
 }

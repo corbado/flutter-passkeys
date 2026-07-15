@@ -49,6 +49,7 @@ class PasskeysDarwin extends PasskeysPlatform {
           request.authSelectionType!.authenticatorAttachment != 'platform',
       request.authSelectionType?.residentKey,
       request.attestation,
+      request.prf,
     );
 
     return RegisterResponseType(
@@ -57,6 +58,7 @@ class PasskeysDarwin extends PasskeysPlatform {
       clientDataJSON: r.clientDataJSON,
       attestationObject: r.attestationObject,
       transports: r.transports.whereType<String>().toList(),
+      clientExtensionResults: r.clientExtensionResults,
     );
   }
 
@@ -84,6 +86,7 @@ class PasskeysDarwin extends PasskeysPlatform {
               .toList() ??
           [],
       request.preferImmediatelyAvailableCredentials,
+      request.prf,
     );
 
     return AuthenticateResponseType(
@@ -93,6 +96,7 @@ class PasskeysDarwin extends PasskeysPlatform {
       authenticatorData: r.authenticatorData,
       signature: r.signature,
       userHandle: r.userHandle ?? '',
+      clientExtensionResults: r.clientExtensionResults,
     );
   }
 

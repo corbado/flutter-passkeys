@@ -59,6 +59,7 @@ class RegisterResponse {
     required this.clientDataJSON,
     required this.attestationObject,
     required this.transports,
+    this.clientExtensionResults = const {},
   });
 
   /// The ID
@@ -75,6 +76,9 @@ class RegisterResponse {
 
   /// The supported transports for the authenticator
   final List<String?> transports;
+
+  /// The clientExtensionResults - PRF results
+  final Map<String?, Object?>? clientExtensionResults;
 }
 
 /// Represents an authenticate response
@@ -87,6 +91,7 @@ class AuthenticateResponse {
     required this.authenticatorData,
     required this.signature,
     this.userHandle,
+    this.clientExtensionResults = const {},
   });
 
   /// The ID
@@ -105,6 +110,9 @@ class AuthenticateResponse {
   final String signature;
 
   final String? userHandle;
+
+  /// The clientExtensionResults - PRF results
+  final Map<String?, Object?>? clientExtensionResults;
 }
 
 @HostApi()
@@ -124,6 +132,7 @@ abstract class PasskeysApi {
     bool canBeSecurityKey,
     String? residentKeyPreference,
     String? attestationPreference,
+    String? salt,
   );
 
   @async
@@ -133,6 +142,7 @@ abstract class PasskeysApi {
     bool conditionalUI,
     List<CredentialType> allowedCredentials,
     bool preferImmediatelyAvailableCredentials,
+    String? salt,
   );
 
   @async

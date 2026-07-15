@@ -32,6 +32,7 @@ class PasskeysAndroid extends PasskeysPlatform {
         );
       }).toList(),
       request.preferImmediatelyAvailableCredentials,
+      request.prf,
     );
 
     return AuthenticateResponseType(
@@ -41,6 +42,7 @@ class PasskeysAndroid extends PasskeysPlatform {
       authenticatorData: r.authenticatorData,
       signature: r.signature,
       userHandle: r.userHandle,
+      clientExtensionResults: r.clientExtensionResults,
     );
   }
 
@@ -94,6 +96,7 @@ class PasskeysAndroid extends PasskeysPlatform {
       request.excludeCredentials
           .map((e) => ExcludeCredential(id: e.id, type: e.type))
           .toList(),
+      request.prf,
     );
 
     return RegisterResponseType(
@@ -102,6 +105,7 @@ class PasskeysAndroid extends PasskeysPlatform {
       clientDataJSON: r.clientDataJSON,
       attestationObject: r.attestationObject,
       transports: r.transports.whereType<String>().toList(),
+      clientExtensionResults: r.clientExtensionResults,
     );
   }
 

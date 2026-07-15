@@ -15,6 +15,7 @@ class AuthenticateRequestType {
     this.timeout,
     this.userVerification,
     this.allowCredentials,
+    this.prf,
   });
 
   /// Constructs a new instance from a JSON string.
@@ -57,6 +58,7 @@ class AuthenticateRequestType {
       mediation: mediation,
       preferImmediatelyAvailableCredentials:
           preferImmediatelyAvailableCredentials,
+      prf: _prfSaltFromExtensions(json['extensions']),
     );
   }
 
@@ -102,6 +104,9 @@ class AuthenticateRequestType {
   /// immediately available, such as those that are stored on the device.
   final bool preferImmediatelyAvailableCredentials;
 
+  /// Base64URL-encoded salt for the WebAuthn PRF extension (`prf.eval.first`).
+  final String? prf;
+
   /// Converts this instance to a JSON string.
   String toJsonString() => jsonEncode(toJson());
 
@@ -114,6 +119,21 @@ class AuthenticateRequestType {
       if (allowCredentials != null && allowCredentials!.isNotEmpty)
         'allowCredentials': allowCredentials!.map((e) => e.toJson()).toList(),
       if (userVerification != null) 'userVerification': userVerification,
+      if (prf != null)
+        'extensions': {
+          'prf': {
+            'eval': {'first': prf},
+          },
+        },
     };
   }
+}
+
+String? _prfSaltFromExtensions(Object? extensions) {
+  if (extensions is! Map) return null;
+  final prf = extensions['prf'];
+  if (prf is! Map) return null;
+  final eval = prf['eval'];
+  if (eval is! Map) return null;
+  return eval['first'] as String?;
 }

@@ -43,3 +43,7 @@ dev_dependencies:
   mocktail: ^1.0.0
   plugin_platform_interface: ^2.0.0
   very_good_analysis: ^5.0.0
+  
+dependency_overrides:
+  passkeys_platform_interface:
+    path: ../passkeys_platform_interface
