@@ -6,9 +6,8 @@ import 'package:passkeys_platform_interface/types/types.dart';
 /// The iOS/macOS implementation of [PasskeysPlatform].
 class PasskeysDarwin extends PasskeysPlatform {
   /// Creates a new plugin implementation instance.
-  PasskeysDarwin({
-    @visibleForTesting PasskeysApi? api,
-  }) : _api = api ?? PasskeysApi();
+  PasskeysDarwin({@visibleForTesting PasskeysApi? api})
+    : _api = api ?? PasskeysApi();
 
   /// Registers this class as the default instance of [PasskeysDarwin].
   static void registerWith() {
@@ -21,7 +20,7 @@ class PasskeysDarwin extends PasskeysPlatform {
   Future<bool> canAuthenticate() async => _api.canAuthenticate();
 
   @override
-  Future<RegisterResponseType> register(RegisterRequestType request, String? salt) async {
+  Future<RegisterResponseType> register(RegisterRequestType request) async {
     final userArg = User(name: request.user.name, id: request.user.id);
     final relyingPartyArg = RelyingParty(
       name: request.relyingParty.name,
@@ -32,13 +31,24 @@ class PasskeysDarwin extends PasskeysPlatform {
       request.challenge,
       relyingPartyArg,
       userArg,
-      request.excludeCredentials.map((e) => CredentialType(type: e.type, id: e.id, transports: e.transports ?? [])).toList(),
+      request.excludeCredentials
+          .map(
+            (e) => CredentialType(
+              type: e.type,
+              id: e.id,
+              transports: e.transports ?? [],
+            ),
+          )
+          .toList(),
       request.pubKeyCredParams?.map((e) => e.alg).toList() ?? [],
-      request.authSelectionType == null || request.authSelectionType!.authenticatorAttachment != 'cross-platform',
-      request.authSelectionType == null || request.authSelectionType!.authenticatorAttachment != 'platform',
+      request.authSelectionType == null ||
+          request.authSelectionType!.authenticatorAttachment !=
+              'cross-platform',
+      request.authSelectionType == null ||
+          request.authSelectionType!.authenticatorAttachment != 'platform',
       request.authSelectionType?.residentKey,
       request.attestation,
-      salt,
+      request.prf,
     );
 
     return RegisterResponseType(
@@ -52,7 +62,9 @@ class PasskeysDarwin extends PasskeysPlatform {
   }
 
   @override
-  Future<AuthenticateResponseType> authenticate(AuthenticateRequestType request, String? salt) async {
+  Future<AuthenticateResponseType> authenticate(
+    AuthenticateRequestType request,
+  ) async {
     var conditionalUI = false;
     if (request.mediation == MediationType.Conditional) {
       conditionalUI = true;
@@ -62,9 +74,18 @@ class PasskeysDarwin extends PasskeysPlatform {
       request.relyingPartyId,
       request.challenge,
       conditionalUI,
-      request.allowCredentials?.map((e) => CredentialType(type: e.type, id: e.id, transports: e.transports ?? [])).toList() ?? [],
+      request.allowCredentials
+              ?.map(
+                (e) => CredentialType(
+                  type: e.type,
+                  id: e.id,
+                  transports: e.transports ?? [],
+                ),
+              )
+              .toList() ??
+          [],
       request.preferImmediatelyAvailableCredentials,
-      salt,
+      request.prf,
     );
 
     return AuthenticateResponseType(
@@ -79,7 +100,8 @@ class PasskeysDarwin extends PasskeysPlatform {
   }
 
   @override
-  Future<void> cancelCurrentAuthenticatorOperation() => _api.cancelCurrentAuthenticatorOperation();
+  Future<void> cancelCurrentAuthenticatorOperation() =>
+      _api.cancelCurrentAuthenticatorOperation();
 
   @override
   Future<AvailabilityTypeIOS> getAvailability() async {

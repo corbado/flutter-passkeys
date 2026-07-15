@@ -67,7 +67,7 @@ class AuthenticateController: NSObject, ASAuthorizationControllerDelegate, ASAut
             if #available(iOS 18.0, *),
                let credPrf = r.prf {
                 let prfBytes = credPrf.first.withUnsafeBytes({ Data($0) })
-                prf = prfBytes.base64EncodedString()
+                prf = prfBytes.toBase64URL()
             }
             
             let response = AuthenticateResponse(

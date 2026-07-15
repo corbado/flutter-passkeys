@@ -2,7 +2,6 @@ package com.corbado.passkeys_android;
 
 import android.app.Activity;
 import android.os.CancellationSignal;
-import android.util.Base64;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -130,22 +129,19 @@ public class MessageHandler implements Messages.PasskeysApi {
         try {
             JSONObject optionsJson = createCredentialOptions.toJSON();
 
-            // PRF extension if salt provided
             if (salt != null && !salt.isEmpty()) {
-                String saltBase64Url = hexToBase64Url(salt);
                 JSONObject extensions = optionsJson.optJSONObject("extensions");
                 if (extensions == null) extensions = new JSONObject();
 
                 JSONObject prf = new JSONObject();
                 JSONObject eval = new JSONObject();
-                eval.put("first", saltBase64Url);
+                eval.put("first", salt);
                 prf.put("eval", eval);
 
                 extensions.put("prf", prf);
                 optionsJson.put("extensions", extensions);
             }
             String options = optionsJson.toString();
-            Log.i("Passkeys", "options = " + options);
 
             Activity activity = plugin.requireActivity();
             CredentialManager credentialManager = CredentialManager.create(activity);
@@ -286,23 +282,19 @@ public class MessageHandler implements Messages.PasskeysApi {
                 allowCredentialsType, userVerification);
         try {
             JSONObject optionsJson = getCredentialOptions.toJSON();
-            // PRF extension if salt provided
             if (salt != null && !salt.isEmpty()) {
-                String saltBase64Url = hexToBase64Url(salt);
-                Log.i("Passkey", "salt provided auth" + saltBase64Url);
                 JSONObject extensions = optionsJson.optJSONObject("extensions");
                 if (extensions == null) extensions = new JSONObject();
 
                 JSONObject prf = new JSONObject();
                 JSONObject eval = new JSONObject();
-                eval.put("first", saltBase64Url);
+                eval.put("first", salt);
                 prf.put("eval", eval);
 
                 extensions.put("prf", prf);
                 optionsJson.put("extensions", extensions);
             }
             String options = optionsJson.toString();
-            Log.i("Passkeys", "options = " + options);
             Activity activity = plugin.requireActivity();
 
             CredentialManager credentialManager = CredentialManager.create(activity);
@@ -425,18 +417,5 @@ public class MessageHandler implements Messages.PasskeysApi {
         }
 
         result.success(null);
-    }
-
-    ///  `hexToBase64Url`
-    public static String hexToBase64Url(String hex) {
-        int len = hex.length();
-        byte[] bytes = new byte[len / 2];
-        for (int i = 0; i < len; i += 2) {
-            bytes[i / 2] = (byte) Integer.parseInt(hex.substring(i, i + 2), 16);
-        }
-        return Base64.encodeToString(
-                bytes,
-                Base64.URL_SAFE | Base64.NO_PADDING | Base64.NO_WRAP
-        );
     }
 }

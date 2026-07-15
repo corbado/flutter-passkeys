@@ -6,9 +6,8 @@ import 'package:passkeys_windows/messages.g.dart';
 /// The Windows implementation of [PasskeysPlatform].
 class PasskeysWindows extends PasskeysPlatform {
   /// The method channel used to interact with the native platform.
-  PasskeysWindows({
-    @visibleForTesting PasskeysApi? api,
-  }) : _api = api ?? PasskeysApi();
+  PasskeysWindows({@visibleForTesting PasskeysApi? api})
+    : _api = api ?? PasskeysApi();
 
   /// Registers this class as the default instance of [PasskeysPlatform]
   static void registerWith() => PasskeysPlatform.instance = PasskeysWindows();
@@ -16,7 +15,9 @@ class PasskeysWindows extends PasskeysPlatform {
   final PasskeysApi _api;
 
   @override
-  Future<AuthenticateResponseType> authenticate(AuthenticateRequestType request, String? salt) async {
+  Future<AuthenticateResponseType> authenticate(
+    AuthenticateRequestType request,
+  ) async {
     final authenticateResponse = await _api.authenticate(
       request.relyingPartyId,
       request.challenge,
@@ -55,7 +56,7 @@ class PasskeysWindows extends PasskeysPlatform {
   }
 
   @override
-  Future<RegisterResponseType> register(RegisterRequestType request, String? salt) async {
+  Future<RegisterResponseType> register(RegisterRequestType request) async {
     final userArg = User(
       displayName: request.user.displayName,
       name: request.user.name,
@@ -72,7 +73,8 @@ class PasskeysWindows extends PasskeysPlatform {
 
     if (requestAuthSelectionType != null) {
       authSelection = AuthenticatorSelection(
-        authenticatorAttachment: requestAuthSelectionType.authenticatorAttachment,
+        authenticatorAttachment:
+            requestAuthSelectionType.authenticatorAttachment,
         requireResidentKey: requestAuthSelectionType.requireResidentKey,
         residentKey: requestAuthSelectionType.residentKey,
         userVerification: requestAuthSelectionType.userVerification,
@@ -84,10 +86,14 @@ class PasskeysWindows extends PasskeysPlatform {
       relyingPartyArg,
       userArg,
       authSelection,
-      request.pubKeyCredParams?.map((e) => PubKeyCredParam(type: e.type, alg: e.alg)).toList(),
+      request.pubKeyCredParams
+          ?.map((e) => PubKeyCredParam(type: e.type, alg: e.alg))
+          .toList(),
       request.timeout,
       request.attestation,
-      request.excludeCredentials.map((e) => ExcludeCredential(type: e.type, id: e.id)).toList(),
+      request.excludeCredentials
+          .map((e) => ExcludeCredential(type: e.type, id: e.id))
+          .toList(),
     );
 
     return RegisterResponseType(
@@ -100,17 +106,20 @@ class PasskeysWindows extends PasskeysPlatform {
   }
 
   @override
-  Future<void> cancelCurrentAuthenticatorOperation() => _api.cancelCurrentAuthenticatorOperation();
+  Future<void> cancelCurrentAuthenticatorOperation() =>
+      _api.cancelCurrentAuthenticatorOperation();
 
   @override
   Future<AvailabilityTypeWindows> getAvailability() async {
-    final isUserVerifyingPlatformAuthenticatorAvailable = await canAuthenticate();
+    final isUserVerifyingPlatformAuthenticatorAvailable =
+        await canAuthenticate();
 
     final hasPasskeySupport = await _api.hasPasskeySupport();
 
     return AvailabilityTypeWindows(
       hasPasskeySupport: hasPasskeySupport,
-      isUserVerifyingPlatformAuthenticatorAvailable: isUserVerifyingPlatformAuthenticatorAvailable,
+      isUserVerifyingPlatformAuthenticatorAvailable:
+          isUserVerifyingPlatformAuthenticatorAvailable,
       isNative: true,
     );
   }

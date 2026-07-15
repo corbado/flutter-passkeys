@@ -41,7 +41,7 @@ class RegisterController: NSObject, ASAuthorizationControllerDelegate, ASAuthori
             if #available(iOS 18.0, *),
                let credPrf = credentialRegistration.prf,
                let prfBytes = credPrf.first?.withUnsafeBytes({ Data($0) }) {
-                prf = prfBytes.base64EncodedString()
+                prf = prfBytes.toBase64URL()
             }
             
             let response = RegisterResponse(

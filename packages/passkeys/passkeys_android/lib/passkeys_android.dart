@@ -6,9 +6,8 @@ import 'package:passkeys_platform_interface/types/types.dart';
 /// The Android implementation of [PasskeysPlatform].
 class PasskeysAndroid extends PasskeysPlatform {
   /// The method channel used to interact with the native platform.
-  PasskeysAndroid({
-    @visibleForTesting PasskeysApi? api,
-  }) : _api = api ?? PasskeysApi();
+  PasskeysAndroid({@visibleForTesting PasskeysApi? api})
+    : _api = api ?? PasskeysApi();
 
   /// Registers this class as the default instance of [PasskeysPlatform]
   static void registerWith() => PasskeysPlatform.instance = PasskeysAndroid();
@@ -16,7 +15,9 @@ class PasskeysAndroid extends PasskeysPlatform {
   final PasskeysApi _api;
 
   @override
-  Future<AuthenticateResponseType> authenticate(AuthenticateRequestType request, String? salt) async {
+  Future<AuthenticateResponseType> authenticate(
+    AuthenticateRequestType request,
+  ) async {
     final r = await _api.authenticate(
       request.relyingPartyId,
       request.challenge,
@@ -30,17 +31,18 @@ class PasskeysAndroid extends PasskeysPlatform {
         );
       }).toList(),
       request.preferImmediatelyAvailableCredentials,
-      salt,
+      request.prf,
     );
 
     return AuthenticateResponseType(
-        id: r.id,
-        rawId: r.rawId,
-        clientDataJSON: r.clientDataJSON,
-        authenticatorData: r.authenticatorData,
-        signature: r.signature,
-        userHandle: r.userHandle,
-        clientExtensionResults: r.clientExtensionResults);
+      id: r.id,
+      rawId: r.rawId,
+      clientDataJSON: r.clientDataJSON,
+      authenticatorData: r.authenticatorData,
+      signature: r.signature,
+      userHandle: r.userHandle,
+      clientExtensionResults: r.clientExtensionResults,
+    );
   }
 
   @override
@@ -54,7 +56,7 @@ class PasskeysAndroid extends PasskeysPlatform {
   }
 
   @override
-  Future<RegisterResponseType> register(RegisterRequestType request, String? salt) async {
+  Future<RegisterResponseType> register(RegisterRequestType request) async {
     final userArg = User(
       displayName: request.user.displayName,
       name: request.user.name,
@@ -81,15 +83,20 @@ class PasskeysAndroid extends PasskeysPlatform {
     }
 
     final r = await _api.register(
-        request.challenge,
-        relyingPartyArg,
-        userArg,
-        authSelection,
-        request.pubKeyCredParams?.map((e) => PubKeyCredParam(alg: e.alg, type: e.type)).toList(),
-        request.timeout,
-        request.attestation,
-        request.excludeCredentials.map((e) => ExcludeCredential(id: e.id, type: e.type)).toList(),
-        salt);
+      request.challenge,
+      relyingPartyArg,
+      userArg,
+      authSelection,
+      request.pubKeyCredParams
+          ?.map((e) => PubKeyCredParam(alg: e.alg, type: e.type))
+          .toList(),
+      request.timeout,
+      request.attestation,
+      request.excludeCredentials
+          .map((e) => ExcludeCredential(id: e.id, type: e.type))
+          .toList(),
+      request.prf,
+    );
 
     return RegisterResponseType(
       id: r.id,
@@ -110,13 +117,15 @@ class PasskeysAndroid extends PasskeysPlatform {
   // In case of android we link passkey support to the availability of the biometric authentication
   @override
   Future<AvailabilityTypeAndroid> getAvailability() async {
-    final isUserVerifyingPlatformAuthenticatorAvailable = await canAuthenticate();
+    final isUserVerifyingPlatformAuthenticatorAvailable =
+        await canAuthenticate();
 
     final hasPasskeySupport = await _api.hasPasskeySupport();
 
     return AvailabilityTypeAndroid(
       hasPasskeySupport: hasPasskeySupport,
-      isUserVerifyingPlatformAuthenticatorAvailable: isUserVerifyingPlatformAuthenticatorAvailable,
+      isUserVerifyingPlatformAuthenticatorAvailable:
+          isUserVerifyingPlatformAuthenticatorAvailable,
       isNative: true,
     );
   }

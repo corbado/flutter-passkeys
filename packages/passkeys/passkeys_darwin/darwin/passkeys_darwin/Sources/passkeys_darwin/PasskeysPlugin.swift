@@ -90,11 +90,10 @@ public class PasskeysPlugin: NSObject, FlutterPlugin, PasskeysApi {
             }
 
             // PRF
-            if #available(iOS 18.0, *) {
-                guard let salt = salt, let saltData = Data(hex: salt) else {
-                return
-            }
-            let values = ASAuthorizationPublicKeyCredentialPRFAssertionInput.InputValues(saltInput1: saltData)
+            if #available(iOS 18.0, *),
+               let salt,
+               let saltData = Data.fromBase64Url(salt) {
+                let values = ASAuthorizationPublicKeyCredentialPRFAssertionInput.InputValues(saltInput1: saltData)
                 platformRequest.prf = ASAuthorizationPublicKeyCredentialPRFRegistrationInput.inputValues(values)
             }
             
@@ -184,9 +183,10 @@ public class PasskeysPlugin: NSObject, FlutterPlugin, PasskeysApi {
         platformRequest.allowedCredentials = parseCredentials(credentials: allowedCredentials)
         
         // PRF
-        if #available(iOS 18.0, *) {
-            guard let salt = salt, let saltData = Data(hex: salt) else { return }
-        let values = ASAuthorizationPublicKeyCredentialPRFAssertionInput.InputValues(saltInput1: saltData)
+        if #available(iOS 18.0, *),
+           let salt,
+           let saltData = Data.fromBase64Url(salt) {
+            let values = ASAuthorizationPublicKeyCredentialPRFAssertionInput.InputValues(saltInput1: saltData)
             platformRequest.prf = ASAuthorizationPublicKeyCredentialPRFAssertionInput.inputValues(values)
         }
         
@@ -314,26 +314,6 @@ public extension Data {
     private static func base64UrlToBase64(base64Url: String) -> String {
         return base64Url.replacingOccurrences(of: "-", with: "+")
                          .replacingOccurrences(of: "_", with: "/")
-    }
-    
-    
-    /// init    - https://stackoverflow.com/questions/26501276/converting-hex-string-to-nsdata-in-swift
-    init?(hex: String) {
-        let hex = hex.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard hex.count % 2 == 0 else { return nil }
-
-        var data = Data(capacity: hex.count / 2)
-        var index = hex.startIndex
-
-        while index < hex.endIndex {
-            let nextIndex = hex.index(index, offsetBy: 2)
-            let byteString = hex[index..<nextIndex]
-            guard let byte = UInt8(byteString, radix: 16) else { return nil }
-            data.append(byte)
-            index = nextIndex
-        }
-
-        self = data
     }
 }
 

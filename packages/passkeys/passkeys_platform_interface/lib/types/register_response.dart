@@ -23,7 +23,9 @@ class RegisterResponseType {
   factory RegisterResponseType.fromJson(Map<String, dynamic> json) {
     final response = json['response'];
     if (response is! Map<String, dynamic>) {
-      throw FormatException('Expected "response" to be a Map, got ${response.runtimeType}');
+      throw FormatException(
+        'Expected "response" to be a Map, got ${response.runtimeType}',
+      );
     }
     final transports = response['transports'] as List<dynamic>?;
 
@@ -33,7 +35,8 @@ class RegisterResponseType {
       clientDataJSON: response['clientDataJSON'] as String? ?? '',
       attestationObject: response['attestationObject'] as String? ?? '',
       transports: transports?.map((e) => e as String?).toList() ?? [],
-      clientExtensionResults: json['clientExtensionResults'] as Map<String, Object>?,
+      clientExtensionResults:
+          json['clientExtensionResults'] as Map<String, dynamic>?,
     );
   }
   final String id;
@@ -41,6 +44,8 @@ class RegisterResponseType {
   final String clientDataJSON;
   final String attestationObject;
   final List<String?> transports;
+
+  /// Raw WebAuthn client extension results, including the on-device PRF output.
   final Map<String?, Object?>? clientExtensionResults;
 
   /// Converts this instance to a JSON string.
@@ -48,32 +53,14 @@ class RegisterResponseType {
 
   /// Converts this instance to a JSON map.
   Map<String, dynamic> toJson() {
-    Map<String, dynamic>? sanitizedExtensions;
-
     final response = <String, dynamic>{
       'clientDataJSON': clientDataJSON,
       'attestationObject': attestationObject,
     };
 
-    // Only include non-null transports
     final nonNullTransports = transports.whereType<String>().toList();
     if (nonNullTransports.isNotEmpty) {
       response['transports'] = nonNullTransports;
-    }
-
-    if (clientExtensionResults != null) {
-      sanitizedExtensions = {};
-
-      final prf = clientExtensionResults?['prf'] as Map?;
-      final results = prf?['results'] as Map?;
-
-      if (results != null) {
-        sanitizedExtensions['prf'] = {
-          'results': {
-            'first': '',
-          }
-        };
-      }
     }
 
     return {
@@ -81,7 +68,9 @@ class RegisterResponseType {
       'rawId': rawId,
       'type': 'public-key',
       'response': response,
-      'clientExtensionResults': sanitizedExtensions ?? {},
+      'clientExtensionResults': <String, dynamic>{
+        if (clientExtensionResults?['prf'] is Map) 'prf': {'enabled': true},
+      },
     };
   }
 }

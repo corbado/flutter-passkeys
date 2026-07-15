@@ -29,7 +29,9 @@ class AuthenticateResponseType {
     if (json.containsKey('response')) {
       final response = json['response'];
       if (response is! Map<String, dynamic>) {
-        throw FormatException('Expected "response" to be a Map, got ${response.runtimeType}');
+        throw FormatException(
+          'Expected "response" to be a Map, got ${response.runtimeType}',
+        );
       }
       return AuthenticateResponseType(
         id: json['id'] as String? ?? '',
@@ -38,7 +40,8 @@ class AuthenticateResponseType {
         authenticatorData: response['authenticatorData'] as String? ?? '',
         signature: response['signature'] as String? ?? '',
         userHandle: (response['userHandle'] as String?) ?? '',
-        clientExtensionResults: json['clientExtensionResults'] as Map<String, Object>?,
+        clientExtensionResults:
+            json['clientExtensionResults'] as Map<String, dynamic>?,
       );
     }
 
@@ -50,7 +53,8 @@ class AuthenticateResponseType {
       authenticatorData: json['authenticatorData'] as String? ?? '',
       signature: json['signature'] as String? ?? '',
       userHandle: (json['userHandle'] as String?) ?? '',
-      clientExtensionResults: json['clientExtensionResults'] as Map<String, Object>?,
+      clientExtensionResults:
+          json['clientExtensionResults'] as Map<String, dynamic>?,
     );
   }
 
@@ -72,7 +76,7 @@ class AuthenticateResponseType {
   /// The user handle. Can be empty if the user handle is not available.
   final String userHandle;
 
-  /// Optional client extension results.
+  /// Raw WebAuthn client extension results, including the on-device PRF output.
   final Map<String?, Object?>? clientExtensionResults;
 
   /// Converts this instance to a JSON string.
@@ -82,28 +86,22 @@ class AuthenticateResponseType {
   ///
   /// Output follows the standard WebAuthn format with nested 'response' object.
   Map<String, dynamic> toJson() {
-    Map<String, dynamic>? sanitizedExtensions;
+    final response = <String, dynamic>{
+      'clientDataJSON': clientDataJSON,
+      'authenticatorData': authenticatorData,
+      'signature': signature,
+    };
 
-    final response = <String, dynamic>{'clientDataJSON': clientDataJSON, 'authenticatorData': authenticatorData, 'signature': signature};
-
-    // Only include userHandle if it's not empty
     if (userHandle.isNotEmpty) {
       response['userHandle'] = userHandle;
     }
 
-    if (clientExtensionResults != null) {
-      sanitizedExtensions = {};
-
-      final prf = clientExtensionResults?['prf'] as Map?;
-      final results = prf?['results'] as Map?;
-
-      if (results != null) {
-        sanitizedExtensions['prf'] = {
-          'results': {'first': ''},
-        };
-      }
-    }
-
-    return {'id': id, 'rawId': rawId, 'type': 'public-key', 'response': response, 'clientExtensionResults': sanitizedExtensions ?? <String, dynamic>{}};
+    return {
+      'id': id,
+      'rawId': rawId,
+      'type': 'public-key',
+      'response': response,
+      'clientExtensionResults': <String, dynamic>{},
+    };
   }
 }
