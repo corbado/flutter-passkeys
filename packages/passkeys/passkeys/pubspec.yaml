@@ -5,8 +5,10 @@ repository: https://github.com/corbado/flutter-passkeys/tree/main/packages/passk
 version: 2.21.1
 
 environment:
-  sdk: ">=3.8.0 <4.0.0"
-  flutter: ">=3.32.0"
+  sdk: ">=3.9.0 <4.0.0"
+  flutter: ">=3.35.0"
+
+resolution: workspace
 
 flutter:
   plugin:
@@ -43,7 +45,3 @@ dev_dependencies:
   mocktail: ^1.0.0
   plugin_platform_interface: ^2.0.0
   very_good_analysis: ^5.0.0
-  
-dependency_overrides:
-  passkeys_platform_interface:
-    path: ../passkeys_platform_interface

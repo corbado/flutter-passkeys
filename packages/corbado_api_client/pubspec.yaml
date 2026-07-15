@@ -6,17 +6,18 @@ version: 1.1.1
 publish_to: none
 
 environment:
-  sdk: ">=3.8.0 <4.0.0"
-  flutter: ">=3.32.0"
+  sdk: ">=3.9.0 <4.0.0"
+  flutter: ">=3.35.0"
+
+resolution: workspace
 
 dependencies:
   flutter:
     sdk: flutter
-  openapi_generator_annotations: ^5.0.2
+  openapi_generator_annotations: ^7.0.0
   collection: ^1.15.0
 
 dev_dependencies:
-  openapi_generator: ^5.0.2
   build_runner: ^2.4.5
   flutter_test:
     sdk: flutter

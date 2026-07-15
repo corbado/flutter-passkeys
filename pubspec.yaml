@@ -1,7 +1,98 @@
 name: flutter_passkeys_workspace
+repository: https://github.com/corbado/flutter-passkeys
+publish_to: none
 
 environment:
-  sdk: '>=3.8.0 <4.0.0'
+  sdk: '>=3.9.0 <4.0.0'
+
+workspace:
+  - packages/passkeys/passkeys
+  - packages/passkeys/passkeys/example
+  - packages/passkeys/passkeys_android
+  - packages/passkeys/passkeys_darwin
+  - packages/passkeys/passkeys_doctor
+  - packages/passkeys/passkeys_platform_interface
+  - packages/passkeys/passkeys_web
+  - packages/passkeys/passkeys_windows
+  - packages/corbado_auth
+  - packages/corbado_auth/example
+  - packages/corbado_auth_firebase
+  - packages/corbado_auth_firebase/example
+  - packages/corbado_api_client
+  - packages/corbado_api_client/lib/frontendapi
+  - packages/corbado_api_client/lib/telemetry_api_client
 
 dev_dependencies:
-  melos: ^4.1.0
+  melos: ^8.2.2
+
+melos:
+  scripts:
+    example-passkeys-web:
+      description: Run passkeys example on web.
+      run: |
+        cd packages/passkeys/passkeys/example
+        flutter run lib/main.dart -d chrome --web-browser-flag "--disable-web-security"
+
+    example-passkeys-native:
+      description: Run passkeys example on iOS or Android (you should start the emulator/simulator before you run this command).
+      run: |
+        cd packages/passkeys/passkeys/example
+        flutter run lib/main.dart
+
+    example-corbado_auth-native:
+      description: Run corbado_auth example on iOS or Android (you should start the emulator/simulator before you run this command).
+      run: |
+        cd packages/corbado_auth/example
+        flutter run lib/main.dart
+
+    example-corbado_auth-web:
+      description: Run corbado_auth example on web.
+      run: |
+        cd packages/corbado_auth/example
+        flutter run lib/main.dart -d chrome --web-browser-flag "--disable-web-security"
+
+    example-corbado_auth_firebase-native:
+      description: Run corbado_auth_firebase example on iOS or Android (you should start the emulator/simulator before you run this command).
+      run: |
+        cd packages/corbado_auth_firebase/example
+        flutter run lib/main.dart --dart-define=CORBADO_PROJECT_ID=pro-8751299119685489253
+
+    build-passkeys-web-javascript:
+      description: Build passkeys_web's javascript code and copy it to the example.
+      run: |
+        cd packages/passkeys/passkeys_web/javascript
+        npm run build
+        cp dist/bundle.js ../../passkeys/example/web/bundle.js
+
+    generate-corbado-api-client:
+      description: Regenerate the Corbado frontend API client. openapi_generator pins analyzer <9 so it cannot live in the workspace; this resolves corbado_api_client in an isolated copy with the build tool, then copies the generated client back.
+      run: |
+        set -e
+        pkg="$MELOS_ROOT_PATH/packages/corbado_api_client"
+        work="$(mktemp -d)"
+        trap 'rm -rf "$work"' EXIT
+        cp -R "$pkg/." "$work/"
+        cd "$work"
+        rm -rf .dart_tool pubspec.lock
+        sed -i.bak '/^resolution: workspace$/d' pubspec.yaml
+        rm -f pubspec.yaml.bak
+        flutter pub add "dev:openapi_generator:^7.0.0"
+        dart run build_runner build --delete-conflicting-outputs
+        rm -rf "$pkg/lib/frontendapi"
+        cp -R lib/frontendapi "$pkg/lib/frontendapi"
+
+    deploy-example-passkeys-web:
+      description: Deploy passkeys example to Vercel.
+      run: |
+        cd packages/passkeys/passkeys/example
+        vercel pull
+        vercel build --prod
+        vercel deploy --prebuilt --prod
+
+    deploy-example-corbado_auth-web:
+      description: Deploy corbado_auth example to Vercel.
+      run: |
+        cd packages/corbado_auth/example
+        vercel pull
+        vercel build --prod
+        vercel deploy --prebuilt --prod
