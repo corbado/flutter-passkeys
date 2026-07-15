@@ -42,7 +42,7 @@ class _$IdentifierUpdateReqSerializer
   @override
   final Iterable<Type> types = const [
     IdentifierUpdateReq,
-    _$IdentifierUpdateReq
+    _$IdentifierUpdateReq,
   ];
 
   @override
@@ -71,9 +71,11 @@ class _$IdentifierUpdateReqSerializer
     IdentifierUpdateReq object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(
+      serializers,
+      object,
+      specifiedType: specifiedType,
+    ).toList();
   }
 
   void _deserializeProperties(
@@ -89,17 +91,21 @@ class _$IdentifierUpdateReqSerializer
       final value = serializedList[i + 1];
       switch (key) {
         case r'identifierType':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(LoginIdentifierType),
-          ) as LoginIdentifierType;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(LoginIdentifierType),
+                  )
+                  as LoginIdentifierType;
           result.identifierType = valueDes;
           break;
         case r'value':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(String),
-          ) as String;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(String),
+                  )
+                  as String;
           result.value = valueDes;
           break;
         default:

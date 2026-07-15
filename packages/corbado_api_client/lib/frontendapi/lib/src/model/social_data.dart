@@ -88,9 +88,11 @@ class _$SocialDataSerializer implements PrimitiveSerializer<SocialData> {
     SocialData object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(
+      serializers,
+      object,
+      specifiedType: specifiedType,
+    ).toList();
   }
 
   void _deserializeProperties(
@@ -106,32 +108,41 @@ class _$SocialDataSerializer implements PrimitiveSerializer<SocialData> {
       final value = serializedList[i + 1];
       switch (key) {
         case r'providers':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType:
-                const FullType(BuiltList, [FullType(SocialProviderType)]),
-          ) as BuiltList<SocialProviderType>;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(BuiltList, [
+                      FullType(SocialProviderType),
+                    ]),
+                  )
+                  as BuiltList<SocialProviderType>;
           result.providers.replace(valueDes);
           break;
         case r'status':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(SocialDataStatusEnum),
-          ) as SocialDataStatusEnum;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(SocialDataStatusEnum),
+                  )
+                  as SocialDataStatusEnum;
           result.status = valueDes;
           break;
         case r'oauthUrl':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(String),
-          ) as String;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(String),
+                  )
+                  as String;
           result.oauthUrl = valueDes;
           break;
         case r'error':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(RequestError),
-          ) as RequestError;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(RequestError),
+                  )
+                  as RequestError;
           result.error.replace(valueDes);
           break;
         default:

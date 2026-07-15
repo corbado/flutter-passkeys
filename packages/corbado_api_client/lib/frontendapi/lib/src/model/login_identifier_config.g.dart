@@ -10,19 +10,22 @@ class _$LoginIdentifierConfig extends LoginIdentifierConfig {
   @override
   final LoginIdentifierType type;
 
-  factory _$LoginIdentifierConfig(
-          [void Function(LoginIdentifierConfigBuilder)? updates]) =>
-      (new LoginIdentifierConfigBuilder()..update(updates))._build();
+  factory _$LoginIdentifierConfig([
+    void Function(LoginIdentifierConfigBuilder)? updates,
+  ]) => (new LoginIdentifierConfigBuilder()..update(updates))._build();
 
   _$LoginIdentifierConfig._({required this.type}) : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        type, r'LoginIdentifierConfig', 'type');
+      type,
+      r'LoginIdentifierConfig',
+      'type',
+    );
   }
 
   @override
   LoginIdentifierConfig rebuild(
-          void Function(LoginIdentifierConfigBuilder) updates) =>
-      (toBuilder()..update(updates)).build();
+    void Function(LoginIdentifierConfigBuilder) updates,
+  ) => (toBuilder()..update(updates)).build();
 
   @override
   LoginIdentifierConfigBuilder toBuilder() =>
@@ -44,9 +47,9 @@ class _$LoginIdentifierConfig extends LoginIdentifierConfig {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper(r'LoginIdentifierConfig')
-          ..add('type', type))
-        .toString();
+    return (newBuiltValueToStringHelper(
+      r'LoginIdentifierConfig',
+    )..add('type', type)).toString();
   }
 }
 
@@ -86,10 +89,15 @@ class LoginIdentifierConfigBuilder
   LoginIdentifierConfig build() => _build();
 
   _$LoginIdentifierConfig _build() {
-    final _$result = _$v ??
+    final _$result =
+        _$v ??
         new _$LoginIdentifierConfig._(
-            type: BuiltValueNullFieldError.checkNotNull(
-                type, r'LoginIdentifierConfig', 'type'));
+          type: BuiltValueNullFieldError.checkNotNull(
+            type,
+            r'LoginIdentifierConfig',
+            'type',
+          ),
+        );
     replace(_$result);
     return _$result;
   }

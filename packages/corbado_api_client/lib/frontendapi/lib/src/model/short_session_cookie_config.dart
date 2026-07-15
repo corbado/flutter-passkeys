@@ -39,9 +39,9 @@ abstract class ShortSessionCookieConfig
 
   ShortSessionCookieConfig._();
 
-  factory ShortSessionCookieConfig(
-          [void updates(ShortSessionCookieConfigBuilder b)]) =
-      _$ShortSessionCookieConfig;
+  factory ShortSessionCookieConfig([
+    void updates(ShortSessionCookieConfigBuilder b),
+  ]) = _$ShortSessionCookieConfig;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(ShortSessionCookieConfigBuilder b) => b;
@@ -56,7 +56,7 @@ class _$ShortSessionCookieConfigSerializer
   @override
   final Iterable<Type> types = const [
     ShortSessionCookieConfig,
-    _$ShortSessionCookieConfig
+    _$ShortSessionCookieConfig,
   ];
 
   @override
@@ -100,9 +100,11 @@ class _$ShortSessionCookieConfigSerializer
     ShortSessionCookieConfig object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(
+      serializers,
+      object,
+      specifiedType: specifiedType,
+    ).toList();
   }
 
   void _deserializeProperties(
@@ -118,38 +120,47 @@ class _$ShortSessionCookieConfigSerializer
       final value = serializedList[i + 1];
       switch (key) {
         case r'domain':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(String),
-          ) as String;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(String),
+                  )
+                  as String;
           result.domain = valueDes;
           break;
         case r'secure':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(bool),
-          ) as bool;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(bool),
+                  )
+                  as bool;
           result.secure = valueDes;
           break;
         case r'sameSite':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(ShortSessionCookieConfigSameSiteEnum),
-          ) as ShortSessionCookieConfigSameSiteEnum;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(
+                      ShortSessionCookieConfigSameSiteEnum,
+                    ),
+                  )
+                  as ShortSessionCookieConfigSameSiteEnum;
           result.sameSite = valueDes;
           break;
         case r'path':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(String),
-          ) as String;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(String),
+                  )
+                  as String;
           result.path = valueDes;
           break;
         case r'lifetimeSeconds':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(int),
-          ) as int;
+          final valueDes =
+              serializers.deserialize(value, specifiedType: const FullType(int))
+                  as int;
           result.lifetimeSeconds = valueDes;
           break;
         default:

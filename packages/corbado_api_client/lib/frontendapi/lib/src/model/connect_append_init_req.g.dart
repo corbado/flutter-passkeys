@@ -12,23 +12,30 @@ class _$ConnectAppendInitReq extends ConnectAppendInitReq {
   @override
   final BuiltMap<String, String> flags;
 
-  factory _$ConnectAppendInitReq(
-          [void Function(ConnectAppendInitReqBuilder)? updates]) =>
-      (new ConnectAppendInitReqBuilder()..update(updates))._build();
+  factory _$ConnectAppendInitReq([
+    void Function(ConnectAppendInitReqBuilder)? updates,
+  ]) => (new ConnectAppendInitReqBuilder()..update(updates))._build();
 
-  _$ConnectAppendInitReq._(
-      {required this.clientInformation, required this.flags})
-      : super._() {
+  _$ConnectAppendInitReq._({
+    required this.clientInformation,
+    required this.flags,
+  }) : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        clientInformation, r'ConnectAppendInitReq', 'clientInformation');
+      clientInformation,
+      r'ConnectAppendInitReq',
+      'clientInformation',
+    );
     BuiltValueNullFieldError.checkNotNull(
-        flags, r'ConnectAppendInitReq', 'flags');
+      flags,
+      r'ConnectAppendInitReq',
+      'flags',
+    );
   }
 
   @override
   ConnectAppendInitReq rebuild(
-          void Function(ConnectAppendInitReqBuilder) updates) =>
-      (toBuilder()..update(updates)).build();
+    void Function(ConnectAppendInitReqBuilder) updates,
+  ) => (toBuilder()..update(updates)).build();
 
   @override
   ConnectAppendInitReqBuilder toBuilder() =>
@@ -106,10 +113,12 @@ class ConnectAppendInitReqBuilder
   _$ConnectAppendInitReq _build() {
     _$ConnectAppendInitReq _$result;
     try {
-      _$result = _$v ??
+      _$result =
+          _$v ??
           new _$ConnectAppendInitReq._(
-              clientInformation: clientInformation.build(),
-              flags: flags.build());
+            clientInformation: clientInformation.build(),
+            flags: flags.build(),
+          );
     } catch (_) {
       late String _$failedField;
       try {
@@ -119,7 +128,10 @@ class ConnectAppendInitReqBuilder
         flags.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            r'ConnectAppendInitReq', _$failedField, e.toString());
+          r'ConnectAppendInitReq',
+          _$failedField,
+          e.toString(),
+        );
       }
       rethrow;
     }

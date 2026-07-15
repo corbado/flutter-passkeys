@@ -83,9 +83,11 @@ class _$ProcessCommonSerializer implements PrimitiveSerializer<ProcessCommon> {
     ProcessCommon object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(
+      serializers,
+      object,
+      specifiedType: specifiedType,
+    ).toList();
   }
 
   void _deserializeProperties(
@@ -101,31 +103,39 @@ class _$ProcessCommonSerializer implements PrimitiveSerializer<ProcessCommon> {
       final value = serializedList[i + 1];
       switch (key) {
         case r'appName':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(String),
-          ) as String;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(String),
+                  )
+                  as String;
           result.appName = valueDes;
           break;
         case r'frontendApiUrl':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(String),
-          ) as String;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(String),
+                  )
+                  as String;
           result.frontendApiUrl = valueDes;
           break;
         case r'hideBadge':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(bool),
-          ) as bool;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(bool),
+                  )
+                  as bool;
           result.hideBadge = valueDes;
           break;
         case r'environment':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(String),
-          ) as String;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(String),
+                  )
+                  as String;
           result.environment = valueDes;
           break;
         default:

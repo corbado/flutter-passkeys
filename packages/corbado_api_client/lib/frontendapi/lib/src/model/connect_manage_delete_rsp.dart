@@ -20,9 +20,9 @@ abstract class ConnectManageDeleteRsp
 
   ConnectManageDeleteRsp._();
 
-  factory ConnectManageDeleteRsp(
-          [void updates(ConnectManageDeleteRspBuilder b)]) =
-      _$ConnectManageDeleteRsp;
+  factory ConnectManageDeleteRsp([
+    void updates(ConnectManageDeleteRspBuilder b),
+  ]) = _$ConnectManageDeleteRsp;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(ConnectManageDeleteRspBuilder b) => b;
@@ -37,7 +37,7 @@ class _$ConnectManageDeleteRspSerializer
   @override
   final Iterable<Type> types = const [
     ConnectManageDeleteRsp,
-    _$ConnectManageDeleteRsp
+    _$ConnectManageDeleteRsp,
   ];
 
   @override
@@ -61,9 +61,11 @@ class _$ConnectManageDeleteRspSerializer
     ConnectManageDeleteRsp object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(
+      serializers,
+      object,
+      specifiedType: specifiedType,
+    ).toList();
   }
 
   void _deserializeProperties(
@@ -79,10 +81,12 @@ class _$ConnectManageDeleteRspSerializer
       final value = serializedList[i + 1];
       switch (key) {
         case r'credentialID':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(String),
-          ) as String;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(String),
+                  )
+                  as String;
           result.credentialID = valueDes;
           break;
         default:

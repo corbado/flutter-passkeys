@@ -15,8 +15,9 @@ class _$GeneralBlockVerifyIdentifier extends GeneralBlockVerifyIdentifier {
   final String identifier;
   @override
   final BuiltList<
-          GeneralBlockVerifyIdentifierAlternativeVerificationMethodsInner>
-      alternativeVerificationMethods;
+    GeneralBlockVerifyIdentifierAlternativeVerificationMethodsInner
+  >
+  alternativeVerificationMethods;
   @override
   final bool isPostLoginVerification;
   @override
@@ -24,35 +25,50 @@ class _$GeneralBlockVerifyIdentifier extends GeneralBlockVerifyIdentifier {
   @override
   final RequestError? error;
 
-  factory _$GeneralBlockVerifyIdentifier(
-          [void Function(GeneralBlockVerifyIdentifierBuilder)? updates]) =>
-      (new GeneralBlockVerifyIdentifierBuilder()..update(updates))._build();
+  factory _$GeneralBlockVerifyIdentifier([
+    void Function(GeneralBlockVerifyIdentifierBuilder)? updates,
+  ]) => (new GeneralBlockVerifyIdentifierBuilder()..update(updates))._build();
 
-  _$GeneralBlockVerifyIdentifier._(
-      {required this.blockType,
-      required this.verificationMethod,
-      required this.identifier,
-      required this.alternativeVerificationMethods,
-      required this.isPostLoginVerification,
-      this.retryNotBefore,
-      this.error})
-      : super._() {
+  _$GeneralBlockVerifyIdentifier._({
+    required this.blockType,
+    required this.verificationMethod,
+    required this.identifier,
+    required this.alternativeVerificationMethods,
+    required this.isPostLoginVerification,
+    this.retryNotBefore,
+    this.error,
+  }) : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        blockType, r'GeneralBlockVerifyIdentifier', 'blockType');
-    BuiltValueNullFieldError.checkNotNull(verificationMethod,
-        r'GeneralBlockVerifyIdentifier', 'verificationMethod');
+      blockType,
+      r'GeneralBlockVerifyIdentifier',
+      'blockType',
+    );
     BuiltValueNullFieldError.checkNotNull(
-        identifier, r'GeneralBlockVerifyIdentifier', 'identifier');
-    BuiltValueNullFieldError.checkNotNull(alternativeVerificationMethods,
-        r'GeneralBlockVerifyIdentifier', 'alternativeVerificationMethods');
-    BuiltValueNullFieldError.checkNotNull(isPostLoginVerification,
-        r'GeneralBlockVerifyIdentifier', 'isPostLoginVerification');
+      verificationMethod,
+      r'GeneralBlockVerifyIdentifier',
+      'verificationMethod',
+    );
+    BuiltValueNullFieldError.checkNotNull(
+      identifier,
+      r'GeneralBlockVerifyIdentifier',
+      'identifier',
+    );
+    BuiltValueNullFieldError.checkNotNull(
+      alternativeVerificationMethods,
+      r'GeneralBlockVerifyIdentifier',
+      'alternativeVerificationMethods',
+    );
+    BuiltValueNullFieldError.checkNotNull(
+      isPostLoginVerification,
+      r'GeneralBlockVerifyIdentifier',
+      'isPostLoginVerification',
+    );
   }
 
   @override
   GeneralBlockVerifyIdentifier rebuild(
-          void Function(GeneralBlockVerifyIdentifierBuilder) updates) =>
-      (toBuilder()..update(updates)).build();
+    void Function(GeneralBlockVerifyIdentifierBuilder) updates,
+  ) => (toBuilder()..update(updates)).build();
 
   @override
   GeneralBlockVerifyIdentifierBuilder toBuilder() =>
@@ -93,7 +109,9 @@ class _$GeneralBlockVerifyIdentifier extends GeneralBlockVerifyIdentifier {
           ..add('verificationMethod', verificationMethod)
           ..add('identifier', identifier)
           ..add(
-              'alternativeVerificationMethods', alternativeVerificationMethods)
+            'alternativeVerificationMethods',
+            alternativeVerificationMethods,
+          )
           ..add('isPostLoginVerification', isPostLoginVerification)
           ..add('retryNotBefore', retryNotBefore)
           ..add('error', error))
@@ -103,8 +121,10 @@ class _$GeneralBlockVerifyIdentifier extends GeneralBlockVerifyIdentifier {
 
 class GeneralBlockVerifyIdentifierBuilder
     implements
-        Builder<GeneralBlockVerifyIdentifier,
-            GeneralBlockVerifyIdentifierBuilder> {
+        Builder<
+          GeneralBlockVerifyIdentifier,
+          GeneralBlockVerifyIdentifierBuilder
+        > {
   _$GeneralBlockVerifyIdentifier? _$v;
 
   String? _blockType;
@@ -121,16 +141,19 @@ class GeneralBlockVerifyIdentifierBuilder
   set identifier(String? identifier) => _$this._identifier = identifier;
 
   ListBuilder<GeneralBlockVerifyIdentifierAlternativeVerificationMethodsInner>?
-      _alternativeVerificationMethods;
+  _alternativeVerificationMethods;
   ListBuilder<GeneralBlockVerifyIdentifierAlternativeVerificationMethodsInner>
-      get alternativeVerificationMethods =>
-          _$this._alternativeVerificationMethods ??= new ListBuilder<
-              GeneralBlockVerifyIdentifierAlternativeVerificationMethodsInner>();
+  get alternativeVerificationMethods =>
+      _$this._alternativeVerificationMethods ??=
+          new ListBuilder<
+            GeneralBlockVerifyIdentifierAlternativeVerificationMethodsInner
+          >();
   set alternativeVerificationMethods(
-          ListBuilder<
-                  GeneralBlockVerifyIdentifierAlternativeVerificationMethodsInner>?
-              alternativeVerificationMethods) =>
-      _$this._alternativeVerificationMethods = alternativeVerificationMethods;
+    ListBuilder<
+      GeneralBlockVerifyIdentifierAlternativeVerificationMethodsInner
+    >?
+    alternativeVerificationMethods,
+  ) => _$this._alternativeVerificationMethods = alternativeVerificationMethods;
 
   bool? _isPostLoginVerification;
   bool? get isPostLoginVerification => _$this._isPostLoginVerification;
@@ -156,8 +179,8 @@ class GeneralBlockVerifyIdentifierBuilder
       _blockType = $v.blockType;
       _verificationMethod = $v.verificationMethod;
       _identifier = $v.identifier;
-      _alternativeVerificationMethods =
-          $v.alternativeVerificationMethods.toBuilder();
+      _alternativeVerificationMethods = $v.alternativeVerificationMethods
+          .toBuilder();
       _isPostLoginVerification = $v.isPostLoginVerification;
       _retryNotBefore = $v.retryNotBefore;
       _error = $v.error?.toBuilder();
@@ -183,24 +206,34 @@ class GeneralBlockVerifyIdentifierBuilder
   _$GeneralBlockVerifyIdentifier _build() {
     _$GeneralBlockVerifyIdentifier _$result;
     try {
-      _$result = _$v ??
+      _$result =
+          _$v ??
           new _$GeneralBlockVerifyIdentifier._(
-              blockType: BuiltValueNullFieldError.checkNotNull(
-                  blockType, r'GeneralBlockVerifyIdentifier', 'blockType'),
-              verificationMethod: BuiltValueNullFieldError.checkNotNull(
-                  verificationMethod,
-                  r'GeneralBlockVerifyIdentifier',
-                  'verificationMethod'),
-              identifier: BuiltValueNullFieldError.checkNotNull(
-                  identifier, r'GeneralBlockVerifyIdentifier', 'identifier'),
-              alternativeVerificationMethods:
-                  alternativeVerificationMethods.build(),
-              isPostLoginVerification: BuiltValueNullFieldError.checkNotNull(
-                  isPostLoginVerification,
-                  r'GeneralBlockVerifyIdentifier',
-                  'isPostLoginVerification'),
-              retryNotBefore: retryNotBefore,
-              error: _error?.build());
+            blockType: BuiltValueNullFieldError.checkNotNull(
+              blockType,
+              r'GeneralBlockVerifyIdentifier',
+              'blockType',
+            ),
+            verificationMethod: BuiltValueNullFieldError.checkNotNull(
+              verificationMethod,
+              r'GeneralBlockVerifyIdentifier',
+              'verificationMethod',
+            ),
+            identifier: BuiltValueNullFieldError.checkNotNull(
+              identifier,
+              r'GeneralBlockVerifyIdentifier',
+              'identifier',
+            ),
+            alternativeVerificationMethods: alternativeVerificationMethods
+                .build(),
+            isPostLoginVerification: BuiltValueNullFieldError.checkNotNull(
+              isPostLoginVerification,
+              r'GeneralBlockVerifyIdentifier',
+              'isPostLoginVerification',
+            ),
+            retryNotBefore: retryNotBefore,
+            error: _error?.build(),
+          );
     } catch (_) {
       late String _$failedField;
       try {
@@ -211,7 +244,10 @@ class GeneralBlockVerifyIdentifierBuilder
         _error?.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            r'GeneralBlockVerifyIdentifier', _$failedField, e.toString());
+          r'GeneralBlockVerifyIdentifier',
+          _$failedField,
+          e.toString(),
+        );
       }
       rethrow;
     }

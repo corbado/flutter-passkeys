@@ -12,22 +12,28 @@ class _$IdentifierUpdateReq extends IdentifierUpdateReq {
   @override
   final String value;
 
-  factory _$IdentifierUpdateReq(
-          [void Function(IdentifierUpdateReqBuilder)? updates]) =>
-      (new IdentifierUpdateReqBuilder()..update(updates))._build();
+  factory _$IdentifierUpdateReq([
+    void Function(IdentifierUpdateReqBuilder)? updates,
+  ]) => (new IdentifierUpdateReqBuilder()..update(updates))._build();
 
   _$IdentifierUpdateReq._({required this.identifierType, required this.value})
-      : super._() {
+    : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        identifierType, r'IdentifierUpdateReq', 'identifierType');
+      identifierType,
+      r'IdentifierUpdateReq',
+      'identifierType',
+    );
     BuiltValueNullFieldError.checkNotNull(
-        value, r'IdentifierUpdateReq', 'value');
+      value,
+      r'IdentifierUpdateReq',
+      'value',
+    );
   }
 
   @override
   IdentifierUpdateReq rebuild(
-          void Function(IdentifierUpdateReqBuilder) updates) =>
-      (toBuilder()..update(updates)).build();
+    void Function(IdentifierUpdateReqBuilder) updates,
+  ) => (toBuilder()..update(updates)).build();
 
   @override
   IdentifierUpdateReqBuilder toBuilder() =>
@@ -101,12 +107,20 @@ class IdentifierUpdateReqBuilder
   IdentifierUpdateReq build() => _build();
 
   _$IdentifierUpdateReq _build() {
-    final _$result = _$v ??
+    final _$result =
+        _$v ??
         new _$IdentifierUpdateReq._(
-            identifierType: BuiltValueNullFieldError.checkNotNull(
-                identifierType, r'IdentifierUpdateReq', 'identifierType'),
-            value: BuiltValueNullFieldError.checkNotNull(
-                value, r'IdentifierUpdateReq', 'value'));
+          identifierType: BuiltValueNullFieldError.checkNotNull(
+            identifierType,
+            r'IdentifierUpdateReq',
+            'identifierType',
+          ),
+          value: BuiltValueNullFieldError.checkNotNull(
+            value,
+            r'IdentifierUpdateReq',
+            'value',
+          ),
+        );
     replace(_$result);
     return _$result;
   }

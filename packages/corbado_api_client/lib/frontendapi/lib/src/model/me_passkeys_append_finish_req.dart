@@ -26,9 +26,9 @@ abstract class MePasskeysAppendFinishReq
 
   MePasskeysAppendFinishReq._();
 
-  factory MePasskeysAppendFinishReq(
-          [void updates(MePasskeysAppendFinishReqBuilder b)]) =
-      _$MePasskeysAppendFinishReq;
+  factory MePasskeysAppendFinishReq([
+    void updates(MePasskeysAppendFinishReqBuilder b),
+  ]) = _$MePasskeysAppendFinishReq;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(MePasskeysAppendFinishReqBuilder b) => b;
@@ -43,7 +43,7 @@ class _$MePasskeysAppendFinishReqSerializer
   @override
   final Iterable<Type> types = const [
     MePasskeysAppendFinishReq,
-    _$MePasskeysAppendFinishReq
+    _$MePasskeysAppendFinishReq,
   ];
 
   @override
@@ -72,9 +72,11 @@ class _$MePasskeysAppendFinishReqSerializer
     MePasskeysAppendFinishReq object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(
+      serializers,
+      object,
+      specifiedType: specifiedType,
+    ).toList();
   }
 
   void _deserializeProperties(
@@ -90,17 +92,21 @@ class _$MePasskeysAppendFinishReqSerializer
       final value = serializedList[i + 1];
       switch (key) {
         case r'attestationResponse':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(String),
-          ) as String;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(String),
+                  )
+                  as String;
           result.attestationResponse = valueDes;
           break;
         case r'clientInformation':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(ClientInformation),
-          ) as ClientInformation;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(ClientInformation),
+                  )
+                  as ClientInformation;
           result.clientInformation.replace(valueDes);
           break;
         default:

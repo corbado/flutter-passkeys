@@ -12,23 +12,30 @@ class _$ConnectLoginInitReq extends ConnectLoginInitReq {
   @override
   final BuiltMap<String, String> flags;
 
-  factory _$ConnectLoginInitReq(
-          [void Function(ConnectLoginInitReqBuilder)? updates]) =>
-      (new ConnectLoginInitReqBuilder()..update(updates))._build();
+  factory _$ConnectLoginInitReq([
+    void Function(ConnectLoginInitReqBuilder)? updates,
+  ]) => (new ConnectLoginInitReqBuilder()..update(updates))._build();
 
-  _$ConnectLoginInitReq._(
-      {required this.clientInformation, required this.flags})
-      : super._() {
+  _$ConnectLoginInitReq._({
+    required this.clientInformation,
+    required this.flags,
+  }) : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        clientInformation, r'ConnectLoginInitReq', 'clientInformation');
+      clientInformation,
+      r'ConnectLoginInitReq',
+      'clientInformation',
+    );
     BuiltValueNullFieldError.checkNotNull(
-        flags, r'ConnectLoginInitReq', 'flags');
+      flags,
+      r'ConnectLoginInitReq',
+      'flags',
+    );
   }
 
   @override
   ConnectLoginInitReq rebuild(
-          void Function(ConnectLoginInitReqBuilder) updates) =>
-      (toBuilder()..update(updates)).build();
+    void Function(ConnectLoginInitReqBuilder) updates,
+  ) => (toBuilder()..update(updates)).build();
 
   @override
   ConnectLoginInitReqBuilder toBuilder() =>
@@ -106,10 +113,12 @@ class ConnectLoginInitReqBuilder
   _$ConnectLoginInitReq _build() {
     _$ConnectLoginInitReq _$result;
     try {
-      _$result = _$v ??
+      _$result =
+          _$v ??
           new _$ConnectLoginInitReq._(
-              clientInformation: clientInformation.build(),
-              flags: flags.build());
+            clientInformation: clientInformation.build(),
+            flags: flags.build(),
+          );
     } catch (_) {
       late String _$failedField;
       try {
@@ -119,7 +128,10 @@ class ConnectLoginInitReqBuilder
         flags.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            r'ConnectLoginInitReq', _$failedField, e.toString());
+          r'ConnectLoginInitReq',
+          _$failedField,
+          e.toString(),
+        );
       }
       rethrow;
     }

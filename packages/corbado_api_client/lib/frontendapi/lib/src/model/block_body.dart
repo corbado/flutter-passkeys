@@ -112,9 +112,11 @@ class _$BlockBodySerializer implements PrimitiveSerializer<BlockBody> {
     BlockBody object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(
+      serializers,
+      object,
+      specifiedType: specifiedType,
+    ).toList();
   }
 
   void _deserializeProperties(
@@ -130,45 +132,59 @@ class _$BlockBodySerializer implements PrimitiveSerializer<BlockBody> {
       final value = serializedList[i + 1];
       switch (key) {
         case r'block':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(BlockType),
-          ) as BlockType;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(BlockType),
+                  )
+                  as BlockType;
           result.block = valueDes;
           break;
         case r'authType':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(AuthType),
-          ) as AuthType;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(AuthType),
+                  )
+                  as AuthType;
           result.authType = valueDes;
           break;
         case r'data':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(BlockBodyData),
-          ) as BlockBodyData;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(BlockBodyData),
+                  )
+                  as BlockBodyData;
           result.data.replace(valueDes);
           break;
         case r'alternatives':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(BuiltList, [FullType(BlockBody)]),
-          ) as BuiltList<BlockBody>;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(BuiltList, [
+                      FullType(BlockBody),
+                    ]),
+                  )
+                  as BuiltList<BlockBody>;
           result.alternatives.replace(valueDes);
           break;
         case r'error':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(RequestError),
-          ) as RequestError;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(RequestError),
+                  )
+                  as RequestError;
           result.error.replace(valueDes);
           break;
         case r'continueOnOtherDevice':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(ContinueOnOtherDevice),
-          ) as ContinueOnOtherDevice;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(ContinueOnOtherDevice),
+                  )
+                  as ContinueOnOtherDevice;
           result.continueOnOtherDevice.replace(valueDes);
           break;
         default:

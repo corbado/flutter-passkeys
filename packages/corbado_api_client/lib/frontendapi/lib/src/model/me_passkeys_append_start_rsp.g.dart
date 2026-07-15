@@ -7,16 +7,18 @@ part of 'me_passkeys_append_start_rsp.dart';
 // **************************************************************************
 
 const MePasskeysAppendStartRspAppendNotAllowedReasonEnum
-    _$mePasskeysAppendStartRspAppendNotAllowedReasonEnum_passkeyAlreadyExists =
+_$mePasskeysAppendStartRspAppendNotAllowedReasonEnum_passkeyAlreadyExists =
     const MePasskeysAppendStartRspAppendNotAllowedReasonEnum._(
-        'passkeyAlreadyExists');
+      'passkeyAlreadyExists',
+    );
 const MePasskeysAppendStartRspAppendNotAllowedReasonEnum
-    _$mePasskeysAppendStartRspAppendNotAllowedReasonEnum_passkeysNotSupported =
+_$mePasskeysAppendStartRspAppendNotAllowedReasonEnum_passkeysNotSupported =
     const MePasskeysAppendStartRspAppendNotAllowedReasonEnum._(
-        'passkeysNotSupported');
+      'passkeysNotSupported',
+    );
 
 MePasskeysAppendStartRspAppendNotAllowedReasonEnum
-    _$mePasskeysAppendStartRspAppendNotAllowedReasonEnumValueOf(String name) {
+_$mePasskeysAppendStartRspAppendNotAllowedReasonEnumValueOf(String name) {
   switch (name) {
     case 'passkeyAlreadyExists':
       return _$mePasskeysAppendStartRspAppendNotAllowedReasonEnum_passkeyAlreadyExists;
@@ -28,20 +30,23 @@ MePasskeysAppendStartRspAppendNotAllowedReasonEnum
 }
 
 final BuiltSet<MePasskeysAppendStartRspAppendNotAllowedReasonEnum>
-    _$mePasskeysAppendStartRspAppendNotAllowedReasonEnumValues = new BuiltSet<
-        MePasskeysAppendStartRspAppendNotAllowedReasonEnum>(const <MePasskeysAppendStartRspAppendNotAllowedReasonEnum>[
-  _$mePasskeysAppendStartRspAppendNotAllowedReasonEnum_passkeyAlreadyExists,
-  _$mePasskeysAppendStartRspAppendNotAllowedReasonEnum_passkeysNotSupported,
-]);
+_$mePasskeysAppendStartRspAppendNotAllowedReasonEnumValues =
+    new BuiltSet<MePasskeysAppendStartRspAppendNotAllowedReasonEnum>(const <
+      MePasskeysAppendStartRspAppendNotAllowedReasonEnum
+    >[
+      _$mePasskeysAppendStartRspAppendNotAllowedReasonEnum_passkeyAlreadyExists,
+      _$mePasskeysAppendStartRspAppendNotAllowedReasonEnum_passkeysNotSupported,
+    ]);
 
 Serializer<MePasskeysAppendStartRspAppendNotAllowedReasonEnum>
-    _$mePasskeysAppendStartRspAppendNotAllowedReasonEnumSerializer =
+_$mePasskeysAppendStartRspAppendNotAllowedReasonEnumSerializer =
     new _$MePasskeysAppendStartRspAppendNotAllowedReasonEnumSerializer();
 
 class _$MePasskeysAppendStartRspAppendNotAllowedReasonEnumSerializer
     implements
         PrimitiveSerializer<
-            MePasskeysAppendStartRspAppendNotAllowedReasonEnum> {
+          MePasskeysAppendStartRspAppendNotAllowedReasonEnum
+        > {
   static const Map<String, Object> _toWire = const <String, Object>{
     'passkeyAlreadyExists': 'passkey_already_exists',
     'passkeysNotSupported': 'passkeys_not_supported',
@@ -53,23 +58,26 @@ class _$MePasskeysAppendStartRspAppendNotAllowedReasonEnumSerializer
 
   @override
   final Iterable<Type> types = const <Type>[
-    MePasskeysAppendStartRspAppendNotAllowedReasonEnum
+    MePasskeysAppendStartRspAppendNotAllowedReasonEnum,
   ];
   @override
   final String wireName = 'MePasskeysAppendStartRspAppendNotAllowedReasonEnum';
 
   @override
-  Object serialize(Serializers serializers,
-          MePasskeysAppendStartRspAppendNotAllowedReasonEnum object,
-          {FullType specifiedType = FullType.unspecified}) =>
-      _toWire[object.name] ?? object.name;
+  Object serialize(
+    Serializers serializers,
+    MePasskeysAppendStartRspAppendNotAllowedReasonEnum object, {
+    FullType specifiedType = FullType.unspecified,
+  }) => _toWire[object.name] ?? object.name;
 
   @override
   MePasskeysAppendStartRspAppendNotAllowedReasonEnum deserialize(
-          Serializers serializers, Object serialized,
-          {FullType specifiedType = FullType.unspecified}) =>
-      MePasskeysAppendStartRspAppendNotAllowedReasonEnum.valueOf(
-          _fromWire[serialized] ?? (serialized is String ? serialized : ''));
+    Serializers serializers,
+    Object serialized, {
+    FullType specifiedType = FullType.unspecified,
+  }) => MePasskeysAppendStartRspAppendNotAllowedReasonEnum.valueOf(
+    _fromWire[serialized] ?? (serialized is String ? serialized : ''),
+  );
 }
 
 class _$MePasskeysAppendStartRsp extends MePasskeysAppendStartRsp {
@@ -79,25 +87,28 @@ class _$MePasskeysAppendStartRsp extends MePasskeysAppendStartRsp {
   final String? newClientEnvHandle;
   @override
   final MePasskeysAppendStartRspAppendNotAllowedReasonEnum?
-      appendNotAllowedReason;
+  appendNotAllowedReason;
 
-  factory _$MePasskeysAppendStartRsp(
-          [void Function(MePasskeysAppendStartRspBuilder)? updates]) =>
-      (new MePasskeysAppendStartRspBuilder()..update(updates))._build();
+  factory _$MePasskeysAppendStartRsp([
+    void Function(MePasskeysAppendStartRspBuilder)? updates,
+  ]) => (new MePasskeysAppendStartRspBuilder()..update(updates))._build();
 
-  _$MePasskeysAppendStartRsp._(
-      {required this.attestationOptions,
-      this.newClientEnvHandle,
-      this.appendNotAllowedReason})
-      : super._() {
+  _$MePasskeysAppendStartRsp._({
+    required this.attestationOptions,
+    this.newClientEnvHandle,
+    this.appendNotAllowedReason,
+  }) : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        attestationOptions, r'MePasskeysAppendStartRsp', 'attestationOptions');
+      attestationOptions,
+      r'MePasskeysAppendStartRsp',
+      'attestationOptions',
+    );
   }
 
   @override
   MePasskeysAppendStartRsp rebuild(
-          void Function(MePasskeysAppendStartRspBuilder) updates) =>
-      (toBuilder()..update(updates)).build();
+    void Function(MePasskeysAppendStartRspBuilder) updates,
+  ) => (toBuilder()..update(updates)).build();
 
   @override
   MePasskeysAppendStartRspBuilder toBuilder() =>
@@ -149,11 +160,10 @@ class MePasskeysAppendStartRspBuilder
 
   MePasskeysAppendStartRspAppendNotAllowedReasonEnum? _appendNotAllowedReason;
   MePasskeysAppendStartRspAppendNotAllowedReasonEnum?
-      get appendNotAllowedReason => _$this._appendNotAllowedReason;
+  get appendNotAllowedReason => _$this._appendNotAllowedReason;
   set appendNotAllowedReason(
-          MePasskeysAppendStartRspAppendNotAllowedReasonEnum?
-              appendNotAllowedReason) =>
-      _$this._appendNotAllowedReason = appendNotAllowedReason;
+    MePasskeysAppendStartRspAppendNotAllowedReasonEnum? appendNotAllowedReason,
+  ) => _$this._appendNotAllowedReason = appendNotAllowedReason;
 
   MePasskeysAppendStartRspBuilder() {
     MePasskeysAppendStartRsp._defaults(this);
@@ -185,14 +195,17 @@ class MePasskeysAppendStartRspBuilder
   MePasskeysAppendStartRsp build() => _build();
 
   _$MePasskeysAppendStartRsp _build() {
-    final _$result = _$v ??
+    final _$result =
+        _$v ??
         new _$MePasskeysAppendStartRsp._(
-            attestationOptions: BuiltValueNullFieldError.checkNotNull(
-                attestationOptions,
-                r'MePasskeysAppendStartRsp',
-                'attestationOptions'),
-            newClientEnvHandle: newClientEnvHandle,
-            appendNotAllowedReason: appendNotAllowedReason);
+          attestationOptions: BuiltValueNullFieldError.checkNotNull(
+            attestationOptions,
+            r'MePasskeysAppendStartRsp',
+            'attestationOptions',
+          ),
+          newClientEnvHandle: newClientEnvHandle,
+          appendNotAllowedReason: appendNotAllowedReason,
+        );
     replace(_$result);
     return _$result;
   }

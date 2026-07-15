@@ -16,26 +16,32 @@ class _$GeneralBlockCompleted extends GeneralBlockCompleted {
   @override
   final PasskeyOperation? passkeyOperation;
 
-  factory _$GeneralBlockCompleted(
-          [void Function(GeneralBlockCompletedBuilder)? updates]) =>
-      (new GeneralBlockCompletedBuilder()..update(updates))._build();
+  factory _$GeneralBlockCompleted([
+    void Function(GeneralBlockCompletedBuilder)? updates,
+  ]) => (new GeneralBlockCompletedBuilder()..update(updates))._build();
 
-  _$GeneralBlockCompleted._(
-      {required this.blockType,
-      required this.shortSession,
-      this.longSession,
-      this.passkeyOperation})
-      : super._() {
+  _$GeneralBlockCompleted._({
+    required this.blockType,
+    required this.shortSession,
+    this.longSession,
+    this.passkeyOperation,
+  }) : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        blockType, r'GeneralBlockCompleted', 'blockType');
+      blockType,
+      r'GeneralBlockCompleted',
+      'blockType',
+    );
     BuiltValueNullFieldError.checkNotNull(
-        shortSession, r'GeneralBlockCompleted', 'shortSession');
+      shortSession,
+      r'GeneralBlockCompleted',
+      'shortSession',
+    );
   }
 
   @override
   GeneralBlockCompleted rebuild(
-          void Function(GeneralBlockCompletedBuilder) updates) =>
-      (toBuilder()..update(updates)).build();
+    void Function(GeneralBlockCompletedBuilder) updates,
+  ) => (toBuilder()..update(updates)).build();
 
   @override
   GeneralBlockCompletedBuilder toBuilder() =>
@@ -128,14 +134,22 @@ class GeneralBlockCompletedBuilder
   _$GeneralBlockCompleted _build() {
     _$GeneralBlockCompleted _$result;
     try {
-      _$result = _$v ??
+      _$result =
+          _$v ??
           new _$GeneralBlockCompleted._(
-              blockType: BuiltValueNullFieldError.checkNotNull(
-                  blockType, r'GeneralBlockCompleted', 'blockType'),
-              shortSession: BuiltValueNullFieldError.checkNotNull(
-                  shortSession, r'GeneralBlockCompleted', 'shortSession'),
-              longSession: longSession,
-              passkeyOperation: _passkeyOperation?.build());
+            blockType: BuiltValueNullFieldError.checkNotNull(
+              blockType,
+              r'GeneralBlockCompleted',
+              'blockType',
+            ),
+            shortSession: BuiltValueNullFieldError.checkNotNull(
+              shortSession,
+              r'GeneralBlockCompleted',
+              'shortSession',
+            ),
+            longSession: longSession,
+            passkeyOperation: _passkeyOperation?.build(),
+          );
     } catch (_) {
       late String _$failedField;
       try {
@@ -143,7 +157,10 @@ class GeneralBlockCompletedBuilder
         _passkeyOperation?.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            r'GeneralBlockCompleted', _$failedField, e.toString());
+          r'GeneralBlockCompleted',
+          _$failedField,
+          e.toString(),
+        );
       }
       rethrow;
     }

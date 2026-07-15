@@ -12,22 +12,28 @@ class _$MeIdentifierCreateReq extends MeIdentifierCreateReq {
   @override
   final String value;
 
-  factory _$MeIdentifierCreateReq(
-          [void Function(MeIdentifierCreateReqBuilder)? updates]) =>
-      (new MeIdentifierCreateReqBuilder()..update(updates))._build();
+  factory _$MeIdentifierCreateReq([
+    void Function(MeIdentifierCreateReqBuilder)? updates,
+  ]) => (new MeIdentifierCreateReqBuilder()..update(updates))._build();
 
   _$MeIdentifierCreateReq._({required this.identifierType, required this.value})
-      : super._() {
+    : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        identifierType, r'MeIdentifierCreateReq', 'identifierType');
+      identifierType,
+      r'MeIdentifierCreateReq',
+      'identifierType',
+    );
     BuiltValueNullFieldError.checkNotNull(
-        value, r'MeIdentifierCreateReq', 'value');
+      value,
+      r'MeIdentifierCreateReq',
+      'value',
+    );
   }
 
   @override
   MeIdentifierCreateReq rebuild(
-          void Function(MeIdentifierCreateReqBuilder) updates) =>
-      (toBuilder()..update(updates)).build();
+    void Function(MeIdentifierCreateReqBuilder) updates,
+  ) => (toBuilder()..update(updates)).build();
 
   @override
   MeIdentifierCreateReqBuilder toBuilder() =>
@@ -101,12 +107,20 @@ class MeIdentifierCreateReqBuilder
   MeIdentifierCreateReq build() => _build();
 
   _$MeIdentifierCreateReq _build() {
-    final _$result = _$v ??
+    final _$result =
+        _$v ??
         new _$MeIdentifierCreateReq._(
-            identifierType: BuiltValueNullFieldError.checkNotNull(
-                identifierType, r'MeIdentifierCreateReq', 'identifierType'),
-            value: BuiltValueNullFieldError.checkNotNull(
-                value, r'MeIdentifierCreateReq', 'value'));
+          identifierType: BuiltValueNullFieldError.checkNotNull(
+            identifierType,
+            r'MeIdentifierCreateReq',
+            'identifierType',
+          ),
+          value: BuiltValueNullFieldError.checkNotNull(
+            value,
+            r'MeIdentifierCreateReq',
+            'value',
+          ),
+        );
     replace(_$result);
     return _$result;
   }

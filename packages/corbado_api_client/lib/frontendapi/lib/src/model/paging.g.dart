@@ -17,9 +17,11 @@ class _$Paging extends Paging {
   factory _$Paging([void Function(PagingBuilder)? updates]) =>
       (new PagingBuilder()..update(updates))._build();
 
-  _$Paging._(
-      {required this.page, required this.totalPages, required this.totalItems})
-      : super._() {
+  _$Paging._({
+    required this.page,
+    required this.totalPages,
+    required this.totalItems,
+  }) : super._() {
     BuiltValueNullFieldError.checkNotNull(page, r'Paging', 'page');
     BuiltValueNullFieldError.checkNotNull(totalPages, r'Paging', 'totalPages');
     BuiltValueNullFieldError.checkNotNull(totalItems, r'Paging', 'totalItems');
@@ -106,14 +108,21 @@ class PagingBuilder implements Builder<Paging, PagingBuilder> {
   Paging build() => _build();
 
   _$Paging _build() {
-    final _$result = _$v ??
+    final _$result =
+        _$v ??
         new _$Paging._(
-            page:
-                BuiltValueNullFieldError.checkNotNull(page, r'Paging', 'page'),
-            totalPages: BuiltValueNullFieldError.checkNotNull(
-                totalPages, r'Paging', 'totalPages'),
-            totalItems: BuiltValueNullFieldError.checkNotNull(
-                totalItems, r'Paging', 'totalItems'));
+          page: BuiltValueNullFieldError.checkNotNull(page, r'Paging', 'page'),
+          totalPages: BuiltValueNullFieldError.checkNotNull(
+            totalPages,
+            r'Paging',
+            'totalPages',
+          ),
+          totalItems: BuiltValueNullFieldError.checkNotNull(
+            totalItems,
+            r'Paging',
+            'totalItems',
+          ),
+        );
     replace(_$result);
     return _$result;
   }

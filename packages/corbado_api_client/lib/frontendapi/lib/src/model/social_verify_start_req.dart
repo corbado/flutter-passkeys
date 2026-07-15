@@ -48,7 +48,7 @@ class _$SocialVerifyStartReqSerializer
   @override
   final Iterable<Type> types = const [
     SocialVerifyStartReq,
-    _$SocialVerifyStartReq
+    _$SocialVerifyStartReq,
   ];
 
   @override
@@ -82,9 +82,11 @@ class _$SocialVerifyStartReqSerializer
     SocialVerifyStartReq object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(
+      serializers,
+      object,
+      specifiedType: specifiedType,
+    ).toList();
   }
 
   void _deserializeProperties(
@@ -100,24 +102,30 @@ class _$SocialVerifyStartReqSerializer
       final value = serializedList[i + 1];
       switch (key) {
         case r'providerType':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(SocialProviderType),
-          ) as SocialProviderType;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(SocialProviderType),
+                  )
+                  as SocialProviderType;
           result.providerType = valueDes;
           break;
         case r'redirectUrl':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(String),
-          ) as String;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(String),
+                  )
+                  as String;
           result.redirectUrl = valueDes;
           break;
         case r'authType':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(AuthType),
-          ) as AuthType;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(AuthType),
+                  )
+                  as AuthType;
           result.authType = valueDes;
           break;
         default:

@@ -24,9 +24,9 @@ abstract class ConnectManageDeleteReq
 
   ConnectManageDeleteReq._();
 
-  factory ConnectManageDeleteReq(
-          [void updates(ConnectManageDeleteReqBuilder b)]) =
-      _$ConnectManageDeleteReq;
+  factory ConnectManageDeleteReq([
+    void updates(ConnectManageDeleteReqBuilder b),
+  ]) = _$ConnectManageDeleteReq;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(ConnectManageDeleteReqBuilder b) => b;
@@ -41,7 +41,7 @@ class _$ConnectManageDeleteReqSerializer
   @override
   final Iterable<Type> types = const [
     ConnectManageDeleteReq,
-    _$ConnectManageDeleteReq
+    _$ConnectManageDeleteReq,
   ];
 
   @override
@@ -70,9 +70,11 @@ class _$ConnectManageDeleteReqSerializer
     ConnectManageDeleteReq object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(
+      serializers,
+      object,
+      specifiedType: specifiedType,
+    ).toList();
   }
 
   void _deserializeProperties(
@@ -88,17 +90,21 @@ class _$ConnectManageDeleteReqSerializer
       final value = serializedList[i + 1];
       switch (key) {
         case r'connectToken':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(String),
-          ) as String;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(String),
+                  )
+                  as String;
           result.connectToken = valueDes;
           break;
         case r'credentialID':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(String),
-          ) as String;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(String),
+                  )
+                  as String;
           result.credentialID = valueDes;
           break;
         default:

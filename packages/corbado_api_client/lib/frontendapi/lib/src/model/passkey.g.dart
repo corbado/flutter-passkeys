@@ -40,18 +40,20 @@ PasskeyTransportEnum _$passkeyTransportEnumValueOf(String name) {
 
 final BuiltSet<PasskeyTransportEnum> _$passkeyTransportEnumValues =
     new BuiltSet<PasskeyTransportEnum>(const <PasskeyTransportEnum>[
-  _$passkeyTransportEnum_usb,
-  _$passkeyTransportEnum_nfc,
-  _$passkeyTransportEnum_ble,
-  _$passkeyTransportEnum_internal,
-  _$passkeyTransportEnum_hybrid,
-  _$passkeyTransportEnum_smartCard,
-]);
+      _$passkeyTransportEnum_usb,
+      _$passkeyTransportEnum_nfc,
+      _$passkeyTransportEnum_ble,
+      _$passkeyTransportEnum_internal,
+      _$passkeyTransportEnum_hybrid,
+      _$passkeyTransportEnum_smartCard,
+    ]);
 
-const PasskeyStatusEnum _$passkeyStatusEnum_pending =
-    const PasskeyStatusEnum._('pending');
-const PasskeyStatusEnum _$passkeyStatusEnum_active =
-    const PasskeyStatusEnum._('active');
+const PasskeyStatusEnum _$passkeyStatusEnum_pending = const PasskeyStatusEnum._(
+  'pending',
+);
+const PasskeyStatusEnum _$passkeyStatusEnum_active = const PasskeyStatusEnum._(
+  'active',
+);
 
 PasskeyStatusEnum _$passkeyStatusEnumValueOf(String name) {
   switch (name) {
@@ -66,9 +68,9 @@ PasskeyStatusEnum _$passkeyStatusEnumValueOf(String name) {
 
 final BuiltSet<PasskeyStatusEnum> _$passkeyStatusEnumValues =
     new BuiltSet<PasskeyStatusEnum>(const <PasskeyStatusEnum>[
-  _$passkeyStatusEnum_pending,
-  _$passkeyStatusEnum_active,
-]);
+      _$passkeyStatusEnum_pending,
+      _$passkeyStatusEnum_active,
+    ]);
 
 Serializer<PasskeyTransportEnum> _$passkeyTransportEnumSerializer =
     new _$PasskeyTransportEnumSerializer();
@@ -100,15 +102,20 @@ class _$PasskeyTransportEnumSerializer
   final String wireName = 'PasskeyTransportEnum';
 
   @override
-  Object serialize(Serializers serializers, PasskeyTransportEnum object,
-          {FullType specifiedType = FullType.unspecified}) =>
-      _toWire[object.name] ?? object.name;
+  Object serialize(
+    Serializers serializers,
+    PasskeyTransportEnum object, {
+    FullType specifiedType = FullType.unspecified,
+  }) => _toWire[object.name] ?? object.name;
 
   @override
-  PasskeyTransportEnum deserialize(Serializers serializers, Object serialized,
-          {FullType specifiedType = FullType.unspecified}) =>
-      PasskeyTransportEnum.valueOf(
-          _fromWire[serialized] ?? (serialized is String ? serialized : ''));
+  PasskeyTransportEnum deserialize(
+    Serializers serializers,
+    Object serialized, {
+    FullType specifiedType = FullType.unspecified,
+  }) => PasskeyTransportEnum.valueOf(
+    _fromWire[serialized] ?? (serialized is String ? serialized : ''),
+  );
 }
 
 class _$PasskeyStatusEnumSerializer
@@ -128,15 +135,20 @@ class _$PasskeyStatusEnumSerializer
   final String wireName = 'PasskeyStatusEnum';
 
   @override
-  Object serialize(Serializers serializers, PasskeyStatusEnum object,
-          {FullType specifiedType = FullType.unspecified}) =>
-      _toWire[object.name] ?? object.name;
+  Object serialize(
+    Serializers serializers,
+    PasskeyStatusEnum object, {
+    FullType specifiedType = FullType.unspecified,
+  }) => _toWire[object.name] ?? object.name;
 
   @override
-  PasskeyStatusEnum deserialize(Serializers serializers, Object serialized,
-          {FullType specifiedType = FullType.unspecified}) =>
-      PasskeyStatusEnum.valueOf(
-          _fromWire[serialized] ?? (serialized is String ? serialized : ''));
+  PasskeyStatusEnum deserialize(
+    Serializers serializers,
+    Object serialized, {
+    FullType specifiedType = FullType.unspecified,
+  }) => PasskeyStatusEnum.valueOf(
+    _fromWire[serialized] ?? (serialized is String ? serialized : ''),
+  );
 }
 
 class _$Passkey extends Passkey {
@@ -168,35 +180,53 @@ class _$Passkey extends Passkey {
   factory _$Passkey([void Function(PasskeyBuilder)? updates]) =>
       (new PasskeyBuilder()..update(updates))._build();
 
-  _$Passkey._(
-      {required this.id,
-      required this.credentialID,
-      required this.attestationType,
-      required this.transport,
-      required this.backupEligible,
-      required this.backupState,
-      required this.authenticatorAAGUID,
-      required this.sourceOS,
-      required this.sourceBrowser,
-      required this.lastUsed,
-      required this.created,
-      required this.status})
-      : super._() {
+  _$Passkey._({
+    required this.id,
+    required this.credentialID,
+    required this.attestationType,
+    required this.transport,
+    required this.backupEligible,
+    required this.backupState,
+    required this.authenticatorAAGUID,
+    required this.sourceOS,
+    required this.sourceBrowser,
+    required this.lastUsed,
+    required this.created,
+    required this.status,
+  }) : super._() {
     BuiltValueNullFieldError.checkNotNull(id, r'Passkey', 'id');
     BuiltValueNullFieldError.checkNotNull(
-        credentialID, r'Passkey', 'credentialID');
+      credentialID,
+      r'Passkey',
+      'credentialID',
+    );
     BuiltValueNullFieldError.checkNotNull(
-        attestationType, r'Passkey', 'attestationType');
+      attestationType,
+      r'Passkey',
+      'attestationType',
+    );
     BuiltValueNullFieldError.checkNotNull(transport, r'Passkey', 'transport');
     BuiltValueNullFieldError.checkNotNull(
-        backupEligible, r'Passkey', 'backupEligible');
+      backupEligible,
+      r'Passkey',
+      'backupEligible',
+    );
     BuiltValueNullFieldError.checkNotNull(
-        backupState, r'Passkey', 'backupState');
+      backupState,
+      r'Passkey',
+      'backupState',
+    );
     BuiltValueNullFieldError.checkNotNull(
-        authenticatorAAGUID, r'Passkey', 'authenticatorAAGUID');
+      authenticatorAAGUID,
+      r'Passkey',
+      'authenticatorAAGUID',
+    );
     BuiltValueNullFieldError.checkNotNull(sourceOS, r'Passkey', 'sourceOS');
     BuiltValueNullFieldError.checkNotNull(
-        sourceBrowser, r'Passkey', 'sourceBrowser');
+      sourceBrowser,
+      r'Passkey',
+      'sourceBrowser',
+    );
     BuiltValueNullFieldError.checkNotNull(lastUsed, r'Passkey', 'lastUsed');
     BuiltValueNullFieldError.checkNotNull(created, r'Passkey', 'created');
     BuiltValueNullFieldError.checkNotNull(status, r'Passkey', 'status');
@@ -363,28 +393,62 @@ class PasskeyBuilder implements Builder<Passkey, PasskeyBuilder> {
   _$Passkey _build() {
     _$Passkey _$result;
     try {
-      _$result = _$v ??
+      _$result =
+          _$v ??
           new _$Passkey._(
-              id: BuiltValueNullFieldError.checkNotNull(id, r'Passkey', 'id'),
-              credentialID: BuiltValueNullFieldError.checkNotNull(
-                  credentialID, r'Passkey', 'credentialID'),
-              attestationType: BuiltValueNullFieldError.checkNotNull(
-                  attestationType, r'Passkey', 'attestationType'),
-              transport: transport.build(),
-              backupEligible: BuiltValueNullFieldError.checkNotNull(
-                  backupEligible, r'Passkey', 'backupEligible'),
-              backupState: BuiltValueNullFieldError.checkNotNull(
-                  backupState, r'Passkey', 'backupState'),
-              authenticatorAAGUID: BuiltValueNullFieldError.checkNotNull(
-                  authenticatorAAGUID, r'Passkey', 'authenticatorAAGUID'),
-              sourceOS: BuiltValueNullFieldError.checkNotNull(
-                  sourceOS, r'Passkey', 'sourceOS'),
-              sourceBrowser: BuiltValueNullFieldError.checkNotNull(
-                  sourceBrowser, r'Passkey', 'sourceBrowser'),
-              lastUsed: BuiltValueNullFieldError.checkNotNull(
-                  lastUsed, r'Passkey', 'lastUsed'),
-              created: BuiltValueNullFieldError.checkNotNull(created, r'Passkey', 'created'),
-              status: BuiltValueNullFieldError.checkNotNull(status, r'Passkey', 'status'));
+            id: BuiltValueNullFieldError.checkNotNull(id, r'Passkey', 'id'),
+            credentialID: BuiltValueNullFieldError.checkNotNull(
+              credentialID,
+              r'Passkey',
+              'credentialID',
+            ),
+            attestationType: BuiltValueNullFieldError.checkNotNull(
+              attestationType,
+              r'Passkey',
+              'attestationType',
+            ),
+            transport: transport.build(),
+            backupEligible: BuiltValueNullFieldError.checkNotNull(
+              backupEligible,
+              r'Passkey',
+              'backupEligible',
+            ),
+            backupState: BuiltValueNullFieldError.checkNotNull(
+              backupState,
+              r'Passkey',
+              'backupState',
+            ),
+            authenticatorAAGUID: BuiltValueNullFieldError.checkNotNull(
+              authenticatorAAGUID,
+              r'Passkey',
+              'authenticatorAAGUID',
+            ),
+            sourceOS: BuiltValueNullFieldError.checkNotNull(
+              sourceOS,
+              r'Passkey',
+              'sourceOS',
+            ),
+            sourceBrowser: BuiltValueNullFieldError.checkNotNull(
+              sourceBrowser,
+              r'Passkey',
+              'sourceBrowser',
+            ),
+            lastUsed: BuiltValueNullFieldError.checkNotNull(
+              lastUsed,
+              r'Passkey',
+              'lastUsed',
+            ),
+            created: BuiltValueNullFieldError.checkNotNull(
+              created,
+              r'Passkey',
+              'created',
+            ),
+            status: BuiltValueNullFieldError.checkNotNull(
+              status,
+              r'Passkey',
+              'status',
+            ),
+          );
     } catch (_) {
       late String _$failedField;
       try {
@@ -392,7 +456,10 @@ class PasskeyBuilder implements Builder<Passkey, PasskeyBuilder> {
         transport.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            r'Passkey', _$failedField, e.toString());
+          r'Passkey',
+          _$failedField,
+          e.toString(),
+        );
       }
       rethrow;
     }

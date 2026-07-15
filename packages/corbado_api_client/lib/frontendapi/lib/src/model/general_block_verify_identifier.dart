@@ -25,8 +25,10 @@ part 'general_block_verify_identifier.g.dart';
 @BuiltValue()
 abstract class GeneralBlockVerifyIdentifier
     implements
-        Built<GeneralBlockVerifyIdentifier,
-            GeneralBlockVerifyIdentifierBuilder> {
+        Built<
+          GeneralBlockVerifyIdentifier,
+          GeneralBlockVerifyIdentifierBuilder
+        > {
   @BuiltValueField(wireName: r'blockType')
   String get blockType;
 
@@ -39,7 +41,7 @@ abstract class GeneralBlockVerifyIdentifier
 
   @BuiltValueField(wireName: r'alternativeVerificationMethods')
   BuiltList<GeneralBlockVerifyIdentifierAlternativeVerificationMethodsInner>
-      get alternativeVerificationMethods;
+  get alternativeVerificationMethods;
 
   @BuiltValueField(wireName: r'isPostLoginVerification')
   bool get isPostLoginVerification;
@@ -52,9 +54,9 @@ abstract class GeneralBlockVerifyIdentifier
 
   GeneralBlockVerifyIdentifier._();
 
-  factory GeneralBlockVerifyIdentifier(
-          [void updates(GeneralBlockVerifyIdentifierBuilder b)]) =
-      _$GeneralBlockVerifyIdentifier;
+  factory GeneralBlockVerifyIdentifier([
+    void updates(GeneralBlockVerifyIdentifierBuilder b),
+  ]) = _$GeneralBlockVerifyIdentifier;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(GeneralBlockVerifyIdentifierBuilder b) => b;
@@ -69,7 +71,7 @@ class _$GeneralBlockVerifyIdentifierSerializer
   @override
   final Iterable<Type> types = const [
     GeneralBlockVerifyIdentifier,
-    _$GeneralBlockVerifyIdentifier
+    _$GeneralBlockVerifyIdentifier,
   ];
 
   @override
@@ -100,7 +102,8 @@ class _$GeneralBlockVerifyIdentifierSerializer
       object.alternativeVerificationMethods,
       specifiedType: const FullType(BuiltList, [
         FullType(
-            GeneralBlockVerifyIdentifierAlternativeVerificationMethodsInner)
+          GeneralBlockVerifyIdentifierAlternativeVerificationMethodsInner,
+        ),
       ]),
     );
     yield r'isPostLoginVerification';
@@ -130,9 +133,11 @@ class _$GeneralBlockVerifyIdentifierSerializer
     GeneralBlockVerifyIdentifier object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(
+      serializers,
+      object,
+      specifiedType: specifiedType,
+    ).toList();
   }
 
   void _deserializeProperties(
@@ -148,56 +153,69 @@ class _$GeneralBlockVerifyIdentifierSerializer
       final value = serializedList[i + 1];
       switch (key) {
         case r'blockType':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(String),
-          ) as String;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(String),
+                  )
+                  as String;
           result.blockType = valueDes;
           break;
         case r'verificationMethod':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(VerificationMethod),
-          ) as VerificationMethod;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(VerificationMethod),
+                  )
+                  as VerificationMethod;
           result.verificationMethod = valueDes;
           break;
         case r'identifier':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(String),
-          ) as String;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(String),
+                  )
+                  as String;
           result.identifier = valueDes;
           break;
         case r'alternativeVerificationMethods':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(BuiltList, [
-              FullType(
-                  GeneralBlockVerifyIdentifierAlternativeVerificationMethodsInner)
-            ]),
-          ) as BuiltList<
-              GeneralBlockVerifyIdentifierAlternativeVerificationMethodsInner>;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(BuiltList, [
+                      FullType(
+                        GeneralBlockVerifyIdentifierAlternativeVerificationMethodsInner,
+                      ),
+                    ]),
+                  )
+                  as BuiltList<
+                    GeneralBlockVerifyIdentifierAlternativeVerificationMethodsInner
+                  >;
           result.alternativeVerificationMethods.replace(valueDes);
           break;
         case r'isPostLoginVerification':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(bool),
-          ) as bool;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(bool),
+                  )
+                  as bool;
           result.isPostLoginVerification = valueDes;
           break;
         case r'retryNotBefore':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(int),
-          ) as int;
+          final valueDes =
+              serializers.deserialize(value, specifiedType: const FullType(int))
+                  as int;
           result.retryNotBefore = valueDes;
           break;
         case r'error':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(RequestError),
-          ) as RequestError;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(RequestError),
+                  )
+                  as RequestError;
           result.error.replace(valueDes);
           break;
         default:

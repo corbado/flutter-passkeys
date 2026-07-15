@@ -12,15 +12,18 @@ class _$ProcessStaticInfo extends ProcessStaticInfo {
   @override
   final int expiresAt;
 
-  factory _$ProcessStaticInfo(
-          [void Function(ProcessStaticInfoBuilder)? updates]) =>
-      (new ProcessStaticInfoBuilder()..update(updates))._build();
+  factory _$ProcessStaticInfo([
+    void Function(ProcessStaticInfoBuilder)? updates,
+  ]) => (new ProcessStaticInfoBuilder()..update(updates))._build();
 
   _$ProcessStaticInfo._({required this.token, required this.expiresAt})
-      : super._() {
+    : super._() {
     BuiltValueNullFieldError.checkNotNull(token, r'ProcessStaticInfo', 'token');
     BuiltValueNullFieldError.checkNotNull(
-        expiresAt, r'ProcessStaticInfo', 'expiresAt');
+      expiresAt,
+      r'ProcessStaticInfo',
+      'expiresAt',
+    );
   }
 
   @override
@@ -98,12 +101,20 @@ class ProcessStaticInfoBuilder
   ProcessStaticInfo build() => _build();
 
   _$ProcessStaticInfo _build() {
-    final _$result = _$v ??
+    final _$result =
+        _$v ??
         new _$ProcessStaticInfo._(
-            token: BuiltValueNullFieldError.checkNotNull(
-                token, r'ProcessStaticInfo', 'token'),
-            expiresAt: BuiltValueNullFieldError.checkNotNull(
-                expiresAt, r'ProcessStaticInfo', 'expiresAt'));
+          token: BuiltValueNullFieldError.checkNotNull(
+            token,
+            r'ProcessStaticInfo',
+            'token',
+          ),
+          expiresAt: BuiltValueNullFieldError.checkNotNull(
+            expiresAt,
+            r'ProcessStaticInfo',
+            'expiresAt',
+          ),
+        );
     replace(_$result);
     return _$result;
   }

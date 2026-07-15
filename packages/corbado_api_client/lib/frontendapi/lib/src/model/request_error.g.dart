@@ -94,12 +94,20 @@ class RequestErrorBuilder
   RequestError build() => _build();
 
   _$RequestError _build() {
-    final _$result = _$v ??
+    final _$result =
+        _$v ??
         new _$RequestError._(
-            code: BuiltValueNullFieldError.checkNotNull(
-                code, r'RequestError', 'code'),
-            message: BuiltValueNullFieldError.checkNotNull(
-                message, r'RequestError', 'message'));
+          code: BuiltValueNullFieldError.checkNotNull(
+            code,
+            r'RequestError',
+            'code',
+          ),
+          message: BuiltValueNullFieldError.checkNotNull(
+            message,
+            r'RequestError',
+            'message',
+          ),
+        );
     replace(_$result);
     return _$result;
   }

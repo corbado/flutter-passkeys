@@ -46,7 +46,7 @@ class _$ConnectLoginStartReqSerializer
   @override
   final Iterable<Type> types = const [
     ConnectLoginStartReq,
-    _$ConnectLoginStartReq
+    _$ConnectLoginStartReq,
   ];
 
   @override
@@ -80,9 +80,11 @@ class _$ConnectLoginStartReqSerializer
     ConnectLoginStartReq object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(
+      serializers,
+      object,
+      specifiedType: specifiedType,
+    ).toList();
   }
 
   void _deserializeProperties(
@@ -98,24 +100,29 @@ class _$ConnectLoginStartReqSerializer
       final value = serializedList[i + 1];
       switch (key) {
         case r'identifier':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(String),
-          ) as String;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(String),
+                  )
+                  as String;
           result.identifier = valueDes;
           break;
         case r'source':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(ConnectLoginStartReqSource_Enum),
-          ) as ConnectLoginStartReqSource_Enum;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(
+                      ConnectLoginStartReqSource_Enum,
+                    ),
+                  )
+                  as ConnectLoginStartReqSource_Enum;
           result.source_ = valueDes;
           break;
         case r'loadedMs':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(int),
-          ) as int;
+          final valueDes =
+              serializers.deserialize(value, specifiedType: const FullType(int))
+                  as int;
           result.loadedMs = valueDes;
           break;
         default:

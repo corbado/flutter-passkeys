@@ -15,7 +15,10 @@ class _$EventCreateReq extends EventCreateReq {
 
   _$EventCreateReq._({required this.eventType}) : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        eventType, r'EventCreateReq', 'eventType');
+      eventType,
+      r'EventCreateReq',
+      'eventType',
+    );
   }
 
   @override
@@ -42,9 +45,9 @@ class _$EventCreateReq extends EventCreateReq {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper(r'EventCreateReq')
-          ..add('eventType', eventType))
-        .toString();
+    return (newBuiltValueToStringHelper(
+      r'EventCreateReq',
+    )..add('eventType', eventType)).toString();
   }
 }
 
@@ -84,10 +87,15 @@ class EventCreateReqBuilder
   EventCreateReq build() => _build();
 
   _$EventCreateReq _build() {
-    final _$result = _$v ??
+    final _$result =
+        _$v ??
         new _$EventCreateReq._(
-            eventType: BuiltValueNullFieldError.checkNotNull(
-                eventType, r'EventCreateReq', 'eventType'));
+          eventType: BuiltValueNullFieldError.checkNotNull(
+            eventType,
+            r'EventCreateReq',
+            'eventType',
+          ),
+        );
     replace(_$result);
     return _$result;
   }

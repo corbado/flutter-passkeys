@@ -53,9 +53,11 @@ class _$MeUpdateReqSerializer implements PrimitiveSerializer<MeUpdateReq> {
     MeUpdateReq object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(
+      serializers,
+      object,
+      specifiedType: specifiedType,
+    ).toList();
   }
 
   void _deserializeProperties(
@@ -71,10 +73,12 @@ class _$MeUpdateReqSerializer implements PrimitiveSerializer<MeUpdateReq> {
       final value = serializedList[i + 1];
       switch (key) {
         case r'fullName':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(String),
-          ) as String;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(String),
+                  )
+                  as String;
           result.fullName = valueDes;
           break;
         default:

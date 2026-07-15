@@ -19,17 +19,23 @@ class _$ProcessInitRsp extends ProcessInitRsp {
   factory _$ProcessInitRsp([void Function(ProcessInitRspBuilder)? updates]) =>
       (new ProcessInitRspBuilder()..update(updates))._build();
 
-  _$ProcessInitRsp._(
-      {required this.token,
-      required this.expiresAt,
-      required this.processResponse,
-      this.newClientEnvHandle})
-      : super._() {
+  _$ProcessInitRsp._({
+    required this.token,
+    required this.expiresAt,
+    required this.processResponse,
+    this.newClientEnvHandle,
+  }) : super._() {
     BuiltValueNullFieldError.checkNotNull(token, r'ProcessInitRsp', 'token');
     BuiltValueNullFieldError.checkNotNull(
-        expiresAt, r'ProcessInitRsp', 'expiresAt');
+      expiresAt,
+      r'ProcessInitRsp',
+      'expiresAt',
+    );
     BuiltValueNullFieldError.checkNotNull(
-        processResponse, r'ProcessInitRsp', 'processResponse');
+      processResponse,
+      r'ProcessInitRsp',
+      'processResponse',
+    );
   }
 
   @override
@@ -128,14 +134,22 @@ class ProcessInitRspBuilder
   _$ProcessInitRsp _build() {
     _$ProcessInitRsp _$result;
     try {
-      _$result = _$v ??
+      _$result =
+          _$v ??
           new _$ProcessInitRsp._(
-              token: BuiltValueNullFieldError.checkNotNull(
-                  token, r'ProcessInitRsp', 'token'),
-              expiresAt: BuiltValueNullFieldError.checkNotNull(
-                  expiresAt, r'ProcessInitRsp', 'expiresAt'),
-              processResponse: processResponse.build(),
-              newClientEnvHandle: newClientEnvHandle);
+            token: BuiltValueNullFieldError.checkNotNull(
+              token,
+              r'ProcessInitRsp',
+              'token',
+            ),
+            expiresAt: BuiltValueNullFieldError.checkNotNull(
+              expiresAt,
+              r'ProcessInitRsp',
+              'expiresAt',
+            ),
+            processResponse: processResponse.build(),
+            newClientEnvHandle: newClientEnvHandle,
+          );
     } catch (_) {
       late String _$failedField;
       try {
@@ -143,7 +157,10 @@ class ProcessInitRspBuilder
         processResponse.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            r'ProcessInitRsp', _$failedField, e.toString());
+          r'ProcessInitRsp',
+          _$failedField,
+          e.toString(),
+        );
       }
       rethrow;
     }

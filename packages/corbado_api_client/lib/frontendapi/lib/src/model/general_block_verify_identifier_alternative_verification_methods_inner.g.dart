@@ -13,39 +13,45 @@ class _$GeneralBlockVerifyIdentifierAlternativeVerificationMethodsInner
   @override
   final String identifier;
 
-  factory _$GeneralBlockVerifyIdentifierAlternativeVerificationMethodsInner(
-          [void Function(
-                  GeneralBlockVerifyIdentifierAlternativeVerificationMethodsInnerBuilder)?
-              updates]) =>
+  factory _$GeneralBlockVerifyIdentifierAlternativeVerificationMethodsInner([
+    void Function(
+      GeneralBlockVerifyIdentifierAlternativeVerificationMethodsInnerBuilder,
+    )?
+    updates,
+  ]) =>
       (new GeneralBlockVerifyIdentifierAlternativeVerificationMethodsInnerBuilder()
             ..update(updates))
           ._build();
 
-  _$GeneralBlockVerifyIdentifierAlternativeVerificationMethodsInner._(
-      {required this.verificationMethod, required this.identifier})
-      : super._() {
+  _$GeneralBlockVerifyIdentifierAlternativeVerificationMethodsInner._({
+    required this.verificationMethod,
+    required this.identifier,
+  }) : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        verificationMethod,
-        r'GeneralBlockVerifyIdentifierAlternativeVerificationMethodsInner',
-        'verificationMethod');
+      verificationMethod,
+      r'GeneralBlockVerifyIdentifierAlternativeVerificationMethodsInner',
+      'verificationMethod',
+    );
     BuiltValueNullFieldError.checkNotNull(
-        identifier,
-        r'GeneralBlockVerifyIdentifierAlternativeVerificationMethodsInner',
-        'identifier');
+      identifier,
+      r'GeneralBlockVerifyIdentifierAlternativeVerificationMethodsInner',
+      'identifier',
+    );
   }
 
   @override
   GeneralBlockVerifyIdentifierAlternativeVerificationMethodsInner rebuild(
-          void Function(
-                  GeneralBlockVerifyIdentifierAlternativeVerificationMethodsInnerBuilder)
-              updates) =>
-      (toBuilder()..update(updates)).build();
+    void Function(
+      GeneralBlockVerifyIdentifierAlternativeVerificationMethodsInnerBuilder,
+    )
+    updates,
+  ) => (toBuilder()..update(updates)).build();
 
   @override
   GeneralBlockVerifyIdentifierAlternativeVerificationMethodsInnerBuilder
-      toBuilder() =>
-          new GeneralBlockVerifyIdentifierAlternativeVerificationMethodsInnerBuilder()
-            ..replace(this);
+  toBuilder() =>
+      new GeneralBlockVerifyIdentifierAlternativeVerificationMethodsInnerBuilder()
+        ..replace(this);
 
   @override
   bool operator ==(Object other) {
@@ -68,7 +74,8 @@ class _$GeneralBlockVerifyIdentifierAlternativeVerificationMethodsInner
   @override
   String toString() {
     return (newBuiltValueToStringHelper(
-            r'GeneralBlockVerifyIdentifierAlternativeVerificationMethodsInner')
+            r'GeneralBlockVerifyIdentifierAlternativeVerificationMethodsInner',
+          )
           ..add('verificationMethod', verificationMethod)
           ..add('identifier', identifier))
         .toString();
@@ -77,8 +84,10 @@ class _$GeneralBlockVerifyIdentifierAlternativeVerificationMethodsInner
 
 class GeneralBlockVerifyIdentifierAlternativeVerificationMethodsInnerBuilder
     implements
-        Builder<GeneralBlockVerifyIdentifierAlternativeVerificationMethodsInner,
-            GeneralBlockVerifyIdentifierAlternativeVerificationMethodsInnerBuilder> {
+        Builder<
+          GeneralBlockVerifyIdentifierAlternativeVerificationMethodsInner,
+          GeneralBlockVerifyIdentifierAlternativeVerificationMethodsInnerBuilder
+        > {
   _$GeneralBlockVerifyIdentifierAlternativeVerificationMethodsInner? _$v;
 
   VerificationMethod? _verificationMethod;
@@ -92,11 +101,12 @@ class GeneralBlockVerifyIdentifierAlternativeVerificationMethodsInnerBuilder
 
   GeneralBlockVerifyIdentifierAlternativeVerificationMethodsInnerBuilder() {
     GeneralBlockVerifyIdentifierAlternativeVerificationMethodsInner._defaults(
-        this);
+      this,
+    );
   }
 
   GeneralBlockVerifyIdentifierAlternativeVerificationMethodsInnerBuilder
-      get _$this {
+  get _$this {
     final $v = _$v;
     if ($v != null) {
       _verificationMethod = $v.verificationMethod;
@@ -108,17 +118,21 @@ class GeneralBlockVerifyIdentifierAlternativeVerificationMethodsInnerBuilder
 
   @override
   void replace(
-      GeneralBlockVerifyIdentifierAlternativeVerificationMethodsInner other) {
+    GeneralBlockVerifyIdentifierAlternativeVerificationMethodsInner other,
+  ) {
     ArgumentError.checkNotNull(other, 'other');
-    _$v = other
-        as _$GeneralBlockVerifyIdentifierAlternativeVerificationMethodsInner;
+    _$v =
+        other
+            as _$GeneralBlockVerifyIdentifierAlternativeVerificationMethodsInner;
   }
 
   @override
   void update(
-      void Function(
-              GeneralBlockVerifyIdentifierAlternativeVerificationMethodsInnerBuilder)?
-          updates) {
+    void Function(
+      GeneralBlockVerifyIdentifierAlternativeVerificationMethodsInnerBuilder,
+    )?
+    updates,
+  ) {
     if (updates != null) updates(this);
   }
 
@@ -127,16 +141,20 @@ class GeneralBlockVerifyIdentifierAlternativeVerificationMethodsInnerBuilder
       _build();
 
   _$GeneralBlockVerifyIdentifierAlternativeVerificationMethodsInner _build() {
-    final _$result = _$v ??
+    final _$result =
+        _$v ??
         new _$GeneralBlockVerifyIdentifierAlternativeVerificationMethodsInner._(
-            verificationMethod: BuiltValueNullFieldError.checkNotNull(
-                verificationMethod,
-                r'GeneralBlockVerifyIdentifierAlternativeVerificationMethodsInner',
-                'verificationMethod'),
-            identifier: BuiltValueNullFieldError.checkNotNull(
-                identifier,
-                r'GeneralBlockVerifyIdentifierAlternativeVerificationMethodsInner',
-                'identifier'));
+          verificationMethod: BuiltValueNullFieldError.checkNotNull(
+            verificationMethod,
+            r'GeneralBlockVerifyIdentifierAlternativeVerificationMethodsInner',
+            'verificationMethod',
+          ),
+          identifier: BuiltValueNullFieldError.checkNotNull(
+            identifier,
+            r'GeneralBlockVerifyIdentifierAlternativeVerificationMethodsInner',
+            'identifier',
+          ),
+        );
     replace(_$result);
     return _$result;
   }

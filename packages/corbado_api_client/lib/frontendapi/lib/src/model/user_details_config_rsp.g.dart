@@ -12,23 +12,30 @@ class _$UserDetailsConfigRsp extends UserDetailsConfigRsp {
   @override
   final BuiltList<LoginIdentifierConfig> identifiers;
 
-  factory _$UserDetailsConfigRsp(
-          [void Function(UserDetailsConfigRspBuilder)? updates]) =>
-      (new UserDetailsConfigRspBuilder()..update(updates))._build();
+  factory _$UserDetailsConfigRsp([
+    void Function(UserDetailsConfigRspBuilder)? updates,
+  ]) => (new UserDetailsConfigRspBuilder()..update(updates))._build();
 
-  _$UserDetailsConfigRsp._(
-      {required this.fullNameRequired, required this.identifiers})
-      : super._() {
+  _$UserDetailsConfigRsp._({
+    required this.fullNameRequired,
+    required this.identifiers,
+  }) : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        fullNameRequired, r'UserDetailsConfigRsp', 'fullNameRequired');
+      fullNameRequired,
+      r'UserDetailsConfigRsp',
+      'fullNameRequired',
+    );
     BuiltValueNullFieldError.checkNotNull(
-        identifiers, r'UserDetailsConfigRsp', 'identifiers');
+      identifiers,
+      r'UserDetailsConfigRsp',
+      'identifiers',
+    );
   }
 
   @override
   UserDetailsConfigRsp rebuild(
-          void Function(UserDetailsConfigRspBuilder) updates) =>
-      (toBuilder()..update(updates)).build();
+    void Function(UserDetailsConfigRspBuilder) updates,
+  ) => (toBuilder()..update(updates)).build();
 
   @override
   UserDetailsConfigRspBuilder toBuilder() =>
@@ -106,13 +113,16 @@ class UserDetailsConfigRspBuilder
   _$UserDetailsConfigRsp _build() {
     _$UserDetailsConfigRsp _$result;
     try {
-      _$result = _$v ??
+      _$result =
+          _$v ??
           new _$UserDetailsConfigRsp._(
-              fullNameRequired: BuiltValueNullFieldError.checkNotNull(
-                  fullNameRequired,
-                  r'UserDetailsConfigRsp',
-                  'fullNameRequired'),
-              identifiers: identifiers.build());
+            fullNameRequired: BuiltValueNullFieldError.checkNotNull(
+              fullNameRequired,
+              r'UserDetailsConfigRsp',
+              'fullNameRequired',
+            ),
+            identifiers: identifiers.build(),
+          );
     } catch (_) {
       late String _$failedField;
       try {
@@ -120,7 +130,10 @@ class UserDetailsConfigRspBuilder
         identifiers.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            r'UserDetailsConfigRsp', _$failedField, e.toString());
+          r'UserDetailsConfigRsp',
+          _$failedField,
+          e.toString(),
+        );
       }
       rethrow;
     }

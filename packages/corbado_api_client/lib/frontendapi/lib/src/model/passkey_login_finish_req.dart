@@ -20,8 +20,9 @@ abstract class PasskeyLoginFinishReq
 
   PasskeyLoginFinishReq._();
 
-  factory PasskeyLoginFinishReq(
-      [void updates(PasskeyLoginFinishReqBuilder b)]) = _$PasskeyLoginFinishReq;
+  factory PasskeyLoginFinishReq([
+    void updates(PasskeyLoginFinishReqBuilder b),
+  ]) = _$PasskeyLoginFinishReq;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(PasskeyLoginFinishReqBuilder b) => b;
@@ -36,7 +37,7 @@ class _$PasskeyLoginFinishReqSerializer
   @override
   final Iterable<Type> types = const [
     PasskeyLoginFinishReq,
-    _$PasskeyLoginFinishReq
+    _$PasskeyLoginFinishReq,
   ];
 
   @override
@@ -60,9 +61,11 @@ class _$PasskeyLoginFinishReqSerializer
     PasskeyLoginFinishReq object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(
+      serializers,
+      object,
+      specifiedType: specifiedType,
+    ).toList();
   }
 
   void _deserializeProperties(
@@ -78,10 +81,12 @@ class _$PasskeyLoginFinishReqSerializer
       final value = serializedList[i + 1];
       switch (key) {
         case r'signedChallenge':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(String),
-          ) as String;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(String),
+                  )
+                  as String;
           result.signedChallenge = valueDes;
           break;
         default:

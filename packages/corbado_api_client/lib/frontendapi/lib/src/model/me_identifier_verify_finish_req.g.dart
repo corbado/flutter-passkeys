@@ -12,23 +12,30 @@ class _$MeIdentifierVerifyFinishReq extends MeIdentifierVerifyFinishReq {
   @override
   final String code;
 
-  factory _$MeIdentifierVerifyFinishReq(
-          [void Function(MeIdentifierVerifyFinishReqBuilder)? updates]) =>
-      (new MeIdentifierVerifyFinishReqBuilder()..update(updates))._build();
+  factory _$MeIdentifierVerifyFinishReq([
+    void Function(MeIdentifierVerifyFinishReqBuilder)? updates,
+  ]) => (new MeIdentifierVerifyFinishReqBuilder()..update(updates))._build();
 
-  _$MeIdentifierVerifyFinishReq._(
-      {required this.identifierID, required this.code})
-      : super._() {
+  _$MeIdentifierVerifyFinishReq._({
+    required this.identifierID,
+    required this.code,
+  }) : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        identifierID, r'MeIdentifierVerifyFinishReq', 'identifierID');
+      identifierID,
+      r'MeIdentifierVerifyFinishReq',
+      'identifierID',
+    );
     BuiltValueNullFieldError.checkNotNull(
-        code, r'MeIdentifierVerifyFinishReq', 'code');
+      code,
+      r'MeIdentifierVerifyFinishReq',
+      'code',
+    );
   }
 
   @override
   MeIdentifierVerifyFinishReq rebuild(
-          void Function(MeIdentifierVerifyFinishReqBuilder) updates) =>
-      (toBuilder()..update(updates)).build();
+    void Function(MeIdentifierVerifyFinishReqBuilder) updates,
+  ) => (toBuilder()..update(updates)).build();
 
   @override
   MeIdentifierVerifyFinishReqBuilder toBuilder() =>
@@ -62,8 +69,10 @@ class _$MeIdentifierVerifyFinishReq extends MeIdentifierVerifyFinishReq {
 
 class MeIdentifierVerifyFinishReqBuilder
     implements
-        Builder<MeIdentifierVerifyFinishReq,
-            MeIdentifierVerifyFinishReqBuilder> {
+        Builder<
+          MeIdentifierVerifyFinishReq,
+          MeIdentifierVerifyFinishReqBuilder
+        > {
   _$MeIdentifierVerifyFinishReq? _$v;
 
   String? _identifierID;
@@ -103,12 +112,20 @@ class MeIdentifierVerifyFinishReqBuilder
   MeIdentifierVerifyFinishReq build() => _build();
 
   _$MeIdentifierVerifyFinishReq _build() {
-    final _$result = _$v ??
+    final _$result =
+        _$v ??
         new _$MeIdentifierVerifyFinishReq._(
-            identifierID: BuiltValueNullFieldError.checkNotNull(
-                identifierID, r'MeIdentifierVerifyFinishReq', 'identifierID'),
-            code: BuiltValueNullFieldError.checkNotNull(
-                code, r'MeIdentifierVerifyFinishReq', 'code'));
+          identifierID: BuiltValueNullFieldError.checkNotNull(
+            identifierID,
+            r'MeIdentifierVerifyFinishReq',
+            'identifierID',
+          ),
+          code: BuiltValueNullFieldError.checkNotNull(
+            code,
+            r'MeIdentifierVerifyFinishReq',
+            'code',
+          ),
+        );
     replace(_$result);
     return _$result;
   }

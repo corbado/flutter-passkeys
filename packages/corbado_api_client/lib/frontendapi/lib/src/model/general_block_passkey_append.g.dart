@@ -7,17 +7,17 @@ part of 'general_block_passkey_append.dart';
 // **************************************************************************
 
 const GeneralBlockPasskeyAppendVariantEnum
-    _$generalBlockPasskeyAppendVariantEnum_default_ =
+_$generalBlockPasskeyAppendVariantEnum_default_ =
     const GeneralBlockPasskeyAppendVariantEnum._('default_');
 const GeneralBlockPasskeyAppendVariantEnum
-    _$generalBlockPasskeyAppendVariantEnum_afterHybrid =
+_$generalBlockPasskeyAppendVariantEnum_afterHybrid =
     const GeneralBlockPasskeyAppendVariantEnum._('afterHybrid');
 const GeneralBlockPasskeyAppendVariantEnum
-    _$generalBlockPasskeyAppendVariantEnum_afterError =
+_$generalBlockPasskeyAppendVariantEnum_afterError =
     const GeneralBlockPasskeyAppendVariantEnum._('afterError');
 
 GeneralBlockPasskeyAppendVariantEnum
-    _$generalBlockPasskeyAppendVariantEnumValueOf(String name) {
+_$generalBlockPasskeyAppendVariantEnumValueOf(String name) {
   switch (name) {
     case 'default_':
       return _$generalBlockPasskeyAppendVariantEnum_default_;
@@ -31,15 +31,17 @@ GeneralBlockPasskeyAppendVariantEnum
 }
 
 final BuiltSet<GeneralBlockPasskeyAppendVariantEnum>
-    _$generalBlockPasskeyAppendVariantEnumValues = new BuiltSet<
-        GeneralBlockPasskeyAppendVariantEnum>(const <GeneralBlockPasskeyAppendVariantEnum>[
-  _$generalBlockPasskeyAppendVariantEnum_default_,
-  _$generalBlockPasskeyAppendVariantEnum_afterHybrid,
-  _$generalBlockPasskeyAppendVariantEnum_afterError,
-]);
+_$generalBlockPasskeyAppendVariantEnumValues =
+    new BuiltSet<GeneralBlockPasskeyAppendVariantEnum>(
+      const <GeneralBlockPasskeyAppendVariantEnum>[
+        _$generalBlockPasskeyAppendVariantEnum_default_,
+        _$generalBlockPasskeyAppendVariantEnum_afterHybrid,
+        _$generalBlockPasskeyAppendVariantEnum_afterError,
+      ],
+    );
 
 Serializer<GeneralBlockPasskeyAppendVariantEnum>
-    _$generalBlockPasskeyAppendVariantEnumSerializer =
+_$generalBlockPasskeyAppendVariantEnumSerializer =
     new _$GeneralBlockPasskeyAppendVariantEnumSerializer();
 
 class _$GeneralBlockPasskeyAppendVariantEnumSerializer
@@ -57,23 +59,26 @@ class _$GeneralBlockPasskeyAppendVariantEnumSerializer
 
   @override
   final Iterable<Type> types = const <Type>[
-    GeneralBlockPasskeyAppendVariantEnum
+    GeneralBlockPasskeyAppendVariantEnum,
   ];
   @override
   final String wireName = 'GeneralBlockPasskeyAppendVariantEnum';
 
   @override
   Object serialize(
-          Serializers serializers, GeneralBlockPasskeyAppendVariantEnum object,
-          {FullType specifiedType = FullType.unspecified}) =>
-      _toWire[object.name] ?? object.name;
+    Serializers serializers,
+    GeneralBlockPasskeyAppendVariantEnum object, {
+    FullType specifiedType = FullType.unspecified,
+  }) => _toWire[object.name] ?? object.name;
 
   @override
   GeneralBlockPasskeyAppendVariantEnum deserialize(
-          Serializers serializers, Object serialized,
-          {FullType specifiedType = FullType.unspecified}) =>
-      GeneralBlockPasskeyAppendVariantEnum.valueOf(
-          _fromWire[serialized] ?? (serialized is String ? serialized : ''));
+    Serializers serializers,
+    Object serialized, {
+    FullType specifiedType = FullType.unspecified,
+  }) => GeneralBlockPasskeyAppendVariantEnum.valueOf(
+    _fromWire[serialized] ?? (serialized is String ? serialized : ''),
+  );
 }
 
 class _$GeneralBlockPasskeyAppend extends GeneralBlockPasskeyAppend {
@@ -92,39 +97,60 @@ class _$GeneralBlockPasskeyAppend extends GeneralBlockPasskeyAppend {
   @override
   final GeneralBlockPasskeyAppendVariantEnum variant;
 
-  factory _$GeneralBlockPasskeyAppend(
-          [void Function(GeneralBlockPasskeyAppendBuilder)? updates]) =>
-      (new GeneralBlockPasskeyAppendBuilder()..update(updates))._build();
+  factory _$GeneralBlockPasskeyAppend([
+    void Function(GeneralBlockPasskeyAppendBuilder)? updates,
+  ]) => (new GeneralBlockPasskeyAppendBuilder()..update(updates))._build();
 
-  _$GeneralBlockPasskeyAppend._(
-      {required this.blockType,
-      required this.challenge,
-      required this.identifierValue,
-      required this.identifierType,
-      required this.autoSubmit,
-      required this.passkeyIconSet,
-      required this.variant})
-      : super._() {
+  _$GeneralBlockPasskeyAppend._({
+    required this.blockType,
+    required this.challenge,
+    required this.identifierValue,
+    required this.identifierType,
+    required this.autoSubmit,
+    required this.passkeyIconSet,
+    required this.variant,
+  }) : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        blockType, r'GeneralBlockPasskeyAppend', 'blockType');
+      blockType,
+      r'GeneralBlockPasskeyAppend',
+      'blockType',
+    );
     BuiltValueNullFieldError.checkNotNull(
-        challenge, r'GeneralBlockPasskeyAppend', 'challenge');
+      challenge,
+      r'GeneralBlockPasskeyAppend',
+      'challenge',
+    );
     BuiltValueNullFieldError.checkNotNull(
-        identifierValue, r'GeneralBlockPasskeyAppend', 'identifierValue');
+      identifierValue,
+      r'GeneralBlockPasskeyAppend',
+      'identifierValue',
+    );
     BuiltValueNullFieldError.checkNotNull(
-        identifierType, r'GeneralBlockPasskeyAppend', 'identifierType');
+      identifierType,
+      r'GeneralBlockPasskeyAppend',
+      'identifierType',
+    );
     BuiltValueNullFieldError.checkNotNull(
-        autoSubmit, r'GeneralBlockPasskeyAppend', 'autoSubmit');
+      autoSubmit,
+      r'GeneralBlockPasskeyAppend',
+      'autoSubmit',
+    );
     BuiltValueNullFieldError.checkNotNull(
-        passkeyIconSet, r'GeneralBlockPasskeyAppend', 'passkeyIconSet');
+      passkeyIconSet,
+      r'GeneralBlockPasskeyAppend',
+      'passkeyIconSet',
+    );
     BuiltValueNullFieldError.checkNotNull(
-        variant, r'GeneralBlockPasskeyAppend', 'variant');
+      variant,
+      r'GeneralBlockPasskeyAppend',
+      'variant',
+    );
   }
 
   @override
   GeneralBlockPasskeyAppend rebuild(
-          void Function(GeneralBlockPasskeyAppendBuilder) updates) =>
-      (toBuilder()..update(updates)).build();
+    void Function(GeneralBlockPasskeyAppendBuilder) updates,
+  ) => (toBuilder()..update(updates)).build();
 
   @override
   GeneralBlockPasskeyAppendBuilder toBuilder() =>
@@ -242,24 +268,45 @@ class GeneralBlockPasskeyAppendBuilder
   GeneralBlockPasskeyAppend build() => _build();
 
   _$GeneralBlockPasskeyAppend _build() {
-    final _$result = _$v ??
+    final _$result =
+        _$v ??
         new _$GeneralBlockPasskeyAppend._(
-            blockType: BuiltValueNullFieldError.checkNotNull(
-                blockType, r'GeneralBlockPasskeyAppend', 'blockType'),
-            challenge: BuiltValueNullFieldError.checkNotNull(
-                challenge, r'GeneralBlockPasskeyAppend', 'challenge'),
-            identifierValue: BuiltValueNullFieldError.checkNotNull(
-                identifierValue,
-                r'GeneralBlockPasskeyAppend',
-                'identifierValue'),
-            identifierType: BuiltValueNullFieldError.checkNotNull(
-                identifierType, r'GeneralBlockPasskeyAppend', 'identifierType'),
-            autoSubmit: BuiltValueNullFieldError.checkNotNull(
-                autoSubmit, r'GeneralBlockPasskeyAppend', 'autoSubmit'),
-            passkeyIconSet: BuiltValueNullFieldError.checkNotNull(
-                passkeyIconSet, r'GeneralBlockPasskeyAppend', 'passkeyIconSet'),
-            variant: BuiltValueNullFieldError.checkNotNull(
-                variant, r'GeneralBlockPasskeyAppend', 'variant'));
+          blockType: BuiltValueNullFieldError.checkNotNull(
+            blockType,
+            r'GeneralBlockPasskeyAppend',
+            'blockType',
+          ),
+          challenge: BuiltValueNullFieldError.checkNotNull(
+            challenge,
+            r'GeneralBlockPasskeyAppend',
+            'challenge',
+          ),
+          identifierValue: BuiltValueNullFieldError.checkNotNull(
+            identifierValue,
+            r'GeneralBlockPasskeyAppend',
+            'identifierValue',
+          ),
+          identifierType: BuiltValueNullFieldError.checkNotNull(
+            identifierType,
+            r'GeneralBlockPasskeyAppend',
+            'identifierType',
+          ),
+          autoSubmit: BuiltValueNullFieldError.checkNotNull(
+            autoSubmit,
+            r'GeneralBlockPasskeyAppend',
+            'autoSubmit',
+          ),
+          passkeyIconSet: BuiltValueNullFieldError.checkNotNull(
+            passkeyIconSet,
+            r'GeneralBlockPasskeyAppend',
+            'passkeyIconSet',
+          ),
+          variant: BuiltValueNullFieldError.checkNotNull(
+            variant,
+            r'GeneralBlockPasskeyAppend',
+            'variant',
+          ),
+        );
     replace(_$result);
     return _$result;
   }

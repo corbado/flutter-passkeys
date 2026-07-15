@@ -57,7 +57,7 @@ class _$ConnectManageInitRspSerializer
   @override
   final Iterable<Type> types = const [
     ConnectManageInitRsp,
-    _$ConnectManageInitRsp
+    _$ConnectManageInitRsp,
   ];
 
   @override
@@ -91,8 +91,10 @@ class _$ConnectManageInitRspSerializer
     yield r'flags';
     yield serializers.serialize(
       object.flags,
-      specifiedType:
-          const FullType(BuiltMap, [FullType(String), FullType(String)]),
+      specifiedType: const FullType(BuiltMap, [
+        FullType(String),
+        FullType(String),
+      ]),
     );
     if (object.newClientEnvHandle != null) {
       yield r'newClientEnvHandle';
@@ -109,9 +111,11 @@ class _$ConnectManageInitRspSerializer
     ConnectManageInitRsp object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(
+      serializers,
+      object,
+      specifiedType: specifiedType,
+    ).toList();
   }
 
   void _deserializeProperties(
@@ -127,46 +131,57 @@ class _$ConnectManageInitRspSerializer
       final value = serializedList[i + 1];
       switch (key) {
         case r'processID':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(String),
-          ) as String;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(String),
+                  )
+                  as String;
           result.processID = valueDes;
           break;
         case r'expiresAt':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(int),
-          ) as int;
+          final valueDes =
+              serializers.deserialize(value, specifiedType: const FullType(int))
+                  as int;
           result.expiresAt = valueDes;
           break;
         case r'frontendApiUrl':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(String),
-          ) as String;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(String),
+                  )
+                  as String;
           result.frontendApiUrl = valueDes;
           break;
         case r'manageAllowed':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(bool),
-          ) as bool;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(bool),
+                  )
+                  as bool;
           result.manageAllowed = valueDes;
           break;
         case r'flags':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType:
-                const FullType(BuiltMap, [FullType(String), FullType(String)]),
-          ) as BuiltMap<String, String>;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(BuiltMap, [
+                      FullType(String),
+                      FullType(String),
+                    ]),
+                  )
+                  as BuiltMap<String, String>;
           result.flags.replace(valueDes);
           break;
         case r'newClientEnvHandle':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(String),
-          ) as String;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(String),
+                  )
+                  as String;
           result.newClientEnvHandle = valueDes;
           break;
         default:

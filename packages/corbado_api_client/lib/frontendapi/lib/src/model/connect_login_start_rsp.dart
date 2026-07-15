@@ -40,7 +40,7 @@ class _$ConnectLoginStartRspSerializer
   @override
   final Iterable<Type> types = const [
     ConnectLoginStartRsp,
-    _$ConnectLoginStartRsp
+    _$ConnectLoginStartRsp,
   ];
 
   @override
@@ -69,9 +69,11 @@ class _$ConnectLoginStartRspSerializer
     ConnectLoginStartRsp object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(
+      serializers,
+      object,
+      specifiedType: specifiedType,
+    ).toList();
   }
 
   void _deserializeProperties(
@@ -87,17 +89,21 @@ class _$ConnectLoginStartRspSerializer
       final value = serializedList[i + 1];
       switch (key) {
         case r'assertionOptions':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(String),
-          ) as String;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(String),
+                  )
+                  as String;
           result.assertionOptions = valueDes;
           break;
         case r'isCDA':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(bool),
-          ) as bool;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(bool),
+                  )
+                  as bool;
           result.isCDA = valueDes;
           break;
         default:

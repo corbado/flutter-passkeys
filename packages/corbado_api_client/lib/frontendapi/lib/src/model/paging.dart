@@ -74,9 +74,11 @@ class _$PagingSerializer implements PrimitiveSerializer<Paging> {
     Paging object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(
+      serializers,
+      object,
+      specifiedType: specifiedType,
+    ).toList();
   }
 
   void _deserializeProperties(
@@ -92,24 +94,21 @@ class _$PagingSerializer implements PrimitiveSerializer<Paging> {
       final value = serializedList[i + 1];
       switch (key) {
         case r'page':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(int),
-          ) as int;
+          final valueDes =
+              serializers.deserialize(value, specifiedType: const FullType(int))
+                  as int;
           result.page = valueDes;
           break;
         case r'totalPages':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(int),
-          ) as int;
+          final valueDes =
+              serializers.deserialize(value, specifiedType: const FullType(int))
+                  as int;
           result.totalPages = valueDes;
           break;
         case r'totalItems':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(int),
-          ) as int;
+          final valueDes =
+              serializers.deserialize(value, specifiedType: const FullType(int))
+                  as int;
           result.totalItems = valueDes;
           break;
         default:

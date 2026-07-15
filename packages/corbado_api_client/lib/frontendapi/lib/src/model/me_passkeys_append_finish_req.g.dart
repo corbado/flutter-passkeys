@@ -12,23 +12,30 @@ class _$MePasskeysAppendFinishReq extends MePasskeysAppendFinishReq {
   @override
   final ClientInformation clientInformation;
 
-  factory _$MePasskeysAppendFinishReq(
-          [void Function(MePasskeysAppendFinishReqBuilder)? updates]) =>
-      (new MePasskeysAppendFinishReqBuilder()..update(updates))._build();
+  factory _$MePasskeysAppendFinishReq([
+    void Function(MePasskeysAppendFinishReqBuilder)? updates,
+  ]) => (new MePasskeysAppendFinishReqBuilder()..update(updates))._build();
 
-  _$MePasskeysAppendFinishReq._(
-      {required this.attestationResponse, required this.clientInformation})
-      : super._() {
-    BuiltValueNullFieldError.checkNotNull(attestationResponse,
-        r'MePasskeysAppendFinishReq', 'attestationResponse');
+  _$MePasskeysAppendFinishReq._({
+    required this.attestationResponse,
+    required this.clientInformation,
+  }) : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        clientInformation, r'MePasskeysAppendFinishReq', 'clientInformation');
+      attestationResponse,
+      r'MePasskeysAppendFinishReq',
+      'attestationResponse',
+    );
+    BuiltValueNullFieldError.checkNotNull(
+      clientInformation,
+      r'MePasskeysAppendFinishReq',
+      'clientInformation',
+    );
   }
 
   @override
   MePasskeysAppendFinishReq rebuild(
-          void Function(MePasskeysAppendFinishReqBuilder) updates) =>
-      (toBuilder()..update(updates)).build();
+    void Function(MePasskeysAppendFinishReqBuilder) updates,
+  ) => (toBuilder()..update(updates)).build();
 
   @override
   MePasskeysAppendFinishReqBuilder toBuilder() =>
@@ -107,13 +114,16 @@ class MePasskeysAppendFinishReqBuilder
   _$MePasskeysAppendFinishReq _build() {
     _$MePasskeysAppendFinishReq _$result;
     try {
-      _$result = _$v ??
+      _$result =
+          _$v ??
           new _$MePasskeysAppendFinishReq._(
-              attestationResponse: BuiltValueNullFieldError.checkNotNull(
-                  attestationResponse,
-                  r'MePasskeysAppendFinishReq',
-                  'attestationResponse'),
-              clientInformation: clientInformation.build());
+            attestationResponse: BuiltValueNullFieldError.checkNotNull(
+              attestationResponse,
+              r'MePasskeysAppendFinishReq',
+              'attestationResponse',
+            ),
+            clientInformation: clientInformation.build(),
+          );
     } catch (_) {
       late String _$failedField;
       try {
@@ -121,7 +131,10 @@ class MePasskeysAppendFinishReqBuilder
         clientInformation.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            r'MePasskeysAppendFinishReq', _$failedField, e.toString());
+          r'MePasskeysAppendFinishReq',
+          _$failedField,
+          e.toString(),
+        );
       }
       rethrow;
     }

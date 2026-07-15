@@ -85,9 +85,11 @@ class _$SocialAccountSerializer implements PrimitiveSerializer<SocialAccount> {
     SocialAccount object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(
+      serializers,
+      object,
+      specifiedType: specifiedType,
+    ).toList();
   }
 
   void _deserializeProperties(
@@ -103,31 +105,39 @@ class _$SocialAccountSerializer implements PrimitiveSerializer<SocialAccount> {
       final value = serializedList[i + 1];
       switch (key) {
         case r'providerType':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(SocialProviderType),
-          ) as SocialProviderType;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(SocialProviderType),
+                  )
+                  as SocialProviderType;
           result.providerType = valueDes;
           break;
         case r'identifierValue':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(String),
-          ) as String;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(String),
+                  )
+                  as String;
           result.identifierValue = valueDes;
           break;
         case r'avatarUrl':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(String),
-          ) as String;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(String),
+                  )
+                  as String;
           result.avatarUrl = valueDes;
           break;
         case r'fullName':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(String),
-          ) as String;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(String),
+                  )
+                  as String;
           result.fullName = valueDes;
           break;
         default:

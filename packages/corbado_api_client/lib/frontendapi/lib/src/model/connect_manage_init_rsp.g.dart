@@ -20,34 +20,49 @@ class _$ConnectManageInitRsp extends ConnectManageInitRsp {
   @override
   final String? newClientEnvHandle;
 
-  factory _$ConnectManageInitRsp(
-          [void Function(ConnectManageInitRspBuilder)? updates]) =>
-      (new ConnectManageInitRspBuilder()..update(updates))._build();
+  factory _$ConnectManageInitRsp([
+    void Function(ConnectManageInitRspBuilder)? updates,
+  ]) => (new ConnectManageInitRspBuilder()..update(updates))._build();
 
-  _$ConnectManageInitRsp._(
-      {required this.processID,
-      required this.expiresAt,
-      required this.frontendApiUrl,
-      required this.manageAllowed,
-      required this.flags,
-      this.newClientEnvHandle})
-      : super._() {
+  _$ConnectManageInitRsp._({
+    required this.processID,
+    required this.expiresAt,
+    required this.frontendApiUrl,
+    required this.manageAllowed,
+    required this.flags,
+    this.newClientEnvHandle,
+  }) : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        processID, r'ConnectManageInitRsp', 'processID');
+      processID,
+      r'ConnectManageInitRsp',
+      'processID',
+    );
     BuiltValueNullFieldError.checkNotNull(
-        expiresAt, r'ConnectManageInitRsp', 'expiresAt');
+      expiresAt,
+      r'ConnectManageInitRsp',
+      'expiresAt',
+    );
     BuiltValueNullFieldError.checkNotNull(
-        frontendApiUrl, r'ConnectManageInitRsp', 'frontendApiUrl');
+      frontendApiUrl,
+      r'ConnectManageInitRsp',
+      'frontendApiUrl',
+    );
     BuiltValueNullFieldError.checkNotNull(
-        manageAllowed, r'ConnectManageInitRsp', 'manageAllowed');
+      manageAllowed,
+      r'ConnectManageInitRsp',
+      'manageAllowed',
+    );
     BuiltValueNullFieldError.checkNotNull(
-        flags, r'ConnectManageInitRsp', 'flags');
+      flags,
+      r'ConnectManageInitRsp',
+      'flags',
+    );
   }
 
   @override
   ConnectManageInitRsp rebuild(
-          void Function(ConnectManageInitRspBuilder) updates) =>
-      (toBuilder()..update(updates)).build();
+    void Function(ConnectManageInitRspBuilder) updates,
+  ) => (toBuilder()..update(updates)).build();
 
   @override
   ConnectManageInitRspBuilder toBuilder() =>
@@ -158,18 +173,32 @@ class ConnectManageInitRspBuilder
   _$ConnectManageInitRsp _build() {
     _$ConnectManageInitRsp _$result;
     try {
-      _$result = _$v ??
+      _$result =
+          _$v ??
           new _$ConnectManageInitRsp._(
-              processID: BuiltValueNullFieldError.checkNotNull(
-                  processID, r'ConnectManageInitRsp', 'processID'),
-              expiresAt: BuiltValueNullFieldError.checkNotNull(
-                  expiresAt, r'ConnectManageInitRsp', 'expiresAt'),
-              frontendApiUrl: BuiltValueNullFieldError.checkNotNull(
-                  frontendApiUrl, r'ConnectManageInitRsp', 'frontendApiUrl'),
-              manageAllowed: BuiltValueNullFieldError.checkNotNull(
-                  manageAllowed, r'ConnectManageInitRsp', 'manageAllowed'),
-              flags: flags.build(),
-              newClientEnvHandle: newClientEnvHandle);
+            processID: BuiltValueNullFieldError.checkNotNull(
+              processID,
+              r'ConnectManageInitRsp',
+              'processID',
+            ),
+            expiresAt: BuiltValueNullFieldError.checkNotNull(
+              expiresAt,
+              r'ConnectManageInitRsp',
+              'expiresAt',
+            ),
+            frontendApiUrl: BuiltValueNullFieldError.checkNotNull(
+              frontendApiUrl,
+              r'ConnectManageInitRsp',
+              'frontendApiUrl',
+            ),
+            manageAllowed: BuiltValueNullFieldError.checkNotNull(
+              manageAllowed,
+              r'ConnectManageInitRsp',
+              'manageAllowed',
+            ),
+            flags: flags.build(),
+            newClientEnvHandle: newClientEnvHandle,
+          );
     } catch (_) {
       late String _$failedField;
       try {
@@ -177,7 +206,10 @@ class ConnectManageInitRspBuilder
         flags.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            r'ConnectManageInitRsp', _$failedField, e.toString());
+          r'ConnectManageInitRsp',
+          _$failedField,
+          e.toString(),
+        );
       }
       rethrow;
     }

@@ -26,21 +26,21 @@ class _$ClientInformation extends ClientInformation {
   @override
   final bool? isNative;
 
-  factory _$ClientInformation(
-          [void Function(ClientInformationBuilder)? updates]) =>
-      (new ClientInformationBuilder()..update(updates))._build();
+  factory _$ClientInformation([
+    void Function(ClientInformationBuilder)? updates,
+  ]) => (new ClientInformationBuilder()..update(updates))._build();
 
-  _$ClientInformation._(
-      {this.bluetoothAvailable,
-      this.clientEnvHandle,
-      this.visitorId,
-      this.canUsePasskeys,
-      this.isUserVerifyingPlatformAuthenticatorAvailable,
-      this.isConditionalMediationAvailable,
-      this.clientCapabilities,
-      this.javaScriptHighEntropy,
-      this.isNative})
-      : super._();
+  _$ClientInformation._({
+    this.bluetoothAvailable,
+    this.clientEnvHandle,
+    this.visitorId,
+    this.canUsePasskeys,
+    this.isUserVerifyingPlatformAuthenticatorAvailable,
+    this.isConditionalMediationAvailable,
+    this.clientCapabilities,
+    this.javaScriptHighEntropy,
+    this.isNative,
+  }) : super._();
 
   @override
   ClientInformation rebuild(void Function(ClientInformationBuilder) updates) =>
@@ -74,8 +74,10 @@ class _$ClientInformation extends ClientInformation {
     _$hash = $jc(_$hash, clientEnvHandle.hashCode);
     _$hash = $jc(_$hash, visitorId.hashCode);
     _$hash = $jc(_$hash, canUsePasskeys.hashCode);
-    _$hash =
-        $jc(_$hash, isUserVerifyingPlatformAuthenticatorAvailable.hashCode);
+    _$hash = $jc(
+      _$hash,
+      isUserVerifyingPlatformAuthenticatorAvailable.hashCode,
+    );
     _$hash = $jc(_$hash, isConditionalMediationAvailable.hashCode);
     _$hash = $jc(_$hash, clientCapabilities.hashCode);
     _$hash = $jc(_$hash, javaScriptHighEntropy.hashCode);
@@ -91,10 +93,14 @@ class _$ClientInformation extends ClientInformation {
           ..add('clientEnvHandle', clientEnvHandle)
           ..add('visitorId', visitorId)
           ..add('canUsePasskeys', canUsePasskeys)
-          ..add('isUserVerifyingPlatformAuthenticatorAvailable',
-              isUserVerifyingPlatformAuthenticatorAvailable)
-          ..add('isConditionalMediationAvailable',
-              isConditionalMediationAvailable)
+          ..add(
+            'isUserVerifyingPlatformAuthenticatorAvailable',
+            isUserVerifyingPlatformAuthenticatorAvailable,
+          )
+          ..add(
+            'isConditionalMediationAvailable',
+            isConditionalMediationAvailable,
+          )
           ..add('clientCapabilities', clientCapabilities)
           ..add('javaScriptHighEntropy', javaScriptHighEntropy)
           ..add('isNative', isNative))
@@ -129,9 +135,9 @@ class ClientInformationBuilder
   bool? get isUserVerifyingPlatformAuthenticatorAvailable =>
       _$this._isUserVerifyingPlatformAuthenticatorAvailable;
   set isUserVerifyingPlatformAuthenticatorAvailable(
-          bool? isUserVerifyingPlatformAuthenticatorAvailable) =>
-      _$this._isUserVerifyingPlatformAuthenticatorAvailable =
-          isUserVerifyingPlatformAuthenticatorAvailable;
+    bool? isUserVerifyingPlatformAuthenticatorAvailable,
+  ) => _$this._isUserVerifyingPlatformAuthenticatorAvailable =
+      isUserVerifyingPlatformAuthenticatorAvailable;
 
   bool? _isConditionalMediationAvailable;
   bool? get isConditionalMediationAvailable =>
@@ -149,8 +155,8 @@ class ClientInformationBuilder
   JavaScriptHighEntropyBuilder get javaScriptHighEntropy =>
       _$this._javaScriptHighEntropy ??= new JavaScriptHighEntropyBuilder();
   set javaScriptHighEntropy(
-          JavaScriptHighEntropyBuilder? javaScriptHighEntropy) =>
-      _$this._javaScriptHighEntropy = javaScriptHighEntropy;
+    JavaScriptHighEntropyBuilder? javaScriptHighEntropy,
+  ) => _$this._javaScriptHighEntropy = javaScriptHighEntropy;
 
   bool? _isNative;
   bool? get isNative => _$this._isNative;
@@ -195,18 +201,20 @@ class ClientInformationBuilder
   _$ClientInformation _build() {
     _$ClientInformation _$result;
     try {
-      _$result = _$v ??
+      _$result =
+          _$v ??
           new _$ClientInformation._(
-              bluetoothAvailable: bluetoothAvailable,
-              clientEnvHandle: clientEnvHandle,
-              visitorId: visitorId,
-              canUsePasskeys: canUsePasskeys,
-              isUserVerifyingPlatformAuthenticatorAvailable:
-                  isUserVerifyingPlatformAuthenticatorAvailable,
-              isConditionalMediationAvailable: isConditionalMediationAvailable,
-              clientCapabilities: _clientCapabilities?.build(),
-              javaScriptHighEntropy: _javaScriptHighEntropy?.build(),
-              isNative: isNative);
+            bluetoothAvailable: bluetoothAvailable,
+            clientEnvHandle: clientEnvHandle,
+            visitorId: visitorId,
+            canUsePasskeys: canUsePasskeys,
+            isUserVerifyingPlatformAuthenticatorAvailable:
+                isUserVerifyingPlatformAuthenticatorAvailable,
+            isConditionalMediationAvailable: isConditionalMediationAvailable,
+            clientCapabilities: _clientCapabilities?.build(),
+            javaScriptHighEntropy: _javaScriptHighEntropy?.build(),
+            isNative: isNative,
+          );
     } catch (_) {
       late String _$failedField;
       try {
@@ -216,7 +224,10 @@ class ClientInformationBuilder
         _javaScriptHighEntropy?.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            r'ClientInformation', _$failedField, e.toString());
+          r'ClientInformation',
+          _$failedField,
+          e.toString(),
+        );
       }
       rethrow;
     }

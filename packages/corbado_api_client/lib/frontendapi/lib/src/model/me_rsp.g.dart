@@ -19,17 +19,20 @@ class _$MeRsp extends MeRsp {
   factory _$MeRsp([void Function(MeRspBuilder)? updates]) =>
       (new MeRspBuilder()..update(updates))._build();
 
-  _$MeRsp._(
-      {required this.id,
-      required this.fullName,
-      required this.identifiers,
-      required this.socialAccounts})
-      : super._() {
+  _$MeRsp._({
+    required this.id,
+    required this.fullName,
+    required this.identifiers,
+    required this.socialAccounts,
+  }) : super._() {
     BuiltValueNullFieldError.checkNotNull(id, r'MeRsp', 'id');
     BuiltValueNullFieldError.checkNotNull(fullName, r'MeRsp', 'fullName');
     BuiltValueNullFieldError.checkNotNull(identifiers, r'MeRsp', 'identifiers');
     BuiltValueNullFieldError.checkNotNull(
-        socialAccounts, r'MeRsp', 'socialAccounts');
+      socialAccounts,
+      r'MeRsp',
+      'socialAccounts',
+    );
   }
 
   @override
@@ -127,13 +130,18 @@ class MeRspBuilder implements Builder<MeRsp, MeRspBuilder> {
   _$MeRsp _build() {
     _$MeRsp _$result;
     try {
-      _$result = _$v ??
+      _$result =
+          _$v ??
           new _$MeRsp._(
-              id: BuiltValueNullFieldError.checkNotNull(id, r'MeRsp', 'id'),
-              fullName: BuiltValueNullFieldError.checkNotNull(
-                  fullName, r'MeRsp', 'fullName'),
-              identifiers: identifiers.build(),
-              socialAccounts: socialAccounts.build());
+            id: BuiltValueNullFieldError.checkNotNull(id, r'MeRsp', 'id'),
+            fullName: BuiltValueNullFieldError.checkNotNull(
+              fullName,
+              r'MeRsp',
+              'fullName',
+            ),
+            identifiers: identifiers.build(),
+            socialAccounts: socialAccounts.build(),
+          );
     } catch (_) {
       late String _$failedField;
       try {
@@ -143,7 +151,10 @@ class MeRspBuilder implements Builder<MeRsp, MeRspBuilder> {
         socialAccounts.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            r'MeRsp', _$failedField, e.toString());
+          r'MeRsp',
+          _$failedField,
+          e.toString(),
+        );
       }
       rethrow;
     }

@@ -14,27 +14,36 @@ class _$JavaScriptHighEntropy extends JavaScriptHighEntropy {
   @override
   final bool mobile;
 
-  factory _$JavaScriptHighEntropy(
-          [void Function(JavaScriptHighEntropyBuilder)? updates]) =>
-      (new JavaScriptHighEntropyBuilder()..update(updates))._build();
+  factory _$JavaScriptHighEntropy([
+    void Function(JavaScriptHighEntropyBuilder)? updates,
+  ]) => (new JavaScriptHighEntropyBuilder()..update(updates))._build();
 
-  _$JavaScriptHighEntropy._(
-      {required this.platform,
-      required this.platformVersion,
-      required this.mobile})
-      : super._() {
+  _$JavaScriptHighEntropy._({
+    required this.platform,
+    required this.platformVersion,
+    required this.mobile,
+  }) : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        platform, r'JavaScriptHighEntropy', 'platform');
+      platform,
+      r'JavaScriptHighEntropy',
+      'platform',
+    );
     BuiltValueNullFieldError.checkNotNull(
-        platformVersion, r'JavaScriptHighEntropy', 'platformVersion');
+      platformVersion,
+      r'JavaScriptHighEntropy',
+      'platformVersion',
+    );
     BuiltValueNullFieldError.checkNotNull(
-        mobile, r'JavaScriptHighEntropy', 'mobile');
+      mobile,
+      r'JavaScriptHighEntropy',
+      'mobile',
+    );
   }
 
   @override
   JavaScriptHighEntropy rebuild(
-          void Function(JavaScriptHighEntropyBuilder) updates) =>
-      (toBuilder()..update(updates)).build();
+    void Function(JavaScriptHighEntropyBuilder) updates,
+  ) => (toBuilder()..update(updates)).build();
 
   @override
   JavaScriptHighEntropyBuilder toBuilder() =>
@@ -116,14 +125,25 @@ class JavaScriptHighEntropyBuilder
   JavaScriptHighEntropy build() => _build();
 
   _$JavaScriptHighEntropy _build() {
-    final _$result = _$v ??
+    final _$result =
+        _$v ??
         new _$JavaScriptHighEntropy._(
-            platform: BuiltValueNullFieldError.checkNotNull(
-                platform, r'JavaScriptHighEntropy', 'platform'),
-            platformVersion: BuiltValueNullFieldError.checkNotNull(
-                platformVersion, r'JavaScriptHighEntropy', 'platformVersion'),
-            mobile: BuiltValueNullFieldError.checkNotNull(
-                mobile, r'JavaScriptHighEntropy', 'mobile'));
+          platform: BuiltValueNullFieldError.checkNotNull(
+            platform,
+            r'JavaScriptHighEntropy',
+            'platform',
+          ),
+          platformVersion: BuiltValueNullFieldError.checkNotNull(
+            platformVersion,
+            r'JavaScriptHighEntropy',
+            'platformVersion',
+          ),
+          mobile: BuiltValueNullFieldError.checkNotNull(
+            mobile,
+            r'JavaScriptHighEntropy',
+            'mobile',
+          ),
+        );
     replace(_$result);
     return _$result;
   }

@@ -60,16 +60,10 @@ class CorbadoConnectApi {
     final _path = r'/v2/connect/append/finish';
     final _options = Options(
       method: r'POST',
-      headers: <String, dynamic>{
-        ...?headers,
-      },
+      headers: <String, dynamic>{...?headers},
       extra: <String, dynamic>{
         'secure': <Map<String, String>>[
-          {
-            'type': 'http',
-            'scheme': 'bearer',
-            'name': 'bearerAuth',
-          },
+          {'type': 'http', 'scheme': 'bearer', 'name': 'bearerAuth'},
           {
             'type': 'apiKey',
             'name': 'projectID',
@@ -87,14 +81,13 @@ class CorbadoConnectApi {
 
     try {
       const _type = FullType(ConnectAppendFinishReq);
-      _bodyData =
-          _serializers.serialize(connectAppendFinishReq, specifiedType: _type);
+      _bodyData = _serializers.serialize(
+        connectAppendFinishReq,
+        specifiedType: _type,
+      );
     } catch (error, stackTrace) {
       throw DioException(
-        requestOptions: _options.compose(
-          _dio.options,
-          _path,
-        ),
+        requestOptions: _options.compose(_dio.options, _path),
         type: DioExceptionType.unknown,
         error: error,
         stackTrace: stackTrace,
@@ -117,9 +110,10 @@ class CorbadoConnectApi {
       _responseData = rawResponse == null
           ? null
           : _serializers.deserialize(
-              rawResponse,
-              specifiedType: const FullType(ConnectAppendFinishRsp),
-            ) as ConnectAppendFinishRsp;
+                  rawResponse,
+                  specifiedType: const FullType(ConnectAppendFinishRsp),
+                )
+                as ConnectAppendFinishRsp;
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _response.requestOptions,
@@ -168,16 +162,10 @@ class CorbadoConnectApi {
     final _path = r'/v2/connect/append/init';
     final _options = Options(
       method: r'POST',
-      headers: <String, dynamic>{
-        ...?headers,
-      },
+      headers: <String, dynamic>{...?headers},
       extra: <String, dynamic>{
         'secure': <Map<String, String>>[
-          {
-            'type': 'http',
-            'scheme': 'bearer',
-            'name': 'bearerAuth',
-          },
+          {'type': 'http', 'scheme': 'bearer', 'name': 'bearerAuth'},
           {
             'type': 'apiKey',
             'name': 'projectID',
@@ -195,14 +183,13 @@ class CorbadoConnectApi {
 
     try {
       const _type = FullType(ConnectAppendInitReq);
-      _bodyData =
-          _serializers.serialize(connectAppendInitReq, specifiedType: _type);
+      _bodyData = _serializers.serialize(
+        connectAppendInitReq,
+        specifiedType: _type,
+      );
     } catch (error, stackTrace) {
       throw DioException(
-        requestOptions: _options.compose(
-          _dio.options,
-          _path,
-        ),
+        requestOptions: _options.compose(_dio.options, _path),
         type: DioExceptionType.unknown,
         error: error,
         stackTrace: stackTrace,
@@ -225,9 +212,10 @@ class CorbadoConnectApi {
       _responseData = rawResponse == null
           ? null
           : _serializers.deserialize(
-              rawResponse,
-              specifiedType: const FullType(ConnectAppendInitRsp),
-            ) as ConnectAppendInitRsp;
+                  rawResponse,
+                  specifiedType: const FullType(ConnectAppendInitRsp),
+                )
+                as ConnectAppendInitRsp;
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _response.requestOptions,
@@ -276,16 +264,10 @@ class CorbadoConnectApi {
     final _path = r'/v2/connect/append/start';
     final _options = Options(
       method: r'POST',
-      headers: <String, dynamic>{
-        ...?headers,
-      },
+      headers: <String, dynamic>{...?headers},
       extra: <String, dynamic>{
         'secure': <Map<String, String>>[
-          {
-            'type': 'http',
-            'scheme': 'bearer',
-            'name': 'bearerAuth',
-          },
+          {'type': 'http', 'scheme': 'bearer', 'name': 'bearerAuth'},
           {
             'type': 'apiKey',
             'name': 'projectID',
@@ -303,14 +285,13 @@ class CorbadoConnectApi {
 
     try {
       const _type = FullType(ConnectAppendStartReq);
-      _bodyData =
-          _serializers.serialize(connectAppendStartReq, specifiedType: _type);
+      _bodyData = _serializers.serialize(
+        connectAppendStartReq,
+        specifiedType: _type,
+      );
     } catch (error, stackTrace) {
       throw DioException(
-        requestOptions: _options.compose(
-          _dio.options,
-          _path,
-        ),
+        requestOptions: _options.compose(_dio.options, _path),
         type: DioExceptionType.unknown,
         error: error,
         stackTrace: stackTrace,
@@ -333,9 +314,10 @@ class CorbadoConnectApi {
       _responseData = rawResponse == null
           ? null
           : _serializers.deserialize(
-              rawResponse,
-              specifiedType: const FullType(ConnectAppendStartRsp),
-            ) as ConnectAppendStartRsp;
+                  rawResponse,
+                  specifiedType: const FullType(ConnectAppendStartRsp),
+                )
+                as ConnectAppendStartRsp;
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _response.requestOptions,
@@ -384,16 +366,10 @@ class CorbadoConnectApi {
     final _path = r'/v2/connect/events';
     final _options = Options(
       method: r'POST',
-      headers: <String, dynamic>{
-        ...?headers,
-      },
+      headers: <String, dynamic>{...?headers},
       extra: <String, dynamic>{
         'secure': <Map<String, String>>[
-          {
-            'type': 'http',
-            'scheme': 'bearer',
-            'name': 'bearerAuth',
-          },
+          {'type': 'http', 'scheme': 'bearer', 'name': 'bearerAuth'},
           {
             'type': 'apiKey',
             'name': 'projectID',
@@ -411,14 +387,13 @@ class CorbadoConnectApi {
 
     try {
       const _type = FullType(ConnectEventCreateReq);
-      _bodyData =
-          _serializers.serialize(connectEventCreateReq, specifiedType: _type);
+      _bodyData = _serializers.serialize(
+        connectEventCreateReq,
+        specifiedType: _type,
+      );
     } catch (error, stackTrace) {
       throw DioException(
-        requestOptions: _options.compose(
-          _dio.options,
-          _path,
-        ),
+        requestOptions: _options.compose(_dio.options, _path),
         type: DioExceptionType.unknown,
         error: error,
         stackTrace: stackTrace,
@@ -463,16 +438,10 @@ class CorbadoConnectApi {
     final _path = r'/v2/connect/login/finish';
     final _options = Options(
       method: r'POST',
-      headers: <String, dynamic>{
-        ...?headers,
-      },
+      headers: <String, dynamic>{...?headers},
       extra: <String, dynamic>{
         'secure': <Map<String, String>>[
-          {
-            'type': 'http',
-            'scheme': 'bearer',
-            'name': 'bearerAuth',
-          },
+          {'type': 'http', 'scheme': 'bearer', 'name': 'bearerAuth'},
           {
             'type': 'apiKey',
             'name': 'projectID',
@@ -490,14 +459,13 @@ class CorbadoConnectApi {
 
     try {
       const _type = FullType(ConnectLoginFinishReq);
-      _bodyData =
-          _serializers.serialize(connectLoginFinishReq, specifiedType: _type);
+      _bodyData = _serializers.serialize(
+        connectLoginFinishReq,
+        specifiedType: _type,
+      );
     } catch (error, stackTrace) {
       throw DioException(
-        requestOptions: _options.compose(
-          _dio.options,
-          _path,
-        ),
+        requestOptions: _options.compose(_dio.options, _path),
         type: DioExceptionType.unknown,
         error: error,
         stackTrace: stackTrace,
@@ -520,9 +488,10 @@ class CorbadoConnectApi {
       _responseData = rawResponse == null
           ? null
           : _serializers.deserialize(
-              rawResponse,
-              specifiedType: const FullType(ConnectLoginFinishRsp),
-            ) as ConnectLoginFinishRsp;
+                  rawResponse,
+                  specifiedType: const FullType(ConnectLoginFinishRsp),
+                )
+                as ConnectLoginFinishRsp;
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _response.requestOptions,
@@ -571,16 +540,10 @@ class CorbadoConnectApi {
     final _path = r'/v2/connect/login/init';
     final _options = Options(
       method: r'POST',
-      headers: <String, dynamic>{
-        ...?headers,
-      },
+      headers: <String, dynamic>{...?headers},
       extra: <String, dynamic>{
         'secure': <Map<String, String>>[
-          {
-            'type': 'http',
-            'scheme': 'bearer',
-            'name': 'bearerAuth',
-          },
+          {'type': 'http', 'scheme': 'bearer', 'name': 'bearerAuth'},
           {
             'type': 'apiKey',
             'name': 'projectID',
@@ -598,14 +561,13 @@ class CorbadoConnectApi {
 
     try {
       const _type = FullType(ConnectLoginInitReq);
-      _bodyData =
-          _serializers.serialize(connectLoginInitReq, specifiedType: _type);
+      _bodyData = _serializers.serialize(
+        connectLoginInitReq,
+        specifiedType: _type,
+      );
     } catch (error, stackTrace) {
       throw DioException(
-        requestOptions: _options.compose(
-          _dio.options,
-          _path,
-        ),
+        requestOptions: _options.compose(_dio.options, _path),
         type: DioExceptionType.unknown,
         error: error,
         stackTrace: stackTrace,
@@ -628,9 +590,10 @@ class CorbadoConnectApi {
       _responseData = rawResponse == null
           ? null
           : _serializers.deserialize(
-              rawResponse,
-              specifiedType: const FullType(ConnectLoginInitRsp),
-            ) as ConnectLoginInitRsp;
+                  rawResponse,
+                  specifiedType: const FullType(ConnectLoginInitRsp),
+                )
+                as ConnectLoginInitRsp;
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _response.requestOptions,
@@ -679,16 +642,10 @@ class CorbadoConnectApi {
     final _path = r'/v2/connect/login/start';
     final _options = Options(
       method: r'POST',
-      headers: <String, dynamic>{
-        ...?headers,
-      },
+      headers: <String, dynamic>{...?headers},
       extra: <String, dynamic>{
         'secure': <Map<String, String>>[
-          {
-            'type': 'http',
-            'scheme': 'bearer',
-            'name': 'bearerAuth',
-          },
+          {'type': 'http', 'scheme': 'bearer', 'name': 'bearerAuth'},
           {
             'type': 'apiKey',
             'name': 'projectID',
@@ -706,14 +663,13 @@ class CorbadoConnectApi {
 
     try {
       const _type = FullType(ConnectLoginStartReq);
-      _bodyData =
-          _serializers.serialize(connectLoginStartReq, specifiedType: _type);
+      _bodyData = _serializers.serialize(
+        connectLoginStartReq,
+        specifiedType: _type,
+      );
     } catch (error, stackTrace) {
       throw DioException(
-        requestOptions: _options.compose(
-          _dio.options,
-          _path,
-        ),
+        requestOptions: _options.compose(_dio.options, _path),
         type: DioExceptionType.unknown,
         error: error,
         stackTrace: stackTrace,
@@ -736,9 +692,10 @@ class CorbadoConnectApi {
       _responseData = rawResponse == null
           ? null
           : _serializers.deserialize(
-              rawResponse,
-              specifiedType: const FullType(ConnectLoginStartRsp),
-            ) as ConnectLoginStartRsp;
+                  rawResponse,
+                  specifiedType: const FullType(ConnectLoginStartRsp),
+                )
+                as ConnectLoginStartRsp;
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _response.requestOptions,
@@ -787,16 +744,10 @@ class CorbadoConnectApi {
     final _path = r'/v2/connect/manage/delete';
     final _options = Options(
       method: r'POST',
-      headers: <String, dynamic>{
-        ...?headers,
-      },
+      headers: <String, dynamic>{...?headers},
       extra: <String, dynamic>{
         'secure': <Map<String, String>>[
-          {
-            'type': 'http',
-            'scheme': 'bearer',
-            'name': 'bearerAuth',
-          },
+          {'type': 'http', 'scheme': 'bearer', 'name': 'bearerAuth'},
           {
             'type': 'apiKey',
             'name': 'projectID',
@@ -814,14 +765,13 @@ class CorbadoConnectApi {
 
     try {
       const _type = FullType(ConnectManageDeleteReq);
-      _bodyData =
-          _serializers.serialize(connectManageDeleteReq, specifiedType: _type);
+      _bodyData = _serializers.serialize(
+        connectManageDeleteReq,
+        specifiedType: _type,
+      );
     } catch (error, stackTrace) {
       throw DioException(
-        requestOptions: _options.compose(
-          _dio.options,
-          _path,
-        ),
+        requestOptions: _options.compose(_dio.options, _path),
         type: DioExceptionType.unknown,
         error: error,
         stackTrace: stackTrace,
@@ -844,9 +794,10 @@ class CorbadoConnectApi {
       _responseData = rawResponse == null
           ? null
           : _serializers.deserialize(
-              rawResponse,
-              specifiedType: const FullType(ConnectManageDeleteRsp),
-            ) as ConnectManageDeleteRsp;
+                  rawResponse,
+                  specifiedType: const FullType(ConnectManageDeleteRsp),
+                )
+                as ConnectManageDeleteRsp;
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _response.requestOptions,
@@ -895,16 +846,10 @@ class CorbadoConnectApi {
     final _path = r'/v2/connect/manage/init';
     final _options = Options(
       method: r'POST',
-      headers: <String, dynamic>{
-        ...?headers,
-      },
+      headers: <String, dynamic>{...?headers},
       extra: <String, dynamic>{
         'secure': <Map<String, String>>[
-          {
-            'type': 'http',
-            'scheme': 'bearer',
-            'name': 'bearerAuth',
-          },
+          {'type': 'http', 'scheme': 'bearer', 'name': 'bearerAuth'},
           {
             'type': 'apiKey',
             'name': 'projectID',
@@ -922,14 +867,13 @@ class CorbadoConnectApi {
 
     try {
       const _type = FullType(ConnectManageInitReq);
-      _bodyData =
-          _serializers.serialize(connectManageInitReq, specifiedType: _type);
+      _bodyData = _serializers.serialize(
+        connectManageInitReq,
+        specifiedType: _type,
+      );
     } catch (error, stackTrace) {
       throw DioException(
-        requestOptions: _options.compose(
-          _dio.options,
-          _path,
-        ),
+        requestOptions: _options.compose(_dio.options, _path),
         type: DioExceptionType.unknown,
         error: error,
         stackTrace: stackTrace,
@@ -952,9 +896,10 @@ class CorbadoConnectApi {
       _responseData = rawResponse == null
           ? null
           : _serializers.deserialize(
-              rawResponse,
-              specifiedType: const FullType(ConnectManageInitRsp),
-            ) as ConnectManageInitRsp;
+                  rawResponse,
+                  specifiedType: const FullType(ConnectManageInitRsp),
+                )
+                as ConnectManageInitRsp;
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _response.requestOptions,
@@ -1003,16 +948,10 @@ class CorbadoConnectApi {
     final _path = r'/v2/connect/manage/list';
     final _options = Options(
       method: r'POST',
-      headers: <String, dynamic>{
-        ...?headers,
-      },
+      headers: <String, dynamic>{...?headers},
       extra: <String, dynamic>{
         'secure': <Map<String, String>>[
-          {
-            'type': 'http',
-            'scheme': 'bearer',
-            'name': 'bearerAuth',
-          },
+          {'type': 'http', 'scheme': 'bearer', 'name': 'bearerAuth'},
           {
             'type': 'apiKey',
             'name': 'projectID',
@@ -1030,14 +969,13 @@ class CorbadoConnectApi {
 
     try {
       const _type = FullType(ConnectManageListReq);
-      _bodyData =
-          _serializers.serialize(connectManageListReq, specifiedType: _type);
+      _bodyData = _serializers.serialize(
+        connectManageListReq,
+        specifiedType: _type,
+      );
     } catch (error, stackTrace) {
       throw DioException(
-        requestOptions: _options.compose(
-          _dio.options,
-          _path,
-        ),
+        requestOptions: _options.compose(_dio.options, _path),
         type: DioExceptionType.unknown,
         error: error,
         stackTrace: stackTrace,
@@ -1060,9 +998,10 @@ class CorbadoConnectApi {
       _responseData = rawResponse == null
           ? null
           : _serializers.deserialize(
-              rawResponse,
-              specifiedType: const FullType(ConnectManageListRsp),
-            ) as ConnectManageListRsp;
+                  rawResponse,
+                  specifiedType: const FullType(ConnectManageListRsp),
+                )
+                as ConnectManageListRsp;
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _response.requestOptions,
