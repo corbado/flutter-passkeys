@@ -89,7 +89,7 @@ class _$BlockTypeMeta {
   BuiltSet<BlockType> get values => _$values;
 }
 
-abstract class _$BlockTypeMixin {
+mixin _$BlockTypeMixin {
   // ignore: non_constant_identifier_names
   _$BlockTypeMeta get BlockType => const _$BlockTypeMeta();
 }

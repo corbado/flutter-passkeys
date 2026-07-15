@@ -33,7 +33,7 @@ class _$AuthTypeMeta {
   BuiltSet<AuthType> get values => _$values;
 }
 
-abstract class _$AuthTypeMixin {
+mixin _$AuthTypeMixin {
   // ignore: non_constant_identifier_names
   _$AuthTypeMeta get AuthType => const _$AuthTypeMeta();
 }

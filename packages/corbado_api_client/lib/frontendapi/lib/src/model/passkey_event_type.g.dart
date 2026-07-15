@@ -83,7 +83,7 @@ class _$PasskeyEventTypeMeta {
   BuiltSet<PasskeyEventType> get values => _$values;
 }
 
-abstract class _$PasskeyEventTypeMixin {
+mixin _$PasskeyEventTypeMixin {
   // ignore: non_constant_identifier_names
   _$PasskeyEventTypeMeta get PasskeyEventType => const _$PasskeyEventTypeMeta();
 }

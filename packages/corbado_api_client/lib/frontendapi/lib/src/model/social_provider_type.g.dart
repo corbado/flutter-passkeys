@@ -36,7 +36,7 @@ class _$SocialProviderTypeMeta {
   BuiltSet<SocialProviderType> get values => _$values;
 }
 
-abstract class _$SocialProviderTypeMixin {
+mixin _$SocialProviderTypeMixin {
   // ignore: non_constant_identifier_names
   _$SocialProviderTypeMeta get SocialProviderType =>
       const _$SocialProviderTypeMeta();
