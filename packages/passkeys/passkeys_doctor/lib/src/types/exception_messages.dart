@@ -22,9 +22,7 @@ const Map<String, ExceptionInfo> exceptionInfos = {
     title: 'PasskeyAuthCancelledException',
     description: 'Thrown when the user cancels the passkey flow.',
     platforms: ['Android', 'iOS'],
-    suggestions: [
-      'Allow the user to start the flow again.',
-    ],
+    suggestions: ['Allow the user to start the flow again.'],
   ),
   'exclude-credentials-match': ExceptionInfo(
     title: 'ExcludeCredentialsCanNotBeRegisteredException',
@@ -69,43 +67,33 @@ const Map<String, ExceptionInfo> exceptionInfos = {
     title: 'DeviceNotSupportedException',
     description: 'Thrown when the device does not support passkeys.',
     platforms: ['Android', 'iOS'],
-    suggestions: [
-      'Update the device OS to a version that supports passkeys.',
-    ],
+    suggestions: ['Update the device OS to a version that supports passkeys.'],
   ),
   'android-timeout': ExceptionInfo(
     title: 'TimeoutException',
     description: 'Thrown when the operation times out.',
     platforms: ['Android', 'iOS'],
-    suggestions: [
-      'Ask the user to try again.',
-    ],
+    suggestions: ['Ask the user to try again.'],
   ),
   'ios-security-key-timeout': ExceptionInfo(
     title: 'TimeoutException',
     description: 'Thrown when the operation times out.',
     platforms: ['Android', 'iOS'],
-    suggestions: [
-      'Ask the user to try again.',
-    ],
+    suggestions: ['Ask the user to try again.'],
   ),
   'no-credentials-available': ExceptionInfo(
     title: 'NoCredentialsAvailableException',
     description:
         'Thrown when the user has no credentials available for the authenticator.',
     platforms: ['Android', 'iOS'],
-    suggestions: [
-      'Use a fallback method (e.g. login via email OTP).',
-    ],
+    suggestions: ['Use a fallback method (e.g. login via email OTP).'],
   ),
   'android-no-credential': ExceptionInfo(
     title: 'NoCredentialsAvailableException',
     description:
         'Thrown when the user has no credentials available for the authenticator.',
     platforms: ['Android', 'iOS'],
-    suggestions: [
-      'Use a fallback method (e.g. login via email OTP).',
-    ],
+    suggestions: ['Use a fallback method (e.g. login via email OTP).'],
   ),
   'android-no-create-option': ExceptionInfo(
     title: 'NoCreateOptionException',
@@ -165,7 +153,9 @@ const Map<String, ExceptionInfo> exceptionInfos = {
 };
 
 Future<ExceptionInfo> getExceptionInfo(
-    PlatformException error, List<Checkpoint> checkpoints) async {
+  PlatformException error,
+  List<Checkpoint> checkpoints,
+) async {
   if (error.code == 'android-sync-account-not-available') {
     final deviceInfo = DeviceInfoPlugin();
     final androidInfo = await deviceInfo.androidInfo;
@@ -181,16 +171,15 @@ Future<ExceptionInfo> getExceptionInfo(
   }
 
   if (error.code == 'domain-not-associated' &&
-      checkpoints.any((cp) =>
-          cp.name.contains('AASA') && cp.type == CheckpointType.success)) {
+      checkpoints.any(
+        (cp) => cp.name.contains('AASA') && cp.type == CheckpointType.success,
+      )) {
     return const ExceptionInfo(
       title: 'DomainNotAssociatedException',
       description:
           'In your case it is caused by Apple CDN caching of the AASA file; check docs for the `?mode=developer` parameter.',
       platforms: ['iOS'],
-      suggestions: [
-        'Clear any CDN caches or use the `?mode=developer` flag.',
-      ],
+      suggestions: ['Clear any CDN caches or use the `?mode=developer` flag.'],
     );
   }
 

@@ -25,5 +25,6 @@ class UserType {
   /// The Base64URL encoded identifier _with_ padding.
   final String id;
 
+  /// Converts this instance to a JSON map.
   Map<String, dynamic> toJson() => _$UserTypeToJson(this);
 }

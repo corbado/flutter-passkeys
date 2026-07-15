@@ -6,8 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+/// Page shown to a logged in user with access to profile actions.
 class ProfilePage extends ConsumerWidget {
-  ProfilePage({super.key});
+  /// Creates the profile page.
+  const ProfilePage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -27,10 +29,7 @@ class ProfilePage extends ConsumerWidget {
               children: [
                 const Text(
                   'Welcome',
-                  style: TextStyle(
-                    fontSize: 40,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 10),
                 Text(
@@ -42,10 +41,9 @@ class ProfilePage extends ConsumerWidget {
                 ),
                 const SizedBox(height: 10),
                 const Text(
-                  'You are currently logged in. You have a JWT token that you can use to make calls to your backend.',
-                  style: TextStyle(
-                    fontSize: 20,
-                  ),
+                  'You are currently logged in. You have a JWT token that you '
+                  'can use to make calls to your backend.',
+                  style: TextStyle(fontSize: 20),
                 ),
                 const SizedBox(height: 10),
                 SizedBox(

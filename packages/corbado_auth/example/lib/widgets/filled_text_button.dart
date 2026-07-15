@@ -1,18 +1,29 @@
 import 'package:flutter/material.dart';
 
+/// A filled (elevated) button with a loading and disabled state.
 class FilledTextButton extends StatelessWidget {
+  /// Creates a filled text button.
+  const FilledTextButton({
+    required this.content,
+    required this.onTap,
+    super.key,
+    this.disabled = false,
+    this.isLoading = false,
+  });
+
+  /// Called when the button is tapped and not loading.
   final VoidCallback onTap;
+
+  /// The button label.
   final String content;
+
+  /// Whether the button is disabled.
   final bool disabled;
+
+  /// Whether the button shows a loading indicator instead of its label.
   final bool isLoading;
 
-  const FilledTextButton(
-      {super.key,
-      required this.content,
-      required this.onTap,
-      this.disabled = false,
-      this.isLoading = false});
-
+  /// Invokes [onTap] unless the button is currently loading.
   void onPressed() {
     if (isLoading) {
       return;
@@ -28,12 +39,11 @@ class FilledTextButton extends StatelessWidget {
 
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0),
-          ),
-          backgroundColor: Theme.of(context).colorScheme.primary,
-          disabledBackgroundColor: Colors.grey.withOpacity(0.25),
-          padding: const EdgeInsets.all(15)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        disabledBackgroundColor: Colors.grey.withValues(alpha: 0.25),
+        padding: const EdgeInsets.all(15),
+      ),
       onPressed: disabled ? null : onPressed,
       child: isLoading
           ? SizedBox(
@@ -41,7 +51,8 @@ class FilledTextButton extends StatelessWidget {
               width: progressIndicatorSize,
               child: CircularProgressIndicator(
                 color: Theme.of(context).colorScheme.onPrimary,
-              ))
+              ),
+            )
           : Text(content),
     );
   }

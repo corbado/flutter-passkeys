@@ -12,6 +12,5 @@ import 'package:openapi_generator_annotations/openapi_generator_annotations.dart
   generatorName: Generator.dio,
   outputDirectory: './lib/frontendapi',
 )
-
 /// Represents the Corbado API client
 class CorbadoApiClient {}

@@ -1,22 +1,26 @@
+// ignore_for_file: library_prefixes
+
 import 'package:corbado_auth/corbado_auth.dart';
-import 'package:corbado_auth/src/blocks/email_verify_block.dart';
-import 'package:corbado_auth/src/blocks/types.dart';
-import 'package:corbado_auth/src/process_handler.dart';
 import 'package:corbado_auth/src/services/telemetry/telemetry.dart';
 import 'package:corbado_frontend_api_client/corbado_frontend_api_client.dart'
     as Api;
 
+/// Data backing the passkey append step of an authentication process.
 class PasskeyAppendBlockData {
-  List<PasskeyFallback> availableFallbacks;
-  bool canBeSkipped;
-  final String identifierValue;
-  final Api.LoginIdentifierType identifierType;
-  PasskeyFallback? preferredFallback;
-  final bool autoSubmit;
-  bool primaryLoading = false;
+  /// Creates the data describing the identifier and fallback options.
+  PasskeyAppendBlockData({
+    required this.identifierValue,
+    required this.identifierType,
+    required this.autoSubmit,
+    this.availableFallbacks = const [],
+    this.canBeSkipped = false,
+    this.preferredFallback,
+  });
 
+  /// Builds the data from a server [Api.GeneralBlockPasskeyAppend] response.
   factory PasskeyAppendBlockData.fromProcessResponse(
-      Api.GeneralBlockPasskeyAppend typed) {
+    Api.GeneralBlockPasskeyAppend typed,
+  ) {
     return PasskeyAppendBlockData(
       availableFallbacks: [],
       identifierValue: typed.identifierValue,
@@ -25,33 +29,46 @@ class PasskeyAppendBlockData {
     );
   }
 
-  PasskeyAppendBlockData({
-    this.availableFallbacks = const [],
-    this.canBeSkipped = false,
-    required this.identifierValue,
-    required this.identifierType,
-    this.preferredFallback,
-    required this.autoSubmit,
-  });
+  /// The fallback verification options available to the user.
+  List<PasskeyFallback> availableFallbacks;
+
+  /// Whether the passkey append step can be skipped.
+  bool canBeSkipped;
+
+  /// The identifier value (e.g. email) the passkey is appended for.
+  final String identifierValue;
+
+  /// The type of the identifier value.
+  final Api.LoginIdentifierType identifierType;
+
+  /// The fallback that should be used by default, if any.
+  PasskeyFallback? preferredFallback;
+
+  /// Whether the passkey append should be triggered automatically.
+  final bool autoSubmit;
+
+  /// Whether the primary action is currently loading.
+  bool primaryLoading = false;
 }
 
+/// Block that drives the passkey append step of an authentication process.
 class PasskeyAppendBlock extends Block<PasskeyAppendBlockData> {
-  PasskeyAppendBlock(
-      {required ProcessHandler processHandler,
-      required PasskeyAppendBlockData data,
-      required Api.AuthType authType})
-      : super(
-          processHandler: processHandler,
-          initialScreen: ScreenNames.PasskeyAppend,
-          type: Api.BlockType.passkeyAppend,
-          alternatives: [],
-          data: data,
-          authProcessType: authType == Api.AuthType.login
-              ? AuthProcessType.Login
-              : AuthProcessType.Signup,
-        );
+  /// Creates the block for the given [authType], process handler and data.
+  PasskeyAppendBlock({
+    required super.processHandler,
+    required super.data,
+    required Api.AuthType authType,
+  }) : super(
+         initialScreen: ScreenNames.PasskeyAppend,
+         type: Api.BlockType.passkeyAppend,
+         alternatives: [],
+         authProcessType: authType == Api.AuthType.login
+             ? AuthProcessType.Login
+             : AuthProcessType.Signup,
+       );
 
-  init() {
+  @override
+  void init() {
     const allowedAlternatives = [
       Api.BlockType.emailVerify,
       Api.BlockType.phoneVerify,
@@ -59,26 +76,28 @@ class PasskeyAppendBlock extends Block<PasskeyAppendBlockData> {
     data.availableFallbacks = alternatives
         .where((alternative) => allowedAlternatives.contains(alternative.type))
         .map((alternative) {
-      switch (alternative.type) {
-        case Api.BlockType.emailVerify:
-          final typed = alternative.data as EmailVerifyBlockData;
-          if (typed.verificationMethod == VerificationMethod.emailLink) {
-            throw Exception('Currently not supported');
+          switch (alternative.type) {
+            case Api.BlockType.emailVerify:
+              final typed = alternative.data as EmailVerifyBlockData;
+              if (typed.verificationMethod == VerificationMethod.emailLink) {
+                throw Exception('Currently not supported');
+              }
+
+              return PasskeyFallback(
+                label: 'Email verification',
+                onTap: initFallbackEmailOtp,
+              );
+
+            case Api.BlockType.completed:
+            case Api.BlockType.phoneVerify:
+              throw Exception('Currently not supported');
+
+            // ignore: no_default_cases
+            default:
+              throw Exception('Currently not supported');
           }
-
-          return PasskeyFallback(
-            label: 'Email verification',
-            onTap: initFallbackEmailOtp,
-          );
-
-        case Api.BlockType.completed:
-        case Api.BlockType.phoneVerify:
-          throw Exception('Currently not supported');
-
-        default:
-          throw Exception('Currently not supported');
-      }
-    }).toList();
+        })
+        .toList();
 
     switch (data.availableFallbacks.length) {
       case 0:
@@ -89,8 +108,9 @@ class PasskeyAppendBlock extends Block<PasskeyAppendBlockData> {
         throw Exception('Currently not supported');
     }
 
-    data.canBeSkipped =
-        alternatives.any((a) => a.type == Api.BlockType.completed);
+    data.canBeSkipped = alternatives.any(
+      (a) => a.type == Api.BlockType.completed,
+    );
 
     // depending on data.canBeSkipped is only a short term fix
     if (data.autoSubmit && !data.canBeSkipped) {
@@ -98,7 +118,8 @@ class PasskeyAppendBlock extends Block<PasskeyAppendBlockData> {
     }
   }
 
-  passkeyAppend() async {
+  /// Creates and appends a passkey for the current user.
+  Future<void> passkeyAppend() async {
     TelemetryService.instance.logMethodCalled(
       'passkeyAppend',
       'PasskeyAppendBlock',
@@ -117,6 +138,7 @@ class PasskeyAppendBlock extends Block<PasskeyAppendBlockData> {
     }
   }
 
+  /// Starts the email one-time password fallback verification.
   Future<void> initFallbackEmailOtp() async {
     TelemetryService.instance.logMethodCalled(
       'initFallbackEmailOtp',
@@ -131,7 +153,8 @@ class PasskeyAppendBlock extends Block<PasskeyAppendBlockData> {
     }
   }
 
-  skipPasskeyAppend() async {
+  /// Skips the passkey append step and completes the auth process.
+  Future<void> skipPasskeyAppend() async {
     TelemetryService.instance.logMethodCalled(
       'skipPasskeyAppend',
       'PasskeyAppendBlock',

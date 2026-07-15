@@ -5,11 +5,17 @@ import 'package:corbado_auth_example/widgets/outlined_text_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
-class PasskeyAppendScreen extends HookWidget implements CorbadoScreen<PasskeyAppendBlock> {
+/// Screen that prompts the user to create (append) a passkey.
+class PasskeyAppendScreen extends HookWidget
+    implements CorbadoScreen<PasskeyAppendBlock> {
+  /// Creates the passkey append screen for the given [block].
+  const PasskeyAppendScreen(this.block, {super.key});
+
+  /// The block driving the passkey append flow.
+  @override
   final PasskeyAppendBlock block;
 
-  PasskeyAppendScreen(this.block);
-
+  @override
   Widget build(BuildContext context) {
     useEffect(() {
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -18,6 +24,7 @@ class PasskeyAppendScreen extends HookWidget implements CorbadoScreen<PasskeyApp
           showNotificationError(context, maybeError.detailedError());
         }
       });
+      return null;
     }, [block.error]);
 
     return Column(
@@ -28,19 +35,15 @@ class PasskeyAppendScreen extends HookWidget implements CorbadoScreen<PasskeyApp
           padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
           child: Text(
             'Set up your passkey',
-            style: TextStyle(
-              fontSize: 40,
-              fontWeight: FontWeight.bold,
-            ),
+            style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
           ),
         ),
         const Padding(
           padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           child: Text(
-            'Quick and secure login using Apple Touch ID or Face ID instead of passwords.',
-            style: TextStyle(
-              fontSize: 20,
-            ),
+            'Quick and secure login using Apple Touch ID or Face ID instead '
+            'of passwords.',
+            style: TextStyle(fontSize: 20),
           ),
         ),
         const SizedBox(height: 20),
@@ -56,22 +59,28 @@ class PasskeyAppendScreen extends HookWidget implements CorbadoScreen<PasskeyApp
           ),
         ),
         const SizedBox(height: 10),
-        if (block.data.preferredFallback != null) SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: OutlinedTextButton(
-                  onTap: () => block.data.preferredFallback!.onTap(),
-                  content: block.data.preferredFallback!.label,
-                ),
-              ) else Container(),
-        if (block.data.canBeSkipped) SizedBox(
-          width: double.infinity,
-          height: 50,
-          child: OutlinedTextButton(
-            onTap: block.skipPasskeyAppend,
-            content: 'Maybe later',
-          ),
-        ) else Container(),
+        if (block.data.preferredFallback != null)
+          SizedBox(
+            width: double.infinity,
+            height: 50,
+            child: OutlinedTextButton(
+              onTap: () => block.data.preferredFallback!.onTap(),
+              content: block.data.preferredFallback!.label,
+            ),
+          )
+        else
+          Container(),
+        if (block.data.canBeSkipped)
+          SizedBox(
+            width: double.infinity,
+            height: 50,
+            child: OutlinedTextButton(
+              onTap: block.skipPasskeyAppend,
+              content: 'Maybe later',
+            ),
+          )
+        else
+          Container(),
         const SizedBox(height: 10),
       ],
     );

@@ -1,5 +1,4 @@
 import 'package:passkeys_platform_interface/method_channel_passkeys.dart';
-import 'package:passkeys_platform_interface/types/availability.dart';
 import 'package:passkeys_platform_interface/types/types.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
@@ -34,19 +33,21 @@ abstract class PasskeysPlatform extends PlatformInterface {
 
   /// Returns true if passkeys are supported by the device
   /// We have deprecated this function (it will now always return true).
-  @deprecated
+  @Deprecated('This function will now always return true.')
   Future<bool> canAuthenticate() async {
     return true;
   }
 
   /// Handles the platform-specific steps for the registration flow
   /// (see https://webauthn.guide/#registration)
-  /// Namely it creates a public/private key pair (only the public key will be returned)
+  /// Namely it creates a public/private key pair
+  /// (only the public key will be returned)
   Future<RegisterResponseType> register(RegisterRequestType request);
 
   /// Handles the platform-specific steps for the authentication flow
   /// (see https://webauthn.guide/#authentication)
-  /// Namely it creates a signature for the challenge issued by the relying party
+  /// Namely it creates a signature for the challenge issued by the relying
+  /// party
   Future<AuthenticateResponseType> authenticate(
     AuthenticateRequestType request,
   );
@@ -56,7 +57,7 @@ abstract class PasskeysPlatform extends PlatformInterface {
   /// the user decides ignore that and login by typing his username instead.
   Future<void> cancelCurrentAuthenticatorOperation();
 
-  /// Retrieves the availability information for passkeys, user-verifying platform authenticators,
-  /// and conditional mediation whenever possible
+  /// Retrieves the availability information for passkeys, user-verifying
+  /// platform authenticators, and conditional mediation whenever possible
   Future<AvailabilityType> getAvailability();
 }

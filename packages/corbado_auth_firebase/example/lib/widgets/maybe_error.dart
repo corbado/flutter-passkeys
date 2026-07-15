@@ -14,10 +14,9 @@ class MaybeError extends StatelessWidget {
     return Text(
       err,
       textAlign: TextAlign.center,
-      style: Theme.of(context)
-          .textTheme
-          .bodyMedium!
-          .copyWith(color: Theme.of(context).colorScheme.error),
+      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+        color: Theme.of(context).colorScheme.error,
+      ),
     );
   }
 }

@@ -10,8 +10,10 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:overlay_support/overlay_support.dart';
 
+/// Page that lists the user's passkeys and lets them add or delete passkeys.
 class PasskeyListPage extends HookConsumerWidget {
-  PasskeyListPage({super.key});
+  /// Creates the passkey list page.
+  const PasskeyListPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -45,10 +47,7 @@ class PasskeyListPage extends HookConsumerWidget {
               children: [
                 const Text(
                   'Check your passkeys',
-                  style: TextStyle(
-                    fontSize: 40,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 20),
                 Column(
@@ -70,17 +69,22 @@ class PasskeyListPage extends HookConsumerWidget {
                                   credentialID: credentialID,
                                 );
 
+                                if (!context.mounted) {
+                                  return;
+                                }
                                 showSimpleNotification(
-                                    const Text(
-                                      'Passkey has been deleted successfully.',
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                    leading: const Icon(
-                                      Icons.check,
-                                      color: Colors.green,
-                                    ),
-                                    background:
-                                        Theme.of(context).colorScheme.primary);
+                                  const Text(
+                                    'Passkey has been deleted successfully.',
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                  leading: const Icon(
+                                    Icons.check,
+                                    color: Colors.green,
+                                  ),
+                                  background: Theme.of(
+                                    context,
+                                  ).colorScheme.primary,
+                                );
                               } on CorbadoError catch (e) {
                                 error.value = e.translatedError;
                               } catch (e) {
@@ -109,16 +113,17 @@ class PasskeyListPage extends HookConsumerWidget {
 
                       try {
                         await corbado.appendPasskey();
+                        if (!context.mounted) {
+                          return;
+                        }
                         showSimpleNotification(
-                            const Text(
-                              'Passkey has been created successfully.',
-                              style: TextStyle(color: Colors.white),
-                            ),
-                            leading: const Icon(
-                              Icons.check,
-                              color: Colors.green,
-                            ),
-                            background: Theme.of(context).colorScheme.primary);
+                          const Text(
+                            'Passkey has been created successfully.',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          leading: const Icon(Icons.check, color: Colors.green),
+                          background: Theme.of(context).colorScheme.primary,
+                        );
                       } on CorbadoError catch (e) {
                         error.value = e.translatedError;
                       } catch (e) {

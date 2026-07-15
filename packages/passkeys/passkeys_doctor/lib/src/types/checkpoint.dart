@@ -13,9 +13,9 @@ class Checkpoint {
 
   String toString() {
     return 'Checkpoint: $name\n'
-           'Description: $description\n'
-           'Type: $type\n'
-           'Documentation Link: ${documentationLink ?? "N/A"}';
+        'Description: $description\n'
+        'Type: $type\n'
+        'Documentation Link: ${documentationLink ?? "N/A"}';
   }
 
   Map<String, dynamic> toJson() {

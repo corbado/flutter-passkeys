@@ -6,7 +6,6 @@ part 'user.g.dart';
 /// The central user object of the Corbado Auth SDK.
 @JsonSerializable(explicitToJson: true)
 class User {
-
   /// Constructor
   User({required this.idToken, required this.decoded});
 
@@ -35,6 +34,7 @@ class User {
   /// Serialize user
   Map<String, dynamic> toJson() => _$UserToJson(this);
 
+  /// Whether the idToken has not yet expired.
   bool hasValidToken() {
     final t = DateTime.fromMillisecondsSinceEpoch(decoded.exp * 1000);
     return t.isAfter(DateTime.now());
@@ -45,8 +45,17 @@ class User {
 @JsonSerializable()
 class IdToken {
   /// Constructor
-  IdToken(this.iss, this.sub, this.exp, this.nbf, this.iat, this.name,
-      this.orig, this.version, {this.email = ''});
+  IdToken(
+    this.iss,
+    this.sub,
+    this.exp,
+    this.nbf,
+    this.iat,
+    this.name,
+    this.orig,
+    this.version, {
+    this.email = '',
+  });
 
   /// Deserialize token.
   factory IdToken.fromJson(Map<String, dynamic> json) =>
@@ -54,18 +63,31 @@ class IdToken {
 
   /// Issuer of the token
   final String iss;
+
+  /// Subject (unique user id) of the token.
   final String sub;
+
+  /// Expiration time of the token (seconds since epoch).
   final int exp;
+
+  /// Time before which the token is not valid (seconds since epoch).
   final int nbf;
+
+  /// Time at which the token was issued (seconds since epoch).
   final int iat;
 
   /// Username
   final String? name;
+
+  /// Origin of the token.
   final String orig;
 
   /// Null if the email has not been verified by the user.
   final String? email;
+
+  /// Version of the token format.
   final int version;
 
+  /// Serialize token.
   Map<String, dynamic> toJson() => _$IdTokenToJson(this);
 }

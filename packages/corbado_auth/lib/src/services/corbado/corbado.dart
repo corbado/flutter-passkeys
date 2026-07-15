@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'package:built_collection/built_collection.dart';
 import 'package:corbado_auth/corbado_auth.dart';
-import 'package:corbado_auth/src/blocks/types.dart';
 import 'package:corbado_auth/src/services/storage/storage.dart';
 import 'package:corbado_frontend_api_client/corbado_frontend_api_client.dart'
     as api;
@@ -13,27 +12,38 @@ import 'package:flutter/foundation.dart';
 import 'package:passkeys/authenticator.dart';
 import 'package:passkeys/types.dart';
 
-abstract class CorbadoService {
-  CorbadoService(
-      this.frontendAPIClient, this.passkeyAuthenticator, this._storageService);
+// ignore_for_file: avoid_positional_boolean_parameters, only_throw_errors
 
+/// Talks to the Corbado frontend API to drive authentication processes.
+abstract class CorbadoService {
+  /// Creates a [CorbadoService] backed by the given API client, authenticator
+  /// and storage service.
+  CorbadoService(
+    this.frontendAPIClient,
+    this.passkeyAuthenticator,
+    this._storageService,
+  );
+
+  /// The client used to communicate with the Corbado frontend API.
   final api.CorbadoFrontendApiClient frontendAPIClient;
+
+  /// The authenticator used to create and verify passkeys.
   final PasskeyAuthenticator passkeyAuthenticator;
   final StorageService _storageService;
 
+  /// Emits the results of passkey authenticator operations.
   Stream<Result> get resultStream =>
       passkeyAuthenticator.resultStream.distinct();
 
-  String? _processID;
-  DateTime? _processExpiresAt;
-
+  /// Initializes a new authentication process.
   Future<api.ProcessResponse> initAuthProcess() async {
     final ciBuilder = await _buildClientInformation();
-    final processInitReq =
-        api.ProcessInitReq((b) => b..clientInformation = ciBuilder);
-    final res = await frontendAPIClient
-        .getAuthApi()
-        .processInit(processInitReq: processInitReq);
+    final processInitReq = api.ProcessInitReq(
+      (b) => b..clientInformation = ciBuilder,
+    );
+    final res = await frontendAPIClient.getAuthApi().processInit(
+      processInitReq: processInitReq,
+    );
     if (res.data == null) {
       throw CorbadoError.fromMissingServerResponse();
     }
@@ -47,14 +57,18 @@ abstract class CorbadoService {
     return res.data!.processResponse;
   }
 
+  /// Completes the current authentication process.
   Future<api.ProcessResponse> completeAuthProcess() async {
     return _wrapWithError(
-        () => frontendAPIClient.getAuthApi().processComplete());
+      () => frontendAPIClient.getAuthApi().processComplete(),
+    );
   }
 
+  /// Resets the current authentication process, optionally starting a new one.
   Future<api.ProcessResponse> resetAuthProcess() async {
     final out = await _wrapWithError(
-        () => frontendAPIClient.getAuthApi().processReset());
+      () => frontendAPIClient.getAuthApi().processReset(),
+    );
 
     final newProcess = out.newProcess;
     if (newProcess != null) {
@@ -64,13 +78,14 @@ abstract class CorbadoService {
     return out;
   }
 
-  void clearAuthProcess() {
-    _processID = null;
-    _processExpiresAt = null;
-  }
+  /// Clears any state associated with the current authentication process.
+  void clearAuthProcess() {}
 
-  Future<api.ProcessResponse> signupInit(
-      {String? email, String? fullName}) async {
+  /// Starts a signup process for the given [email] and/or [fullName].
+  Future<api.ProcessResponse> signupInit({
+    String? email,
+    String? fullName,
+  }) async {
     final identifierBuilder = ListBuilder<api.LoginIdentifier>();
     if (email != null) {
       identifierBuilder.add(
@@ -82,119 +97,165 @@ abstract class CorbadoService {
       );
     }
 
-    final signupInitReq = api.SignupInitReq((b) => b
-      ..fullName = fullName
-      ..identifiers = identifierBuilder);
+    final signupInitReq = api.SignupInitReq(
+      (b) => b
+        ..fullName = fullName
+        ..identifiers = identifierBuilder,
+    );
 
     return _wrapWithError(
       () => frontendAPIClient.getAuthApi().signupInit(
-            signupInitReq: signupInitReq,
-          ),
+        signupInitReq: signupInitReq,
+      ),
     );
   }
 
+  /// Starts a login process for the given [loginIdentifier].
   Future<api.ProcessResponse> loginInit(
-      String loginIdentifier, bool isPhone) async {
-    final req = api.LoginInitReq((b) => b
-      ..identifierValue = loginIdentifier
-      ..isPhone = isPhone);
+    String loginIdentifier,
+    bool isPhone,
+  ) async {
+    final req = api.LoginInitReq(
+      (b) => b
+        ..identifierValue = loginIdentifier
+        ..isPhone = isPhone,
+    );
 
     return _wrapWithError(
-        () => frontendAPIClient.getAuthApi().loginInit(loginInitReq: req));
+      () => frontendAPIClient.getAuthApi().loginInit(loginInitReq: req),
+    );
   }
 
+  /// Finishes a passkey mediation with the given [signedChallenge].
   Future<api.ProcessResponse> finishPasskeyMediation(
-      String signedChallenge) async {
+    String signedChallenge,
+  ) async {
     final req = api.PasskeyMediationFinishReq(
-        (b) => b..signedChallenge = signedChallenge);
+      (b) => b..signedChallenge = signedChallenge,
+    );
 
-    return _wrapWithError(() => frontendAPIClient
-        .getAuthApi()
-        .passkeyMediationFinish(passkeyMediationFinishReq: req));
+    return _wrapWithError(
+      () => frontendAPIClient.getAuthApi().passkeyMediationFinish(
+        passkeyMediationFinishReq: req,
+      ),
+    );
   }
 
+  /// Verifies the email one-time passcode [code].
   Future<api.ProcessResponse> verifyEmailOtpCode(String code) async {
-    final req = api.IdentifierVerifyFinishReq((b) => b
-      ..code = code
-      ..identifierType = api.LoginIdentifierType.email
-      ..verificationType = api.VerificationMethod.emailOtp
-      ..isNewDevice = false);
+    final req = api.IdentifierVerifyFinishReq(
+      (b) => b
+        ..code = code
+        ..identifierType = api.LoginIdentifierType.email
+        ..verificationType = api.VerificationMethod.emailOtp
+        ..isNewDevice = false,
+    );
 
-    return _wrapWithError(() => frontendAPIClient
-        .getAuthApi()
-        .identifierVerifyFinish(identifierVerifyFinishReq: req));
+    return _wrapWithError(
+      () => frontendAPIClient.getAuthApi().identifierVerifyFinish(
+        identifierVerifyFinishReq: req,
+      ),
+    );
   }
 
+  /// Sends an email one-time passcode to the current identifier.
   Future<api.ProcessResponse> sendEmailOtpCode() async {
-    final req = api.IdentifierVerifyStartReq((b) => b
-      ..identifierType = api.LoginIdentifierType.email
-      ..verificationType = api.VerificationMethod.emailOtp);
+    final req = api.IdentifierVerifyStartReq(
+      (b) => b
+        ..identifierType = api.LoginIdentifierType.email
+        ..verificationType = api.VerificationMethod.emailOtp,
+    );
 
-    return _wrapWithError(() => frontendAPIClient
-        .getAuthApi()
-        .identifierVerifyStart(identifierVerifyStartReq: req));
+    return _wrapWithError(
+      () => frontendAPIClient.getAuthApi().identifierVerifyStart(
+        identifierVerifyStartReq: req,
+      ),
+    );
   }
 
+  /// Sends an email magic link to the current identifier.
   Future<api.ProcessResponse> sendEmailLink() async {
-    final req = api.IdentifierVerifyStartReq((b) => b
-      ..identifierType = api.LoginIdentifierType.email
-      ..verificationType = api.VerificationMethod.emailLink);
+    final req = api.IdentifierVerifyStartReq(
+      (b) => b
+        ..identifierType = api.LoginIdentifierType.email
+        ..verificationType = api.VerificationMethod.emailLink,
+    );
 
-    return _wrapWithError(() => frontendAPIClient
-        .getAuthApi()
-        .identifierVerifyStart(identifierVerifyStartReq: req));
+    return _wrapWithError(
+      () => frontendAPIClient.getAuthApi().identifierVerifyStart(
+        identifierVerifyStartReq: req,
+      ),
+    );
   }
 
+  /// Updates the email identifier to [email].
   Future<api.ProcessResponse> updateEmail(String email) async {
-    final req = api.IdentifierUpdateReq((b) => b
-      ..identifierType = api.LoginIdentifierType.email
-      ..value = email);
+    final req = api.IdentifierUpdateReq(
+      (b) => b
+        ..identifierType = api.LoginIdentifierType.email
+        ..value = email,
+    );
 
-    return _wrapWithError(() => frontendAPIClient
-        .getAuthApi()
-        .identifierUpdate(identifierUpdateReq: req));
+    return _wrapWithError(
+      () => frontendAPIClient.getAuthApi().identifierUpdate(
+        identifierUpdateReq: req,
+      ),
+    );
   }
 
   /// passkey related functionalities
   Future<api.ProcessResponse> appendPasskey() async {
-    final startRes = await _wrapWithError(() => frontendAPIClient
-        .getAuthApi()
-        .passkeyAppendStart(passkeyAppendStartReq: PasskeyAppendStartReq()));
+    final startRes = await _wrapWithError(
+      () => frontendAPIClient.getAuthApi().passkeyAppendStart(
+        passkeyAppendStartReq: PasskeyAppendStartReq(),
+      ),
+    );
     if (startRes.blockBody.error != null) {
       throw CorbadoError.fromMissingServerResponse();
     }
 
     final body =
-        startRes.blockBody.data.oneOf.value as api.GeneralBlockPasskeyAppend;
+        startRes.blockBody.data.oneOf.value! as api.GeneralBlockPasskeyAppend;
     final json = jsonDecode(body.challenge) as Map<String, dynamic>;
 
-    final authenticatorReq =
-        StartRegisterResponse.fromJson(json).toPlatformType();
+    final authenticatorReq = StartRegisterResponse.fromJson(
+      json,
+    ).toPlatformType();
 
     try {
-      final authenticatorRes =
-          await passkeyAuthenticator.register(authenticatorReq);
+      final authenticatorRes = await passkeyAuthenticator.register(
+        authenticatorReq,
+      );
       final attestationResponse = jsonEncode(
-          FinishRegisterRequest.fromRegisterCompleteRequest(authenticatorRes)
-              .toJson());
+        FinishRegisterRequest.fromRegisterCompleteRequest(
+          authenticatorRes,
+        ).toJson(),
+      );
       final passkeyAppendReq = api.PasskeyAppendFinishReq(
-          (b) => b..signedChallenge = attestationResponse);
+        (b) => b..signedChallenge = attestationResponse,
+      );
 
-      return _wrapWithError(() => frontendAPIClient
-          .getAuthApi()
-          .passkeyAppendFinish(passkeyAppendFinishReq: passkeyAppendReq));
+      return _wrapWithError(
+        () => frontendAPIClient.getAuthApi().passkeyAppendFinish(
+          passkeyAppendFinishReq: passkeyAppendReq,
+        ),
+      );
     } on AuthenticatorException catch (e) {
       throw CorbadoError.fromAuthenticatorError(e);
     }
   }
 
+  /// Appends a passkey to the currently signed in user.
   Future<void> sessionAppendPasskey() async {
     final ci = await _buildClientInformation();
-    final startReq =
-        api.MePasskeysAppendStartReq((b) => b..clientInformation = ci);
-    final startRes = await _wrapWithError(() => frontendAPIClient
-        .getUsersApi()
-        .currentUserPasskeyAppendStart(mePasskeysAppendStartReq: startReq));
+    final startReq = api.MePasskeysAppendStartReq(
+      (b) => b..clientInformation = ci,
+    );
+    final startRes = await _wrapWithError(
+      () => frontendAPIClient.getUsersApi().currentUserPasskeyAppendStart(
+        mePasskeysAppendStartReq: startReq,
+      ),
+    );
 
     if (startRes.attestationOptions.isEmpty) {
       throw CorbadoError.fromMissingServerResponse();
@@ -203,21 +264,28 @@ abstract class CorbadoService {
     final json =
         jsonDecode(startRes.attestationOptions) as Map<String, dynamic>;
     try {
-      final authenticatorReq =
-          StartRegisterResponse.fromJson(json).toPlatformType();
-      final authenticatorRes =
-          await passkeyAuthenticator.register(authenticatorReq);
+      final authenticatorReq = StartRegisterResponse.fromJson(
+        json,
+      ).toPlatformType();
+      final authenticatorRes = await passkeyAuthenticator.register(
+        authenticatorReq,
+      );
       final attestationResponse = jsonEncode(
-          FinishRegisterRequest.fromRegisterCompleteRequest(authenticatorRes)
-              .toJson());
-      final mePasskeysAppendFinishReq = api.MePasskeysAppendFinishReq((b) => b
-        ..attestationResponse = attestationResponse
-        ..clientInformation = ci);
+        FinishRegisterRequest.fromRegisterCompleteRequest(
+          authenticatorRes,
+        ).toJson(),
+      );
+      final mePasskeysAppendFinishReq = api.MePasskeysAppendFinishReq(
+        (b) => b
+          ..attestationResponse = attestationResponse
+          ..clientInformation = ci,
+      );
 
-      return _wrapWithErrorEmptyResponse(() => frontendAPIClient
-          .getUsersApi()
-          .currentUserPasskeyAppendFinish(
-              mePasskeysAppendFinishReq: mePasskeysAppendFinishReq));
+      return _wrapWithErrorEmptyResponse(
+        () => frontendAPIClient.getUsersApi().currentUserPasskeyAppendFinish(
+          mePasskeysAppendFinishReq: mePasskeysAppendFinishReq,
+        ),
+      );
     } on AuthenticatorException catch (e) {
       throw CorbadoError.fromAuthenticatorError(e);
     } catch (e) {
@@ -225,51 +293,69 @@ abstract class CorbadoService {
     }
   }
 
+  /// Lists the passkeys of the currently signed in user.
   Future<List<api.Passkey>> sessionListPasskeys({String? token}) async {
     final res = await _wrapWithError(
-        () => frontendAPIClient.getUsersApi().currentUserPasskeyGet());
+      () => frontendAPIClient.getUsersApi().currentUserPasskeyGet(),
+    );
 
     return res.passkeys.toList();
   }
 
+  /// Deletes the passkey identified by [credentialID] for the current user.
   Future<void> sessionDeletePasskeys({required String credentialID}) async {
-    await _wrapWithError(() => frontendAPIClient
-        .getUsersApi()
-        .currentUserPasskeyDelete(credentialID: credentialID));
+    await _wrapWithError(
+      () => frontendAPIClient.getUsersApi().currentUserPasskeyDelete(
+        credentialID: credentialID,
+      ),
+    );
   }
 
+  /// Updates the currently signed in user, e.g. their [fullname].
   Future<void> sessionUpdateUser({String? fullname}) async {
     final meUpdateReq = api.MeUpdateReq((b) => b..fullName = fullname);
-    await _wrapWithErrorEmptyResponse(() => frontendAPIClient
-        .getUsersApi()
-        .currentUserUpdate(meUpdateReq: meUpdateReq));
+    await _wrapWithErrorEmptyResponse(
+      () => frontendAPIClient.getUsersApi().currentUserUpdate(
+        meUpdateReq: meUpdateReq,
+      ),
+    );
   }
 
+  /// Verifies the user by triggering a passkey login.
   Future<api.ProcessResponse> verifyPasskey() async {
-    final startRes = await _wrapWithError(() => frontendAPIClient
-        .getAuthApi()
-        .passkeyLoginStart(passkeyLoginStartReq: api.PasskeyLoginStartReq()));
+    final startRes = await _wrapWithError(
+      () => frontendAPIClient.getAuthApi().passkeyLoginStart(
+        passkeyLoginStartReq: api.PasskeyLoginStartReq(),
+      ),
+    );
     if (startRes.blockBody.error != null) {
       throw CorbadoError.fromMissingServerResponse();
     }
 
     final body =
-        startRes.blockBody.data.oneOf.value as api.GeneralBlockPasskeyVerify;
+        startRes.blockBody.data.oneOf.value! as api.GeneralBlockPasskeyVerify;
     final json = jsonDecode(body.challenge) as Map<String, dynamic>;
 
     final authenticatorReq = StartLoginResponse.fromJson(json).toPlatformType(
-        conditional: false, preferImmediatelyAvailableCredentials: false);
+      conditional: false,
+      preferImmediatelyAvailableCredentials: false,
+    );
     try {
-      final authenticatorRes =
-          await passkeyAuthenticator.authenticate(authenticatorReq);
+      final authenticatorRes = await passkeyAuthenticator.authenticate(
+        authenticatorReq,
+      );
       final assertionResponse = jsonEncode(
-          FinishLoginRequest.fromPlatformType(authenticatorRes).toJson());
+        FinishLoginRequest.fromPlatformType(authenticatorRes).toJson(),
+      );
       final passkeyLoginFinishReq = api.PasskeyLoginFinishReq(
-          (b) => b..signedChallenge = assertionResponse);
+        (b) => b..signedChallenge = assertionResponse,
+      );
 
-      return _wrapWithError(() => frontendAPIClient
-          .getAuthApi()
-          .passkeyLoginFinish(passkeyLoginFinishReq: passkeyLoginFinishReq));
+      return _wrapWithError(
+        () => frontendAPIClient.getAuthApi().passkeyLoginFinish(
+          passkeyLoginFinishReq: passkeyLoginFinishReq,
+        ),
+      );
     } on AuthenticatorException catch (e) {
       if (e is NoCredentialsAvailableException) {
         rethrow;
@@ -279,25 +365,32 @@ abstract class CorbadoService {
     }
   }
 
+  /// Verifies the user with a conditional (mediated) passkey [challenge].
   Future<api.ProcessResponse> verifyPasskeyConditional(
-      String challenge, bool silent) async {
+    String challenge,
+    bool silent,
+  ) async {
     final json = jsonDecode(challenge) as Map<String, dynamic>;
     final authenticatorReq = StartLoginResponse.fromJson(json).toPlatformType(
       conditional: silent,
     );
 
     try {
-      final authenticatorRes =
-          await passkeyAuthenticator.authenticate(authenticatorReq);
+      final authenticatorRes = await passkeyAuthenticator.authenticate(
+        authenticatorReq,
+      );
       final assertionResponse = jsonEncode(
-          FinishLoginRequest.fromPlatformType(authenticatorRes).toJson());
+        FinishLoginRequest.fromPlatformType(authenticatorRes).toJson(),
+      );
       final passkeyLoginFinishReq = api.PasskeyMediationFinishReq(
-          (b) => b..signedChallenge = assertionResponse);
+        (b) => b..signedChallenge = assertionResponse,
+      );
 
-      return _wrapWithError(() => frontendAPIClient
-          .getAuthApi()
-          .passkeyMediationFinish(
-              passkeyMediationFinishReq: passkeyLoginFinishReq));
+      return _wrapWithError(
+        () => frontendAPIClient.getAuthApi().passkeyMediationFinish(
+          passkeyMediationFinishReq: passkeyLoginFinishReq,
+        ),
+      );
     } on AuthenticatorException catch (e) {
       if (e is NoCredentialsAvailableException ||
           e is PasskeyAuthCancelledException) {
@@ -308,6 +401,7 @@ abstract class CorbadoService {
     }
   }
 
+  /// Cancels any passkey operation that is currently in progress.
   Future<void> cancelPasskeyOperation() async {
     return passkeyAuthenticator.cancelCurrentAuthenticatorOperation();
   }
@@ -328,7 +422,8 @@ abstract class CorbadoService {
   }
 
   Future<void> _wrapWithErrorEmptyResponse(
-      Future<Response<void>> Function() callback) async {
+    Future<Response<void>> Function() callback,
+  ) async {
     try {
       await callback();
     } catch (e) {
@@ -340,9 +435,6 @@ abstract class CorbadoService {
     frontendAPIClient.dio.options.headers.addAll({
       'x-corbado-process-id': token,
     });
-
-    _processID = token;
-    _processExpiresAt = DateTime.fromMillisecondsSinceEpoch(expiresAt * 1000);
 
     return;
   }
@@ -381,13 +473,18 @@ abstract class CorbadoService {
 
   /// Builds an API client to interact with the Corbado frontend API.
   /// Depending on the platform different headers will be set.
-  static String getFrontendAPIDomain(String projectId,
-      {@deprecated String? customDomain}) {
+  static String getFrontendAPIDomain(
+    String projectId, {
+    @Deprecated('Use the default Corbado frontend API domain instead.')
+    String? customDomain,
+  }) {
     var frontendAPIDomain = 'https://$projectId.frontendapi.corbado.io';
     if (customDomain != null && customDomain.isNotEmpty) {
       if (kDebugMode) {
         print(
-            '[DEPRECATED] The "customDomain" parameter is deprecated and will be removed in a future release.');
+          '[DEPRECATED] The "customDomain" parameter is deprecated and will '
+          'be removed in a future release.',
+        );
       }
       frontendAPIDomain = customDomain;
     }

@@ -3,22 +3,13 @@
 //
 
 // ignore_for_file: unused_element
-import 'package:corbado_frontend_api_client/src/model/social_data.dart';
 import 'package:corbado_frontend_api_client/src/model/general_block_login_init.dart';
-import 'package:corbado_frontend_api_client/src/model/general_block_verify_identifier_alternative_verification_methods_inner.dart';
-import 'package:corbado_frontend_api_client/src/model/full_name_with_error.dart';
 import 'package:corbado_frontend_api_client/src/model/general_block_passkey_append.dart';
-import 'package:corbado_frontend_api_client/src/model/login_identifier_with_error.dart';
-import 'package:corbado_frontend_api_client/src/model/passkey_icon_set.dart';
-import 'package:corbado_frontend_api_client/src/model/verification_method.dart';
-import 'package:corbado_frontend_api_client/src/model/passkey_operation.dart';
 import 'package:corbado_frontend_api_client/src/model/general_block_completed.dart';
 import 'package:corbado_frontend_api_client/src/model/general_block_verify_identifier.dart';
 import 'package:corbado_frontend_api_client/src/model/general_block_passkey_appended.dart';
 import 'package:corbado_frontend_api_client/src/model/general_block_signup_init.dart';
 import 'package:built_collection/built_collection.dart';
-import 'package:corbado_frontend_api_client/src/model/request_error.dart';
-import 'package:corbado_frontend_api_client/src/model/login_identifier_type.dart';
 import 'package:corbado_frontend_api_client/src/model/general_block_passkey_verify.dart';
 import 'package:corbado_frontend_api_client/src/model/general_block_post_signup_email_verify.dart';
 import 'package:built_value/built_value.dart';
@@ -156,10 +147,7 @@ class _$BlockBodyDataSerializer implements PrimitiveSerializer<BlockBodyData> {
   final String wireName = r'BlockBodyData';
 
   Iterable<Object?> _serializeProperties(
-    Serializers serializers,
-    BlockBodyData object, {
-    FullType specifiedType = FullType.unspecified,
-  }) sync* {}
+      Serializers serializers, BlockBodyData object) sync* {}
 
   @override
   Object serialize(
