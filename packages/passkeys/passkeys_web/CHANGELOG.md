@@ -1,3 +1,11 @@
+## 2.9.2
+
+ - Update a dependency to the latest release.
+
+## 2.9.1
+
+ - Update a dependency to the latest release.
+
 ## 2.9.0
 * Raises minimum Dart SDK to `3.4.0` to match the `web ^1.1.1` requirement.
 

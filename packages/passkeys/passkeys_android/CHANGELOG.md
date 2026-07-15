@@ -1,3 +1,11 @@
+## 2.12.2
+
+ - Update a dependency to the latest release.
+
+## 2.12.1
+
+ - Update a dependency to the latest release.
+
 ## 2.12.0
 * Adds `NoCreateOptionException` handling for register flow.
 * Unstubs `cancelCurrentAuthenticatorOperation` implementation.

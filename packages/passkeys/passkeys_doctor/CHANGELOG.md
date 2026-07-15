@@ -1,3 +1,11 @@
+## 1.5.1
+
+ - Update a dependency to the latest release.
+
+## 1.5.0
+
+ - Update a dependency to the latest release.
+
 ## 1.4.1
 
 * Uses `flutter.compileSdkVersion` instead of a hardcoded `compileSdk = 35` in the Android `build.gradle`, so the package inherits the host project's compile SDK. Fixes build failures alongside plugins that now require `compileSdk >= 36` (e.g. `device_info_plus`). See https://github.com/corbado/flutter-passkeys/issues/245.
