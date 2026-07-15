@@ -40,7 +40,7 @@ class _$PasskeyIconSetMeta {
   BuiltSet<PasskeyIconSet> get values => _$values;
 }
 
-abstract class _$PasskeyIconSetMixin {
+mixin _$PasskeyIconSetMixin {
   // ignore: non_constant_identifier_names
   _$PasskeyIconSetMeta get PasskeyIconSet => const _$PasskeyIconSetMeta();
 }

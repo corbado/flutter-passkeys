@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_constructors_over_static_methods
+
 import 'dart:convert';
 
 import 'package:cloud_functions/cloud_functions.dart';
@@ -5,7 +7,9 @@ import 'package:corbado_auth/corbado_auth.dart';
 import 'package:corbado_auth_firebase/src/exceptions.dart';
 import 'package:passkeys/types.dart';
 
+/// Wraps the Corbado Firebase Functions used for passkey and OTP flows.
 class CorbadoService {
+  /// Creates a [CorbadoService] backed by the given [functions] instance.
   CorbadoService(FirebaseFunctions functions) : _functions = functions;
   final FirebaseFunctions _functions;
   static final _functionOptions = HttpsCallableOptions(
@@ -16,11 +20,14 @@ class CorbadoService {
 
   static CorbadoService? _instance;
 
+  /// Returns a lazily created singleton backed by the default Firebase
+  /// Functions instance.
   static CorbadoService getInstance() {
     _instance ??= CorbadoService(FirebaseFunctions.instance);
     return _instance!;
   }
 
+  /// Starts a passkey sign up and returns the registration challenge.
   Future<RegisterRequestType> startSignUpWithPasskey(
     String email,
     String userAgent,
@@ -42,6 +49,7 @@ class CorbadoService {
     }
   }
 
+  /// Completes a passkey sign up and returns a Firebase auth token.
   Future<String> finishSignUpWithPasskey(
     RegisterResponseType platformResponse,
     String userAgent,
@@ -70,6 +78,7 @@ class CorbadoService {
     }
   }
 
+  /// Starts a passkey login and returns the authentication challenge.
   Future<AuthenticateRequestType> startLoginWithPasskey(
     String email,
     String userAgent, {
@@ -94,6 +103,7 @@ class CorbadoService {
     }
   }
 
+  /// Completes a passkey login and returns a Firebase auth token.
   Future<String> finishLoginWithPasskey(
     AuthenticateResponseType platformResponse,
     String userAgent,
@@ -121,6 +131,7 @@ class CorbadoService {
     }
   }
 
+  /// Starts an email one-time-password login by sending a code to [email].
   Future<void> startLoginWithEmailOTP(String email) async {
     try {
       final startResponse = await _functions
@@ -140,6 +151,8 @@ class CorbadoService {
     }
   }
 
+  /// Completes an email one-time-password login using [code] and returns a
+  /// Firebase auth token.
   Future<String> finishLoginWithEmailOTP(String code) async {
     try {
       final finishResponse = await _functions
@@ -157,6 +170,8 @@ class CorbadoService {
     }
   }
 
+  /// Starts appending a passkey to an existing user and returns the
+  /// registration challenge.
   Future<RegisterRequestType> startPasskeyAppend(
     String firebaseToken,
     String userAgent,
@@ -181,6 +196,7 @@ class CorbadoService {
     }
   }
 
+  /// Completes appending a passkey and returns whether it succeeded.
   Future<bool> finishPasskeyAppend(
     String firebaseToken,
     RegisterResponseType platformResponse,
@@ -211,6 +227,7 @@ class CorbadoService {
     }
   }
 
+  /// Returns all passkeys registered for the given user.
   Future<List<PasskeyInfo>> getPasskeys(String firebaseToken) async {
     try {
       final res = await _functions
@@ -231,6 +248,7 @@ class CorbadoService {
     }
   }
 
+  /// Deletes the passkey identified by [passkeyId] for the given user.
   Future<void> deletePasskey(String firebaseToken, String passkeyId) async {
     try {
       await _functions
@@ -248,6 +266,7 @@ class CorbadoService {
     }
   }
 
+  /// Deletes the given user and all of their associated passkeys.
   Future<void> deleteUser(String firebaseToken) async {
     try {
       await _functions

@@ -39,7 +39,7 @@ class _$LoginIdentifierTypeMeta {
   BuiltSet<LoginIdentifierType> get values => _$values;
 }
 
-abstract class _$LoginIdentifierTypeMixin {
+mixin _$LoginIdentifierTypeMixin {
   // ignore: non_constant_identifier_names
   _$LoginIdentifierTypeMeta get LoginIdentifierType =>
       const _$LoginIdentifierTypeMeta();

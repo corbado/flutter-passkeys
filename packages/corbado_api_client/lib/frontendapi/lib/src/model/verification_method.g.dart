@@ -36,7 +36,7 @@ class _$VerificationMethodMeta {
   BuiltSet<VerificationMethod> get values => _$values;
 }
 
-abstract class _$VerificationMethodMixin {
+mixin _$VerificationMethodMixin {
   // ignore: non_constant_identifier_names
   _$VerificationMethodMeta get VerificationMethod =>
       const _$VerificationMethodMeta();
