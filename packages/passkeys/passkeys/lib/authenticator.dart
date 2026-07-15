@@ -7,7 +7,7 @@ import 'package:passkeys_platform_interface/passkeys_platform_interface.dart';
 
 /// Handles platform dependent parts of the registration and authentication
 /// flow.
-class PasskeyAuthenticator {
+class PasskeyAuthenticator implements PasskeyAuthenticatorInterface {
   /// Constructor
   PasskeyAuthenticator({bool? debugMode})
       : _platform = PasskeysPlatform.instance,

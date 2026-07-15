@@ -12,7 +12,7 @@ Pod::Spec.new do |s|
   s.license          = { :type => 'BSD', :file => '../LICENSE' }
   s.author           = { 'Your Company' => 'email@example.com' }
   s.source           = { :path => '.' }  
-  s.source_files = 'Classes/**/*'
+  s.source_files = 'passkeys_darwin/Sources/passkeys_darwin/**/*.swift'
 
   # Flutter.framework does not contain a i386 slice.
   s.pod_target_xcconfig = {
@@ -25,6 +25,6 @@ Pod::Spec.new do |s|
 
   s.ios.dependency 'Flutter'
   s.osx.dependency 'FlutterMacOS'
-  s.ios.deployment_target = '9.0'
-  s.osx.deployment_target = '13.5'
+  s.ios.deployment_target = '13.0'
+  s.osx.deployment_target = '10.15'
 end

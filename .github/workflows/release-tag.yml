@@ -1,0 +1,44 @@
+name: Create Release Tags
+
+on:
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  actions: write
+
+jobs:
+  create-tags:
+    if: ${{ contains(github.event.head_commit.message, 'chore(release):') }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          cache: true
+
+      - name: Tag packages
+        uses: bluefireteam/melos-action@v3
+        with:
+          tag: true
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Trigger publish workflows
+        run: |
+          melos exec -c 1 --no-published --no-private --order-dependents -- \
+            gh workflow run release-publish.yml \
+            --ref \$MELOS_PACKAGE_NAME-v\$MELOS_PACKAGE_VERSION
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
