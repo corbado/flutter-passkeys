@@ -1,4 +1,3 @@
-# See https://github.com/amannn/action-semantic-pull-request
 name: 'PR Title is Conventional'
 
 on:
