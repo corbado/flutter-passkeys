@@ -10,9 +10,9 @@ AuthenticatorSelectionType _$AuthenticatorSelectionTypeFromJson(
   Map<String, dynamic> json,
 ) => AuthenticatorSelectionType(
   authenticatorAttachment: json['authenticatorAttachment'] as String?,
-  requireResidentKey: json['requireResidentKey'] as bool,
-  residentKey: json['residentKey'] as String,
-  userVerification: json['userVerification'] as String,
+  requireResidentKey: json['requireResidentKey'] as bool? ?? false,
+  residentKey: _readResidentKey(json, 'residentKey') as String,
+  userVerification: json['userVerification'] as String? ?? 'preferred',
 );
 
 Map<String, dynamic> _$AuthenticatorSelectionTypeToJson(
