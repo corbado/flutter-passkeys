@@ -176,25 +176,7 @@ public class MessageHandler implements Messages.PasskeysApi {
                                     typedTransports.add("");
                                 }
 
-                                JSONObject ext = json.optJSONObject("clientExtensionResults");
-                                Map<String, Object> extMap = null;
-
-                                if (ext != null) {
-                                    extMap = new HashMap<>();
-
-                                    JSONObject prf = ext.optJSONObject("prf");
-                                    if (prf != null) {
-                                        JSONObject results = prf.optJSONObject("results");
-                                        if (results != null) {
-                                            String first = results.optString("first", "");
-                                            Map<String, Object> resultsMap = new HashMap<>();
-                                            resultsMap.put("first", first);
-                                            Map<String, Object> prfMap = new HashMap<>();
-                                            prfMap.put("results", resultsMap);
-                                            extMap.put("prf", prfMap);
-                                        }
-                                    }
-                                }
+                                Map<String, Object> extMap = parsePrfExtensionResults(json);
                                 result.success(new Messages.RegisterResponse.Builder()
                                         .setId(json.getString("id"))
                                         .setRawId(json.getString("rawId"))
@@ -333,25 +315,7 @@ public class MessageHandler implements Messages.PasskeysApi {
                                     final String signature = response.getString("signature");
                                     final String authenticatorData = response.getString("authenticatorData");
 
-                                    JSONObject ext = json.optJSONObject("clientExtensionResults");
-                                    Map<String, Object> extMap = null;
-
-                                    if (ext != null) {
-                                        extMap = new HashMap<>();
-
-                                        JSONObject prf = ext.optJSONObject("prf");
-                                        if (prf != null) {
-                                            JSONObject results = prf.optJSONObject("results");
-                                            if (results != null) {
-                                                String first = results.optString("first", "");
-                                                Map<String, Object> resultsMap = new HashMap<>();
-                                                resultsMap.put("first", first);
-                                                Map<String, Object> prfMap = new HashMap<>();
-                                                prfMap.put("results", resultsMap);
-                                                extMap.put("prf", prfMap);
-                                            }
-                                        }
-                                    }
+                                    Map<String, Object> extMap = parsePrfExtensionResults(json);
                                     final Messages.AuthenticateResponse msg = new Messages.AuthenticateResponse.Builder()
                                             .setId(id).setRawId(rawId).setClientDataJSON(clientDataJSON)
                                             .setAuthenticatorData(authenticatorData)
@@ -417,5 +381,34 @@ public class MessageHandler implements Messages.PasskeysApi {
         }
 
         result.success(null);
+    }
+
+    private static Map<String, Object> parsePrfExtensionResults(JSONObject json) {
+        JSONObject ext = json.optJSONObject("clientExtensionResults");
+        if (ext == null) {
+            return null;
+        }
+        JSONObject prf = ext.optJSONObject("prf");
+        if (prf == null) {
+            return null;
+        }
+
+        Map<String, Object> prfMap = new HashMap<>();
+        if (prf.has("enabled")) {
+            prfMap.put("enabled", prf.optBoolean("enabled"));
+        }
+        JSONObject results = prf.optJSONObject("results");
+        if (results != null && results.has("first")) {
+            Map<String, Object> resultsMap = new HashMap<>();
+            resultsMap.put("first", results.optString("first"));
+            prfMap.put("results", resultsMap);
+        }
+        if (prfMap.isEmpty()) {
+            return null;
+        }
+
+        Map<String, Object> extMap = new HashMap<>();
+        extMap.put("prf", prfMap);
+        return extMap;
     }
 }

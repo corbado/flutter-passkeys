@@ -90,7 +90,7 @@ public class PasskeysPlugin: NSObject, FlutterPlugin, PasskeysApi {
             }
 
             // PRF
-            if #available(iOS 18.0, *),
+            if #available(iOS 18.0, macOS 15.0, *),
                let salt,
                let saltData = Data.fromBase64Url(salt) {
                 let values = ASAuthorizationPublicKeyCredentialPRFAssertionInput.InputValues(saltInput1: saltData)
@@ -183,7 +183,7 @@ public class PasskeysPlugin: NSObject, FlutterPlugin, PasskeysApi {
         platformRequest.allowedCredentials = parseCredentials(credentials: allowedCredentials)
         
         // PRF
-        if #available(iOS 18.0, *),
+        if #available(iOS 18.0, macOS 15.0, *),
            let salt,
            let saltData = Data.fromBase64Url(salt) {
             let values = ASAuthorizationPublicKeyCredentialPRFAssertionInput.InputValues(saltInput1: saltData)

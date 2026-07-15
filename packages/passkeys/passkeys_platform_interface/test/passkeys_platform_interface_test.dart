@@ -220,10 +220,10 @@ void main() {
         },
       });
 
-      expect(
-        response.clientExtensionResults?['prf'],
-        isA<Map<dynamic, dynamic>>(),
-      );
+      final prf = response.clientExtensionResults?['prf'] as Map?;
+      final results = prf?['results'] as Map?;
+      expect(prf?['enabled'], isTrue);
+      expect(results?['first'], 'top-secret');
     });
 
     test('toJson signals prf.enabled without leaking the secret', () {
@@ -258,6 +258,36 @@ void main() {
 
       expect(response.toJson()['clientExtensionResults'], <String, dynamic>{});
     });
+
+    test('toJson signals prf.enabled when only enabled is reported', () {
+      const response = RegisterResponseType(
+        id: 'id',
+        rawId: 'rawId',
+        clientDataJSON: 'cdj',
+        attestationObject: 'ao',
+        transports: [],
+        clientExtensionResults: {
+          'prf': {'enabled': true},
+        },
+      );
+
+      expect(response.toJson()['clientExtensionResults'], {
+        'prf': {'enabled': true},
+      });
+    });
+
+    test('toJson emits empty when extension results carry no prf', () {
+      const response = RegisterResponseType(
+        id: 'id',
+        rawId: 'rawId',
+        clientDataJSON: 'cdj',
+        attestationObject: 'ao',
+        transports: [],
+        clientExtensionResults: {'largeBlob': <String, dynamic>{}},
+      );
+
+      expect(response.toJson()['clientExtensionResults'], <String, dynamic>{});
+    });
   });
 
   group('AuthenticateResponseType PRF extension', () {
@@ -278,10 +308,9 @@ void main() {
         },
       });
 
-      expect(
-        response.clientExtensionResults?['prf'],
-        isA<Map<dynamic, dynamic>>(),
-      );
+      final prf = response.clientExtensionResults?['prf'] as Map?;
+      final results = prf?['results'] as Map?;
+      expect(results?['first'], 'top-secret');
     });
 
     test('toJson never forwards the PRF secret to the relying party', () {

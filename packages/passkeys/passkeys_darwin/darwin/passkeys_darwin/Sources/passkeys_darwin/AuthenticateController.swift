@@ -64,7 +64,7 @@ class AuthenticateController: NSObject, ASAuthorizationControllerDelegate, ASAut
             break
         case let r as ASAuthorizationPlatformPublicKeyCredentialAssertion:
             var prf: String? = nil
-            if #available(iOS 18.0, *),
+            if #available(iOS 18.0, macOS 15.0, *),
                let credPrf = r.prf {
                 let prfBytes = credPrf.first.withUnsafeBytes({ Data($0) })
                 prf = prfBytes.toBase64URL()
