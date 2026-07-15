@@ -97,6 +97,7 @@ class CorbadoAuth {
     _corbadoService = await createClient(
       projectId,
       passkeyAuthenticator: passkeyAuthenticator,
+      // ignore: deprecated_member_use_from_same_package
       customDomain: customDomain,
     );
     _sessionService = _buildSessionService(

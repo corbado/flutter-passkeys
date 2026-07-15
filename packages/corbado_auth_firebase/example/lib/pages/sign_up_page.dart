@@ -105,7 +105,7 @@ class SignUpPage extends HookConsumerWidget {
               children: [
                 Switch(
                   value: usePasskeys.value,
-                  activeThumbColor: Theme.of(context).primaryColor,
+                  activeColor: Theme.of(context).primaryColor,
                   onChanged: (bool value) {
                     usePasskeys.value = value;
                   },

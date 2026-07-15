@@ -12,6 +12,7 @@ Future<CorbadoService> createClient(
 }) async {
   final basePath = CorbadoService.getFrontendAPIDomain(
     projectId,
+    // ignore: deprecated_member_use_from_same_package
     customDomain: customDomain,
   );
 
