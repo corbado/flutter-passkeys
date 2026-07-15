@@ -63,7 +63,7 @@ It helps you to integrate passkey authentication into your Flutter app that uses
 The `passkeys` package can be used as the platform authenticator for [supabase_flutter](https://pub.dev/packages/supabase_flutter).
 Supabase Auth acts as the relying party server, while `passkeys` handles the native passkey prompts on iOS, Android, macOS, Windows and Web.
 
-> **Note:** Passkey support in `supabase_flutter` is experimental and the API may change. It requires `supabase_flutter` 2.15.0 or later and `passkeys` 2.21.0 or later.
+It requires `supabase_flutter` 2.15.0 or later and `passkeys` 2.21.0 or later.
 
 #### Setup
 
