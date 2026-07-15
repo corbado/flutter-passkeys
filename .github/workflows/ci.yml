@@ -29,3 +29,63 @@ jobs:
 
       - name: Test
         run: melos run test
+
+  build:
+    name: Build ${{ matrix.name }}
+    needs: analyze-and-test
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: Android
+            os: ubuntu-latest
+            build: flutter build apk --debug
+          - name: Web
+            os: ubuntu-latest
+            build: flutter build web
+          - name: Windows
+            os: windows-latest
+            build: flutter build windows --debug
+          - name: macOS
+            os: macos-latest
+            build: flutter build macos --debug
+          - name: iOS (Swift Package Manager)
+            os: macos-latest
+            swift-package-manager: true
+            build: flutter build ios --debug --no-codesign
+          - name: iOS (CocoaPods)
+            os: macos-latest
+            swift-package-manager: false
+            build: flutter build ios --debug --no-codesign
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Set up Java
+        if: matrix.name == 'Android'
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.32.0"
+
+      - name: Set up melos
+        uses: bluefireteam/melos-action@v3
+
+      - name: Enable Swift Package Manager
+        if: matrix.swift-package-manager == true
+        run: flutter config --enable-swift-package-manager
+
+      - name: Disable Swift Package Manager
+        if: matrix.swift-package-manager == false
+        run: flutter config --no-enable-swift-package-manager
+
+      - name: Build
+        working-directory: packages/passkeys/passkeys/example
+        run: ${{ matrix.build }}
