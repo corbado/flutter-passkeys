@@ -38,7 +38,13 @@ extension FlutterError: Error {
             }
             break
         default:
-            code = "unknown"
+            // ASAuthorizationError code 1006 (.matchedExcludedCredential, iOS 18+)
+            // indicates the device already holds a credential listed in excludeCredentials.
+            if error.code.rawValue == 1006 {
+                code = "exclude-credentials-match"
+            } else {
+                code = "unknown"
+            }
             break
         }
 
