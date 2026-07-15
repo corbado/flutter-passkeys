@@ -58,8 +58,9 @@ abstract class GeneralBlockLoginInit
 
   GeneralBlockLoginInit._();
 
-  factory GeneralBlockLoginInit(
-      [void updates(GeneralBlockLoginInitBuilder b)]) = _$GeneralBlockLoginInit;
+  factory GeneralBlockLoginInit([
+    void updates(GeneralBlockLoginInitBuilder b),
+  ]) = _$GeneralBlockLoginInit;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(GeneralBlockLoginInitBuilder b) => b;
@@ -74,7 +75,7 @@ class _$GeneralBlockLoginInitSerializer
   @override
   final Iterable<Type> types = const [
     GeneralBlockLoginInit,
-    _$GeneralBlockLoginInit
+    _$GeneralBlockLoginInit,
   ];
 
   @override
@@ -149,9 +150,11 @@ class _$GeneralBlockLoginInitSerializer
     GeneralBlockLoginInit object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(
+      serializers,
+      object,
+      specifiedType: specifiedType,
+    ).toList();
   }
 
   void _deserializeProperties(
@@ -167,73 +170,93 @@ class _$GeneralBlockLoginInitSerializer
       final value = serializedList[i + 1];
       switch (key) {
         case r'blockType':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(String),
-          ) as String;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(String),
+                  )
+                  as String;
           result.blockType = valueDes;
           break;
         case r'identifierValue':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(String),
-          ) as String;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(String),
+                  )
+                  as String;
           result.identifierValue = valueDes;
           break;
         case r'isPhone':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(bool),
-          ) as bool;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(bool),
+                  )
+                  as bool;
           result.isPhone = valueDes;
           break;
         case r'isPhoneAvailable':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(bool),
-          ) as bool;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(bool),
+                  )
+                  as bool;
           result.isPhoneAvailable = valueDes;
           break;
         case r'isEmailAvailable':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(bool),
-          ) as bool;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(bool),
+                  )
+                  as bool;
           result.isEmailAvailable = valueDes;
           break;
         case r'isUsernameAvailable':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(bool),
-          ) as bool;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(bool),
+                  )
+                  as bool;
           result.isUsernameAvailable = valueDes;
           break;
         case r'socialData':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(SocialData),
-          ) as SocialData;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(SocialData),
+                  )
+                  as SocialData;
           result.socialData.replace(valueDes);
           break;
         case r'conditionalUIChallenge':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(String),
-          ) as String;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(String),
+                  )
+                  as String;
           result.conditionalUIChallenge = valueDes;
           break;
         case r'fieldError':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(RequestError),
-          ) as RequestError;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(RequestError),
+                  )
+                  as RequestError;
           result.fieldError.replace(valueDes);
           break;
         case r'error':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(RequestError),
-          ) as RequestError;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(RequestError),
+                  )
+                  as RequestError;
           result.error.replace(valueDes);
           break;
         default:

@@ -30,8 +30,9 @@ abstract class MeIdentifierUpdateReq
 
   MeIdentifierUpdateReq._();
 
-  factory MeIdentifierUpdateReq(
-      [void updates(MeIdentifierUpdateReqBuilder b)]) = _$MeIdentifierUpdateReq;
+  factory MeIdentifierUpdateReq([
+    void updates(MeIdentifierUpdateReqBuilder b),
+  ]) = _$MeIdentifierUpdateReq;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(MeIdentifierUpdateReqBuilder b) => b;
@@ -46,7 +47,7 @@ class _$MeIdentifierUpdateReqSerializer
   @override
   final Iterable<Type> types = const [
     MeIdentifierUpdateReq,
-    _$MeIdentifierUpdateReq
+    _$MeIdentifierUpdateReq,
   ];
 
   @override
@@ -80,9 +81,11 @@ class _$MeIdentifierUpdateReqSerializer
     MeIdentifierUpdateReq object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(
+      serializers,
+      object,
+      specifiedType: specifiedType,
+    ).toList();
   }
 
   void _deserializeProperties(
@@ -98,24 +101,30 @@ class _$MeIdentifierUpdateReqSerializer
       final value = serializedList[i + 1];
       switch (key) {
         case r'identifierID':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(String),
-          ) as String;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(String),
+                  )
+                  as String;
           result.identifierID = valueDes;
           break;
         case r'identifierType':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(LoginIdentifierType),
-          ) as LoginIdentifierType;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(LoginIdentifierType),
+                  )
+                  as LoginIdentifierType;
           result.identifierType = valueDes;
           break;
         case r'value':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(String),
-          ) as String;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(String),
+                  )
+                  as String;
           result.value = valueDes;
           break;
         default:

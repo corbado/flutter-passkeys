@@ -12,23 +12,30 @@ class _$ConnectLoginStartRsp extends ConnectLoginStartRsp {
   @override
   final bool isCDA;
 
-  factory _$ConnectLoginStartRsp(
-          [void Function(ConnectLoginStartRspBuilder)? updates]) =>
-      (new ConnectLoginStartRspBuilder()..update(updates))._build();
+  factory _$ConnectLoginStartRsp([
+    void Function(ConnectLoginStartRspBuilder)? updates,
+  ]) => (new ConnectLoginStartRspBuilder()..update(updates))._build();
 
-  _$ConnectLoginStartRsp._(
-      {required this.assertionOptions, required this.isCDA})
-      : super._() {
+  _$ConnectLoginStartRsp._({
+    required this.assertionOptions,
+    required this.isCDA,
+  }) : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        assertionOptions, r'ConnectLoginStartRsp', 'assertionOptions');
+      assertionOptions,
+      r'ConnectLoginStartRsp',
+      'assertionOptions',
+    );
     BuiltValueNullFieldError.checkNotNull(
-        isCDA, r'ConnectLoginStartRsp', 'isCDA');
+      isCDA,
+      r'ConnectLoginStartRsp',
+      'isCDA',
+    );
   }
 
   @override
   ConnectLoginStartRsp rebuild(
-          void Function(ConnectLoginStartRspBuilder) updates) =>
-      (toBuilder()..update(updates)).build();
+    void Function(ConnectLoginStartRspBuilder) updates,
+  ) => (toBuilder()..update(updates)).build();
 
   @override
   ConnectLoginStartRspBuilder toBuilder() =>
@@ -102,12 +109,20 @@ class ConnectLoginStartRspBuilder
   ConnectLoginStartRsp build() => _build();
 
   _$ConnectLoginStartRsp _build() {
-    final _$result = _$v ??
+    final _$result =
+        _$v ??
         new _$ConnectLoginStartRsp._(
-            assertionOptions: BuiltValueNullFieldError.checkNotNull(
-                assertionOptions, r'ConnectLoginStartRsp', 'assertionOptions'),
-            isCDA: BuiltValueNullFieldError.checkNotNull(
-                isCDA, r'ConnectLoginStartRsp', 'isCDA'));
+          assertionOptions: BuiltValueNullFieldError.checkNotNull(
+            assertionOptions,
+            r'ConnectLoginStartRsp',
+            'assertionOptions',
+          ),
+          isCDA: BuiltValueNullFieldError.checkNotNull(
+            isCDA,
+            r'ConnectLoginStartRsp',
+            'isCDA',
+          ),
+        );
     replace(_$result);
     return _$result;
   }

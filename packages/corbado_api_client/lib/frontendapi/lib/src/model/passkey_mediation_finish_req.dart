@@ -21,9 +21,9 @@ abstract class PasskeyMediationFinishReq
 
   PasskeyMediationFinishReq._();
 
-  factory PasskeyMediationFinishReq(
-          [void updates(PasskeyMediationFinishReqBuilder b)]) =
-      _$PasskeyMediationFinishReq;
+  factory PasskeyMediationFinishReq([
+    void updates(PasskeyMediationFinishReqBuilder b),
+  ]) = _$PasskeyMediationFinishReq;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(PasskeyMediationFinishReqBuilder b) => b;
@@ -38,7 +38,7 @@ class _$PasskeyMediationFinishReqSerializer
   @override
   final Iterable<Type> types = const [
     PasskeyMediationFinishReq,
-    _$PasskeyMediationFinishReq
+    _$PasskeyMediationFinishReq,
   ];
 
   @override
@@ -62,9 +62,11 @@ class _$PasskeyMediationFinishReqSerializer
     PasskeyMediationFinishReq object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(
+      serializers,
+      object,
+      specifiedType: specifiedType,
+    ).toList();
   }
 
   void _deserializeProperties(
@@ -80,10 +82,12 @@ class _$PasskeyMediationFinishReqSerializer
       final value = serializedList[i + 1];
       switch (key) {
         case r'signedChallenge':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(String),
-          ) as String;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(String),
+                  )
+                  as String;
           result.signedChallenge = valueDes;
           break;
         default:

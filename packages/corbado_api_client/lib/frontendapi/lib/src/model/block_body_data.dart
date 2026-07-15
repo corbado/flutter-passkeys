@@ -147,7 +147,9 @@ class _$BlockBodyDataSerializer implements PrimitiveSerializer<BlockBodyData> {
   final String wireName = r'BlockBodyData';
 
   Iterable<Object?> _serializeProperties(
-      Serializers serializers, BlockBodyData object) sync* {}
+    Serializers serializers,
+    BlockBodyData object,
+  ) sync* {}
 
   @override
   Object serialize(
@@ -156,8 +158,10 @@ class _$BlockBodyDataSerializer implements PrimitiveSerializer<BlockBodyData> {
     FullType specifiedType = FullType.unspecified,
   }) {
     final oneOf = object.oneOf;
-    return serializers.serialize(oneOf.value,
-        specifiedType: FullType(oneOf.valueType))!;
+    return serializers.serialize(
+      oneOf.value,
+      specifiedType: FullType(oneOf.valueType),
+    )!;
   }
 
   @override
@@ -171,8 +175,12 @@ class _$BlockBodyDataSerializer implements PrimitiveSerializer<BlockBodyData> {
     final serializedList = (serialized as Iterable<Object?>).toList();
     final discIndex =
         serializedList.indexOf(BlockBodyData.discriminatorFieldName) + 1;
-    final discValue = serializers.deserialize(serializedList[discIndex],
-        specifiedType: FullType(String)) as String;
+    final discValue =
+        serializers.deserialize(
+              serializedList[discIndex],
+              specifiedType: FullType(String),
+            )
+            as String;
     oneOfDataSrc = serialized;
     final oneOfTypes = [
       GeneralBlockCompleted,
@@ -188,69 +196,87 @@ class _$BlockBodyDataSerializer implements PrimitiveSerializer<BlockBodyData> {
     Type oneOfType;
     switch (discValue) {
       case r'generalBlockCompleted':
-        oneOfResult = serializers.deserialize(
-          oneOfDataSrc,
-          specifiedType: FullType(GeneralBlockCompleted),
-        ) as GeneralBlockCompleted;
+        oneOfResult =
+            serializers.deserialize(
+                  oneOfDataSrc,
+                  specifiedType: FullType(GeneralBlockCompleted),
+                )
+                as GeneralBlockCompleted;
         oneOfType = GeneralBlockCompleted;
         break;
       case r'generalBlockLoginInit':
-        oneOfResult = serializers.deserialize(
-          oneOfDataSrc,
-          specifiedType: FullType(GeneralBlockLoginInit),
-        ) as GeneralBlockLoginInit;
+        oneOfResult =
+            serializers.deserialize(
+                  oneOfDataSrc,
+                  specifiedType: FullType(GeneralBlockLoginInit),
+                )
+                as GeneralBlockLoginInit;
         oneOfType = GeneralBlockLoginInit;
         break;
       case r'generalBlockPasskeyAppend':
-        oneOfResult = serializers.deserialize(
-          oneOfDataSrc,
-          specifiedType: FullType(GeneralBlockPasskeyAppend),
-        ) as GeneralBlockPasskeyAppend;
+        oneOfResult =
+            serializers.deserialize(
+                  oneOfDataSrc,
+                  specifiedType: FullType(GeneralBlockPasskeyAppend),
+                )
+                as GeneralBlockPasskeyAppend;
         oneOfType = GeneralBlockPasskeyAppend;
         break;
       case r'generalBlockPasskeyAppended':
-        oneOfResult = serializers.deserialize(
-          oneOfDataSrc,
-          specifiedType: FullType(GeneralBlockPasskeyAppended),
-        ) as GeneralBlockPasskeyAppended;
+        oneOfResult =
+            serializers.deserialize(
+                  oneOfDataSrc,
+                  specifiedType: FullType(GeneralBlockPasskeyAppended),
+                )
+                as GeneralBlockPasskeyAppended;
         oneOfType = GeneralBlockPasskeyAppended;
         break;
       case r'generalBlockPasskeyVerify':
-        oneOfResult = serializers.deserialize(
-          oneOfDataSrc,
-          specifiedType: FullType(GeneralBlockPasskeyVerify),
-        ) as GeneralBlockPasskeyVerify;
+        oneOfResult =
+            serializers.deserialize(
+                  oneOfDataSrc,
+                  specifiedType: FullType(GeneralBlockPasskeyVerify),
+                )
+                as GeneralBlockPasskeyVerify;
         oneOfType = GeneralBlockPasskeyVerify;
         break;
       case r'generalBlockPostSignupEmailVerify':
-        oneOfResult = serializers.deserialize(
-          oneOfDataSrc,
-          specifiedType: FullType(GeneralBlockPostSignupEmailVerify),
-        ) as GeneralBlockPostSignupEmailVerify;
+        oneOfResult =
+            serializers.deserialize(
+                  oneOfDataSrc,
+                  specifiedType: FullType(GeneralBlockPostSignupEmailVerify),
+                )
+                as GeneralBlockPostSignupEmailVerify;
         oneOfType = GeneralBlockPostSignupEmailVerify;
         break;
       case r'generalBlockSignupInit':
-        oneOfResult = serializers.deserialize(
-          oneOfDataSrc,
-          specifiedType: FullType(GeneralBlockSignupInit),
-        ) as GeneralBlockSignupInit;
+        oneOfResult =
+            serializers.deserialize(
+                  oneOfDataSrc,
+                  specifiedType: FullType(GeneralBlockSignupInit),
+                )
+                as GeneralBlockSignupInit;
         oneOfType = GeneralBlockSignupInit;
         break;
       case r'generalBlockVerifyIdentifier':
-        oneOfResult = serializers.deserialize(
-          oneOfDataSrc,
-          specifiedType: FullType(GeneralBlockVerifyIdentifier),
-        ) as GeneralBlockVerifyIdentifier;
+        oneOfResult =
+            serializers.deserialize(
+                  oneOfDataSrc,
+                  specifiedType: FullType(GeneralBlockVerifyIdentifier),
+                )
+                as GeneralBlockVerifyIdentifier;
         oneOfType = GeneralBlockVerifyIdentifier;
         break;
       default:
         throw UnsupportedError(
-            "Couldn't deserialize oneOf for the discriminator value: ${discValue}");
+          "Couldn't deserialize oneOf for the discriminator value: ${discValue}",
+        );
     }
     result.oneOf = OneOfDynamic(
-        typeIndex: oneOfTypes.indexOf(oneOfType),
-        types: oneOfTypes,
-        value: oneOfResult);
+      typeIndex: oneOfTypes.indexOf(oneOfType),
+      types: oneOfTypes,
+      value: oneOfResult,
+    );
     return result.build();
   }
 }

@@ -28,42 +28,63 @@ class _$GeneralBlockLoginInit extends GeneralBlockLoginInit {
   @override
   final RequestError? error;
 
-  factory _$GeneralBlockLoginInit(
-          [void Function(GeneralBlockLoginInitBuilder)? updates]) =>
-      (new GeneralBlockLoginInitBuilder()..update(updates))._build();
+  factory _$GeneralBlockLoginInit([
+    void Function(GeneralBlockLoginInitBuilder)? updates,
+  ]) => (new GeneralBlockLoginInitBuilder()..update(updates))._build();
 
-  _$GeneralBlockLoginInit._(
-      {required this.blockType,
-      required this.identifierValue,
-      required this.isPhone,
-      required this.isPhoneAvailable,
-      required this.isEmailAvailable,
-      required this.isUsernameAvailable,
-      required this.socialData,
-      this.conditionalUIChallenge,
-      this.fieldError,
-      this.error})
-      : super._() {
+  _$GeneralBlockLoginInit._({
+    required this.blockType,
+    required this.identifierValue,
+    required this.isPhone,
+    required this.isPhoneAvailable,
+    required this.isEmailAvailable,
+    required this.isUsernameAvailable,
+    required this.socialData,
+    this.conditionalUIChallenge,
+    this.fieldError,
+    this.error,
+  }) : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        blockType, r'GeneralBlockLoginInit', 'blockType');
+      blockType,
+      r'GeneralBlockLoginInit',
+      'blockType',
+    );
     BuiltValueNullFieldError.checkNotNull(
-        identifierValue, r'GeneralBlockLoginInit', 'identifierValue');
+      identifierValue,
+      r'GeneralBlockLoginInit',
+      'identifierValue',
+    );
     BuiltValueNullFieldError.checkNotNull(
-        isPhone, r'GeneralBlockLoginInit', 'isPhone');
+      isPhone,
+      r'GeneralBlockLoginInit',
+      'isPhone',
+    );
     BuiltValueNullFieldError.checkNotNull(
-        isPhoneAvailable, r'GeneralBlockLoginInit', 'isPhoneAvailable');
+      isPhoneAvailable,
+      r'GeneralBlockLoginInit',
+      'isPhoneAvailable',
+    );
     BuiltValueNullFieldError.checkNotNull(
-        isEmailAvailable, r'GeneralBlockLoginInit', 'isEmailAvailable');
+      isEmailAvailable,
+      r'GeneralBlockLoginInit',
+      'isEmailAvailable',
+    );
     BuiltValueNullFieldError.checkNotNull(
-        isUsernameAvailable, r'GeneralBlockLoginInit', 'isUsernameAvailable');
+      isUsernameAvailable,
+      r'GeneralBlockLoginInit',
+      'isUsernameAvailable',
+    );
     BuiltValueNullFieldError.checkNotNull(
-        socialData, r'GeneralBlockLoginInit', 'socialData');
+      socialData,
+      r'GeneralBlockLoginInit',
+      'socialData',
+    );
   }
 
   @override
   GeneralBlockLoginInit rebuild(
-          void Function(GeneralBlockLoginInitBuilder) updates) =>
-      (toBuilder()..update(updates)).build();
+    void Function(GeneralBlockLoginInitBuilder) updates,
+  ) => (toBuilder()..update(updates)).build();
 
   @override
   GeneralBlockLoginInitBuilder toBuilder() =>
@@ -211,30 +232,44 @@ class GeneralBlockLoginInitBuilder
   _$GeneralBlockLoginInit _build() {
     _$GeneralBlockLoginInit _$result;
     try {
-      _$result = _$v ??
+      _$result =
+          _$v ??
           new _$GeneralBlockLoginInit._(
-              blockType: BuiltValueNullFieldError.checkNotNull(
-                  blockType, r'GeneralBlockLoginInit', 'blockType'),
-              identifierValue: BuiltValueNullFieldError.checkNotNull(
-                  identifierValue, r'GeneralBlockLoginInit', 'identifierValue'),
-              isPhone: BuiltValueNullFieldError.checkNotNull(
-                  isPhone, r'GeneralBlockLoginInit', 'isPhone'),
-              isPhoneAvailable: BuiltValueNullFieldError.checkNotNull(
-                  isPhoneAvailable,
-                  r'GeneralBlockLoginInit',
-                  'isPhoneAvailable'),
-              isEmailAvailable: BuiltValueNullFieldError.checkNotNull(
-                  isEmailAvailable,
-                  r'GeneralBlockLoginInit',
-                  'isEmailAvailable'),
-              isUsernameAvailable: BuiltValueNullFieldError.checkNotNull(
-                  isUsernameAvailable,
-                  r'GeneralBlockLoginInit',
-                  'isUsernameAvailable'),
-              socialData: socialData.build(),
-              conditionalUIChallenge: conditionalUIChallenge,
-              fieldError: _fieldError?.build(),
-              error: _error?.build());
+            blockType: BuiltValueNullFieldError.checkNotNull(
+              blockType,
+              r'GeneralBlockLoginInit',
+              'blockType',
+            ),
+            identifierValue: BuiltValueNullFieldError.checkNotNull(
+              identifierValue,
+              r'GeneralBlockLoginInit',
+              'identifierValue',
+            ),
+            isPhone: BuiltValueNullFieldError.checkNotNull(
+              isPhone,
+              r'GeneralBlockLoginInit',
+              'isPhone',
+            ),
+            isPhoneAvailable: BuiltValueNullFieldError.checkNotNull(
+              isPhoneAvailable,
+              r'GeneralBlockLoginInit',
+              'isPhoneAvailable',
+            ),
+            isEmailAvailable: BuiltValueNullFieldError.checkNotNull(
+              isEmailAvailable,
+              r'GeneralBlockLoginInit',
+              'isEmailAvailable',
+            ),
+            isUsernameAvailable: BuiltValueNullFieldError.checkNotNull(
+              isUsernameAvailable,
+              r'GeneralBlockLoginInit',
+              'isUsernameAvailable',
+            ),
+            socialData: socialData.build(),
+            conditionalUIChallenge: conditionalUIChallenge,
+            fieldError: _fieldError?.build(),
+            error: _error?.build(),
+          );
     } catch (_) {
       late String _$failedField;
       try {
@@ -247,7 +282,10 @@ class GeneralBlockLoginInitBuilder
         _error?.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            r'GeneralBlockLoginInit', _$failedField, e.toString());
+          r'GeneralBlockLoginInit',
+          _$failedField,
+          e.toString(),
+        );
       }
       rethrow;
     }

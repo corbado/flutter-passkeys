@@ -26,9 +26,9 @@ abstract class MeIdentifierVerifyStartReq
 
   MeIdentifierVerifyStartReq._();
 
-  factory MeIdentifierVerifyStartReq(
-          [void updates(MeIdentifierVerifyStartReqBuilder b)]) =
-      _$MeIdentifierVerifyStartReq;
+  factory MeIdentifierVerifyStartReq([
+    void updates(MeIdentifierVerifyStartReqBuilder b),
+  ]) = _$MeIdentifierVerifyStartReq;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(MeIdentifierVerifyStartReqBuilder b) => b;
@@ -43,7 +43,7 @@ class _$MeIdentifierVerifyStartReqSerializer
   @override
   final Iterable<Type> types = const [
     MeIdentifierVerifyStartReq,
-    _$MeIdentifierVerifyStartReq
+    _$MeIdentifierVerifyStartReq,
   ];
 
   @override
@@ -72,9 +72,11 @@ class _$MeIdentifierVerifyStartReqSerializer
     MeIdentifierVerifyStartReq object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(
+      serializers,
+      object,
+      specifiedType: specifiedType,
+    ).toList();
   }
 
   void _deserializeProperties(
@@ -90,17 +92,21 @@ class _$MeIdentifierVerifyStartReqSerializer
       final value = serializedList[i + 1];
       switch (key) {
         case r'identifierID':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(String),
-          ) as String;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(String),
+                  )
+                  as String;
           result.identifierID = valueDes;
           break;
         case r'clientInformation':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(ClientInformation),
-          ) as ClientInformation;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(ClientInformation),
+                  )
+                  as ClientInformation;
           result.clientInformation.replace(valueDes);
           break;
         default:

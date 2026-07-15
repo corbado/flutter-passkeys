@@ -10,19 +10,22 @@ class _$ConnectManageDeleteRsp extends ConnectManageDeleteRsp {
   @override
   final String credentialID;
 
-  factory _$ConnectManageDeleteRsp(
-          [void Function(ConnectManageDeleteRspBuilder)? updates]) =>
-      (new ConnectManageDeleteRspBuilder()..update(updates))._build();
+  factory _$ConnectManageDeleteRsp([
+    void Function(ConnectManageDeleteRspBuilder)? updates,
+  ]) => (new ConnectManageDeleteRspBuilder()..update(updates))._build();
 
   _$ConnectManageDeleteRsp._({required this.credentialID}) : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        credentialID, r'ConnectManageDeleteRsp', 'credentialID');
+      credentialID,
+      r'ConnectManageDeleteRsp',
+      'credentialID',
+    );
   }
 
   @override
   ConnectManageDeleteRsp rebuild(
-          void Function(ConnectManageDeleteRspBuilder) updates) =>
-      (toBuilder()..update(updates)).build();
+    void Function(ConnectManageDeleteRspBuilder) updates,
+  ) => (toBuilder()..update(updates)).build();
 
   @override
   ConnectManageDeleteRspBuilder toBuilder() =>
@@ -45,9 +48,9 @@ class _$ConnectManageDeleteRsp extends ConnectManageDeleteRsp {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper(r'ConnectManageDeleteRsp')
-          ..add('credentialID', credentialID))
-        .toString();
+    return (newBuiltValueToStringHelper(
+      r'ConnectManageDeleteRsp',
+    )..add('credentialID', credentialID)).toString();
   }
 }
 
@@ -87,10 +90,15 @@ class ConnectManageDeleteRspBuilder
   ConnectManageDeleteRsp build() => _build();
 
   _$ConnectManageDeleteRsp _build() {
-    final _$result = _$v ??
+    final _$result =
+        _$v ??
         new _$ConnectManageDeleteRsp._(
-            credentialID: BuiltValueNullFieldError.checkNotNull(
-                credentialID, r'ConnectManageDeleteRsp', 'credentialID'));
+          credentialID: BuiltValueNullFieldError.checkNotNull(
+            credentialID,
+            r'ConnectManageDeleteRsp',
+            'credentialID',
+          ),
+        );
     replace(_$result);
     return _$result;
   }

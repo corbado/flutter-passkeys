@@ -10,19 +10,22 @@ class _$ConnectEventCreateReq extends ConnectEventCreateReq {
   @override
   final PasskeyEventType eventType;
 
-  factory _$ConnectEventCreateReq(
-          [void Function(ConnectEventCreateReqBuilder)? updates]) =>
-      (new ConnectEventCreateReqBuilder()..update(updates))._build();
+  factory _$ConnectEventCreateReq([
+    void Function(ConnectEventCreateReqBuilder)? updates,
+  ]) => (new ConnectEventCreateReqBuilder()..update(updates))._build();
 
   _$ConnectEventCreateReq._({required this.eventType}) : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        eventType, r'ConnectEventCreateReq', 'eventType');
+      eventType,
+      r'ConnectEventCreateReq',
+      'eventType',
+    );
   }
 
   @override
   ConnectEventCreateReq rebuild(
-          void Function(ConnectEventCreateReqBuilder) updates) =>
-      (toBuilder()..update(updates)).build();
+    void Function(ConnectEventCreateReqBuilder) updates,
+  ) => (toBuilder()..update(updates)).build();
 
   @override
   ConnectEventCreateReqBuilder toBuilder() =>
@@ -44,9 +47,9 @@ class _$ConnectEventCreateReq extends ConnectEventCreateReq {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper(r'ConnectEventCreateReq')
-          ..add('eventType', eventType))
-        .toString();
+    return (newBuiltValueToStringHelper(
+      r'ConnectEventCreateReq',
+    )..add('eventType', eventType)).toString();
   }
 }
 
@@ -86,10 +89,15 @@ class ConnectEventCreateReqBuilder
   ConnectEventCreateReq build() => _build();
 
   _$ConnectEventCreateReq _build() {
-    final _$result = _$v ??
+    final _$result =
+        _$v ??
         new _$ConnectEventCreateReq._(
-            eventType: BuiltValueNullFieldError.checkNotNull(
-                eventType, r'ConnectEventCreateReq', 'eventType'));
+          eventType: BuiltValueNullFieldError.checkNotNull(
+            eventType,
+            r'ConnectEventCreateReq',
+            'eventType',
+          ),
+        );
     replace(_$result);
     return _$result;
   }

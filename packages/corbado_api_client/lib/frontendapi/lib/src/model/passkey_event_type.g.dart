@@ -6,21 +6,26 @@ part of 'passkey_event_type.dart';
 // BuiltValueGenerator
 // **************************************************************************
 
-const PasskeyEventType _$loginExplicitAbort =
-    const PasskeyEventType._('loginExplicitAbort');
+const PasskeyEventType _$loginExplicitAbort = const PasskeyEventType._(
+  'loginExplicitAbort',
+);
 const PasskeyEventType _$loginError = const PasskeyEventType._('loginError');
-const PasskeyEventType _$loginErrorUntyped =
-    const PasskeyEventType._('loginErrorUntyped');
-const PasskeyEventType _$loginOneTapSwitch =
-    const PasskeyEventType._('loginOneTapSwitch');
+const PasskeyEventType _$loginErrorUntyped = const PasskeyEventType._(
+  'loginErrorUntyped',
+);
+const PasskeyEventType _$loginOneTapSwitch = const PasskeyEventType._(
+  'loginOneTapSwitch',
+);
 const PasskeyEventType _$userAppendAfterCrossPlatformBlacklisted =
     const PasskeyEventType._('userAppendAfterCrossPlatformBlacklisted');
 const PasskeyEventType _$userAppendAfterLoginErrorBlacklisted =
     const PasskeyEventType._('userAppendAfterLoginErrorBlacklisted');
-const PasskeyEventType _$appendCredentialExists =
-    const PasskeyEventType._('appendCredentialExists');
-const PasskeyEventType _$appendExplicitAbort =
-    const PasskeyEventType._('appendExplicitAbort');
+const PasskeyEventType _$appendCredentialExists = const PasskeyEventType._(
+  'appendCredentialExists',
+);
+const PasskeyEventType _$appendExplicitAbort = const PasskeyEventType._(
+  'appendExplicitAbort',
+);
 const PasskeyEventType _$appendError = const PasskeyEventType._('appendError');
 
 PasskeyEventType _$valueOf(String name) {
@@ -50,16 +55,16 @@ PasskeyEventType _$valueOf(String name) {
 
 final BuiltSet<PasskeyEventType> _$values =
     new BuiltSet<PasskeyEventType>(const <PasskeyEventType>[
-  _$loginExplicitAbort,
-  _$loginError,
-  _$loginErrorUntyped,
-  _$loginOneTapSwitch,
-  _$userAppendAfterCrossPlatformBlacklisted,
-  _$userAppendAfterLoginErrorBlacklisted,
-  _$appendCredentialExists,
-  _$appendExplicitAbort,
-  _$appendError,
-]);
+      _$loginExplicitAbort,
+      _$loginError,
+      _$loginErrorUntyped,
+      _$loginOneTapSwitch,
+      _$userAppendAfterCrossPlatformBlacklisted,
+      _$userAppendAfterLoginErrorBlacklisted,
+      _$appendCredentialExists,
+      _$appendExplicitAbort,
+      _$appendError,
+    ]);
 
 class _$PasskeyEventTypeMeta {
   const _$PasskeyEventTypeMeta();
@@ -121,15 +126,20 @@ class _$PasskeyEventTypeSerializer
   final String wireName = 'PasskeyEventType';
 
   @override
-  Object serialize(Serializers serializers, PasskeyEventType object,
-          {FullType specifiedType = FullType.unspecified}) =>
-      _toWire[object.name] ?? object.name;
+  Object serialize(
+    Serializers serializers,
+    PasskeyEventType object, {
+    FullType specifiedType = FullType.unspecified,
+  }) => _toWire[object.name] ?? object.name;
 
   @override
-  PasskeyEventType deserialize(Serializers serializers, Object serialized,
-          {FullType specifiedType = FullType.unspecified}) =>
-      PasskeyEventType.valueOf(
-          _fromWire[serialized] ?? (serialized is String ? serialized : ''));
+  PasskeyEventType deserialize(
+    Serializers serializers,
+    Object serialized, {
+    FullType specifiedType = FullType.unspecified,
+  }) => PasskeyEventType.valueOf(
+    _fromWire[serialized] ?? (serialized is String ? serialized : ''),
+  );
 }
 
 // ignore_for_file: deprecated_member_use_from_same_package,type=lint

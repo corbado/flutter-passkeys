@@ -10,19 +10,22 @@ class _$PasskeyMediationFinishReq extends PasskeyMediationFinishReq {
   @override
   final String signedChallenge;
 
-  factory _$PasskeyMediationFinishReq(
-          [void Function(PasskeyMediationFinishReqBuilder)? updates]) =>
-      (new PasskeyMediationFinishReqBuilder()..update(updates))._build();
+  factory _$PasskeyMediationFinishReq([
+    void Function(PasskeyMediationFinishReqBuilder)? updates,
+  ]) => (new PasskeyMediationFinishReqBuilder()..update(updates))._build();
 
   _$PasskeyMediationFinishReq._({required this.signedChallenge}) : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        signedChallenge, r'PasskeyMediationFinishReq', 'signedChallenge');
+      signedChallenge,
+      r'PasskeyMediationFinishReq',
+      'signedChallenge',
+    );
   }
 
   @override
   PasskeyMediationFinishReq rebuild(
-          void Function(PasskeyMediationFinishReqBuilder) updates) =>
-      (toBuilder()..update(updates)).build();
+    void Function(PasskeyMediationFinishReqBuilder) updates,
+  ) => (toBuilder()..update(updates)).build();
 
   @override
   PasskeyMediationFinishReqBuilder toBuilder() =>
@@ -45,9 +48,9 @@ class _$PasskeyMediationFinishReq extends PasskeyMediationFinishReq {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper(r'PasskeyMediationFinishReq')
-          ..add('signedChallenge', signedChallenge))
-        .toString();
+    return (newBuiltValueToStringHelper(
+      r'PasskeyMediationFinishReq',
+    )..add('signedChallenge', signedChallenge)).toString();
   }
 }
 
@@ -89,12 +92,15 @@ class PasskeyMediationFinishReqBuilder
   PasskeyMediationFinishReq build() => _build();
 
   _$PasskeyMediationFinishReq _build() {
-    final _$result = _$v ??
+    final _$result =
+        _$v ??
         new _$PasskeyMediationFinishReq._(
-            signedChallenge: BuiltValueNullFieldError.checkNotNull(
-                signedChallenge,
-                r'PasskeyMediationFinishReq',
-                'signedChallenge'));
+          signedChallenge: BuiltValueNullFieldError.checkNotNull(
+            signedChallenge,
+            r'PasskeyMediationFinishReq',
+            'signedChallenge',
+          ),
+        );
     replace(_$result);
     return _$result;
   }

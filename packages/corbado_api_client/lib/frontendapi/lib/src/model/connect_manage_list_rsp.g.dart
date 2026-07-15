@@ -10,19 +10,22 @@ class _$ConnectManageListRsp extends ConnectManageListRsp {
   @override
   final BuiltList<Passkey> passkeys;
 
-  factory _$ConnectManageListRsp(
-          [void Function(ConnectManageListRspBuilder)? updates]) =>
-      (new ConnectManageListRspBuilder()..update(updates))._build();
+  factory _$ConnectManageListRsp([
+    void Function(ConnectManageListRspBuilder)? updates,
+  ]) => (new ConnectManageListRspBuilder()..update(updates))._build();
 
   _$ConnectManageListRsp._({required this.passkeys}) : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        passkeys, r'ConnectManageListRsp', 'passkeys');
+      passkeys,
+      r'ConnectManageListRsp',
+      'passkeys',
+    );
   }
 
   @override
   ConnectManageListRsp rebuild(
-          void Function(ConnectManageListRspBuilder) updates) =>
-      (toBuilder()..update(updates)).build();
+    void Function(ConnectManageListRspBuilder) updates,
+  ) => (toBuilder()..update(updates)).build();
 
   @override
   ConnectManageListRspBuilder toBuilder() =>
@@ -44,9 +47,9 @@ class _$ConnectManageListRsp extends ConnectManageListRsp {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper(r'ConnectManageListRsp')
-          ..add('passkeys', passkeys))
-        .toString();
+    return (newBuiltValueToStringHelper(
+      r'ConnectManageListRsp',
+    )..add('passkeys', passkeys)).toString();
   }
 }
 
@@ -98,7 +101,10 @@ class ConnectManageListRspBuilder
         passkeys.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            r'ConnectManageListRsp', _$failedField, e.toString());
+          r'ConnectManageListRsp',
+          _$failedField,
+          e.toString(),
+        );
       }
       rethrow;
     }

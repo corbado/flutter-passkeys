@@ -10,19 +10,22 @@ class _$GeneralBlockPasskeyAppended extends GeneralBlockPasskeyAppended {
   @override
   final String blockType;
 
-  factory _$GeneralBlockPasskeyAppended(
-          [void Function(GeneralBlockPasskeyAppendedBuilder)? updates]) =>
-      (new GeneralBlockPasskeyAppendedBuilder()..update(updates))._build();
+  factory _$GeneralBlockPasskeyAppended([
+    void Function(GeneralBlockPasskeyAppendedBuilder)? updates,
+  ]) => (new GeneralBlockPasskeyAppendedBuilder()..update(updates))._build();
 
   _$GeneralBlockPasskeyAppended._({required this.blockType}) : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        blockType, r'GeneralBlockPasskeyAppended', 'blockType');
+      blockType,
+      r'GeneralBlockPasskeyAppended',
+      'blockType',
+    );
   }
 
   @override
   GeneralBlockPasskeyAppended rebuild(
-          void Function(GeneralBlockPasskeyAppendedBuilder) updates) =>
-      (toBuilder()..update(updates)).build();
+    void Function(GeneralBlockPasskeyAppendedBuilder) updates,
+  ) => (toBuilder()..update(updates)).build();
 
   @override
   GeneralBlockPasskeyAppendedBuilder toBuilder() =>
@@ -44,16 +47,18 @@ class _$GeneralBlockPasskeyAppended extends GeneralBlockPasskeyAppended {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper(r'GeneralBlockPasskeyAppended')
-          ..add('blockType', blockType))
-        .toString();
+    return (newBuiltValueToStringHelper(
+      r'GeneralBlockPasskeyAppended',
+    )..add('blockType', blockType)).toString();
   }
 }
 
 class GeneralBlockPasskeyAppendedBuilder
     implements
-        Builder<GeneralBlockPasskeyAppended,
-            GeneralBlockPasskeyAppendedBuilder> {
+        Builder<
+          GeneralBlockPasskeyAppended,
+          GeneralBlockPasskeyAppendedBuilder
+        > {
   _$GeneralBlockPasskeyAppended? _$v;
 
   String? _blockType;
@@ -88,10 +93,15 @@ class GeneralBlockPasskeyAppendedBuilder
   GeneralBlockPasskeyAppended build() => _build();
 
   _$GeneralBlockPasskeyAppended _build() {
-    final _$result = _$v ??
+    final _$result =
+        _$v ??
         new _$GeneralBlockPasskeyAppended._(
-            blockType: BuiltValueNullFieldError.checkNotNull(
-                blockType, r'GeneralBlockPasskeyAppended', 'blockType'));
+          blockType: BuiltValueNullFieldError.checkNotNull(
+            blockType,
+            r'GeneralBlockPasskeyAppended',
+            'blockType',
+          ),
+        );
     replace(_$result);
     return _$result;
   }

@@ -19,7 +19,8 @@ class PasskeyEventType extends EnumClass {
   @BuiltValueEnumConst(wireName: r'login-one-tap-switch')
   static const PasskeyEventType loginOneTapSwitch = _$loginOneTapSwitch;
   @BuiltValueEnumConst(
-      wireName: r'user-append-after-cross-platform-blacklisted')
+    wireName: r'user-append-after-cross-platform-blacklisted',
+  )
   static const PasskeyEventType userAppendAfterCrossPlatformBlacklisted =
       _$userAppendAfterCrossPlatformBlacklisted;
   @BuiltValueEnumConst(wireName: r'user-append-after-login-error-blacklisted')

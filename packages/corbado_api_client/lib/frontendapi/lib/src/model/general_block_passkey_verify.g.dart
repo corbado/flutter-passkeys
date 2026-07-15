@@ -7,11 +7,11 @@ part of 'general_block_passkey_verify.dart';
 // **************************************************************************
 
 const GeneralBlockPasskeyVerifyLoginHintEnum
-    _$generalBlockPasskeyVerifyLoginHintEnum_cda =
+_$generalBlockPasskeyVerifyLoginHintEnum_cda =
     const GeneralBlockPasskeyVerifyLoginHintEnum._('cda');
 
 GeneralBlockPasskeyVerifyLoginHintEnum
-    _$generalBlockPasskeyVerifyLoginHintEnumValueOf(String name) {
+_$generalBlockPasskeyVerifyLoginHintEnumValueOf(String name) {
   switch (name) {
     case 'cda':
       return _$generalBlockPasskeyVerifyLoginHintEnum_cda;
@@ -21,13 +21,15 @@ GeneralBlockPasskeyVerifyLoginHintEnum
 }
 
 final BuiltSet<GeneralBlockPasskeyVerifyLoginHintEnum>
-    _$generalBlockPasskeyVerifyLoginHintEnumValues = new BuiltSet<
-        GeneralBlockPasskeyVerifyLoginHintEnum>(const <GeneralBlockPasskeyVerifyLoginHintEnum>[
-  _$generalBlockPasskeyVerifyLoginHintEnum_cda,
-]);
+_$generalBlockPasskeyVerifyLoginHintEnumValues =
+    new BuiltSet<GeneralBlockPasskeyVerifyLoginHintEnum>(
+      const <GeneralBlockPasskeyVerifyLoginHintEnum>[
+        _$generalBlockPasskeyVerifyLoginHintEnum_cda,
+      ],
+    );
 
 Serializer<GeneralBlockPasskeyVerifyLoginHintEnum>
-    _$generalBlockPasskeyVerifyLoginHintEnumSerializer =
+_$generalBlockPasskeyVerifyLoginHintEnumSerializer =
     new _$GeneralBlockPasskeyVerifyLoginHintEnumSerializer();
 
 class _$GeneralBlockPasskeyVerifyLoginHintEnumSerializer
@@ -41,23 +43,26 @@ class _$GeneralBlockPasskeyVerifyLoginHintEnumSerializer
 
   @override
   final Iterable<Type> types = const <Type>[
-    GeneralBlockPasskeyVerifyLoginHintEnum
+    GeneralBlockPasskeyVerifyLoginHintEnum,
   ];
   @override
   final String wireName = 'GeneralBlockPasskeyVerifyLoginHintEnum';
 
   @override
-  Object serialize(Serializers serializers,
-          GeneralBlockPasskeyVerifyLoginHintEnum object,
-          {FullType specifiedType = FullType.unspecified}) =>
-      _toWire[object.name] ?? object.name;
+  Object serialize(
+    Serializers serializers,
+    GeneralBlockPasskeyVerifyLoginHintEnum object, {
+    FullType specifiedType = FullType.unspecified,
+  }) => _toWire[object.name] ?? object.name;
 
   @override
   GeneralBlockPasskeyVerifyLoginHintEnum deserialize(
-          Serializers serializers, Object serialized,
-          {FullType specifiedType = FullType.unspecified}) =>
-      GeneralBlockPasskeyVerifyLoginHintEnum.valueOf(
-          _fromWire[serialized] ?? (serialized is String ? serialized : ''));
+    Serializers serializers,
+    Object serialized, {
+    FullType specifiedType = FullType.unspecified,
+  }) => GeneralBlockPasskeyVerifyLoginHintEnum.valueOf(
+    _fromWire[serialized] ?? (serialized is String ? serialized : ''),
+  );
 }
 
 class _$GeneralBlockPasskeyVerify extends GeneralBlockPasskeyVerify {
@@ -70,28 +75,37 @@ class _$GeneralBlockPasskeyVerify extends GeneralBlockPasskeyVerify {
   @override
   final GeneralBlockPasskeyVerifyLoginHintEnum? loginHint;
 
-  factory _$GeneralBlockPasskeyVerify(
-          [void Function(GeneralBlockPasskeyVerifyBuilder)? updates]) =>
-      (new GeneralBlockPasskeyVerifyBuilder()..update(updates))._build();
+  factory _$GeneralBlockPasskeyVerify([
+    void Function(GeneralBlockPasskeyVerifyBuilder)? updates,
+  ]) => (new GeneralBlockPasskeyVerifyBuilder()..update(updates))._build();
 
-  _$GeneralBlockPasskeyVerify._(
-      {required this.blockType,
-      required this.challenge,
-      required this.identifierValue,
-      this.loginHint})
-      : super._() {
+  _$GeneralBlockPasskeyVerify._({
+    required this.blockType,
+    required this.challenge,
+    required this.identifierValue,
+    this.loginHint,
+  }) : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        blockType, r'GeneralBlockPasskeyVerify', 'blockType');
+      blockType,
+      r'GeneralBlockPasskeyVerify',
+      'blockType',
+    );
     BuiltValueNullFieldError.checkNotNull(
-        challenge, r'GeneralBlockPasskeyVerify', 'challenge');
+      challenge,
+      r'GeneralBlockPasskeyVerify',
+      'challenge',
+    );
     BuiltValueNullFieldError.checkNotNull(
-        identifierValue, r'GeneralBlockPasskeyVerify', 'identifierValue');
+      identifierValue,
+      r'GeneralBlockPasskeyVerify',
+      'identifierValue',
+    );
   }
 
   @override
   GeneralBlockPasskeyVerify rebuild(
-          void Function(GeneralBlockPasskeyVerifyBuilder) updates) =>
-      (toBuilder()..update(updates)).build();
+    void Function(GeneralBlockPasskeyVerifyBuilder) updates,
+  ) => (toBuilder()..update(updates)).build();
 
   @override
   GeneralBlockPasskeyVerifyBuilder toBuilder() =>
@@ -183,17 +197,26 @@ class GeneralBlockPasskeyVerifyBuilder
   GeneralBlockPasskeyVerify build() => _build();
 
   _$GeneralBlockPasskeyVerify _build() {
-    final _$result = _$v ??
+    final _$result =
+        _$v ??
         new _$GeneralBlockPasskeyVerify._(
-            blockType: BuiltValueNullFieldError.checkNotNull(
-                blockType, r'GeneralBlockPasskeyVerify', 'blockType'),
-            challenge: BuiltValueNullFieldError.checkNotNull(
-                challenge, r'GeneralBlockPasskeyVerify', 'challenge'),
-            identifierValue: BuiltValueNullFieldError.checkNotNull(
-                identifierValue,
-                r'GeneralBlockPasskeyVerify',
-                'identifierValue'),
-            loginHint: loginHint);
+          blockType: BuiltValueNullFieldError.checkNotNull(
+            blockType,
+            r'GeneralBlockPasskeyVerify',
+            'blockType',
+          ),
+          challenge: BuiltValueNullFieldError.checkNotNull(
+            challenge,
+            r'GeneralBlockPasskeyVerify',
+            'challenge',
+          ),
+          identifierValue: BuiltValueNullFieldError.checkNotNull(
+            identifierValue,
+            r'GeneralBlockPasskeyVerify',
+            'identifierValue',
+          ),
+          loginHint: loginHint,
+        );
     replace(_$result);
     return _$result;
   }

@@ -80,9 +80,11 @@ class _$ProcessResponseSerializer
     ProcessResponse object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(
+      serializers,
+      object,
+      specifiedType: specifiedType,
+    ).toList();
   }
 
   void _deserializeProperties(
@@ -98,24 +100,30 @@ class _$ProcessResponseSerializer
       final value = serializedList[i + 1];
       switch (key) {
         case r'blockBody':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(BlockBody),
-          ) as BlockBody;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(BlockBody),
+                  )
+                  as BlockBody;
           result.blockBody.replace(valueDes);
           break;
         case r'common':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(ProcessCommon),
-          ) as ProcessCommon;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(ProcessCommon),
+                  )
+                  as ProcessCommon;
           result.common.replace(valueDes);
           break;
         case r'newProcess':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(ProcessStaticInfo),
-          ) as ProcessStaticInfo;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(ProcessStaticInfo),
+                  )
+                  as ProcessStaticInfo;
           result.newProcess.replace(valueDes);
           break;
         default:

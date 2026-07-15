@@ -13,21 +13,24 @@ class _$GeneralBlockPostSignupEmailVerify
   @override
   final RequestError? error;
 
-  factory _$GeneralBlockPostSignupEmailVerify(
-          [void Function(GeneralBlockPostSignupEmailVerifyBuilder)? updates]) =>
-      (new GeneralBlockPostSignupEmailVerifyBuilder()..update(updates))
-          ._build();
+  factory _$GeneralBlockPostSignupEmailVerify([
+    void Function(GeneralBlockPostSignupEmailVerifyBuilder)? updates,
+  ]) => (new GeneralBlockPostSignupEmailVerifyBuilder()..update(updates))
+      ._build();
 
   _$GeneralBlockPostSignupEmailVerify._({required this.blockType, this.error})
-      : super._() {
+    : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        blockType, r'GeneralBlockPostSignupEmailVerify', 'blockType');
+      blockType,
+      r'GeneralBlockPostSignupEmailVerify',
+      'blockType',
+    );
   }
 
   @override
   GeneralBlockPostSignupEmailVerify rebuild(
-          void Function(GeneralBlockPostSignupEmailVerifyBuilder) updates) =>
-      (toBuilder()..update(updates)).build();
+    void Function(GeneralBlockPostSignupEmailVerifyBuilder) updates,
+  ) => (toBuilder()..update(updates)).build();
 
   @override
   GeneralBlockPostSignupEmailVerifyBuilder toBuilder() =>
@@ -61,8 +64,10 @@ class _$GeneralBlockPostSignupEmailVerify
 
 class GeneralBlockPostSignupEmailVerifyBuilder
     implements
-        Builder<GeneralBlockPostSignupEmailVerify,
-            GeneralBlockPostSignupEmailVerifyBuilder> {
+        Builder<
+          GeneralBlockPostSignupEmailVerify,
+          GeneralBlockPostSignupEmailVerifyBuilder
+        > {
   _$GeneralBlockPostSignupEmailVerify? _$v;
 
   String? _blockType;
@@ -95,7 +100,8 @@ class GeneralBlockPostSignupEmailVerifyBuilder
 
   @override
   void update(
-      void Function(GeneralBlockPostSignupEmailVerifyBuilder)? updates) {
+    void Function(GeneralBlockPostSignupEmailVerifyBuilder)? updates,
+  ) {
     if (updates != null) updates(this);
   }
 
@@ -105,11 +111,16 @@ class GeneralBlockPostSignupEmailVerifyBuilder
   _$GeneralBlockPostSignupEmailVerify _build() {
     _$GeneralBlockPostSignupEmailVerify _$result;
     try {
-      _$result = _$v ??
+      _$result =
+          _$v ??
           new _$GeneralBlockPostSignupEmailVerify._(
-              blockType: BuiltValueNullFieldError.checkNotNull(
-                  blockType, r'GeneralBlockPostSignupEmailVerify', 'blockType'),
-              error: _error?.build());
+            blockType: BuiltValueNullFieldError.checkNotNull(
+              blockType,
+              r'GeneralBlockPostSignupEmailVerify',
+              'blockType',
+            ),
+            error: _error?.build(),
+          );
     } catch (_) {
       late String _$failedField;
       try {
@@ -117,7 +128,10 @@ class GeneralBlockPostSignupEmailVerifyBuilder
         _error?.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            r'GeneralBlockPostSignupEmailVerify', _$failedField, e.toString());
+          r'GeneralBlockPostSignupEmailVerify',
+          _$failedField,
+          e.toString(),
+        );
       }
       rethrow;
     }

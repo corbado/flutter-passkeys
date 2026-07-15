@@ -14,27 +14,36 @@ class _$SocialVerifyStartReq extends SocialVerifyStartReq {
   @override
   final AuthType authType;
 
-  factory _$SocialVerifyStartReq(
-          [void Function(SocialVerifyStartReqBuilder)? updates]) =>
-      (new SocialVerifyStartReqBuilder()..update(updates))._build();
+  factory _$SocialVerifyStartReq([
+    void Function(SocialVerifyStartReqBuilder)? updates,
+  ]) => (new SocialVerifyStartReqBuilder()..update(updates))._build();
 
-  _$SocialVerifyStartReq._(
-      {required this.providerType,
-      required this.redirectUrl,
-      required this.authType})
-      : super._() {
+  _$SocialVerifyStartReq._({
+    required this.providerType,
+    required this.redirectUrl,
+    required this.authType,
+  }) : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        providerType, r'SocialVerifyStartReq', 'providerType');
+      providerType,
+      r'SocialVerifyStartReq',
+      'providerType',
+    );
     BuiltValueNullFieldError.checkNotNull(
-        redirectUrl, r'SocialVerifyStartReq', 'redirectUrl');
+      redirectUrl,
+      r'SocialVerifyStartReq',
+      'redirectUrl',
+    );
     BuiltValueNullFieldError.checkNotNull(
-        authType, r'SocialVerifyStartReq', 'authType');
+      authType,
+      r'SocialVerifyStartReq',
+      'authType',
+    );
   }
 
   @override
   SocialVerifyStartReq rebuild(
-          void Function(SocialVerifyStartReqBuilder) updates) =>
-      (toBuilder()..update(updates)).build();
+    void Function(SocialVerifyStartReqBuilder) updates,
+  ) => (toBuilder()..update(updates)).build();
 
   @override
   SocialVerifyStartReqBuilder toBuilder() =>
@@ -116,14 +125,25 @@ class SocialVerifyStartReqBuilder
   SocialVerifyStartReq build() => _build();
 
   _$SocialVerifyStartReq _build() {
-    final _$result = _$v ??
+    final _$result =
+        _$v ??
         new _$SocialVerifyStartReq._(
-            providerType: BuiltValueNullFieldError.checkNotNull(
-                providerType, r'SocialVerifyStartReq', 'providerType'),
-            redirectUrl: BuiltValueNullFieldError.checkNotNull(
-                redirectUrl, r'SocialVerifyStartReq', 'redirectUrl'),
-            authType: BuiltValueNullFieldError.checkNotNull(
-                authType, r'SocialVerifyStartReq', 'authType'));
+          providerType: BuiltValueNullFieldError.checkNotNull(
+            providerType,
+            r'SocialVerifyStartReq',
+            'providerType',
+          ),
+          redirectUrl: BuiltValueNullFieldError.checkNotNull(
+            redirectUrl,
+            r'SocialVerifyStartReq',
+            'redirectUrl',
+          ),
+          authType: BuiltValueNullFieldError.checkNotNull(
+            authType,
+            r'SocialVerifyStartReq',
+            'authType',
+          ),
+        );
     replace(_$result);
     return _$result;
   }

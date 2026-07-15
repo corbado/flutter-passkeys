@@ -37,9 +37,9 @@ abstract class IdentifierVerifyFinishReq
 
   IdentifierVerifyFinishReq._();
 
-  factory IdentifierVerifyFinishReq(
-          [void updates(IdentifierVerifyFinishReqBuilder b)]) =
-      _$IdentifierVerifyFinishReq;
+  factory IdentifierVerifyFinishReq([
+    void updates(IdentifierVerifyFinishReqBuilder b),
+  ]) = _$IdentifierVerifyFinishReq;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(IdentifierVerifyFinishReqBuilder b) => b;
@@ -54,7 +54,7 @@ class _$IdentifierVerifyFinishReqSerializer
   @override
   final Iterable<Type> types = const [
     IdentifierVerifyFinishReq,
-    _$IdentifierVerifyFinishReq
+    _$IdentifierVerifyFinishReq,
   ];
 
   @override
@@ -93,9 +93,11 @@ class _$IdentifierVerifyFinishReqSerializer
     IdentifierVerifyFinishReq object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(
+      serializers,
+      object,
+      specifiedType: specifiedType,
+    ).toList();
   }
 
   void _deserializeProperties(
@@ -111,31 +113,39 @@ class _$IdentifierVerifyFinishReqSerializer
       final value = serializedList[i + 1];
       switch (key) {
         case r'code':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(String),
-          ) as String;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(String),
+                  )
+                  as String;
           result.code = valueDes;
           break;
         case r'identifierType':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(LoginIdentifierType),
-          ) as LoginIdentifierType;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(LoginIdentifierType),
+                  )
+                  as LoginIdentifierType;
           result.identifierType = valueDes;
           break;
         case r'verificationType':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(VerificationMethod),
-          ) as VerificationMethod;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(VerificationMethod),
+                  )
+                  as VerificationMethod;
           result.verificationType = valueDes;
           break;
         case r'isNewDevice':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(bool),
-          ) as bool;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(bool),
+                  )
+                  as bool;
           result.isNewDevice = valueDes;
           break;
         default:

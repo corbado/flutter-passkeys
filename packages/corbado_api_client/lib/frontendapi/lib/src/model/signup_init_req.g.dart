@@ -17,7 +17,10 @@ class _$SignupInitReq extends SignupInitReq {
 
   _$SignupInitReq._({required this.identifiers, this.fullName}) : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        identifiers, r'SignupInitReq', 'identifiers');
+      identifiers,
+      r'SignupInitReq',
+      'identifiers',
+    );
   }
 
   @override
@@ -98,9 +101,12 @@ class SignupInitReqBuilder
   _$SignupInitReq _build() {
     _$SignupInitReq _$result;
     try {
-      _$result = _$v ??
+      _$result =
+          _$v ??
           new _$SignupInitReq._(
-              identifiers: identifiers.build(), fullName: fullName);
+            identifiers: identifiers.build(),
+            fullName: fullName,
+          );
     } catch (_) {
       late String _$failedField;
       try {
@@ -108,7 +114,10 @@ class SignupInitReqBuilder
         identifiers.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            r'SignupInitReq', _$failedField, e.toString());
+          r'SignupInitReq',
+          _$failedField,
+          e.toString(),
+        );
       }
       rethrow;
     }

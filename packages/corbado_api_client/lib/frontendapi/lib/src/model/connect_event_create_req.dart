@@ -22,8 +22,9 @@ abstract class ConnectEventCreateReq
 
   ConnectEventCreateReq._();
 
-  factory ConnectEventCreateReq(
-      [void updates(ConnectEventCreateReqBuilder b)]) = _$ConnectEventCreateReq;
+  factory ConnectEventCreateReq([
+    void updates(ConnectEventCreateReqBuilder b),
+  ]) = _$ConnectEventCreateReq;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(ConnectEventCreateReqBuilder b) => b;
@@ -38,7 +39,7 @@ class _$ConnectEventCreateReqSerializer
   @override
   final Iterable<Type> types = const [
     ConnectEventCreateReq,
-    _$ConnectEventCreateReq
+    _$ConnectEventCreateReq,
   ];
 
   @override
@@ -62,9 +63,11 @@ class _$ConnectEventCreateReqSerializer
     ConnectEventCreateReq object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(
+      serializers,
+      object,
+      specifiedType: specifiedType,
+    ).toList();
   }
 
   void _deserializeProperties(
@@ -80,10 +83,12 @@ class _$ConnectEventCreateReqSerializer
       final value = serializedList[i + 1];
       switch (key) {
         case r'eventType':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(PasskeyEventType),
-          ) as PasskeyEventType;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(PasskeyEventType),
+                  )
+                  as PasskeyEventType;
           result.eventType = valueDes;
           break;
         default:

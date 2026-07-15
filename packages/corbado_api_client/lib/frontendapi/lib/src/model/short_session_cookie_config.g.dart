@@ -7,17 +7,17 @@ part of 'short_session_cookie_config.dart';
 // **************************************************************************
 
 const ShortSessionCookieConfigSameSiteEnum
-    _$shortSessionCookieConfigSameSiteEnum_lax =
+_$shortSessionCookieConfigSameSiteEnum_lax =
     const ShortSessionCookieConfigSameSiteEnum._('lax');
 const ShortSessionCookieConfigSameSiteEnum
-    _$shortSessionCookieConfigSameSiteEnum_strict =
+_$shortSessionCookieConfigSameSiteEnum_strict =
     const ShortSessionCookieConfigSameSiteEnum._('strict');
 const ShortSessionCookieConfigSameSiteEnum
-    _$shortSessionCookieConfigSameSiteEnum_none =
+_$shortSessionCookieConfigSameSiteEnum_none =
     const ShortSessionCookieConfigSameSiteEnum._('none');
 
 ShortSessionCookieConfigSameSiteEnum
-    _$shortSessionCookieConfigSameSiteEnumValueOf(String name) {
+_$shortSessionCookieConfigSameSiteEnumValueOf(String name) {
   switch (name) {
     case 'lax':
       return _$shortSessionCookieConfigSameSiteEnum_lax;
@@ -31,15 +31,17 @@ ShortSessionCookieConfigSameSiteEnum
 }
 
 final BuiltSet<ShortSessionCookieConfigSameSiteEnum>
-    _$shortSessionCookieConfigSameSiteEnumValues = new BuiltSet<
-        ShortSessionCookieConfigSameSiteEnum>(const <ShortSessionCookieConfigSameSiteEnum>[
-  _$shortSessionCookieConfigSameSiteEnum_lax,
-  _$shortSessionCookieConfigSameSiteEnum_strict,
-  _$shortSessionCookieConfigSameSiteEnum_none,
-]);
+_$shortSessionCookieConfigSameSiteEnumValues =
+    new BuiltSet<ShortSessionCookieConfigSameSiteEnum>(
+      const <ShortSessionCookieConfigSameSiteEnum>[
+        _$shortSessionCookieConfigSameSiteEnum_lax,
+        _$shortSessionCookieConfigSameSiteEnum_strict,
+        _$shortSessionCookieConfigSameSiteEnum_none,
+      ],
+    );
 
 Serializer<ShortSessionCookieConfigSameSiteEnum>
-    _$shortSessionCookieConfigSameSiteEnumSerializer =
+_$shortSessionCookieConfigSameSiteEnumSerializer =
     new _$ShortSessionCookieConfigSameSiteEnumSerializer();
 
 class _$ShortSessionCookieConfigSameSiteEnumSerializer
@@ -57,23 +59,26 @@ class _$ShortSessionCookieConfigSameSiteEnumSerializer
 
   @override
   final Iterable<Type> types = const <Type>[
-    ShortSessionCookieConfigSameSiteEnum
+    ShortSessionCookieConfigSameSiteEnum,
   ];
   @override
   final String wireName = 'ShortSessionCookieConfigSameSiteEnum';
 
   @override
   Object serialize(
-          Serializers serializers, ShortSessionCookieConfigSameSiteEnum object,
-          {FullType specifiedType = FullType.unspecified}) =>
-      _toWire[object.name] ?? object.name;
+    Serializers serializers,
+    ShortSessionCookieConfigSameSiteEnum object, {
+    FullType specifiedType = FullType.unspecified,
+  }) => _toWire[object.name] ?? object.name;
 
   @override
   ShortSessionCookieConfigSameSiteEnum deserialize(
-          Serializers serializers, Object serialized,
-          {FullType specifiedType = FullType.unspecified}) =>
-      ShortSessionCookieConfigSameSiteEnum.valueOf(
-          _fromWire[serialized] ?? (serialized is String ? serialized : ''));
+    Serializers serializers,
+    Object serialized, {
+    FullType specifiedType = FullType.unspecified,
+  }) => ShortSessionCookieConfigSameSiteEnum.valueOf(
+    _fromWire[serialized] ?? (serialized is String ? serialized : ''),
+  );
 }
 
 class _$ShortSessionCookieConfig extends ShortSessionCookieConfig {
@@ -88,33 +93,48 @@ class _$ShortSessionCookieConfig extends ShortSessionCookieConfig {
   @override
   final int lifetimeSeconds;
 
-  factory _$ShortSessionCookieConfig(
-          [void Function(ShortSessionCookieConfigBuilder)? updates]) =>
-      (new ShortSessionCookieConfigBuilder()..update(updates))._build();
+  factory _$ShortSessionCookieConfig([
+    void Function(ShortSessionCookieConfigBuilder)? updates,
+  ]) => (new ShortSessionCookieConfigBuilder()..update(updates))._build();
 
-  _$ShortSessionCookieConfig._(
-      {required this.domain,
-      required this.secure,
-      required this.sameSite,
-      required this.path,
-      required this.lifetimeSeconds})
-      : super._() {
+  _$ShortSessionCookieConfig._({
+    required this.domain,
+    required this.secure,
+    required this.sameSite,
+    required this.path,
+    required this.lifetimeSeconds,
+  }) : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        domain, r'ShortSessionCookieConfig', 'domain');
+      domain,
+      r'ShortSessionCookieConfig',
+      'domain',
+    );
     BuiltValueNullFieldError.checkNotNull(
-        secure, r'ShortSessionCookieConfig', 'secure');
+      secure,
+      r'ShortSessionCookieConfig',
+      'secure',
+    );
     BuiltValueNullFieldError.checkNotNull(
-        sameSite, r'ShortSessionCookieConfig', 'sameSite');
+      sameSite,
+      r'ShortSessionCookieConfig',
+      'sameSite',
+    );
     BuiltValueNullFieldError.checkNotNull(
-        path, r'ShortSessionCookieConfig', 'path');
+      path,
+      r'ShortSessionCookieConfig',
+      'path',
+    );
     BuiltValueNullFieldError.checkNotNull(
-        lifetimeSeconds, r'ShortSessionCookieConfig', 'lifetimeSeconds');
+      lifetimeSeconds,
+      r'ShortSessionCookieConfig',
+      'lifetimeSeconds',
+    );
   }
 
   @override
   ShortSessionCookieConfig rebuild(
-          void Function(ShortSessionCookieConfigBuilder) updates) =>
-      (toBuilder()..update(updates)).build();
+    void Function(ShortSessionCookieConfigBuilder) updates,
+  ) => (toBuilder()..update(updates)).build();
 
   @override
   ShortSessionCookieConfigBuilder toBuilder() =>
@@ -214,20 +234,35 @@ class ShortSessionCookieConfigBuilder
   ShortSessionCookieConfig build() => _build();
 
   _$ShortSessionCookieConfig _build() {
-    final _$result = _$v ??
+    final _$result =
+        _$v ??
         new _$ShortSessionCookieConfig._(
-            domain: BuiltValueNullFieldError.checkNotNull(
-                domain, r'ShortSessionCookieConfig', 'domain'),
-            secure: BuiltValueNullFieldError.checkNotNull(
-                secure, r'ShortSessionCookieConfig', 'secure'),
-            sameSite: BuiltValueNullFieldError.checkNotNull(
-                sameSite, r'ShortSessionCookieConfig', 'sameSite'),
-            path: BuiltValueNullFieldError.checkNotNull(
-                path, r'ShortSessionCookieConfig', 'path'),
-            lifetimeSeconds: BuiltValueNullFieldError.checkNotNull(
-                lifetimeSeconds,
-                r'ShortSessionCookieConfig',
-                'lifetimeSeconds'));
+          domain: BuiltValueNullFieldError.checkNotNull(
+            domain,
+            r'ShortSessionCookieConfig',
+            'domain',
+          ),
+          secure: BuiltValueNullFieldError.checkNotNull(
+            secure,
+            r'ShortSessionCookieConfig',
+            'secure',
+          ),
+          sameSite: BuiltValueNullFieldError.checkNotNull(
+            sameSite,
+            r'ShortSessionCookieConfig',
+            'sameSite',
+          ),
+          path: BuiltValueNullFieldError.checkNotNull(
+            path,
+            r'ShortSessionCookieConfig',
+            'path',
+          ),
+          lifetimeSeconds: BuiltValueNullFieldError.checkNotNull(
+            lifetimeSeconds,
+            r'ShortSessionCookieConfig',
+            'lifetimeSeconds',
+          ),
+        );
     replace(_$result);
     return _$result;
   }

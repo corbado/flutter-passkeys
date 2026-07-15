@@ -12,23 +12,30 @@ class _$ConnectLoginFinishReq extends ConnectLoginFinishReq {
   @override
   final String assertionResponse;
 
-  factory _$ConnectLoginFinishReq(
-          [void Function(ConnectLoginFinishReqBuilder)? updates]) =>
-      (new ConnectLoginFinishReqBuilder()..update(updates))._build();
+  factory _$ConnectLoginFinishReq([
+    void Function(ConnectLoginFinishReqBuilder)? updates,
+  ]) => (new ConnectLoginFinishReqBuilder()..update(updates))._build();
 
-  _$ConnectLoginFinishReq._(
-      {required this.isConditionalUI, required this.assertionResponse})
-      : super._() {
+  _$ConnectLoginFinishReq._({
+    required this.isConditionalUI,
+    required this.assertionResponse,
+  }) : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        isConditionalUI, r'ConnectLoginFinishReq', 'isConditionalUI');
+      isConditionalUI,
+      r'ConnectLoginFinishReq',
+      'isConditionalUI',
+    );
     BuiltValueNullFieldError.checkNotNull(
-        assertionResponse, r'ConnectLoginFinishReq', 'assertionResponse');
+      assertionResponse,
+      r'ConnectLoginFinishReq',
+      'assertionResponse',
+    );
   }
 
   @override
   ConnectLoginFinishReq rebuild(
-          void Function(ConnectLoginFinishReqBuilder) updates) =>
-      (toBuilder()..update(updates)).build();
+    void Function(ConnectLoginFinishReqBuilder) updates,
+  ) => (toBuilder()..update(updates)).build();
 
   @override
   ConnectLoginFinishReqBuilder toBuilder() =>
@@ -103,14 +110,20 @@ class ConnectLoginFinishReqBuilder
   ConnectLoginFinishReq build() => _build();
 
   _$ConnectLoginFinishReq _build() {
-    final _$result = _$v ??
+    final _$result =
+        _$v ??
         new _$ConnectLoginFinishReq._(
-            isConditionalUI: BuiltValueNullFieldError.checkNotNull(
-                isConditionalUI, r'ConnectLoginFinishReq', 'isConditionalUI'),
-            assertionResponse: BuiltValueNullFieldError.checkNotNull(
-                assertionResponse,
-                r'ConnectLoginFinishReq',
-                'assertionResponse'));
+          isConditionalUI: BuiltValueNullFieldError.checkNotNull(
+            isConditionalUI,
+            r'ConnectLoginFinishReq',
+            'isConditionalUI',
+          ),
+          assertionResponse: BuiltValueNullFieldError.checkNotNull(
+            assertionResponse,
+            r'ConnectLoginFinishReq',
+            'assertionResponse',
+          ),
+        );
     replace(_$result);
     return _$result;
   }

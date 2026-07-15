@@ -17,8 +17,10 @@ part 'general_block_post_signup_email_verify.g.dart';
 @BuiltValue()
 abstract class GeneralBlockPostSignupEmailVerify
     implements
-        Built<GeneralBlockPostSignupEmailVerify,
-            GeneralBlockPostSignupEmailVerifyBuilder> {
+        Built<
+          GeneralBlockPostSignupEmailVerify,
+          GeneralBlockPostSignupEmailVerifyBuilder
+        > {
   @BuiltValueField(wireName: r'blockType')
   String get blockType;
 
@@ -27,9 +29,9 @@ abstract class GeneralBlockPostSignupEmailVerify
 
   GeneralBlockPostSignupEmailVerify._();
 
-  factory GeneralBlockPostSignupEmailVerify(
-          [void updates(GeneralBlockPostSignupEmailVerifyBuilder b)]) =
-      _$GeneralBlockPostSignupEmailVerify;
+  factory GeneralBlockPostSignupEmailVerify([
+    void updates(GeneralBlockPostSignupEmailVerifyBuilder b),
+  ]) = _$GeneralBlockPostSignupEmailVerify;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(GeneralBlockPostSignupEmailVerifyBuilder b) => b;
@@ -44,7 +46,7 @@ class _$GeneralBlockPostSignupEmailVerifySerializer
   @override
   final Iterable<Type> types = const [
     GeneralBlockPostSignupEmailVerify,
-    _$GeneralBlockPostSignupEmailVerify
+    _$GeneralBlockPostSignupEmailVerify,
   ];
 
   @override
@@ -75,9 +77,11 @@ class _$GeneralBlockPostSignupEmailVerifySerializer
     GeneralBlockPostSignupEmailVerify object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(
+      serializers,
+      object,
+      specifiedType: specifiedType,
+    ).toList();
   }
 
   void _deserializeProperties(
@@ -93,17 +97,21 @@ class _$GeneralBlockPostSignupEmailVerifySerializer
       final value = serializedList[i + 1];
       switch (key) {
         case r'blockType':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(String),
-          ) as String;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(String),
+                  )
+                  as String;
           result.blockType = valueDes;
           break;
         case r'error':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(RequestError),
-          ) as RequestError;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(RequestError),
+                  )
+                  as RequestError;
           result.error.replace(valueDes);
           break;
         default:

@@ -38,7 +38,7 @@ class _$ConnectManageListRspSerializer
   @override
   final Iterable<Type> types = const [
     ConnectManageListRsp,
-    _$ConnectManageListRsp
+    _$ConnectManageListRsp,
   ];
 
   @override
@@ -62,9 +62,11 @@ class _$ConnectManageListRspSerializer
     ConnectManageListRsp object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(
+      serializers,
+      object,
+      specifiedType: specifiedType,
+    ).toList();
   }
 
   void _deserializeProperties(
@@ -80,10 +82,14 @@ class _$ConnectManageListRspSerializer
       final value = serializedList[i + 1];
       switch (key) {
         case r'passkeys':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(BuiltList, [FullType(Passkey)]),
-          ) as BuiltList<Passkey>;
+          final valueDes =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(BuiltList, [
+                      FullType(Passkey),
+                    ]),
+                  )
+                  as BuiltList<Passkey>;
           result.passkeys.replace(valueDes);
           break;
         default:

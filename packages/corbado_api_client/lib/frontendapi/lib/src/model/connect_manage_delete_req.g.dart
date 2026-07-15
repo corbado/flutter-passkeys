@@ -12,23 +12,30 @@ class _$ConnectManageDeleteReq extends ConnectManageDeleteReq {
   @override
   final String credentialID;
 
-  factory _$ConnectManageDeleteReq(
-          [void Function(ConnectManageDeleteReqBuilder)? updates]) =>
-      (new ConnectManageDeleteReqBuilder()..update(updates))._build();
+  factory _$ConnectManageDeleteReq([
+    void Function(ConnectManageDeleteReqBuilder)? updates,
+  ]) => (new ConnectManageDeleteReqBuilder()..update(updates))._build();
 
-  _$ConnectManageDeleteReq._(
-      {required this.connectToken, required this.credentialID})
-      : super._() {
+  _$ConnectManageDeleteReq._({
+    required this.connectToken,
+    required this.credentialID,
+  }) : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        connectToken, r'ConnectManageDeleteReq', 'connectToken');
+      connectToken,
+      r'ConnectManageDeleteReq',
+      'connectToken',
+    );
     BuiltValueNullFieldError.checkNotNull(
-        credentialID, r'ConnectManageDeleteReq', 'credentialID');
+      credentialID,
+      r'ConnectManageDeleteReq',
+      'credentialID',
+    );
   }
 
   @override
   ConnectManageDeleteReq rebuild(
-          void Function(ConnectManageDeleteReqBuilder) updates) =>
-      (toBuilder()..update(updates)).build();
+    void Function(ConnectManageDeleteReqBuilder) updates,
+  ) => (toBuilder()..update(updates)).build();
 
   @override
   ConnectManageDeleteReqBuilder toBuilder() =>
@@ -101,12 +108,20 @@ class ConnectManageDeleteReqBuilder
   ConnectManageDeleteReq build() => _build();
 
   _$ConnectManageDeleteReq _build() {
-    final _$result = _$v ??
+    final _$result =
+        _$v ??
         new _$ConnectManageDeleteReq._(
-            connectToken: BuiltValueNullFieldError.checkNotNull(
-                connectToken, r'ConnectManageDeleteReq', 'connectToken'),
-            credentialID: BuiltValueNullFieldError.checkNotNull(
-                credentialID, r'ConnectManageDeleteReq', 'credentialID'));
+          connectToken: BuiltValueNullFieldError.checkNotNull(
+            connectToken,
+            r'ConnectManageDeleteReq',
+            'connectToken',
+          ),
+          credentialID: BuiltValueNullFieldError.checkNotNull(
+            credentialID,
+            r'ConnectManageDeleteReq',
+            'credentialID',
+          ),
+        );
     replace(_$result);
     return _$result;
   }

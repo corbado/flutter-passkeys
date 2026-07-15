@@ -15,7 +15,10 @@ class _$MeRefreshRsp extends MeRefreshRsp {
 
   _$MeRefreshRsp._({required this.shortSession}) : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        shortSession, r'MeRefreshRsp', 'shortSession');
+      shortSession,
+      r'MeRefreshRsp',
+      'shortSession',
+    );
   }
 
   @override
@@ -41,9 +44,9 @@ class _$MeRefreshRsp extends MeRefreshRsp {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper(r'MeRefreshRsp')
-          ..add('shortSession', shortSession))
-        .toString();
+    return (newBuiltValueToStringHelper(
+      r'MeRefreshRsp',
+    )..add('shortSession', shortSession)).toString();
   }
 }
 
@@ -83,10 +86,15 @@ class MeRefreshRspBuilder
   MeRefreshRsp build() => _build();
 
   _$MeRefreshRsp _build() {
-    final _$result = _$v ??
+    final _$result =
+        _$v ??
         new _$MeRefreshRsp._(
-            shortSession: BuiltValueNullFieldError.checkNotNull(
-                shortSession, r'MeRefreshRsp', 'shortSession'));
+          shortSession: BuiltValueNullFieldError.checkNotNull(
+            shortSession,
+            r'MeRefreshRsp',
+            'shortSession',
+          ),
+        );
     replace(_$result);
     return _$result;
   }

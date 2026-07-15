@@ -56,15 +56,20 @@ class _$AuthTypeSerializer implements PrimitiveSerializer<AuthType> {
   final String wireName = 'AuthType';
 
   @override
-  Object serialize(Serializers serializers, AuthType object,
-          {FullType specifiedType = FullType.unspecified}) =>
-      _toWire[object.name] ?? object.name;
+  Object serialize(
+    Serializers serializers,
+    AuthType object, {
+    FullType specifiedType = FullType.unspecified,
+  }) => _toWire[object.name] ?? object.name;
 
   @override
-  AuthType deserialize(Serializers serializers, Object serialized,
-          {FullType specifiedType = FullType.unspecified}) =>
-      AuthType.valueOf(
-          _fromWire[serialized] ?? (serialized is String ? serialized : ''));
+  AuthType deserialize(
+    Serializers serializers,
+    Object serialized, {
+    FullType specifiedType = FullType.unspecified,
+  }) => AuthType.valueOf(
+    _fromWire[serialized] ?? (serialized is String ? serialized : ''),
+  );
 }
 
 // ignore_for_file: deprecated_member_use_from_same_package,type=lint
