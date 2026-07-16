@@ -9,7 +9,7 @@ import 'package:patrol/patrol.dart';
 
 const _testMode = bool.fromEnvironment('TEST_MODE');
 
-const _skipBiometricCeremony = !bool.fromEnvironment('RUN_CEREMONIES');
+const _runCeremonies = bool.fromEnvironment('RUN_CEREMONIES');
 
 List<Configuration> get _signUpConfigurations =>
     Platform.isIOS ? SIGNUP_IOS_CONFIGURATIONS : SIGNUP_ANDROID_CONFIGURATIONS;
@@ -96,6 +96,10 @@ void main() {
     });
   });
 
+  if (!_runCeremonies) {
+    return;
+  }
+
   group('passkey ceremonies', () {
     patrolTest(
       'default sign up creates a passkey and opens the profile',
@@ -105,7 +109,6 @@ void main() {
         await _registerPasskey($, 'test+signup@example.com');
         await $(const Key('sign-out-button')).tap();
       },
-      skip: _skipBiometricCeremony,
     );
 
     patrolTest(
@@ -123,7 +126,6 @@ void main() {
 
         await $(const Key('welcome-text')).waitUntilVisible();
       },
-      skip: _skipBiometricCeremony,
     );
 
     patrolTest(
@@ -141,7 +143,6 @@ void main() {
           const Key('error-text'),
         ).waitUntilVisible(timeout: const Duration(seconds: 20));
       },
-      skip: _skipBiometricCeremony,
     );
 
     patrolTest(
@@ -161,7 +162,6 @@ void main() {
 
         await $(find.textContaining('cannot be registered')).waitUntilVisible();
       },
-      skip: _skipBiometricCeremony,
     );
 
     patrolTest(
@@ -181,7 +181,6 @@ void main() {
           find.textContaining('No credentials available'),
         ).waitUntilVisible();
       },
-      skip: _skipBiometricCeremony,
     );
 
     patrolTest(
@@ -202,7 +201,6 @@ void main() {
           find.textContaining('No credentials available'),
         ).waitUntilVisible();
       },
-      skip: _skipBiometricCeremony,
     );
 
     patrolTest(
@@ -224,7 +222,6 @@ void main() {
           const Key('error-text-login'),
         ).waitUntilVisible(timeout: const Duration(seconds: 20));
       },
-      skip: _skipBiometricCeremony,
     );
   });
 }
