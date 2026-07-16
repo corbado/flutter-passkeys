@@ -47,11 +47,6 @@ android {
         versionName flutterVersionName
         // Required by patrol for the instrumentation test runner.
         testInstrumentationRunner "pl.leancode.patrol.PatrolJUnitRunner"
-        testInstrumentationRunnerArguments clearPackageData: "true"
-    }
-
-    testOptions {
-        execution "ANDROIDX_TEST_ORCHESTRATOR"
     }
 
     // this signing config only exists to allow everybody to easily run the example
@@ -79,5 +74,4 @@ flutter {
 }
 
 dependencies {
-    androidTestUtil "androidx.test:orchestrator:1.5.1"
 }
