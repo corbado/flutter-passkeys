@@ -115,10 +115,10 @@ class AuthenticateRequestType {
     return {
       'challenge': challenge,
       'rpId': relyingPartyId,
-      if (timeout != null) 'timeout': timeout,
+      'timeout': ?timeout,
       if (allowCredentials != null && allowCredentials!.isNotEmpty)
         'allowCredentials': allowCredentials!.map((e) => e.toJson()).toList(),
-      if (userVerification != null) 'userVerification': userVerification,
+      'userVerification': ?userVerification,
       if (prf != null)
         'extensions': {
           'prf': {
