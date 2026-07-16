@@ -24,18 +24,19 @@ dependencies:
   riverpod: ^2.3.10
 
 dev_dependencies:
-  appium_flutter_server: ^0.0.20
-  flutter_driver:
-    sdk: flutter
   flutter_test:
     sdk: flutter
   integration_test:
     sdk: flutter
+  patrol: ^4.7.1
   very_good_analysis: ^5.0.0
 
 flutter:
   uses-material-design: true
 
-pubspec_overrides:
-  passkeys-darwin:
-    url: ../passkeys_darwin
+patrol:
+  app_name: Passkeys Example
+  android:
+    package_name: com.corbado.passkeys.pub
+  ios:
+    bundle_id: com.corbado.passkeys.pub

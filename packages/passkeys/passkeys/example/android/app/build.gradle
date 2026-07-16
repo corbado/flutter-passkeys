@@ -45,6 +45,13 @@ android {
         targetSdk 34
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+        // Required by patrol for the instrumentation test runner.
+        testInstrumentationRunner "pl.leancode.patrol.PatrolJUnitRunner"
+        testInstrumentationRunnerArguments clearPackageData: "true"
+    }
+
+    testOptions {
+        execution "ANDROIDX_TEST_ORCHESTRATOR"
     }
 
     // this signing config only exists to allow everybody to easily run the example
@@ -72,4 +79,7 @@ flutter {
 }
 
 dependencies {
+    androidTestImplementation "androidx.test.ext:junit:1.1.5"
+    androidTestImplementation "androidx.test:runner:1.5.2"
+    androidTestUtil "androidx.test:orchestrator:1.4.2"
 }

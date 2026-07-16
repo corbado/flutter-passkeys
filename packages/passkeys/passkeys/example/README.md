@@ -49,108 +49,70 @@ After setting your developer account, rebuild and run the app.
 
 # How to run automatic tests of the example
 
+The end to end tests are written with [patrol](https://pub.dev/packages/patrol) and live in
+`integration_test/`.
+
 ## Requirements
 
 Before running the tests, ensure you have the following setup:
 
-- **Appium** (installed globally with Flutter Plugin)
-- **iPhone 16 Pro Simulator** (configured in Xcode)
-- **Android Emulator with API 29** (Nexus 5 device setup in Android Studio)
-- **Google Account** (credentials available in 1Password)
+- **patrol_cli** installed globally:
+  ```sh
+  dart pub global activate patrol_cli
+  ```
+- **iPhone Simulator** (configured in Xcode) and/or an **Android Emulator** with Google Play
+  Services.
+- **Google Account** (credentials available in 1Password).
 - **Biometric Authentication**:
-    - Set up a PIN code on the Android device
-    - Register a fingerprint on the Android device
+    - Set up a PIN code on the device.
+    - Register a fingerprint / enroll a biometric on the device.
 
 ## Step-by-Step Guide
 
-### 1. Set Up the iOS Simulator
+### 1. Set up the devices
 
-1. Open **Xcode**.
-2. Navigate to **Xcode > Settings > Platforms** and ensure the latest iOS version is installed.
-3. Open the **Simulator** app.
-4. Select **iPhone 16 Pro** as the active simulator.
-5. Ensure the simulator is running before proceeding.
+1. Start an iOS Simulator from Xcode and/or an Android Emulator from Android Studio.
+2. Log in with the Google Account (credentials available in 1Password).
+3. Set up a **PIN code** and register a **fingerprint** under the device security settings.
 
-### 2. Set Up the Android Emulator
+### 2. Add the iOS UI test target (one time, iOS only)
 
-1. Open **Android Studio**.
-2. Navigate to **AVD Manager** (Android Virtual Device Manager).
-3. Create a new device with the following specifications:
-    - **Device:** Nexus 5
-    - **API Level:** 29
-    - **Google Play Services:** Enabled
-4. Start the emulator and complete the setup.
-5. Log in with the Google Account (credentials available in 1Password).
-6. Set up a **PIN code**.
-7. Register a **fingerprint** under device security settings. (You can use adb commands to simulate fingerprint authentication.)
-```shell
-    adb emu finger touch 1
+patrol drives iOS through a native UI test target that must be created in Xcode:
+
+1. Open `ios/Runner.xcworkspace` in Xcode.
+2. Add a new **UI Testing Bundle** target named `RunnerUITests`.
+3. Follow the current
+   [patrol iOS setup guide](https://patrol.leancode.co/documentation/native/setup-ios) to wire up
+   the target.
+
+The Android instrumentation setup (the `androidTest` runner and the `build.gradle` changes) is
+already included in this example.
+
+### 3. Run the tests
+
+From this directory, with a device running:
+
+```sh
+patrol test --target integration_test/passkeys_test.dart
 ```
 
-### 3. Build and Install the Example App
+To target a specific device, pass `--device <device-id>` (list them with `flutter devices`).
 
-1. Ensure all dependencies are installed:
-   ```sh
-   flutter pub get
-   ```
-2. Get Device ID for Android & iOS:
-   ```sh
-   flutter devices
-   ```
-3. Build and install the app on both devices:
-   ```sh
-   flutter build apk --debug --dart-define=TEST_MODE=true
-   flutter install --device-id=<device-id>
-   ```
-   ```sh
-   flutter build ios --simulator --dart-define=TEST_MODE=true
-   flutter install --device-id=<device-id>
-   ```
+### 4. Notes on the passkey ceremonies
 
-### 4. Install and run Appium
+The tests in `integration_test/passkeys_test.dart` cover the deterministic Flutter UI flows.
+The passkey registration and authentication ceremonies trigger the platform credential manager and
+a biometric prompt. Confirming those prompts and matching a fingerprint / Face ID cannot be
+expressed in patrol alone and requires device level biometric automation, for example:
 
-1. Install Appium globally:
-   ```sh
-   npm install -g appium
-   ```
+```sh
+adb emu finger touch 1
+```
 
-2. Install the drivers for Flutter
-    ```sh
-    appium driver install --source=npm appium-flutter-driver
-    appium driver install uiautomator2
-    appium driver install --source=npm appium-flutter-integration-driver
-    ```
+on Android, or an enrolled biometric on the iOS simulator combined with `$.native` taps on the
+system dialog. Layer these steps on top of the provided tests when running on a configured device.
 
-3. Start Appium on port 4567
-    ```sh
-    appium -p 4567
-    ```
-   
-### 5. Run the Automated Tests
-
-Make sure the emulators are running before executing the tests.
-
-1. Install required Node.js dependencies:
-   ```sh
-   cd tests
-   npm install
-   ```
-2. Run tests for Android:
-   ```sh
-   npm run test:android -- --deviceName=<device-id>
-   ```
-3. Run tests for iOS:
-   ```sh
-   npm run test:ios -- --deviceName=<device-id>
-   ```
-
-### 6. Notes
-
-- Ensure emulators are running before executing tests.
-- Restart the emulators if needed and re-run the tests.
-- You will have to rebuild and reinstall the app if you make changes to the code and want to run the tests again.
-
-### 7. Clean Up (Optional)
+### 5. Clean Up (Optional)
 
 - To clean the project:
   ```sh
@@ -160,7 +122,3 @@ Make sure the emulators are running before executing the tests.
   ```sh
   flutter pub get
   ```
-
----
-
-Follow these steps carefully to ensure a successful automated testing process.
