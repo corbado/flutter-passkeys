@@ -356,7 +356,7 @@ namespace passkeys_windows
           if (attestation_result->dwVersion >= WEBAUTHN_CREDENTIAL_ATTESTATION_VERSION_2)
           {
             const WEBAUTHN_EXTENSIONS &result_extensions = attestation_result->Extensions;
-            for (DWORD i = 0; i < result_extensions.cExtensions; i++)
+            for (DWORD i = 0; result_extensions.pExtensions && i < result_extensions.cExtensions; i++)
             {
               const WEBAUTHN_EXTENSION &ext = result_extensions.pExtensions[i];
               if (ext.pwszExtensionIdentifier &&
@@ -364,6 +364,7 @@ namespace passkeys_windows
                   ext.pvExtension && ext.cbExtension == sizeof(BOOL))
               {
                 prf_enabled = (*reinterpret_cast<BOOL *>(ext.pvExtension)) != FALSE;
+                break;
               }
             }
           }
@@ -499,6 +500,13 @@ namespace passkeys_windows
         if (prf)
         {
           prf_salt = DecodeBase64Url(*prf);
+          // pbFirst is required by the WebAuthn API; an empty salt would make
+          // it null, so reject it with a clear error instead.
+          if (prf_salt.empty())
+          {
+            result(FlutterError("invalid-prf-salt", "PRF salt must not be empty"));
+            return;
+          }
           hmac_salt.cbFirst = static_cast<DWORD>(prf_salt.size());
           hmac_salt.pbFirst = prf_salt.data();
           hmac_salt_values.pGlobalHmacSalt = &hmac_salt;
@@ -548,7 +556,8 @@ namespace passkeys_windows
         if (prf &&
             assertion->dwVersion >= WEBAUTHN_ASSERTION_VERSION_3 &&
             assertion->pHmacSecret &&
-            assertion->pHmacSecret->cbFirst > 0)
+            assertion->pHmacSecret->cbFirst > 0 &&
+            assertion->pHmacSecret->pbFirst)
         {
           response.set_prf_result_first(EncodeBase64Url(
               assertion->pHmacSecret->pbFirst, assertion->pHmacSecret->cbFirst));

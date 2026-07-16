@@ -47,6 +47,7 @@ class PasskeysWindows extends PasskeysPlatform {
           ? null
           : {
               'prf': {
+                'enabled': true,
                 'results': {'first': authenticateResponse.prfResultFirst},
               },
             },
