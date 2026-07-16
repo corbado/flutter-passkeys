@@ -60,4 +60,26 @@ abstract class PasskeysPlatform extends PlatformInterface {
   /// Retrieves the availability information for passkeys, user-verifying
   /// platform authenticators, and conditional mediation whenever possible
   Future<AvailabilityType> getAvailability();
+
+  /// Signals to the platform that the credential in [request] is no longer
+  /// recognized by the relying party. Platforms that support the WebAuthn
+  /// Signal API can use this hint to remove the credential from the credential
+  /// picker and autofill suggestions.
+  ///
+  /// This is a best-effort hint; platforms without support treat it as a
+  /// no-op.
+  Future<void> signalUnknownCredential(
+    SignalUnknownCredentialRequestType request,
+  ) async {}
+
+  /// Signals to the platform the complete set of credentials that the relying
+  /// party still accepts for a user. Platforms that support the WebAuthn Signal
+  /// API can use this to prune any other credentials from the credential
+  /// picker.
+  ///
+  /// This is a best-effort hint; platforms without support treat it as a
+  /// no-op.
+  Future<void> signalAllAcceptedCredentials(
+    SignalAllAcceptedCredentialsRequestType request,
+  ) async {}
 }

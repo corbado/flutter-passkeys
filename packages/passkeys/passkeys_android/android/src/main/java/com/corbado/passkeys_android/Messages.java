@@ -1104,6 +1104,10 @@ public class Messages {
 
     void cancelCurrentAuthenticatorOperation(@NonNull Result<Void> result);
 
+    void signalUnknownCredential(@NonNull String relyingPartyId, @NonNull String credentialId, @NonNull Result<Void> result);
+
+    void signalAllAcceptedCredentials(@NonNull String relyingPartyId, @NonNull String userId, @NonNull List<String> allAcceptedCredentialIds, @NonNull Result<Void> result);
+
     /** The codec used by PasskeysApi. */
     static @NonNull MessageCodec<Object> getCodec() {
       return PasskeysApiCodec.INSTANCE;
@@ -1258,6 +1262,67 @@ public class Messages {
                     };
 
                 api.cancelCurrentAuthenticatorOperation(resultCallback);
+              });
+        } else {
+          channel.setMessageHandler(null);
+        }
+      }
+      {
+        BasicMessageChannel<Object> channel =
+            new BasicMessageChannel<>(
+                binaryMessenger, "dev.flutter.pigeon.passkeys_android.PasskeysApi.signalUnknownCredential", getCodec());
+        if (api != null) {
+          channel.setMessageHandler(
+              (message, reply) -> {
+                ArrayList<Object> wrapped = new ArrayList<Object>();
+                ArrayList<Object> args = (ArrayList<Object>) message;
+                String relyingPartyIdArg = (String) args.get(0);
+                String credentialIdArg = (String) args.get(1);
+                Result<Void> resultCallback =
+                    new Result<Void>() {
+                      public void success(Void result) {
+                        wrapped.add(0, null);
+                        reply.reply(wrapped);
+                      }
+
+                      public void error(Throwable error) {
+                        ArrayList<Object> wrappedError = wrapError(error);
+                        reply.reply(wrappedError);
+                      }
+                    };
+
+                api.signalUnknownCredential(relyingPartyIdArg, credentialIdArg, resultCallback);
+              });
+        } else {
+          channel.setMessageHandler(null);
+        }
+      }
+      {
+        BasicMessageChannel<Object> channel =
+            new BasicMessageChannel<>(
+                binaryMessenger, "dev.flutter.pigeon.passkeys_android.PasskeysApi.signalAllAcceptedCredentials", getCodec());
+        if (api != null) {
+          channel.setMessageHandler(
+              (message, reply) -> {
+                ArrayList<Object> wrapped = new ArrayList<Object>();
+                ArrayList<Object> args = (ArrayList<Object>) message;
+                String relyingPartyIdArg = (String) args.get(0);
+                String userIdArg = (String) args.get(1);
+                List<String> allAcceptedCredentialIdsArg = (List<String>) args.get(2);
+                Result<Void> resultCallback =
+                    new Result<Void>() {
+                      public void success(Void result) {
+                        wrapped.add(0, null);
+                        reply.reply(wrapped);
+                      }
+
+                      public void error(Throwable error) {
+                        ArrayList<Object> wrappedError = wrapError(error);
+                        reply.reply(wrappedError);
+                      }
+                    };
+
+                api.signalAllAcceptedCredentials(relyingPartyIdArg, userIdArg, allAcceptedCredentialIdsArg, resultCallback);
               });
         } else {
           channel.setMessageHandler(null);

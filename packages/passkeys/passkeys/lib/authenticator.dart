@@ -161,6 +161,81 @@ class PasskeyAuthenticator implements PasskeyAuthenticatorInterface {
     }
   }
 
+  /// Signals to the platform that a credential is no longer recognized by the
+  /// relying party.
+  ///
+  /// Call this after the server rejects an assertion because the credential was
+  /// deleted server-side. Where supported this removes the stale credential
+  /// from the passkey picker and autofill suggestions.
+  ///
+  /// This is a best-effort hint. It is only acted upon on Android (with a
+  /// Credential Manager provider that supports the Signal API), iOS 26.2 and
+  /// later, macOS 26.2 and later, and browsers that expose
+  /// `PublicKeyCredential.signalUnknownCredential`. On every other platform or
+  /// OS version, including older iOS and macOS releases, the call is a no-op.
+  @override
+  Future<void> signalUnknownCredential(
+    SignalUnknownCredentialRequestType request,
+  ) async {
+    try {
+      _isValidCredentialID(request.credentialId);
+
+      await _platform.signalUnknownCredential(request);
+    } on PlatformException catch (e, stackTrace) {
+      _mapSignalException(e, stackTrace);
+    }
+  }
+
+  /// Signals to the platform the complete set of credentials that the relying
+  /// party still accepts for a user.
+  ///
+  /// Where supported any credentials not contained in
+  /// [SignalAllAcceptedCredentialsRequestType.allAcceptedCredentialIds] are
+  /// pruned from the passkey picker.
+  ///
+  /// This is a best-effort hint. It is only acted upon on Android (with a
+  /// Credential Manager provider that supports the Signal API), iOS 26.2 and
+  /// later, macOS 26.2 and later, and browsers that expose
+  /// `PublicKeyCredential.signalAllAcceptedCredentials`. On every other
+  /// platform or OS version, including older iOS and macOS releases, the call
+  /// is a no-op.
+  @override
+  Future<void> signalAllAcceptedCredentials(
+    SignalAllAcceptedCredentialsRequestType request,
+  ) async {
+    try {
+      _isValidUserID(request.userId);
+      for (final credentialId in request.allAcceptedCredentialIds) {
+        _isValidCredentialID(credentialId);
+      }
+
+      await _platform.signalAllAcceptedCredentials(request);
+    } on PlatformException catch (e, stackTrace) {
+      _mapSignalException(e, stackTrace);
+    }
+  }
+
+  Never _mapSignalException(PlatformException e, StackTrace stackTrace) {
+    if (debugMode) {
+      _doctor.recordException(e);
+    }
+
+    switch (e.code) {
+      case 'cancelled':
+        throw PasskeyAuthCancelledException();
+      case 'domain-not-associated':
+        throw DomainNotAssociatedException(e.message);
+      case 'deviceNotSupported':
+        throw DeviceNotSupportedException();
+      default:
+        if (e.code.startsWith('android-unhandled') ||
+            e.code.startsWith('ios-unhandled')) {
+          throw UnhandledAuthenticatorException(e.code, e.message, e.details);
+        }
+        Error.throwWithStackTrace(e, stackTrace);
+    }
+  }
+
   /// Returns platform-specific information about the availability of passkeys.
   ///
   /// This function returns an instance of [GetAvailability], which provides

@@ -1,6 +1,7 @@
 package com.corbado.passkeys_android;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.os.Build;
@@ -21,6 +22,7 @@ import io.flutter.plugin.common.MethodChannel;
 public class FlutterPasskeysPlugin extends FlutterActivity implements FlutterPlugin, ActivityAware {
     private static final String TAG = "FlutterPasskeysPlugin";
     private BinaryMessenger binaryMessenger;
+    private Context applicationContext;
     private Activity activity;
 
     public FlutterPasskeysPlugin() {
@@ -29,11 +31,18 @@ public class FlutterPasskeysPlugin extends FlutterActivity implements FlutterPlu
     @Override
     public void onAttachedToEngine(@NonNull FlutterPluginBinding binding) {
         binaryMessenger = binding.getBinaryMessenger();
+        applicationContext = binding.getApplicationContext();
     }
 
     @Override
     public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
         binaryMessenger = null;
+        applicationContext = null;
+    }
+
+    public Context requireApplicationContext() {
+        if (applicationContext == null) throw new IllegalStateException("Application context not found");
+        return applicationContext;
     }
 
     @Override

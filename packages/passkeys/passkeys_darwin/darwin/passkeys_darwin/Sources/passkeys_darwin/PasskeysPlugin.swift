@@ -210,7 +210,73 @@ public class PasskeysPlugin: NSObject, FlutterPlugin, PasskeysApi {
         inFlightController?.cancel()
         completion(.success(()))
     }
-    
+
+    func signalUnknownCredential(relyingPartyId: String, credentialId: String, completion: @escaping (Result<Void, Error>) -> Void) {
+        guard let credentialData = Data.fromBase64Url(credentialId) else {
+            completion(.success(()))
+            return
+        }
+
+        if #available(iOS 26.2, macOS 26.2, *) {
+            Task {
+                do {
+                    try await ASCredentialDataManager().reportUnknownPublicKeyCredential(
+                        relyingPartyIdentifier: relyingPartyId,
+                        credentialID: credentialData
+                    )
+                    DispatchQueue.main.async { completion(.success(())) }
+                } catch {
+                    DispatchQueue.main.async {
+                        completion(.failure(FlutterError(fromNSError: error as NSError)))
+                    }
+                }
+            }
+        } else {
+            // The Signal API is unavailable on this OS version; the hint is
+            // best-effort so treat it as a no-op.
+            completion(.success(()))
+        }
+    }
+
+    func signalAllAcceptedCredentials(relyingPartyId: String, userId: String, allAcceptedCredentialIds: [String], completion: @escaping (Result<Void, Error>) -> Void) {
+        guard let userHandle = Data.fromBase64Url(userId) else {
+            completion(.success(()))
+            return
+        }
+
+        var credentialIDs = [Data]()
+        for credentialId in allAcceptedCredentialIds {
+            guard let credentialData = Data.fromBase64Url(credentialId) else {
+                // Never signal a partial list, that would prune credentials
+                // that are actually still accepted. Treat it as a no-op.
+                completion(.success(()))
+                return
+            }
+            credentialIDs.append(credentialData)
+        }
+
+        if #available(iOS 26.2, macOS 26.2, *) {
+            Task {
+                do {
+                    try await ASCredentialDataManager().reportAllAcceptedPublicKeyCredentials(
+                        relyingPartyIdentifier: relyingPartyId,
+                        userHandle: userHandle,
+                        acceptedCredentialIDs: credentialIDs
+                    )
+                    DispatchQueue.main.async { completion(.success(())) }
+                } catch {
+                    DispatchQueue.main.async {
+                        completion(.failure(FlutterError(fromNSError: error as NSError)))
+                    }
+                }
+            }
+        } else {
+            // The Signal API is unavailable on this OS version; the hint is
+            // best-effort so treat it as a no-op.
+            completion(.success(()))
+        }
+    }
+
     private func parseCredentials(credentials: [CredentialType]) -> [ASAuthorizationPlatformPublicKeyCredentialDescriptor] {
         return credentials.compactMap { credential in
             guard let credentialData = Data.fromBase64Url(credential.id) else {

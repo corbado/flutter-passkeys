@@ -7,6 +7,29 @@ import 'package:passkeys_platform_interface/types/types.dart';
 class _FakePasskeysApi extends pigeon.PasskeysApi {
   String? registerSalt;
   String? authenticateSalt;
+  List<Object?>? signalUnknownCredentialArgs;
+  List<Object?>? signalAllAcceptedCredentialsArgs;
+
+  @override
+  Future<void> signalUnknownCredential(
+    String relyingPartyId,
+    String credentialId,
+  ) async {
+    signalUnknownCredentialArgs = [relyingPartyId, credentialId];
+  }
+
+  @override
+  Future<void> signalAllAcceptedCredentials(
+    String relyingPartyId,
+    String userId,
+    List<String?> allAcceptedCredentialIds,
+  ) async {
+    signalAllAcceptedCredentialsArgs = [
+      relyingPartyId,
+      userId,
+      allAcceptedCredentialIds,
+    ];
+  }
 
   @override
   Future<pigeon.RegisterResponse> register(
@@ -127,6 +150,39 @@ void main() {
         response.clientExtensionResults?['prf'],
         isA<Map<dynamic, dynamic>>(),
       );
+    });
+
+    test('signalUnknownCredential forwards its arguments', () async {
+      final api = _FakePasskeysApi();
+      final platform = PasskeysAndroid(api: api);
+
+      await platform.signalUnknownCredential(
+        const SignalUnknownCredentialRequestType(
+          relyingPartyId: 'example.com',
+          credentialId: 'credential-id',
+        ),
+      );
+
+      expect(api.signalUnknownCredentialArgs, ['example.com', 'credential-id']);
+    });
+
+    test('signalAllAcceptedCredentials forwards its arguments', () async {
+      final api = _FakePasskeysApi();
+      final platform = PasskeysAndroid(api: api);
+
+      await platform.signalAllAcceptedCredentials(
+        const SignalAllAcceptedCredentialsRequestType(
+          relyingPartyId: 'example.com',
+          userId: 'user-id',
+          allAcceptedCredentialIds: ['cred-1', 'cred-2'],
+        ),
+      );
+
+      expect(api.signalAllAcceptedCredentialsArgs, [
+        'example.com',
+        'user-id',
+        ['cred-1', 'cred-2'],
+      ]);
     });
   });
 }

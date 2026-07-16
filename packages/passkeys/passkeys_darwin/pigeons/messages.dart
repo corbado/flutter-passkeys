@@ -5,7 +5,7 @@ import 'package:pigeon/pigeon.dart';
 @ConfigurePigeon(
   PigeonOptions(
     dartOut: 'lib/messages.g.dart',
-    swiftOut: 'darwin/Classes/messages.swift',
+    swiftOut: 'darwin/passkeys_darwin/Sources/passkeys_darwin/messages.swift',
   ),
 )
 class RelyingParty {
@@ -147,4 +147,14 @@ abstract class PasskeysApi {
 
   @async
   void cancelCurrentAuthenticatorOperation();
+
+  @async
+  void signalUnknownCredential(String relyingPartyId, String credentialId);
+
+  @async
+  void signalAllAcceptedCredentials(
+    String relyingPartyId,
+    String userId,
+    List<String> allAcceptedCredentialIds,
+  );
 }

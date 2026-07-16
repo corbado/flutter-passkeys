@@ -115,6 +115,27 @@ class PasskeysAndroid extends PasskeysPlatform {
     return _api.cancelCurrentAuthenticatorOperation();
   }
 
+  @override
+  Future<void> signalUnknownCredential(
+    SignalUnknownCredentialRequestType request,
+  ) {
+    return _api.signalUnknownCredential(
+      request.relyingPartyId,
+      request.credentialId,
+    );
+  }
+
+  @override
+  Future<void> signalAllAcceptedCredentials(
+    SignalAllAcceptedCredentialsRequestType request,
+  ) {
+    return _api.signalAllAcceptedCredentials(
+      request.relyingPartyId,
+      request.userId,
+      request.allAcceptedCredentialIds,
+    );
+  }
+
   // In case of android we link passkey support to the availability of the
   // biometric authentication
   @override
