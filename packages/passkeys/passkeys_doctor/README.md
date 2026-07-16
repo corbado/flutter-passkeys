@@ -6,7 +6,7 @@ This is an internal package and it is used inside of the passkeys package
 
 ## Usage
 
-The doctor is unabled by default in the example.
+The doctor is enabled by default in the example.
 
 Here is what the doctor checks for
 
@@ -33,7 +33,7 @@ Here is what the doctor checks for
 
 ### 3. Error Handling
 
-The doctor keeps track of errors and exceptions happening in the passkeys flows , give a description of it and suggestions on how to fix them.
+The doctor keeps track of errors and exceptions happening in the passkeys flows, gives a description of them and suggestions on how to fix them.
 
 
 > **Note:** The doctor can export the results from the exception and the checks through a result Stream that can be used in the UI as done in the example
