@@ -1,17 +1,17 @@
 #!/usr/bin/env bash
-# Runs the patrol integration tests on a connected device / emulator.
+# Runs the patrol integration tests for the passkeys example on a connected
+# device / emulator.
 #
 # Pass "true" as the first argument to also run the passkey ceremonies, which
-# need a screen-lock PIN and a host side biometric injector (see the example
-# README). They are off by default because they hang on a bare emulator that
-# has no credential provider.
+# need a screen-lock PIN and a host side biometric injector (see the README).
+# They are off by default because they hang on a device without a credential
+# provider. The ceremony setup below is Android emulator specific.
 set -euo pipefail
 
 run_ceremonies="${1:-false}"
 
-adb wait-for-device
-
 if [ "$run_ceremonies" = "true" ]; then
+  adb wait-for-device
   # A screen-lock PIN lets the credential manager use a device credential; the
   # test enters it when the lock screen is shown.
   adb shell locksettings set-pin 1234
@@ -21,16 +21,7 @@ if [ "$run_ceremonies" = "true" ]; then
   trap 'kill $!' EXIT
 fi
 
-# The Android test orchestrator occasionally drops a test process on CI
-# emulators, so retry the run a couple of times before giving up.
-for attempt in 1 2 3; do
-  if patrol test \
-    --target integration_test/passkeys_test.dart \
-    --dart-define=TEST_MODE=true \
-    --dart-define="RUN_CEREMONIES=${run_ceremonies}"; then
-    exit 0
-  fi
-  echo "patrol test attempt ${attempt} failed"
-done
-
-exit 1
+patrol test \
+  --target integration_test/passkeys_test.dart \
+  --dart-define=TEST_MODE=true \
+  --dart-define="RUN_CEREMONIES=${run_ceremonies}"

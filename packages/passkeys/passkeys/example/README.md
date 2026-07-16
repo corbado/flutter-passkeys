@@ -90,14 +90,21 @@ already included in this example.
 
 ### 3. Run the tests
 
-From this directory, with a device running. `TEST_MODE=true` enables the on-screen test
-configuration selector that the tests drive:
+With a device running, run the melos script from the repository root:
 
 ```sh
-patrol test --target integration_test/passkeys_test.dart --dart-define=TEST_MODE=true
+melos run integration-test-passkeys
 ```
 
-To target a specific device, pass `--device <device-id>` (list them with `flutter devices`).
+It activates `patrol_cli` and runs the tests with `TEST_MODE=true`, which enables the on-screen
+test configuration selector the tests drive.
+
+Note on the Flutter version: patrol cannot build on Flutter 3.44 (the Android build fails with
+`compileFlutterBuildDebug not found`), while the workspace needs Dart 3.10 or newer to resolve. Use
+a Flutter version in between, such as `3.41.x` (Dart 3.11), to run these tests locally.
+
+To target a specific device, run the underlying command directly with `--device <device-id>` (list
+devices with `flutter devices`).
 
 ### 4. What the tests cover
 
@@ -115,34 +122,16 @@ To target a specific device, pass `--device <device-id>` (list them with `flutte
 The passkey registration and authentication ceremonies end in the platform credential manager and a
 device credential / biometric prompt. patrol confirms the credential manager sheet and enters a
 screen-lock PIN itself, but a biometric match (fingerprint / Face ID) still has to be injected from
-the host. Two things make the ceremonies runnable without any change to patrol:
-
-1. A screen-lock PIN so the credential manager can use a device credential:
-   ```sh
-   adb shell locksettings set-pin 1234
-   ```
-2. A host side fingerprint injector that runs while the ceremony is on screen:
-   ```sh
-   ( while true; do adb emu finger touch 1; sleep 2; done ) &
-   ```
-
-The ceremonies are skipped unless enabled with `--dart-define=RUN_CEREMONIES=true`:
+the host. To run them on an Android emulator that has a credential provider configured:
 
 ```sh
-adb shell locksettings set-pin 1234
-( while true; do adb emu finger touch 1; sleep 2; done ) &
-patrol test \
-  --target integration_test/passkeys_test.dart \
-  --dart-define=TEST_MODE=true \
-  --dart-define=RUN_CEREMONIES=true
+melos run integration-test-passkeys-ceremonies
 ```
 
-The `.github/workflows/integration-test.yml` CI job runs the deterministic tests on an Android
-emulator on every push and pull request. The ceremonies are **not** run there, because a bare
-emulator has no credential provider (a signed-in account) and the passkey prompt would hang. Run
-them by triggering that workflow manually (`workflow_dispatch`) with the **Run the passkey
-ceremonies** option enabled, on a device that has a credential provider configured. The job is
-non-gating and bounded by a timeout.
+That script sets a screen-lock PIN (`adb shell locksettings set-pin 1234`), injects a fingerprint
+match in a loop (`adb emu finger touch 1`) while the ceremony is on screen, and runs the tests with
+`--dart-define=RUN_CEREMONIES=true`. The ceremonies are only defined when that flag is set, so the
+default run in step 3 covers just the deterministic flows.
 
 ### 6. Clean Up (Optional)
 
