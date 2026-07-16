@@ -1,0 +1,69 @@
+name: Integration Tests
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  android-patrol:
+    name: Android patrol E2E
+    runs-on: ubuntu-latest
+    # This device end to end suite depends on emulator setup (a configured
+    # credential provider / signed-in account) that is still being stabilised
+    # on CI hardware, so it does not gate the pipeline yet.
+    continue-on-error: true
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.44.5"
+
+      - name: Set up melos
+        uses: bluefireteam/melos-action@v3
+
+      - name: Activate patrol_cli
+        run: |
+          dart pub global activate patrol_cli
+          echo "$HOME/.pub-cache/bin" >> "$GITHUB_PATH"
+
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' \
+            | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+
+      - name: Run patrol tests on an emulator
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 34
+          arch: x86_64
+          target: google_apis
+          profile: pixel_6
+          working-directory: packages/passkeys/passkeys/example
+          script: |
+            adb wait-for-device
+            # A screen-lock PIN lets the credential manager use a device
+            # credential; the test enters it when the lock screen is shown.
+            adb shell locksettings set-pin 1234
+            # Continuously inject a fingerprint match so any biometric prompt
+            # shown during the passkey ceremonies is accepted from the host.
+            ( while true; do adb emu finger touch 1; sleep 2; done ) &
+            finger_loop_pid=$!
+            trap "kill ${finger_loop_pid}" EXIT
+            patrol test \
+              --target integration_test/passkeys_test.dart \
+              --dart-define=TEST_MODE=true \
+              --dart-define=RUN_CEREMONIES=true

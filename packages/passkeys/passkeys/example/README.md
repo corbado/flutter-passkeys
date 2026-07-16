@@ -110,22 +110,38 @@ To target a specific device, pass `--device <device-id>` (list them with `flutte
 - **Login without a passkey** — shows the expected error.
 - **Passkey ceremonies** — `default sign up` and `default login`.
 
-### 5. Enabling the biometric ceremonies
+### 5. Running the passkey ceremonies
 
-The passkey registration and authentication ceremonies trigger the platform credential manager and
-a biometric prompt. Confirming that prompt and matching a fingerprint / Face ID cannot be expressed
-in patrol alone and requires device level biometric automation, for example:
+The passkey registration and authentication ceremonies end in the platform credential manager and a
+device credential / biometric prompt. patrol confirms the credential manager sheet and enters a
+screen-lock PIN itself, but a biometric match (fingerprint / Face ID) still has to be injected from
+the host. Two things make the ceremonies runnable without any change to patrol:
+
+1. A screen-lock PIN so the credential manager can use a device credential:
+   ```sh
+   adb shell locksettings set-pin 1234
+   ```
+2. A host side fingerprint injector that runs while the ceremony is on screen:
+   ```sh
+   ( while true; do adb emu finger touch 1; sleep 2; done ) &
+   ```
+
+The ceremonies are skipped unless enabled with `--dart-define=RUN_CEREMONIES=true`:
 
 ```sh
-adb emu finger touch 1
+adb shell locksettings set-pin 1234
+( while true; do adb emu finger touch 1; sleep 2; done ) &
+patrol test \
+  --target integration_test/passkeys_test.dart \
+  --dart-define=TEST_MODE=true \
+  --dart-define=RUN_CEREMONIES=true
 ```
 
-on Android, or a simulated biometric match on the iOS simulator. The ceremony tests are therefore
-skipped by default (`_skipBiometricCeremony` in the test file). Wire the host side biometric step
-into `_completePlatformAuthenticator` and set `_skipBiometricCeremony = false` to enable them on a
-configured device.
+This is exactly what the `.github/workflows/integration-test.yml` CI job does on an Android
+emulator. That job is currently non-gating, because a full ceremony also needs a configured
+credential provider (a signed-in account) on the device.
 
-### 5. Clean Up (Optional)
+### 6. Clean Up (Optional)
 
 - To clean the project:
   ```sh

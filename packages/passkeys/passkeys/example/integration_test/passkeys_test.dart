@@ -28,9 +28,11 @@ import 'package:patrol/patrol.dart';
 /// configuration tests are skipped without it.
 const _testMode = bool.fromEnvironment('TEST_MODE');
 
-/// See the file level comment: the biometric prompt cannot be matched from
-/// patrol, so ceremonies that must succeed are skipped by default.
-const _skipBiometricCeremony = true;
+/// Whether to run the passkey ceremonies (see the file level comment). They are
+/// skipped unless the app is built with `--dart-define=RUN_CEREMONIES=true`,
+/// which is done by the `integration-test` CI job on a device that is set up
+/// with a screen-lock PIN and a host side biometric injector.
+const _skipBiometricCeremony = !bool.fromEnvironment('RUN_CEREMONIES');
 
 List<Configuration> get _signUpConfigurations =>
     Platform.isIOS ? SIGNUP_IOS_CONFIGURATIONS : SIGNUP_ANDROID_CONFIGURATIONS;
@@ -155,14 +157,50 @@ void main() {
   });
 }
 
-/// Confirms the platform credential manager sheet and the biometric prompt that
-/// end every passkey ceremony.
+/// Confirms the platform credential manager sheet and the device credential /
+/// biometric prompt that end every passkey ceremony.
 ///
-/// patrol can interact with the credential manager sheet, but the biometric
-/// match itself must be injected from the host (see [_skipBiometricCeremony]).
-/// Add that host side step here, for example `adb emu finger touch 1` on an
-/// Android emulator, to enable the biometric tests above on a configured
-/// device.
+/// This relies only on patrol's existing native automation plus device level
+/// setup provided by the `integration-test` CI job:
+///  * the credential manager sheet is confirmed here with a native tap;
+///  * a device credential (PIN) is entered if the lock screen appears;
+///  * a biometric prompt is matched by the host, which injects
+///    `adb emu finger touch 1` in a loop while the ceremony runs.
 Future<void> _completePlatformAuthenticator(PatrolIntegrationTester $) async {
-  await $.pump();
+  // The confirmation button label varies by OS version and by whether this is
+  // a registration or an authentication, so try the known labels in turn.
+  const confirmationLabels = [
+    'Continue',
+    'Create passkey',
+    'Create',
+    'Use a passkey',
+    'Sign in',
+    'OK',
+  ];
+  for (final label in confirmationLabels) {
+    try {
+      await $.platformAutomator.tap(
+        Selector(text: label),
+        timeout: const Duration(seconds: 2),
+      );
+      break;
+    } on PatrolActionException {
+      // This label is not on screen; try the next one.
+    }
+  }
+
+  // Enter the screen-lock PIN if the device credential screen is shown. The CI
+  // emulator is configured with the PIN 1234.
+  try {
+    await $.platformAutomator.mobile.enterTextByIndex(
+      '1234',
+      index: 0,
+      timeout: const Duration(seconds: 6),
+    );
+  } on PatrolActionException {
+    // No PIN entry was requested (e.g. biometric only); ignore.
+  }
+
+  // Give the host side biometric injector time to match the prompt.
+  await $.pump(const Duration(seconds: 6));
 }
