@@ -222,13 +222,13 @@ if (kIsWeb) {
 ## Using the PRF extension
 
 The WebAuthn [PRF extension](https://w3c.github.io/webauthn/#prf-extension) (backed by the CTAP2
-`hmac-secret` extension) lets you derive a stable, high-entropy secret from a passkey. Because the
-secret never leaves the authenticator and is reproducible on every authentication, it is a good
-building block for client side encryption (for example to seed a symmetric key that encrypts a
-user's data).
+`hmac-secret` extension) lets you derive a stable, high-entropy secret from a passkey. The
+underlying key material never leaves the authenticator, and the derived secret is reproducible on
+every authentication, so it is a good building block for client-side encryption (for example to seed
+a symmetric key that encrypts a user's data).
 
-You pass a base64url encoded `prf` salt into the register and authenticate requests, and read the
-derived secret back from `clientExtensionResults`.
+You pass a base64url-encoded `prf` salt into the registration and authentication requests, and read
+the derived secret back from `clientExtensionResults`.
 
 ### Platform support
 
@@ -278,13 +278,13 @@ final response = await authenticator.authenticate(
   ),
 );
 
-// The derived secret is returned as a base64url encoded string.
+// The derived secret is returned as a base64url-encoded string.
 final results =
     (response.clientExtensionResults?['prf'] as Map?)?['results'] as Map?;
 final secret = results?['first'] as String?;
 ```
 
-Use `secret` (after base64url decoding it) as key material for your encryption, but never send it to
+Use `secret` (after base64url-decoding it) as key material for your encryption, but never send it to
 your relying party server.
 
 ## Troubleshooting
