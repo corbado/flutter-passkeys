@@ -15,6 +15,7 @@ on Vercel).
 
 - sign up and login users with passkeys on iOS, Android and Web
 - login users with conditional UI
+- derive secrets from a passkey through the WebAuthn PRF extension (see [Using the PRF extension](#using-the-prf-extension))
 
 ## Getting started
 
@@ -217,6 +218,74 @@ if (kIsWeb) {
 ```
 
 </details>
+
+## Using the PRF extension
+
+The WebAuthn [PRF extension](https://w3c.github.io/webauthn/#prf-extension) (backed by the CTAP2
+`hmac-secret` extension) lets you derive a stable, high-entropy secret from a passkey. Because the
+secret never leaves the authenticator and is reproducible on every authentication, it is a good
+building block for client side encryption (for example to seed a symmetric key that encrypts a
+user's data).
+
+You pass a base64url encoded `prf` salt into the register and authenticate requests, and read the
+derived secret back from `clientExtensionResults`.
+
+### Platform support
+
+| Android            | iOS                   | macOS                  | Web                | Windows | Linux |
+| ------------------ | --------------------- | ---------------------- | ------------------ | ------- | ----- |
+| :white_check_mark: | :white_check_mark: (18+) | :white_check_mark: (15+) | :white_check_mark: | :x:     | :x:   |
+
+The salt is typically coordinated with your relying party server (it is part of the WebAuthn
+`extensions.prf.eval.first` input). Registration usually only reports whether PRF is `enabled`,
+while the derived secret (`results.first`) is returned during authentication.
+
+### Registration
+
+```dart
+final authenticator = PasskeyAuthenticator();
+
+final response = await authenticator.register(
+  RegisterRequestType(
+    challenge: challenge,
+    relyingParty: relyingParty,
+    user: user,
+    excludeCredentials: const [],
+    // Base64URL encoded salt, without padding.
+    prf: prfSalt,
+  ),
+);
+
+// During registration platforms typically only tell you whether PRF is
+// available for the newly created credential.
+final prf = response.clientExtensionResults?['prf'] as Map?;
+final prfEnabled = prf?['enabled'] == true;
+```
+
+### Authentication
+
+```dart
+final authenticator = PasskeyAuthenticator();
+
+final response = await authenticator.authenticate(
+  AuthenticateRequestType(
+    relyingPartyId: relyingPartyId,
+    challenge: challenge,
+    mediation: MediationType.Optional,
+    preferImmediatelyAvailableCredentials: false,
+    // Use the same salt you used during registration to obtain the same secret.
+    prf: prfSalt,
+  ),
+);
+
+// The derived secret is returned as a base64url encoded string.
+final results =
+    (response.clientExtensionResults?['prf'] as Map?)?['results'] as Map?;
+final secret = results?['first'] as String?;
+```
+
+Use `secret` (after base64url decoding it) as key material for your encryption, but never send it to
+your relying party server.
 
 ## Troubleshooting
 
