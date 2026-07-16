@@ -61,27 +61,11 @@ void main() {
         await _pumpApp($);
 
         for (final configuration in _signUpConfigurations) {
-          await $(const Key('test-selector')).tap();
-          await $(configuration.name).tap();
+          await _selectConfiguration($, configuration.name);
           expect($(configuration.name), findsWidgets);
         }
       },
       skip: !_testMode,
-    );
-
-    patrolTest(
-      'default sign up creates a passkey and opens the profile',
-      ($) async {
-        await _pumpApp($);
-
-        await $(const Key('email-field')).enterText('test+signup@example.com');
-        await $(const Key('sign-up-button')).tap();
-        await _completePlatformAuthenticator($);
-
-        expect($(const Key('welcome-text')), findsOneWidget);
-        await $(const Key('sign-out-button')).tap();
-      },
-      skip: _skipBiometricCeremony,
     );
   });
 
@@ -110,15 +94,26 @@ void main() {
       expect($(const Key('error-text-login')), findsOneWidget);
       expect($(find.textContaining('does not exist')), findsOneWidget);
     });
+  });
+
+  group('passkey ceremonies', () {
+    patrolTest(
+      'default sign up creates a passkey and opens the profile',
+      ($) async {
+        await _pumpApp($);
+
+        await _registerPasskey($, 'test+signup@example.com');
+        await $(const Key('sign-out-button')).tap();
+      },
+      skip: _skipBiometricCeremony,
+    );
 
     patrolTest(
       'default login authenticates an existing passkey',
       ($) async {
         await _pumpApp($);
 
-        await $(const Key('email-field')).enterText('test+login@example.com');
-        await $(const Key('sign-up-button')).tap();
-        await _completePlatformAuthenticator($);
+        await _registerPasskey($, 'test+login@example.com');
         await $(const Key('sign-out-button')).tap();
 
         await $(const Key('go-to-login-button')).tap();
@@ -126,11 +121,127 @@ void main() {
         await $(const Key('sign-in-button')).tap();
         await _completePlatformAuthenticator($);
 
-        expect($(const Key('welcome-text')), findsOneWidget);
+        await $(const Key('welcome-text')).waitUntilVisible();
+      },
+      skip: _skipBiometricCeremony,
+    );
+
+    patrolTest(
+      'sign up with a timeout configuration shows an error',
+      ($) async {
+        await _pumpApp($);
+
+        await _selectConfiguration($, '5s Timeout');
+        await $(
+          const Key('email-field'),
+        ).enterText('test+signup-timeout@example.com');
+        await $(const Key('sign-up-button')).tap();
+
+        await $(
+          const Key('error-text'),
+        ).waitUntilVisible(timeout: const Duration(seconds: 20));
+      },
+      skip: _skipBiometricCeremony,
+    );
+
+    patrolTest(
+      'sign up excluding an existing credential shows an error',
+      ($) async {
+        await _pumpApp($);
+
+        await _registerPasskey($, 'test+exclude-existing@example.com');
+        await $(const Key('sign-out-button')).tap();
+
+        await _selectConfiguration($, 'ExcludeCredentials');
+        await $(
+          const Key('email-field'),
+        ).enterText('test+exclude-new@example.com');
+        await $(const Key('sign-up-button')).tap();
+        await _completePlatformAuthenticator($);
+
+        await $(find.textContaining('cannot be registered')).waitUntilVisible();
+      },
+      skip: _skipBiometricCeremony,
+    );
+
+    patrolTest(
+      'login with allowCredentials shows no credentials available',
+      ($) async {
+        await _pumpApp($);
+
+        await _registerPasskey($, 'test+allow@example.com');
+        await $(const Key('sign-out-button')).tap();
+
+        await $(const Key('go-to-login-button')).tap();
+        await _selectConfiguration($, 'AllowCredentials');
+        await $(const Key('email-field')).enterText('test+allow@example.com');
+        await $(const Key('sign-in-button')).tap();
+
+        await $(
+          find.textContaining('No credentials available'),
+        ).waitUntilVisible();
+      },
+      skip: _skipBiometricCeremony,
+    );
+
+    patrolTest(
+      'login with preferImmediatelyAvailableCredentials shows no credentials '
+      'available',
+      ($) async {
+        await _pumpApp($);
+
+        await _registerPasskey($, 'test+prefer@example.com');
+        await $(const Key('sign-out-button')).tap();
+
+        await $(const Key('go-to-login-button')).tap();
+        await _selectConfiguration($, 'PreferImmediatelyAvailableCredentials');
+        await $(const Key('email-field')).enterText('test+prefer@example.com');
+        await $(const Key('sign-in-button')).tap();
+
+        await $(
+          find.textContaining('No credentials available'),
+        ).waitUntilVisible();
+      },
+      skip: _skipBiometricCeremony,
+    );
+
+    patrolTest(
+      'login with a timeout configuration shows an error',
+      ($) async {
+        await _pumpApp($);
+
+        await _registerPasskey($, 'test+login-timeout@example.com');
+        await $(const Key('sign-out-button')).tap();
+
+        await $(const Key('go-to-login-button')).tap();
+        await _selectConfiguration($, '5s Timeout');
+        await $(
+          const Key('email-field'),
+        ).enterText('test+login-timeout@example.com');
+        await $(const Key('sign-in-button')).tap();
+
+        await $(
+          const Key('error-text-login'),
+        ).waitUntilVisible(timeout: const Duration(seconds: 20));
       },
       skip: _skipBiometricCeremony,
     );
   });
+}
+
+Future<void> _selectConfiguration(
+  PatrolIntegrationTester $,
+  String name,
+) async {
+  await $(const Key('test-selector')).tap();
+  await $(name).tap();
+}
+
+Future<void> _registerPasskey(PatrolIntegrationTester $, String email) async {
+  await $(const Key('email-field')).enterText(email);
+  await $(const Key('sign-up-button')).tap();
+  await _completePlatformAuthenticator($);
+  await $(const Key('welcome-text')).waitUntilVisible();
 }
 
 Future<void> _completePlatformAuthenticator(PatrolIntegrationTester $) async {
