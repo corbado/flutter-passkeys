@@ -36,209 +36,184 @@ var PasskeyAuthenticator = (function (exports) {
         return e.name = "SuppressedError", e.error = error, e.suppressed = suppressed, e;
     };
 
-    // src/webauthn-json/base64url.ts
     function base64urlToBuffer(baseurl64String) {
-      const padding = "==".slice(0, (4 - baseurl64String.length % 4) % 4);
-      const base64String = baseurl64String.replace(/-/g, "+").replace(/_/g, "/") + padding;
-      const str = atob(base64String);
-      const buffer = new ArrayBuffer(str.length);
-      const byteView = new Uint8Array(buffer);
-      for (let i = 0; i < str.length; i++) {
-        byteView[i] = str.charCodeAt(i);
-      }
-      return buffer;
+        // Base64url to Base64
+        const padding = "==".slice(0, (4 - (baseurl64String.length % 4)) % 4);
+        const base64String = baseurl64String.replace(/-/g, "+").replace(/_/g, "/") + padding;
+        // Base64 to binary string
+        const str = atob(base64String);
+        // Binary string to buffer
+        const buffer = new ArrayBuffer(str.length);
+        const byteView = new Uint8Array(buffer);
+        for (let i = 0; i < str.length; i++) {
+            byteView[i] = str.charCodeAt(i);
+        }
+        return buffer;
     }
     function bufferToBase64url(buffer) {
-      const byteView = new Uint8Array(buffer);
-      let str = "";
-      for (const charCode of byteView) {
-        str += String.fromCharCode(charCode);
-      }
-      const base64String = btoa(str);
-      const base64urlString = base64String.replace(/\+/g, "-").replace(
-        /\//g,
-        "_"
-      ).replace(/=/g, "");
-      return base64urlString;
-    }
-
-    // src/webauthn-json/convert.ts
-    var copyValue = "copy";
-    var convertValue = "convert";
-    function convert(conversionFn, schema2, input) {
-      if (schema2 === copyValue) {
-        return input;
-      }
-      if (schema2 === convertValue) {
-        return conversionFn(input);
-      }
-      if (schema2 instanceof Array) {
-        return input.map((v) => convert(conversionFn, schema2[0], v));
-      }
-      if (schema2 instanceof Object) {
-        const output = {};
-        for (const [key, schemaField] of Object.entries(schema2)) {
-          if (schemaField.derive) {
-            const v = schemaField.derive(input);
-            if (v !== void 0) {
-              input[key] = v;
-            }
-          }
-          if (!(key in input)) {
-            if (schemaField.required) {
-              throw new Error(`Missing key: ${key}`);
-            }
-            continue;
-          }
-          if (input[key] == null) {
-            output[key] = null;
-            continue;
-          }
-          output[key] = convert(
-            conversionFn,
-            schemaField.schema,
-            input[key]
-          );
+        // Buffer to binary string
+        const byteView = new Uint8Array(buffer);
+        let str = "";
+        for (const charCode of byteView) {
+            str += String.fromCharCode(charCode);
         }
-        return output;
-      }
-    }
-    function derived(schema2, derive) {
-      return {
-        required: true,
-        schema: schema2,
-        derive
-      };
-    }
-    function required(schema2) {
-      return {
-        required: true,
-        schema: schema2
-      };
-    }
-    function optional(schema2) {
-      return {
-        required: false,
-        schema: schema2
-      };
+        // Binary string to base64
+        const base64String = btoa(str);
+        // Base64 to base64url
+        // We assume that the base64url string is well-formed.
+        const base64urlString = base64String.replace(/\+/g, "-").replace(/\//g, "_").replace(/=/g, "");
+        return base64urlString;
     }
 
-    // src/webauthn-json/basic/schema.ts
-    var publicKeyCredentialDescriptorSchema = {
-      type: required(copyValue),
-      id: required(convertValue),
-      transports: optional(copyValue)
+    // We export these values in order so that they can be used to deduplicate
+    // schema definitions in minified JS code.
+    // TODO: Parcel isn't deduplicating these values.
+    const copyValue = "copy";
+    const convertValue = "convert";
+    function convert(conversionFn, schema, input) {
+        if (schema === copyValue) {
+            return input;
+        }
+        if (schema === convertValue) {
+            return conversionFn(input);
+        }
+        if (schema instanceof Array) {
+            return input.map((v) => convert(conversionFn, schema[0], v));
+        }
+        if (schema instanceof Object) {
+            const output = {};
+            for (const [key, schemaField] of Object.entries(schema)) {
+                if (schemaField.derive) {
+                    const v = schemaField.derive(input);
+                    if (v !== undefined) {
+                        input[key] = v;
+                    }
+                }
+                if (!(key in input)) {
+                    if (schemaField.required) {
+                        throw new Error(`Missing key: ${key}`);
+                    }
+                    continue;
+                }
+                // Fields can be null (rather than missing or `undefined`), e.g. the
+                // `userHandle` field of the `AuthenticatorAssertionResponse`:
+                // https://www.w3.org/TR/webauthn/#iface-authenticatorassertionresponse
+                if (input[key] == null) {
+                    output[key] = null;
+                    continue;
+                }
+                output[key] = convert(conversionFn, schemaField.schema, input[key]);
+            }
+            return output;
+        }
+    }
+    function derived(schema, derive) {
+        return {
+            required: true,
+            schema,
+            derive,
+        };
+    }
+    function required(schema) {
+        return {
+            required: true,
+            schema,
+        };
+    }
+    function optional(schema) {
+        return {
+            required: false,
+            schema,
+        };
+    }
+
+    // Shared by `create()` and `get()`.
+    const publicKeyCredentialDescriptorSchema = {
+        type: required(copyValue),
+        id: required(convertValue),
+        transports: optional(copyValue),
     };
-    var simplifiedExtensionsSchema = {
-      appid: optional(copyValue),
-      appidExclude: optional(copyValue),
-      credProps: optional(copyValue)
+    const simplifiedExtensionsSchema = {
+        appid: optional(copyValue),
+        appidExclude: optional(copyValue),
+        credProps: optional(copyValue),
     };
-    var simplifiedClientExtensionResultsSchema = {
-      appid: optional(copyValue),
-      appidExclude: optional(copyValue),
-      credProps: optional(copyValue)
+    const simplifiedClientExtensionResultsSchema = {
+        appid: optional(copyValue),
+        appidExclude: optional(copyValue),
+        credProps: optional(copyValue),
     };
-    var credentialCreationOptions = {
-      publicKey: required({
-        rp: required(copyValue),
-        user: required({
-          id: required(convertValue),
-          name: required(copyValue),
-          displayName: required(copyValue)
+    // `navigator.create()` request
+    const credentialCreationOptions = {
+        publicKey: required({
+            rp: required(copyValue),
+            user: required({
+                id: required(convertValue),
+                name: required(copyValue),
+                displayName: required(copyValue),
+            }),
+            challenge: required(convertValue),
+            pubKeyCredParams: required(copyValue),
+            timeout: optional(copyValue),
+            excludeCredentials: optional([publicKeyCredentialDescriptorSchema]),
+            authenticatorSelection: optional(copyValue),
+            attestation: optional(copyValue),
+            extensions: optional(simplifiedExtensionsSchema),
         }),
-        challenge: required(convertValue),
-        pubKeyCredParams: required(copyValue),
-        timeout: optional(copyValue),
-        excludeCredentials: optional([publicKeyCredentialDescriptorSchema]),
-        authenticatorSelection: optional(copyValue),
-        attestation: optional(copyValue),
-        extensions: optional(simplifiedExtensionsSchema)
-      }),
-      signal: optional(copyValue)
+        signal: optional(copyValue),
     };
-    var publicKeyCredentialWithAttestation = {
-      type: required(copyValue),
-      id: required(copyValue),
-      rawId: required(convertValue),
-      authenticatorAttachment: optional(copyValue),
-      response: required({
-        clientDataJSON: required(convertValue),
-        attestationObject: required(convertValue),
-        transports: derived(
-          copyValue,
-          (response) => {
-            var _a;
-            return ((_a = response.getTransports) == null ? void 0 : _a.call(response)) || [];
-          }
-        )
-      }),
-      clientExtensionResults: derived(
-        simplifiedClientExtensionResultsSchema,
-        (pkc) => pkc.getClientExtensionResults()
-      )
+    // `navigator.create()` response
+    const publicKeyCredentialWithAttestation = {
+        type: required(copyValue),
+        id: required(copyValue),
+        rawId: required(convertValue),
+        authenticatorAttachment: optional(copyValue),
+        response: required({
+            clientDataJSON: required(convertValue),
+            attestationObject: required(convertValue),
+            transports: derived(copyValue, (response) => { var _a; return ((_a = response.getTransports) === null || _a === void 0 ? void 0 : _a.call(response)) || []; }),
+        }),
+        clientExtensionResults: derived(simplifiedClientExtensionResultsSchema, (pkc) => pkc.getClientExtensionResults()),
     };
-    var credentialRequestOptions = {
-      mediation: optional(copyValue),
-      publicKey: required({
-        challenge: required(convertValue),
-        timeout: optional(copyValue),
-        rpId: optional(copyValue),
-        allowCredentials: optional([publicKeyCredentialDescriptorSchema]),
-        userVerification: optional(copyValue),
-        extensions: optional(simplifiedExtensionsSchema)
-      }),
-      signal: optional(copyValue)
+    // `navigator.get()` request
+    const credentialRequestOptions = {
+        mediation: optional(copyValue),
+        publicKey: required({
+            challenge: required(convertValue),
+            timeout: optional(copyValue),
+            rpId: optional(copyValue),
+            allowCredentials: optional([publicKeyCredentialDescriptorSchema]),
+            userVerification: optional(copyValue),
+            extensions: optional(simplifiedExtensionsSchema),
+        }),
+        signal: optional(copyValue),
     };
-    var publicKeyCredentialWithAssertion = {
-      type: required(copyValue),
-      id: required(copyValue),
-      rawId: required(convertValue),
-      authenticatorAttachment: optional(copyValue),
-      response: required({
-        clientDataJSON: required(convertValue),
-        authenticatorData: required(convertValue),
-        signature: required(convertValue),
-        userHandle: required(convertValue)
-      }),
-      clientExtensionResults: derived(
-        simplifiedClientExtensionResultsSchema,
-        (pkc) => pkc.getClientExtensionResults()
-      )
+    // `navigator.get()` response
+    const publicKeyCredentialWithAssertion = {
+        type: required(copyValue),
+        id: required(copyValue),
+        rawId: required(convertValue),
+        authenticatorAttachment: optional(copyValue),
+        response: required({
+            clientDataJSON: required(convertValue),
+            authenticatorData: required(convertValue),
+            signature: required(convertValue),
+            userHandle: required(convertValue),
+        }),
+        clientExtensionResults: derived(simplifiedClientExtensionResultsSchema, (pkc) => pkc.getClientExtensionResults()),
     };
 
-    // src/webauthn-json/basic/api.ts
     function createRequestFromJSON(requestJSON) {
-      return convert(base64urlToBuffer, credentialCreationOptions, requestJSON);
+        return convert(base64urlToBuffer, credentialCreationOptions, requestJSON);
     }
     function createResponseToJSON(credential) {
-      return convert(
-        bufferToBase64url,
-        publicKeyCredentialWithAttestation,
-        credential
-      );
-    }
-    async function create(requestJSON) {
-      const credential = await navigator.credentials.create(
-        createRequestFromJSON(requestJSON)
-      );
-      return createResponseToJSON(credential);
+        return convert(bufferToBase64url, publicKeyCredentialWithAttestation, credential);
     }
     function getRequestFromJSON(requestJSON) {
-      return convert(base64urlToBuffer, credentialRequestOptions, requestJSON);
+        return convert(base64urlToBuffer, credentialRequestOptions, requestJSON);
     }
     function getResponseToJSON(credential) {
-      return convert(
-        bufferToBase64url,
-        publicKeyCredentialWithAssertion,
-        credential
-      );
-    }
-    async function get(requestJSON) {
-      const credential = await navigator.credentials.get(
-        getRequestFromJSON(requestJSON)
-      );
-      return getResponseToJSON(credential);
+        return convert(bufferToBase64url, publicKeyCredentialWithAssertion, credential);
     }
 
     var _PasskeyAuthenticator_abortController;
@@ -248,10 +223,14 @@ var PasskeyAuthenticator = (function (exports) {
             _PasskeyAuthenticator_abortController.set(this, void 0);
         }
         async register(params) {
+            var _a;
             try {
                 const typedParams = JSON.parse(params);
-                const out = await create(typedParams);
-                return JSON.stringify(out);
+                const request = createRequestFromJSON(typedParams);
+                applyPrfInput(request.publicKey, (_a = typedParams.publicKey) === null || _a === void 0 ? void 0 : _a.extensions);
+                const credential = await navigator.credentials.create(request);
+                const out = createResponseToJSON(credential);
+                return JSON.stringify(withPrfResults(out, credential));
             }
             catch (e) {
                 let error;
@@ -270,12 +249,16 @@ var PasskeyAuthenticator = (function (exports) {
             }
         }
         async login(params) {
+            var _a;
             try {
                 __classPrivateFieldSet(this, _PasskeyAuthenticator_abortController, new AbortController(), "f");
                 const typedParams = JSON.parse(params);
                 typedParams.signal = __classPrivateFieldGet(this, _PasskeyAuthenticator_abortController, "f").signal;
-                const out = await get(typedParams);
-                return JSON.stringify(out);
+                const request = getRequestFromJSON(typedParams);
+                applyPrfInput(request.publicKey, (_a = typedParams.publicKey) === null || _a === void 0 ? void 0 : _a.extensions);
+                const credential = await navigator.credentials.get(request);
+                const out = getResponseToJSON(credential);
+                return JSON.stringify(withPrfResults(out, credential));
             }
             catch (e) {
                 let error;
@@ -303,6 +286,42 @@ var PasskeyAuthenticator = (function (exports) {
         }
     }
     _PasskeyAuthenticator_abortController = new WeakMap();
+    // The @github/webauthn-json schema does not know about the PRF extension, so
+    // it drops the salts on the way in and the results on the way out. We convert
+    // those base64url values ourselves and splice them back in.
+    function applyPrfInput(publicKey, extensions) {
+        var _a;
+        const evalInput = (_a = extensions === null || extensions === void 0 ? void 0 : extensions.prf) === null || _a === void 0 ? void 0 : _a.eval;
+        if (!evalInput) {
+            return;
+        }
+        const prf = {
+            eval: { first: base64urlToBuffer(evalInput.first) },
+        };
+        if (evalInput.second) {
+            prf.eval.second = base64urlToBuffer(evalInput.second);
+        }
+        publicKey.extensions = { ...(publicKey.extensions || {}), prf };
+    }
+    function withPrfResults(out, credential) {
+        var _a, _b;
+        const prf = (_a = credential.getClientExtensionResults()) === null || _a === void 0 ? void 0 : _a.prf;
+        if (!prf) {
+            return out;
+        }
+        const prfJson = {};
+        if (typeof prf.enabled === 'boolean') {
+            prfJson.enabled = prf.enabled;
+        }
+        if ((_b = prf.results) === null || _b === void 0 ? void 0 : _b.first) {
+            prfJson.results = { first: bufferToBase64url(prf.results.first) };
+            if (prf.results.second) {
+                prfJson.results.second = bufferToBase64url(prf.results.second);
+            }
+        }
+        out.clientExtensionResults = { ...(out.clientExtensionResults || {}), prf: prfJson };
+        return out;
+    }
     class PlatformError {
         constructor(code, message, details) {
             this.code = code;

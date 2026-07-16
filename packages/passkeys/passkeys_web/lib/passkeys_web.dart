@@ -51,7 +51,10 @@ class PasskeysWeb extends PasskeysPlatform {
     );
 
     try {
-      final serializedRequest = jsonEncode(r.toJson());
+      final requestJson = r.toJson();
+      _applyPrf(requestJson, request.prf);
+
+      final serializedRequest = jsonEncode(requestJson);
       final response = await authenticatorRegister(
         serializedRequest.toJS,
       ).toDart;
@@ -65,6 +68,8 @@ class PasskeysWeb extends PasskeysPlatform {
         clientDataJSON: typedResponse.response.clientDataJSON,
         attestationObject: typedResponse.response.attestationObject,
         transports: typedResponse.response.transports,
+        clientExtensionResults:
+            decodedResponse['clientExtensionResults'] as Map<String, dynamic>?,
       );
     } catch (e) {
       final exception = _parseException(e.toString());
@@ -86,17 +91,40 @@ class PasskeysWeb extends PasskeysPlatform {
     );
 
     try {
-      final serializedRequest = jsonEncode(r.toJson());
+      final requestJson = r.toJson();
+      _applyPrf(requestJson, request.prf);
+
+      final serializedRequest = jsonEncode(requestJson);
       final response = await authenticatorLogin(serializedRequest.toJS).toDart;
       final decodedResponse =
           jsonDecode(response.toDart) as Map<String, dynamic>;
       final typedResponse = PasskeyLoginResponse.fromJson(decodedResponse);
 
-      return typedResponse.toAuthenticateResponseType();
+      return typedResponse.toAuthenticateResponseType(
+        clientExtensionResults:
+            decodedResponse['clientExtensionResults'] as Map<String, dynamic>?,
+      );
     } catch (e) {
       final exception = _parseException(e.toString());
       throw exception;
     }
+  }
+
+  /// Adds the WebAuthn PRF extension salt to the serialized [requestJson] so
+  /// the JS layer can forward it to the browser's WebAuthn API.
+  void _applyPrf(Map<String, dynamic> requestJson, String? prf) {
+    if (prf == null) {
+      return;
+    }
+
+    final publicKey = requestJson['publicKey'] as Map<String, dynamic>;
+    final extensions =
+        (publicKey['extensions'] as Map<String, dynamic>?) ??
+        <String, dynamic>{};
+    extensions['prf'] = {
+      'eval': {'first': prf},
+    };
+    publicKey['extensions'] = extensions;
   }
 
   PlatformException _parseException(String exception) {
