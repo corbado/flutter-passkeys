@@ -28,15 +28,17 @@ class PasskeyLoginResponse {
   Map<String, dynamic> toJson() => _$PasskeyLoginResponseToJson(this);
 
   /// Converts this response into the platform interface response type.
-  AuthenticateResponseType toAuthenticateResponseType() =>
-      AuthenticateResponseType(
-        clientDataJSON: response.clientDataJSON,
-        authenticatorData: response.authenticatorData,
-        signature: response.signature,
-        userHandle: response.userHandle ?? '',
-        id: id,
-        rawId: rawId,
-      );
+  AuthenticateResponseType toAuthenticateResponseType({
+    Map<String, dynamic>? clientExtensionResults,
+  }) => AuthenticateResponseType(
+    clientDataJSON: response.clientDataJSON,
+    authenticatorData: response.authenticatorData,
+    signature: response.signature,
+    userHandle: response.userHandle ?? '',
+    id: id,
+    rawId: rawId,
+    clientExtensionResults: clientExtensionResults,
+  );
 }
 
 /// The authenticator assertion data returned during a passkey login.
