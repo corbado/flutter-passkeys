@@ -61,21 +61,7 @@ jobs:
           target: google_apis
           profile: pixel_6
           working-directory: packages/passkeys/passkeys/example
-          script: |
-            adb wait-for-device
-            run_ceremonies="${{ inputs.run_ceremonies || 'false' }}"
-
-            # The passkey ceremonies need a credential provider on the device,
-            # so they run only on an explicit workflow_dispatch. When enabled,
-            # set a screen-lock PIN (entered by the test) and inject a
-            # fingerprint match in a loop so the biometric prompt is accepted.
-            if [ "$run_ceremonies" = "true" ]; then
-              adb shell locksettings set-pin 1234
-              ( while true; do adb emu finger touch 1; sleep 2; done ) &
-              trap "kill $!" EXIT
-            fi
-
-            patrol test \
-              --target integration_test/passkeys_test.dart \
-              --dart-define=TEST_MODE=true \
-              --dart-define=RUN_CEREMONIES=$run_ceremonies
+          # android-emulator-runner executes the script line by line, so the
+          # multi-line logic lives in a committed shell script invoked here.
+          # The passkey ceremonies only run on an explicit workflow_dispatch.
+          script: bash tool/run_integration_tests.sh "${{ inputs.run_ceremonies || 'false' }}"
