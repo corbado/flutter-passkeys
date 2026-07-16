@@ -137,9 +137,12 @@ patrol test \
   --dart-define=RUN_CEREMONIES=true
 ```
 
-This is exactly what the `.github/workflows/integration-test.yml` CI job does on an Android
-emulator. That job is currently non-gating, because a full ceremony also needs a configured
-credential provider (a signed-in account) on the device.
+The `.github/workflows/integration-test.yml` CI job runs the deterministic tests on an Android
+emulator on every push and pull request. The ceremonies are **not** run there, because a bare
+emulator has no credential provider (a signed-in account) and the passkey prompt would hang. Run
+them by triggering that workflow manually (`workflow_dispatch`) with the **Run the passkey
+ceremonies** option enabled, on a device that has a credential provider configured. The job is
+non-gating and bounded by a timeout.
 
 ### 6. Clean Up (Optional)
 

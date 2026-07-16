@@ -5,14 +5,22 @@ on:
     branches: [ main ]
   pull_request:
   workflow_dispatch:
+    inputs:
+      run_ceremonies:
+        description: >-
+          Run the passkey ceremonies. Only works on a device with a configured
+          credential provider (a signed-in account); leave off for a bare CI
+          emulator, where the ceremonies would hang.
+        type: boolean
+        default: false
 
 jobs:
   android-patrol:
     name: Android patrol E2E
     runs-on: ubuntu-latest
-    # This device end to end suite depends on emulator setup (a configured
-    # credential provider / signed-in account) that is still being stabilised
-    # on CI hardware, so it does not gate the pipeline yet.
+    # Bounded so a stuck native prompt can never hang the pipeline.
+    timeout-minutes: 30
+    # Kept non-gating until it is proven stable on CI hardware.
     continue-on-error: true
 
     steps:
@@ -55,15 +63,19 @@ jobs:
           working-directory: packages/passkeys/passkeys/example
           script: |
             adb wait-for-device
-            # A screen-lock PIN lets the credential manager use a device
-            # credential; the test enters it when the lock screen is shown.
-            adb shell locksettings set-pin 1234
-            # Continuously inject a fingerprint match so any biometric prompt
-            # shown during the passkey ceremonies is accepted from the host.
-            ( while true; do adb emu finger touch 1; sleep 2; done ) &
-            finger_loop_pid=$!
-            trap "kill ${finger_loop_pid}" EXIT
+            run_ceremonies="${{ inputs.run_ceremonies || 'false' }}"
+
+            # The passkey ceremonies need a credential provider on the device,
+            # so they run only on an explicit workflow_dispatch. When enabled,
+            # set a screen-lock PIN (entered by the test) and inject a
+            # fingerprint match in a loop so the biometric prompt is accepted.
+            if [ "$run_ceremonies" = "true" ]; then
+              adb shell locksettings set-pin 1234
+              ( while true; do adb emu finger touch 1; sleep 2; done ) &
+              trap "kill $!" EXIT
+            fi
+
             patrol test \
               --target integration_test/passkeys_test.dart \
               --dart-define=TEST_MODE=true \
-              --dart-define=RUN_CEREMONIES=true
+              --dart-define=RUN_CEREMONIES=$run_ceremonies
