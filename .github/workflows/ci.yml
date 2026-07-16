@@ -16,19 +16,19 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: "3.32.0"
+          flutter-version: "3.35.0"
 
       - name: Set up melos
         uses: bluefireteam/melos-action@v3
 
       - name: Check formatting
-        run: melos run format:check
+        run: melos format --set-exit-if-changed
 
       - name: Analyze
-        run: melos run analyze
+        run: melos analyze --fatal-infos
 
       - name: Test
-        run: melos run test
+        run: melos test
 
   build:
     name: Build ${{ matrix.name }}
@@ -73,7 +73,7 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: "3.32.0"
+          flutter-version: "3.35.0"
 
       - name: Set up melos
         uses: bluefireteam/melos-action@v3

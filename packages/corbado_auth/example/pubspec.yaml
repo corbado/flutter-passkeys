@@ -4,12 +4,13 @@ version: 0.0.1
 publish_to: none
 
 environment:
-  sdk: ">=3.8.0 <4.0.0"
-  flutter: ">=3.32.0"
+  sdk: ">=3.9.0 <4.0.0"
+  flutter: ">=3.35.0"
+
+resolution: workspace
 
 dependencies:
-  corbado_auth:
-    path: ../
+  corbado_auth: ^3.7.3
   corbado_telemetry_api_client: ^1.0.2
   flutter:
     sdk: flutter

@@ -5,13 +5,15 @@ repository: https://github.com/corbado/flutter-passkeys/tree/main/packages/corba
 version: 2.0.7
 
 environment:
-  sdk: ">=3.8.0 <4.0.0"
-  flutter: ">=3.32.0"
+  sdk: ">=3.9.0 <4.0.0"
+  flutter: ">=3.35.0"
+
+resolution: workspace
 
 dependencies:
   cloud_functions: ^4.5.8
   corbado_auth: ^3.7.3
-  corbado_frontend_api_client: ^1.1.1
+  corbado_frontend_api_client: ^2.2.0
   flutter:
     sdk: flutter
   flutter_keychain: ^2.4.0
