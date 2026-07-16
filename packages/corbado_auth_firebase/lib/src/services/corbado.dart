@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_constructors_over_static_methods
-
 import 'dart:convert';
 
 import 'package:cloud_functions/cloud_functions.dart';
@@ -11,6 +9,13 @@ import 'package:passkeys/types.dart';
 class CorbadoService {
   /// Creates a [CorbadoService] backed by the given [functions] instance.
   CorbadoService(FirebaseFunctions functions) : _functions = functions;
+
+  /// Returns a lazily created singleton backed by the default Firebase
+  /// Functions instance.
+  factory CorbadoService.getInstance() {
+    return _instance ??= CorbadoService(FirebaseFunctions.instance);
+  }
+
   final FirebaseFunctions _functions;
   static final _functionOptions = HttpsCallableOptions(
     timeout: const Duration(seconds: 10),
@@ -19,13 +24,6 @@ class CorbadoService {
   String? _ongoingEmailOTPCodeID;
 
   static CorbadoService? _instance;
-
-  /// Returns a lazily created singleton backed by the default Firebase
-  /// Functions instance.
-  static CorbadoService getInstance() {
-    _instance ??= CorbadoService(FirebaseFunctions.instance);
-    return _instance!;
-  }
 
   /// Starts a passkey sign up and returns the registration challenge.
   Future<RegisterRequestType> startSignUpWithPasskey(

@@ -12,7 +12,7 @@ import 'package:flutter/foundation.dart';
 import 'package:passkeys/authenticator.dart';
 import 'package:passkeys/types.dart';
 
-// ignore_for_file: avoid_positional_boolean_parameters, only_throw_errors
+// ignore_for_file: avoid_positional_boolean_parameters
 
 /// Talks to the Corbado frontend API to drive authentication processes.
 abstract class CorbadoService {
@@ -45,7 +45,7 @@ abstract class CorbadoService {
       processInitReq: processInitReq,
     );
     if (res.data == null) {
-      throw CorbadoError.fromMissingServerResponse();
+      throw CorbadoAuthException.fromMissingServerResponse();
     }
 
     if (res.data!.newClientEnvHandle != null) {
@@ -211,7 +211,7 @@ abstract class CorbadoService {
       ),
     );
     if (startRes.blockBody.error != null) {
-      throw CorbadoError.fromMissingServerResponse();
+      throw CorbadoAuthException.fromMissingServerResponse();
     }
 
     final body =
@@ -241,7 +241,7 @@ abstract class CorbadoService {
         ),
       );
     } on AuthenticatorException catch (e) {
-      throw CorbadoError.fromAuthenticatorError(e);
+      throw CorbadoAuthException.fromAuthenticatorError(e);
     }
   }
 
@@ -258,7 +258,7 @@ abstract class CorbadoService {
     );
 
     if (startRes.attestationOptions.isEmpty) {
-      throw CorbadoError.fromMissingServerResponse();
+      throw CorbadoAuthException.fromMissingServerResponse();
     }
 
     final json =
@@ -287,9 +287,9 @@ abstract class CorbadoService {
         ),
       );
     } on AuthenticatorException catch (e) {
-      throw CorbadoError.fromAuthenticatorError(e);
+      throw CorbadoAuthException.fromAuthenticatorError(e);
     } catch (e) {
-      throw CorbadoError.fromUnknownError(e);
+      throw CorbadoAuthException.fromUnknownError(e);
     }
   }
 
@@ -329,7 +329,7 @@ abstract class CorbadoService {
       ),
     );
     if (startRes.blockBody.error != null) {
-      throw CorbadoError.fromMissingServerResponse();
+      throw CorbadoAuthException.fromMissingServerResponse();
     }
 
     final body =
@@ -361,7 +361,7 @@ abstract class CorbadoService {
         rethrow;
       }
 
-      throw CorbadoError.fromAuthenticatorError(e);
+      throw CorbadoAuthException.fromAuthenticatorError(e);
     }
   }
 
@@ -397,7 +397,7 @@ abstract class CorbadoService {
         rethrow;
       }
 
-      throw CorbadoError.fromAuthenticatorError(e);
+      throw CorbadoAuthException.fromAuthenticatorError(e);
     }
   }
 
@@ -411,11 +411,11 @@ abstract class CorbadoService {
     try {
       response = await callback();
     } catch (e) {
-      throw CorbadoError.fromUnknownError(e);
+      throw CorbadoAuthException.fromUnknownError(e);
     }
 
     if (response.data == null) {
-      throw CorbadoError.fromMissingServerResponse();
+      throw CorbadoAuthException.fromMissingServerResponse();
     }
 
     return response.data!;
@@ -427,7 +427,7 @@ abstract class CorbadoService {
     try {
       await callback();
     } catch (e) {
-      throw CorbadoError.fromUnknownError(e);
+      throw CorbadoAuthException.fromUnknownError(e);
     }
   }
 

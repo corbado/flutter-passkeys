@@ -1,11 +1,9 @@
-// ignore_for_file: library_prefixes, avoid_positional_boolean_parameters
-
 import 'package:corbado_auth/src/blocks/translator.dart';
 import 'package:corbado_auth/src/blocks/types.dart';
 import 'package:corbado_auth/src/services/telemetry/telemetry.dart';
 import 'package:corbado_auth/src/types/screen_names.dart';
 import 'package:corbado_frontend_api_client/corbado_frontend_api_client.dart'
-    as Api;
+    as api;
 
 /// The method used to verify an email address.
 enum VerificationMethod {
@@ -26,12 +24,12 @@ class EmailVerifyBlockData {
     required this.isPostLoginVerification,
   });
 
-  /// Builds the data from a server [Api.GeneralBlockVerifyIdentifier] response.
+  /// Builds the data from a server [api.GeneralBlockVerifyIdentifier] response.
   factory EmailVerifyBlockData.fromProcessResponse(
-    Api.GeneralBlockVerifyIdentifier typed,
+    api.GeneralBlockVerifyIdentifier typed,
   ) {
     final verificationMethod =
-        typed.verificationMethod == Api.VerificationMethod.emailOtp
+        typed.verificationMethod == api.VerificationMethod.emailOtp
         ? VerificationMethod.emailOTP
         : VerificationMethod.emailLink;
 
@@ -72,12 +70,12 @@ class EmailVerifyBlock extends Block<EmailVerifyBlockData> {
   EmailVerifyBlock({
     required super.processHandler,
     required super.data,
-    required Api.AuthType authType,
+    required api.AuthType authType,
   }) : super(
-         type: Api.BlockType.emailVerify,
+         type: api.BlockType.emailVerify,
          alternatives: [],
          initialScreen: ScreenNames.EmailVerifyOTP,
-         authProcessType: authType == Api.AuthType.login
+         authProcessType: authType == api.AuthType.login
              ? AuthProcessType.Login
              : AuthProcessType.Signup,
        );
@@ -127,7 +125,7 @@ class EmailVerifyBlock extends Block<EmailVerifyBlockData> {
 
       final res = await corbadoService.verifyEmailOtpCode(otpCode);
       processHandler.updateBlockFromServer(res);
-    } on CorbadoError catch (e) {
+    } on CorbadoAuthException catch (e) {
       data.primaryLoading = false;
       processHandler.updateBlockFromError(e);
     }
@@ -152,7 +150,7 @@ class EmailVerifyBlock extends Block<EmailVerifyBlockData> {
 
         return;
       }
-    } on CorbadoError catch (e) {
+    } on CorbadoAuthException catch (e) {
       processHandler.updateBlockFromError(e);
     }
   }
@@ -166,8 +164,7 @@ class EmailVerifyBlock extends Block<EmailVerifyBlockData> {
 
     try {
       if (newValue == data.email) {
-        // ignore: only_throw_errors
-        throw CorbadoError(
+        throw CorbadoAuthException(
           errorCode: 'new_identifier_same_as_old',
           translatedError: Translator.error('new_identifier_same_as_old'),
         );
@@ -178,18 +175,17 @@ class EmailVerifyBlock extends Block<EmailVerifyBlockData> {
 
       final res = await corbadoService.updateEmail(newValue);
 
-      final error = CorbadoError.fromRequestError(res.blockBody.error);
+      final error = CorbadoAuthException.fromRequestError(res.blockBody.error);
 
       if (error != null) {
         data.primaryLoading = false;
 
-        // ignore: only_throw_errors
         throw error;
       }
 
       await resendEmail();
       navigateToVerifyEmail();
-    } on CorbadoError catch (e) {
+    } on CorbadoAuthException catch (e) {
       data.primaryLoading = false;
       processHandler.updateBlockFromError(e);
     }

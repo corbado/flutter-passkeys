@@ -1,9 +1,7 @@
-// ignore_for_file: library_prefixes
-
 import 'package:corbado_auth/corbado_auth.dart';
 import 'package:corbado_auth/src/services/telemetry/telemetry.dart';
 import 'package:corbado_frontend_api_client/corbado_frontend_api_client.dart'
-    as Api;
+    as api;
 
 /// Data backing the passkey append step of an authentication process.
 class PasskeyAppendBlockData {
@@ -17,9 +15,9 @@ class PasskeyAppendBlockData {
     this.preferredFallback,
   });
 
-  /// Builds the data from a server [Api.GeneralBlockPasskeyAppend] response.
+  /// Builds the data from a server [api.GeneralBlockPasskeyAppend] response.
   factory PasskeyAppendBlockData.fromProcessResponse(
-    Api.GeneralBlockPasskeyAppend typed,
+    api.GeneralBlockPasskeyAppend typed,
   ) {
     return PasskeyAppendBlockData(
       availableFallbacks: [],
@@ -39,7 +37,7 @@ class PasskeyAppendBlockData {
   final String identifierValue;
 
   /// The type of the identifier value.
-  final Api.LoginIdentifierType identifierType;
+  final api.LoginIdentifierType identifierType;
 
   /// The fallback that should be used by default, if any.
   PasskeyFallback? preferredFallback;
@@ -57,12 +55,12 @@ class PasskeyAppendBlock extends Block<PasskeyAppendBlockData> {
   PasskeyAppendBlock({
     required super.processHandler,
     required super.data,
-    required Api.AuthType authType,
+    required api.AuthType authType,
   }) : super(
          initialScreen: ScreenNames.PasskeyAppend,
-         type: Api.BlockType.passkeyAppend,
+         type: api.BlockType.passkeyAppend,
          alternatives: [],
-         authProcessType: authType == Api.AuthType.login
+         authProcessType: authType == api.AuthType.login
              ? AuthProcessType.Login
              : AuthProcessType.Signup,
        );
@@ -70,14 +68,14 @@ class PasskeyAppendBlock extends Block<PasskeyAppendBlockData> {
   @override
   void init() {
     const allowedAlternatives = [
-      Api.BlockType.emailVerify,
-      Api.BlockType.phoneVerify,
+      api.BlockType.emailVerify,
+      api.BlockType.phoneVerify,
     ];
     data.availableFallbacks = alternatives
         .where((alternative) => allowedAlternatives.contains(alternative.type))
         .map((alternative) {
           return switch (alternative.type) {
-            Api.BlockType.emailVerify
+            api.BlockType.emailVerify
                 when (alternative.data as EmailVerifyBlockData)
                         .verificationMethod !=
                     VerificationMethod.emailLink =>
@@ -97,7 +95,7 @@ class PasskeyAppendBlock extends Block<PasskeyAppendBlockData> {
     };
 
     data.canBeSkipped = alternatives.any(
-      (a) => a.type == Api.BlockType.completed,
+      (a) => a.type == api.BlockType.completed,
     );
 
     // depending on data.canBeSkipped is only a short term fix
@@ -120,7 +118,7 @@ class PasskeyAppendBlock extends Block<PasskeyAppendBlockData> {
 
       final response = await corbadoService.appendPasskey();
       processHandler.updateBlockFromServer(response);
-    } on CorbadoError catch (e) {
+    } on CorbadoAuthException catch (e) {
       data.primaryLoading = false;
       processHandler.updateBlockFromError(e);
     }
@@ -136,7 +134,7 @@ class PasskeyAppendBlock extends Block<PasskeyAppendBlockData> {
     try {
       final response = await corbadoService.sendEmailOtpCode();
       processHandler.updateBlockFromServer(response);
-    } on CorbadoError catch (e) {
+    } on CorbadoAuthException catch (e) {
       processHandler.updateBlockFromError(e);
     }
   }
@@ -151,7 +149,7 @@ class PasskeyAppendBlock extends Block<PasskeyAppendBlockData> {
     try {
       final response = await corbadoService.completeAuthProcess();
       processHandler.updateBlockFromServer(response);
-    } on CorbadoError catch (e) {
+    } on CorbadoAuthException catch (e) {
       processHandler.updateBlockFromError(e);
     }
   }
