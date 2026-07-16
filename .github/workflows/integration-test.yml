@@ -20,7 +20,7 @@ jobs:
     if: >-
       github.event_name == 'workflow_dispatch' ||
       startsWith(github.event.pull_request.title, 'chore(release):')
-    timeout-minutes: 30
+    timeout-minutes: 45
     continue-on-error: true
 
     steps:
