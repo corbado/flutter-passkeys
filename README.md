@@ -17,7 +17,7 @@ Flutter packages to enable passkey authentication (based on WebAuthn / FIDO2).
 #### Description
 
 A Flutter package that enables simple passkey authentication.
-Currently Android and iOS are supported.
+Currently Android, iOS, macOS, Web and Windows are supported.
 
 #### Features
 

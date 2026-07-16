@@ -1,4 +1,4 @@
-# passkeys_darwin
+# passkeys_windows
 
 The Windows implementation of `passkeys`.
 

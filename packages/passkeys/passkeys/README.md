@@ -13,7 +13,7 @@ on Vercel).
 
 ## Features
 
-- sign up and login users with passkeys on iOS, Android and Web
+- sign up and login users with passkeys on Android, iOS, macOS, Web and Windows
 - login users with conditional UI
 - derive secrets from a passkey through the WebAuthn PRF extension (see [Using the PRF extension](#using-the-prf-extension))
 
@@ -409,7 +409,7 @@ If you get an error like "Simulator requires enrolled biometrics to use passkeys
 login, activate Face ID for your device.
 On a simulator, this can be done under _Features_ => _Face ID_ by clicking on "Enrolled".
 
-<img src="https://raw.githubusercontent.com/corbado/flutter-passkeys/main/packages/passkeys/passkeys/doc/ios_error_enrolled_biometrics.png" style="width: 200px" calt="ios_enrolled_biometrics">
+<img src="https://raw.githubusercontent.com/corbado/flutter-passkeys/main/packages/passkeys/passkeys/doc/ios_error_enrolled_biometrics.png" style="width: 200px" alt="ios_enrolled_biometrics">
 </details>
 
 ### macOS
@@ -429,7 +429,7 @@ On a simulator, this can be done under _Features_ => _Face ID_ by clicking on "E
 <details>
 <summary>1. Update your index.html to include our JavaScript library</summary>
 Our passkeys_web package relies on JavaScript for integrating with the browser's WebAuthn API.
-To make this work, you have to include our JavaScript library in your web/index.html file. If not correctly integrated the PasskeyAuthenticator would not correctly initialize and the application would crash and an exception asking to add the code blow will show in your console.
+To make this work, you have to include our JavaScript library in your web/index.html file. If not correctly integrated the PasskeyAuthenticator would not correctly initialize and the application would crash and an exception asking to add the code below will show in your console.
 
 ```html
 <script
