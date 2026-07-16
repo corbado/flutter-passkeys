@@ -81,28 +81,27 @@ class _CorbadoAuthComponentState extends State<CorbadoAuthComponent> {
         if (snapshot.hasData) {
           final d = snapshot.data!;
 
-          switch (d.screenName) {
-            case ScreenNames.SignupInit:
-              return widget.components.signupInit!(d.block as SignupInitBlock);
-            case ScreenNames.LoginInit:
-              return widget.components.loginInit!(d.block as LoginInitBlock);
-            case ScreenNames.EmailVerifyOTP:
-              return widget.components.emailVerifyOtp!(
-                d.block as EmailVerifyBlock,
-              );
-            case ScreenNames.PasskeyAppend:
-              return widget.components.passkeyAppend!(
-                d.block as PasskeyAppendBlock,
-              );
-            case ScreenNames.PasskeyVerify:
-              return widget.components.passkeyVerify!(
-                d.block as PasskeyVerifyBlock,
-              );
-            case ScreenNames.EmailEdit:
-              return widget.components.emailEdit!(d.block as EmailVerifyBlock);
-            case ScreenNames.EmailVerifyLink:
-              throw UnimplementedError();
-          }
+          return switch (d.screenName) {
+            ScreenNames.SignupInit => widget.components.signupInit!(
+              d.block as SignupInitBlock,
+            ),
+            ScreenNames.LoginInit => widget.components.loginInit!(
+              d.block as LoginInitBlock,
+            ),
+            ScreenNames.EmailVerifyOTP => widget.components.emailVerifyOtp!(
+              d.block as EmailVerifyBlock,
+            ),
+            ScreenNames.PasskeyAppend => widget.components.passkeyAppend!(
+              d.block as PasskeyAppendBlock,
+            ),
+            ScreenNames.PasskeyVerify => widget.components.passkeyVerify!(
+              d.block as PasskeyVerifyBlock,
+            ),
+            ScreenNames.EmailEdit => widget.components.emailEdit!(
+              d.block as EmailVerifyBlock,
+            ),
+            ScreenNames.EmailVerifyLink => throw UnimplementedError(),
+          };
         } else {
           if (widget.loading != null) return widget.loading!;
           return const Center(child: CircularProgressIndicator());
