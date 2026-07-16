@@ -218,12 +218,6 @@ var PasskeyAuthenticator = (function (exports) {
         credential
       );
     }
-    async function create(requestJSON) {
-      const credential = await navigator.credentials.create(
-        createRequestFromJSON(requestJSON)
-      );
-      return createResponseToJSON(credential);
-    }
     function getRequestFromJSON(requestJSON) {
       return convert(base64urlToBuffer, credentialRequestOptions, requestJSON);
     }
@@ -234,12 +228,53 @@ var PasskeyAuthenticator = (function (exports) {
         credential
       );
     }
-    async function get(requestJSON) {
-      const credential = await navigator.credentials.get(
-        getRequestFromJSON(requestJSON)
-      );
-      return getResponseToJSON(credential);
-    }
+
+    // src/webauthn-json/extended/schema.ts
+    var authenticationExtensionsClientInputsSchema = {
+      appid: optional(copyValue),
+      appidExclude: optional(copyValue),
+      uvm: optional(copyValue),
+      credProps: optional(copyValue),
+      largeBlob: optional({
+        support: optional(copyValue),
+        read: optional(copyValue),
+        write: optional(convertValue)
+      })
+    };
+    var authenticationExtensionsClientOutputsSchema = {
+      appid: optional(copyValue),
+      appidExclude: optional(copyValue),
+      uvm: optional(copyValue),
+      credProps: optional(copyValue),
+      largeBlob: optional({
+        supported: optional(copyValue),
+        blob: optional(convertValue),
+        written: optional(copyValue)
+      })
+    };
+    var credentialCreationOptionsExtended = JSON.parse(
+      JSON.stringify(credentialCreationOptions)
+    );
+    credentialCreationOptionsExtended.publicKey.schema.extensions = optional(authenticationExtensionsClientInputsSchema);
+    var publicKeyCredentialWithAttestationExtended = JSON.parse(
+      JSON.stringify(publicKeyCredentialWithAttestation)
+    );
+    publicKeyCredentialWithAttestationExtended.clientExtensionResults = derived(
+      authenticationExtensionsClientOutputsSchema,
+      publicKeyCredentialWithAttestation.clientExtensionResults.derive
+    );
+    publicKeyCredentialWithAttestationExtended.response.schema.transports = publicKeyCredentialWithAttestation.response.schema.transports;
+    var credentialRequestOptionsExtended = JSON.parse(
+      JSON.stringify(credentialRequestOptions)
+    );
+    credentialRequestOptionsExtended.publicKey.schema.extensions = optional(authenticationExtensionsClientInputsSchema);
+    var publicKeyCredentialWithAssertionExtended = JSON.parse(
+      JSON.stringify(publicKeyCredentialWithAssertion)
+    );
+    publicKeyCredentialWithAssertionExtended.clientExtensionResults = derived(
+      authenticationExtensionsClientOutputsSchema,
+      publicKeyCredentialWithAssertion.clientExtensionResults.derive
+    );
 
     var _PasskeyAuthenticator_abortController;
     const ABORTED_BY_USER = 'operation aborted by user.';
@@ -248,10 +283,14 @@ var PasskeyAuthenticator = (function (exports) {
             _PasskeyAuthenticator_abortController.set(this, undefined);
         }
         async register(params) {
+            var _a;
             try {
                 const typedParams = JSON.parse(params);
-                const out = await create(typedParams);
-                return JSON.stringify(out);
+                const request = createRequestFromJSON(typedParams);
+                applyPrfInput(request.publicKey, (_a = typedParams.publicKey) === null || _a === void 0 ? void 0 : _a.extensions);
+                const credential = await navigator.credentials.create(request);
+                const out = createResponseToJSON(credential);
+                return JSON.stringify(withPrfResults(out, credential));
             }
             catch (e) {
                 let error;
@@ -270,12 +309,16 @@ var PasskeyAuthenticator = (function (exports) {
             }
         }
         async login(params) {
+            var _a;
             try {
                 __classPrivateFieldSet(this, _PasskeyAuthenticator_abortController, new AbortController(), "f");
                 const typedParams = JSON.parse(params);
                 typedParams.signal = __classPrivateFieldGet(this, _PasskeyAuthenticator_abortController, "f").signal;
-                const out = await get(typedParams);
-                return JSON.stringify(out);
+                const request = getRequestFromJSON(typedParams);
+                applyPrfInput(request.publicKey, (_a = typedParams.publicKey) === null || _a === void 0 ? void 0 : _a.extensions);
+                const credential = await navigator.credentials.get(request);
+                const out = getResponseToJSON(credential);
+                return JSON.stringify(withPrfResults(out, credential));
             }
             catch (e) {
                 let error;
@@ -303,6 +346,42 @@ var PasskeyAuthenticator = (function (exports) {
         }
     }
     _PasskeyAuthenticator_abortController = new WeakMap();
+    // The @github/webauthn-json schema does not know about the PRF extension, so
+    // it drops the salts on the way in and the results on the way out. We convert
+    // those base64url values ourselves and splice them back in.
+    function applyPrfInput(publicKey, extensions) {
+        var _a;
+        const evalInput = (_a = extensions === null || extensions === undefined ? undefined : extensions.prf) === null || _a === undefined ? undefined : _a.eval;
+        if (!evalInput) {
+            return;
+        }
+        const prf = {
+            eval: { first: base64urlToBuffer(evalInput.first) },
+        };
+        if (evalInput.second) {
+            prf.eval.second = base64urlToBuffer(evalInput.second);
+        }
+        publicKey.extensions = { ...(publicKey.extensions || {}), prf };
+    }
+    function withPrfResults(out, credential) {
+        var _a, _b;
+        const prf = (_a = credential.getClientExtensionResults()) === null || _a === undefined ? undefined : _a.prf;
+        if (!prf) {
+            return out;
+        }
+        const prfJson = {};
+        if (typeof prf.enabled === 'boolean') {
+            prfJson.enabled = prf.enabled;
+        }
+        if ((_b = prf.results) === null || _b === undefined ? undefined : _b.first) {
+            prfJson.results = { first: bufferToBase64url(prf.results.first) };
+            if (prf.results.second) {
+                prfJson.results.second = bufferToBase64url(prf.results.second);
+            }
+        }
+        out.clientExtensionResults = { ...(out.clientExtensionResults || {}), prf: prfJson };
+        return out;
+    }
     class PlatformError {
         constructor(code, message, details) {
             this.code = code;
