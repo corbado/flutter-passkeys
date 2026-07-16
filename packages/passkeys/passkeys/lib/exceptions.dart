@@ -1,6 +1,6 @@
 /// Used as a base exception for all authenticator exceptions thrown by this
 /// package.
-class AuthenticatorException implements Exception {}
+sealed class AuthenticatorException implements Exception {}
 
 /// Thrown when the user cancels the passkey flow.
 ///
@@ -127,7 +127,7 @@ class TimeoutException implements AuthenticatorException {
 
 /// This exception is thrown when a string is not a valid Base64URL encoded
 /// string.
-abstract class MalformedBase64Url implements AuthenticatorException {
+sealed class MalformedBase64Url implements AuthenticatorException {
   @override
   String toString();
 }

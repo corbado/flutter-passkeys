@@ -1,8 +1,6 @@
-// ignore_for_file: file_names
-
 import 'package:json_annotation/json_annotation.dart';
 
-part 'passkeySignUpResponse.g.dart';
+part 'passkey_sign_up_response.g.dart';
 
 /// Response returned by the Web SDK after a successful passkey registration.
 @JsonSerializable()

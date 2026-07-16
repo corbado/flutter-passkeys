@@ -1,5 +1,4 @@
 // ignore_for_file: constant_identifier_names
-// ignore_for_file: prefer_constructors_over_static_methods
 
 import 'package:corbado_auth/corbado_auth.dart';
 import 'package:corbado_auth/src/blocks/translator.dart';
@@ -26,7 +25,7 @@ class TextFieldWithError {
   final String value;
 
   /// The validation error for the field, if any.
-  final CorbadoError? error;
+  final CorbadoAuthException? error;
 }
 
 /// A fallback verification option presented to the user.
@@ -42,35 +41,20 @@ class PasskeyFallback {
 }
 
 /// An error raised during a Corbado authentication process.
-class CorbadoError {
+@Deprecated(
+  'CorbadoError is misnamed for a recoverable, catchable condition. '
+  'Use CorbadoAuthException instead, which extends this type so existing '
+  '`on CorbadoError` catch clauses keep working.',
+)
+class CorbadoError implements Exception {
   /// Creates an error with an [errorCode], [translatedError] and optional
   /// [original] cause.
+  @Deprecated('Use CorbadoAuthException instead.')
   const CorbadoError({
     required this.errorCode,
     required this.translatedError,
     this.original,
   });
-
-  /// Creates an error representing a missing server response.
-  factory CorbadoError.fromMissingServerResponse() {
-    const code = 'missing_server_response';
-
-    return CorbadoError(
-      errorCode: code,
-      translatedError: Translator.error(code),
-    );
-  }
-
-  /// Creates an error representing an unknown error [e].
-  factory CorbadoError.fromUnknownError(Object e) {
-    const code = 'unknown_error';
-
-    return CorbadoError(
-      errorCode: code,
-      translatedError: Translator.error(code),
-      original: e,
-    );
-  }
 
   /// The machine readable error code.
   final String errorCode;
@@ -85,22 +69,72 @@ class CorbadoError {
   String detailedError() {
     return 'error ($errorCode): $original';
   }
+}
 
-  /// Creates an error from a server [RequestError], or null if there is none.
-  static CorbadoError? fromRequestError(RequestError? error) {
+/// An exception raised during a Corbado authentication process.
+// ignore: deprecated_member_use_from_same_package
+class CorbadoAuthException extends CorbadoError {
+  /// Creates an exception with an [errorCode], [translatedError] and optional
+  /// [original] cause.
+  const CorbadoAuthException({
+    required super.errorCode,
+    required super.translatedError,
+    super.original,
+  });
+
+  /// Creates an exception representing a missing server response.
+  factory CorbadoAuthException.fromMissingServerResponse() {
+    const code = 'missing_server_response';
+
+    return CorbadoAuthException(
+      errorCode: code,
+      translatedError: Translator.error(code),
+    );
+  }
+
+  /// Creates an exception representing an unknown error [e].
+  factory CorbadoAuthException.fromUnknownError(Object e) {
+    const code = 'unknown_error';
+
+    return CorbadoAuthException(
+      errorCode: code,
+      translatedError: Translator.error(code),
+      original: e,
+    );
+  }
+
+  /// Creates an exception from an authenticator exception [e].
+  factory CorbadoAuthException.fromAuthenticatorError(
+    AuthenticatorException e,
+  ) {
+    if (e is PasskeyAuthCancelledException) {
+      const errorCode = 'passkey_operation_cancelled';
+      return CorbadoAuthException(
+        errorCode: errorCode,
+        translatedError: Translator.error(errorCode),
+        original: e,
+      );
+    }
+
+    return CorbadoAuthException.fromUnknownError(e);
+  }
+
+  /// Creates an exception from a server [RequestError], or null if there is
+  /// none.
+  static CorbadoAuthException? fromRequestError(RequestError? error) {
     if (error == null) {
       return null;
     }
 
-    return CorbadoError(
+    return CorbadoAuthException(
       errorCode: error.code,
       translatedError: Translator.error(error.code),
     );
   }
 
-  /// Creates an error from a [RequestError] using identifier-specific
+  /// Creates an exception from a [RequestError] using identifier-specific
   /// translations, or null if there is none.
-  static CorbadoError? fromRequestErrorWithIdentifier(
+  static CorbadoAuthException? fromRequestErrorWithIdentifier(
     RequestError? error,
     LoginIdentifierType identifierType,
   ) {
@@ -113,24 +147,10 @@ class CorbadoError {
       identifierType,
     );
 
-    return CorbadoError(
+    return CorbadoAuthException(
       errorCode: error.code,
       translatedError: translatedError,
     );
-  }
-
-  /// Creates an error from an authenticator exception [e].
-  static CorbadoError fromAuthenticatorError(AuthenticatorException e) {
-    if (e is PasskeyAuthCancelledException) {
-      const errorCode = 'passkey_operation_cancelled';
-      return CorbadoError(
-        errorCode: errorCode,
-        translatedError: Translator.error(errorCode),
-        original: e,
-      );
-    }
-
-    return CorbadoError.fromUnknownError(e);
   }
 }
 
@@ -163,7 +183,7 @@ class Block<T> {
   final BlockType type;
 
   /// The current error for this block, if any.
-  CorbadoError? error;
+  CorbadoAuthException? error;
 
   /// The data backing this block.
   T data;
@@ -184,7 +204,7 @@ class Block<T> {
     try {
       final res = await corbadoService.resetAuthProcess();
       processHandler.updateBlockFromServer(res);
-    } on CorbadoError catch (e) {
+    } on CorbadoAuthException catch (e) {
       processHandler.updateBlockFromError(e);
     }
   }

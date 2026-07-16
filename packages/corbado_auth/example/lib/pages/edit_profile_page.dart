@@ -103,7 +103,7 @@ class EditProfilePage extends HookConsumerWidget {
                           leading: const Icon(Icons.check, color: Colors.green),
                           background: Theme.of(context).colorScheme.primary,
                         );
-                      } on CorbadoError catch (e) {
+                      } on CorbadoAuthException catch (e) {
                         error.value = e.translatedError;
                       } catch (e) {
                         error.value = e.toString();

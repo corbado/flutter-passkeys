@@ -69,7 +69,7 @@ class ProcessHandler {
   }
 
   /// Attaches the given [error] to the current block and re-emits it.
-  void updateBlockFromError(CorbadoError error) {
+  void updateBlockFromError(CorbadoAuthException error) {
     if (_currentBlock == null) {
       return;
     }
@@ -101,7 +101,7 @@ class ProcessHandler {
           processHandler: this,
           data: SignupInitBlockData.fromProcessResponse(typed),
         );
-        block.error = CorbadoError.fromRequestError(typed.error);
+        block.error = CorbadoAuthException.fromRequestError(typed.error);
 
       case BlockType.loginInit:
         final typed = body.data.oneOf.value! as GeneralBlockLoginInit;
@@ -109,7 +109,7 @@ class ProcessHandler {
           processHandler: this,
           data: LoginInitBlockData.fromProcessResponse(typed),
         );
-        block.error = CorbadoError.fromRequestError(typed.error);
+        block.error = CorbadoAuthException.fromRequestError(typed.error);
 
       case BlockType.emailVerify:
         final typed = body.data.oneOf.value! as GeneralBlockVerifyIdentifier;
@@ -118,7 +118,7 @@ class ProcessHandler {
           data: EmailVerifyBlockData.fromProcessResponse(typed),
           authType: body.authType,
         );
-        block.error = CorbadoError.fromRequestError(typed.error);
+        block.error = CorbadoAuthException.fromRequestError(typed.error);
 
       case BlockType.completed:
         final typed = body.data.oneOf.value! as GeneralBlockCompleted;
@@ -147,7 +147,7 @@ class ProcessHandler {
     }
 
     if (body.error != null) {
-      block.error = CorbadoError(
+      block.error = CorbadoAuthException(
         errorCode: body.error!.code,
         translatedError: Translator.error(body.error!.code),
       );

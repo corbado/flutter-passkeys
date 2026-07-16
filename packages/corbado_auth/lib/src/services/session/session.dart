@@ -5,8 +5,6 @@ import 'package:corbado_auth/src/services/storage/storage.dart';
 import 'package:corbado_frontend_api_client/corbado_frontend_api_client.dart';
 import 'package:flutter/foundation.dart';
 
-// ignore_for_file: only_throw_errors
-
 /// Manages the user session, including token refresh and auth state streams.
 class SessionService {
   /// Creates a [SessionService] backed by the given storage service and
@@ -180,7 +178,7 @@ class SessionService {
         .getUsersApi()
         .currentUserSessionRefresh();
     if (response.data == null) {
-      throw CorbadoError.fromMissingServerResponse();
+      throw CorbadoAuthException.fromMissingServerResponse();
     }
 
     final user = User.fromIdToken(response.data!.shortSession);

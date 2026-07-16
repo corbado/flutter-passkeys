@@ -7,10 +7,10 @@ import 'package:flutter/services.dart';
 import 'package:passkeys_platform_interface/passkeys_platform_interface.dart';
 import 'package:passkeys_platform_interface/types/types.dart';
 import 'package:passkeys_web/interop.dart';
-import 'package:passkeys_web/models/passkeyLoginRequest.dart';
-import 'package:passkeys_web/models/passkeyLoginResponse.dart';
-import 'package:passkeys_web/models/passkeySignUpRequest.dart';
-import 'package:passkeys_web/models/passkeySignUpResponse.dart';
+import 'package:passkeys_web/models/passkey_login_request.dart';
+import 'package:passkeys_web/models/passkey_login_response.dart';
+import 'package:passkeys_web/models/passkey_sign_up_request.dart';
+import 'package:passkeys_web/models/passkey_sign_up_response.dart';
 import 'package:web/web.dart';
 
 /// The Web implementation of [PasskeysPlatform].

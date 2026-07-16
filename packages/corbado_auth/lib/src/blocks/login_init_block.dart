@@ -20,7 +20,9 @@ class LoginInitBlockData {
   factory LoginInitBlockData.fromProcessResponse(GeneralBlockLoginInit typed) {
     return LoginInitBlockData(
       loginIdentifier: typed.identifierValue,
-      loginIdentifierError: CorbadoError.fromRequestError(typed.fieldError),
+      loginIdentifierError: CorbadoAuthException.fromRequestError(
+        typed.fieldError,
+      ),
       conditionalUIChallenge: typed.conditionalUIChallenge,
       isPhoneFocused: typed.isPhone,
       emailEnabled: typed.isEmailAvailable,
@@ -33,7 +35,7 @@ class LoginInitBlockData {
   final String loginIdentifier;
 
   /// The validation error for the login identifier, if any.
-  final CorbadoError? loginIdentifierError;
+  final CorbadoAuthException? loginIdentifierError;
 
   /// The challenge used to start conditional UI, if available.
   final String? conditionalUIChallenge;
@@ -101,7 +103,7 @@ class LoginInitBlock extends Block<LoginInitBlockData> {
 
       final response = await corbadoService.loginInit(loginIdentifier, isPhone);
       processHandler.updateBlockFromServer(response);
-    } on CorbadoError catch (e) {
+    } on CorbadoAuthException catch (e) {
       data.primaryLoading = false;
       processHandler.updateBlockFromError(e);
     }
@@ -126,7 +128,7 @@ class LoginInitBlock extends Block<LoginInitBlockData> {
         true,
       );
       processHandler.updateBlockFromServer(response);
-    } on CorbadoError catch (e) {
+    } on CorbadoAuthException catch (e) {
       processHandler.updateBlockFromError(e);
     } on AuthenticatorException {
       // all authenticator exceptions that have not been translated to errors
