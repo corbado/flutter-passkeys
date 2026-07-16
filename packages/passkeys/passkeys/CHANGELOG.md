@@ -1,3 +1,16 @@
+## 2.22.0
+
+ - **REFACTOR**: clean up analysis lints and refine auth exception types ([#282](https://github.com/corbado/flutter-passkeys/issues/282)).
+ - **REFACTOR**: adopt Dart 3.9 features and migrate the example integration tests to patrol ([#268](https://github.com/corbado/flutter-passkeys/issues/268)).
+ - **FIX**: resolve Dependabot security alerts in npm dependencies ([#277](https://github.com/corbado/flutter-passkeys/issues/277)).
+ - **FIX**(passkeys_darwin): map no-credentials-available regardless of device locale ([#271](https://github.com/corbado/flutter-passkeys/issues/271)).
+ - **FIX**: improve error handling for excludeCredentials on iOS 26 and Android 16+ ([#237](https://github.com/corbado/flutter-passkeys/issues/237)).
+ - **FEAT**(passkeys): expose WebAuthn Signal API ([#279](https://github.com/corbado/flutter-passkeys/issues/279)).
+ - **FEAT**(passkeys_web): add PRF extension support ([#274](https://github.com/corbado/flutter-passkeys/issues/274)).
+ - **FEAT**(passkeys): add PRF support for iOS and Android ([#263](https://github.com/corbado/flutter-passkeys/issues/263)).
+ - **DOCS**: fix mistakes across package READMEs ([#281](https://github.com/corbado/flutter-passkeys/issues/281)).
+ - **DOCS**(passkeys): document the PRF extension ([#275](https://github.com/corbado/flutter-passkeys/issues/275)).
+
 ## 2.21.1
 
  - **DOCS**(passkeys): document Android Digital Asset Links setup ([#256](https://github.com/corbado/flutter-passkeys/issues/256)). ([1777f145](https://github.com/corbado/flutter-passkeys/commit/1777f1451fc4a650deb1768cc2910237d8cca2db))

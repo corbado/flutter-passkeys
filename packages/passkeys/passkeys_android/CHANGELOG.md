@@ -1,3 +1,10 @@
+## 2.13.0
+
+ - **FIX**(passkeys_android): downgrade expected auth errors from Log.e to Log.d ([#273](https://github.com/corbado/flutter-passkeys/issues/273)).
+ - **FIX**: improve error handling for excludeCredentials on iOS 26 and Android 16+ ([#237](https://github.com/corbado/flutter-passkeys/issues/237)).
+ - **FEAT**(passkeys): expose WebAuthn Signal API ([#279](https://github.com/corbado/flutter-passkeys/issues/279)).
+ - **FEAT**(passkeys): add PRF support for iOS and Android ([#263](https://github.com/corbado/flutter-passkeys/issues/263)).
+
 ## 2.12.2
 
  - Update a dependency to the latest release.
