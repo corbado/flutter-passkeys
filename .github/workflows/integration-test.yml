@@ -18,9 +18,7 @@ jobs:
   android-patrol:
     name: Android patrol E2E
     runs-on: ubuntu-latest
-    # Bounded so a stuck native prompt can never hang the pipeline.
     timeout-minutes: 30
-    # Kept non-gating until it is proven stable on CI hardware.
     continue-on-error: true
 
     steps:
@@ -61,7 +59,4 @@ jobs:
           target: google_apis
           profile: pixel_6
           working-directory: packages/passkeys/passkeys/example
-          # android-emulator-runner executes the script line by line, so the
-          # multi-line logic lives in a committed shell script invoked here.
-          # The passkey ceremonies only run on an explicit workflow_dispatch.
           script: bash tool/run_integration_tests.sh "${{ inputs.run_ceremonies || 'false' }}"

@@ -23,7 +23,7 @@ if (flutterVersionName == null) {
 }
 
 android {
-    ndkVersion = "27.2.12479018"
+    ndkVersion = "28.2.13676358"
     compileSdkVersion 36
 
     compileOptions {

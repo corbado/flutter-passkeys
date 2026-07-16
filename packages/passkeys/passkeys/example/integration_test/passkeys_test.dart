@@ -7,31 +7,8 @@ import 'package:passkeys_example/auth_service.dart';
 import 'package:passkeys_example/main.dart';
 import 'package:patrol/patrol.dart';
 
-// End to end tests, ported from the previous Appium (JavaScript) suite.
-//
-// They fall into two categories:
-//
-// 1. Deterministic flows that patrol can drive and assert on its own: the app
-//    launches, navigation, the test configuration selector and the error that
-//    is shown when logging in without a registered passkey.
-//
-// 2. The passkey ceremonies (registration and authentication). These always
-//    end in a platform biometric prompt (fingerprint / Face ID). Matching that
-//    prompt cannot be driven from patrol; it needs device level tooling such
-//    as `adb emu finger touch 1` on Android or a simulated biometric match on
-//    the iOS simulator. These tests drive the flow up to that point and are
-//    skipped by default (see [_skipBiometricCeremony]). Wire the host side
-//    biometric step into [_completePlatformAuthenticator] to enable them.
-
-/// Whether the app was built with `--dart-define=TEST_MODE=true`. The on-screen
-/// test configuration selector is only rendered in that mode, so the
-/// configuration tests are skipped without it.
 const _testMode = bool.fromEnvironment('TEST_MODE');
 
-/// Whether to run the passkey ceremonies (see the file level comment). They are
-/// skipped unless the app is built with `--dart-define=RUN_CEREMONIES=true`,
-/// which is done by the `integration-test` CI job on a device that is set up
-/// with a screen-lock PIN and a host side biometric injector.
 const _skipBiometricCeremony = !bool.fromEnvironment('RUN_CEREMONIES');
 
 List<Configuration> get _signUpConfigurations =>
@@ -139,7 +116,6 @@ void main() {
       ($) async {
         await _pumpApp($);
 
-        // A credential must exist first, so register before authenticating.
         await $(const Key('email-field')).enterText('test+login@example.com');
         await $(const Key('sign-up-button')).tap();
         await _completePlatformAuthenticator($);
@@ -157,18 +133,7 @@ void main() {
   });
 }
 
-/// Confirms the platform credential manager sheet and the device credential /
-/// biometric prompt that end every passkey ceremony.
-///
-/// This relies only on patrol's existing native automation plus device level
-/// setup provided by the `integration-test` CI job:
-///  * the credential manager sheet is confirmed here with a native tap;
-///  * a device credential (PIN) is entered if the lock screen appears;
-///  * a biometric prompt is matched by the host, which injects
-///    `adb emu finger touch 1` in a loop while the ceremony runs.
 Future<void> _completePlatformAuthenticator(PatrolIntegrationTester $) async {
-  // The confirmation button label varies by OS version and by whether this is
-  // a registration or an authentication, so try the known labels in turn.
   const confirmationLabels = [
     'Continue',
     'Create passkey',
@@ -178,19 +143,29 @@ Future<void> _completePlatformAuthenticator(PatrolIntegrationTester $) async {
     'OK',
   ];
   for (final label in confirmationLabels) {
-    try {
-      await $.platformAutomator.tap(
-        Selector(text: label),
-        timeout: const Duration(seconds: 2),
-      );
+    if (await _tapNativeText($, label)) {
       break;
-    } on PatrolActionException {
-      // This label is not on screen; try the next one.
     }
   }
 
-  // Enter the screen-lock PIN if the device credential screen is shown. The CI
-  // emulator is configured with the PIN 1234.
+  await _enterPinIfPresent($);
+
+  await $.pump(const Duration(seconds: 6));
+}
+
+Future<bool> _tapNativeText(PatrolIntegrationTester $, String text) async {
+  try {
+    await $.platformAutomator.tap(
+      Selector(text: text),
+      timeout: const Duration(seconds: 2),
+    );
+    return true;
+  } on PatrolActionException {
+    return false;
+  }
+}
+
+Future<void> _enterPinIfPresent(PatrolIntegrationTester $) async {
   try {
     await $.platformAutomator.mobile.enterTextByIndex(
       '1234',
@@ -198,9 +173,6 @@ Future<void> _completePlatformAuthenticator(PatrolIntegrationTester $) async {
       timeout: const Duration(seconds: 6),
     );
   } on PatrolActionException {
-    // No PIN entry was requested (e.g. biometric only); ignore.
+    return;
   }
-
-  // Give the host side biometric injector time to match the prompt.
-  await $.pump(const Duration(seconds: 6));
 }
