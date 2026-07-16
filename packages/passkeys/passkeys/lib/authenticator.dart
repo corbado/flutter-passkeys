@@ -11,10 +11,15 @@ class PasskeyAuthenticator implements PasskeyAuthenticatorInterface {
   /// Constructor
   PasskeyAuthenticator({bool? debugMode})
     : _platform = PasskeysPlatform.instance,
-      debugMode = debugMode ?? false;
+      debugMode = debugMode ?? false {
+    if (this.debugMode) {
+      _doctor = PasskeysDoctor();
+    }
+  }
 
-  /// The [PasskeysDoctor] instance for debugging and checking passkeys
-  final _doctor = PasskeysDoctor();
+  /// The [PasskeysDoctor] instance for debugging and checking passkeys.
+  /// Only created when [debugMode] is enabled.
+  PasskeysDoctor? _doctor;
 
   /// The platform interface for passkeys.
   final PasskeysPlatform _platform;
@@ -37,7 +42,9 @@ class PasskeyAuthenticator implements PasskeyAuthenticatorInterface {
   }
 
   /// Returns a stream of results from the debugging doctor.
-  Stream<Result> get resultStream => _doctor.resultStream;
+  /// Emits nothing when [debugMode] is disabled.
+  Stream<Result> get resultStream =>
+      _doctor?.resultStream ?? const Stream<Result>.empty();
 
   /// Creates a new passkey and stores it on the device.
   /// Returns [RegisterResponseType] which must be sent to the relying party
@@ -45,7 +52,7 @@ class PasskeyAuthenticator implements PasskeyAuthenticatorInterface {
   @override
   Future<RegisterResponseType> register(RegisterRequestType request) async {
     if (debugMode) {
-      await _doctor.check(request.relyingParty.id);
+      await _doctor?.check(request.relyingParty.id);
     }
 
     try {
@@ -64,7 +71,7 @@ class PasskeyAuthenticator implements PasskeyAuthenticatorInterface {
       return r;
     } on PlatformException catch (e) {
       if (debugMode) {
-        _doctor.recordException(e);
+        _doctor?.recordException(e);
       }
 
       switch (e.code) {
@@ -108,7 +115,7 @@ class PasskeyAuthenticator implements PasskeyAuthenticatorInterface {
     AuthenticateRequestType request,
   ) async {
     if (debugMode) {
-      await _doctor.check(request.relyingPartyId);
+      await _doctor?.check(request.relyingPartyId);
     }
 
     try {
@@ -127,7 +134,7 @@ class PasskeyAuthenticator implements PasskeyAuthenticatorInterface {
       return r;
     } on PlatformException catch (e) {
       if (debugMode) {
-        _doctor.recordException(e);
+        _doctor?.recordException(e);
       }
 
       switch (e.code) {
@@ -217,7 +224,7 @@ class PasskeyAuthenticator implements PasskeyAuthenticatorInterface {
 
   Never _mapSignalException(PlatformException e, StackTrace stackTrace) {
     if (debugMode) {
-      _doctor.recordException(e);
+      _doctor?.recordException(e);
     }
 
     switch (e.code) {
@@ -261,7 +268,7 @@ class PasskeyAuthenticator implements PasskeyAuthenticatorInterface {
   void _isValidChallenge(String challenge) {
     if (!_isValidBase64Url(input: challenge)) {
       if (debugMode) {
-        _doctor.recordException(
+        _doctor?.recordException(
           PlatformException(code: 'malformed-base64-url-challenge'),
         );
       }
@@ -273,7 +280,7 @@ class PasskeyAuthenticator implements PasskeyAuthenticatorInterface {
   void _isValidCredentialID(String credentialID) {
     if (!_isValidBase64Url(input: credentialID)) {
       if (debugMode) {
-        _doctor.recordException(
+        _doctor?.recordException(
           PlatformException(code: 'malformed-base64-url-credential-id'),
         );
       }
@@ -285,7 +292,7 @@ class PasskeyAuthenticator implements PasskeyAuthenticatorInterface {
   void _isValidUserID(String userID) {
     if (!_isValidBase64Url(input: userID, allowPadding: true)) {
       if (debugMode) {
-        _doctor.recordException(
+        _doctor?.recordException(
           PlatformException(code: 'malformed-base64-url-user-id'),
         );
       }
