@@ -337,18 +337,20 @@ public class MessageHandler implements Messages.PasskeysApi {
                         @Override
                         public void onError(GetCredentialException e) {
                             Exception platformException = e;
-                            Log.e(TAG, "onError called", e);
 
                             // currently, Android throws this error when users skip the fingerPrint
                             // animation => we interpret this as a cancellation for now
                             if (Objects.equals(e.getMessage(),
                                     "None of the allowed credentials can be authenticated")) {
                                 platformException = new Messages.FlutterError("cancelled", e.getMessage(), "");
+                                Log.d(TAG, "onError called", e);
                             } else if (e instanceof GetCredentialCancellationException) {
                                 platformException = new Messages.FlutterError("cancelled", e.getMessage(), "");
+                                Log.d(TAG, "onError called", e);
                             } else if (e instanceof NoCredentialException) {
                                 platformException = new Messages.FlutterError("android-no-credential", e.getMessage(),
                                         "");
+                                Log.d(TAG, "onError called", e);
                             } else if (e instanceof GetPublicKeyCredentialDomException) {
                                 if (Objects.equals(e.getMessage(), "Failed to decrypt credential.")) {
                                     platformException = new Messages.FlutterError("android-sync-account-not-available",
@@ -360,9 +362,11 @@ public class MessageHandler implements Messages.PasskeysApi {
                                     platformException = new Messages.FlutterError("android-unhandled: " + e.getType(),
                                             e.getMessage(), e.getErrorMessage());
                                 }
+                                Log.e(TAG, "onError called", e);
                             } else {
                                 platformException = new Messages.FlutterError("android-unhandled: " + e.getType(),
                                         e.getMessage(), e.getErrorMessage());
+                                Log.e(TAG, "onError called", e);
                             }
 
                             result.error(platformException);
