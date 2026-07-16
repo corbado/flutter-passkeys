@@ -8,9 +8,11 @@
 
 #include <flutter/plugin_registrar_windows.h>
 
+#include <cwchar>
 #include <memory>
 #include <sstream>
 #include <stdexcept>
+#include <vector>
 
 namespace passkeys_windows
 {
@@ -61,6 +63,7 @@ namespace passkeys_windows
         const int64_t *timeout,
         const std::string *attestation,
         const flutter::EncodableList &exclude_credentials,
+        const std::string *prf,
         std::function<void(ErrorOr<RegisterResponse> reply)> result) override
     {
 
@@ -275,6 +278,24 @@ namespace passkeys_windows
           }
         }
 
+        // Enable the PRF extension (backed by the CTAP2 hmac-secret extension)
+        // when a PRF salt was requested. At creation the Windows API only
+        // supports enabling hmac-secret; the derived secret is produced during
+        // authentication. These locals must outlive the API call below.
+        BOOL hmac_secret_enable = TRUE;
+        std::vector<WEBAUTHN_EXTENSION> extensions;
+        if (prf)
+        {
+          WEBAUTHN_EXTENSION hmac_ext = {};
+          hmac_ext.pwszExtensionIdentifier = WEBAUTHN_EXTENSIONS_IDENTIFIER_HMAC_SECRET;
+          hmac_ext.cbExtension = sizeof(BOOL);
+          hmac_ext.pvExtension = &hmac_secret_enable;
+          extensions.push_back(hmac_ext);
+
+          options.Extensions.cExtensions = static_cast<DWORD>(extensions.size());
+          options.Extensions.pExtensions = extensions.data();
+        }
+
         // Call Windows WebAuthn API
         struct CredentialAttestationDeleter
         {
@@ -327,6 +348,28 @@ namespace passkeys_windows
 
         RegisterResponse response(id, id, client_data_json_b64, attestation_object, transports);
 
+        // Report whether the credential was created with PRF (hmac-secret)
+        // support so the Dart layer can surface it in clientExtensionResults.
+        if (prf)
+        {
+          bool prf_enabled = false;
+          if (attestation_result->dwVersion >= WEBAUTHN_CREDENTIAL_ATTESTATION_VERSION_2)
+          {
+            const WEBAUTHN_EXTENSIONS &result_extensions = attestation_result->Extensions;
+            for (DWORD i = 0; i < result_extensions.cExtensions; i++)
+            {
+              const WEBAUTHN_EXTENSION &ext = result_extensions.pExtensions[i];
+              if (ext.pwszExtensionIdentifier &&
+                  wcscmp(ext.pwszExtensionIdentifier, WEBAUTHN_EXTENSIONS_IDENTIFIER_HMAC_SECRET) == 0 &&
+                  ext.pvExtension && ext.cbExtension == sizeof(BOOL))
+              {
+                prf_enabled = (*reinterpret_cast<BOOL *>(ext.pvExtension)) != FALSE;
+              }
+            }
+          }
+          response.set_prf_enabled(prf_enabled);
+        }
+
         result(response);
       }
       catch (const std::exception &e)
@@ -342,6 +385,7 @@ namespace passkeys_windows
         const std::string *user_verification,
         const flutter::EncodableList *allow_credentials,
         const bool *prefer_immediately_available_credentials,
+        const std::string *prf,
         std::function<void(ErrorOr<AuthenticateResponse> reply)> result) override
     {
 
@@ -444,6 +488,23 @@ namespace passkeys_windows
           options.bAutoFill = TRUE;
         }
 
+        // Pass the PRF salt as an hmac-secret salt value. We deliberately do
+        // not set WEBAUTHN_AUTHENTICATOR_HMAC_SECRET_VALUES_FLAG, so Windows
+        // applies the WebAuthn PRF derivation
+        // (SHA-256("WebAuthn PRF" || 0x00 || salt)) itself, matching the other
+        // platforms. These locals must outlive the API call below.
+        std::vector<uint8_t> prf_salt;
+        WEBAUTHN_HMAC_SECRET_SALT hmac_salt = {};
+        WEBAUTHN_HMAC_SECRET_SALT_VALUES hmac_salt_values = {};
+        if (prf)
+        {
+          prf_salt = DecodeBase64Url(*prf);
+          hmac_salt.cbFirst = static_cast<DWORD>(prf_salt.size());
+          hmac_salt.pbFirst = prf_salt.data();
+          hmac_salt_values.pGlobalHmacSalt = &hmac_salt;
+          options.pHmacSecretSaltValues = &hmac_salt_values;
+        }
+
         // Call Windows WebAuthn API
         struct AssertionDeleter
         {
@@ -482,6 +543,16 @@ namespace passkeys_windows
 
         AuthenticateResponse response(
             id, id, client_data_json_b64, authenticator_data, signature, user_handle);
+
+        // Surface the derived PRF secret (prf.results.first) when present.
+        if (prf &&
+            assertion->dwVersion >= WEBAUTHN_ASSERTION_VERSION_3 &&
+            assertion->pHmacSecret &&
+            assertion->pHmacSecret->cbFirst > 0)
+        {
+          response.set_prf_result_first(EncodeBase64Url(
+              assertion->pHmacSecret->pbFirst, assertion->pHmacSecret->cbFirst));
+        }
 
         // Memory freed automatically by unique_ptr deleter
 

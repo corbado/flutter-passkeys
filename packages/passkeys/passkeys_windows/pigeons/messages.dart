@@ -109,6 +109,7 @@ class RegisterResponse {
     required this.clientDataJSON,
     required this.attestationObject,
     required this.transports,
+    this.prfEnabled,
   });
 
   /// The ID
@@ -125,6 +126,10 @@ class RegisterResponse {
 
   /// The supported transports for the authenticator
   final List<String?> transports;
+
+  /// Whether the created credential supports the WebAuthn PRF extension.
+  /// Only set when PRF was requested during registration.
+  final bool? prfEnabled;
 }
 
 /// Represents an authenticate response
@@ -137,6 +142,7 @@ class AuthenticateResponse {
     required this.authenticatorData,
     required this.signature,
     required this.userHandle,
+    this.prfResultFirst,
   });
 
   /// The ID
@@ -156,6 +162,10 @@ class AuthenticateResponse {
 
   /// The user handle
   final String userHandle;
+
+  /// The base64url encoded output of the WebAuthn PRF extension
+  /// (`prf.results.first`). Only set when PRF was requested.
+  final String? prfResultFirst;
 }
 
 @HostApi()
@@ -176,6 +186,7 @@ abstract class PasskeysApi {
     int? timeout,
     String? attestation,
     List<ExcludeCredential> excludeCredentials,
+    String? prf,
   );
 
   @async
@@ -186,6 +197,7 @@ abstract class PasskeysApi {
     String? userVerification,
     List<AllowCredential>? allowCredentials,
     bool? preferImmediatelyAvailableCredentials,
+    String? prf,
   );
 
   @async
