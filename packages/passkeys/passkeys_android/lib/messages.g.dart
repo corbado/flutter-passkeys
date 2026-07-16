@@ -567,4 +567,65 @@ class PasskeysApi {
       return;
     }
   }
+
+  Future<void> signalUnknownCredential(
+    String arg_relyingPartyId,
+    String arg_credentialId,
+  ) async {
+    final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
+      'dev.flutter.pigeon.passkeys_android.PasskeysApi.signalUnknownCredential',
+      codec,
+      binaryMessenger: _binaryMessenger,
+    );
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_relyingPartyId, arg_credentialId])
+            as List<Object?>?;
+    if (replyList == null) {
+      throw PlatformException(
+        code: 'channel-error',
+        message: 'Unable to establish connection on channel.',
+      );
+    } else if (replyList.length > 1) {
+      throw PlatformException(
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<void> signalAllAcceptedCredentials(
+    String arg_relyingPartyId,
+    String arg_userId,
+    List<String?> arg_allAcceptedCredentialIds,
+  ) async {
+    final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
+      'dev.flutter.pigeon.passkeys_android.PasskeysApi.signalAllAcceptedCredentials',
+      codec,
+      binaryMessenger: _binaryMessenger,
+    );
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[
+              arg_relyingPartyId,
+              arg_userId,
+              arg_allAcceptedCredentialIds,
+            ])
+            as List<Object?>?;
+    if (replyList == null) {
+      throw PlatformException(
+        code: 'channel-error',
+        message: 'Unable to establish connection on channel.',
+      );
+    } else if (replyList.length > 1) {
+      throw PlatformException(
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
 }

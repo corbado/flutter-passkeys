@@ -15,6 +15,10 @@ import androidx.credentials.GetCredentialRequest;
 import androidx.credentials.GetCredentialResponse;
 import androidx.credentials.GetPublicKeyCredentialOption;
 import androidx.credentials.PublicKeyCredential;
+import androidx.credentials.SignalAllAcceptedCredentialIdsRequest;
+import androidx.credentials.SignalCredentialStateRequest;
+import androidx.credentials.SignalCredentialStateResponse;
+import androidx.credentials.SignalUnknownCredentialRequest;
 import androidx.credentials.exceptions.CreateCredentialCancellationException;
 import androidx.credentials.exceptions.CreateCredentialException;
 import androidx.credentials.exceptions.CreateCredentialNoCreateOptionException;
@@ -23,6 +27,7 @@ import androidx.credentials.exceptions.GetCredentialException;
 import androidx.credentials.exceptions.NoCredentialException;
 import androidx.credentials.exceptions.publickeycredential.CreatePublicKeyCredentialDomException;
 import androidx.credentials.exceptions.publickeycredential.GetPublicKeyCredentialDomException;
+import androidx.credentials.exceptions.publickeycredential.SignalCredentialStateException;
 
 import com.corbado.passkeys_android.models.login.AllowCredentialType;
 import com.corbado.passkeys_android.models.login.GetCredentialOptions;
@@ -381,6 +386,48 @@ public class MessageHandler implements Messages.PasskeysApi {
         }
 
         result.success(null);
+    }
+
+    @Override
+    public void signalUnknownCredential(@NonNull String relyingPartyId, @NonNull String credentialId, @NonNull Messages.Result<Void> result) {
+        try {
+            JSONObject requestJson = new JSONObject();
+            requestJson.put("rpId", relyingPartyId);
+            requestJson.put("credentialId", credentialId);
+            signalCredentialState(new SignalUnknownCredentialRequest(requestJson.toString()), result);
+        } catch (JSONException e) {
+            result.error(e);
+        }
+    }
+
+    @Override
+    public void signalAllAcceptedCredentials(@NonNull String relyingPartyId, @NonNull String userId, @NonNull List<String> allAcceptedCredentialIds, @NonNull Messages.Result<Void> result) {
+        try {
+            JSONObject requestJson = new JSONObject();
+            requestJson.put("rpId", relyingPartyId);
+            requestJson.put("userId", userId);
+            requestJson.put("allAcceptedCredentialIds", new JSONArray(allAcceptedCredentialIds));
+            signalCredentialState(new SignalAllAcceptedCredentialIdsRequest(requestJson.toString()), result);
+        } catch (JSONException e) {
+            result.error(e);
+        }
+    }
+
+    private void signalCredentialState(SignalCredentialStateRequest request, @NonNull Messages.Result<Void> result) {
+        Activity activity = plugin.requireActivity();
+        CredentialManager credentialManager = CredentialManager.create(activity);
+        credentialManager.signalCredentialStateAsync(request, Runnable::run,
+                new CredentialManagerCallback<SignalCredentialStateResponse, SignalCredentialStateException>() {
+                    @Override
+                    public void onResult(SignalCredentialStateResponse res) {
+                        result.success(null);
+                    }
+
+                    @Override
+                    public void onError(SignalCredentialStateException e) {
+                        result.error(new Messages.FlutterError("android-unhandled: " + e.getType(), e.getMessage(), null));
+                    }
+                });
     }
 
     private static Map<String, Object> parsePrfExtensionResults(JSONObject json) {

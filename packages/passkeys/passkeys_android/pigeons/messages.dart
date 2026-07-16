@@ -201,4 +201,14 @@ abstract class PasskeysApi {
 
   @async
   void cancelCurrentAuthenticatorOperation();
+
+  @async
+  void signalUnknownCredential(String relyingPartyId, String credentialId);
+
+  @async
+  void signalAllAcceptedCredentials(
+    String relyingPartyId,
+    String userId,
+    List<String> allAcceptedCredentialIds,
+  );
 }

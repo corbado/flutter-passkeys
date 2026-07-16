@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:js_interop';
+import 'dart:js_interop_unsafe';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
@@ -113,6 +114,59 @@ class PasskeysWeb extends PasskeysPlatform {
         details: exception,
       );
     }
+  }
+
+  @override
+  Future<void> signalUnknownCredential(
+    SignalUnknownCredentialRequestType request,
+  ) async {
+    if (!_supportsSignal('signalUnknownCredential')) {
+      // This browser does not support the Signal API; the hint is best-effort
+      // so treat it as a no-op.
+      return;
+    }
+
+    final options = JSObject()
+      ..setProperty('rpId'.toJS, request.relyingPartyId.toJS)
+      ..setProperty('credentialId'.toJS, request.credentialId.toJS);
+
+    try {
+      await signalUnknownCredentialJS(options).toDart;
+    } catch (e) {
+      throw _parseException(e.toString());
+    }
+  }
+
+  @override
+  Future<void> signalAllAcceptedCredentials(
+    SignalAllAcceptedCredentialsRequestType request,
+  ) async {
+    if (!_supportsSignal('signalAllAcceptedCredentials')) {
+      // This browser does not support the Signal API; the hint is best-effort
+      // so treat it as a no-op.
+      return;
+    }
+
+    final credentialIds = request.allAcceptedCredentialIds
+        .map((e) => e.toJS)
+        .toList()
+        .toJS;
+    final options = JSObject()
+      ..setProperty('rpId'.toJS, request.relyingPartyId.toJS)
+      ..setProperty('userId'.toJS, request.userId.toJS)
+      ..setProperty('allAcceptedCredentialIds'.toJS, credentialIds);
+
+    try {
+      await signalAllAcceptedCredentialsJS(options).toDart;
+    } catch (e) {
+      throw _parseException(e.toString());
+    }
+  }
+
+  bool _supportsSignal(String method) {
+    final publicKeyCredentialCtor = publicKeyCredential;
+    return publicKeyCredentialCtor != null &&
+        publicKeyCredentialCtor.has(method);
   }
 
   @override
