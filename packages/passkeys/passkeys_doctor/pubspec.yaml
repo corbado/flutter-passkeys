@@ -26,6 +26,8 @@ dependencies:
   passkeys_platform_interface: ^2.8.0
 
 dev_dependencies:
+  flutter_test:
+    sdk: flutter
   pigeon: ^26.3.4
 
 flutter:
