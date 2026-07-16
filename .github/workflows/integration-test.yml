@@ -1,9 +1,8 @@
 name: Integration Tests
 
 on:
-  push:
-    branches: [ main ]
   pull_request:
+    types: [ opened, synchronize, reopened, edited ]
   workflow_dispatch:
     inputs:
       run_ceremonies:
@@ -18,6 +17,9 @@ jobs:
   android-patrol:
     name: Android patrol E2E
     runs-on: ubuntu-latest
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      startsWith(github.event.pull_request.title, 'chore(release):')
     timeout-minutes: 30
     continue-on-error: true
 
