@@ -232,9 +232,9 @@ derived secret back from `clientExtensionResults`.
 
 ### Platform support
 
-| Android            | iOS                   | macOS                  | Web                | Windows | Linux |
-| ------------------ | --------------------- | ---------------------- | ------------------ | ------- | ----- |
-| :white_check_mark: | :white_check_mark: (18+) | :white_check_mark: (15+) | :white_check_mark: | :x:     | :x:   |
+| Android            | iOS                   | macOS                  | Web                | Windows            | Linux |
+| ------------------ | --------------------- | ---------------------- | ------------------ | ------------------ | ----- |
+| :white_check_mark: | :white_check_mark: (18+) | :white_check_mark: (15+) | :white_check_mark: | :white_check_mark: | :x:   |
 
 The salt is typically coordinated with your relying party server (it is part of the WebAuthn
 `extensions.prf.eval.first` input). Registration usually only reports whether PRF is `enabled`,
