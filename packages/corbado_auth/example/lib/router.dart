@@ -83,22 +83,15 @@ final routerProvider = Provider<GoRouter>((ref) {
         return null;
       }
 
-      switch (authState.value!) {
-        case AuthState.None:
-          // if the user is not logged in but currently on a page that should
-          // only be visible for logged in users => redirect to signIn page.
-          if (!onLoggedOutRoutes) {
-            return Routes.auth;
-          }
-        case AuthState.SignedIn:
-          // if the user is logged in but currently on a page that should
-          // only be visible for logged out users => redirect to profile page.
-          if (onLoggedOutRoutes) {
-            return Routes.profile;
-          }
-      }
-
-      return null;
+      return switch (authState.value!) {
+        // if the user is not logged in but currently on a page that should
+        // only be visible for logged in users => redirect to signIn page.
+        AuthState.None when !onLoggedOutRoutes => Routes.auth,
+        // if the user is logged in but currently on a page that should
+        // only be visible for logged out users => redirect to profile page.
+        AuthState.SignedIn when onLoggedOutRoutes => Routes.profile,
+        _ => null,
+      };
     },
   );
 });

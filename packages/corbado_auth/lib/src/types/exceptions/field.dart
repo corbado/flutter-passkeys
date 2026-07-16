@@ -10,20 +10,14 @@ enum CorbadoField {
   code;
 
   /// Creates a [CorbadoField] from its backend string representation.
-  factory CorbadoField.fromString(String v) {
-    switch (v) {
-      case 'username':
-        return CorbadoField.name;
-      case 'email':
-        return CorbadoField.email;
-      case 'code':
-        return CorbadoField.code;
-      default:
-        throw Exception(
-          'Could not create CorbadoField because value $v is not known.',
-        );
-    }
-  }
+  factory CorbadoField.fromString(String v) => switch (v) {
+    'username' => CorbadoField.name,
+    'email' => CorbadoField.email,
+    'code' => CorbadoField.code,
+    _ => throw Exception(
+      'Could not create CorbadoField because value $v is not known.',
+    ),
+  };
 }
 
 /// Convenience helpers for [CorbadoField].

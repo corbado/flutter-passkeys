@@ -141,19 +141,11 @@ class _DebugOverlayWidget extends HookConsumerWidget {
 }
 
 Widget _buildItem(Checkpoint cp) {
-  IconData iconData;
-  Color color;
-  switch (cp.type) {
-    case CheckpointType.success:
-      iconData = Icons.check;
-      color = Colors.green;
-    case CheckpointType.warning:
-      iconData = Icons.warning_amber;
-      color = Colors.orange;
-    case CheckpointType.error:
-      iconData = Icons.close;
-      color = Colors.red;
-  }
+  final (IconData iconData, Color color) = switch (cp.type) {
+    CheckpointType.success => (Icons.check, Colors.green),
+    CheckpointType.warning => (Icons.warning_amber, Colors.orange),
+    CheckpointType.error => (Icons.close, Colors.red),
+  };
 
   return Container(
     margin: const EdgeInsets.symmetric(vertical: 4),

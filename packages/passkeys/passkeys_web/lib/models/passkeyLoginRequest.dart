@@ -149,22 +149,15 @@ enum AuthenticatorTransport {
   Bluetooth;
 
   /// Maps a platform interface transport string to an [AuthenticatorTransport].
-  factory AuthenticatorTransport.fromPlatformType(String value) {
-    switch (value) {
-      case 'hybrid':
-        return AuthenticatorTransport.Hybrid;
-      case 'internal':
-        return AuthenticatorTransport.Internal;
-      case 'usb':
-        return AuthenticatorTransport.Usb;
-      case 'nfc':
-        return AuthenticatorTransport.Nfc;
-      case 'bluetooth':
-        return AuthenticatorTransport.Bluetooth;
-      default:
-        throw ArgumentError.value(value);
-    }
-  }
+  factory AuthenticatorTransport.fromPlatformType(String value) =>
+      switch (value) {
+        'hybrid' => AuthenticatorTransport.Hybrid,
+        'internal' => AuthenticatorTransport.Internal,
+        'usb' => AuthenticatorTransport.Usb,
+        'nfc' => AuthenticatorTransport.Nfc,
+        'bluetooth' => AuthenticatorTransport.Bluetooth,
+        _ => throw ArgumentError.value(value),
+      };
 }
 
 /// The mediation requirement controlling how the browser prompts the user.
@@ -186,18 +179,13 @@ enum PasskeyLoginMediationType {
   Silent;
 
   /// Maps a platform [MediationType] to a [PasskeyLoginMediationType].
-  factory PasskeyLoginMediationType.fromPlatformType(MediationType value) {
-    switch (value) {
-      case MediationType.Conditional:
-        return PasskeyLoginMediationType.Conditional;
-      case MediationType.Optional:
-        return PasskeyLoginMediationType.Optional;
-      case MediationType.Required:
-        return PasskeyLoginMediationType.Required;
-      case MediationType.Silent:
-        return PasskeyLoginMediationType.Silent;
-    }
-  }
+  factory PasskeyLoginMediationType.fromPlatformType(MediationType value) =>
+      switch (value) {
+        MediationType.Conditional => PasskeyLoginMediationType.Conditional,
+        MediationType.Optional => PasskeyLoginMediationType.Optional,
+        MediationType.Required => PasskeyLoginMediationType.Required,
+        MediationType.Silent => PasskeyLoginMediationType.Silent,
+      };
 }
 
 /// The relying party's requirement for user verification during an operation.
@@ -215,18 +203,13 @@ enum UserVerificationRequirement {
   Required;
 
   /// Maps a platform interface string to a [UserVerificationRequirement].
-  factory UserVerificationRequirement.fromPlatformType(String value) {
-    switch (value) {
-      case 'discouraged':
-        return UserVerificationRequirement.Discouraged;
-      case 'preferred':
-        return UserVerificationRequirement.Preferred;
-      case 'required':
-        return UserVerificationRequirement.Required;
-      default:
-        throw ArgumentError.value(value);
-    }
-  }
+  factory UserVerificationRequirement.fromPlatformType(String value) =>
+      switch (value) {
+        'discouraged' => UserVerificationRequirement.Discouraged,
+        'preferred' => UserVerificationRequirement.Preferred,
+        'required' => UserVerificationRequirement.Required,
+        _ => throw ArgumentError.value(value),
+      };
 }
 
 /// Optional WebAuthn client extensions for a login request.

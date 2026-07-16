@@ -57,6 +57,20 @@ melos:
         cd packages/corbado_auth_firebase/example
         flutter run lib/main.dart --dart-define=CORBADO_PROJECT_ID=pro-8751299119685489253
 
+    integration-test-passkeys:
+      description: Run the passkeys example patrol integration tests on a connected device or emulator (needs Flutter with Dart 3.10 or 3.11, for example 3.41.x, since patrol cannot build on 3.44).
+      run: |
+        dart pub global activate patrol_cli
+        cd packages/passkeys/passkeys/example
+        bash tool/run_integration_tests.sh
+
+    integration-test-passkeys-ceremonies:
+      description: Run the passkeys example patrol tests including the passkey ceremonies on an Android emulator (sets a screen-lock PIN and injects a fingerprint match).
+      run: |
+        dart pub global activate patrol_cli
+        cd packages/passkeys/passkeys/example
+        bash tool/run_integration_tests.sh true
+
     build-passkeys-web-javascript:
       description: Build passkeys_web's javascript code and copy it to the example.
       run: |

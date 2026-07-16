@@ -54,35 +54,24 @@ class PasskeyVerifyBlock extends Block<PasskeyVerifyBlockData> {
   @override
   void init() {
     data.availableFallbacks = alternatives.map((alternative) {
-      switch (alternative.type) {
-        case Api.BlockType.emailVerify:
-          final typed = alternative.data as EmailVerifyBlockData;
-          if (typed.verificationMethod == VerificationMethod.emailLink) {
-            throw Exception('Currently not supported');
-          }
-
-          return PasskeyFallback(
+      return switch (alternative.type) {
+        Api.BlockType.emailVerify
+            when (alternative.data as EmailVerifyBlockData)
+                    .verificationMethod !=
+                VerificationMethod.emailLink =>
+          PasskeyFallback(
             label: 'Email verification',
             onTap: initFallbackEmailOtp,
-          );
-
-        case Api.BlockType.phoneVerify:
-          throw Exception('Currently not supported');
-
-        // ignore: no_default_cases
-        default:
-          throw Exception('Currently not supported');
-      }
+          ),
+        _ => throw Exception('Currently not supported'),
+      };
     }).toList();
 
-    switch (data.availableFallbacks.length) {
-      case 0:
-        data.preferredFallback = null;
-      case 1:
-        data.preferredFallback = data.availableFallbacks.first;
-      default:
-        throw Exception('Currently not supported');
-    }
+    data.preferredFallback = switch (data.availableFallbacks.length) {
+      0 => null,
+      1 => data.availableFallbacks.first,
+      _ => throw Exception('Currently not supported'),
+    };
 
     passkeyVerify();
   }

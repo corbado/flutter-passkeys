@@ -114,16 +114,14 @@ class RegisterRequestType {
       'challenge': challenge,
       'rp': relyingParty.toJson(),
       'user': user.toJson(),
-      if (pubKeyCredParams != null)
-        'pubKeyCredParams': pubKeyCredParams!.map((e) => e.toJson()).toList(),
-      if (timeout != null) 'timeout': timeout,
+      'pubKeyCredParams': ?pubKeyCredParams?.map((e) => e.toJson()).toList(),
+      'timeout': ?timeout,
       if (excludeCredentials.isNotEmpty)
         'excludeCredentials': excludeCredentials
             .map((e) => e.toJson())
             .toList(),
-      if (authSelectionType != null)
-        'authenticatorSelection': authSelectionType!.toJson(),
-      if (attestation != null) 'attestation': attestation,
+      'authenticatorSelection': ?authSelectionType?.toJson(),
+      'attestation': ?attestation,
       if (prf != null)
         'extensions': {
           'prf': {

@@ -284,26 +284,15 @@ class CorbadoService {
     }
   }
 
-  Exception _convertFirebaseFunctionsException(FirebaseFunctionsException e) {
-    switch (e.message) {
-      case 'UNKNOWN_USER':
-        return UnknownUserException('');
-      case 'NO_PASSKEY_AVAILABLE':
-        return NoPasskeyForDeviceException();
-      case 'USER_ALREADY_EXISTS':
-        return UserAlreadyExistsException();
-      case 'INVALID_USERNAME':
-        return InvalidUsernameException();
-      case 'INVALID_OTP_CODE':
-        return InvalidOTPCodeException();
-      case 'INVALID_AUTH_TOKEN':
-        return InvalidAuthTokenException();
-      case 'PASSKEY_ALREADY_EXISTS':
-        return PasskeyAlreadyExistsException();
-      case 'UNKNOWN_ERROR':
-        return UnknownErrorException.fromFirebaseFunctionsException(e);
-    }
-
-    return UnknownErrorException.fromFirebaseFunctionsException(e);
-  }
+  Exception _convertFirebaseFunctionsException(FirebaseFunctionsException e) =>
+      switch (e.message) {
+        'UNKNOWN_USER' => UnknownUserException(''),
+        'NO_PASSKEY_AVAILABLE' => NoPasskeyForDeviceException(),
+        'USER_ALREADY_EXISTS' => UserAlreadyExistsException(),
+        'INVALID_USERNAME' => InvalidUsernameException(),
+        'INVALID_OTP_CODE' => InvalidOTPCodeException(),
+        'INVALID_AUTH_TOKEN' => InvalidAuthTokenException(),
+        'PASSKEY_ALREADY_EXISTS' => PasskeyAlreadyExistsException(),
+        _ => UnknownErrorException.fromFirebaseFunctionsException(e),
+      };
 }
