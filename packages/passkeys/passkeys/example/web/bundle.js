@@ -171,7 +171,7 @@ var PasskeyAuthenticator = (function (exports) {
         response: required({
             clientDataJSON: required(convertValue),
             attestationObject: required(convertValue),
-            transports: derived(copyValue, (response) => { var _a; return ((_a = response.getTransports) === null || _a === undefined ? undefined : _a.call(response)) || []; }),
+            transports: derived(copyValue, (response) => { var _a; return ((_a = response.getTransports) === null || _a === void 0 ? void 0 : _a.call(response)) || []; }),
         }),
         clientExtensionResults: derived(simplifiedClientExtensionResultsSchema, (pkc) => pkc.getClientExtensionResults()),
     };
@@ -220,7 +220,7 @@ var PasskeyAuthenticator = (function (exports) {
     const ABORTED_BY_USER = 'operation aborted by user.';
     class PasskeyAuthenticator {
         constructor() {
-            _PasskeyAuthenticator_abortController.set(this, undefined);
+            _PasskeyAuthenticator_abortController.set(this, void 0);
         }
         async register(params) {
             var _a;
@@ -291,7 +291,7 @@ var PasskeyAuthenticator = (function (exports) {
     // those base64url values ourselves and splice them back in.
     function applyPrfInput(publicKey, extensions) {
         var _a;
-        const evalInput = (_a = extensions === null || extensions === undefined ? undefined : extensions.prf) === null || _a === undefined ? undefined : _a.eval;
+        const evalInput = (_a = extensions === null || extensions === void 0 ? void 0 : extensions.prf) === null || _a === void 0 ? void 0 : _a.eval;
         if (!evalInput) {
             return;
         }
@@ -305,7 +305,7 @@ var PasskeyAuthenticator = (function (exports) {
     }
     function withPrfResults(out, credential) {
         var _a, _b;
-        const prf = (_a = credential.getClientExtensionResults()) === null || _a === undefined ? undefined : _a.prf;
+        const prf = (_a = credential.getClientExtensionResults()) === null || _a === void 0 ? void 0 : _a.prf;
         if (!prf) {
             return out;
         }
@@ -313,7 +313,7 @@ var PasskeyAuthenticator = (function (exports) {
         if (typeof prf.enabled === 'boolean') {
             prfJson.enabled = prf.enabled;
         }
-        if ((_b = prf.results) === null || _b === undefined ? undefined : _b.first) {
+        if ((_b = prf.results) === null || _b === void 0 ? void 0 : _b.first) {
             prfJson.results = { first: bufferToBase64url(prf.results.first) };
             if (prf.results.second) {
                 prfJson.results.second = bufferToBase64url(prf.results.second);
