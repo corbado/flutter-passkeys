@@ -1,7 +1,7 @@
 import 'package:corbado_auth/corbado_auth.dart';
 import 'package:corbado_auth/src/services/telemetry/telemetry.dart';
 import 'package:corbado_frontend_api_client/corbado_frontend_api_client.dart'
-    as api;
+    hide VerificationMethod;
 
 /// Data backing the passkey append step of an authentication process.
 class PasskeyAppendBlockData {
@@ -15,9 +15,9 @@ class PasskeyAppendBlockData {
     this.preferredFallback,
   });
 
-  /// Builds the data from a server [api.GeneralBlockPasskeyAppend] response.
+  /// Builds the data from a server [GeneralBlockPasskeyAppend] response.
   factory PasskeyAppendBlockData.fromProcessResponse(
-    api.GeneralBlockPasskeyAppend typed,
+    GeneralBlockPasskeyAppend typed,
   ) {
     return PasskeyAppendBlockData(
       availableFallbacks: [],
@@ -37,7 +37,7 @@ class PasskeyAppendBlockData {
   final String identifierValue;
 
   /// The type of the identifier value.
-  final api.LoginIdentifierType identifierType;
+  final LoginIdentifierType identifierType;
 
   /// The fallback that should be used by default, if any.
   PasskeyFallback? preferredFallback;
@@ -55,12 +55,12 @@ class PasskeyAppendBlock extends Block<PasskeyAppendBlockData> {
   PasskeyAppendBlock({
     required super.processHandler,
     required super.data,
-    required api.AuthType authType,
+    required AuthType authType,
   }) : super(
          initialScreen: ScreenNames.PasskeyAppend,
-         type: api.BlockType.passkeyAppend,
+         type: BlockType.passkeyAppend,
          alternatives: [],
-         authProcessType: authType == api.AuthType.login
+         authProcessType: authType == AuthType.login
              ? AuthProcessType.Login
              : AuthProcessType.Signup,
        );
@@ -68,17 +68,17 @@ class PasskeyAppendBlock extends Block<PasskeyAppendBlockData> {
   @override
   void init() {
     const allowedAlternatives = [
-      api.BlockType.emailVerify,
-      api.BlockType.phoneVerify,
+      BlockType.emailVerify,
+      BlockType.phoneVerify,
     ];
     data.availableFallbacks = alternatives
         .where((alternative) => allowedAlternatives.contains(alternative.type))
         .map((alternative) {
           return switch (alternative.type) {
-            api.BlockType.emailVerify
+            BlockType.emailVerify
                 when (alternative.data as EmailVerifyBlockData)
                         .verificationMethod !=
-                    VerificationMethod.emailLink =>
+                    EmailVerificationMethod.emailLink =>
               PasskeyFallback(
                 label: 'Email verification',
                 onTap: initFallbackEmailOtp,
@@ -95,7 +95,7 @@ class PasskeyAppendBlock extends Block<PasskeyAppendBlockData> {
     };
 
     data.canBeSkipped = alternatives.any(
-      (a) => a.type == api.BlockType.completed,
+      (a) => a.type == BlockType.completed,
     );
 
     // depending on data.canBeSkipped is only a short term fix

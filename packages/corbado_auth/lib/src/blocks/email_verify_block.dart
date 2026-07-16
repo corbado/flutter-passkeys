@@ -3,16 +3,23 @@ import 'package:corbado_auth/src/blocks/types.dart';
 import 'package:corbado_auth/src/services/telemetry/telemetry.dart';
 import 'package:corbado_auth/src/types/screen_names.dart';
 import 'package:corbado_frontend_api_client/corbado_frontend_api_client.dart'
-    as api;
+    hide VerificationMethod;
+import 'package:corbado_frontend_api_client/corbado_frontend_api_client.dart'
+    as api
+    show VerificationMethod;
 
 /// The method used to verify an email address.
-enum VerificationMethod {
+enum EmailVerificationMethod {
   /// Verification via a one-time password sent by email.
   emailOTP,
 
   /// Verification via a magic link sent by email.
   emailLink,
 }
+
+/// Deprecated alias for [EmailVerificationMethod].
+@Deprecated('Use EmailVerificationMethod instead.')
+typedef VerificationMethod = EmailVerificationMethod;
 
 /// Data backing the email verification step of an authentication process.
 class EmailVerifyBlockData {
@@ -24,14 +31,14 @@ class EmailVerifyBlockData {
     required this.isPostLoginVerification,
   });
 
-  /// Builds the data from a server [api.GeneralBlockVerifyIdentifier] response.
+  /// Builds the data from a server [GeneralBlockVerifyIdentifier] response.
   factory EmailVerifyBlockData.fromProcessResponse(
-    api.GeneralBlockVerifyIdentifier typed,
+    GeneralBlockVerifyIdentifier typed,
   ) {
     final verificationMethod =
         typed.verificationMethod == api.VerificationMethod.emailOtp
-        ? VerificationMethod.emailOTP
-        : VerificationMethod.emailLink;
+        ? EmailVerificationMethod.emailOTP
+        : EmailVerificationMethod.emailLink;
 
     DateTime? retryNotBefore;
     if (typed.retryNotBefore != null) {
@@ -52,7 +59,7 @@ class EmailVerifyBlockData {
   final String email;
 
   /// The verification method to use for this email.
-  final VerificationMethod verificationMethod;
+  final EmailVerificationMethod verificationMethod;
 
   /// The earliest time at which a verification can be retried.
   DateTime? retryNotBefore;
@@ -70,12 +77,12 @@ class EmailVerifyBlock extends Block<EmailVerifyBlockData> {
   EmailVerifyBlock({
     required super.processHandler,
     required super.data,
-    required api.AuthType authType,
+    required AuthType authType,
   }) : super(
-         type: api.BlockType.emailVerify,
+         type: BlockType.emailVerify,
          alternatives: [],
          initialScreen: ScreenNames.EmailVerifyOTP,
-         authProcessType: authType == api.AuthType.login
+         authProcessType: authType == AuthType.login
              ? AuthProcessType.Login
              : AuthProcessType.Signup,
        );
@@ -105,7 +112,7 @@ class EmailVerifyBlock extends Block<EmailVerifyBlockData> {
 
     error = null;
 
-    if (data.verificationMethod == VerificationMethod.emailOTP) {
+    if (data.verificationMethod == EmailVerificationMethod.emailOTP) {
       processHandler.updateCurrentScreen(ScreenNames.EmailVerifyOTP);
     } else {
       processHandler.updateCurrentScreen(ScreenNames.EmailVerifyOTP);
@@ -139,7 +146,7 @@ class EmailVerifyBlock extends Block<EmailVerifyBlockData> {
     );
 
     try {
-      if (data.verificationMethod == VerificationMethod.emailOTP) {
+      if (data.verificationMethod == EmailVerificationMethod.emailOTP) {
         final res = await corbadoService.sendEmailOtpCode();
         processHandler.updateBlockFromServer(res);
 

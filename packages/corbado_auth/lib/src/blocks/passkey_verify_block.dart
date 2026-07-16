@@ -1,7 +1,7 @@
 import 'package:corbado_auth/corbado_auth.dart';
 import 'package:corbado_auth/src/services/telemetry/telemetry.dart';
 import 'package:corbado_frontend_api_client/corbado_frontend_api_client.dart'
-    as api;
+    hide VerificationMethod;
 
 /// Data backing the passkey verification step of an authentication process.
 class PasskeyVerifyBlockData {
@@ -12,9 +12,9 @@ class PasskeyVerifyBlockData {
     this.preferredFallback,
   });
 
-  /// Builds the data from a server [api.GeneralBlockPasskeyVerify] response.
+  /// Builds the data from a server [GeneralBlockPasskeyVerify] response.
   factory PasskeyVerifyBlockData.fromProcessResponse(
-    api.GeneralBlockPasskeyVerify typed,
+    GeneralBlockPasskeyVerify typed,
   ) {
     return PasskeyVerifyBlockData(
       availableFallbacks: [],
@@ -44,7 +44,7 @@ class PasskeyVerifyBlock extends Block<PasskeyVerifyBlockData> {
     required super.data,
   }) : super(
          initialScreen: ScreenNames.PasskeyVerify,
-         type: api.BlockType.passkeyVerify,
+         type: BlockType.passkeyVerify,
          alternatives: [],
          authProcessType: AuthProcessType.Login,
        );
@@ -53,10 +53,10 @@ class PasskeyVerifyBlock extends Block<PasskeyVerifyBlockData> {
   void init() {
     data.availableFallbacks = alternatives.map((alternative) {
       return switch (alternative.type) {
-        api.BlockType.emailVerify
+        BlockType.emailVerify
             when (alternative.data as EmailVerifyBlockData)
                     .verificationMethod !=
-                VerificationMethod.emailLink =>
+                EmailVerificationMethod.emailLink =>
           PasskeyFallback(
             label: 'Email verification',
             onTap: initFallbackEmailOtp,
