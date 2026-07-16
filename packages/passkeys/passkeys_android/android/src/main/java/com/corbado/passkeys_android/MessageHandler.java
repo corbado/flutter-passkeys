@@ -414,8 +414,9 @@ public class MessageHandler implements Messages.PasskeysApi {
     }
 
     private void signalCredentialState(SignalCredentialStateRequest request, @NonNull Messages.Result<Void> result) {
-        Activity activity = plugin.requireActivity();
-        CredentialManager credentialManager = CredentialManager.create(activity);
+        // The Signal API does not present any UI, so it can run without a
+        // foreground activity (e.g. right after a backgrounded server response).
+        CredentialManager credentialManager = CredentialManager.create(plugin.requireApplicationContext());
         credentialManager.signalCredentialStateAsync(request, Runnable::run,
                 new CredentialManagerCallback<SignalCredentialStateResponse, SignalCredentialStateException>() {
                     @Override

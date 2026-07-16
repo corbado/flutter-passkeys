@@ -224,9 +224,11 @@ public class PasskeysPlugin: NSObject, FlutterPlugin, PasskeysApi {
                         relyingPartyIdentifier: relyingPartyId,
                         credentialID: credentialData
                     )
-                    completion(.success(()))
+                    DispatchQueue.main.async { completion(.success(())) }
                 } catch {
-                    completion(.failure(FlutterError(fromNSError: error as NSError)))
+                    DispatchQueue.main.async {
+                        completion(.failure(FlutterError(fromNSError: error as NSError)))
+                    }
                 }
             }
         } else {
@@ -252,9 +254,11 @@ public class PasskeysPlugin: NSObject, FlutterPlugin, PasskeysApi {
                         userHandle: userHandle,
                         acceptedCredentialIDs: credentialIDs
                     )
-                    completion(.success(()))
+                    DispatchQueue.main.async { completion(.success(())) }
                 } catch {
-                    completion(.failure(FlutterError(fromNSError: error as NSError)))
+                    DispatchQueue.main.async {
+                        completion(.failure(FlutterError(fromNSError: error as NSError)))
+                    }
                 }
             }
         } else {
