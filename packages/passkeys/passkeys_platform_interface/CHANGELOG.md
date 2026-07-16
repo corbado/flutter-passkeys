@@ -1,3 +1,9 @@
+## 2.9.0
+
+ - **REFACTOR**: adopt Dart 3.9 features and migrate the example integration tests to patrol ([#268](https://github.com/corbado/flutter-passkeys/issues/268)).
+ - **FEAT**(passkeys): expose WebAuthn Signal API ([#279](https://github.com/corbado/flutter-passkeys/issues/279)).
+ - **FEAT**(passkeys): add PRF support for iOS and Android ([#263](https://github.com/corbado/flutter-passkeys/issues/263)).
+
 ## 2.8.0
 
  - **FIX**(passkeys_platform_interface): default optional authenticatorSelection fields ([#254](https://github.com/corbado/flutter-passkeys/issues/254)). ([5f410f67](https://github.com/corbado/flutter-passkeys/commit/5f410f670be7d6c08f0d6236c13a102b6cc29f0c))

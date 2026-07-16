@@ -1,3 +1,11 @@
+## 2.0.8
+
+ - **REFACTOR**: clean up analysis lints and refine auth exception types ([#282](https://github.com/corbado/flutter-passkeys/issues/282)).
+ - **REFACTOR**: adopt Dart 3.9 features and migrate the example integration tests to patrol ([#268](https://github.com/corbado/flutter-passkeys/issues/268)).
+ - **FIX**: resolve Dependabot security alerts in npm dependencies ([#277](https://github.com/corbado/flutter-passkeys/issues/277)).
+ - **FIX**(corbado_auth_firebase): repair compile error and resolve analyzer issues ([#253](https://github.com/corbado/flutter-passkeys/issues/253)).
+ - **DOCS**: Remove comment about corbado_auth_firebase being broken ([#272](https://github.com/corbado/flutter-passkeys/issues/272)).
+
 ## 2.0.7
 
  - Update a dependency to the latest release.
