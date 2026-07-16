@@ -118,11 +118,13 @@ class PasskeysWeb extends PasskeysPlatform {
     }
 
     final publicKey = requestJson['publicKey'] as Map<String, dynamic>;
-    publicKey['extensions'] = {
-      'prf': {
-        'eval': {'first': prf},
-      },
+    final extensions =
+        (publicKey['extensions'] as Map<String, dynamic>?) ??
+        <String, dynamic>{};
+    extensions['prf'] = {
+      'eval': {'first': prf},
     };
+    publicKey['extensions'] = extensions;
   }
 
   PlatformException _parseException(String exception) {

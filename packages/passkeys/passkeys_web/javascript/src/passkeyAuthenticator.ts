@@ -1,11 +1,16 @@
+// Import the basic request/response conversions and the base64url helpers
+// directly from their modules (rather than the "@github/webauthn-json/extended"
+// aggregate) so the bundle does not pull in the unused extended schema.
 import {
-    base64urlToBuffer,
-    bufferToBase64url,
     createRequestFromJSON,
     createResponseToJSON,
     getRequestFromJSON,
     getResponseToJSON,
-} from "@github/webauthn-json/extended";
+} from "@github/webauthn-json/src/webauthn-json/basic/api";
+import {
+    base64urlToBuffer,
+    bufferToBase64url,
+} from "@github/webauthn-json/src/webauthn-json/base64url";
 import {
     CredentialCreationOptionsJSON,
     CredentialRequestOptionsJSON,
