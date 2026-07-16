@@ -22,7 +22,7 @@ class _FakePasskeysApi extends pigeon.PasskeysApi {
   Future<void> signalAllAcceptedCredentials(
     String relyingPartyId,
     String userId,
-    List<String?> allAcceptedCredentialIds,
+    List<String> allAcceptedCredentialIds,
   ) async {
     signalAllAcceptedCredentialsArgs = [
       relyingPartyId,
