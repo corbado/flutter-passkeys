@@ -165,10 +165,14 @@ class PasskeyAuthenticator implements PasskeyAuthenticatorInterface {
   /// relying party.
   ///
   /// Call this after the server rejects an assertion because the credential was
-  /// deleted server-side. On platforms that support the WebAuthn Signal API
-  /// (Android, iOS, macOS and web) this removes the stale credential from the
-  /// passkey picker and autofill suggestions. On platforms without support the
-  /// call is a no-op.
+  /// deleted server-side. Where supported this removes the stale credential
+  /// from the passkey picker and autofill suggestions.
+  ///
+  /// This is a best-effort hint. It is only acted upon on Android (with a
+  /// Credential Manager provider that supports the Signal API), iOS 26.2 and
+  /// later, macOS 26.2 and later, and browsers that expose
+  /// `PublicKeyCredential.signalUnknownCredential`. On every other platform or
+  /// OS version, including older iOS and macOS releases, the call is a no-op.
   @override
   Future<void> signalUnknownCredential(
     SignalUnknownCredentialRequestType request,
@@ -185,11 +189,16 @@ class PasskeyAuthenticator implements PasskeyAuthenticatorInterface {
   /// Signals to the platform the complete set of credentials that the relying
   /// party still accepts for a user.
   ///
-  /// On platforms that support the WebAuthn Signal API (Android, iOS, macOS and
-  /// web) any credentials not contained in
+  /// Where supported any credentials not contained in
   /// [SignalAllAcceptedCredentialsRequestType.allAcceptedCredentialIds] are
-  /// pruned from the passkey picker. On platforms without support the call is a
-  /// no-op.
+  /// pruned from the passkey picker.
+  ///
+  /// This is a best-effort hint. It is only acted upon on Android (with a
+  /// Credential Manager provider that supports the Signal API), iOS 26.2 and
+  /// later, macOS 26.2 and later, and browsers that expose
+  /// `PublicKeyCredential.signalAllAcceptedCredentials`. On every other
+  /// platform or OS version, including older iOS and macOS releases, the call
+  /// is a no-op.
   @override
   Future<void> signalAllAcceptedCredentials(
     SignalAllAcceptedCredentialsRequestType request,
