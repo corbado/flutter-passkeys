@@ -90,27 +90,40 @@ already included in this example.
 
 ### 3. Run the tests
 
-From this directory, with a device running:
+From this directory, with a device running. `TEST_MODE=true` enables the on-screen test
+configuration selector that the tests drive:
 
 ```sh
-patrol test --target integration_test/passkeys_test.dart
+patrol test --target integration_test/passkeys_test.dart --dart-define=TEST_MODE=true
 ```
 
 To target a specific device, pass `--device <device-id>` (list them with `flutter devices`).
 
-### 4. Notes on the passkey ceremonies
+### 4. What the tests cover
 
-The tests in `integration_test/passkeys_test.dart` cover the deterministic Flutter UI flows.
+`integration_test/passkeys_test.dart` ports the previous Appium suite:
+
+- **Navigation** — the app starts on the sign up page and moves between sign up and sign in.
+- **Sign up / login configurations** — every platform specific configuration
+  (`Default`, `5s Timeout`, `ExcludeCredentials`, `AllowCredentials`,
+  `PreferImmediatelyAvailableCredentials`, …) is listed and selectable.
+- **Login without a passkey** — shows the expected error.
+- **Passkey ceremonies** — `default sign up` and `default login`.
+
+### 5. Enabling the biometric ceremonies
+
 The passkey registration and authentication ceremonies trigger the platform credential manager and
-a biometric prompt. Confirming those prompts and matching a fingerprint / Face ID cannot be
-expressed in patrol alone and requires device level biometric automation, for example:
+a biometric prompt. Confirming that prompt and matching a fingerprint / Face ID cannot be expressed
+in patrol alone and requires device level biometric automation, for example:
 
 ```sh
 adb emu finger touch 1
 ```
 
-on Android, or an enrolled biometric on the iOS simulator combined with `$.native` taps on the
-system dialog. Layer these steps on top of the provided tests when running on a configured device.
+on Android, or a simulated biometric match on the iOS simulator. The ceremony tests are therefore
+skipped by default (`_skipBiometricCeremony` in the test file). Wire the host side biometric step
+into `_completePlatformAuthenticator` and set `_skipBiometricCeremony = false` to enable them on a
+configured device.
 
 ### 5. Clean Up (Optional)
 
