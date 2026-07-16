@@ -27,6 +27,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v5
 
+      - name: Drop codegen-only pigeon dependency for resolution
+        run: |
+          for pkg in android darwin doctor windows; do
+            sed -i '/^  pigeon:/d' "packages/passkeys/passkeys_$pkg/pubspec.yaml"
+          done
+
       - name: Set up Java
         uses: actions/setup-java@v4
         with:
