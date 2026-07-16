@@ -244,7 +244,16 @@ public class PasskeysPlugin: NSObject, FlutterPlugin, PasskeysApi {
             return
         }
 
-        let credentialIDs = allAcceptedCredentialIds.compactMap { Data.fromBase64Url($0) }
+        var credentialIDs = [Data]()
+        for credentialId in allAcceptedCredentialIds {
+            guard let credentialData = Data.fromBase64Url(credentialId) else {
+                // Never signal a partial list, that would prune credentials
+                // that are actually still accepted. Treat it as a no-op.
+                completion(.success(()))
+                return
+            }
+            credentialIDs.append(credentialData)
+        }
 
         if #available(iOS 26.2, macOS 26.2, *) {
             Task {

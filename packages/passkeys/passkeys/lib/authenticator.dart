@@ -177,8 +177,8 @@ class PasskeyAuthenticator implements PasskeyAuthenticatorInterface {
       _isValidCredentialID(request.credentialId);
 
       await _platform.signalUnknownCredential(request);
-    } on PlatformException catch (e) {
-      _mapSignalException(e);
+    } on PlatformException catch (e, stackTrace) {
+      _mapSignalException(e, stackTrace);
     }
   }
 
@@ -201,12 +201,12 @@ class PasskeyAuthenticator implements PasskeyAuthenticatorInterface {
       }
 
       await _platform.signalAllAcceptedCredentials(request);
-    } on PlatformException catch (e) {
-      _mapSignalException(e);
+    } on PlatformException catch (e, stackTrace) {
+      _mapSignalException(e, stackTrace);
     }
   }
 
-  Never _mapSignalException(PlatformException e) {
+  Never _mapSignalException(PlatformException e, StackTrace stackTrace) {
     if (debugMode) {
       _doctor.recordException(e);
     }
@@ -223,7 +223,7 @@ class PasskeyAuthenticator implements PasskeyAuthenticatorInterface {
             e.code.startsWith('ios-unhandled')) {
           throw UnhandledAuthenticatorException(e.code, e.message, e.details);
         }
-        throw e;
+        Error.throwWithStackTrace(e, stackTrace);
     }
   }
 
