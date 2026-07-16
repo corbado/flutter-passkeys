@@ -61,3 +61,6 @@ gradlew.bat
 # FVM Version Cache
 .fvm/
 .fvmrc
+
+# LLM
+.claude/
