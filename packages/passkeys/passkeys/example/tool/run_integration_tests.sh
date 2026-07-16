@@ -21,7 +21,16 @@ if [ "$run_ceremonies" = "true" ]; then
   trap 'kill $!' EXIT
 fi
 
-patrol test \
-  --target integration_test/passkeys_test.dart \
-  --dart-define=TEST_MODE=true \
-  --dart-define="RUN_CEREMONIES=${run_ceremonies}"
+# The Android test orchestrator occasionally drops a test process on CI
+# emulators, so retry the run a couple of times before giving up.
+for attempt in 1 2 3; do
+  if patrol test \
+    --target integration_test/passkeys_test.dart \
+    --dart-define=TEST_MODE=true \
+    --dart-define="RUN_CEREMONIES=${run_ceremonies}"; then
+    exit 0
+  fi
+  echo "patrol test attempt ${attempt} failed"
+done
+
+exit 1
