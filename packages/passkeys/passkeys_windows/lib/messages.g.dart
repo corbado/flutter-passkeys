@@ -187,6 +187,7 @@ class RegisterResponse {
     required this.clientDataJSON,
     required this.attestationObject,
     required this.transports,
+    this.prfEnabled,
   });
 
   /// The ID
@@ -204,8 +205,19 @@ class RegisterResponse {
   /// The supported transports for the authenticator
   List<String?> transports;
 
+  /// Whether the created credential supports the WebAuthn PRF extension.
+  /// Only set when PRF was requested during registration.
+  bool? prfEnabled;
+
   Object encode() {
-    return <Object?>[id, rawId, clientDataJSON, attestationObject, transports];
+    return <Object?>[
+      id,
+      rawId,
+      clientDataJSON,
+      attestationObject,
+      transports,
+      prfEnabled,
+    ];
   }
 
   static RegisterResponse decode(Object result) {
@@ -216,6 +228,7 @@ class RegisterResponse {
       clientDataJSON: result[2]! as String,
       attestationObject: result[3]! as String,
       transports: (result[4] as List<Object?>?)!.cast<String?>(),
+      prfEnabled: result[5] as bool?,
     );
   }
 }
@@ -229,6 +242,7 @@ class AuthenticateResponse {
     required this.authenticatorData,
     required this.signature,
     required this.userHandle,
+    this.prfResultFirst,
   });
 
   /// The ID
@@ -249,6 +263,10 @@ class AuthenticateResponse {
   /// The user handle
   String userHandle;
 
+  /// The base64url encoded output of the WebAuthn PRF extension
+  /// (`prf.results.first`). Only set when PRF was requested.
+  String? prfResultFirst;
+
   Object encode() {
     return <Object?>[
       id,
@@ -257,6 +275,7 @@ class AuthenticateResponse {
       authenticatorData,
       signature,
       userHandle,
+      prfResultFirst,
     ];
   }
 
@@ -269,6 +288,7 @@ class AuthenticateResponse {
       authenticatorData: result[3]! as String,
       signature: result[4]! as String,
       userHandle: result[5]! as String,
+      prfResultFirst: result[6] as String?,
     );
   }
 }
@@ -406,6 +426,7 @@ class PasskeysApi {
     int? arg_timeout,
     String? arg_attestation,
     List<ExcludeCredential?> arg_excludeCredentials,
+    String? arg_prf,
   ) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
       'dev.flutter.pigeon.passkeys_windows.PasskeysApi.register',
@@ -422,6 +443,7 @@ class PasskeysApi {
               arg_timeout,
               arg_attestation,
               arg_excludeCredentials,
+              arg_prf,
             ])
             as List<Object?>?;
     if (replyList == null) {
@@ -452,6 +474,7 @@ class PasskeysApi {
     String? arg_userVerification,
     List<AllowCredential?>? arg_allowCredentials,
     bool? arg_preferImmediatelyAvailableCredentials,
+    String? arg_prf,
   ) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
       'dev.flutter.pigeon.passkeys_windows.PasskeysApi.authenticate',
@@ -466,6 +489,7 @@ class PasskeysApi {
               arg_userVerification,
               arg_allowCredentials,
               arg_preferImmediatelyAvailableCredentials,
+              arg_prf,
             ])
             as List<Object?>?;
     if (replyList == null) {

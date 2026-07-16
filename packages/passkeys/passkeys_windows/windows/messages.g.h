@@ -285,13 +285,22 @@ class AuthenticatorSelection {
 // Generated class from Pigeon that represents data sent in messages.
 class RegisterResponse {
  public:
-  // Constructs an object setting all fields.
+  // Constructs an object setting all non-nullable fields.
   explicit RegisterResponse(
     const std::string& id,
     const std::string& raw_id,
     const std::string& client_data_j_s_o_n,
     const std::string& attestation_object,
     const flutter::EncodableList& transports);
+
+  // Constructs an object setting all fields.
+  explicit RegisterResponse(
+    const std::string& id,
+    const std::string& raw_id,
+    const std::string& client_data_j_s_o_n,
+    const std::string& attestation_object,
+    const flutter::EncodableList& transports,
+    const bool* prf_enabled);
 
   // The ID
   const std::string& id() const;
@@ -313,6 +322,12 @@ class RegisterResponse {
   const flutter::EncodableList& transports() const;
   void set_transports(const flutter::EncodableList& value_arg);
 
+  // Whether the created credential supports the WebAuthn PRF extension.
+  // Only set when PRF was requested during registration.
+  const bool* prf_enabled() const;
+  void set_prf_enabled(const bool* value_arg);
+  void set_prf_enabled(bool value_arg);
+
 
  private:
   static RegisterResponse FromEncodableList(const flutter::EncodableList& list);
@@ -324,6 +339,7 @@ class RegisterResponse {
   std::string client_data_j_s_o_n_;
   std::string attestation_object_;
   flutter::EncodableList transports_;
+  std::optional<bool> prf_enabled_;
 
 };
 
@@ -333,7 +349,7 @@ class RegisterResponse {
 // Generated class from Pigeon that represents data sent in messages.
 class AuthenticateResponse {
  public:
-  // Constructs an object setting all fields.
+  // Constructs an object setting all non-nullable fields.
   explicit AuthenticateResponse(
     const std::string& id,
     const std::string& raw_id,
@@ -341,6 +357,16 @@ class AuthenticateResponse {
     const std::string& authenticator_data,
     const std::string& signature,
     const std::string& user_handle);
+
+  // Constructs an object setting all fields.
+  explicit AuthenticateResponse(
+    const std::string& id,
+    const std::string& raw_id,
+    const std::string& client_data_j_s_o_n,
+    const std::string& authenticator_data,
+    const std::string& signature,
+    const std::string& user_handle,
+    const std::string* prf_result_first);
 
   // The ID
   const std::string& id() const;
@@ -366,6 +392,12 @@ class AuthenticateResponse {
   const std::string& user_handle() const;
   void set_user_handle(std::string_view value_arg);
 
+  // The base64url encoded output of the WebAuthn PRF extension
+  // (`prf.results.first`). Only set when PRF was requested.
+  const std::string* prf_result_first() const;
+  void set_prf_result_first(const std::string_view* value_arg);
+  void set_prf_result_first(std::string_view value_arg);
+
 
  private:
   static AuthenticateResponse FromEncodableList(const flutter::EncodableList& list);
@@ -378,6 +410,7 @@ class AuthenticateResponse {
   std::string authenticator_data_;
   std::string signature_;
   std::string user_handle_;
+  std::optional<std::string> prf_result_first_;
 
 };
 
@@ -417,6 +450,7 @@ class PasskeysApi {
     const int64_t* timeout,
     const std::string* attestation,
     const flutter::EncodableList& exclude_credentials,
+    const std::string* prf,
     std::function<void(ErrorOr<RegisterResponse> reply)> result) = 0;
   virtual void Authenticate(
     const std::string& relying_party_id,
@@ -425,6 +459,7 @@ class PasskeysApi {
     const std::string* user_verification,
     const flutter::EncodableList* allow_credentials,
     const bool* prefer_immediately_available_credentials,
+    const std::string* prf,
     std::function<void(ErrorOr<AuthenticateResponse> reply)> result) = 0;
   virtual void CancelCurrentAuthenticatorOperation(std::function<void(std::optional<FlutterError> reply)> result) = 0;
 
