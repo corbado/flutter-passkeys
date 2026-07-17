@@ -1,13 +1,8 @@
 import 'dart:io';
 
+import 'package:corbado_auth/src/version.dart';
 import 'package:corbado_telemetry_api_client/corbado_telemetry_api_client.dart';
 import 'package:flutter/foundation.dart';
-
-/// The version of this SDK reported in telemetry events.
-const String sdkVersion = '3.7.1';
-
-/// The name of this SDK reported in telemetry events.
-const String sdkName = 'Flutter SDK';
 
 // The TelemetryService manages the collection of telemetry events and
 // is enabled by default. It can be disabled by setting isEnabled=false
