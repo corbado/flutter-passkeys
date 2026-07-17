@@ -1,5 +1,6 @@
 import 'package:corbado_auth/src/services/corbado/corbado.dart';
 import 'package:corbado_auth/src/services/storage/storage_web.dart';
+import 'package:corbado_auth/src/version.dart';
 import 'package:corbado_frontend_api_client/corbado_frontend_api_client.dart';
 import 'package:passkeys/authenticator.dart';
 
@@ -18,7 +19,7 @@ Future<CorbadoService> createClient(
 
   final apiClient = CorbadoFrontendApiClient(
     basePathOverride: basePath,
-    sdkVersion: '3.2.0',
+    sdkVersion: sdkVersion,
     languageVersion: 'Flutter Web',
   );
   apiClient.dio.options.headers.addAll({

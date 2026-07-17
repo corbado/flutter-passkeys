@@ -29,7 +29,7 @@ melos:
   command:
     version:
       hooks:
-        preCommit: dart run packages/corbado_auth/scripts/update_telemetry_version.dart
+        preCommit: dart run packages/corbado_auth/scripts/update_sdk_version.dart
 
   scripts:
     example-passkeys-web:
