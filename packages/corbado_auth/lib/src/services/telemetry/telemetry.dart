@@ -4,7 +4,7 @@ import 'package:corbado_telemetry_api_client/corbado_telemetry_api_client.dart';
 import 'package:flutter/foundation.dart';
 
 /// The version of this SDK reported in telemetry events.
-const String sdkVersion = '3.7.1';
+const String sdkVersion = '3.7.3';
 
 /// The name of this SDK reported in telemetry events.
 const String sdkName = 'Flutter SDK';

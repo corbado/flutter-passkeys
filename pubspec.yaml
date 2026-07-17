@@ -26,6 +26,11 @@ dev_dependencies:
   melos: ^8.2.2
 
 melos:
+  command:
+    version:
+      hooks:
+        preCommit: dart run packages/corbado_auth/tool/update_telemetry_version.dart
+
   scripts:
     example-passkeys-web:
       description: Run passkeys example on web.
