@@ -1,6 +1,6 @@
 import 'dart:io';
 
-/// Syncs the hardcoded [sdkVersion] in `lib/src/version.dart` with the version
+/// Syncs the hardcoded `sdkVersion` in `lib/src/version.dart` with the version
 /// declared in `pubspec.yaml`. Run automatically by the melos version
 /// preCommit hook so the two never drift.
 void main() {
