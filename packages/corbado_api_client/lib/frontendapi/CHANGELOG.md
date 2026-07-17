@@ -1,3 +1,7 @@
+## 2.2.1
+
+ - **FIX**(corbado_auth_firebase): repair compile error and resolve analyzer issues ([#253](https://github.com/corbado/flutter-passkeys/issues/253)). ([d22c2a74](https://github.com/corbado/flutter-passkeys/commit/d22c2a740e5f3768bc08cdc4b64e688cd9aee1d8))
+
 ## 2.2.0
 * Adds environment to ProcessCommon
 

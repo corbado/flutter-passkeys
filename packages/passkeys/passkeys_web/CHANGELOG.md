@@ -1,3 +1,11 @@
+## 2.10.0
+
+ - **REFACTOR**: clean up analysis lints and refine auth exception types ([#282](https://github.com/corbado/flutter-passkeys/issues/282)). ([60312bd3](https://github.com/corbado/flutter-passkeys/commit/60312bd32b3435147341396b4a2210608aa1ff51))
+ - **REFACTOR**: adopt Dart 3.9 features and migrate the example integration tests to patrol ([#268](https://github.com/corbado/flutter-passkeys/issues/268)). ([7a1bd0de](https://github.com/corbado/flutter-passkeys/commit/7a1bd0de58f594fe423d80f15dfc98568b34df7c))
+ - **FIX**: resolve Dependabot security alerts in npm dependencies ([#277](https://github.com/corbado/flutter-passkeys/issues/277)). ([ffe1d76f](https://github.com/corbado/flutter-passkeys/commit/ffe1d76fec67dd6a5dfa3731fc912e89d50fd44b))
+ - **FEAT**(passkeys): expose WebAuthn Signal API ([#279](https://github.com/corbado/flutter-passkeys/issues/279)). ([c91ccc8e](https://github.com/corbado/flutter-passkeys/commit/c91ccc8e8021f65eeff42640f120d4a321df1426))
+ - **FEAT**(passkeys_web): add PRF extension support ([#274](https://github.com/corbado/flutter-passkeys/issues/274)). ([4f63d7ed](https://github.com/corbado/flutter-passkeys/commit/4f63d7ed9b6a19b7aac5527e0df1e24dd2662c23))
+
 ## 2.9.2
 
  - Update a dependency to the latest release.

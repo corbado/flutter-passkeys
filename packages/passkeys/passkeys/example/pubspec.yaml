@@ -20,7 +20,7 @@ dependencies:
   hooks_riverpod: ^2.4.0
   jwt_decoder: ^2.0.1
   overlay_support: ^2.1.0
-  passkeys: ^2.21.1
+  passkeys: ^2.22.0
   riverpod: ^2.3.10
 
 dev_dependencies:
