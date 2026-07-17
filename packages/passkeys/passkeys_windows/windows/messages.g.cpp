@@ -376,6 +376,20 @@ RegisterResponse::RegisterResponse(
     attestation_object_(attestation_object),
     transports_(transports) {}
 
+RegisterResponse::RegisterResponse(
+  const std::string& id,
+  const std::string& raw_id,
+  const std::string& client_data_j_s_o_n,
+  const std::string& attestation_object,
+  const EncodableList& transports,
+  const bool* prf_enabled)
+ : id_(id),
+    raw_id_(raw_id),
+    client_data_j_s_o_n_(client_data_j_s_o_n),
+    attestation_object_(attestation_object),
+    transports_(transports),
+    prf_enabled_(prf_enabled ? std::optional<bool>(*prf_enabled) : std::nullopt) {}
+
 const std::string& RegisterResponse::id() const {
   return id_;
 }
@@ -421,14 +435,28 @@ void RegisterResponse::set_transports(const EncodableList& value_arg) {
 }
 
 
+const bool* RegisterResponse::prf_enabled() const {
+  return prf_enabled_ ? &(*prf_enabled_) : nullptr;
+}
+
+void RegisterResponse::set_prf_enabled(const bool* value_arg) {
+  prf_enabled_ = value_arg ? std::optional<bool>(*value_arg) : std::nullopt;
+}
+
+void RegisterResponse::set_prf_enabled(bool value_arg) {
+  prf_enabled_ = value_arg;
+}
+
+
 EncodableList RegisterResponse::ToEncodableList() const {
   EncodableList list;
-  list.reserve(5);
+  list.reserve(6);
   list.push_back(EncodableValue(id_));
   list.push_back(EncodableValue(raw_id_));
   list.push_back(EncodableValue(client_data_j_s_o_n_));
   list.push_back(EncodableValue(attestation_object_));
   list.push_back(EncodableValue(transports_));
+  list.push_back(prf_enabled_ ? EncodableValue(*prf_enabled_) : EncodableValue());
   return list;
 }
 
@@ -439,6 +467,10 @@ RegisterResponse RegisterResponse::FromEncodableList(const EncodableList& list) 
     std::get<std::string>(list[2]),
     std::get<std::string>(list[3]),
     std::get<EncodableList>(list[4]));
+  auto& encodable_prf_enabled = list[5];
+  if (!encodable_prf_enabled.IsNull()) {
+    decoded.set_prf_enabled(std::get<bool>(encodable_prf_enabled));
+  }
   return decoded;
 }
 
@@ -457,6 +489,22 @@ AuthenticateResponse::AuthenticateResponse(
     authenticator_data_(authenticator_data),
     signature_(signature),
     user_handle_(user_handle) {}
+
+AuthenticateResponse::AuthenticateResponse(
+  const std::string& id,
+  const std::string& raw_id,
+  const std::string& client_data_j_s_o_n,
+  const std::string& authenticator_data,
+  const std::string& signature,
+  const std::string& user_handle,
+  const std::string* prf_result_first)
+ : id_(id),
+    raw_id_(raw_id),
+    client_data_j_s_o_n_(client_data_j_s_o_n),
+    authenticator_data_(authenticator_data),
+    signature_(signature),
+    user_handle_(user_handle),
+    prf_result_first_(prf_result_first ? std::optional<std::string>(*prf_result_first) : std::nullopt) {}
 
 const std::string& AuthenticateResponse::id() const {
   return id_;
@@ -512,15 +560,29 @@ void AuthenticateResponse::set_user_handle(std::string_view value_arg) {
 }
 
 
+const std::string* AuthenticateResponse::prf_result_first() const {
+  return prf_result_first_ ? &(*prf_result_first_) : nullptr;
+}
+
+void AuthenticateResponse::set_prf_result_first(const std::string_view* value_arg) {
+  prf_result_first_ = value_arg ? std::optional<std::string>(*value_arg) : std::nullopt;
+}
+
+void AuthenticateResponse::set_prf_result_first(std::string_view value_arg) {
+  prf_result_first_ = value_arg;
+}
+
+
 EncodableList AuthenticateResponse::ToEncodableList() const {
   EncodableList list;
-  list.reserve(6);
+  list.reserve(7);
   list.push_back(EncodableValue(id_));
   list.push_back(EncodableValue(raw_id_));
   list.push_back(EncodableValue(client_data_j_s_o_n_));
   list.push_back(EncodableValue(authenticator_data_));
   list.push_back(EncodableValue(signature_));
   list.push_back(EncodableValue(user_handle_));
+  list.push_back(prf_result_first_ ? EncodableValue(*prf_result_first_) : EncodableValue());
   return list;
 }
 
@@ -532,6 +594,10 @@ AuthenticateResponse AuthenticateResponse::FromEncodableList(const EncodableList
     std::get<std::string>(list[3]),
     std::get<std::string>(list[4]),
     std::get<std::string>(list[5]));
+  auto& encodable_prf_result_first = list[6];
+  if (!encodable_prf_result_first.IsNull()) {
+    decoded.set_prf_result_first(std::get<std::string>(encodable_prf_result_first));
+  }
   return decoded;
 }
 
@@ -703,7 +769,9 @@ void PasskeysApi::SetUp(
             return;
           }
           const auto& exclude_credentials_arg = std::get<EncodableList>(encodable_exclude_credentials_arg);
-          api->Register(challenge_arg, relying_party_arg, user_arg, authenticator_selection_arg, pub_key_cred_params_arg, timeout_arg, attestation_arg, exclude_credentials_arg, [reply](ErrorOr<RegisterResponse>&& output) {
+          const auto& encodable_prf_arg = args.at(8);
+          const auto* prf_arg = std::get_if<std::string>(&encodable_prf_arg);
+          api->Register(challenge_arg, relying_party_arg, user_arg, authenticator_selection_arg, pub_key_cred_params_arg, timeout_arg, attestation_arg, exclude_credentials_arg, prf_arg, [reply](ErrorOr<RegisterResponse>&& output) {
             if (output.has_error()) {
               reply(WrapError(output.error()));
               return;
@@ -747,7 +815,9 @@ void PasskeysApi::SetUp(
           const auto* allow_credentials_arg = std::get_if<EncodableList>(&encodable_allow_credentials_arg);
           const auto& encodable_prefer_immediately_available_credentials_arg = args.at(5);
           const auto* prefer_immediately_available_credentials_arg = std::get_if<bool>(&encodable_prefer_immediately_available_credentials_arg);
-          api->Authenticate(relying_party_id_arg, challenge_arg, timeout_arg, user_verification_arg, allow_credentials_arg, prefer_immediately_available_credentials_arg, [reply](ErrorOr<AuthenticateResponse>&& output) {
+          const auto& encodable_prf_arg = args.at(6);
+          const auto* prf_arg = std::get_if<std::string>(&encodable_prf_arg);
+          api->Authenticate(relying_party_id_arg, challenge_arg, timeout_arg, user_verification_arg, allow_credentials_arg, prefer_immediately_available_credentials_arg, prf_arg, [reply](ErrorOr<AuthenticateResponse>&& output) {
             if (output.has_error()) {
               reply(WrapError(output.error()));
               return;

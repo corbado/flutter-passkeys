@@ -33,6 +33,7 @@ class PasskeysWindows extends PasskeysPlatform {
           )
           .toList(),
       request.preferImmediatelyAvailableCredentials,
+      request.prf,
     );
 
     return AuthenticateResponseType(
@@ -42,6 +43,14 @@ class PasskeysWindows extends PasskeysPlatform {
       authenticatorData: authenticateResponse.authenticatorData,
       signature: authenticateResponse.signature,
       userHandle: authenticateResponse.userHandle,
+      clientExtensionResults: authenticateResponse.prfResultFirst == null
+          ? null
+          : {
+              'prf': {
+                'enabled': true,
+                'results': {'first': authenticateResponse.prfResultFirst},
+              },
+            },
     );
   }
 
@@ -94,6 +103,7 @@ class PasskeysWindows extends PasskeysPlatform {
       request.excludeCredentials
           .map((e) => ExcludeCredential(type: e.type, id: e.id))
           .toList(),
+      request.prf,
     );
 
     return RegisterResponseType(
@@ -102,6 +112,11 @@ class PasskeysWindows extends PasskeysPlatform {
       clientDataJSON: registerResponse.clientDataJSON,
       attestationObject: registerResponse.attestationObject,
       transports: registerResponse.transports.whereType<String>().toList(),
+      clientExtensionResults: registerResponse.prfEnabled == null
+          ? null
+          : {
+              'prf': {'enabled': registerResponse.prfEnabled},
+            },
     );
   }
 

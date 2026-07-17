@@ -105,6 +105,27 @@ class PasskeysDarwin extends PasskeysPlatform {
       _api.cancelCurrentAuthenticatorOperation();
 
   @override
+  Future<void> signalUnknownCredential(
+    SignalUnknownCredentialRequestType request,
+  ) {
+    return _api.signalUnknownCredential(
+      request.relyingPartyId,
+      request.credentialId,
+    );
+  }
+
+  @override
+  Future<void> signalAllAcceptedCredentials(
+    SignalAllAcceptedCredentialsRequestType request,
+  ) {
+    return _api.signalAllAcceptedCredentials(
+      request.relyingPartyId,
+      request.userId,
+      request.allAcceptedCredentialIds,
+    );
+  }
+
+  @override
   Future<AvailabilityTypeIOS> getAvailability() async {
     final availability = await _api.canAuthenticate();
     final hasBiometrics = await _api.hasBiometrics();

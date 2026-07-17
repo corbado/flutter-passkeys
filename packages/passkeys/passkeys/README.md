@@ -13,8 +13,9 @@ on Vercel).
 
 ## Features
 
-- sign up and login users with passkeys on iOS, Android and Web
+- sign up and login users with passkeys on Android, iOS, macOS, Web and Windows
 - login users with conditional UI
+- derive secrets from a passkey through the WebAuthn PRF extension (see [Using the PRF extension](#using-the-prf-extension))
 
 ## Getting started
 
@@ -218,6 +219,74 @@ if (kIsWeb) {
 
 </details>
 
+## Using the PRF extension
+
+The WebAuthn [PRF extension](https://w3c.github.io/webauthn/#prf-extension) (backed by the CTAP2
+`hmac-secret` extension) lets you derive a stable, high-entropy secret from a passkey. The
+underlying key material never leaves the authenticator, and the derived secret is reproducible on
+every authentication, so it is a good building block for client-side encryption (for example to seed
+a symmetric key that encrypts a user's data).
+
+You pass a base64url-encoded `prf` salt into the registration and authentication requests, and read
+the derived secret back from `clientExtensionResults`.
+
+### Platform support
+
+| Android            | iOS                   | macOS                  | Web                | Windows            | Linux |
+| ------------------ | --------------------- | ---------------------- | ------------------ | ------------------ | ----- |
+| :white_check_mark: | :white_check_mark: (18+) | :white_check_mark: (15+) | :white_check_mark: | :white_check_mark: | :x:   |
+
+The salt is typically coordinated with your relying party server (it is part of the WebAuthn
+`extensions.prf.eval.first` input). Registration usually only reports whether PRF is `enabled`,
+while the derived secret (`results.first`) is returned during authentication.
+
+### Registration
+
+```dart
+final authenticator = PasskeyAuthenticator();
+
+final response = await authenticator.register(
+  RegisterRequestType(
+    challenge: challenge,
+    relyingParty: relyingParty,
+    user: user,
+    excludeCredentials: const [],
+    // Base64URL encoded salt, without padding.
+    prf: prfSalt,
+  ),
+);
+
+// During registration platforms typically only tell you whether PRF is
+// available for the newly created credential.
+final prf = response.clientExtensionResults?['prf'] as Map?;
+final prfEnabled = prf?['enabled'] == true;
+```
+
+### Authentication
+
+```dart
+final authenticator = PasskeyAuthenticator();
+
+final response = await authenticator.authenticate(
+  AuthenticateRequestType(
+    relyingPartyId: relyingPartyId,
+    challenge: challenge,
+    mediation: MediationType.Optional,
+    preferImmediatelyAvailableCredentials: false,
+    // Use the same salt you used during registration to obtain the same secret.
+    prf: prfSalt,
+  ),
+);
+
+// The derived secret is returned as a base64url-encoded string.
+final results =
+    (response.clientExtensionResults?['prf'] as Map?)?['results'] as Map?;
+final secret = results?['first'] as String?;
+```
+
+Use `secret` (after base64url-decoding it) as key material for your encryption, but never send it to
+your relying party server.
+
 ## Troubleshooting
 
 As a first step, you can rely on our integrated doctor tool to help you debug and configure your app. To enable it, simply pass debugMode: true when initializing PasskeysAuthenticator:
@@ -340,7 +409,7 @@ If you get an error like "Simulator requires enrolled biometrics to use passkeys
 login, activate Face ID for your device.
 On a simulator, this can be done under _Features_ => _Face ID_ by clicking on "Enrolled".
 
-<img src="https://raw.githubusercontent.com/corbado/flutter-passkeys/main/packages/passkeys/passkeys/doc/ios_error_enrolled_biometrics.png" style="width: 200px" calt="ios_enrolled_biometrics">
+<img src="https://raw.githubusercontent.com/corbado/flutter-passkeys/main/packages/passkeys/passkeys/doc/ios_error_enrolled_biometrics.png" style="width: 200px" alt="ios_enrolled_biometrics">
 </details>
 
 ### macOS
@@ -360,7 +429,7 @@ On a simulator, this can be done under _Features_ => _Face ID_ by clicking on "E
 <details>
 <summary>1. Update your index.html to include our JavaScript library</summary>
 Our passkeys_web package relies on JavaScript for integrating with the browser's WebAuthn API.
-To make this work, you have to include our JavaScript library in your web/index.html file. If not correctly integrated the PasskeyAuthenticator would not correctly initialize and the application would crash and an exception asking to add the code blow will show in your console.
+To make this work, you have to include our JavaScript library in your web/index.html file. If not correctly integrated the PasskeyAuthenticator would not correctly initialize and the application would crash and an exception asking to add the code below will show in your console.
 
 ```html
 <script

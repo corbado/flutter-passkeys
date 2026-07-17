@@ -16,4 +16,18 @@ abstract interface class PasskeyAuthenticatorInterface {
   Future<AuthenticateResponseType> authenticate(
     AuthenticateRequestType request,
   );
+
+  /// Signals to the platform that the credential in [request] is no longer
+  /// recognized by the relying party, so it can be removed from the credential
+  /// picker and autofill suggestions.
+  Future<void> signalUnknownCredential(
+    SignalUnknownCredentialRequestType request,
+  );
+
+  /// Signals to the platform the complete set of credentials that the relying
+  /// party still accepts for a user, so any others can be pruned from the
+  /// credential picker.
+  Future<void> signalAllAcceptedCredentials(
+    SignalAllAcceptedCredentialsRequestType request,
+  );
 }

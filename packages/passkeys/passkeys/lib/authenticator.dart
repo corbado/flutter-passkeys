@@ -11,10 +11,15 @@ class PasskeyAuthenticator implements PasskeyAuthenticatorInterface {
   /// Constructor
   PasskeyAuthenticator({bool? debugMode})
     : _platform = PasskeysPlatform.instance,
-      debugMode = debugMode ?? false;
+      debugMode = debugMode ?? false {
+    if (this.debugMode) {
+      _doctor = PasskeysDoctor();
+    }
+  }
 
-  /// The [PasskeysDoctor] instance for debugging and checking passkeys
-  final _doctor = PasskeysDoctor();
+  /// The [PasskeysDoctor] instance for debugging and checking passkeys.
+  /// Only created when [debugMode] is enabled.
+  PasskeysDoctor? _doctor;
 
   /// The platform interface for passkeys.
   final PasskeysPlatform _platform;
@@ -37,7 +42,9 @@ class PasskeyAuthenticator implements PasskeyAuthenticatorInterface {
   }
 
   /// Returns a stream of results from the debugging doctor.
-  Stream<Result> get resultStream => _doctor.resultStream;
+  /// Emits nothing when [debugMode] is disabled.
+  Stream<Result> get resultStream =>
+      _doctor?.resultStream ?? const Stream<Result>.empty();
 
   /// Creates a new passkey and stores it on the device.
   /// Returns [RegisterResponseType] which must be sent to the relying party
@@ -45,7 +52,7 @@ class PasskeyAuthenticator implements PasskeyAuthenticatorInterface {
   @override
   Future<RegisterResponseType> register(RegisterRequestType request) async {
     if (debugMode) {
-      await _doctor.check(request.relyingParty.id);
+      await _doctor?.check(request.relyingParty.id);
     }
 
     try {
@@ -64,7 +71,7 @@ class PasskeyAuthenticator implements PasskeyAuthenticatorInterface {
       return r;
     } on PlatformException catch (e) {
       if (debugMode) {
-        _doctor.recordException(e);
+        _doctor?.recordException(e);
       }
 
       switch (e.code) {
@@ -108,7 +115,7 @@ class PasskeyAuthenticator implements PasskeyAuthenticatorInterface {
     AuthenticateRequestType request,
   ) async {
     if (debugMode) {
-      await _doctor.check(request.relyingPartyId);
+      await _doctor?.check(request.relyingPartyId);
     }
 
     try {
@@ -127,7 +134,7 @@ class PasskeyAuthenticator implements PasskeyAuthenticatorInterface {
       return r;
     } on PlatformException catch (e) {
       if (debugMode) {
-        _doctor.recordException(e);
+        _doctor?.recordException(e);
       }
 
       switch (e.code) {
@@ -161,6 +168,81 @@ class PasskeyAuthenticator implements PasskeyAuthenticatorInterface {
     }
   }
 
+  /// Signals to the platform that a credential is no longer recognized by the
+  /// relying party.
+  ///
+  /// Call this after the server rejects an assertion because the credential was
+  /// deleted server-side. Where supported this removes the stale credential
+  /// from the passkey picker and autofill suggestions.
+  ///
+  /// This is a best-effort hint. It is only acted upon on Android (with a
+  /// Credential Manager provider that supports the Signal API), iOS 26.2 and
+  /// later, macOS 26.2 and later, and browsers that expose
+  /// `PublicKeyCredential.signalUnknownCredential`. On every other platform or
+  /// OS version, including older iOS and macOS releases, the call is a no-op.
+  @override
+  Future<void> signalUnknownCredential(
+    SignalUnknownCredentialRequestType request,
+  ) async {
+    try {
+      _isValidCredentialID(request.credentialId);
+
+      await _platform.signalUnknownCredential(request);
+    } on PlatformException catch (e, stackTrace) {
+      _mapSignalException(e, stackTrace);
+    }
+  }
+
+  /// Signals to the platform the complete set of credentials that the relying
+  /// party still accepts for a user.
+  ///
+  /// Where supported any credentials not contained in
+  /// [SignalAllAcceptedCredentialsRequestType.allAcceptedCredentialIds] are
+  /// pruned from the passkey picker.
+  ///
+  /// This is a best-effort hint. It is only acted upon on Android (with a
+  /// Credential Manager provider that supports the Signal API), iOS 26.2 and
+  /// later, macOS 26.2 and later, and browsers that expose
+  /// `PublicKeyCredential.signalAllAcceptedCredentials`. On every other
+  /// platform or OS version, including older iOS and macOS releases, the call
+  /// is a no-op.
+  @override
+  Future<void> signalAllAcceptedCredentials(
+    SignalAllAcceptedCredentialsRequestType request,
+  ) async {
+    try {
+      _isValidUserID(request.userId);
+      for (final credentialId in request.allAcceptedCredentialIds) {
+        _isValidCredentialID(credentialId);
+      }
+
+      await _platform.signalAllAcceptedCredentials(request);
+    } on PlatformException catch (e, stackTrace) {
+      _mapSignalException(e, stackTrace);
+    }
+  }
+
+  Never _mapSignalException(PlatformException e, StackTrace stackTrace) {
+    if (debugMode) {
+      _doctor?.recordException(e);
+    }
+
+    switch (e.code) {
+      case 'cancelled':
+        throw PasskeyAuthCancelledException();
+      case 'domain-not-associated':
+        throw DomainNotAssociatedException(e.message);
+      case 'deviceNotSupported':
+        throw DeviceNotSupportedException();
+      default:
+        if (e.code.startsWith('android-unhandled') ||
+            e.code.startsWith('ios-unhandled')) {
+          throw UnhandledAuthenticatorException(e.code, e.message, e.details);
+        }
+        Error.throwWithStackTrace(e, stackTrace);
+    }
+  }
+
   /// Returns platform-specific information about the availability of passkeys.
   ///
   /// This function returns an instance of [GetAvailability], which provides
@@ -186,7 +268,7 @@ class PasskeyAuthenticator implements PasskeyAuthenticatorInterface {
   void _isValidChallenge(String challenge) {
     if (!_isValidBase64Url(input: challenge)) {
       if (debugMode) {
-        _doctor.recordException(
+        _doctor?.recordException(
           PlatformException(code: 'malformed-base64-url-challenge'),
         );
       }
@@ -198,7 +280,7 @@ class PasskeyAuthenticator implements PasskeyAuthenticatorInterface {
   void _isValidCredentialID(String credentialID) {
     if (!_isValidBase64Url(input: credentialID)) {
       if (debugMode) {
-        _doctor.recordException(
+        _doctor?.recordException(
           PlatformException(code: 'malformed-base64-url-credential-id'),
         );
       }
@@ -210,7 +292,7 @@ class PasskeyAuthenticator implements PasskeyAuthenticatorInterface {
   void _isValidUserID(String userID) {
     if (!_isValidBase64Url(input: userID, allowPadding: true)) {
       if (debugMode) {
-        _doctor.recordException(
+        _doctor?.recordException(
           PlatformException(code: 'malformed-base64-url-user-id'),
         );
       }

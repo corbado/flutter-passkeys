@@ -280,6 +280,8 @@ protocol PasskeysApi {
   func register(challenge: String, relyingParty: RelyingParty, user: User, excludeCredentials: [CredentialType], pubKeyCredValues: [Int64], canBePlatformAuthenticator: Bool, canBeSecurityKey: Bool, residentKeyPreference: String?, attestationPreference: String?, salt: String?, completion: @escaping (Result<RegisterResponse, Error>) -> Void)
   func authenticate(relyingPartyId: String, challenge: String, conditionalUI: Bool, allowedCredentials: [CredentialType], preferImmediatelyAvailableCredentials: Bool, salt: String?, completion: @escaping (Result<AuthenticateResponse, Error>) -> Void)
   func cancelCurrentAuthenticatorOperation(completion: @escaping (Result<Void, Error>) -> Void)
+  func signalUnknownCredential(relyingPartyId: String, credentialId: String, completion: @escaping (Result<Void, Error>) -> Void)
+  func signalAllAcceptedCredentials(relyingPartyId: String, userId: String, allAcceptedCredentialIds: [String], completion: @escaping (Result<Void, Error>) -> Void)
 }
 
 /// Generated setup class from Pigeon to handle messages through the `binaryMessenger`.
@@ -376,6 +378,43 @@ class PasskeysApiSetup {
       }
     } else {
       cancelCurrentAuthenticatorOperationChannel.setMessageHandler(nil)
+    }
+    let signalUnknownCredentialChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.passkeys_darwin.PasskeysApi.signalUnknownCredential", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      signalUnknownCredentialChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let relyingPartyIdArg = args[0] as! String
+        let credentialIdArg = args[1] as! String
+        api.signalUnknownCredential(relyingPartyId: relyingPartyIdArg, credentialId: credentialIdArg) { result in
+          switch result {
+            case .success:
+              reply(wrapResult(nil))
+            case .failure(let error):
+              reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      signalUnknownCredentialChannel.setMessageHandler(nil)
+    }
+    let signalAllAcceptedCredentialsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.passkeys_darwin.PasskeysApi.signalAllAcceptedCredentials", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      signalAllAcceptedCredentialsChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let relyingPartyIdArg = args[0] as! String
+        let userIdArg = args[1] as! String
+        let allAcceptedCredentialIdsArg = args[2] as! [String]
+        api.signalAllAcceptedCredentials(relyingPartyId: relyingPartyIdArg, userId: userIdArg, allAcceptedCredentialIds: allAcceptedCredentialIdsArg) { result in
+          switch result {
+            case .success:
+              reply(wrapResult(nil))
+            case .failure(let error):
+              reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      signalAllAcceptedCredentialsChannel.setMessageHandler(nil)
     }
   }
 }

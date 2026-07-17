@@ -1,11 +1,9 @@
-// ignore_for_file: file_names
-
 import 'package:json_annotation/json_annotation.dart';
 import 'package:passkeys_platform_interface/types/credential.dart';
 import 'package:passkeys_platform_interface/types/pubkeycred_param.dart';
 import 'package:passkeys_platform_interface/types/types.dart';
 
-part 'passkeySignUpRequest.g.dart';
+part 'passkey_sign_up_request.g.dart';
 
 /// Request payload sent to the Web SDK to register a new passkey.
 @JsonSerializable(createFactory: false, explicitToJson: true)

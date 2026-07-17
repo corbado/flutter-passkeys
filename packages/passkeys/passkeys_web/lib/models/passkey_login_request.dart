@@ -1,10 +1,10 @@
-// ignore_for_file: file_names, constant_identifier_names
+// ignore_for_file: constant_identifier_names
 
 import 'package:json_annotation/json_annotation.dart';
 import 'package:passkeys_platform_interface/types/credential.dart';
 import 'package:passkeys_platform_interface/types/types.dart';
 
-part 'passkeyLoginRequest.g.dart';
+part 'passkey_login_request.g.dart';
 
 /// Request payload sent to the Web SDK to authenticate with a passkey.
 @JsonSerializable(explicitToJson: true)

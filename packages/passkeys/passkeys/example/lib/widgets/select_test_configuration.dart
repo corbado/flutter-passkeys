@@ -1,5 +1,3 @@
-// ignore_for_file: library_private_types_in_public_api
-
 import 'package:flutter/material.dart';
 import 'package:passkeys_example/auth_service.dart';
 
@@ -16,7 +14,7 @@ class SelectTestConfiguration extends StatefulWidget {
   final List<Configuration> configurations;
 
   @override
-  _SelectTestConfigurationState createState() =>
+  State<SelectTestConfiguration> createState() =>
       _SelectTestConfigurationState();
 }
 

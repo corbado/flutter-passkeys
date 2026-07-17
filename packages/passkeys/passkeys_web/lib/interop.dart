@@ -30,3 +30,16 @@ external JSPromise<JSBoolean?> isConditionalMediationAvailable();
 /// Whether the current browser supports passkeys.
 @JS('PasskeyAuthenticator.hasPasskeySupport')
 external JSBoolean hasPasskeySupport();
+
+/// The global `PublicKeyCredential` interface. Used to feature-detect the
+/// WebAuthn Signal API static methods before calling them.
+@JS('PublicKeyCredential')
+external JSObject? get publicKeyCredential;
+
+/// Signals that a credential is no longer recognized by the relying party.
+@JS('PublicKeyCredential.signalUnknownCredential')
+external JSPromise<JSAny?> signalUnknownCredentialJS(JSObject options);
+
+/// Signals the complete set of credentials the relying party still accepts.
+@JS('PublicKeyCredential.signalAllAcceptedCredentials')
+external JSPromise<JSAny?> signalAllAcceptedCredentialsJS(JSObject options);

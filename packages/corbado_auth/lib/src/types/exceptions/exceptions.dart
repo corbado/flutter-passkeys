@@ -6,7 +6,7 @@ import 'package:json_annotation/json_annotation.dart';
 part 'exceptions.g.dart';
 
 /// Base class for all exceptions thrown by the Corbado Auth SDK.
-class CorbadoException implements Exception {
+sealed class CorbadoException implements Exception {
   /// Constructor
   CorbadoException(this._message);
 

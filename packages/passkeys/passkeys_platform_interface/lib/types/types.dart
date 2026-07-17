@@ -6,4 +6,5 @@ export 'mediation.dart';
 export 'register_request.dart';
 export 'register_response.dart';
 export 'relying_party.dart';
+export 'signal_request.dart';
 export 'user.dart';

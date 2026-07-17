@@ -95,6 +95,7 @@ class AuthenticateController: NSObject, ASAuthorizationControllerDelegate, ASAut
     func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
         if let err = error as? ASAuthorizationError {
             completion?(.failure(FlutterError(from: err)))
+            return
         }
 
         let nsErr = error as NSError

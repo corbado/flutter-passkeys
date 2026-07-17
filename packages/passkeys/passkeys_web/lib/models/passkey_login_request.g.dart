@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'passkeyLoginRequest.dart';
+part of 'passkey_login_request.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator

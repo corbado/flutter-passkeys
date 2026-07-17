@@ -1,9 +1,7 @@
-// ignore_for_file: file_names
-
 import 'package:json_annotation/json_annotation.dart';
 import 'package:passkeys_platform_interface/types/types.dart';
 
-part 'passkeyLoginResponse.g.dart';
+part 'passkey_login_response.g.dart';
 
 /// Response returned by the Web SDK after a successful passkey login.
 @JsonSerializable()
@@ -28,15 +26,17 @@ class PasskeyLoginResponse {
   Map<String, dynamic> toJson() => _$PasskeyLoginResponseToJson(this);
 
   /// Converts this response into the platform interface response type.
-  AuthenticateResponseType toAuthenticateResponseType() =>
-      AuthenticateResponseType(
-        clientDataJSON: response.clientDataJSON,
-        authenticatorData: response.authenticatorData,
-        signature: response.signature,
-        userHandle: response.userHandle ?? '',
-        id: id,
-        rawId: rawId,
-      );
+  AuthenticateResponseType toAuthenticateResponseType({
+    Map<String, dynamic>? clientExtensionResults,
+  }) => AuthenticateResponseType(
+    clientDataJSON: response.clientDataJSON,
+    authenticatorData: response.authenticatorData,
+    signature: response.signature,
+    userHandle: response.userHandle ?? '',
+    id: id,
+    rawId: rawId,
+    clientExtensionResults: clientExtensionResults,
+  );
 }
 
 /// The authenticator assertion data returned during a passkey login.

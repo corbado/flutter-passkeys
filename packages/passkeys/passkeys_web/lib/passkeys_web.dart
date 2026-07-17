@@ -1,15 +1,16 @@
 import 'dart:convert';
 import 'dart:js_interop';
+import 'dart:js_interop_unsafe';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:passkeys_platform_interface/passkeys_platform_interface.dart';
 import 'package:passkeys_platform_interface/types/types.dart';
 import 'package:passkeys_web/interop.dart';
-import 'package:passkeys_web/models/passkeyLoginRequest.dart';
-import 'package:passkeys_web/models/passkeyLoginResponse.dart';
-import 'package:passkeys_web/models/passkeySignUpRequest.dart';
-import 'package:passkeys_web/models/passkeySignUpResponse.dart';
+import 'package:passkeys_web/models/passkey_login_request.dart';
+import 'package:passkeys_web/models/passkey_login_response.dart';
+import 'package:passkeys_web/models/passkey_sign_up_request.dart';
+import 'package:passkeys_web/models/passkey_sign_up_response.dart';
 import 'package:web/web.dart';
 
 /// The Web implementation of [PasskeysPlatform].
@@ -51,7 +52,10 @@ class PasskeysWeb extends PasskeysPlatform {
     );
 
     try {
-      final serializedRequest = jsonEncode(r.toJson());
+      final requestJson = r.toJson();
+      _applyPrf(requestJson, request.prf);
+
+      final serializedRequest = jsonEncode(requestJson);
       final response = await authenticatorRegister(
         serializedRequest.toJS,
       ).toDart;
@@ -65,6 +69,8 @@ class PasskeysWeb extends PasskeysPlatform {
         clientDataJSON: typedResponse.response.clientDataJSON,
         attestationObject: typedResponse.response.attestationObject,
         transports: typedResponse.response.transports,
+        clientExtensionResults:
+            decodedResponse['clientExtensionResults'] as Map<String, dynamic>?,
       );
     } catch (e) {
       final exception = _parseException(e.toString());
@@ -86,17 +92,40 @@ class PasskeysWeb extends PasskeysPlatform {
     );
 
     try {
-      final serializedRequest = jsonEncode(r.toJson());
+      final requestJson = r.toJson();
+      _applyPrf(requestJson, request.prf);
+
+      final serializedRequest = jsonEncode(requestJson);
       final response = await authenticatorLogin(serializedRequest.toJS).toDart;
       final decodedResponse =
           jsonDecode(response.toDart) as Map<String, dynamic>;
       final typedResponse = PasskeyLoginResponse.fromJson(decodedResponse);
 
-      return typedResponse.toAuthenticateResponseType();
+      return typedResponse.toAuthenticateResponseType(
+        clientExtensionResults:
+            decodedResponse['clientExtensionResults'] as Map<String, dynamic>?,
+      );
     } catch (e) {
       final exception = _parseException(e.toString());
       throw exception;
     }
+  }
+
+  /// Adds the WebAuthn PRF extension salt to the serialized [requestJson] so
+  /// the JS layer can forward it to the browser's WebAuthn API.
+  void _applyPrf(Map<String, dynamic> requestJson, String? prf) {
+    if (prf == null) {
+      return;
+    }
+
+    final publicKey = requestJson['publicKey'] as Map<String, dynamic>;
+    final extensions =
+        (publicKey['extensions'] as Map<String, dynamic>?) ??
+        <String, dynamic>{};
+    extensions['prf'] = {
+      'eval': {'first': prf},
+    };
+    publicKey['extensions'] = extensions;
   }
 
   PlatformException _parseException(String exception) {
@@ -113,6 +142,59 @@ class PasskeysWeb extends PasskeysPlatform {
         details: exception,
       );
     }
+  }
+
+  @override
+  Future<void> signalUnknownCredential(
+    SignalUnknownCredentialRequestType request,
+  ) async {
+    if (!_supportsSignal('signalUnknownCredential')) {
+      // This browser does not support the Signal API; the hint is best-effort
+      // so treat it as a no-op.
+      return;
+    }
+
+    final options = JSObject()
+      ..setProperty('rpId'.toJS, request.relyingPartyId.toJS)
+      ..setProperty('credentialId'.toJS, request.credentialId.toJS);
+
+    try {
+      await signalUnknownCredentialJS(options).toDart;
+    } catch (e) {
+      throw _parseException(e.toString());
+    }
+  }
+
+  @override
+  Future<void> signalAllAcceptedCredentials(
+    SignalAllAcceptedCredentialsRequestType request,
+  ) async {
+    if (!_supportsSignal('signalAllAcceptedCredentials')) {
+      // This browser does not support the Signal API; the hint is best-effort
+      // so treat it as a no-op.
+      return;
+    }
+
+    final credentialIds = request.allAcceptedCredentialIds
+        .map((e) => e.toJS)
+        .toList()
+        .toJS;
+    final options = JSObject()
+      ..setProperty('rpId'.toJS, request.relyingPartyId.toJS)
+      ..setProperty('userId'.toJS, request.userId.toJS)
+      ..setProperty('allAcceptedCredentialIds'.toJS, credentialIds);
+
+    try {
+      await signalAllAcceptedCredentialsJS(options).toDart;
+    } catch (e) {
+      throw _parseException(e.toString());
+    }
+  }
+
+  bool _supportsSignal(String method) {
+    final publicKeyCredentialCtor = publicKeyCredential;
+    return publicKeyCredentialCtor != null &&
+        publicKeyCredentialCtor.has(method);
   }
 
   @override

@@ -32,7 +32,7 @@ If you change the development team id you will get an error on sign up/sign in
 because the relying party server in the example only trusts apps that have been built with a
 development team id of "0000000000" and a Bundle Identifier of "com.corbado.passkeys.pub".
 
-<img src="https://raw.githubusercontent.com/corbado/flutter-passkeys/main/packages/passkeys/passkeys/doc/xcode-team-unknown-name.png" style="width: 50%" calt="ios_enrolled_biometrics">
+<img src="https://raw.githubusercontent.com/corbado/flutter-passkeys/main/packages/passkeys/passkeys/doc/xcode-team-unknown-name.png" style="width: 50%" alt="xcode_team_unknown_name">
 
 
 ### macOS

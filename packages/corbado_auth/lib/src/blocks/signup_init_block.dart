@@ -16,7 +16,7 @@ class SignupInitBlockData {
     if (typed.fullName != null) {
       fullName = TextFieldWithError(
         value: typed.fullName!.fullName,
-        error: CorbadoError.fromRequestError(typed.fullName!.error),
+        error: CorbadoAuthException.fromRequestError(typed.fullName!.error),
       );
     }
 
@@ -25,7 +25,7 @@ class SignupInitBlockData {
       if (identifier.type == LoginIdentifierType.email) {
         email = TextFieldWithError(
           value: identifier.identifier,
-          error: CorbadoError.fromRequestErrorWithIdentifier(
+          error: CorbadoAuthException.fromRequestErrorWithIdentifier(
             identifier.error,
             identifier.type,
           ),
@@ -91,7 +91,7 @@ class SignupInitBlock extends Block<SignupInitBlockData> {
         fullName: fullName,
       );
       processHandler.updateBlockFromServer(res);
-    } on CorbadoError catch (e) {
+    } on CorbadoAuthException catch (e) {
       data.primaryLoading = false;
       processHandler.updateBlockFromError(e);
     }

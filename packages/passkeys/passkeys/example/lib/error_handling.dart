@@ -4,40 +4,39 @@ import 'package:passkeys/exceptions.dart';
 
 /// Returns a user-friendly error message for the given
 /// [AuthenticatorException].
+///
+/// The switch is exhaustive over the sealed [AuthenticatorException]
+/// hierarchy, so adding a new exception type fails to compile until it is
+/// handled here.
 String getFriendlyErrorMessage(AuthenticatorException exception) {
-  if (exception is PasskeyAuthCancelledException) {
-    return 'Authentication was cancelled. Please try again.';
-  } else if (exception is MissingGoogleSignInException) {
-    return 'You need to be signed into your Google account to use passkeys.';
-  } else if (exception is SyncAccountNotAvailableException) {
-    return 'Your sync account is not available. Please sign in and try again.';
-  } else if (exception is ExcludeCredentialsCanNotBeRegisteredException) {
-    return 'Some credentials cannot be registered. '
-        'Please check and try again.';
-  } else if (exception is NoCredentialsAvailableException) {
-    return 'No credentials available. '
-        'Try another login method, such as email OTP.';
-  } else if (exception is DomainNotAssociatedException) {
-    return exception.message ??
-        'This domain is not correctly associated. '
-            'Please check your configuration.';
-  } else if (exception is DeviceNotSupportedException) {
-    return 'This device does not support passkeys. Please update your OS.';
-  } else if (exception is NoCreateOptionException) {
-    return exception.message ??
-        'No viable options found to create a credential. '
-            'Check device settings.';
-  } else if (exception is TimeoutException) {
-    return exception.message ?? 'The operation timed out. Please try again.';
-  } else if (exception is MalformedBase64Url) {
-    return exception.toString();
-  } else if (exception is UnhandledAuthenticatorException) {
-    return 'An unexpected error occurred (Code: ${exception.code}). '
-        'Please contact support.';
-  } else if (exception is PasskeyUnsupportedException) {
-    return 'This device does not support passkeys '
-        '(requires at least Android SDK 28). Please update your OS.';
-  } else {
-    return 'An unknown error occurred. Please try again later.';
-  }
+  return switch (exception) {
+    PasskeyAuthCancelledException() =>
+      'Authentication was cancelled. Please try again.',
+    MissingGoogleSignInException() =>
+      'You need to be signed into your Google account to use passkeys.',
+    SyncAccountNotAvailableException() =>
+      'Your sync account is not available. Please sign in and try again.',
+    ExcludeCredentialsCanNotBeRegisteredException() =>
+      'Some credentials cannot be registered. Please check and try again.',
+    NoCredentialsAvailableException() =>
+      'No credentials available. Try another login method, such as email OTP.',
+    DomainNotAssociatedException(:final message) =>
+      message ??
+          'This domain is not correctly associated. '
+              'Please check your configuration.',
+    DeviceNotSupportedException() =>
+      'This device does not support passkeys. Please update your OS.',
+    NoCreateOptionException(:final message) =>
+      message ??
+          'No viable options found to create a credential. '
+              'Check device settings.',
+    TimeoutException(:final message) =>
+      message ?? 'The operation timed out. Please try again.',
+    MalformedBase64Url() => exception.toString(),
+    UnhandledAuthenticatorException(:final code) =>
+      'An unexpected error occurred (Code: $code). Please contact support.',
+    PasskeyUnsupportedException() =>
+      'This device does not support passkeys '
+          '(requires at least Android SDK 28). Please update your OS.',
+  };
 }

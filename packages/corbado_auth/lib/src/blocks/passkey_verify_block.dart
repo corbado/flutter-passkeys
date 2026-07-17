@@ -1,9 +1,7 @@
-// ignore_for_file: library_prefixes
-
 import 'package:corbado_auth/corbado_auth.dart';
 import 'package:corbado_auth/src/services/telemetry/telemetry.dart';
 import 'package:corbado_frontend_api_client/corbado_frontend_api_client.dart'
-    as Api;
+    hide VerificationMethod;
 
 /// Data backing the passkey verification step of an authentication process.
 class PasskeyVerifyBlockData {
@@ -14,9 +12,9 @@ class PasskeyVerifyBlockData {
     this.preferredFallback,
   });
 
-  /// Builds the data from a server [Api.GeneralBlockPasskeyVerify] response.
+  /// Builds the data from a server [GeneralBlockPasskeyVerify] response.
   factory PasskeyVerifyBlockData.fromProcessResponse(
-    Api.GeneralBlockPasskeyVerify typed,
+    GeneralBlockPasskeyVerify typed,
   ) {
     return PasskeyVerifyBlockData(
       availableFallbacks: [],
@@ -46,7 +44,7 @@ class PasskeyVerifyBlock extends Block<PasskeyVerifyBlockData> {
     required super.data,
   }) : super(
          initialScreen: ScreenNames.PasskeyVerify,
-         type: Api.BlockType.passkeyVerify,
+         type: BlockType.passkeyVerify,
          alternatives: [],
          authProcessType: AuthProcessType.Login,
        );
@@ -55,10 +53,10 @@ class PasskeyVerifyBlock extends Block<PasskeyVerifyBlockData> {
   void init() {
     data.availableFallbacks = alternatives.map((alternative) {
       return switch (alternative.type) {
-        Api.BlockType.emailVerify
+        BlockType.emailVerify
             when (alternative.data as EmailVerifyBlockData)
                     .verificationMethod !=
-                VerificationMethod.emailLink =>
+                EmailVerificationMethod.emailLink =>
           PasskeyFallback(
             label: 'Email verification',
             onTap: initFallbackEmailOtp,
@@ -89,7 +87,7 @@ class PasskeyVerifyBlock extends Block<PasskeyVerifyBlockData> {
       final response = await corbadoService.verifyPasskey();
       data.primaryLoading = false;
       processHandler.updateBlockFromServer(response);
-    } on CorbadoError catch (e) {
+    } on CorbadoAuthException catch (e) {
       data.primaryLoading = false;
       processHandler.updateBlockFromError(e);
     } on NoCredentialsAvailableException {
@@ -107,7 +105,7 @@ class PasskeyVerifyBlock extends Block<PasskeyVerifyBlockData> {
     try {
       final response = await corbadoService.sendEmailOtpCode();
       processHandler.updateBlockFromServer(response);
-    } on CorbadoError catch (e) {
+    } on CorbadoAuthException catch (e) {
       processHandler.updateBlockFromError(e);
     }
   }

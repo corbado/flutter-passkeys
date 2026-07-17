@@ -1,5 +1,3 @@
-// ignore_for_file: library_private_types_in_public_api
-
 import 'package:corbado_auth/corbado_auth.dart';
 import 'package:corbado_auth/src/process_handler.dart';
 import 'package:flutter/material.dart';
@@ -59,7 +57,7 @@ class CorbadoAuthComponent extends StatefulWidget {
   final Widget? loading;
 
   @override
-  _CorbadoAuthComponentState createState() => _CorbadoAuthComponentState();
+  State<CorbadoAuthComponent> createState() => _CorbadoAuthComponentState();
 }
 
 class _CorbadoAuthComponentState extends State<CorbadoAuthComponent> {
