@@ -3,6 +3,41 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2026-08-06
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`passkeys` - `v2.22.1`](#passkeys---v2221)
+ - [`passkeys_darwin` - `v0.4.3+3`](#passkeys_darwin---v0433)
+ - [`corbado_auth` - `v3.8.1`](#corbado_auth---v381)
+ - [`corbado_auth_firebase` - `v2.0.9`](#corbado_auth_firebase---v209)
+
+Packages with dependency updates only:
+
+> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
+
+ - `corbado_auth` - `v3.8.1`
+ - `corbado_auth_firebase` - `v2.0.9`
+
+---
+
+#### `passkeys` - `v2.22.1`
+
+ - **FIX**(passkeys_darwin): compile out Signal API on Xcode older than 26.2 ([#289](https://github.com/corbado/flutter-passkeys/issues/289)). ([3731dc07](https://github.com/corbado/flutter-passkeys/commit/3731dc07755001735daef9e1b2a61ad718b1d26f))
+
+#### `passkeys_darwin` - `v0.4.3+3`
+
+ - **FIX**(passkeys_darwin): compile out Signal API on Xcode older than 26.2 ([#289](https://github.com/corbado/flutter-passkeys/issues/289)). ([3731dc07](https://github.com/corbado/flutter-passkeys/commit/3731dc07755001735daef9e1b2a61ad718b1d26f))
+
+
 ## 2026-07-17
 
 ### Changes

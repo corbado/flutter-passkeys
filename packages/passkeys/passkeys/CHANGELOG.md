@@ -1,3 +1,7 @@
+## 2.22.1
+
+ - **FIX**(passkeys_darwin): compile out Signal API on Xcode older than 26.2 ([#289](https://github.com/corbado/flutter-passkeys/issues/289)). ([3731dc07](https://github.com/corbado/flutter-passkeys/commit/3731dc07755001735daef9e1b2a61ad718b1d26f))
+
 ## 2.22.0
 
  - **REFACTOR**: clean up analysis lints and refine auth exception types ([#282](https://github.com/corbado/flutter-passkeys/issues/282)). ([60312bd3](https://github.com/corbado/flutter-passkeys/commit/60312bd32b3435147341396b4a2210608aa1ff51))

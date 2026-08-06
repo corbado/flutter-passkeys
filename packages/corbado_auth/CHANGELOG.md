@@ -1,3 +1,7 @@
+## 3.8.1
+
+ - Update a dependency to the latest release.
+
 ## 3.8.0
 
  - **REFACTOR**: clean up analysis lints and refine auth exception types ([#282](https://github.com/corbado/flutter-passkeys/issues/282)). ([60312bd3](https://github.com/corbado/flutter-passkeys/commit/60312bd32b3435147341396b4a2210608aa1ff51))
