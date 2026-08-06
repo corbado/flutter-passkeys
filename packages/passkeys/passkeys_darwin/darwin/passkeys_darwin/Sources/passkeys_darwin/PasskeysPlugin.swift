@@ -217,6 +217,10 @@ public class PasskeysPlugin: NSObject, FlutterPlugin, PasskeysApi {
             return
         }
 
+        // ASCredentialDataManager only exists in the 26.2 SDK (Xcode 26.2,
+        // Swift 6.2.3), so it has to be compiled out on older toolchains
+        // instead of only being guarded at runtime.
+        #if compiler(>=6.2.3)
         if #available(iOS 26.2, macOS 26.2, *) {
             Task {
                 do {
@@ -231,11 +235,13 @@ public class PasskeysPlugin: NSObject, FlutterPlugin, PasskeysApi {
                     }
                 }
             }
-        } else {
-            // The Signal API is unavailable on this OS version; the hint is
-            // best-effort so treat it as a no-op.
-            completion(.success(()))
+            return
         }
+        #endif
+
+        // The Signal API is unavailable on this OS version or SDK; the hint is
+        // best-effort so treat it as a no-op.
+        completion(.success(()))
     }
 
     func signalAllAcceptedCredentials(relyingPartyId: String, userId: String, allAcceptedCredentialIds: [String], completion: @escaping (Result<Void, Error>) -> Void) {
@@ -255,6 +261,8 @@ public class PasskeysPlugin: NSObject, FlutterPlugin, PasskeysApi {
             credentialIDs.append(credentialData)
         }
 
+        // See the comment in signalUnknownCredential above.
+        #if compiler(>=6.2.3)
         if #available(iOS 26.2, macOS 26.2, *) {
             Task {
                 do {
@@ -270,11 +278,13 @@ public class PasskeysPlugin: NSObject, FlutterPlugin, PasskeysApi {
                     }
                 }
             }
-        } else {
-            // The Signal API is unavailable on this OS version; the hint is
-            // best-effort so treat it as a no-op.
-            completion(.success(()))
+            return
         }
+        #endif
+
+        // The Signal API is unavailable on this OS version or SDK; the hint is
+        // best-effort so treat it as a no-op.
+        completion(.success(()))
     }
 
     private func parseCredentials(credentials: [CredentialType]) -> [ASAuthorizationPlatformPublicKeyCredentialDescriptor] {

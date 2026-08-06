@@ -180,6 +180,8 @@ class PasskeyAuthenticator implements PasskeyAuthenticatorInterface {
   /// later, macOS 26.2 and later, and browsers that expose
   /// `PublicKeyCredential.signalUnknownCredential`. On every other platform or
   /// OS version, including older iOS and macOS releases, the call is a no-op.
+  /// On iOS and macOS it is also a no-op when the app is built with an Xcode
+  /// older than 26.2, because the underlying API is missing from those SDKs.
   @override
   Future<void> signalUnknownCredential(
     SignalUnknownCredentialRequestType request,
@@ -205,7 +207,9 @@ class PasskeyAuthenticator implements PasskeyAuthenticatorInterface {
   /// later, macOS 26.2 and later, and browsers that expose
   /// `PublicKeyCredential.signalAllAcceptedCredentials`. On every other
   /// platform or OS version, including older iOS and macOS releases, the call
-  /// is a no-op.
+  /// is a no-op. On iOS and macOS it is also a no-op when the app is built with
+  /// an Xcode older than 26.2, because the underlying API is missing from those
+  /// SDKs.
   @override
   Future<void> signalAllAcceptedCredentials(
     SignalAllAcceptedCredentialsRequestType request,
