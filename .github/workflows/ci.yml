@@ -95,31 +95,12 @@ jobs:
           xcode-version: ${{ matrix.xcode }}
 
       # The runner image only installs the iOS platform for its default Xcode,
-      # and without it ibtool cannot compile the example's storyboards. The
-      # download is several gigabytes, so it is exported to a file and cached
-      # rather than fetched on every run.
-      - name: Compute the iOS platform cache key
-        if: matrix.xcode != ''
-        id: ios-platform-key
-        run: echo "key=ios-platform-$(xcodebuild -version | tr -d ' \n')" >> "$GITHUB_OUTPUT"
-
-      - name: Restore the iOS platform
-        if: matrix.xcode != ''
-        id: ios-platform-cache
-        uses: actions/cache@v4
-        with:
-          path: ~/ios-platform
-          key: ${{ steps.ios-platform-key.outputs.key }}
-
-      - name: Download the iOS platform
-        if: matrix.xcode != '' && steps.ios-platform-cache.outputs.cache-hit != 'true'
-        run: |
-          mkdir -p ~/ios-platform
-          xcodebuild -downloadPlatform iOS -exportPath ~/ios-platform
-
+      # and without it ibtool cannot compile the example's storyboards. This is
+      # deliberately not cached: the image is 7.7 GiB, which restores slower
+      # than Apple serves it and would take up most of the 10 GiB cache budget.
       - name: Install the iOS platform
         if: matrix.xcode != ''
-        run: sudo xcodebuild -importPlatform "$(find ~/ios-platform -name '*.dmg' | head -1)"
+        run: sudo xcodebuild -downloadPlatform iOS
 
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
