@@ -14,9 +14,13 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    # Secrets are not available to pull_request workflows from forks, so the
-    # Vercel deploy would fail. Skip the job for those PRs instead.
-    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+    # Secrets are not available to pull_request workflows from forks, nor to
+    # ones Dependabot triggers, which get the separate Dependabot secret store
+    # instead. The Vercel deploy would fail, so skip the job for those PRs.
+    if: >-
+      github.event_name != 'pull_request' ||
+      (github.event.pull_request.head.repo.full_name == github.repository &&
+      github.actor != 'dependabot[bot]')
 
     steps:
       - name: Checkout code
