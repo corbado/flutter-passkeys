@@ -1,3 +1,8 @@
+## 1.6.0
+
+ - **FEAT**(passkeys_doctor): add web/macOS/Windows checks and only run doctor in debug mode ([#284](https://github.com/corbado/flutter-passkeys/issues/284)). ([5cf5c8b7](https://github.com/corbado/flutter-passkeys/commit/5cf5c8b755dffbe550f2879e605d5254100a5e0c))
+ - **DOCS**: fix mistakes across package READMEs ([#281](https://github.com/corbado/flutter-passkeys/issues/281)). ([d9b028ff](https://github.com/corbado/flutter-passkeys/commit/d9b028ff9af7a2239fd89639604dc77355771968))
+
 ## 1.5.1
 
  - Update a dependency to the latest release.

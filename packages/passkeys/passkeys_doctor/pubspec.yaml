@@ -2,7 +2,7 @@ name: passkeys_doctor
 description: "Internal debugging tools used to help with passkeys package."
 homepage: https://docs.corbado.com/overview/welcome
 repository: https://github.com/corbado/flutter-passkeys/tree/main/packages/passkeys/passkeys_doctor
-version: 1.5.1
+version: 1.6.0
 
 environment:
   sdk: ">=3.9.0 <4.0.0"
@@ -23,7 +23,7 @@ dependencies:
   # upgrade. See https://github.com/corbado/flutter-passkeys/issues/240
   # for the downstream win32-6 chain this unblocks.
   package_info_plus: ">=9.0.0 <11.0.0"
-  passkeys_platform_interface: ^2.8.0
+  passkeys_platform_interface: ^2.9.0
 
 dev_dependencies:
   flutter_test:

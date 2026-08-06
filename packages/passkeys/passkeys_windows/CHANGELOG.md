@@ -1,3 +1,9 @@
+## 0.1.3+2
+
+ - **FIX**(passkeys_windows): prevent crash on window close and use-after-free in Register ([#261](https://github.com/corbado/flutter-passkeys/issues/261)). ([92018cd4](https://github.com/corbado/flutter-passkeys/commit/92018cd4b6d800a4496e2d1301c4f13efce999e3))
+ - **FEAT**(passkeys_windows): add PRF extension support ([#276](https://github.com/corbado/flutter-passkeys/issues/276)). ([d8dadfc1](https://github.com/corbado/flutter-passkeys/commit/d8dadfc1239857d2773477e12844a0bb13683f62))
+ - **DOCS**: fix mistakes across package READMEs ([#281](https://github.com/corbado/flutter-passkeys/issues/281)). ([d9b028ff](https://github.com/corbado/flutter-passkeys/commit/d9b028ff9af7a2239fd89639604dc77355771968))
+
 ## 0.1.2+1
 
  - Update a dependency to the latest release.

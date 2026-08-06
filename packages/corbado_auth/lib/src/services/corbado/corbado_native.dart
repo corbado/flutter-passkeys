@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:corbado_auth/src/services/corbado/corbado.dart';
 import 'package:corbado_auth/src/services/storage/storage_native.dart';
+import 'package:corbado_auth/src/version.dart';
 import 'package:corbado_frontend_api_client/corbado_frontend_api_client.dart';
 import 'package:passkeys/authenticator.dart';
 import 'package:ua_client_hints/ua_client_hints.dart';
@@ -23,7 +24,7 @@ Future<CorbadoService> createClient(
 
   final apiClient = CorbadoFrontendApiClient(
     basePathOverride: basePath,
-    sdkVersion: '3.2.0',
+    sdkVersion: sdkVersion,
     languageVersion: Platform.version,
   );
   apiClient.dio.options.headers.addAll({

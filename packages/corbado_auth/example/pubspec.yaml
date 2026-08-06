@@ -10,7 +10,7 @@ environment:
 resolution: workspace
 
 dependencies:
-  corbado_auth: ^3.7.3
+  corbado_auth: ^3.8.0
   corbado_telemetry_api_client: ^1.0.2
   flutter:
     sdk: flutter

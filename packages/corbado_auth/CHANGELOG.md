@@ -1,3 +1,11 @@
+## 3.8.0
+
+ - **REFACTOR**: clean up analysis lints and refine auth exception types ([#282](https://github.com/corbado/flutter-passkeys/issues/282)). ([60312bd3](https://github.com/corbado/flutter-passkeys/commit/60312bd32b3435147341396b4a2210608aa1ff51))
+ - **REFACTOR**: adopt Dart 3.9 features and migrate the example integration tests to patrol ([#268](https://github.com/corbado/flutter-passkeys/issues/268)). ([7a1bd0de](https://github.com/corbado/flutter-passkeys/commit/7a1bd0de58f594fe423d80f15dfc98568b34df7c))
+ - **FIX**(corbado_auth): keep SDK version in sync from a single source ([#286](https://github.com/corbado/flutter-passkeys/issues/286)). ([8688f1d5](https://github.com/corbado/flutter-passkeys/commit/8688f1d5b0f83dca9c57f0b1b2883e6f658c3098))
+ - **FIX**(corbado_auth_firebase): repair compile error and resolve analyzer issues ([#253](https://github.com/corbado/flutter-passkeys/issues/253)). ([d22c2a74](https://github.com/corbado/flutter-passkeys/commit/d22c2a740e5f3768bc08cdc4b64e688cd9aee1d8))
+ - **FEAT**(passkeys): add PRF support for iOS and Android ([#263](https://github.com/corbado/flutter-passkeys/issues/263)). ([906a5069](https://github.com/corbado/flutter-passkeys/commit/906a5069583f76a6b05813b3cc8ab3418e984b11))
+
 ## 3.7.3
 
  - Update a dependency to the latest release.
