@@ -68,11 +68,14 @@ jobs:
           # against explicitly. This cannot go further back than 26.1 until
           # device_info_plus stops referencing isiOSAppOnVision, which is
           # itself a 26.1 SDK API.
+          # Builds for the simulator because the runner image only installs the
+          # device platform for its default Xcode. The simulator SDK carries
+          # the same declarations, so it guards the same mistake.
           - name: iOS (previous Xcode)
             os: macos-latest
             xcode: "~26.1"
             swift-package-manager: false
-            build: flutter build ios --debug --no-codesign
+            build: flutter build ios --debug --simulator
 
     steps:
       - name: Checkout code
