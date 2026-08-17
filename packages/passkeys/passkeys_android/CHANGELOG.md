@@ -1,3 +1,7 @@
+## 2.13.1
+
+ - **FIX**(passkeys_android): serialize algorithm identifiers as numbers ([#297](https://github.com/corbado/flutter-passkeys/issues/297)). ([f5f9714b](https://github.com/corbado/flutter-passkeys/commit/f5f9714b025c0637f6dfd78c55f1e7c50fee25d4))
+
 ## 2.13.0
 
  - **FIX**(passkeys_android): downgrade expected auth errors from Log.e to Log.d ([#273](https://github.com/corbado/flutter-passkeys/issues/273)). ([51f9b540](https://github.com/corbado/flutter-passkeys/commit/51f9b5400e143b26cba43c66bedd934f5be2c05b))

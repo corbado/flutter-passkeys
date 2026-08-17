@@ -1,3 +1,7 @@
+## 2.22.2
+
+ - Update a dependency to the latest release.
+
 ## 2.22.1
 
  - **FIX**(passkeys_darwin): compile out Signal API on Xcode older than 26.2 ([#289](https://github.com/corbado/flutter-passkeys/issues/289)). ([3731dc07](https://github.com/corbado/flutter-passkeys/commit/3731dc07755001735daef9e1b2a61ad718b1d26f))
