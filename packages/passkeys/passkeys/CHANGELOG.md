@@ -1,3 +1,7 @@
+## 2.22.3
+
+ - **FIX**(passkeys): remove unused ua_client_hints dependency ([#300](https://github.com/corbado/flutter-passkeys/issues/300)). ([a25a3de4](https://github.com/corbado/flutter-passkeys/commit/a25a3de43c02c977b797a98dcba9a74eac620c57))
+
 ## 2.22.2
 
  - Update a dependency to the latest release.
