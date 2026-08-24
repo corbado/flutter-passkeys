@@ -212,7 +212,16 @@ namespace passkeys_windows
     auto *plugin_registrar = static_cast<flutter::PluginRegistrarWindows *>(registrar);
     if (plugin_registrar && plugin_registrar->GetView())
     {
-      return plugin_registrar->GetView()->GetNativeWindow();
+      HWND flutter_view = plugin_registrar->GetView()->GetNativeWindow();
+      if (!flutter_view)
+      {
+        return nullptr;
+      }
+
+      // WebAuthn expects the top-level application window that originated the
+      // request. Flutter's native view is a child of that window on Windows.
+      HWND top_level = GetAncestor(flutter_view, GA_ROOT);
+      return top_level ? top_level : flutter_view;
     }
     return nullptr;
   }
