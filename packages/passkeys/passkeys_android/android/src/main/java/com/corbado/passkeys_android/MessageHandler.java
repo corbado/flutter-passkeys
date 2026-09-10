@@ -26,11 +26,17 @@ import androidx.credentials.SignalCredentialStateRequest;
 import androidx.credentials.SignalCredentialStateResponse;
 import androidx.credentials.SignalUnknownCredentialRequest;
 import androidx.credentials.exceptions.ClearCredentialException;
+import androidx.credentials.exceptions.ClearCredentialProviderConfigurationException;
+import androidx.credentials.exceptions.ClearCredentialUnsupportedException;
 import androidx.credentials.exceptions.CreateCredentialCancellationException;
 import androidx.credentials.exceptions.CreateCredentialException;
 import androidx.credentials.exceptions.CreateCredentialNoCreateOptionException;
+import androidx.credentials.exceptions.CreateCredentialProviderConfigurationException;
+import androidx.credentials.exceptions.CreateCredentialUnsupportedException;
 import androidx.credentials.exceptions.GetCredentialCancellationException;
 import androidx.credentials.exceptions.GetCredentialException;
+import androidx.credentials.exceptions.GetCredentialProviderConfigurationException;
+import androidx.credentials.exceptions.GetCredentialUnsupportedException;
 import androidx.credentials.exceptions.NoCredentialException;
 import androidx.credentials.exceptions.publickeycredential.CreatePublicKeyCredentialDomException;
 import androidx.credentials.exceptions.publickeycredential.GetPublicKeyCredentialDomException;
@@ -70,6 +76,7 @@ public class MessageHandler implements Messages.PasskeysApi {
     private static final String TIMEOUT_ERROR = "Passkey operation timed out, please try again";
     private static final String PASSKEY_UNSUPPORTED_ERROR = "Passkeys are only supported on Android API 28 and above.";
     private static final String RESTORE_CREDENTIAL_UNSUPPORTED_ERROR = "Restore credentials are only supported on Android API 28 and above.";
+    private static final String RESTORE_CREDENTIAL_PROVIDER_ERROR = "Restore credentials need Google Play services 24.22 or newer.";
 
     private final FlutterPasskeysPlugin plugin;
 
@@ -385,6 +392,11 @@ public class MessageHandler implements Messages.PasskeysApi {
                                 ? ((CreateRestoreCredentialResponse) res).getResponseJson()
                                 : res.getData().getString(
                                         CreateRestoreCredentialResponse.BUNDLE_KEY_CREATE_RESTORE_CREDENTIAL_RESPONSE);
+                        if (responseJson == null) {
+                            result.error(new Messages.FlutterError("android-unhandled: " + res.getType(),
+                                    "The restore credential response did not contain a registration response.", null));
+                            return;
+                        }
                         try {
                             result.success(parseRegisterResponse(responseJson));
                         } catch (JSONException e) {
@@ -405,6 +417,12 @@ public class MessageHandler implements Messages.PasskeysApi {
                         }
 
                         Log.e(TAG, "onError called", e);
+                        if (e instanceof CreateCredentialUnsupportedException
+                                || e instanceof CreateCredentialProviderConfigurationException) {
+                            result.error(new Messages.FlutterError("restore-credential-unsupported",
+                                    RESTORE_CREDENTIAL_PROVIDER_ERROR, e.getMessage()));
+                            return;
+                        }
                         result.error(new Messages.FlutterError("android-unhandled: " + e.getType(), e.getMessage(),
                                 e.getErrorMessage()));
                     }
@@ -466,6 +484,11 @@ public class MessageHandler implements Messages.PasskeysApi {
                         } else if (e instanceof GetCredentialCancellationException) {
                             platformException = new Messages.FlutterError("cancelled", e.getMessage(), "");
                             Log.d(TAG, "onError called", e);
+                        } else if (e instanceof GetCredentialUnsupportedException
+                                || e instanceof GetCredentialProviderConfigurationException) {
+                            platformException = new Messages.FlutterError("restore-credential-unsupported",
+                                    RESTORE_CREDENTIAL_PROVIDER_ERROR, e.getMessage());
+                            Log.e(TAG, "onError called", e);
                         } else {
                             platformException = new Messages.FlutterError("android-unhandled: " + e.getType(),
                                     e.getMessage(), e.getErrorMessage());
@@ -498,6 +521,13 @@ public class MessageHandler implements Messages.PasskeysApi {
 
                     @Override
                     public void onError(ClearCredentialException e) {
+                        if (e instanceof ClearCredentialUnsupportedException
+                                || e instanceof ClearCredentialProviderConfigurationException) {
+                            // Without restore credential support nothing could have been stored.
+                            Log.d(TAG, "Restore credentials unsupported, nothing to clear", e);
+                            result.success();
+                            return;
+                        }
                         Log.e(TAG, "onError called", e);
                         result.error(new Messages.FlutterError("android-unhandled: " + e.getType(), e.getMessage(),
                                 e.getErrorMessage()));

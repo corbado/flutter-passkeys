@@ -59,9 +59,12 @@ class _RecordingPlatform extends PasskeysPlatform
   bool? createIsCloudBackupEnabled;
   AuthenticateRequestType? getRequest;
   int clearCalls = 0;
+  int cancelCalls = 0;
 
   @override
-  Future<void> cancelCurrentAuthenticatorOperation() async {}
+  Future<void> cancelCurrentAuthenticatorOperation() async {
+    cancelCalls++;
+  }
 
   @override
   Future<RegisterResponseType> register(RegisterRequestType request) {
@@ -206,6 +209,7 @@ void main() {
           isCloudBackupEnabled: false,
         );
 
+        expect(platform.cancelCalls, 1);
         expect(platform.createRequest?.challenge, 'Y2hhbGxlbmdl');
         expect(platform.createIsCloudBackupEnabled, isFalse);
         expect(response.id, 'id');
@@ -242,6 +246,7 @@ void main() {
         _authenticateRequest(),
       );
 
+      expect(platform.cancelCalls, 1);
       expect(platform.getRequest?.relyingPartyId, 'example.com');
       expect(response.signature, 'sig');
     });
