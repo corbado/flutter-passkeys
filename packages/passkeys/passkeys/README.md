@@ -296,9 +296,10 @@ key is a WebAuthn credential that Android creates silently and backs up with the
 relying party server handles it exactly like a passkey. Your app does not need to offer passkeys to
 its users to use restore keys.
 
-`createRestoreCredential`, `getRestoreCredential` and `clearRestoreCredential` take the same request
-types as `register` and `authenticate`. They only exist on Android 9 (API 28) and above with Google
-Play services, everywhere else they throw `RestoreCredentialUnsupportedException`.
+`createRestoreCredential` and `getRestoreCredential` take the same request types as `register` and
+`authenticate`. Restore credentials only exist on Android 9 (API 28) and above with Google Play
+services; everywhere else these two throw `RestoreCredentialUnsupportedException`, while
+`clearRestoreCredential`, which takes no request, is a no-op because there is nothing to clear.
 
 ```dart
 // After the user signs in: create a restore key and register it on your server.

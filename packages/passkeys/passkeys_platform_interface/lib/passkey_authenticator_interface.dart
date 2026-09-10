@@ -30,10 +30,19 @@ abstract interface class PasskeyAuthenticatorInterface {
   Future<void> signalAllAcceptedCredentials(
     SignalAllAcceptedCredentialsRequestType request,
   );
+}
 
+/// Interface for authenticators that manage Android restore credentials
+/// (restore keys), which let Android sign the user in silently on a new
+/// device.
+///
+/// This is separate from [PasskeyAuthenticatorInterface] so that existing
+/// implementations of that interface keep compiling. The `passkeys` package's
+/// `PasskeyAuthenticator` implements both.
+abstract interface class RestoreCredentialInterface {
   /// Creates an Android restore credential (restore key) for the given
   /// [request] and returns the credential that must be sent to the relying
-  /// party server, exactly like [register].
+  /// party server, exactly like [PasskeyAuthenticatorInterface.register].
   ///
   /// [isCloudBackupEnabled] backs the restore key up to the cloud when the
   /// device supports end-to-end encrypted backups, and stores it locally
@@ -45,11 +54,14 @@ abstract interface class PasskeyAuthenticatorInterface {
 
   /// Signs the challenge in [request] with the restore credential (restore
   /// key) on the device and returns the assertion that must be sent to the
-  /// relying party server, exactly like [authenticate].
+  /// relying party server, exactly like
+  /// [PasskeyAuthenticatorInterface.authenticate].
   Future<AuthenticateResponseType> getRestoreCredential(
     AuthenticateRequestType request,
   );
 
   /// Deletes the restore credential (restore key) from the device.
+  ///
+  /// A no-op on platforms without restore credentials.
   Future<void> clearRestoreCredential();
 }
