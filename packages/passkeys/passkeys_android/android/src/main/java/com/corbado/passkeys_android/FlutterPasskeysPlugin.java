@@ -48,7 +48,7 @@ public class FlutterPasskeysPlugin extends FlutterActivity implements FlutterPlu
     @Override
     public void onAttachedToActivity(@NonNull ActivityPluginBinding binding) {
         activity = binding.getActivity();
-        Messages.PasskeysApi.setup(binaryMessenger, new MessageHandler(this));
+        Messages.PasskeysApi.setUp(binaryMessenger, new MessageHandler(this));
     }
 
     public Activity requireActivity() {

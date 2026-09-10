@@ -92,19 +92,19 @@ class RegisterController: NSObject, ASAuthorizationControllerDelegate, ASAuthori
             break
         default:
             let message = "Expected instance of ASAuthorizationPlatformPublicKeyCredentialRegistration or ASAuthorizationSecurityKeyPublicKeyCredentialRegistration but got: " + authorization.credential.description
-            completion?(.failure(FlutterError(code: CustomErrors.unexpectedAuthorizationResponse, message: message)))
+            completion?(.failure(PigeonError(code: CustomErrors.unexpectedAuthorizationResponse, message: message)))
         }
 
     }
 
     func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
         if let err = error as? ASAuthorizationError {
-            completion?(.failure(FlutterError(from: err)))
+            completion?(.failure(PigeonError(from: err)))
             return
         }
         
         let nsErr = error as NSError
-        completion?(.failure(FlutterError(fromNSError: nsErr)))
+        completion?(.failure(PigeonError(fromNSError: nsErr)))
         return
     }
 

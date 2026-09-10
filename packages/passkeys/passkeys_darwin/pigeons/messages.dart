@@ -4,6 +4,7 @@ import 'package:pigeon/pigeon.dart';
 /// Represents a relying party
 @ConfigurePigeon(
   PigeonOptions(
+    copyrightHeader: 'pigeons/header.txt',
     dartOut: 'lib/messages.g.dart',
     swiftOut: 'darwin/passkeys_darwin/Sources/passkeys_darwin/messages.swift',
   ),
