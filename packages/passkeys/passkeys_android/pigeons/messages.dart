@@ -4,6 +4,7 @@ import 'package:pigeon/pigeon.dart';
 /// Represents a relying party
 @ConfigurePigeon(
   PigeonOptions(
+    copyrightHeader: 'pigeons/header.txt',
     dartOut: 'lib/messages.g.dart',
     javaOut: 'android/src/main/java/com/corbado/passkeys_android/Messages.java',
     javaOptions: JavaOptions(

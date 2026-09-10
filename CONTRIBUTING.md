@@ -54,6 +54,8 @@ If you're making changes to native code, you'll need to run the following comman
 
 It works the same for `passkeys_darwin`, `passkeys_windows` and `passkeys_doctor`. Pigeon is pinned to the newest version whose SDK constraint matches the packages' minimum Dart SDK, so that regenerated code keeps compiling for users on that minimum.
 
+Commit the generated files exactly as Pigeon writes them. Each package's `pigeons/header.txt` starts every generated file with a `dart format off` marker, so `melos format` skips them and regenerating never produces a formatting diff.
+
 ### Making Changes to the Web Javascript Code
 
 If you're making changes to the web package, you'll need to run the following command to build the javascript code and import it in to the example
