@@ -220,6 +220,11 @@ namespace passkeys_windows
 
       // WebAuthn expects the top-level application window that originated the
       // request. Flutter's native view is a child of that window on Windows.
+      //
+      // This is only ever the owner of the credential prompt. It is not usable
+      // as a target for posted messages, because the window that dispatches to
+      // plugin window proc delegates is the one hosting the Flutter view, and
+      // an app is free to nest that view below its root window.
       HWND top_level = GetAncestor(flutter_view, GA_ROOT);
       return top_level ? top_level : flutter_view;
     }
