@@ -30,4 +30,26 @@ abstract interface class PasskeyAuthenticatorInterface {
   Future<void> signalAllAcceptedCredentials(
     SignalAllAcceptedCredentialsRequestType request,
   );
+
+  /// Creates an Android restore credential (restore key) for the given
+  /// [request] and returns the credential that must be sent to the relying
+  /// party server, exactly like [register].
+  ///
+  /// [isCloudBackupEnabled] backs the restore key up to the cloud when the
+  /// device supports end-to-end encrypted backups, and stores it locally
+  /// otherwise. Pass `false` to store it locally only.
+  Future<RegisterResponseType> createRestoreCredential(
+    RegisterRequestType request, {
+    bool isCloudBackupEnabled = true,
+  });
+
+  /// Signs the challenge in [request] with the restore credential (restore
+  /// key) on the device and returns the assertion that must be sent to the
+  /// relying party server, exactly like [authenticate].
+  Future<AuthenticateResponseType> getRestoreCredential(
+    AuthenticateRequestType request,
+  );
+
+  /// Deletes the restore credential (restore key) from the device.
+  Future<void> clearRestoreCredential();
 }

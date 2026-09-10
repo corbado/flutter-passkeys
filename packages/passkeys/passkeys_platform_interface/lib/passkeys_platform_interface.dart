@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:passkeys_platform_interface/method_channel_passkeys.dart';
 import 'package:passkeys_platform_interface/types/types.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
@@ -82,4 +83,48 @@ abstract class PasskeysPlatform extends PlatformInterface {
   Future<void> signalAllAcceptedCredentials(
     SignalAllAcceptedCredentialsRequestType request,
   ) async {}
+
+  /// Creates an Android restore credential (restore key) for the given
+  /// [request] and returns the credential that must be sent to the relying
+  /// party server, exactly like [register].
+  ///
+  /// Restore credentials only exist on Android. The default implementation
+  /// throws a [PlatformException] with the code
+  /// `restore-credential-unsupported`.
+  ///
+  /// [isCloudBackupEnabled] backs the restore key up to the cloud when the
+  /// device supports end-to-end encrypted backups, and stores it locally
+  /// otherwise. Pass `false` to store it locally only.
+  Future<RegisterResponseType> createRestoreCredential(
+    RegisterRequestType request, {
+    bool isCloudBackupEnabled = true,
+  }) async {
+    throw _restoreCredentialUnsupported();
+  }
+
+  /// Signs the challenge in [request] with the restore credential (restore
+  /// key) on the device and returns the assertion that must be sent to the
+  /// relying party server, exactly like [authenticate].
+  ///
+  /// Restore credentials only exist on Android. The default implementation
+  /// throws a [PlatformException] with the code
+  /// `restore-credential-unsupported`.
+  Future<AuthenticateResponseType> getRestoreCredential(
+    AuthenticateRequestType request,
+  ) async {
+    throw _restoreCredentialUnsupported();
+  }
+
+  /// Deletes the restore credential (restore key) from the device.
+  ///
+  /// Restore credentials only exist on Android. On every other platform there
+  /// is nothing to clear, so the default implementation is a no-op.
+  Future<void> clearRestoreCredential() async {}
+
+  static PlatformException _restoreCredentialUnsupported() {
+    return PlatformException(
+      code: 'restore-credential-unsupported',
+      message: 'Restore credentials are only available on Android.',
+    );
+  }
 }

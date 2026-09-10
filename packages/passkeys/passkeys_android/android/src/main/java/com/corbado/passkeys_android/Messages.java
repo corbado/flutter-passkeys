@@ -1428,6 +1428,12 @@ public class Messages {
 
     void signalAllAcceptedCredentials(@NonNull String relyingPartyId, @NonNull String userId, @NonNull List<String> allAcceptedCredentialIds, @NonNull VoidResult result);
 
+    void createRestoreCredential(@NonNull String challenge, @NonNull RelyingParty relyingParty, @NonNull User user, @Nullable AuthenticatorSelection authenticatorSelection, @Nullable List<PubKeyCredParam> pubKeyCredParams, @Nullable Long timeout, @Nullable String attestation, @NonNull List<ExcludeCredential> excludeCredentials, @NonNull Boolean isCloudBackupEnabled, @NonNull Result<RegisterResponse> result);
+
+    void getRestoreCredential(@NonNull String relyingPartyId, @NonNull String challenge, @Nullable Long timeout, @Nullable String userVerification, @Nullable List<AllowCredential> allowCredentials, @NonNull Result<AuthenticateResponse> result);
+
+    void clearRestoreCredential(@NonNull VoidResult result);
+
     /** The codec used by PasskeysApi. */
     static @NonNull MessageCodec<Object> getCodec() {
       return PigeonCodec.INSTANCE;
@@ -1647,6 +1653,103 @@ public class Messages {
                     };
 
                 api.signalAllAcceptedCredentials(relyingPartyIdArg, userIdArg, allAcceptedCredentialIdsArg, resultCallback);
+              });
+        } else {
+          channel.setMessageHandler(null);
+        }
+      }
+      {
+        BasicMessageChannel<Object> channel =
+            new BasicMessageChannel<>(
+                binaryMessenger, "dev.flutter.pigeon.passkeys_android.PasskeysApi.createRestoreCredential" + messageChannelSuffix, getCodec());
+        if (api != null) {
+          channel.setMessageHandler(
+              (message, reply) -> {
+                ArrayList<Object> wrapped = new ArrayList<>();
+                ArrayList<Object> args = (ArrayList<Object>) message;
+                String challengeArg = (String) args.get(0);
+                RelyingParty relyingPartyArg = (RelyingParty) args.get(1);
+                User userArg = (User) args.get(2);
+                AuthenticatorSelection authenticatorSelectionArg = (AuthenticatorSelection) args.get(3);
+                List<PubKeyCredParam> pubKeyCredParamsArg = (List<PubKeyCredParam>) args.get(4);
+                Long timeoutArg = (Long) args.get(5);
+                String attestationArg = (String) args.get(6);
+                List<ExcludeCredential> excludeCredentialsArg = (List<ExcludeCredential>) args.get(7);
+                Boolean isCloudBackupEnabledArg = (Boolean) args.get(8);
+                Result<RegisterResponse> resultCallback =
+                    new Result<RegisterResponse>() {
+                      public void success(RegisterResponse result) {
+                        wrapped.add(0, result);
+                        reply.reply(wrapped);
+                      }
+
+                      public void error(Throwable error) {
+                        ArrayList<Object> wrappedError = wrapError(error);
+                        reply.reply(wrappedError);
+                      }
+                    };
+
+                api.createRestoreCredential(challengeArg, relyingPartyArg, userArg, authenticatorSelectionArg, pubKeyCredParamsArg, timeoutArg, attestationArg, excludeCredentialsArg, isCloudBackupEnabledArg, resultCallback);
+              });
+        } else {
+          channel.setMessageHandler(null);
+        }
+      }
+      {
+        BasicMessageChannel<Object> channel =
+            new BasicMessageChannel<>(
+                binaryMessenger, "dev.flutter.pigeon.passkeys_android.PasskeysApi.getRestoreCredential" + messageChannelSuffix, getCodec());
+        if (api != null) {
+          channel.setMessageHandler(
+              (message, reply) -> {
+                ArrayList<Object> wrapped = new ArrayList<>();
+                ArrayList<Object> args = (ArrayList<Object>) message;
+                String relyingPartyIdArg = (String) args.get(0);
+                String challengeArg = (String) args.get(1);
+                Long timeoutArg = (Long) args.get(2);
+                String userVerificationArg = (String) args.get(3);
+                List<AllowCredential> allowCredentialsArg = (List<AllowCredential>) args.get(4);
+                Result<AuthenticateResponse> resultCallback =
+                    new Result<AuthenticateResponse>() {
+                      public void success(AuthenticateResponse result) {
+                        wrapped.add(0, result);
+                        reply.reply(wrapped);
+                      }
+
+                      public void error(Throwable error) {
+                        ArrayList<Object> wrappedError = wrapError(error);
+                        reply.reply(wrappedError);
+                      }
+                    };
+
+                api.getRestoreCredential(relyingPartyIdArg, challengeArg, timeoutArg, userVerificationArg, allowCredentialsArg, resultCallback);
+              });
+        } else {
+          channel.setMessageHandler(null);
+        }
+      }
+      {
+        BasicMessageChannel<Object> channel =
+            new BasicMessageChannel<>(
+                binaryMessenger, "dev.flutter.pigeon.passkeys_android.PasskeysApi.clearRestoreCredential" + messageChannelSuffix, getCodec());
+        if (api != null) {
+          channel.setMessageHandler(
+              (message, reply) -> {
+                ArrayList<Object> wrapped = new ArrayList<>();
+                VoidResult resultCallback =
+                    new VoidResult() {
+                      public void success() {
+                        wrapped.add(0, null);
+                        reply.reply(wrapped);
+                      }
+
+                      public void error(Throwable error) {
+                        ArrayList<Object> wrappedError = wrapError(error);
+                        reply.reply(wrappedError);
+                      }
+                    };
+
+                api.clearRestoreCredential(resultCallback);
               });
         } else {
           channel.setMessageHandler(null);

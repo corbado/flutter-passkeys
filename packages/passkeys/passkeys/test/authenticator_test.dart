@@ -31,7 +31,99 @@ class _ThrowingPlatform extends PasskeysPlatform
   Future<AvailabilityType> getAvailability() {
     throw UnimplementedError();
   }
+
+  @override
+  Future<RegisterResponseType> createRestoreCredential(
+    RegisterRequestType request, {
+    bool isCloudBackupEnabled = true,
+  }) async {
+    throw exception;
+  }
+
+  @override
+  Future<AuthenticateResponseType> getRestoreCredential(
+    AuthenticateRequestType request,
+  ) async {
+    throw exception;
+  }
+
+  @override
+  Future<void> clearRestoreCredential() async {
+    throw exception;
+  }
 }
+
+class _RecordingPlatform extends PasskeysPlatform
+    with MockPlatformInterfaceMixin {
+  RegisterRequestType? createRequest;
+  bool? createIsCloudBackupEnabled;
+  AuthenticateRequestType? getRequest;
+  int clearCalls = 0;
+
+  @override
+  Future<void> cancelCurrentAuthenticatorOperation() async {}
+
+  @override
+  Future<RegisterResponseType> register(RegisterRequestType request) {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<AuthenticateResponseType> authenticate(
+    AuthenticateRequestType request,
+  ) {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<AvailabilityType> getAvailability() {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<RegisterResponseType> createRestoreCredential(
+    RegisterRequestType request, {
+    bool isCloudBackupEnabled = true,
+  }) async {
+    createRequest = request;
+    createIsCloudBackupEnabled = isCloudBackupEnabled;
+    return const RegisterResponseType(
+      id: 'id',
+      rawId: 'rawId',
+      clientDataJSON: 'cdj',
+      attestationObject: 'ao',
+      transports: [],
+    );
+  }
+
+  @override
+  Future<AuthenticateResponseType> getRestoreCredential(
+    AuthenticateRequestType request,
+  ) async {
+    getRequest = request;
+    return const AuthenticateResponseType(
+      id: 'id',
+      rawId: 'rawId',
+      clientDataJSON: 'cdj',
+      authenticatorData: 'ad',
+      signature: 'sig',
+      userHandle: 'uh',
+    );
+  }
+
+  @override
+  Future<void> clearRestoreCredential() async {
+    clearCalls++;
+  }
+}
+
+RegisterRequestType _registerRequest({String challenge = 'Y2hhbGxlbmdl'}) =>
+    RegisterRequestType(
+      challenge: challenge,
+      relyingParty: RelyingPartyType(id: 'example.com', name: 'Example'),
+      user: const UserType(id: 'dXNlcg', name: 'user', displayName: 'User'),
+      excludeCredentials: const [],
+    );
 
 AuthenticateRequestType _authenticateRequest() => const AuthenticateRequestType(
   relyingPartyId: 'example.com',
@@ -84,6 +176,130 @@ void main() {
       await expectMapping(
         'domain-not-associated',
         isA<DomainNotAssociatedException>(),
+      );
+    });
+  });
+
+  group('restore credentials', () {
+    Future<void> expectMapping(
+      String code,
+      Matcher matcher,
+      Future<void> Function(PasskeyAuthenticator authenticator) call,
+    ) async {
+      PasskeysPlatform.instance = _ThrowingPlatform(
+        PlatformException(code: code),
+      );
+      final authenticator = PasskeyAuthenticator();
+
+      await expectLater(() => call(authenticator), throwsA(matcher));
+    }
+
+    test(
+      'createRestoreCredential forwards the request and the backup flag',
+      () async {
+        final platform = _RecordingPlatform();
+        PasskeysPlatform.instance = platform;
+        final authenticator = PasskeyAuthenticator();
+
+        final response = await authenticator.createRestoreCredential(
+          _registerRequest(),
+          isCloudBackupEnabled: false,
+        );
+
+        expect(platform.createRequest?.challenge, 'Y2hhbGxlbmdl');
+        expect(platform.createIsCloudBackupEnabled, isFalse);
+        expect(response.id, 'id');
+      },
+    );
+
+    test('createRestoreCredential defaults to cloud backup', () async {
+      final platform = _RecordingPlatform();
+      PasskeysPlatform.instance = platform;
+
+      await PasskeyAuthenticator().createRestoreCredential(_registerRequest());
+
+      expect(platform.createIsCloudBackupEnabled, isTrue);
+    });
+
+    test('createRestoreCredential validates the challenge first', () async {
+      final platform = _RecordingPlatform();
+      PasskeysPlatform.instance = platform;
+
+      await expectLater(
+        () => PasskeyAuthenticator().createRestoreCredential(
+          _registerRequest(challenge: 'not base64url!'),
+        ),
+        throwsA(isA<MalformedBase64UrlChallenge>()),
+      );
+      expect(platform.createRequest, isNull);
+    });
+
+    test('getRestoreCredential forwards the request', () async {
+      final platform = _RecordingPlatform();
+      PasskeysPlatform.instance = platform;
+
+      final response = await PasskeyAuthenticator().getRestoreCredential(
+        _authenticateRequest(),
+      );
+
+      expect(platform.getRequest?.relyingPartyId, 'example.com');
+      expect(response.signature, 'sig');
+    });
+
+    test('clearRestoreCredential forwards to the platform', () async {
+      final platform = _RecordingPlatform();
+      PasskeysPlatform.instance = platform;
+
+      await PasskeyAuthenticator().clearRestoreCredential();
+
+      expect(platform.clearCalls, 1);
+    });
+
+    test(
+      'restore-credential-unsupported throws '
+      'RestoreCredentialUnsupportedException',
+      () async {
+        await expectMapping(
+          'restore-credential-unsupported',
+          isA<RestoreCredentialUnsupportedException>(),
+          (authenticator) =>
+              authenticator.createRestoreCredential(_registerRequest()),
+        );
+        await expectMapping(
+          'restore-credential-unsupported',
+          isA<RestoreCredentialUnsupportedException>(),
+          (authenticator) =>
+              authenticator.getRestoreCredential(_authenticateRequest()),
+        );
+      },
+    );
+
+    test(
+      'android-no-credential throws NoCredentialsAvailableException',
+      () async {
+        await expectMapping(
+          'android-no-credential',
+          isA<NoCredentialsAvailableException>(),
+          (authenticator) =>
+              authenticator.getRestoreCredential(_authenticateRequest()),
+        );
+      },
+    );
+
+    test('android-unhandled throws UnhandledAuthenticatorException', () async {
+      await expectMapping(
+        'android-unhandled: some-type',
+        isA<UnhandledAuthenticatorException>(),
+        (authenticator) =>
+            authenticator.createRestoreCredential(_registerRequest()),
+      );
+    });
+
+    test('unknown codes are rethrown as PlatformException', () async {
+      await expectMapping(
+        'something-else',
+        isA<PlatformException>(),
+        (authenticator) => authenticator.clearRestoreCredential(),
       );
     });
   });
