@@ -87,19 +87,19 @@ class AuthenticateController: NSObject, ASAuthorizationControllerDelegate, ASAut
             completion?(.success(response))
             break
         default:
-            completion?(.failure(FlutterError(code: CustomErrors.unexpectedAuthorizationResponse)))
+            completion?(.failure(PigeonError(code: CustomErrors.unexpectedAuthorizationResponse)))
             break
         }
     }
 
     func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
         if let err = error as? ASAuthorizationError {
-            completion?(.failure(FlutterError(from: err)))
+            completion?(.failure(PigeonError(from: err)))
             return
         }
 
         let nsErr = error as NSError
-        completion?(.failure(FlutterError(fromNSError: nsErr)))
+        completion?(.failure(PigeonError(fromNSError: nsErr)))
         return
     }
 

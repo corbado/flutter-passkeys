@@ -383,17 +383,17 @@ public class MessageHandler implements Messages.PasskeysApi {
     }
 
     @Override
-    public void cancelCurrentAuthenticatorOperation(@NonNull Messages.Result<Void> result) {
+    public void cancelCurrentAuthenticatorOperation(@NonNull Messages.VoidResult result) {
         if (currentCancellationSignal != null) {
             currentCancellationSignal.cancel();
             currentCancellationSignal = null;
         }
 
-        result.success(null);
+        result.success();
     }
 
     @Override
-    public void signalUnknownCredential(@NonNull String relyingPartyId, @NonNull String credentialId, @NonNull Messages.Result<Void> result) {
+    public void signalUnknownCredential(@NonNull String relyingPartyId, @NonNull String credentialId, @NonNull Messages.VoidResult result) {
         try {
             JSONObject requestJson = new JSONObject();
             requestJson.put("rpId", relyingPartyId);
@@ -405,7 +405,7 @@ public class MessageHandler implements Messages.PasskeysApi {
     }
 
     @Override
-    public void signalAllAcceptedCredentials(@NonNull String relyingPartyId, @NonNull String userId, @NonNull List<String> allAcceptedCredentialIds, @NonNull Messages.Result<Void> result) {
+    public void signalAllAcceptedCredentials(@NonNull String relyingPartyId, @NonNull String userId, @NonNull List<String> allAcceptedCredentialIds, @NonNull Messages.VoidResult result) {
         try {
             JSONObject requestJson = new JSONObject();
             requestJson.put("rpId", relyingPartyId);
@@ -417,7 +417,7 @@ public class MessageHandler implements Messages.PasskeysApi {
         }
     }
 
-    private void signalCredentialState(SignalCredentialStateRequest request, @NonNull Messages.Result<Void> result) {
+    private void signalCredentialState(SignalCredentialStateRequest request, @NonNull Messages.VoidResult result) {
         // The Signal API does not present any UI, so it can run without a
         // foreground activity (e.g. right after a backgrounded server response).
         CredentialManager credentialManager = CredentialManager.create(plugin.requireApplicationContext());
@@ -425,7 +425,7 @@ public class MessageHandler implements Messages.PasskeysApi {
                 new CredentialManagerCallback<SignalCredentialStateResponse, SignalCredentialStateException>() {
                     @Override
                     public void onResult(SignalCredentialStateResponse res) {
-                        result.success(null);
+                        result.success();
                     }
 
                     @Override

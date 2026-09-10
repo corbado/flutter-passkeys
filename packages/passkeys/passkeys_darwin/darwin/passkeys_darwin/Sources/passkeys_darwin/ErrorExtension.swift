@@ -10,7 +10,7 @@ import FlutterMacOS
 #endif
 
 @available(iOS 13.0, *)
-extension FlutterError: Error {
+extension PigeonError {
     convenience init(from error: ASAuthorizationError) {
         var code = ""
         switch (error.code) {

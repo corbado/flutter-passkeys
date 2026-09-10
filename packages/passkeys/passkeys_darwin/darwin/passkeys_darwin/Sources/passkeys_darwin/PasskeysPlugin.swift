@@ -231,7 +231,7 @@ public class PasskeysPlugin: NSObject, FlutterPlugin, PasskeysApi {
                     DispatchQueue.main.async { completion(.success(())) }
                 } catch {
                     DispatchQueue.main.async {
-                        completion(.failure(FlutterError(fromNSError: error as NSError)))
+                        completion(.failure(PigeonError(fromNSError: error as NSError)))
                     }
                 }
             }
@@ -274,7 +274,7 @@ public class PasskeysPlugin: NSObject, FlutterPlugin, PasskeysApi {
                     DispatchQueue.main.async { completion(.success(())) }
                 } catch {
                     DispatchQueue.main.async {
-                        completion(.failure(FlutterError(fromNSError: error as NSError)))
+                        completion(.failure(PigeonError(fromNSError: error as NSError)))
                     }
                 }
             }
