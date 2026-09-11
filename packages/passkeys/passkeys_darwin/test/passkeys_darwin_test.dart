@@ -6,7 +6,9 @@ import 'package:passkeys_platform_interface/types/types.dart';
 
 class _FakePasskeysApi extends pigeon.PasskeysApi {
   String? registerSalt;
+  String? registerUserVerificationPreference;
   String? authenticateSalt;
+  String? authenticateUserVerificationPreference;
   List<Object?>? signalUnknownCredentialArgs;
   List<Object?>? signalAllAcceptedCredentialsArgs;
 
@@ -42,9 +44,11 @@ class _FakePasskeysApi extends pigeon.PasskeysApi {
     bool canBeSecurityKey,
     String? residentKeyPreference,
     String? attestationPreference,
+    String? userVerificationPreference,
     String? salt,
   ) async {
     registerSalt = salt;
+    registerUserVerificationPreference = userVerificationPreference;
     return pigeon.RegisterResponse(
       id: 'id',
       rawId: 'rawId',
@@ -66,9 +70,11 @@ class _FakePasskeysApi extends pigeon.PasskeysApi {
     bool conditionalUI,
     List<pigeon.CredentialType?> allowedCredentials,
     bool preferImmediatelyAvailableCredentials,
+    String? userVerificationPreference,
     String? salt,
   ) async {
     authenticateSalt = salt;
+    authenticateUserVerificationPreference = userVerificationPreference;
     return pigeon.AuthenticateResponse(
       id: 'id',
       rawId: 'rawId',
@@ -131,6 +137,44 @@ void main() {
       expect(api.registerSalt, isNull);
     });
 
+    test('register forwards the user verification preference', () async {
+      final api = _FakePasskeysApi();
+      final platform = PasskeysDarwin(api: api);
+
+      await platform.register(
+        RegisterRequestType(
+          challenge: 'challenge',
+          relyingParty: RelyingPartyType(id: 'example.com', name: 'Example'),
+          user: const UserType(id: 'user', name: 'user', displayName: 'User'),
+          excludeCredentials: const [],
+          authSelectionType: AuthenticatorSelectionType(
+            requireResidentKey: false,
+            residentKey: 'preferred',
+            userVerification: 'required',
+          ),
+        ),
+      );
+
+      expect(api.registerUserVerificationPreference, 'required');
+    });
+
+    test('register passes a null user verification preference when '
+        'no authenticator selection is set', () async {
+      final api = _FakePasskeysApi();
+      final platform = PasskeysDarwin(api: api);
+
+      await platform.register(
+        RegisterRequestType(
+          challenge: 'challenge',
+          relyingParty: RelyingPartyType(id: 'example.com', name: 'Example'),
+          user: const UserType(id: 'user', name: 'user', displayName: 'User'),
+          excludeCredentials: const [],
+        ),
+      );
+
+      expect(api.registerUserVerificationPreference, isNull);
+    });
+
     test('authenticate forwards the PRF salt and maps the result', () async {
       final api = _FakePasskeysApi();
       final platform = PasskeysDarwin(api: api);
@@ -150,6 +194,40 @@ void main() {
         response.clientExtensionResults?['prf'],
         isA<Map<dynamic, dynamic>>(),
       );
+    });
+
+    test('authenticate forwards the user verification preference', () async {
+      final api = _FakePasskeysApi();
+      final platform = PasskeysDarwin(api: api);
+
+      await platform.authenticate(
+        const AuthenticateRequestType(
+          relyingPartyId: 'example.com',
+          challenge: 'challenge',
+          mediation: MediationType.Optional,
+          preferImmediatelyAvailableCredentials: true,
+          userVerification: 'discouraged',
+        ),
+      );
+
+      expect(api.authenticateUserVerificationPreference, 'discouraged');
+    });
+
+    test('authenticate passes a null user verification preference when '
+        'it is not set', () async {
+      final api = _FakePasskeysApi();
+      final platform = PasskeysDarwin(api: api);
+
+      await platform.authenticate(
+        const AuthenticateRequestType(
+          relyingPartyId: 'example.com',
+          challenge: 'challenge',
+          mediation: MediationType.Optional,
+          preferImmediatelyAvailableCredentials: true,
+        ),
+      );
+
+      expect(api.authenticateUserVerificationPreference, isNull);
     });
 
     test('signalUnknownCredential forwards its arguments', () async {

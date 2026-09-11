@@ -497,8 +497,8 @@ class MessagesPigeonCodec: FlutterStandardMessageCodec, @unchecked Sendable {
 protocol PasskeysApi {
   func canAuthenticate() throws -> Bool
   func hasBiometrics() throws -> Bool
-  func register(challenge: String, relyingParty: RelyingParty, user: User, excludeCredentials: [CredentialType], pubKeyCredValues: [Int64], canBePlatformAuthenticator: Bool, canBeSecurityKey: Bool, residentKeyPreference: String?, attestationPreference: String?, salt: String?, completion: @escaping (Result<RegisterResponse, Error>) -> Void)
-  func authenticate(relyingPartyId: String, challenge: String, conditionalUI: Bool, allowedCredentials: [CredentialType], preferImmediatelyAvailableCredentials: Bool, salt: String?, completion: @escaping (Result<AuthenticateResponse, Error>) -> Void)
+  func register(challenge: String, relyingParty: RelyingParty, user: User, excludeCredentials: [CredentialType], pubKeyCredValues: [Int64], canBePlatformAuthenticator: Bool, canBeSecurityKey: Bool, residentKeyPreference: String?, attestationPreference: String?, userVerificationPreference: String?, salt: String?, completion: @escaping (Result<RegisterResponse, Error>) -> Void)
+  func authenticate(relyingPartyId: String, challenge: String, conditionalUI: Bool, allowedCredentials: [CredentialType], preferImmediatelyAvailableCredentials: Bool, userVerificationPreference: String?, salt: String?, completion: @escaping (Result<AuthenticateResponse, Error>) -> Void)
   func cancelCurrentAuthenticatorOperation(completion: @escaping (Result<Void, Error>) -> Void)
   func signalUnknownCredential(relyingPartyId: String, credentialId: String, completion: @escaping (Result<Void, Error>) -> Void)
   func signalAllAcceptedCredentials(relyingPartyId: String, userId: String, allAcceptedCredentialIds: [String], completion: @escaping (Result<Void, Error>) -> Void)
@@ -549,8 +549,9 @@ class PasskeysApiSetup {
         let canBeSecurityKeyArg = args[6] as! Bool
         let residentKeyPreferenceArg: String? = nilOrValue(args[7])
         let attestationPreferenceArg: String? = nilOrValue(args[8])
-        let saltArg: String? = nilOrValue(args[9])
-        api.register(challenge: challengeArg, relyingParty: relyingPartyArg, user: userArg, excludeCredentials: excludeCredentialsArg, pubKeyCredValues: pubKeyCredValuesArg, canBePlatformAuthenticator: canBePlatformAuthenticatorArg, canBeSecurityKey: canBeSecurityKeyArg, residentKeyPreference: residentKeyPreferenceArg, attestationPreference: attestationPreferenceArg, salt: saltArg) { result in
+        let userVerificationPreferenceArg: String? = nilOrValue(args[9])
+        let saltArg: String? = nilOrValue(args[10])
+        api.register(challenge: challengeArg, relyingParty: relyingPartyArg, user: userArg, excludeCredentials: excludeCredentialsArg, pubKeyCredValues: pubKeyCredValuesArg, canBePlatformAuthenticator: canBePlatformAuthenticatorArg, canBeSecurityKey: canBeSecurityKeyArg, residentKeyPreference: residentKeyPreferenceArg, attestationPreference: attestationPreferenceArg, userVerificationPreference: userVerificationPreferenceArg, salt: saltArg) { result in
           switch result {
           case .success(let res):
             reply(wrapResult(res))
@@ -571,8 +572,9 @@ class PasskeysApiSetup {
         let conditionalUIArg = args[2] as! Bool
         let allowedCredentialsArg = args[3] as! [CredentialType]
         let preferImmediatelyAvailableCredentialsArg = args[4] as! Bool
-        let saltArg: String? = nilOrValue(args[5])
-        api.authenticate(relyingPartyId: relyingPartyIdArg, challenge: challengeArg, conditionalUI: conditionalUIArg, allowedCredentials: allowedCredentialsArg, preferImmediatelyAvailableCredentials: preferImmediatelyAvailableCredentialsArg, salt: saltArg) { result in
+        let userVerificationPreferenceArg: String? = nilOrValue(args[5])
+        let saltArg: String? = nilOrValue(args[6])
+        api.authenticate(relyingPartyId: relyingPartyIdArg, challenge: challengeArg, conditionalUI: conditionalUIArg, allowedCredentials: allowedCredentialsArg, preferImmediatelyAvailableCredentials: preferImmediatelyAvailableCredentialsArg, userVerificationPreference: userVerificationPreferenceArg, salt: saltArg) { result in
           switch result {
           case .success(let res):
             reply(wrapResult(res))
