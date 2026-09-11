@@ -98,9 +98,20 @@ jobs:
       # and without it ibtool cannot compile the example's storyboards. This is
       # deliberately not cached: the image is 7.7 GiB, which restores slower
       # than Apple serves it and would take up most of the 10 GiB cache budget.
+      # The download fails with "Unable to connect to simulator" on a large
+      # share of runners (actions/runner-images#13459), so retry it.
       - name: Install the iOS platform
         if: matrix.xcode != ''
-        run: sudo xcodebuild -downloadPlatform iOS
+        run: |
+          sudo xcodebuild -runFirstLaunch
+          for attempt in 1 2 3 4 5; do
+            if sudo xcodebuild -downloadPlatform iOS; then
+              exit 0
+            fi
+            echo "Attempt $attempt failed, retrying in 30 seconds"
+            sleep 30
+          done
+          exit 1
 
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
