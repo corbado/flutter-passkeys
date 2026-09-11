@@ -27,6 +27,7 @@ target_link_libraries(${PLUGIN_NAME} PRIVATE
   WebAuthN
   crypt32
   bcrypt
+  ole32
 )
 
 # WebAuthn API is loaded dynamically from webauthn.dll at runtime
