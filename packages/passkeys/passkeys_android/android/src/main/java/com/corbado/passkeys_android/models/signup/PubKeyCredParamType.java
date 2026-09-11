@@ -14,9 +14,9 @@ public class PubKeyCredParamType {
     }
 
     public JSONObject toJSON() {
-        HashMap<String, String> map = new HashMap<>();
+        HashMap<String, Object> map = new HashMap<>();
         if (type != null) map.put("type", type);
-        map.put("alg", String.valueOf(alg));
+        map.put("alg", alg);
         return new JSONObject(map);
     }
 }

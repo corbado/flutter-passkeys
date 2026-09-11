@@ -229,3 +229,24 @@ class PasskeyUnsupportedException implements AuthenticatorException {
   String toString() =>
       message ?? 'Passkeys are only supported on Android API 28 and above.';
 }
+
+/// This exception is thrown when the Android Restore Credentials APIs are
+/// called on a platform that does not have them: any platform other than
+/// Android, or an Android version below API 28.
+///
+/// Platforms: Android, iOS, macOS, Web, Windows
+///
+/// Suggestions:
+/// - Only call the restore credential methods on Android, for example by
+///   checking `defaultTargetPlatform == TargetPlatform.android` first.
+class RestoreCredentialUnsupportedException implements AuthenticatorException {
+  /// Constructor
+  RestoreCredentialUnsupportedException([this.message]);
+
+  /// The error message, if any.
+  final String? message;
+
+  @override
+  String toString() =>
+      message ?? 'Restore credentials are only available on Android.';
+}

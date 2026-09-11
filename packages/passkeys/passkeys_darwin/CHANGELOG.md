@@ -1,3 +1,7 @@
+## 0.4.3+3
+
+ - **FIX**(passkeys_darwin): compile out Signal API on Xcode older than 26.2 ([#289](https://github.com/corbado/flutter-passkeys/issues/289)). ([3731dc07](https://github.com/corbado/flutter-passkeys/commit/3731dc07755001735daef9e1b2a61ad718b1d26f))
+
 ## 0.4.2+2
 
  - **FIX**(passkeys_darwin): map no-credentials-available regardless of device locale ([#271](https://github.com/corbado/flutter-passkeys/issues/271)). ([7414c54a](https://github.com/corbado/flutter-passkeys/commit/7414c54a24ddde979bc2d64d19b28a52065fc8ca))

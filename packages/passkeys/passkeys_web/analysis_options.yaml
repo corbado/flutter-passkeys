@@ -3,6 +3,13 @@ include: package:very_good_analysis/analysis_options.5.0.0.yaml
 analyzer:
   exclude:
     - "**/*.g.dart"
+    - build/**
+    - android/**
+    - ios/**
+    - web/**
+    - windows/**
+    - macos/**
+    - linux/**
 
 formatter:
   trailing_commas: preserve

@@ -3,6 +3,7 @@ import 'package:pigeon/pigeon.dart';
 /// Represents a relying party
 @ConfigurePigeon(
   PigeonOptions(
+    copyrightHeader: 'pigeons/header.txt',
     dartOut: 'lib/messages.g.dart',
     cppOptions: CppOptions(namespace: 'passkeys_windows'),
     cppHeaderOut: 'windows/messages.g.h',

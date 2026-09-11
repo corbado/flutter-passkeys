@@ -43,21 +43,18 @@ plugins, examples and tests to build from the local clone project.
 
 ## 4. Making Changes
 
-### Making Changes to native code (passkeys_android, passkeys_ios)
+### Making Changes to native code (passkeys_android, passkeys_darwin, passkeys_windows, passkeys_doctor)
 
 If you're making changes to native code, you'll need to run the following command to regenerate the platform channels using [pigeon](https://github.com/flutter/packages/tree/main/packages/pigeon)
 
 ```bash
   cd packages/passkeys/passkeys_android
-  dart run pigeon --input pigeons/messages.dart 
+  dart run pigeon --input pigeons/messages.dart
 ```
 
-It works the same for passkeys_ios
+It works the same for `passkeys_darwin`, `passkeys_windows` and `passkeys_doctor`. Pigeon is pinned to the newest version whose SDK constraint matches the packages' minimum Dart SDK, so that regenerated code keeps compiling for users on that minimum.
 
-```bash
-  cd packages/passkeys/passkeys_ios
-  dart run pigeon --input pigeons/messages.dart 
-```
+Commit the generated files exactly as Pigeon writes them. Each package's `pigeons/header.txt` starts every generated file with a `dart format off` marker, so `melos format` skips them and regenerating never produces a formatting diff.
 
 ### Making Changes to the Web Javascript Code
 

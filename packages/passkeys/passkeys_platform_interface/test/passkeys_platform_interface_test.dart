@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:passkeys_platform_interface/passkeys_platform_interface.dart';
 import 'package:passkeys_platform_interface/types/types.dart';
@@ -34,6 +35,50 @@ void main() {
     setUp(() {
       passkeysPlatform = PasskeysMock();
       PasskeysPlatform.instance = passkeysPlatform;
+    });
+
+    test('createRestoreCredential is unsupported by default', () async {
+      await expectLater(
+        () => passkeysPlatform.createRestoreCredential(
+          RegisterRequestType(
+            challenge: 'challenge',
+            relyingParty: RelyingPartyType(id: 'example.com', name: 'Example'),
+            user: const UserType(id: 'user', name: 'user', displayName: 'User'),
+            excludeCredentials: const [],
+          ),
+        ),
+        throwsA(
+          isA<PlatformException>().having(
+            (e) => e.code,
+            'code',
+            'restore-credential-unsupported',
+          ),
+        ),
+      );
+    });
+
+    test('getRestoreCredential is unsupported by default', () async {
+      await expectLater(
+        () => passkeysPlatform.getRestoreCredential(
+          const AuthenticateRequestType(
+            relyingPartyId: 'example.com',
+            challenge: 'challenge',
+            mediation: MediationType.Optional,
+            preferImmediatelyAvailableCredentials: true,
+          ),
+        ),
+        throwsA(
+          isA<PlatformException>().having(
+            (e) => e.code,
+            'code',
+            'restore-credential-unsupported',
+          ),
+        ),
+      );
+    });
+
+    test('clearRestoreCredential is a no-op by default', () async {
+      await expectLater(passkeysPlatform.clearRestoreCredential(), completes);
     });
   });
 

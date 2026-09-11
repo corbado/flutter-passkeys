@@ -8,14 +8,29 @@
 
 #include <flutter/plugin_registrar_windows.h>
 
+#include <atomic>
 #include <cwchar>
+#include <deque>
+#include <functional>
 #include <memory>
+#include <mutex>
+#include <optional>
 #include <sstream>
 #include <stdexcept>
+#include <thread>
+#include <utility>
 #include <vector>
 
 namespace passkeys_windows
 {
+  namespace
+  {
+    // Private message-only window used to hop WebAuthn results back onto the
+    // platform thread. It belongs to the plugin rather than to the host app, so
+    // it cannot be affected by however the app nests its Flutter view.
+    constexpr wchar_t kCompletionWindowClass[] =
+        L"CorbadoPasskeysWindowsCompletionWindow";
+  } // namespace
 
   // Implementation of PasskeysApi using Windows WebAuthn API
   class PasskeysApiImpl : public PasskeysApi
@@ -26,9 +41,38 @@ namespace passkeys_windows
     {
       // Get initial cancellation ID from Windows
       WebAuthNGetCancellationId(&cancellation_id_);
+
+      completion_message_ = RegisterWindowMessageW(
+          L"Corbado.PasskeysWindows.WebAuthnCompletion");
+      if (completion_message_ == 0)
+      {
+        completion_message_ = WM_APP + 0x431;
+      }
+      completion_window_ = CreateCompletionWindow();
     }
 
-    virtual ~PasskeysApiImpl() = default;
+    virtual ~PasskeysApiImpl()
+    {
+      shutting_down_.store(true);
+      if (operation_running_.load())
+      {
+        WebAuthNCancelCurrentOperation(&cancellation_id_);
+      }
+      if (worker_.joinable())
+      {
+        worker_.join();
+      }
+      DestroyCompletionWindow();
+
+      // Any reply the worker produced is deliberately dropped rather than
+      // delivered. Plugin destruction runs inside FlutterWindowsEngine::Stop(),
+      // where the messenger's engine pointer is already null, so invoking a
+      // Pigeon reply here would crash for the same reason the destructor of
+      // PasskeysWindowsPlugin does not unregister its channels. The isolate
+      // that owns the pending futures is going away with the engine.
+      std::lock_guard<std::mutex> lock(completions_mutex_);
+      completions_.clear();
+    }
 
     void CanAuthenticate(
         std::function<void(ErrorOr<bool> reply)> result) override
@@ -53,7 +97,6 @@ namespace passkeys_windows
       DWORD version = WebAuthNGetApiVersionNumber();
       result(version >= WEBAUTHN_API_VERSION_1);
     }
-
     void Register(
         const std::string &challenge,
         const RelyingParty &relying_party,
@@ -66,21 +109,363 @@ namespace passkeys_windows
         const std::string *prf,
         std::function<void(ErrorOr<RegisterResponse> reply)> result) override
     {
+      HWND hwnd = GetWindowHandle(registrar_);
+      if (!hwnd)
+      {
+        result(FlutterError("NO_WINDOW", "Failed to get window handle"));
+        return;
+      }
+
+      RegisterRequest request{
+          challenge,
+          relying_party,
+          user,
+          CopyOptional(authenticator_selection),
+          CopyOptional(pub_key_cred_params),
+          CopyOptional(timeout),
+          CopyOptional(attestation),
+          exclude_credentials,
+          CopyOptional(prf),
+      };
+
+      StartOperation<RegisterResponse>(
+          std::move(result),
+          [this, hwnd, request = std::move(request)](GUID operation_id)
+          {
+            return RunRegister(
+                hwnd, operation_id, request.challenge, request.relying_party,
+                request.user, OptionalPointer(request.authenticator_selection),
+                OptionalPointer(request.pub_key_cred_params),
+                OptionalPointer(request.timeout),
+                OptionalPointer(request.attestation),
+                request.exclude_credentials, OptionalPointer(request.prf));
+          });
+    }
+
+    void Authenticate(
+        const std::string &relying_party_id,
+        const std::string &challenge,
+        const int64_t *timeout,
+        const std::string *user_verification,
+        const flutter::EncodableList *allow_credentials,
+        const bool *prefer_immediately_available_credentials,
+        const std::string *prf,
+        std::function<void(ErrorOr<AuthenticateResponse> reply)> result) override
+    {
+      HWND hwnd = GetWindowHandle(registrar_);
+      if (!hwnd)
+      {
+        result(FlutterError("NO_WINDOW", "Failed to get window handle"));
+        return;
+      }
+
+      AuthenticateRequest request{
+          relying_party_id,
+          challenge,
+          CopyOptional(timeout),
+          CopyOptional(user_verification),
+          CopyOptional(allow_credentials),
+          CopyOptional(prefer_immediately_available_credentials),
+          CopyOptional(prf),
+      };
+
+      StartOperation<AuthenticateResponse>(
+          std::move(result),
+          [this, hwnd, request = std::move(request)](GUID operation_id)
+          {
+            return RunAuthenticate(
+                hwnd, operation_id, request.relying_party_id, request.challenge,
+                OptionalPointer(request.timeout),
+                OptionalPointer(request.user_verification),
+                OptionalPointer(request.allow_credentials),
+                OptionalPointer(
+                    request.prefer_immediately_available_credentials),
+                OptionalPointer(request.prf));
+          });
+    }
+
+    void CancelCurrentAuthenticatorOperation(
+        std::function<void(std::optional<FlutterError> reply)> result) override
+    {
+      HRESULT hr = WebAuthNCancelCurrentOperation(&cancellation_id_);
+
+      if (SUCCEEDED(hr))
+      {
+        // Get new cancellation ID for next operation
+        WebAuthNGetCancellationId(&cancellation_id_);
+        result(std::nullopt);
+      }
+      else
+      {
+        result(FlutterError("CANCEL_FAILED", "Failed to cancel operation"));
+      }
+    }
+  private:
+    // Copies of the Pigeon arguments, which are only valid for the duration of
+    // the synchronous call and so cannot be referenced from the worker thread.
+    struct RegisterRequest
+    {
+      std::string challenge;
+      RelyingParty relying_party;
+      User user;
+      std::optional<AuthenticatorSelection> authenticator_selection;
+      std::optional<flutter::EncodableList> pub_key_cred_params;
+      std::optional<int64_t> timeout;
+      std::optional<std::string> attestation;
+      flutter::EncodableList exclude_credentials;
+      std::optional<std::string> prf;
+    };
+
+    struct AuthenticateRequest
+    {
+      std::string relying_party_id;
+      std::string challenge;
+      std::optional<int64_t> timeout;
+      std::optional<std::string> user_verification;
+      std::optional<flutter::EncodableList> allow_credentials;
+      std::optional<bool> prefer_immediately_available_credentials;
+      std::optional<std::string> prf;
+    };
+
+    template <typename T>
+    static std::optional<T> CopyOptional(const T *value)
+    {
+      return value ? std::optional<T>(*value) : std::nullopt;
+    }
+
+    template <typename T>
+    static const T *OptionalPointer(const std::optional<T> &value)
+    {
+      return value ? &*value : nullptr;
+    }
+
+    // Moves a blocking WebAuthn call onto a worker thread and delivers its
+    // result back on the platform thread, which is the only thread a Pigeon
+    // reply may be invoked from.
+    template <typename T, typename Operation>
+    void StartOperation(std::function<void(ErrorOr<T> reply)> result,
+                        Operation operation)
+    {
+      if (!completion_window_)
+      {
+        result(FlutterError("NO_WINDOW",
+                            "Failed to create the plugin completion window"));
+        return;
+      }
+
+      auto reply =
+          std::make_shared<std::function<void(ErrorOr<T>)>>(std::move(result));
+      const GUID operation_id = cancellation_id_;
+
+      const bool started = StartWorker(
+          [this, reply, operation = std::move(operation), operation_id]()
+          {
+            EnqueueCompletion(
+                [reply, response = RunGuarded<T>(operation, operation_id)]() mutable
+                { (*reply)(std::move(response)); });
+          });
+
+      if (!started)
+      {
+        (*reply)(FlutterError("OPERATION_IN_PROGRESS",
+                              "Another WebAuthn operation is already running"));
+      }
+    }
+
+    // Guarantees the worker produces exactly one result, so a reply is never
+    // left un-invoked and the operation slot is never leaked.
+    template <typename T, typename Operation>
+    static ErrorOr<T> RunGuarded(const Operation &operation, GUID operation_id)
+    {
+      try
+      {
+        return operation(operation_id);
+      }
+      catch (const std::exception &e)
+      {
+        return FlutterError("EXCEPTION", e.what());
+      }
+      catch (...)
+      {
+        return FlutterError("EXCEPTION", "Unknown native failure");
+      }
+    }
+
+    bool StartWorker(std::function<void()> operation)
+    {
+      bool expected = false;
+      if (!operation_running_.compare_exchange_strong(expected, true))
+      {
+        return false;
+      }
+
+      // The previous worker posts its completion as its final act, so by the
+      // time the slot is free it has exited or is about to. Joining here rather
+      // than while draining keeps the platform thread out of the blocking part
+      // of the operation, which is the whole point of the worker.
+      if (worker_.joinable())
+      {
+        worker_.join();
+      }
 
       try
       {
-        HWND hwnd = GetWindowHandle(registrar_);
-        if (!hwnd)
-        {
-          result(FlutterError("NO_WINDOW", "Failed to get window handle"));
-          return;
-        }
+        worker_ = std::thread([this, operation = std::move(operation)]() mutable
+                              {
+          // The WebAuthn prompt is COM-based modal UI, so the thread that owns
+          // it has to be a single-threaded apartment, matching the apartment
+          // the runner sets up on the platform thread.
+          const HRESULT com_result =
+              CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED);
+          try
+          {
+            operation();
+          }
+          catch (...)
+          {
+            // The operation maps its own failures to a reply, so this only
+            // stops an allocation failure while queueing from taking the
+            // process down with it.
+          }
+          if (SUCCEEDED(com_result))
+          {
+            CoUninitialize();
+          }
+          NotifyPlatformThread(); });
+      }
+      catch (...)
+      {
+        operation_running_.store(false);
+        return false;
+      }
+      return true;
+    }
 
+    void EnqueueCompletion(std::function<void()> completion)
+    {
+      std::lock_guard<std::mutex> lock(completions_mutex_);
+      completions_.push_back(std::move(completion));
+    }
+
+    void NotifyPlatformThread()
+    {
+      if (PostMessageW(completion_window_, completion_message_, 0, 0))
+      {
+        return;
+      }
+
+      // The completion window is owned by this plugin and outlives every
+      // worker, so a failed post means the process is past the point of
+      // delivering anything. Release the slot so the plugin does not stay
+      // wedged in OPERATION_IN_PROGRESS for the rest of its life.
+      operation_running_.store(false);
+    }
+
+    void DrainCompletions()
+    {
+      operation_running_.store(false);
+
+      std::deque<std::function<void()>> completions;
+      {
+        std::lock_guard<std::mutex> lock(completions_mutex_);
+        completions.swap(completions_);
+      }
+
+      if (shutting_down_.load())
+      {
+        return;
+      }
+
+      for (auto &completion : completions)
+      {
+        completion();
+      }
+    }
+
+    HWND CreateCompletionWindow()
+    {
+      WNDCLASSEXW window_class = {};
+      window_class.cbSize = sizeof(WNDCLASSEXW);
+      window_class.lpfnWndProc = CompletionWindowProc;
+      window_class.hInstance = GetModuleHandleW(nullptr);
+      window_class.lpszClassName = kCompletionWindowClass;
+
+      // The class is process-wide while the window is per instance, so a class
+      // registered by an earlier instance is expected rather than an error.
+      if (RegisterClassExW(&window_class) == 0 &&
+          GetLastError() != ERROR_CLASS_ALREADY_EXISTS)
+      {
+        return nullptr;
+      }
+
+      return CreateWindowExW(0, kCompletionWindowClass, L"", 0, 0, 0, 0, 0,
+                             HWND_MESSAGE, nullptr, window_class.hInstance,
+                             this);
+    }
+
+    void DestroyCompletionWindow()
+    {
+      if (!completion_window_)
+      {
+        return;
+      }
+      SetWindowLongPtrW(completion_window_, GWLP_USERDATA, 0);
+      DestroyWindow(completion_window_);
+      completion_window_ = nullptr;
+    }
+
+    static LRESULT CALLBACK CompletionWindowProc(HWND window, UINT message,
+                                                 WPARAM wparam, LPARAM lparam)
+    {
+      if (message == WM_NCCREATE)
+      {
+        auto *create = reinterpret_cast<CREATESTRUCTW *>(lparam);
+        SetWindowLongPtrW(window, GWLP_USERDATA,
+                          reinterpret_cast<LONG_PTR>(create->lpCreateParams));
+        return DefWindowProcW(window, message, wparam, lparam);
+      }
+
+      auto *self = reinterpret_cast<PasskeysApiImpl *>(
+          GetWindowLongPtrW(window, GWLP_USERDATA));
+      if (self && message == self->completion_message_)
+      {
+        self->DrainCompletions();
+        return 0;
+      }
+      return DefWindowProcW(window, message, wparam, lparam);
+    }
+
+    flutter::PluginRegistrarWindows *registrar_;
+    GUID cancellation_id_;
+    HWND completion_window_ = nullptr;
+    UINT completion_message_ = 0;
+    std::atomic_bool operation_running_{false};
+    std::atomic_bool shutting_down_{false};
+    std::mutex completions_mutex_;
+    std::deque<std::function<void()>> completions_;
+    std::thread worker_;
+
+    // Runs on the worker thread. Every parameter is owned by the caller's
+    // RegisterRequest, which outlives the call.
+    ErrorOr<RegisterResponse> RunRegister(
+        HWND hwnd,
+        GUID operation_id,
+        const std::string &challenge,
+        const RelyingParty &relying_party,
+        const User &user,
+        const AuthenticatorSelection *authenticator_selection,
+        const flutter::EncodableList *pub_key_cred_params,
+        const int64_t *timeout,
+        const std::string *attestation,
+        const flutter::EncodableList &exclude_credentials,
+        const std::string *prf)
+    {
+      try
+      {
         // Validate RP ID
         if (!IsValidRpId(relying_party.id()))
         {
-          result(FlutterError("INVALID_RP_ID", "Invalid Relying Party ID format"));
-          return;
+          return FlutterError("INVALID_RP_ID", "Invalid Relying Party ID format");
         }
 
         // Decode user ID from base64url
@@ -223,7 +608,7 @@ namespace passkeys_windows
           }
         }
 
-        options.pCancellationId = &cancellation_id_;
+        options.pCancellationId = &operation_id;
         options.pExcludeCredentialList = exclude_creds.empty() ? nullptr : &exclude_list;
 
         if (authenticator_selection)
@@ -314,8 +699,7 @@ namespace passkeys_windows
         {
           std::string error_code = MapHResultToErrorCode(hr);
           std::string error_message = GetErrorMessage(hr);
-          result(FlutterError(error_code, error_message));
-          return;
+          return FlutterError(error_code, error_message);
         }
 
         // Extract response data
@@ -371,38 +755,32 @@ namespace passkeys_windows
           response.set_prf_enabled(prf_enabled);
         }
 
-        result(response);
+        return response;
       }
       catch (const std::exception &e)
       {
-        result(FlutterError("EXCEPTION", e.what()));
+        return FlutterError("EXCEPTION", e.what());
       }
     }
 
-    void Authenticate(
+    // Runs on the worker thread. Every parameter is owned by the caller's
+    // AuthenticateRequest, which outlives the call.
+    ErrorOr<AuthenticateResponse> RunAuthenticate(
+        HWND hwnd,
+        GUID operation_id,
         const std::string &relying_party_id,
         const std::string &challenge,
         const int64_t *timeout,
         const std::string *user_verification,
         const flutter::EncodableList *allow_credentials,
         const bool *prefer_immediately_available_credentials,
-        const std::string *prf,
-        std::function<void(ErrorOr<AuthenticateResponse> reply)> result) override
+        const std::string *prf)
     {
-
       try
       {
-        HWND hwnd = GetWindowHandle(registrar_);
-        if (!hwnd)
-        {
-          result(FlutterError("NO_WINDOW", "Failed to get window handle"));
-          return;
-        }
-
         if (!IsValidRpId(relying_party_id))
         {
-          result(FlutterError("INVALID_RP_ID", "Invalid Relying Party ID format"));
-          return;
+          return FlutterError("INVALID_RP_ID", "Invalid Relying Party ID format");
         }
 
         // Create origin from RP ID
@@ -464,7 +842,7 @@ namespace passkeys_windows
         options.dwTimeoutMilliseconds = timeout ? static_cast<DWORD>(*timeout) : 60000;
         options.dwAuthenticatorAttachment = WEBAUTHN_AUTHENTICATOR_ATTACHMENT_ANY;
         options.dwUserVerificationRequirement = WEBAUTHN_USER_VERIFICATION_REQUIREMENT_PREFERRED;
-        options.pCancellationId = &cancellation_id_;
+        options.pCancellationId = &operation_id;
         options.pAllowCredentialList = allow_creds.empty() ? nullptr : &allow_list;
 
         if (user_verification)
@@ -504,8 +882,7 @@ namespace passkeys_windows
           // it null, so reject it with a clear error instead.
           if (prf_salt.empty())
           {
-            result(FlutterError("invalid-prf-salt", "PRF salt must not be empty"));
-            return;
+            return FlutterError("invalid-prf-salt", "PRF salt must not be empty");
           }
           hmac_salt.cbFirst = static_cast<DWORD>(prf_salt.size());
           hmac_salt.pbFirst = prf_salt.data();
@@ -530,8 +907,7 @@ namespace passkeys_windows
         {
           std::string error_code = MapHResultToErrorCode(hr);
           std::string error_message = GetErrorMessage(hr);
-          result(FlutterError(error_code, error_message));
-          return;
+          return FlutterError(error_code, error_message);
         }
 
         // Extract response data
@@ -565,34 +941,13 @@ namespace passkeys_windows
 
         // Memory freed automatically by unique_ptr deleter
 
-        result(response);
+        return response;
       }
       catch (const std::exception &e)
       {
-        result(FlutterError("EXCEPTION", e.what()));
+        return FlutterError("EXCEPTION", e.what());
       }
     }
-
-    void CancelCurrentAuthenticatorOperation(
-        std::function<void(std::optional<FlutterError> reply)> result) override
-    {
-      HRESULT hr = WebAuthNCancelCurrentOperation(&cancellation_id_);
-
-      if (SUCCEEDED(hr))
-      {
-        // Get new cancellation ID for next operation
-        WebAuthNGetCancellationId(&cancellation_id_);
-        result(std::nullopt);
-      }
-      else
-      {
-        result(FlutterError("CANCEL_FAILED", "Failed to cancel operation"));
-      }
-    }
-
-  private:
-    flutter::PluginRegistrarWindows *registrar_;
-    GUID cancellation_id_;
 
     std::string MapHResultToErrorCode(HRESULT hr)
     {

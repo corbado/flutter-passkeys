@@ -62,6 +62,20 @@ jobs:
             os: macos-latest
             swift-package-manager: false
             build: flutter build ios --debug --no-codesign
+          # Guards against using APIs that only exist in the newest SDK. The
+          # runtime availability checks in the native code do not stop the
+          # compiler from needing the symbol, so one SDK back has to be built
+          # against explicitly. This cannot go further back than 26.1 until
+          # device_info_plus stops referencing isiOSAppOnVision, which is
+          # itself a 26.1 SDK API.
+          # Builds for the simulator because the runner image only installs the
+          # device platform for its default Xcode. The simulator SDK carries
+          # the same declarations, so it guards the same mistake.
+          - name: iOS (previous Xcode)
+            os: macos-latest
+            xcode: "~26.1"
+            swift-package-manager: false
+            build: flutter build ios --debug --simulator
 
     steps:
       - name: Checkout code
@@ -73,6 +87,31 @@ jobs:
         with:
           distribution: temurin
           java-version: "17"
+
+      - name: Select Xcode
+        if: matrix.xcode != ''
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: ${{ matrix.xcode }}
+
+      # The runner image only installs the iOS platform for its default Xcode,
+      # and without it ibtool cannot compile the example's storyboards. This is
+      # deliberately not cached: the image is 7.7 GiB, which restores slower
+      # than Apple serves it and would take up most of the 10 GiB cache budget.
+      # The download fails with "Unable to connect to simulator" on a large
+      # share of runners (actions/runner-images#13459), so retry it.
+      - name: Install the iOS platform
+        if: matrix.xcode != ''
+        run: |
+          sudo xcodebuild -runFirstLaunch
+          for attempt in 1 2 3 4 5; do
+            if sudo xcodebuild -downloadPlatform iOS; then
+              exit 0
+            fi
+            echo "Attempt $attempt failed, retrying in 30 seconds"
+            sleep 30
+          done
+          exit 1
 
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
