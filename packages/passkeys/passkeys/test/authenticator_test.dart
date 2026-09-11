@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:passkeys/authenticator.dart';
@@ -120,6 +122,62 @@ class _RecordingPlatform extends PasskeysPlatform
   }
 }
 
+/// Models an authentication that is still waiting on the user, so a test can
+/// observe whether an unrelated call cancels it. Restore credentials are
+/// unsupported here, matching every platform other than Android.
+class _PendingAuthenticationPlatform extends PasskeysPlatform
+    with MockPlatformInterfaceMixin {
+  final _pending = Completer<AuthenticateResponseType>();
+  var _authenticationInFlight = false;
+
+  @override
+  Future<void> cancelCurrentAuthenticatorOperation() async {
+    // Only an operation that already reached the platform can be cancelled,
+    // so authenticate's own pre-dispatch cancel is a no-op here.
+    if (_authenticationInFlight && !_pending.isCompleted) {
+      _pending.completeError(PlatformException(code: 'cancelled'));
+    }
+  }
+
+  @override
+  Future<RegisterResponseType> register(RegisterRequestType request) {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<AuthenticateResponseType> authenticate(
+    AuthenticateRequestType request,
+  ) {
+    _authenticationInFlight = true;
+    return _pending.future;
+  }
+
+  @override
+  Future<AvailabilityType> getAvailability() {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<RegisterResponseType> createRestoreCredential(
+    RegisterRequestType request, {
+    bool isCloudBackupEnabled = true,
+  }) async {
+    throw PlatformException(code: 'restore-credential-unsupported');
+  }
+
+  @override
+  Future<AuthenticateResponseType> getRestoreCredential(
+    AuthenticateRequestType request,
+  ) async {
+    throw PlatformException(code: 'restore-credential-unsupported');
+  }
+
+  @override
+  Future<void> clearRestoreCredential() async {
+    throw PlatformException(code: 'restore-credential-unsupported');
+  }
+}
+
 RegisterRequestType _registerRequest({String challenge = 'Y2hhbGxlbmdl'}) =>
     RegisterRequestType(
       challenge: challenge,
@@ -209,7 +267,7 @@ void main() {
           isCloudBackupEnabled: false,
         );
 
-        expect(platform.cancelCalls, 1);
+        expect(platform.cancelCalls, isZero);
         expect(platform.createRequest?.challenge, 'Y2hhbGxlbmdl');
         expect(platform.createIsCloudBackupEnabled, isFalse);
         expect(response.id, 'id');
@@ -246,9 +304,41 @@ void main() {
         _authenticateRequest(),
       );
 
-      expect(platform.cancelCalls, 1);
+      expect(platform.cancelCalls, isZero);
       expect(platform.getRequest?.relyingPartyId, 'example.com');
       expect(response.signature, 'sig');
+    });
+
+    // An unsupported restore call used to cancel whatever passkey operation
+    // was in flight, so an app could lose an ongoing authentication just by
+    // asking for a restore credential on a platform that has none.
+    test('restore calls leave an ongoing authentication untouched', () async {
+      final platform = _PendingAuthenticationPlatform();
+      PasskeysPlatform.instance = platform;
+      final authenticator = PasskeyAuthenticator();
+
+      var authenticationSettled = false;
+      unawaited(
+        authenticator
+            .authenticate(_authenticateRequest())
+            .then<void>(
+              (_) => authenticationSettled = true,
+              onError: (_) => authenticationSettled = true,
+            ),
+      );
+      await pumpEventQueue();
+
+      await expectLater(
+        () => authenticator.getRestoreCredential(_authenticateRequest()),
+        throwsA(isA<RestoreCredentialUnsupportedException>()),
+      );
+      await expectLater(
+        () => authenticator.createRestoreCredential(_registerRequest()),
+        throwsA(isA<RestoreCredentialUnsupportedException>()),
+      );
+      await pumpEventQueue();
+
+      expect(authenticationSettled, isFalse);
     });
 
     test('clearRestoreCredential forwards to the platform', () async {

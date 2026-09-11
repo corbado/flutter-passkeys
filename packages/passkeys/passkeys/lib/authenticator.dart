@@ -254,8 +254,6 @@ class PasskeyAuthenticator
     }
 
     try {
-      await _platform.cancelCurrentAuthenticatorOperation();
-
       _isValidChallenge(request.challenge);
 
       _isValidUserID(request.user.id);
@@ -294,8 +292,6 @@ class PasskeyAuthenticator
     }
 
     try {
-      await _platform.cancelCurrentAuthenticatorOperation();
-
       _isValidChallenge(request.challenge);
 
       if (request.allowCredentials != null) {
