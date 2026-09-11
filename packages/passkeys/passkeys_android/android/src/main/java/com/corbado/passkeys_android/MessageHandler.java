@@ -408,9 +408,6 @@ public class MessageHandler implements Messages.PasskeysApi {
                     @Override
                     public void onError(CreateCredentialException e) {
                         if (e instanceof E2eeUnavailableException && isCloudBackupEnabled) {
-                            // The device has no end-to-end encrypted backup (no screen lock or
-                            // backup disabled). Android's guidance is to fall back to a local
-                            // restore key, which still moves with a device-to-device transfer.
                             Log.d(TAG, "Cloud backup unavailable, creating a local restore credential", e);
                             createRestoreCredential(options, false, result);
                             return;
@@ -503,7 +500,6 @@ public class MessageHandler implements Messages.PasskeysApi {
     @Override
     public void clearRestoreCredential(@NonNull Messages.VoidResult result) {
         if (android.os.Build.VERSION.SDK_INT < 28) {
-            // Nothing could have been created on this device.
             result.success();
             return;
         }
@@ -523,7 +519,6 @@ public class MessageHandler implements Messages.PasskeysApi {
                     public void onError(ClearCredentialException e) {
                         if (e instanceof ClearCredentialUnsupportedException
                                 || e instanceof ClearCredentialProviderConfigurationException) {
-                            // Without restore credential support nothing could have been stored.
                             Log.d(TAG, "Restore credentials unsupported, nothing to clear", e);
                             result.success();
                             return;
@@ -535,10 +530,6 @@ public class MessageHandler implements Messages.PasskeysApi {
                 });
     }
 
-    /**
-     * Restore credentials never show UI, so they also work without a foreground
-     * activity (for example when the app data has just been restored).
-     */
     private Context restoreCredentialContext() {
         try {
             return plugin.requireActivity();
