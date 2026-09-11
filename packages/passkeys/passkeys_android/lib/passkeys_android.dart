@@ -24,26 +24,12 @@ class PasskeysAndroid extends PasskeysPlatform {
       request.challenge,
       request.timeout,
       request.userVerification,
-      request.allowCredentials?.map((e) {
-        return AllowCredential(
-          id: e.id,
-          type: e.type,
-          transports: e.transports,
-        );
-      }).toList(),
+      _allowCredentials(request),
       request.preferImmediatelyAvailableCredentials,
       request.prf,
     );
 
-    return AuthenticateResponseType(
-      id: r.id,
-      rawId: r.rawId,
-      clientDataJSON: r.clientDataJSON,
-      authenticatorData: r.authenticatorData,
-      signature: r.signature,
-      userHandle: r.userHandle,
-      clientExtensionResults: r.clientExtensionResults,
-    );
+    return _authenticateResponse(r);
   }
 
   @override
@@ -58,55 +44,19 @@ class PasskeysAndroid extends PasskeysPlatform {
 
   @override
   Future<RegisterResponseType> register(RegisterRequestType request) async {
-    final userArg = User(
-      displayName: request.user.displayName,
-      name: request.user.name,
-      id: request.user.id,
-    );
-    final relyingPartyArg = RelyingParty(
-      name: request.relyingParty.name,
-      id: request.relyingParty.id,
-    );
-
-    final a = request.authSelectionType;
-
-    AuthenticatorSelection? authSelection;
-
-    if (a == null) {
-      authSelection = null;
-    } else {
-      authSelection = AuthenticatorSelection(
-        authenticatorAttachment: a.authenticatorAttachment,
-        requireResidentKey: a.requireResidentKey,
-        residentKey: a.residentKey,
-        userVerification: a.userVerification,
-      );
-    }
-
     final r = await _api.register(
       request.challenge,
-      relyingPartyArg,
-      userArg,
-      authSelection,
-      request.pubKeyCredParams
-          ?.map((e) => PubKeyCredParam(alg: e.alg, type: e.type))
-          .toList(),
+      _relyingParty(request),
+      _user(request),
+      _authenticatorSelection(request),
+      _pubKeyCredParams(request),
       request.timeout,
       request.attestation,
-      request.excludeCredentials
-          .map((e) => ExcludeCredential(id: e.id, type: e.type))
-          .toList(),
+      _excludeCredentials(request),
       request.prf,
     );
 
-    return RegisterResponseType(
-      id: r.id,
-      rawId: r.rawId,
-      clientDataJSON: r.clientDataJSON,
-      attestationObject: r.attestationObject,
-      transports: r.transports.whereType<String>().toList(),
-      clientExtensionResults: r.clientExtensionResults,
-    );
+    return _registerResponse(r);
   }
 
   //
@@ -136,6 +86,46 @@ class PasskeysAndroid extends PasskeysPlatform {
     );
   }
 
+  @override
+  Future<RegisterResponseType> createRestoreCredential(
+    RegisterRequestType request, {
+    bool isCloudBackupEnabled = true,
+  }) async {
+    final r = await _api.createRestoreCredential(
+      request.challenge,
+      _relyingParty(request),
+      _user(request),
+      _authenticatorSelection(request),
+      _pubKeyCredParams(request),
+      request.timeout,
+      request.attestation,
+      _excludeCredentials(request),
+      isCloudBackupEnabled,
+    );
+
+    return _registerResponse(r);
+  }
+
+  @override
+  Future<AuthenticateResponseType> getRestoreCredential(
+    AuthenticateRequestType request,
+  ) async {
+    final r = await _api.getRestoreCredential(
+      request.relyingPartyId,
+      request.challenge,
+      request.timeout,
+      request.userVerification,
+      _allowCredentials(request),
+    );
+
+    return _authenticateResponse(r);
+  }
+
+  @override
+  Future<void> clearRestoreCredential() {
+    return _api.clearRestoreCredential();
+  }
+
   // In case of android we link passkey support to the availability of the
   // biometric authentication
   @override
@@ -150,6 +140,79 @@ class PasskeysAndroid extends PasskeysPlatform {
       isUserVerifyingPlatformAuthenticatorAvailable:
           isUserVerifyingPlatformAuthenticatorAvailable,
       isNative: true,
+    );
+  }
+
+  RelyingParty _relyingParty(RegisterRequestType request) {
+    return RelyingParty(
+      name: request.relyingParty.name,
+      id: request.relyingParty.id,
+    );
+  }
+
+  User _user(RegisterRequestType request) {
+    return User(
+      displayName: request.user.displayName,
+      name: request.user.name,
+      id: request.user.id,
+    );
+  }
+
+  AuthenticatorSelection? _authenticatorSelection(RegisterRequestType request) {
+    final a = request.authSelectionType;
+    if (a == null) {
+      return null;
+    }
+    return AuthenticatorSelection(
+      authenticatorAttachment: a.authenticatorAttachment,
+      requireResidentKey: a.requireResidentKey,
+      residentKey: a.residentKey,
+      userVerification: a.userVerification,
+    );
+  }
+
+  List<PubKeyCredParam>? _pubKeyCredParams(RegisterRequestType request) {
+    return request.pubKeyCredParams
+        ?.map((e) => PubKeyCredParam(alg: e.alg, type: e.type))
+        .toList();
+  }
+
+  List<ExcludeCredential> _excludeCredentials(RegisterRequestType request) {
+    return request.excludeCredentials
+        .map((e) => ExcludeCredential(id: e.id, type: e.type))
+        .toList();
+  }
+
+  List<AllowCredential>? _allowCredentials(AuthenticateRequestType request) {
+    return request.allowCredentials?.map((e) {
+      return AllowCredential(
+        id: e.id,
+        type: e.type,
+        transports: e.transports,
+      );
+    }).toList();
+  }
+
+  RegisterResponseType _registerResponse(RegisterResponse r) {
+    return RegisterResponseType(
+      id: r.id,
+      rawId: r.rawId,
+      clientDataJSON: r.clientDataJSON,
+      attestationObject: r.attestationObject,
+      transports: r.transports.whereType<String>().toList(),
+      clientExtensionResults: r.clientExtensionResults,
+    );
+  }
+
+  AuthenticateResponseType _authenticateResponse(AuthenticateResponse r) {
+    return AuthenticateResponseType(
+      id: r.id,
+      rawId: r.rawId,
+      clientDataJSON: r.clientDataJSON,
+      authenticatorData: r.authenticatorData,
+      signature: r.signature,
+      userHandle: r.userHandle,
+      clientExtensionResults: r.clientExtensionResults,
     );
   }
 }

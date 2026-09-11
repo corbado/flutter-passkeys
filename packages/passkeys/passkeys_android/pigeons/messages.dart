@@ -212,4 +212,29 @@ abstract class PasskeysApi {
     String userId,
     List<String> allAcceptedCredentialIds,
   );
+
+  @async
+  RegisterResponse createRestoreCredential(
+    String challenge,
+    RelyingParty relyingParty,
+    User user,
+    AuthenticatorSelection? authenticatorSelection,
+    List<PubKeyCredParam>? pubKeyCredParams,
+    int? timeout,
+    String? attestation,
+    List<ExcludeCredential> excludeCredentials,
+    bool isCloudBackupEnabled,
+  );
+
+  @async
+  AuthenticateResponse getRestoreCredential(
+    String relyingPartyId,
+    String challenge,
+    int? timeout,
+    String? userVerification,
+    List<AllowCredential>? allowCredentials,
+  );
+
+  @async
+  void clearRestoreCredential();
 }

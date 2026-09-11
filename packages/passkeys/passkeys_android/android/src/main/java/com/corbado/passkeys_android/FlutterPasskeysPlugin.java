@@ -32,10 +32,12 @@ public class FlutterPasskeysPlugin extends FlutterActivity implements FlutterPlu
     public void onAttachedToEngine(@NonNull FlutterPluginBinding binding) {
         binaryMessenger = binding.getBinaryMessenger();
         applicationContext = binding.getApplicationContext();
+        Messages.PasskeysApi.setUp(binaryMessenger, new MessageHandler(this));
     }
 
     @Override
     public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
+        Messages.PasskeysApi.setUp(binaryMessenger, null);
         binaryMessenger = null;
         applicationContext = null;
     }
@@ -48,7 +50,6 @@ public class FlutterPasskeysPlugin extends FlutterActivity implements FlutterPlu
     @Override
     public void onAttachedToActivity(@NonNull ActivityPluginBinding binding) {
         activity = binding.getActivity();
-        Messages.PasskeysApi.setUp(binaryMessenger, new MessageHandler(this));
     }
 
     public Activity requireActivity() {

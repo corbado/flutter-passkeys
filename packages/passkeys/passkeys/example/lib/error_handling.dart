@@ -38,5 +38,7 @@ String getFriendlyErrorMessage(AuthenticatorException exception) {
     PasskeyUnsupportedException() =>
       'This device does not support passkeys '
           '(requires at least Android SDK 28). Please update your OS.',
+    RestoreCredentialUnsupportedException() =>
+      'Restore credentials are only available on Android 9 and above.',
   };
 }

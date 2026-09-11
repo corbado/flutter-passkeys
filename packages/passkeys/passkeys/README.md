@@ -287,6 +287,45 @@ final secret = results?['first'] as String?;
 Use `secret` (after base64url-decoding it) as key material for your encryption, but never send it to
 your relying party server.
 
+## Restore Credentials (Android)
+
+From April 2027 Google Play requires apps with sign-in to restore the signed in state when the user
+moves to a new Android device, through Credential Manager's
+[Restore Credentials](https://developer.android.com/identity/sign-in/restore-credentials). A restore
+key is a WebAuthn credential that Android creates silently and backs up with the app data, so your
+relying party server handles it exactly like a passkey. Your app does not need to offer passkeys to
+its users to use restore keys.
+
+`createRestoreCredential` and `getRestoreCredential` take the same request types as `register` and
+`authenticate`. Restore credentials only exist on Android 9 (API 28) and above with Google Play
+services; everywhere else these two throw `RestoreCredentialUnsupportedException`, while
+`clearRestoreCredential`, which takes no request, is a no-op because there is nothing to clear.
+
+```dart
+// After the user signs in: create a restore key and register it on your server.
+final creationOptions = await relyingPartyServer.startPasskeyRegistration();
+final credential = await passkeyAuthenticator.createRestoreCredential(creationOptions);
+await relyingPartyServer.finishPasskeyRegistration(credential);
+
+// On the first launch on a new device: sign in with the restored key.
+final requestOptions = await relyingPartyServer.startPasskeyAuthentication();
+final assertion = await passkeyAuthenticator.getRestoreCredential(requestOptions);
+await relyingPartyServer.finishPasskeyAuthentication(assertion);
+
+// When the user signs out.
+await passkeyAuthenticator.clearRestoreCredential();
+```
+
+- `getRestoreCredential` throws `NoCredentialsAvailableException` when there is no restore key on the
+  device.
+- The key is backed up to the cloud when the device has end-to-end encrypted backup (Google backup
+  plus a screen lock). Otherwise it is stored locally and only moves with a cable transfer. Pass
+  `isCloudBackupEnabled: false` to always keep it local.
+- Android keeps one restore key per app. Delete the previous key on your server before creating a new
+  one, and delete it when the user signs out. Keep restore keys apart from user-created passkeys on
+  the server so they do not show up in a passkey management screen.
+- Digital Asset Links must be set up for the relying party, exactly as for passkeys.
+
 ## Troubleshooting
 
 As a first step, you can rely on our integrated doctor tool to help you debug and configure your app. To enable it, simply pass debugMode: true when initializing PasskeysAuthenticator:

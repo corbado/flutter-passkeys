@@ -7,7 +7,8 @@ import 'package:passkeys_platform_interface/passkeys_platform_interface.dart';
 
 /// Handles platform dependent parts of the registration and authentication
 /// flow.
-class PasskeyAuthenticator implements PasskeyAuthenticatorInterface {
+class PasskeyAuthenticator
+    implements PasskeyAuthenticatorInterface, RestoreCredentialInterface {
   /// Constructor
   PasskeyAuthenticator({bool? debugMode})
     : _platform = PasskeysPlatform.instance,
@@ -223,6 +224,126 @@ class PasskeyAuthenticator implements PasskeyAuthenticatorInterface {
       await _platform.signalAllAcceptedCredentials(request);
     } on PlatformException catch (e, stackTrace) {
       _mapSignalException(e, stackTrace);
+    }
+  }
+
+  /// Creates an Android restore credential (restore key) and stores it on the
+  /// device.
+  ///
+  /// Restore keys let Android sign the user in silently on a new device. They
+  /// are WebAuthn credentials, so [request] is the same
+  /// `PublicKeyCredentialCreationOptions` your relying party server produces
+  /// for [register], and the returned [RegisterResponseType] is verified and
+  /// stored by the server exactly like a passkey. Nothing is shown to the user.
+  ///
+  /// [isCloudBackupEnabled] backs the restore key up to the cloud when the
+  /// device has end-to-end encrypted backup (Google backup plus a screen lock)
+  /// and stores it locally otherwise, so it still moves with a cable transfer.
+  /// Pass `false` to always keep it local.
+  ///
+  /// Restore credentials only exist on Android 9 (API 28) and above with
+  /// Google Play services. Everywhere else this throws
+  /// [RestoreCredentialUnsupportedException].
+  @override
+  Future<RegisterResponseType> createRestoreCredential(
+    RegisterRequestType request, {
+    bool isCloudBackupEnabled = true,
+  }) async {
+    if (debugMode) {
+      await _doctor?.check(request.relyingParty.id);
+    }
+
+    try {
+      _isValidChallenge(request.challenge);
+
+      _isValidUserID(request.user.id);
+
+      for (final credential in request.excludeCredentials) {
+        _isValidCredentialID(credential.id);
+      }
+
+      return await _platform.createRestoreCredential(
+        request,
+        isCloudBackupEnabled: isCloudBackupEnabled,
+      );
+    } on PlatformException catch (e, stackTrace) {
+      _mapRestoreCredentialException(e, stackTrace);
+    }
+  }
+
+  /// Signs the challenge in [request] with the restore credential (restore
+  /// key) on the device.
+  ///
+  /// Call this on the first launch after the app was restored on a new device.
+  /// [request] is the same `PublicKeyCredentialRequestOptions` your relying
+  /// party server produces for [authenticate], and the returned
+  /// [AuthenticateResponseType] is verified by the server exactly like a
+  /// passkey assertion. Nothing is shown to the user.
+  ///
+  /// Throws [NoCredentialsAvailableException] when there is no restore key on
+  /// the device, and [RestoreCredentialUnsupportedException] on platforms
+  /// without restore credentials.
+  @override
+  Future<AuthenticateResponseType> getRestoreCredential(
+    AuthenticateRequestType request,
+  ) async {
+    if (debugMode) {
+      await _doctor?.check(request.relyingPartyId);
+    }
+
+    try {
+      _isValidChallenge(request.challenge);
+
+      if (request.allowCredentials != null) {
+        for (final credential in request.allowCredentials!) {
+          _isValidCredentialID(credential.id);
+        }
+      }
+
+      return await _platform.getRestoreCredential(request);
+    } on PlatformException catch (e, stackTrace) {
+      _mapRestoreCredentialException(e, stackTrace);
+    }
+  }
+
+  /// Deletes the restore credential (restore key) from the device.
+  ///
+  /// Call this when the user signs out. Android does not delete restore keys
+  /// on its own, so without this call the user would be signed in again on the
+  /// next launch. On platforms without restore credentials this is a no-op.
+  @override
+  Future<void> clearRestoreCredential() async {
+    try {
+      await _platform.clearRestoreCredential();
+    } on PlatformException catch (e, stackTrace) {
+      _mapRestoreCredentialException(e, stackTrace);
+    }
+  }
+
+  Never _mapRestoreCredentialException(
+    PlatformException e,
+    StackTrace stackTrace,
+  ) {
+    if (debugMode) {
+      _doctor?.recordException(e);
+    }
+
+    switch (e.code) {
+      case 'restore-credential-unsupported':
+        throw RestoreCredentialUnsupportedException(e.message);
+      case 'android-no-credential':
+        throw NoCredentialsAvailableException();
+      case 'cancelled':
+        throw PasskeyAuthCancelledException();
+      case 'domain-not-associated':
+        throw DomainNotAssociatedException(e.message);
+      case 'android-timeout':
+        throw TimeoutException(e.message);
+      default:
+        if (e.code.startsWith('android-unhandled')) {
+          throw UnhandledAuthenticatorException(e.code, e.message, e.details);
+        }
+        Error.throwWithStackTrace(e, stackTrace);
     }
   }
 
