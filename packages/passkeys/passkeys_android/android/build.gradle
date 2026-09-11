@@ -10,13 +10,12 @@ rootProject.allprojects {
 
 apply plugin: 'com.android.library'
 
-// Only apply the Kotlin Gradle Plugin when the consuming app does not use the
-// Android Gradle Plugin's built-in Kotlin support (AGP 9, opt in with
-// android.builtInKotlin=true). This keeps the plugin building on older setups
-// while dropping the KGP dependency once built-in Kotlin is enabled.
-def builtInKotlin = (project.findProperty('android.builtInKotlin') ?: 'false') == 'true'
-if (!builtInKotlin) {
-    apply plugin: 'kotlin-android'
+// Kotlin support normally comes from the app: AGP 9 provides it built in, and
+// Flutter 3.44+ applies the Kotlin Gradle Plugin to plugins on older setups.
+// Only apply it here when neither has, so older Flutter versions still build
+// and the plugin never applies KGP on top of built-in Kotlin.
+if (project.extensions.findByName('kotlin') == null) {
+    project.pluginManager.apply('org.jetbrains.kotlin.android')
 }
 
 android {
