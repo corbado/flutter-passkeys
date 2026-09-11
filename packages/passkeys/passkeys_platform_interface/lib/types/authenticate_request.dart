@@ -16,6 +16,7 @@ class AuthenticateRequestType {
     this.userVerification,
     this.allowCredentials,
     this.prf,
+    this.canBeSecurityKey = true,
   });
 
   /// Constructs a new instance from a JSON string.
@@ -23,6 +24,7 @@ class AuthenticateRequestType {
     String jsonString, {
     MediationType mediation = MediationType.Optional,
     bool preferImmediatelyAvailableCredentials = true,
+    bool canBeSecurityKey = true,
   }) {
     final decoded = jsonDecode(jsonString);
     if (decoded is! Map<String, dynamic>) {
@@ -33,6 +35,7 @@ class AuthenticateRequestType {
       mediation: mediation,
       preferImmediatelyAvailableCredentials:
           preferImmediatelyAvailableCredentials,
+      canBeSecurityKey: canBeSecurityKey,
     );
   }
 
@@ -41,6 +44,7 @@ class AuthenticateRequestType {
     Map<String, dynamic> json, {
     MediationType mediation = MediationType.Optional,
     bool preferImmediatelyAvailableCredentials = true,
+    bool canBeSecurityKey = true,
   }) {
     final allowCredentials = json['allowCredentials'] as List<dynamic>?;
 
@@ -59,6 +63,7 @@ class AuthenticateRequestType {
       preferImmediatelyAvailableCredentials:
           preferImmediatelyAvailableCredentials,
       prf: _prfSaltFromExtensions(json['extensions']),
+      canBeSecurityKey: canBeSecurityKey,
     );
   }
 
@@ -106,6 +111,18 @@ class AuthenticateRequestType {
 
   /// Base64URL-encoded salt for the WebAuthn PRF extension (`prf.eval.first`).
   final String? prf;
+
+  /// Whether a hardware security key may be offered as an authenticator.
+  ///
+  /// When `false`, the system sheet only offers passkeys and does not show
+  /// options such as "Use Security Key" or "Scan QR Code". Set this to `false`
+  /// when the relying party knows that none of the [allowCredentials] live on a
+  /// roaming authenticator.
+  ///
+  /// This is only used on iOS and macOS. Security keys are never offered there
+  /// when [preferImmediatelyAvailableCredentials] is `true` or when [mediation]
+  /// is [MediationType.Conditional], regardless of this value.
+  final bool canBeSecurityKey;
 
   /// Converts this instance to a JSON string.
   String toJsonString() => jsonEncode(toJson());

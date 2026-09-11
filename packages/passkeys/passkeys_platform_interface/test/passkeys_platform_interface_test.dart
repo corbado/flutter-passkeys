@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:passkeys_platform_interface/passkeys_platform_interface.dart';
@@ -248,6 +250,45 @@ void main() {
         build(<String, dynamic>{}).toJson().containsKey('extensions'),
         isFalse,
       );
+    });
+  });
+
+  group('AuthenticateRequestType canBeSecurityKey', () {
+    const json = {'challenge': 'challenge', 'rpId': 'example.com'};
+
+    test('defaults to true', () {
+      const request = AuthenticateRequestType(
+        relyingPartyId: 'example.com',
+        challenge: 'challenge',
+        mediation: MediationType.Optional,
+        preferImmediatelyAvailableCredentials: false,
+      );
+      expect(request.canBeSecurityKey, isTrue);
+      expect(AuthenticateRequestType.fromJson(json).canBeSecurityKey, isTrue);
+    });
+
+    test('fromJson forwards canBeSecurityKey', () {
+      final request = AuthenticateRequestType.fromJson(
+        json,
+        canBeSecurityKey: false,
+      );
+      expect(request.canBeSecurityKey, isFalse);
+    });
+
+    test('fromJsonString forwards canBeSecurityKey', () {
+      final request = AuthenticateRequestType.fromJsonString(
+        jsonEncode(json),
+        canBeSecurityKey: false,
+      );
+      expect(request.canBeSecurityKey, isFalse);
+    });
+
+    test('toJson does not include canBeSecurityKey', () {
+      final encoded = AuthenticateRequestType.fromJson(
+        json,
+        canBeSecurityKey: false,
+      ).toJson();
+      expect(encoded.containsKey('canBeSecurityKey'), isFalse);
     });
   });
 

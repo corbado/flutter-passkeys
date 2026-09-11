@@ -89,6 +89,7 @@ class PasskeysDarwin extends PasskeysPlatform {
       request.preferImmediatelyAvailableCredentials,
       request.userVerification,
       request.prf,
+      request.canBeSecurityKey,
     );
 
     return AuthenticateResponseType(

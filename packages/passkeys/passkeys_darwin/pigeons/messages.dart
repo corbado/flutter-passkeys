@@ -146,6 +146,7 @@ abstract class PasskeysApi {
     bool preferImmediatelyAvailableCredentials,
     String? userVerificationPreference,
     String? salt,
+    bool canBeSecurityKey,
   );
 
   @async
