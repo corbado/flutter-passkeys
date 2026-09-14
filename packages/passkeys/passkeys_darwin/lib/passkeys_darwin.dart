@@ -49,6 +49,7 @@ class PasskeysDarwin extends PasskeysPlatform {
           request.authSelectionType!.authenticatorAttachment != 'platform',
       request.authSelectionType?.residentKey,
       request.attestation,
+      request.authSelectionType?.userVerification,
       request.prf,
     );
 
@@ -86,6 +87,7 @@ class PasskeysDarwin extends PasskeysPlatform {
               .toList() ??
           [],
       request.preferImmediatelyAvailableCredentials,
+      request.userVerification,
       request.prf,
     );
 
