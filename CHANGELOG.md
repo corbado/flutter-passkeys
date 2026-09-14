@@ -15,6 +15,56 @@ Packages with breaking changes:
 
 Packages with other changes:
 
+ - [`passkeys` - `v2.23.1`](#passkeys---v2231)
+ - [`passkeys_android` - `v2.14.1`](#passkeys_android---v2141)
+ - [`passkeys_darwin` - `v0.4.5`](#passkeys_darwin---v045)
+ - [`passkeys_doctor` - `v1.6.2`](#passkeys_doctor---v162)
+ - [`passkeys_windows` - `v0.1.5`](#passkeys_windows---v015)
+ - [`corbado_auth` - `v3.8.5`](#corbado_auth---v385)
+ - [`corbado_auth_firebase` - `v2.0.13`](#corbado_auth_firebase---v2013)
+
+Packages with dependency updates only:
+
+> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
+
+ - `corbado_auth` - `v3.8.5`
+ - `corbado_auth_firebase` - `v2.0.13`
+
+---
+
+#### `passkeys` - `v2.23.1`
+
+ - **FIX**(passkeys): declare the meta dependency required by Pigeon generated code ([#313](https://github.com/corbado/flutter-passkeys/issues/313)). ([e1f12615](https://github.com/corbado/flutter-passkeys/commit/e1f126157ef1498ff563d9c4e8622eddd16a1a50))
+
+#### `passkeys_android` - `v2.14.1`
+
+ - **FIX**(passkeys): declare the meta dependency required by Pigeon generated code ([#313](https://github.com/corbado/flutter-passkeys/issues/313)). ([e1f12615](https://github.com/corbado/flutter-passkeys/commit/e1f126157ef1498ff563d9c4e8622eddd16a1a50))
+
+#### `passkeys_darwin` - `v0.4.5`
+
+ - **FIX**(passkeys): declare the meta dependency required by Pigeon generated code ([#313](https://github.com/corbado/flutter-passkeys/issues/313)). ([e1f12615](https://github.com/corbado/flutter-passkeys/commit/e1f126157ef1498ff563d9c4e8622eddd16a1a50))
+
+#### `passkeys_doctor` - `v1.6.2`
+
+ - **FIX**(passkeys): declare the meta dependency required by Pigeon generated code ([#313](https://github.com/corbado/flutter-passkeys/issues/313)). ([e1f12615](https://github.com/corbado/flutter-passkeys/commit/e1f126157ef1498ff563d9c4e8622eddd16a1a50))
+
+#### `passkeys_windows` - `v0.1.5`
+
+ - **FIX**(passkeys): declare the meta dependency required by Pigeon generated code ([#313](https://github.com/corbado/flutter-passkeys/issues/313)). ([e1f12615](https://github.com/corbado/flutter-passkeys/commit/e1f126157ef1498ff563d9c4e8622eddd16a1a50))
+
+
+## 2026-09-14
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
  - [`passkeys` - `v2.23.0`](#passkeys---v2230)
  - [`passkeys_android` - `v2.14.0`](#passkeys_android---v2140)
  - [`passkeys_darwin` - `v0.4.4+4`](#passkeys_darwin---v0444)
