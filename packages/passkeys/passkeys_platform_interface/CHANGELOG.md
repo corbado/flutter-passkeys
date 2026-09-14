@@ -1,3 +1,8 @@
+## 2.10.0
+
+ - **FIX**(passkeys_darwin): add canBeSecurityKey to authenticate ([#310](https://github.com/corbado/flutter-passkeys/issues/310)). ([c66a16eb](https://github.com/corbado/flutter-passkeys/commit/c66a16eba8a51400bfa8bb52e40c97098b8b7aa0))
+ - **FEAT**(passkeys): add Android Restore Credentials support ([#305](https://github.com/corbado/flutter-passkeys/issues/305)). ([c4e44074](https://github.com/corbado/flutter-passkeys/commit/c4e440743cd6eec94b6e336f2377bd6928fb16df))
+
 ## 2.9.0
 
  - **REFACTOR**: adopt Dart 3.9 features and migrate the example integration tests to patrol ([#268](https://github.com/corbado/flutter-passkeys/issues/268)). ([7a1bd0de](https://github.com/corbado/flutter-passkeys/commit/7a1bd0de58f594fe423d80f15dfc98568b34df7c))

@@ -1,3 +1,7 @@
+## 1.6.1
+
+ - **REFACTOR**(passkeys): regenerate Pigeon bindings with Pigeon 26.3.4 ([#306](https://github.com/corbado/flutter-passkeys/issues/306)). ([aaa15472](https://github.com/corbado/flutter-passkeys/commit/aaa15472b4fa4f0ca4842508232506403033bc6e))
+
 ## 1.6.0
 
  - **FEAT**(passkeys_doctor): add web/macOS/Windows checks and only run doctor in debug mode ([#284](https://github.com/corbado/flutter-passkeys/issues/284)). ([5cf5c8b7](https://github.com/corbado/flutter-passkeys/commit/5cf5c8b755dffbe550f2879e605d5254100a5e0c))

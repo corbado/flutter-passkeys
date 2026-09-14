@@ -3,6 +3,70 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2026-09-14
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`passkeys` - `v2.23.0`](#passkeys---v2230)
+ - [`passkeys_android` - `v2.14.0`](#passkeys_android---v2140)
+ - [`passkeys_darwin` - `v0.4.4+4`](#passkeys_darwin---v0444)
+ - [`passkeys_doctor` - `v1.6.1`](#passkeys_doctor---v161)
+ - [`passkeys_platform_interface` - `v2.10.0`](#passkeys_platform_interface---v2100)
+ - [`passkeys_windows` - `v0.1.4+3`](#passkeys_windows---v0143)
+ - [`corbado_auth` - `v3.8.4`](#corbado_auth---v384)
+ - [`corbado_auth_firebase` - `v2.0.12`](#corbado_auth_firebase---v2012)
+ - [`passkeys_web` - `v2.10.1`](#passkeys_web---v2101)
+
+Packages with dependency updates only:
+
+> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
+
+ - `corbado_auth` - `v3.8.4`
+ - `corbado_auth_firebase` - `v2.0.12`
+ - `passkeys_web` - `v2.10.1`
+
+---
+
+#### `passkeys` - `v2.23.0`
+
+ - **FIX**(passkeys_darwin): add canBeSecurityKey to authenticate ([#310](https://github.com/corbado/flutter-passkeys/issues/310)). ([c66a16eb](https://github.com/corbado/flutter-passkeys/commit/c66a16eba8a51400bfa8bb52e40c97098b8b7aa0))
+ - **FEAT**(passkeys): add Android Restore Credentials support ([#305](https://github.com/corbado/flutter-passkeys/issues/305)). ([c4e44074](https://github.com/corbado/flutter-passkeys/commit/c4e440743cd6eec94b6e336f2377bd6928fb16df))
+
+#### `passkeys_android` - `v2.14.0`
+
+ - **REFACTOR**(passkeys): regenerate Pigeon bindings with Pigeon 26.3.4 ([#306](https://github.com/corbado/flutter-passkeys/issues/306)). ([aaa15472](https://github.com/corbado/flutter-passkeys/commit/aaa15472b4fa4f0ca4842508232506403033bc6e))
+ - **FIX**(passkeys_android): stop applying the Kotlin Gradle Plugin when Kotlin is already provided ([#311](https://github.com/corbado/flutter-passkeys/issues/311)). ([23ba536a](https://github.com/corbado/flutter-passkeys/commit/23ba536a6d3c35e07d8acc2fc5da5f19a0f8cb66))
+ - **FEAT**(passkeys): add Android Restore Credentials support ([#305](https://github.com/corbado/flutter-passkeys/issues/305)). ([c4e44074](https://github.com/corbado/flutter-passkeys/commit/c4e440743cd6eec94b6e336f2377bd6928fb16df))
+
+#### `passkeys_darwin` - `v0.4.4+4`
+
+ - **REFACTOR**(passkeys): regenerate Pigeon bindings with Pigeon 26.3.4 ([#306](https://github.com/corbado/flutter-passkeys/issues/306)). ([aaa15472](https://github.com/corbado/flutter-passkeys/commit/aaa15472b4fa4f0ca4842508232506403033bc6e))
+ - **FIX**(passkeys_darwin): add canBeSecurityKey to authenticate ([#310](https://github.com/corbado/flutter-passkeys/issues/310)). ([c66a16eb](https://github.com/corbado/flutter-passkeys/commit/c66a16eba8a51400bfa8bb52e40c97098b8b7aa0))
+ - **FIX**(passkeys_darwin): forward userVerification preference to AuthenticationServices ([#309](https://github.com/corbado/flutter-passkeys/issues/309)). ([0dc05c95](https://github.com/corbado/flutter-passkeys/commit/0dc05c95dffc3d7c679f70863784e05757bff1a6))
+
+#### `passkeys_doctor` - `v1.6.1`
+
+ - **REFACTOR**(passkeys): regenerate Pigeon bindings with Pigeon 26.3.4 ([#306](https://github.com/corbado/flutter-passkeys/issues/306)). ([aaa15472](https://github.com/corbado/flutter-passkeys/commit/aaa15472b4fa4f0ca4842508232506403033bc6e))
+
+#### `passkeys_platform_interface` - `v2.10.0`
+
+ - **FIX**(passkeys_darwin): add canBeSecurityKey to authenticate ([#310](https://github.com/corbado/flutter-passkeys/issues/310)). ([c66a16eb](https://github.com/corbado/flutter-passkeys/commit/c66a16eba8a51400bfa8bb52e40c97098b8b7aa0))
+ - **FEAT**(passkeys): add Android Restore Credentials support ([#305](https://github.com/corbado/flutter-passkeys/issues/305)). ([c4e44074](https://github.com/corbado/flutter-passkeys/commit/c4e440743cd6eec94b6e336f2377bd6928fb16df))
+
+#### `passkeys_windows` - `v0.1.4+3`
+
+ - **REFACTOR**(passkeys): regenerate Pigeon bindings with Pigeon 26.3.4 ([#306](https://github.com/corbado/flutter-passkeys/issues/306)). ([aaa15472](https://github.com/corbado/flutter-passkeys/commit/aaa15472b4fa4f0ca4842508232506403033bc6e))
+ - **FIX**(passkeys_windows): keep WebAuthn prompts in foreground ([#303](https://github.com/corbado/flutter-passkeys/issues/303)). ([b9638d00](https://github.com/corbado/flutter-passkeys/commit/b9638d0014b778cd5ac0b65b2a73e3dc66abbd8c))
+
+
 ## 2026-08-17
 
 ### Changes
