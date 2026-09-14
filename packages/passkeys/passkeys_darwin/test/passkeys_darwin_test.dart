@@ -9,6 +9,7 @@ class _FakePasskeysApi extends pigeon.PasskeysApi {
   String? registerUserVerificationPreference;
   String? authenticateSalt;
   String? authenticateUserVerificationPreference;
+  bool? authenticateCanBeSecurityKey;
   List<Object?>? signalUnknownCredentialArgs;
   List<Object?>? signalAllAcceptedCredentialsArgs;
 
@@ -72,9 +73,11 @@ class _FakePasskeysApi extends pigeon.PasskeysApi {
     bool preferImmediatelyAvailableCredentials,
     String? userVerificationPreference,
     String? salt,
+    bool canBeSecurityKey,
   ) async {
     authenticateSalt = salt;
     authenticateUserVerificationPreference = userVerificationPreference;
+    authenticateCanBeSecurityKey = canBeSecurityKey;
     return pigeon.AuthenticateResponse(
       id: 'id',
       rawId: 'rawId',
@@ -228,6 +231,39 @@ void main() {
       );
 
       expect(api.authenticateUserVerificationPreference, isNull);
+    });
+
+    test('authenticate allows security keys by default', () async {
+      final api = _FakePasskeysApi();
+      final platform = PasskeysDarwin(api: api);
+
+      await platform.authenticate(
+        const AuthenticateRequestType(
+          relyingPartyId: 'example.com',
+          challenge: 'challenge',
+          mediation: MediationType.Optional,
+          preferImmediatelyAvailableCredentials: false,
+        ),
+      );
+
+      expect(api.authenticateCanBeSecurityKey, isTrue);
+    });
+
+    test('authenticate forwards canBeSecurityKey when disabled', () async {
+      final api = _FakePasskeysApi();
+      final platform = PasskeysDarwin(api: api);
+
+      await platform.authenticate(
+        const AuthenticateRequestType(
+          relyingPartyId: 'example.com',
+          challenge: 'challenge',
+          mediation: MediationType.Optional,
+          preferImmediatelyAvailableCredentials: false,
+          canBeSecurityKey: false,
+        ),
+      );
+
+      expect(api.authenticateCanBeSecurityKey, isFalse);
     });
 
     test('signalUnknownCredential forwards its arguments', () async {

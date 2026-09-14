@@ -172,6 +172,7 @@ public class PasskeysPlugin: NSObject, FlutterPlugin, PasskeysApi {
         preferImmediatelyAvailableCredentials: Bool,
         userVerificationPreference: String?,
         salt: String?,
+        canBeSecurityKey: Bool = true,
         completion: @escaping (Result<AuthenticateResponse, Error>) -> Void
     ) {
         guard (try? canAuthenticate()) == true else {
@@ -205,7 +206,8 @@ public class PasskeysPlugin: NSObject, FlutterPlugin, PasskeysApi {
         
         // We should not show the security key flow when preferImmediatelyAvailable is set to true
         // Also skip security key requests when using conditional UI, which doesn't support them
-        if !preferImmediatelyAvailableCredentials && !conditionalUI {
+        // The relying party can opt out of security keys entirely with canBeSecurityKey
+        if canBeSecurityKey && !preferImmediatelyAvailableCredentials && !conditionalUI {
             let securityKeyProvider = ASAuthorizationSecurityKeyPublicKeyCredentialProvider(relyingPartyIdentifier: relyingPartyId)
             let externalRequest = securityKeyProvider.createCredentialAssertionRequest(challenge: decodedChallenge)
             externalRequest.allowedCredentials = parseSecurityKeyCredentials(credentials: allowedCredentials)

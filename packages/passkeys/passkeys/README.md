@@ -451,6 +451,28 @@ On a simulator, this can be done under _Features_ => _Face ID_ by clicking on "E
 <img src="https://raw.githubusercontent.com/corbado/flutter-passkeys/main/packages/passkeys/passkeys/doc/ios_error_enrolled_biometrics.png" style="width: 200px" alt="ios_enrolled_biometrics">
 </details>
 
+<details>
+<summary>2. The login sheet offers "Use Security Key" or "Scan QR Code" instead of the passkey</summary>
+
+When `preferImmediatelyAvailableCredentials` is `false`, iOS and macOS also offer hardware security
+keys and cross-device sign in on the login sheet. Passkeys stored by a third party credential
+provider, such as Google Password Manager or 1Password, can then end up hidden behind a
+"More options" entry, which some users read as their passkey being gone.
+
+If your relying party knows that none of the credentials in `allowCredentials` live on a security
+key, pass `canBeSecurityKey: false` so the sheet only offers passkeys:
+
+```dart
+final request = AuthenticateRequestType.fromJsonString(
+  webAuthnChallenge,
+  preferImmediatelyAvailableCredentials: false,
+  canBeSecurityKey: false,
+);
+```
+
+The flag only affects iOS and macOS and defaults to `true`.
+</details>
+
 ### macOS
 
 <details>

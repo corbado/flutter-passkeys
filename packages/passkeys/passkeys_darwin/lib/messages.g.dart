@@ -516,14 +516,14 @@ class PasskeysApi {
     return pigeonVar_replyValue! as RegisterResponse;
   }
 
-  Future<AuthenticateResponse> authenticate(String relyingPartyId, String challenge, bool conditionalUI, List<CredentialType> allowedCredentials, bool preferImmediatelyAvailableCredentials, String? userVerificationPreference, String? salt) async {
+  Future<AuthenticateResponse> authenticate(String relyingPartyId, String challenge, bool conditionalUI, List<CredentialType> allowedCredentials, bool preferImmediatelyAvailableCredentials, String? userVerificationPreference, String? salt, bool canBeSecurityKey) async {
     final pigeonVar_channelName = 'dev.flutter.pigeon.passkeys_darwin.PasskeysApi.authenticate$pigeonVar_messageChannelSuffix';
     final pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
       binaryMessenger: pigeonVar_binaryMessenger,
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[relyingPartyId, challenge, conditionalUI, allowedCredentials, preferImmediatelyAvailableCredentials, userVerificationPreference, salt]);
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[relyingPartyId, challenge, conditionalUI, allowedCredentials, preferImmediatelyAvailableCredentials, userVerificationPreference, salt, canBeSecurityKey]);
     final pigeonVar_replyList = await pigeonVar_sendFuture as List<Object?>?;
 
     final Object? pigeonVar_replyValue = _extractReplyValueOrThrow(

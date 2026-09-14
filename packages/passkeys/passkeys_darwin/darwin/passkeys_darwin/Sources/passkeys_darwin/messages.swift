@@ -498,7 +498,7 @@ protocol PasskeysApi {
   func canAuthenticate() throws -> Bool
   func hasBiometrics() throws -> Bool
   func register(challenge: String, relyingParty: RelyingParty, user: User, excludeCredentials: [CredentialType], pubKeyCredValues: [Int64], canBePlatformAuthenticator: Bool, canBeSecurityKey: Bool, residentKeyPreference: String?, attestationPreference: String?, userVerificationPreference: String?, salt: String?, completion: @escaping (Result<RegisterResponse, Error>) -> Void)
-  func authenticate(relyingPartyId: String, challenge: String, conditionalUI: Bool, allowedCredentials: [CredentialType], preferImmediatelyAvailableCredentials: Bool, userVerificationPreference: String?, salt: String?, completion: @escaping (Result<AuthenticateResponse, Error>) -> Void)
+  func authenticate(relyingPartyId: String, challenge: String, conditionalUI: Bool, allowedCredentials: [CredentialType], preferImmediatelyAvailableCredentials: Bool, userVerificationPreference: String?, salt: String?, canBeSecurityKey: Bool, completion: @escaping (Result<AuthenticateResponse, Error>) -> Void)
   func cancelCurrentAuthenticatorOperation(completion: @escaping (Result<Void, Error>) -> Void)
   func signalUnknownCredential(relyingPartyId: String, credentialId: String, completion: @escaping (Result<Void, Error>) -> Void)
   func signalAllAcceptedCredentials(relyingPartyId: String, userId: String, allAcceptedCredentialIds: [String], completion: @escaping (Result<Void, Error>) -> Void)
@@ -574,7 +574,8 @@ class PasskeysApiSetup {
         let preferImmediatelyAvailableCredentialsArg = args[4] as! Bool
         let userVerificationPreferenceArg: String? = nilOrValue(args[5])
         let saltArg: String? = nilOrValue(args[6])
-        api.authenticate(relyingPartyId: relyingPartyIdArg, challenge: challengeArg, conditionalUI: conditionalUIArg, allowedCredentials: allowedCredentialsArg, preferImmediatelyAvailableCredentials: preferImmediatelyAvailableCredentialsArg, userVerificationPreference: userVerificationPreferenceArg, salt: saltArg) { result in
+        let canBeSecurityKeyArg = args[7] as! Bool
+        api.authenticate(relyingPartyId: relyingPartyIdArg, challenge: challengeArg, conditionalUI: conditionalUIArg, allowedCredentials: allowedCredentialsArg, preferImmediatelyAvailableCredentials: preferImmediatelyAvailableCredentialsArg, userVerificationPreference: userVerificationPreferenceArg, salt: saltArg, canBeSecurityKey: canBeSecurityKeyArg) { result in
           switch result {
           case .success(let res):
             reply(wrapResult(res))
