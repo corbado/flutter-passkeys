@@ -1,4 +1,4 @@
-## 0.1.4+3
+## 0.1.4
 
  - **REFACTOR**(passkeys): regenerate Pigeon bindings with Pigeon 26.3.4 ([#306](https://github.com/corbado/flutter-passkeys/issues/306)). ([aaa15472](https://github.com/corbado/flutter-passkeys/commit/aaa15472b4fa4f0ca4842508232506403033bc6e))
  - **FIX**(passkeys_windows): keep WebAuthn prompts in foreground ([#303](https://github.com/corbado/flutter-passkeys/issues/303)). ([b9638d00](https://github.com/corbado/flutter-passkeys/commit/b9638d0014b778cd5ac0b65b2a73e3dc66abbd8c))
