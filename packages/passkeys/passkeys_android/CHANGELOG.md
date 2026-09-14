@@ -1,3 +1,9 @@
+## 2.14.0
+
+ - **REFACTOR**(passkeys): regenerate Pigeon bindings with Pigeon 26.3.4 ([#306](https://github.com/corbado/flutter-passkeys/issues/306)). ([aaa15472](https://github.com/corbado/flutter-passkeys/commit/aaa15472b4fa4f0ca4842508232506403033bc6e))
+ - **FIX**(passkeys_android): stop applying the Kotlin Gradle Plugin when Kotlin is already provided ([#311](https://github.com/corbado/flutter-passkeys/issues/311)). ([23ba536a](https://github.com/corbado/flutter-passkeys/commit/23ba536a6d3c35e07d8acc2fc5da5f19a0f8cb66))
+ - **FEAT**(passkeys): add Android Restore Credentials support ([#305](https://github.com/corbado/flutter-passkeys/issues/305)). ([c4e44074](https://github.com/corbado/flutter-passkeys/commit/c4e440743cd6eec94b6e336f2377bd6928fb16df))
+
 ## 2.13.1
 
  - **FIX**(passkeys_android): serialize algorithm identifiers as numbers ([#297](https://github.com/corbado/flutter-passkeys/issues/297)). ([f5f9714b](https://github.com/corbado/flutter-passkeys/commit/f5f9714b025c0637f6dfd78c55f1e7c50fee25d4))

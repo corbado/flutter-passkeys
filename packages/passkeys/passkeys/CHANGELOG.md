@@ -1,3 +1,8 @@
+## 2.23.0
+
+ - **FIX**(passkeys_darwin): add canBeSecurityKey to authenticate ([#310](https://github.com/corbado/flutter-passkeys/issues/310)). ([c66a16eb](https://github.com/corbado/flutter-passkeys/commit/c66a16eba8a51400bfa8bb52e40c97098b8b7aa0))
+ - **FEAT**(passkeys): add Android Restore Credentials support ([#305](https://github.com/corbado/flutter-passkeys/issues/305)). ([c4e44074](https://github.com/corbado/flutter-passkeys/commit/c4e440743cd6eec94b6e336f2377bd6928fb16df))
+
 ## 2.22.3
 
  - **FIX**(passkeys): remove unused ua_client_hints dependency ([#300](https://github.com/corbado/flutter-passkeys/issues/300)). ([a25a3de4](https://github.com/corbado/flutter-passkeys/commit/a25a3de43c02c977b797a98dcba9a74eac620c57))

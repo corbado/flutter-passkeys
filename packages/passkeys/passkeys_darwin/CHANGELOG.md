@@ -1,3 +1,9 @@
+## 0.4.4+4
+
+ - **REFACTOR**(passkeys): regenerate Pigeon bindings with Pigeon 26.3.4 ([#306](https://github.com/corbado/flutter-passkeys/issues/306)). ([aaa15472](https://github.com/corbado/flutter-passkeys/commit/aaa15472b4fa4f0ca4842508232506403033bc6e))
+ - **FIX**(passkeys_darwin): add canBeSecurityKey to authenticate ([#310](https://github.com/corbado/flutter-passkeys/issues/310)). ([c66a16eb](https://github.com/corbado/flutter-passkeys/commit/c66a16eba8a51400bfa8bb52e40c97098b8b7aa0))
+ - **FIX**(passkeys_darwin): forward userVerification preference to AuthenticationServices ([#309](https://github.com/corbado/flutter-passkeys/issues/309)). ([0dc05c95](https://github.com/corbado/flutter-passkeys/commit/0dc05c95dffc3d7c679f70863784e05757bff1a6))
+
 ## 0.4.3+3
 
  - **FIX**(passkeys_darwin): compile out Signal API on Xcode older than 26.2 ([#289](https://github.com/corbado/flutter-passkeys/issues/289)). ([3731dc07](https://github.com/corbado/flutter-passkeys/commit/3731dc07755001735daef9e1b2a61ad718b1d26f))
