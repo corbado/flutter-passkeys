@@ -100,16 +100,14 @@ class ProcessHandler {
         block = SignupInitBlock(
           processHandler: this,
           data: SignupInitBlockData.fromProcessResponse(typed),
-        );
-        block.error = CorbadoAuthException.fromRequestError(typed.error);
+        )..error = CorbadoAuthException.fromRequestError(typed.error);
 
       case BlockType.loginInit:
         final typed = body.data.oneOf.value! as GeneralBlockLoginInit;
         block = LoginInitBlock(
           processHandler: this,
           data: LoginInitBlockData.fromProcessResponse(typed),
-        );
-        block.error = CorbadoAuthException.fromRequestError(typed.error);
+        )..error = CorbadoAuthException.fromRequestError(typed.error);
 
       case BlockType.emailVerify:
         final typed = body.data.oneOf.value! as GeneralBlockVerifyIdentifier;
@@ -117,8 +115,7 @@ class ProcessHandler {
           processHandler: this,
           data: EmailVerifyBlockData.fromProcessResponse(typed),
           authType: body.authType,
-        );
-        block.error = CorbadoAuthException.fromRequestError(typed.error);
+        )..error = CorbadoAuthException.fromRequestError(typed.error);
 
       case BlockType.completed:
         final typed = body.data.oneOf.value! as GeneralBlockCompleted;

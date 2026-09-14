@@ -220,6 +220,7 @@ abstract class CorbadoService {
       json,
     ).toPlatformType();
 
+    final PasskeyAppendFinishReq passkeyAppendReq;
     try {
       final authenticatorRes = await passkeyAuthenticator.register(
         authenticatorReq,
@@ -229,18 +230,18 @@ abstract class CorbadoService {
           authenticatorRes,
         ).toJson(),
       );
-      final passkeyAppendReq = PasskeyAppendFinishReq(
+      passkeyAppendReq = PasskeyAppendFinishReq(
         (b) => b..signedChallenge = attestationResponse,
-      );
-
-      return _wrapWithError(
-        () => frontendAPIClient.getAuthApi().passkeyAppendFinish(
-          passkeyAppendFinishReq: passkeyAppendReq,
-        ),
       );
     } on AuthenticatorException catch (e) {
       throw CorbadoAuthException.fromAuthenticatorError(e);
     }
+
+    return _wrapWithError(
+      () => frontendAPIClient.getAuthApi().passkeyAppendFinish(
+        passkeyAppendFinishReq: passkeyAppendReq,
+      ),
+    );
   }
 
   /// Appends a passkey to the currently signed in user.
@@ -261,6 +262,7 @@ abstract class CorbadoService {
 
     final json =
         jsonDecode(startRes.attestationOptions) as Map<String, dynamic>;
+    final MePasskeysAppendFinishReq mePasskeysAppendFinishReq;
     try {
       final authenticatorReq = StartRegisterResponse.fromJson(
         json,
@@ -273,22 +275,22 @@ abstract class CorbadoService {
           authenticatorRes,
         ).toJson(),
       );
-      final mePasskeysAppendFinishReq = MePasskeysAppendFinishReq(
+      mePasskeysAppendFinishReq = MePasskeysAppendFinishReq(
         (b) => b
           ..attestationResponse = attestationResponse
           ..clientInformation = ci,
-      );
-
-      return _wrapWithErrorEmptyResponse(
-        () => frontendAPIClient.getUsersApi().currentUserPasskeyAppendFinish(
-          mePasskeysAppendFinishReq: mePasskeysAppendFinishReq,
-        ),
       );
     } on AuthenticatorException catch (e) {
       throw CorbadoAuthException.fromAuthenticatorError(e);
     } catch (e) {
       throw CorbadoAuthException.fromUnknownError(e);
     }
+
+    return _wrapWithErrorEmptyResponse(
+      () => frontendAPIClient.getUsersApi().currentUserPasskeyAppendFinish(
+        mePasskeysAppendFinishReq: mePasskeysAppendFinishReq,
+      ),
+    );
   }
 
   /// Lists the passkeys of the currently signed in user.
@@ -338,6 +340,7 @@ abstract class CorbadoService {
       conditional: false,
       preferImmediatelyAvailableCredentials: false,
     );
+    final PasskeyLoginFinishReq passkeyLoginFinishReq;
     try {
       final authenticatorRes = await passkeyAuthenticator.authenticate(
         authenticatorReq,
@@ -345,14 +348,8 @@ abstract class CorbadoService {
       final assertionResponse = jsonEncode(
         FinishLoginRequest.fromPlatformType(authenticatorRes).toJson(),
       );
-      final passkeyLoginFinishReq = PasskeyLoginFinishReq(
+      passkeyLoginFinishReq = PasskeyLoginFinishReq(
         (b) => b..signedChallenge = assertionResponse,
-      );
-
-      return _wrapWithError(
-        () => frontendAPIClient.getAuthApi().passkeyLoginFinish(
-          passkeyLoginFinishReq: passkeyLoginFinishReq,
-        ),
       );
     } on AuthenticatorException catch (e) {
       if (e is NoCredentialsAvailableException) {
@@ -361,6 +358,12 @@ abstract class CorbadoService {
 
       throw CorbadoAuthException.fromAuthenticatorError(e);
     }
+
+    return _wrapWithError(
+      () => frontendAPIClient.getAuthApi().passkeyLoginFinish(
+        passkeyLoginFinishReq: passkeyLoginFinishReq,
+      ),
+    );
   }
 
   /// Verifies the user with a conditional (mediated) passkey [challenge].
@@ -373,6 +376,7 @@ abstract class CorbadoService {
       conditional: silent,
     );
 
+    final PasskeyMediationFinishReq passkeyMediationFinishReq;
     try {
       final authenticatorRes = await passkeyAuthenticator.authenticate(
         authenticatorReq,
@@ -380,14 +384,8 @@ abstract class CorbadoService {
       final assertionResponse = jsonEncode(
         FinishLoginRequest.fromPlatformType(authenticatorRes).toJson(),
       );
-      final passkeyLoginFinishReq = PasskeyMediationFinishReq(
+      passkeyMediationFinishReq = PasskeyMediationFinishReq(
         (b) => b..signedChallenge = assertionResponse,
-      );
-
-      return _wrapWithError(
-        () => frontendAPIClient.getAuthApi().passkeyMediationFinish(
-          passkeyMediationFinishReq: passkeyLoginFinishReq,
-        ),
       );
     } on AuthenticatorException catch (e) {
       if (e is NoCredentialsAvailableException ||
@@ -397,6 +395,12 @@ abstract class CorbadoService {
 
       throw CorbadoAuthException.fromAuthenticatorError(e);
     }
+
+    return _wrapWithError(
+      () => frontendAPIClient.getAuthApi().passkeyMediationFinish(
+        passkeyMediationFinishReq: passkeyMediationFinishReq,
+      ),
+    );
   }
 
   /// Cancels any passkey operation that is currently in progress.
