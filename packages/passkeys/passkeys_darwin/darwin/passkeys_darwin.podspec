@@ -13,6 +13,7 @@ Pod::Spec.new do |s|
   s.author           = { 'Your Company' => 'email@example.com' }
   s.source           = { :path => '.' }  
   s.source_files = 'passkeys_darwin/Sources/passkeys_darwin/**/*.swift'
+  s.resource_bundles = {'passkeys_darwin_privacy' => ['passkeys_darwin/Sources/passkeys_darwin/Resources/PrivacyInfo.xcprivacy']}
 
   # Flutter.framework does not contain a i386 slice.
   s.pod_target_xcconfig = {

@@ -14,7 +14,10 @@ let package = Package(
     targets: [
         .target(
             name: "passkeys_darwin",
-            dependencies: []
+            dependencies: [],
+            resources: [
+                .process("Resources")
+            ]
         )
     ]
 )
