@@ -3,6 +3,38 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2026-09-17
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`passkeys_darwin` - `v0.4.6`](#passkeys_darwin---v046)
+ - [`passkeys` - `v2.23.2`](#passkeys---v2232)
+ - [`corbado_auth` - `v3.8.6`](#corbado_auth---v386)
+ - [`corbado_auth_firebase` - `v2.0.14`](#corbado_auth_firebase---v2014)
+
+Packages with dependency updates only:
+
+> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
+
+ - `passkeys` - `v2.23.2`
+ - `corbado_auth` - `v3.8.6`
+ - `corbado_auth_firebase` - `v2.0.14`
+
+---
+
+#### `passkeys_darwin` - `v0.4.6`
+
+ - **FIX**(passkeys_darwin): declare a privacy manifest for Apple platforms ([#317](https://github.com/corbado/flutter-passkeys/issues/317)). ([90a2af97](https://github.com/corbado/flutter-passkeys/commit/90a2af9788333df5f00670fed4a9233b59e398e6))
+
+
 ## 2026-09-14
 
 ### Changes
