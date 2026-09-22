@@ -503,7 +503,9 @@ namespace passkeys_windows
         client_data.dwVersion = WEBAUTHN_CLIENT_DATA_CURRENT_VERSION;
         client_data.cbClientDataJSON = static_cast<DWORD>(client_data_json.size());
         client_data.pbClientDataJSON = reinterpret_cast<PBYTE>(const_cast<char *>(client_data_json.data()));
-        client_data.pwszHashAlgId = WEBAUTHN_HASH_ALGORITHM_SHA_512;
+        // WebAuthn defines clientDataHash as SHA-256 over clientDataJSON, and relying
+        // parties recompute it that way, so any other algorithm fails verification.
+        client_data.pwszHashAlgId = WEBAUTHN_HASH_ALGORITHM_SHA_256;
 
         // Setup credential parameters
         std::vector<WEBAUTHN_COSE_CREDENTIAL_PARAMETER> cred_params;
@@ -795,7 +797,9 @@ namespace passkeys_windows
         client_data.dwVersion = WEBAUTHN_CLIENT_DATA_CURRENT_VERSION;
         client_data.cbClientDataJSON = static_cast<DWORD>(client_data_json.size());
         client_data.pbClientDataJSON = reinterpret_cast<PBYTE>(const_cast<char *>(client_data_json.data()));
-        client_data.pwszHashAlgId = WEBAUTHN_HASH_ALGORITHM_SHA_512;
+        // WebAuthn defines clientDataHash as SHA-256 over clientDataJSON, and relying
+        // parties recompute it that way, so any other algorithm fails verification.
+        client_data.pwszHashAlgId = WEBAUTHN_HASH_ALGORITHM_SHA_256;
 
         // Setup allow credentials
         std::vector<WEBAUTHN_CREDENTIAL_EX> allow_creds;
