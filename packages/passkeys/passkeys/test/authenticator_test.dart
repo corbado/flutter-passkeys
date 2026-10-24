@@ -53,6 +53,14 @@ class _ThrowingPlatform extends PasskeysPlatform
   Future<void> clearRestoreCredential() async {
     throw exception;
   }
+
+  @override
+  Future<PasswordOrPasskeyResponseType> getPasswordOrPasskey(
+    AuthenticateRequestType? passkeyRequest, {
+    bool preferImmediatelyAvailableCredentials = false,
+  }) async {
+    throw exception;
+  }
 }
 
 class _RecordingPlatform extends PasskeysPlatform
@@ -60,6 +68,8 @@ class _RecordingPlatform extends PasskeysPlatform
   RegisterRequestType? createRequest;
   bool? createIsCloudBackupEnabled;
   AuthenticateRequestType? getRequest;
+  AuthenticateRequestType? passwordOrPasskeyRequest;
+  bool? passwordOrPasskeyPreferImmediately;
   int clearCalls = 0;
   int cancelCalls = 0;
 
@@ -119,6 +129,18 @@ class _RecordingPlatform extends PasskeysPlatform
   @override
   Future<void> clearRestoreCredential() async {
     clearCalls++;
+  }
+
+  @override
+  Future<PasswordOrPasskeyResponseType> getPasswordOrPasskey(
+    AuthenticateRequestType? passkeyRequest, {
+    bool preferImmediatelyAvailableCredentials = false,
+  }) async {
+    passwordOrPasskeyRequest = passkeyRequest;
+    passwordOrPasskeyPreferImmediately = preferImmediatelyAvailableCredentials;
+    return const PasswordOrPasskeyResponseType.password(
+      PasswordCredentialType(username: 'user', password: 'secret'),
+    );
   }
 }
 
@@ -286,6 +308,81 @@ void main() {
         await expectMapping(
           'exclude-credentials-match',
           isA<ExcludeCredentialsCanNotBeRegisteredException>(),
+        );
+      },
+    );
+  });
+
+  group('getPasswordOrPasskey', () {
+    Future<void> expectMapping(String code, Matcher matcher) async {
+      PasskeysPlatform.instance = _ThrowingPlatform(
+        PlatformException(code: code),
+      );
+
+      await expectLater(
+        () => PasskeyAuthenticator().getPasswordOrPasskey(null),
+        throwsA(matcher),
+      );
+    }
+
+    test(
+      'forwards the request and preferImmediatelyAvailableCredentials',
+      () async {
+        final platform = _RecordingPlatform();
+        PasskeysPlatform.instance = platform;
+        final request = _authenticateRequest();
+
+        final response = await PasskeyAuthenticator().getPasswordOrPasskey(
+          request,
+          preferImmediatelyAvailableCredentials: true,
+        );
+
+        expect(platform.passwordOrPasskeyRequest, same(request));
+        expect(platform.passwordOrPasskeyPreferImmediately, isTrue);
+        expect(platform.cancelCalls, 1);
+        expect(response.password?.username, 'user');
+      },
+    );
+
+    test('validates the passkey challenge first', () async {
+      final platform = _RecordingPlatform();
+      PasskeysPlatform.instance = platform;
+
+      await expectLater(
+        () => PasskeyAuthenticator().getPasswordOrPasskey(
+          const AuthenticateRequestType(
+            relyingPartyId: 'example.com',
+            challenge: 'not base64url!',
+            mediation: MediationType.Optional,
+            preferImmediatelyAvailableCredentials: false,
+          ),
+        ),
+        throwsA(isA<MalformedBase64UrlChallenge>()),
+      );
+      expect(platform.passwordOrPasskeyRequest, isNull);
+    });
+
+    test(
+      'password-credential-unsupported throws '
+      'PasswordCredentialUnsupportedException',
+      () async {
+        await expectMapping(
+          'password-credential-unsupported',
+          isA<PasswordCredentialUnsupportedException>(),
+        );
+      },
+    );
+
+    test('cancelled throws PasskeyAuthCancelledException', () async {
+      await expectMapping('cancelled', isA<PasskeyAuthCancelledException>());
+    });
+
+    test(
+      'android-no-credential throws NoCredentialsAvailableException',
+      () async {
+        await expectMapping(
+          'android-no-credential',
+          isA<NoCredentialsAvailableException>(),
         );
       },
     );

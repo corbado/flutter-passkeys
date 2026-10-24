@@ -9,6 +9,9 @@ import 'package:passkeys_platform_interface/types/types.dart';
 class _FakePasskeysApi extends pigeon.PasskeysApi {
   String? registerSalt;
   bool? registerIsConditional;
+  List<Object?>? getPasswordOrPasskeyArgs;
+  pigeon.PasswordOrPasskeyResponse passwordOrPasskeyResponse =
+      pigeon.PasswordOrPasskeyResponse(username: 'user', password: 'secret');
   String? authenticateSalt;
   List<Object?>? signalUnknownCredentialArgs;
   List<Object?>? signalAllAcceptedCredentialsArgs;
@@ -153,6 +156,25 @@ class _FakePasskeysApi extends pigeon.PasskeysApi {
       },
     );
   }
+
+  @override
+  Future<pigeon.PasswordOrPasskeyResponse> getPasswordOrPasskey(
+    String? relyingPartyId,
+    String? challenge,
+    int? timeout,
+    String? userVerification,
+    List<pigeon.AllowCredential?>? allowCredentials,
+    String? salt,
+    bool preferImmediatelyAvailableCredentials,
+  ) async {
+    getPasswordOrPasskeyArgs = [
+      relyingPartyId,
+      challenge,
+      salt,
+      preferImmediatelyAvailableCredentials,
+    ];
+    return passwordOrPasskeyResponse;
+  }
 }
 
 void main() {
@@ -240,6 +262,61 @@ void main() {
         isA<Map<dynamic, dynamic>>(),
       );
     });
+
+    test(
+      'getPasswordOrPasskey without a passkey request offers passwords only',
+      () async {
+        final api = _FakePasskeysApi();
+        final platform = PasskeysAndroid(api: api);
+
+        final response = await platform.getPasswordOrPasskey(
+          null,
+          preferImmediatelyAvailableCredentials: true,
+        );
+
+        expect(api.getPasswordOrPasskeyArgs, [null, null, null, true]);
+        expect(response.password?.username, 'user');
+        expect(response.password?.password, 'secret');
+        expect(response.passkey, isNull);
+      },
+    );
+
+    test(
+      'getPasswordOrPasskey forwards the passkey request and maps a passkey',
+      () async {
+        final api = _FakePasskeysApi()
+          ..passwordOrPasskeyResponse = pigeon.PasswordOrPasskeyResponse(
+            passkey: pigeon.AuthenticateResponse(
+              id: 'id',
+              rawId: 'rawId',
+              clientDataJSON: 'cdj',
+              authenticatorData: 'ad',
+              signature: 'sig',
+              userHandle: 'uh',
+            ),
+          );
+        final platform = PasskeysAndroid(api: api);
+
+        final response = await platform.getPasswordOrPasskey(
+          const AuthenticateRequestType(
+            relyingPartyId: 'example.com',
+            challenge: 'challenge',
+            mediation: MediationType.Optional,
+            preferImmediatelyAvailableCredentials: false,
+            prf: 'salt-value',
+          ),
+        );
+
+        expect(api.getPasswordOrPasskeyArgs, [
+          'example.com',
+          'challenge',
+          'salt-value',
+          false,
+        ]);
+        expect(response.passkey?.id, 'id');
+        expect(response.password, isNull);
+      },
+    );
 
     test('signalUnknownCredential forwards its arguments', () async {
       final api = _FakePasskeysApi();

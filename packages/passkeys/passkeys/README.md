@@ -322,6 +322,33 @@ try {
 - The resulting attestation has the user presence flag unset, so the relying party server must not
   require user presence for these registrations.
 
+## Saved passwords and passkeys in one sheet (Android)
+
+`getPasswordOrPasskey` shows Credential Manager's sheet with the user's saved passwords and, when you
+pass authentication options, their passkeys, and returns whichever the user picks. It is Android's
+answer to passkey autofill on a sign-in form, and the way to obtain a saved password from which a
+conditional create can follow (see above).
+
+```dart
+final requestOptions = await relyingPartyServer.startPasskeyAuthentication();
+final picked = await passkeyAuthenticator.getPasswordOrPasskey(
+  requestOptions,
+  // Show nothing unless something is saved on this device.
+  preferImmediatelyAvailableCredentials: true,
+);
+if (picked.passkey != null) {
+  await relyingPartyServer.finishPasskeyAuthentication(picked.passkey!);
+} else {
+  // Sign in exactly as if the user had typed these.
+  await signInWithPassword(picked.password!.username, picked.password!.password);
+}
+```
+
+- Pass `null` instead of authentication options to offer saved passwords only.
+- Throws `PasskeyAuthCancelledException` when the user dismisses the sheet and
+  `NoCredentialsAvailableException` when nothing is saved. Every other platform throws
+  `PasswordCredentialUnsupportedException`; use the platform's autofill there.
+
 ## Restore Credentials (Android)
 
 From April 2027 Google Play requires apps with sign-in to restore the signed in state when the user

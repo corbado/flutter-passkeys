@@ -118,6 +118,72 @@ class PasskeyAuthenticator
     }
   }
 
+  /// Shows the platform credential manager with the user's saved passwords
+  /// and, when [passkeyRequest] is given, their passkeys, and returns the one
+  /// the user picks.
+  ///
+  /// A returned password has not been checked by anyone: sign in with it as if
+  /// the user had typed it. A returned passkey assertion must be sent to the
+  /// relying party server exactly like the result of [authenticate].
+  ///
+  /// With [preferImmediatelyAvailableCredentials] no sheet is shown when
+  /// nothing is saved on the device, which suits showing it unprompted.
+  ///
+  /// Throws [PasskeyAuthCancelledException] when the user dismisses the sheet,
+  /// [NoCredentialsAvailableException] when nothing is saved, and
+  /// [PasswordCredentialUnsupportedException] on platforms other than Android.
+  Future<PasswordOrPasskeyResponseType> getPasswordOrPasskey(
+    AuthenticateRequestType? passkeyRequest, {
+    bool preferImmediatelyAvailableCredentials = false,
+  }) async {
+    if (debugMode && passkeyRequest != null) {
+      await _doctor?.check(passkeyRequest.relyingPartyId);
+    }
+
+    try {
+      await _platform.cancelCurrentAuthenticatorOperation();
+
+      if (passkeyRequest != null) {
+        _isValidChallenge(passkeyRequest.challenge);
+        if (passkeyRequest.allowCredentials != null) {
+          for (final credential in passkeyRequest.allowCredentials!) {
+            _isValidCredentialID(credential.id);
+          }
+        }
+      }
+
+      return await _platform.getPasswordOrPasskey(
+        passkeyRequest,
+        preferImmediatelyAvailableCredentials:
+            preferImmediatelyAvailableCredentials,
+      );
+    } on PlatformException catch (e, stackTrace) {
+      if (debugMode) {
+        _doctor?.recordException(e);
+      }
+
+      switch (e.code) {
+        case 'password-credential-unsupported':
+          throw PasswordCredentialUnsupportedException(e.message);
+        case 'cancelled':
+          throw PasskeyAuthCancelledException();
+        case 'android-no-credential':
+          throw NoCredentialsAvailableException();
+        case 'domain-not-associated':
+          throw DomainNotAssociatedException(e.message);
+        case 'android-sync-account-not-available':
+          throw SyncAccountNotAvailableException();
+        case 'android-timeout':
+          throw TimeoutException(e.message);
+        default:
+          if (e.code.startsWith('android-unhandled')) {
+            throw UnhandledAuthenticatorException(e.code, e.message, e.details);
+          }
+          Error.throwWithStackTrace(e, stackTrace);
+      }
+    }
+  }
+
   /// Authenticates a user with a passkey.
   /// Returns [AuthenticateResponseType] which must be sent to the relying party
   /// server.

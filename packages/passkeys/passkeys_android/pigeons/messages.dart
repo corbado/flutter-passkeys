@@ -168,6 +168,22 @@ class AuthenticateResponse {
   final Map<String?, Object?>? clientExtensionResults;
 }
 
+/// The credential picked in the Credential Manager sheet: a saved password
+/// ([username] and [password]) or a passkey assertion ([passkey]).
+class PasswordOrPasskeyResponse {
+  /// Constructor
+  const PasswordOrPasskeyResponse({this.username, this.password, this.passkey});
+
+  /// The username of the saved password
+  final String? username;
+
+  /// The saved password
+  final String? password;
+
+  /// The passkey assertion
+  final AuthenticateResponse? passkey;
+}
+
 @HostApi()
 abstract class PasskeysApi {
   @async
@@ -199,6 +215,18 @@ abstract class PasskeysApi {
     List<AllowCredential>? allowCredentials,
     bool? preferImmediatelyAvailableCredentials,
     String? salt,
+  );
+
+  /// Without [challenge] only saved passwords are offered.
+  @async
+  PasswordOrPasskeyResponse getPasswordOrPasskey(
+    String? relyingPartyId,
+    String? challenge,
+    int? timeout,
+    String? userVerification,
+    List<AllowCredential>? allowCredentials,
+    String? salt,
+    bool preferImmediatelyAvailableCredentials,
   );
 
   @async

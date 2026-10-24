@@ -292,3 +292,24 @@ class ConditionalCreateUnsupportedException implements AuthenticatorException {
   String toString() =>
       message ?? 'Conditional passkey creation is not supported here.';
 }
+
+/// Thrown when saved passwords are requested on a platform without a
+/// credential manager that returns them to the app (anything but Android, or
+/// Android below API 28).
+///
+/// Platforms: Android, iOS, macOS, Web, Windows
+///
+/// Suggestions:
+/// - only call `getPasswordOrPasskey` on Android and use the platform's
+///   autofill elsewhere.
+class PasswordCredentialUnsupportedException implements AuthenticatorException {
+  /// Constructor
+  PasswordCredentialUnsupportedException([this.message]);
+
+  /// The error message, if any.
+  final String? message;
+
+  @override
+  String toString() =>
+      message ?? 'Saved passwords can only be requested on Android.';
+}

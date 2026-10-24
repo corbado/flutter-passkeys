@@ -82,6 +82,19 @@ void main() {
     test('clearRestoreCredential is a no-op by default', () async {
       await expectLater(passkeysPlatform.clearRestoreCredential(), completes);
     });
+
+    test('getPasswordOrPasskey is unsupported by default', () async {
+      await expectLater(
+        () => passkeysPlatform.getPasswordOrPasskey(null),
+        throwsA(
+          isA<PlatformException>().having(
+            (e) => e.code,
+            'code',
+            'password-credential-unsupported',
+          ),
+        ),
+      );
+    });
   });
 
   group('AuthenticatorSelectionType.fromJson', () {
