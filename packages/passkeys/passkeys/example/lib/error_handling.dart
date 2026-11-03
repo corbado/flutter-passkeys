@@ -44,5 +44,7 @@ String getFriendlyErrorMessage(AuthenticatorException exception) {
       'No passkey was created automatically. You can create one manually.',
     ConditionalCreateUnsupportedException() =>
       'Automatic passkey creation is not supported on this device.',
+    PasswordCredentialUnsupportedException() =>
+      'Saved passwords can only be requested on Android.',
   };
 }

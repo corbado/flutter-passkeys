@@ -121,6 +121,27 @@ abstract class PasskeysPlatform extends PlatformInterface {
   /// is nothing to clear, so the default implementation is a no-op.
   Future<void> clearRestoreCredential() async {}
 
+  /// Shows the platform credential manager with the user's saved passwords
+  /// and, when [passkeyRequest] is given, their passkeys for that relying
+  /// party, and returns whichever credential the user picks.
+  ///
+  /// With [preferImmediatelyAvailableCredentials] the sheet only appears when
+  /// something is saved on the device; otherwise the call fails at once with
+  /// no UI instead of offering a passkey from another device.
+  ///
+  /// Only Android has a credential manager that returns saved passwords to the
+  /// app. The default implementation throws a [PlatformException] with the code
+  /// `password-credential-unsupported`.
+  Future<PasswordOrPasskeyResponseType> getPasswordOrPasskey(
+    AuthenticateRequestType? passkeyRequest, {
+    bool preferImmediatelyAvailableCredentials = false,
+  }) async {
+    throw PlatformException(
+      code: 'password-credential-unsupported',
+      message: 'Saved passwords can only be requested on Android.',
+    );
+  }
+
   static PlatformException _restoreCredentialUnsupported() {
     return PlatformException(
       code: 'restore-credential-unsupported',
