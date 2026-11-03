@@ -127,7 +127,10 @@ class PasskeyAuthenticator
   /// relying party server exactly like the result of [authenticate].
   ///
   /// With [preferImmediatelyAvailableCredentials] no sheet is shown when
-  /// nothing is saved on the device, which suits showing it unprompted.
+  /// nothing is saved on the device, which suits showing it unprompted. When
+  /// it is omitted, the value from [passkeyRequest] is used, or `false` when
+  /// there is no [passkeyRequest]. The `mediation` of [passkeyRequest] does
+  /// not apply here.
   ///
   /// Passkeys need Android 9 (API 28) or newer. Below that only saved
   /// passwords are offered, even when [passkeyRequest] is given.
@@ -137,7 +140,7 @@ class PasskeyAuthenticator
   /// [PasswordCredentialUnsupportedException] on platforms other than Android.
   Future<PasswordOrPasskeyResponseType> getPasswordOrPasskey(
     AuthenticateRequestType? passkeyRequest, {
-    bool preferImmediatelyAvailableCredentials = false,
+    bool? preferImmediatelyAvailableCredentials,
   }) async {
     if (debugMode && passkeyRequest != null) {
       await _doctor?.check(passkeyRequest.relyingPartyId);
@@ -158,7 +161,9 @@ class PasskeyAuthenticator
       return await _platform.getPasswordOrPasskey(
         passkeyRequest,
         preferImmediatelyAvailableCredentials:
-            preferImmediatelyAvailableCredentials,
+            preferImmediatelyAvailableCredentials ??
+            passkeyRequest?.preferImmediatelyAvailableCredentials ??
+            false,
       );
     } on PlatformException catch (e, stackTrace) {
       if (debugMode) {

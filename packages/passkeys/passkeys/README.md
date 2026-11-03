@@ -344,6 +344,8 @@ if (picked.passkey != null) {
 }
 ```
 
+- `preferImmediatelyAvailableCredentials` defaults to the value in the authentication options, or
+  `false` without them. Their `mediation` does not apply here.
 - Pass `null` instead of authentication options to offer saved passwords only. Below Android 9
   (API 28) only saved passwords are offered either way.
 - Throws `PasskeyAuthCancelledException` when the user dismisses the sheet and

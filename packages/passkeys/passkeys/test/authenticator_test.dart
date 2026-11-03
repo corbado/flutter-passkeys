@@ -344,6 +344,47 @@ void main() {
       },
     );
 
+    test(
+      'falls back to the request preferImmediatelyAvailableCredentials',
+      () async {
+        final platform = _RecordingPlatform();
+        PasskeysPlatform.instance = platform;
+
+        await PasskeyAuthenticator().getPasswordOrPasskey(
+          _authenticateRequest(),
+        );
+
+        expect(platform.passwordOrPasskeyPreferImmediately, isTrue);
+      },
+    );
+
+    test(
+      'an explicit preferImmediatelyAvailableCredentials overrides the request',
+      () async {
+        final platform = _RecordingPlatform();
+        PasskeysPlatform.instance = platform;
+
+        await PasskeyAuthenticator().getPasswordOrPasskey(
+          _authenticateRequest(),
+          preferImmediatelyAvailableCredentials: false,
+        );
+
+        expect(platform.passwordOrPasskeyPreferImmediately, isFalse);
+      },
+    );
+
+    test(
+      'preferImmediatelyAvailableCredentials is false without a request',
+      () async {
+        final platform = _RecordingPlatform();
+        PasskeysPlatform.instance = platform;
+
+        await PasskeyAuthenticator().getPasswordOrPasskey(null);
+
+        expect(platform.passwordOrPasskeyPreferImmediately, isFalse);
+      },
+    );
+
     test('validates the passkey challenge first', () async {
       final platform = _RecordingPlatform();
       PasskeysPlatform.instance = platform;
