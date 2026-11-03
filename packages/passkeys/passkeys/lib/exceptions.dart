@@ -294,10 +294,9 @@ class ConditionalCreateUnsupportedException implements AuthenticatorException {
 }
 
 /// Thrown when saved passwords are requested on a platform without a
-/// credential manager that returns them to the app (anything but Android, or
-/// Android below API 28).
+/// credential manager that returns them to the app (anything but Android).
 ///
-/// Platforms: Android, iOS, macOS, Web, Windows
+/// Platforms: iOS, macOS, Web, Windows
 ///
 /// Suggestions:
 /// - only call `getPasswordOrPasskey` on Android and use the platform's

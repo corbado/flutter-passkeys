@@ -129,6 +129,9 @@ class PasskeyAuthenticator
   /// With [preferImmediatelyAvailableCredentials] no sheet is shown when
   /// nothing is saved on the device, which suits showing it unprompted.
   ///
+  /// Passkeys need Android 9 (API 28) or newer. Below that only saved
+  /// passwords are offered, even when [passkeyRequest] is given.
+  ///
   /// Throws [PasskeyAuthCancelledException] when the user dismisses the sheet,
   /// [NoCredentialsAvailableException] when nothing is saved, and
   /// [PasswordCredentialUnsupportedException] on platforms other than Android.

@@ -217,7 +217,7 @@ abstract class PasskeysApi {
     String? salt,
   );
 
-  /// Without [challenge] only saved passwords are offered.
+  /// Without [challenge], or below API 28, only saved passwords are offered.
   @async
   PasswordOrPasskeyResponse getPasswordOrPasskey(
     String? relyingPartyId,

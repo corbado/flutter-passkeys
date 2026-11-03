@@ -344,7 +344,8 @@ if (picked.passkey != null) {
 }
 ```
 
-- Pass `null` instead of authentication options to offer saved passwords only.
+- Pass `null` instead of authentication options to offer saved passwords only. Below Android 9
+  (API 28) only saved passwords are offered either way.
 - Throws `PasskeyAuthCancelledException` when the user dismisses the sheet and
   `NoCredentialsAvailableException` when nothing is saved. Every other platform throws
   `PasswordCredentialUnsupportedException`; use the platform's autofill there.

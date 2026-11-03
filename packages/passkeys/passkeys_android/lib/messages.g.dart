@@ -778,7 +778,7 @@ class PasskeysApi {
     return pigeonVar_replyValue! as AuthenticateResponse;
   }
 
-  /// Without [challenge] only saved passwords are offered.
+  /// Without [challenge], or below API 28, only saved passwords are offered.
   Future<PasswordOrPasskeyResponse> getPasswordOrPasskey(String? relyingPartyId, String? challenge, int? timeout, String? userVerification, List<AllowCredential>? allowCredentials, String? salt, bool preferImmediatelyAvailableCredentials) async {
     final pigeonVar_channelName = 'dev.flutter.pigeon.passkeys_android.PasskeysApi.getPasswordOrPasskey$pigeonVar_messageChannelSuffix';
     final pigeonVar_channel = BasicMessageChannel<Object?>(

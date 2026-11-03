@@ -82,7 +82,6 @@ public class MessageHandler implements Messages.PasskeysApi {
     private static final String RESTORE_CREDENTIAL_PROVIDER_ERROR = "Restore credentials need Google Play services 24.22 or newer.";
     private static final String CONDITIONAL_CREATE_NOT_ELIGIBLE_ERROR = "The credential provider did not create a passkey without asking.";
     private static final String CONDITIONAL_CREATE_UNSUPPORTED_ERROR = "The credential provider does not support conditional passkey creation.";
-    private static final String PASSWORD_CREDENTIAL_UNSUPPORTED_ERROR = "Saved passwords are only supported on Android API 28 and above.";
 
     private final FlutterPasskeysPlugin plugin;
 
@@ -283,16 +282,10 @@ public class MessageHandler implements Messages.PasskeysApi {
             @Nullable List<Messages.AllowCredential> allowCredentials, @Nullable String salt,
             @NonNull Boolean preferImmediatelyAvailableCredentials,
             @NonNull Messages.Result<Messages.PasswordOrPasskeyResponse> result) {
-        if (android.os.Build.VERSION.SDK_INT < 28) {
-            result.error(new Messages.FlutterError("password-credential-unsupported",
-                    PASSWORD_CREDENTIAL_UNSUPPORTED_ERROR, null));
-            return;
-        }
-
         GetCredentialRequest.Builder builder = new GetCredentialRequest.Builder()
                 .addCredentialOption(new GetPasswordOption())
                 .setPreferImmediatelyAvailableCredentials(preferImmediatelyAvailableCredentials);
-        if (relyingPartyId != null && challenge != null) {
+        if (relyingPartyId != null && challenge != null && android.os.Build.VERSION.SDK_INT >= 28) {
             try {
                 JSONObject optionsJson = buildGetCredentialOptions(relyingPartyId, challenge, timeout,
                         userVerification, allowCredentials);

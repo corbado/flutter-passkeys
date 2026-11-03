@@ -1536,7 +1536,7 @@ public class Messages {
     void register(@NonNull String challenge, @NonNull RelyingParty relyingParty, @NonNull User user, @Nullable AuthenticatorSelection authenticatorSelection, @Nullable List<PubKeyCredParam> pubKeyCredParams, @Nullable Long timeout, @Nullable String attestation, @NonNull List<ExcludeCredential> excludeCredentials, @Nullable String salt, @NonNull Boolean isConditional, @NonNull Result<RegisterResponse> result);
 
     void authenticate(@NonNull String relyingPartyId, @NonNull String challenge, @Nullable Long timeout, @Nullable String userVerification, @Nullable List<AllowCredential> allowCredentials, @Nullable Boolean preferImmediatelyAvailableCredentials, @Nullable String salt, @NonNull Result<AuthenticateResponse> result);
-    /** Without [challenge] only saved passwords are offered. */
+    /** Without [challenge], or below API 28, only saved passwords are offered. */
     void getPasswordOrPasskey(@Nullable String relyingPartyId, @Nullable String challenge, @Nullable Long timeout, @Nullable String userVerification, @Nullable List<AllowCredential> allowCredentials, @Nullable String salt, @NonNull Boolean preferImmediatelyAvailableCredentials, @NonNull Result<PasswordOrPasskeyResponse> result);
 
     void cancelCurrentAuthenticatorOperation(@NonNull VoidResult result);
