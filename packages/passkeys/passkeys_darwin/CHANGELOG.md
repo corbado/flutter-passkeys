@@ -1,3 +1,7 @@
+## 0.4.6
+
+ - **FIX**(passkeys_darwin): declare a privacy manifest for Apple platforms ([#317](https://github.com/corbado/flutter-passkeys/issues/317)). ([90a2af97](https://github.com/corbado/flutter-passkeys/commit/90a2af9788333df5f00670fed4a9233b59e398e6))
+
 ## 0.4.5
 
  - **FIX**(passkeys): declare the meta dependency required by Pigeon generated code ([#313](https://github.com/corbado/flutter-passkeys/issues/313)). ([e1f12615](https://github.com/corbado/flutter-passkeys/commit/e1f126157ef1498ff563d9c4e8622eddd16a1a50))

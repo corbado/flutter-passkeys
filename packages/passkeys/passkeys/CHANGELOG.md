@@ -1,3 +1,7 @@
+## 2.23.2
+
+ - Update a dependency to the latest release.
+
 ## 2.23.1
 
  - **FIX**(passkeys): declare the meta dependency required by Pigeon generated code ([#313](https://github.com/corbado/flutter-passkeys/issues/313)). ([e1f12615](https://github.com/corbado/flutter-passkeys/commit/e1f126157ef1498ff563d9c4e8622eddd16a1a50))
