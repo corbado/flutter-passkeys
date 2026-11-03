@@ -223,10 +223,9 @@ void main() {
       String code,
       Matcher matcher, {
       String? message,
-      Object? details,
     }) async {
       PasskeysPlatform.instance = _ThrowingPlatform(
-        PlatformException(code: code, message: message, details: details),
+        PlatformException(code: code, message: message),
       );
       final authenticator = PasskeyAuthenticator();
 
@@ -269,12 +268,11 @@ void main() {
     });
 
     test(
-      'cancelled with android-credential-not-authenticated details throws '
+      'android-credential-not-authenticated throws '
       'CredentialNotAuthenticatedException with the platform message',
       () async {
         await expectMapping(
-          'cancelled',
-          details: 'android-credential-not-authenticated',
+          'android-credential-not-authenticated',
           isA<CredentialNotAuthenticatedException>().having(
             (e) => e.message,
             'message',

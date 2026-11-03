@@ -215,13 +215,6 @@ Future<ExceptionInfo> getExceptionInfo(
     );
   }
 
-  final details = error.details;
-  if (error.code == 'cancelled' &&
-      details is String &&
-      exceptionInfos.containsKey(details)) {
-    return exceptionInfos[details]!;
-  }
-
   // Standard lookup
   if (exceptionInfos.containsKey(error.code)) {
     return exceptionInfos[error.code]!;

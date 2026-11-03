@@ -83,7 +83,7 @@ class PasskeyAuthenticator
 
       switch (e.code) {
         case 'cancelled':
-          throw _cancelledException(e);
+          throw PasskeyAuthCancelledException(e.message);
         case 'exclude-credentials-match':
           throw ExcludeCredentialsCanNotBeRegisteredException();
         case 'android-missing-google-sign-in':
@@ -176,7 +176,9 @@ class PasskeyAuthenticator
         case 'password-credential-unsupported':
           throw PasswordCredentialUnsupportedException(e.message);
         case 'cancelled':
-          throw _cancelledException(e);
+          throw PasskeyAuthCancelledException(e.message);
+        case 'android-credential-not-authenticated':
+          throw CredentialNotAuthenticatedException(e.message);
         case 'android-no-credential':
           throw NoCredentialsAvailableException();
         case 'domain-not-associated':
@@ -230,7 +232,9 @@ class PasskeyAuthenticator
         case 'no-credentials-available':
           throw NoCredentialsAvailableException();
         case 'cancelled':
-          throw _cancelledException(e);
+          throw PasskeyAuthCancelledException(e.message);
+        case 'android-credential-not-authenticated':
+          throw CredentialNotAuthenticatedException(e.message);
         case 'android-no-credential':
           throw NoCredentialsAvailableException();
         case 'deviceNotSupported':
@@ -420,7 +424,7 @@ class PasskeyAuthenticator
       case 'android-no-credential':
         throw NoCredentialsAvailableException();
       case 'cancelled':
-        throw _cancelledException(e);
+        throw PasskeyAuthCancelledException(e.message);
       case 'domain-not-associated':
         throw DomainNotAssociatedException(e.message);
       case 'android-timeout':
@@ -433,11 +437,6 @@ class PasskeyAuthenticator
     }
   }
 
-  PasskeyAuthCancelledException _cancelledException(PlatformException e) =>
-      e.details == 'android-credential-not-authenticated'
-      ? CredentialNotAuthenticatedException(e.message)
-      : PasskeyAuthCancelledException(e.message);
-
   Never _mapSignalException(PlatformException e, StackTrace stackTrace) {
     if (debugMode) {
       _doctor?.recordException(e);
@@ -445,7 +444,7 @@ class PasskeyAuthenticator
 
     switch (e.code) {
       case 'cancelled':
-        throw _cancelledException(e);
+        throw PasskeyAuthCancelledException(e.message);
       case 'domain-not-associated':
         throw DomainNotAssociatedException(e.message);
       case 'deviceNotSupported':
