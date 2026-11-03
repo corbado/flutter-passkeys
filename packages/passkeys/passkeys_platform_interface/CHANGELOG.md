@@ -1,3 +1,10 @@
+## 2.11.0
+
+ - **FIX**(passkeys_platform_interface): default missing credential transports to an empty list ([#331](https://github.com/corbado/flutter-passkeys/issues/331)). ([86404d9c](https://github.com/corbado/flutter-passkeys/commit/86404d9cf0501b32fef3b4702b9d057bc8e86b50))
+ - **FEAT**(passkeys_web): support conditional passkey creation ([#328](https://github.com/corbado/flutter-passkeys/issues/328)). ([87b47895](https://github.com/corbado/flutter-passkeys/commit/87b478952f026a522304ec4dffe3a19306f62dee))
+ - **FEAT**(passkeys_android): get a saved password or passkey in one request ([#325](https://github.com/corbado/flutter-passkeys/issues/325)). ([62905dae](https://github.com/corbado/flutter-passkeys/commit/62905daec5cb3510385d96ded9167ba6dd03ab6f))
+ - **FEAT**(passkeys): support conditional passkey creation ([#324](https://github.com/corbado/flutter-passkeys/issues/324)). ([e0fa3b50](https://github.com/corbado/flutter-passkeys/commit/e0fa3b5061d40e9268b35f8e2952e6ce2970bf60))
+
 ## 2.10.0
 
  - **FIX**(passkeys_darwin): add canBeSecurityKey to authenticate ([#310](https://github.com/corbado/flutter-passkeys/issues/310)). ([c66a16eb](https://github.com/corbado/flutter-passkeys/commit/c66a16eba8a51400bfa8bb52e40c97098b8b7aa0))

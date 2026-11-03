@@ -1,3 +1,10 @@
+## 2.11.0
+
+ - **FIX**(passkeys_web): ignore unknown credential transports instead of throwing ([#332](https://github.com/corbado/flutter-passkeys/issues/332)). ([01509f29](https://github.com/corbado/flutter-passkeys/commit/01509f29b549dd2d9cce9f6d23224d2e8b92062d))
+ - **FIX**(passkeys_web): map an excluded credential match to ExcludeCredentialsCanNotBeRegisteredException ([#329](https://github.com/corbado/flutter-passkeys/issues/329)). ([212ed8a5](https://github.com/corbado/flutter-passkeys/commit/212ed8a5dec2a99a933c9df45836c5a74911f4e2))
+ - **FEAT**(passkeys_web): support conditional passkey creation ([#328](https://github.com/corbado/flutter-passkeys/issues/328)). ([87b47895](https://github.com/corbado/flutter-passkeys/commit/87b478952f026a522304ec4dffe3a19306f62dee))
+ - **FEAT**(passkeys): support conditional passkey creation ([#324](https://github.com/corbado/flutter-passkeys/issues/324)). ([e0fa3b50](https://github.com/corbado/flutter-passkeys/commit/e0fa3b5061d40e9268b35f8e2952e6ce2970bf60))
+
 ## 2.10.1
 
  - Update a dependency to the latest release.

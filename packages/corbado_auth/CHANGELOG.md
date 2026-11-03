@@ -1,3 +1,7 @@
+## 3.8.7
+
+ - **FIX**(passkeys_platform_interface): default missing credential transports to an empty list ([#331](https://github.com/corbado/flutter-passkeys/issues/331)). ([86404d9c](https://github.com/corbado/flutter-passkeys/commit/86404d9cf0501b32fef3b4702b9d057bc8e86b50))
+
 ## 3.8.6
 
  - Update a dependency to the latest release.

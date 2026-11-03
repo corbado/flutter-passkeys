@@ -1,3 +1,8 @@
+## 0.1.6
+
+ - **FIX**(passkeys_windows): hash client data with SHA-256, not SHA-512 ([#319](https://github.com/corbado/flutter-passkeys/issues/319)). ([70a9de98](https://github.com/corbado/flutter-passkeys/commit/70a9de9897d9fa42d383e3bf4979ea62d13956d5))
+ - **FEAT**(passkeys): support conditional passkey creation ([#324](https://github.com/corbado/flutter-passkeys/issues/324)). ([e0fa3b50](https://github.com/corbado/flutter-passkeys/commit/e0fa3b5061d40e9268b35f8e2952e6ce2970bf60))
+
 ## 0.1.5
 
  - **FIX**(passkeys): declare the meta dependency required by Pigeon generated code ([#313](https://github.com/corbado/flutter-passkeys/issues/313)). ([e1f12615](https://github.com/corbado/flutter-passkeys/commit/e1f126157ef1498ff563d9c4e8622eddd16a1a50))
