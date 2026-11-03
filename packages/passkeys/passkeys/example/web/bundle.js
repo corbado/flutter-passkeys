@@ -226,7 +226,9 @@ var PasskeyAuthenticator = (function (exports) {
             var _a;
             let isConditional = false;
             try {
+                __classPrivateFieldSet(this, _PasskeyAuthenticator_abortController, new AbortController(), "f");
                 const typedParams = JSON.parse(params);
+                typedParams.signal = __classPrivateFieldGet(this, _PasskeyAuthenticator_abortController, "f").signal;
                 isConditional = typedParams.mediation === 'conditional';
                 const request = createRequestFromJSON(typedParams);
                 applyPrfInput(request.publicKey, (_a = typedParams.publicKey) === null || _a === void 0 ? void 0 : _a.extensions);
@@ -245,6 +247,9 @@ var PasskeyAuthenticator = (function (exports) {
                 let error;
                 if (e instanceof PlatformError) {
                     error = e;
+                }
+                else if (e === ABORTED_BY_USER) {
+                    error = PlatformError.cancelled();
                 }
                 else if (isConditional && e instanceof DOMException) {
                     error = PlatformError.fromConditionalCreateDOMException(e);

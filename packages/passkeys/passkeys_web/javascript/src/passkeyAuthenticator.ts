@@ -29,7 +29,9 @@ export class PasskeyAuthenticator {
     async register(params: string): Promise<string> {
         let isConditional = false;
         try {
+            this.#abortController = new AbortController();
             const typedParams: CredentialCreationOptionsJSON = JSON.parse(params);
+            typedParams.signal = this.#abortController.signal;
             isConditional = (typedParams as any).mediation === 'conditional';
             const request = createRequestFromJSON(typedParams);
             applyPrfInput(request.publicKey, (typedParams.publicKey as any)?.extensions);
@@ -50,6 +52,8 @@ export class PasskeyAuthenticator {
             let error: PlatformError;
             if (e instanceof PlatformError) {
                 error = e;
+            } else if (e === ABORTED_BY_USER) {
+                error = PlatformError.cancelled();
             } else if (isConditional && e instanceof DOMException) {
                 error = PlatformError.fromConditionalCreateDOMException(e)
             } else if (e instanceof DOMException) {
