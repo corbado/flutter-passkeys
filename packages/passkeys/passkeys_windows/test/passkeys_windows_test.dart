@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:passkeys_platform_interface/passkeys_platform_interface.dart';
 import 'package:passkeys_platform_interface/types/types.dart';
@@ -92,6 +93,33 @@ void main() {
     test('is a PasskeysPlatform', () {
       expect(passkeys, isA<PasskeysPlatform>());
     });
+
+    test(
+      'register refuses a conditional create without calling Windows Hello',
+      () async {
+        final api = _FakePasskeysApi();
+        final request = RegisterRequestType(
+          challenge: 'challenge',
+          relyingParty: RelyingPartyType(name: 'name', id: 'example.com'),
+          user: const UserType(displayName: 'display', name: 'name', id: 'id'),
+          excludeCredentials: const [],
+          prf: 'prfSalt',
+          mediation: MediationType.Conditional,
+        );
+
+        await expectLater(
+          () => PasskeysWindows(api: api).register(request),
+          throwsA(
+            isA<PlatformException>().having(
+              (e) => e.code,
+              'code',
+              'conditional-create-unsupported',
+            ),
+          ),
+        );
+        expect(api.capturedRegisterPrf, isNull);
+      },
+    );
   });
 
   group('PasskeysWindows PRF', () {

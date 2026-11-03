@@ -14,8 +14,11 @@ import FlutterMacOS
 class RegisterController: NSObject, ASAuthorizationControllerDelegate, ASAuthorizationControllerPresentationContextProviding, Cancellable {
     private var completion: ((Result<RegisterResponse, Error>) -> Void)?
     private var cancelAuthorization: (() -> Void)?;
+    private let isConditional: Bool
+    private var cancelledByApp = false
 
-    init(completion: @escaping ((Result<RegisterResponse, Error>) -> Void)) {
+    init(isConditional: Bool = false, completion: @escaping ((Result<RegisterResponse, Error>) -> Void)) {
+        self.isConditional = isConditional
         self.completion = completion;
     }
     
@@ -99,6 +102,11 @@ class RegisterController: NSObject, ASAuthorizationControllerDelegate, ASAuthori
 
     func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
         if let err = error as? ASAuthorizationError {
+            // A conditional create shows no UI, so .canceled means the system declined, unless the app cancelled it.
+            if isConditional && err.code == .canceled && !cancelledByApp {
+                completion?(.failure(PigeonError(code: "not-eligible", message: err.localizedDescription, details: "")))
+                return
+            }
             completion?(.failure(PigeonError(from: err)))
             return
         }
@@ -126,6 +134,7 @@ class RegisterController: NSObject, ASAuthorizationControllerDelegate, ASAuthori
     }
     
     func cancel() {
+        cancelledByApp = true
         cancelAuthorization?();
     }
 }

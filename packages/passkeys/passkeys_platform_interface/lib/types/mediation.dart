@@ -8,6 +8,10 @@ enum MediationType {
   /// Used for scenarios where immediate user interaction is preferred but not
   /// required.
   /// Only available if the credential interfaces support conditional mediation.
+  ///
+  /// For a create (`RegisterRequestType.mediation`) it requests a conditional
+  /// (automatic) create: the platform creates a passkey without showing UI, or
+  /// fails without showing UI.
   Conditional,
 
   /// Allows automatic credential handover if possible, but will prompt for user

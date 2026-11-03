@@ -497,14 +497,14 @@ class PasskeysApi {
     return pigeonVar_replyValue! as bool;
   }
 
-  Future<RegisterResponse> register(String challenge, RelyingParty relyingParty, User user, List<CredentialType> excludeCredentials, List<int> pubKeyCredValues, bool canBePlatformAuthenticator, bool canBeSecurityKey, String? residentKeyPreference, String? attestationPreference, String? userVerificationPreference, String? salt) async {
+  Future<RegisterResponse> register(String challenge, RelyingParty relyingParty, User user, List<CredentialType> excludeCredentials, List<int> pubKeyCredValues, bool canBePlatformAuthenticator, bool canBeSecurityKey, String? residentKeyPreference, String? attestationPreference, String? userVerificationPreference, String? salt, bool isConditional) async {
     final pigeonVar_channelName = 'dev.flutter.pigeon.passkeys_darwin.PasskeysApi.register$pigeonVar_messageChannelSuffix';
     final pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
       binaryMessenger: pigeonVar_binaryMessenger,
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[challenge, relyingParty, user, excludeCredentials, pubKeyCredValues, canBePlatformAuthenticator, canBeSecurityKey, residentKeyPreference, attestationPreference, userVerificationPreference, salt]);
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[challenge, relyingParty, user, excludeCredentials, pubKeyCredValues, canBePlatformAuthenticator, canBeSecurityKey, residentKeyPreference, attestationPreference, userVerificationPreference, salt, isConditional]);
     final pigeonVar_replyList = await pigeonVar_sendFuture as List<Object?>?;
 
     final Object? pigeonVar_replyValue = _extractReplyValueOrThrow(

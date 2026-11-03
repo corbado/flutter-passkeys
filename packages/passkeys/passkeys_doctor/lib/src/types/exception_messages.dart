@@ -105,6 +105,23 @@ const Map<String, ExceptionInfo> exceptionInfos = {
       'Ask the user to enable passkeys in the device settings.',
     ],
   ),
+  'not-eligible': ExceptionInfo(
+    title: 'ConditionalCreateNotEligibleException',
+    description:
+        'Thrown by a conditional (automatic) create when the platform decides not to create a passkey. No UI was shown.',
+    platforms: ['Android', 'iOS', 'macOS'],
+    suggestions: [
+      'Treat it as "nothing happened".',
+      'If you want a passkey, fall back to an ordinary create.',
+    ],
+  ),
+  'conditional-create-unsupported': ExceptionInfo(
+    title: 'ConditionalCreateUnsupportedException',
+    description:
+        'Thrown when a conditional (automatic) create is requested on a platform or OS version that does not support it.',
+    platforms: ['Android', 'iOS', 'macOS', 'Web', 'Windows'],
+    suggestions: ['Fall back to an ordinary create.'],
+  ),
   'malformed-base64-url-challenge': ExceptionInfo(
     title: 'MalformedBase64UrlChallenge',
     description:

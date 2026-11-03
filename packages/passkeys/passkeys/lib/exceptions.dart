@@ -250,3 +250,45 @@ class RestoreCredentialUnsupportedException implements AuthenticatorException {
   String toString() =>
       message ?? 'Restore credentials are only available on Android.';
 }
+
+/// Thrown by a conditional (automatic) create when the platform decides not to
+/// create a passkey, typically because the user did not just sign in with a
+/// saved password for this account. No UI was shown.
+///
+/// Platforms: Android, iOS, macOS
+///
+/// Suggestions:
+/// - treat it as "nothing happened" and, if you want a passkey, fall back to
+///   an ordinary (modal) create.
+class ConditionalCreateNotEligibleException implements AuthenticatorException {
+  /// Constructor
+  ConditionalCreateNotEligibleException([this.message]);
+
+  /// The error message, if any.
+  final String? message;
+
+  @override
+  String toString() =>
+      message ?? 'The platform did not create a passkey without asking.';
+}
+
+/// Thrown when a conditional (automatic) create is requested on a platform or
+/// OS version that does not support it (Web, Windows, iOS/macOS below 18, an
+/// Android credential provider without conditional create, or an Apple
+/// request that only allows a cross-platform authenticator).
+///
+/// Platforms: Android, iOS, macOS, Web, Windows
+///
+/// Suggestions:
+/// - fall back to an ordinary (modal) create.
+class ConditionalCreateUnsupportedException implements AuthenticatorException {
+  /// Constructor
+  ConditionalCreateUnsupportedException([this.message]);
+
+  /// The error message, if any.
+  final String? message;
+
+  @override
+  String toString() =>
+      message ?? 'Conditional passkey creation is not supported here.';
+}

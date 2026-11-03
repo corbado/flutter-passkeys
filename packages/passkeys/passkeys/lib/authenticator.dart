@@ -50,6 +50,12 @@ class PasskeyAuthenticator
   /// Creates a new passkey and stores it on the device.
   /// Returns [RegisterResponseType] which must be sent to the relying party
   /// server.
+  ///
+  /// When [RegisterRequestType.mediation] is [MediationType.Conditional] no UI
+  /// is shown: the platform either creates the passkey or throws
+  /// [ConditionalCreateNotEligibleException] (or
+  /// [ConditionalCreateUnsupportedException] where conditional create does
+  /// not exist).
   @override
   Future<RegisterResponseType> register(RegisterRequestType request) async {
     if (debugMode) {
@@ -92,6 +98,10 @@ class PasskeyAuthenticator
           throw PasskeyUnsupportedException(e.message);
         case 'android-no-create-option':
           throw NoCreateOptionException(e.message);
+        case 'not-eligible':
+          throw ConditionalCreateNotEligibleException(e.message);
+        case 'conditional-create-unsupported':
+          throw ConditionalCreateUnsupportedException(e.message);
         case 'android-timeout':
           throw TimeoutException(e.message);
         case 'ios-security-key-timeout':

@@ -1418,7 +1418,7 @@ public class Messages {
 
     void hasPasskeySupport(@NonNull Result<Boolean> result);
 
-    void register(@NonNull String challenge, @NonNull RelyingParty relyingParty, @NonNull User user, @Nullable AuthenticatorSelection authenticatorSelection, @Nullable List<PubKeyCredParam> pubKeyCredParams, @Nullable Long timeout, @Nullable String attestation, @NonNull List<ExcludeCredential> excludeCredentials, @Nullable String salt, @NonNull Result<RegisterResponse> result);
+    void register(@NonNull String challenge, @NonNull RelyingParty relyingParty, @NonNull User user, @Nullable AuthenticatorSelection authenticatorSelection, @Nullable List<PubKeyCredParam> pubKeyCredParams, @Nullable Long timeout, @Nullable String attestation, @NonNull List<ExcludeCredential> excludeCredentials, @Nullable String salt, @NonNull Boolean isConditional, @NonNull Result<RegisterResponse> result);
 
     void authenticate(@NonNull String relyingPartyId, @NonNull String challenge, @Nullable Long timeout, @Nullable String userVerification, @Nullable List<AllowCredential> allowCredentials, @Nullable Boolean preferImmediatelyAvailableCredentials, @Nullable String salt, @NonNull Result<AuthenticateResponse> result);
 
@@ -1516,6 +1516,7 @@ public class Messages {
                 String attestationArg = (String) args.get(6);
                 List<ExcludeCredential> excludeCredentialsArg = (List<ExcludeCredential>) args.get(7);
                 String saltArg = (String) args.get(8);
+                Boolean isConditionalArg = (Boolean) args.get(9);
                 Result<RegisterResponse> resultCallback =
                     new Result<RegisterResponse>() {
                       public void success(RegisterResponse result) {
@@ -1529,7 +1530,7 @@ public class Messages {
                       }
                     };
 
-                api.register(challengeArg, relyingPartyArg, userArg, authenticatorSelectionArg, pubKeyCredParamsArg, timeoutArg, attestationArg, excludeCredentialsArg, saltArg, resultCallback);
+                api.register(challengeArg, relyingPartyArg, userArg, authenticatorSelectionArg, pubKeyCredParamsArg, timeoutArg, attestationArg, excludeCredentialsArg, saltArg, isConditionalArg, resultCallback);
               });
         } else {
           channel.setMessageHandler(null);

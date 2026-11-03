@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:passkeys_platform_interface/types/authenticator_selection.dart';
 import 'package:passkeys_platform_interface/types/credential.dart';
+import 'package:passkeys_platform_interface/types/mediation.dart';
 import 'package:passkeys_platform_interface/types/pubkeycred_param.dart';
 import 'package:passkeys_platform_interface/types/relying_party.dart';
 import 'package:passkeys_platform_interface/types/user.dart';
@@ -20,19 +21,29 @@ class RegisterRequestType {
     this.timeout,
     this.attestation,
     this.prf,
+    this.mediation = MediationType.Optional,
   });
 
   /// Constructs a new instance from a JSON string.
-  factory RegisterRequestType.fromJsonString(String jsonString) {
+  factory RegisterRequestType.fromJsonString(
+    String jsonString, {
+    MediationType mediation = MediationType.Optional,
+  }) {
     final decoded = jsonDecode(jsonString);
     if (decoded is! Map<String, dynamic>) {
       throw FormatException('Expected JSON object, got ${decoded.runtimeType}');
     }
-    return RegisterRequestType.fromJson(decoded);
+    return RegisterRequestType.fromJson(decoded, mediation: mediation);
   }
 
   /// Constructs a new instance from a JSON map.
-  factory RegisterRequestType.fromJson(Map<String, dynamic> json) {
+  ///
+  /// [mediation] is not part of the creation options JSON; it mirrors the
+  /// `mediation` member of `navigator.credentials.create()`.
+  factory RegisterRequestType.fromJson(
+    Map<String, dynamic> json, {
+    MediationType mediation = MediationType.Optional,
+  }) {
     final excludeCredentials = json['excludeCredentials'] as List<dynamic>?;
     final rp = json['rp'];
     final user = json['user'];
@@ -68,6 +79,7 @@ class RegisterRequestType {
       timeout: json['timeout'] as int?,
       attestation: json['attestation'] as String?,
       prf: _prfSaltFromExtensions(json['extensions']),
+      mediation: mediation,
     );
   }
 
@@ -104,6 +116,17 @@ class RegisterRequestType {
 
   /// Base64URL-encoded salt for the WebAuthn PRF extension (`prf.eval.first`).
   final String? prf;
+
+  /// [MediationType.Conditional] requests a conditional (automatic) create:
+  /// the platform creates the passkey without showing UI when the user has
+  /// just signed in with a saved password for the same account, and fails
+  /// with `not-eligible` otherwise. Every other value is an ordinary create.
+  ///
+  /// Supported on Android and on iOS/macOS 18+.
+  final MediationType mediation;
+
+  /// Whether this is a conditional (automatic) create.
+  bool get isConditional => mediation == MediationType.Conditional;
 
   /// Converts this instance to a JSON string.
   String toJsonString() => jsonEncode(toJson());

@@ -292,6 +292,58 @@ void main() {
     });
   });
 
+  group('RegisterRequestType mediation', () {
+    const json = {
+      'challenge': 'challenge',
+      'rp': {'id': 'example.com', 'name': 'Example'},
+      'user': {'id': 'user-id', 'name': 'user', 'displayName': 'User'},
+    };
+
+    test('defaults to an ordinary (optional) create', () {
+      final request = RegisterRequestType.fromJson(json);
+      expect(request.mediation, MediationType.Optional);
+      expect(request.isConditional, isFalse);
+    });
+
+    test('fromJson forwards mediation', () {
+      final request = RegisterRequestType.fromJson(
+        json,
+        mediation: MediationType.Conditional,
+      );
+      expect(request.isConditional, isTrue);
+    });
+
+    test('fromJsonString forwards mediation', () {
+      final request = RegisterRequestType.fromJsonString(
+        jsonEncode(json),
+        mediation: MediationType.Conditional,
+      );
+      expect(request.isConditional, isTrue);
+    });
+
+    test('only conditional mediation is a conditional create', () {
+      for (final mediation in MediationType.values) {
+        final request = RegisterRequestType.fromJson(
+          json,
+          mediation: mediation,
+        );
+        expect(
+          request.isConditional,
+          mediation == MediationType.Conditional,
+          reason: '$mediation',
+        );
+      }
+    });
+
+    test('toJson does not include mediation', () {
+      final encoded = RegisterRequestType.fromJson(
+        json,
+        mediation: MediationType.Conditional,
+      ).toJson();
+      expect(encoded.containsKey('mediation'), isFalse);
+    });
+  });
+
   group('RegisterResponseType PRF extension', () {
     test('clientExtensionResults is read from the response JSON', () {
       final response = RegisterResponseType.fromJson({

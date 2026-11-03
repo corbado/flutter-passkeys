@@ -241,6 +241,56 @@ void main() {
     });
   });
 
+  group('conditional register maps platform error codes', () {
+    Future<void> expectMapping(String code, Matcher matcher) async {
+      PasskeysPlatform.instance = _ThrowingPlatform(
+        PlatformException(code: code),
+      );
+      final authenticator = PasskeyAuthenticator();
+      final request = RegisterRequestType(
+        challenge: 'Y2hhbGxlbmdl',
+        relyingParty: RelyingPartyType(id: 'example.com', name: 'Example'),
+        user: const UserType(id: 'dXNlcg', name: 'user', displayName: 'User'),
+        excludeCredentials: const [],
+        mediation: MediationType.Conditional,
+      );
+
+      await expectLater(
+        () => authenticator.register(request),
+        throwsA(matcher),
+      );
+    }
+
+    test('not-eligible throws ConditionalCreateNotEligibleException', () async {
+      await expectMapping(
+        'not-eligible',
+        isA<ConditionalCreateNotEligibleException>(),
+      );
+    });
+
+    test(
+      'conditional-create-unsupported throws '
+      'ConditionalCreateUnsupportedException',
+      () async {
+        await expectMapping(
+          'conditional-create-unsupported',
+          isA<ConditionalCreateUnsupportedException>(),
+        );
+      },
+    );
+
+    test(
+      'exclude-credentials-match throws '
+      'ExcludeCredentialsCanNotBeRegisteredException',
+      () async {
+        await expectMapping(
+          'exclude-credentials-match',
+          isA<ExcludeCredentialsCanNotBeRegisteredException>(),
+        );
+      },
+    );
+  });
+
   group('restore credentials', () {
     Future<void> expectMapping(
       String code,

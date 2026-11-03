@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:passkeys_platform_interface/passkeys_platform_interface.dart';
 import 'package:passkeys_platform_interface/types/types.dart';
 import 'package:passkeys_windows/messages.g.dart';
@@ -66,6 +67,14 @@ class PasskeysWindows extends PasskeysPlatform {
 
   @override
   Future<RegisterResponseType> register(RegisterRequestType request) async {
+    // Windows Hello has no conditional create; a modal create would show UI.
+    if (request.isConditional) {
+      throw PlatformException(
+        code: 'conditional-create-unsupported',
+        message: 'Conditional passkey creation is not supported on Windows.',
+      );
+    }
+
     final userArg = User(
       displayName: request.user.displayName,
       name: request.user.name,

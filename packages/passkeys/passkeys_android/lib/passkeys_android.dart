@@ -54,6 +54,7 @@ class PasskeysAndroid extends PasskeysPlatform {
       request.attestation,
       _excludeCredentials(request),
       request.prf,
+      request.isConditional,
     );
 
     return _registerResponse(r);

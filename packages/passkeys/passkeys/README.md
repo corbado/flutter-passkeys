@@ -287,6 +287,41 @@ final secret = results?['first'] as String?;
 Use `secret` (after base64url-decoding it) as key material for your encryption, but never send it to
 your relying party server.
 
+## Automatic passkey creation (conditional create)
+
+Right after a user signs in with a saved password, the platform can create a passkey for them without
+showing any UI (WebAuthn's `mediation: "conditional"` for `navigator.credentials.create()`). Pass
+`MediationType.Conditional` to request it:
+
+```dart
+final creationOptions = await relyingPartyServer.startPasskeyRegistration();
+try {
+  final credential = await passkeyAuthenticator.register(
+    RegisterRequestType.fromJson(creationOptions, mediation: MediationType.Conditional),
+  );
+  await relyingPartyServer.finishPasskeyRegistration(credential);
+  // Tell the user: the platform may not show a notification.
+} on ConditionalCreateNotEligibleException {
+  // Nothing was created and no UI was shown; optionally offer an ordinary create.
+} on ConditionalCreateUnsupportedException {
+  // Not available here; optionally offer an ordinary create.
+}
+```
+
+- Supported on Android (when the credential provider supports it) and on iOS 18 / macOS 15 and above.
+  Web, Windows and older Apple versions throw `ConditionalCreateUnsupportedException`, as do Apple
+  platforms when `authenticatorAttachment` is `cross-platform`.
+- Only `MediationType.Conditional` changes the behavior of `register`. Every other `MediationType`
+  value is an ordinary create.
+- The platform decides whether to create. It typically requires that the user just signed in with a
+  password saved in the same provider, for the same username as `user.name`. On Android with Google
+  Password Manager that means a password returned through Credential Manager, not one filled in by
+  autofill.
+- iOS reports an existing passkey for the account as not eligible as well; Android reports it as
+  `ExcludeCredentialsCanNotBeRegisteredException`.
+- The resulting attestation has the user presence flag unset, so the relying party server must not
+  require user presence for these registrations.
+
 ## Restore Credentials (Android)
 
 From April 2027 Google Play requires apps with sign-in to restore the signed in state when the user

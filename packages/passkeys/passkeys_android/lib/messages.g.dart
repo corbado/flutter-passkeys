@@ -680,14 +680,14 @@ class PasskeysApi {
     return pigeonVar_replyValue! as bool;
   }
 
-  Future<RegisterResponse> register(String challenge, RelyingParty relyingParty, User user, AuthenticatorSelection? authenticatorSelection, List<PubKeyCredParam>? pubKeyCredParams, int? timeout, String? attestation, List<ExcludeCredential> excludeCredentials, String? salt) async {
+  Future<RegisterResponse> register(String challenge, RelyingParty relyingParty, User user, AuthenticatorSelection? authenticatorSelection, List<PubKeyCredParam>? pubKeyCredParams, int? timeout, String? attestation, List<ExcludeCredential> excludeCredentials, String? salt, bool isConditional) async {
     final pigeonVar_channelName = 'dev.flutter.pigeon.passkeys_android.PasskeysApi.register$pigeonVar_messageChannelSuffix';
     final pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
       binaryMessenger: pigeonVar_binaryMessenger,
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[challenge, relyingParty, user, authenticatorSelection, pubKeyCredParams, timeout, attestation, excludeCredentials, salt]);
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[challenge, relyingParty, user, authenticatorSelection, pubKeyCredParams, timeout, attestation, excludeCredentials, salt, isConditional]);
     final pigeonVar_replyList = await pigeonVar_sendFuture as List<Object?>?;
 
     final Object? pigeonVar_replyValue = _extractReplyValueOrThrow(

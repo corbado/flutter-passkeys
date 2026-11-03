@@ -51,6 +51,7 @@ class PasskeysDarwin extends PasskeysPlatform {
       request.attestation,
       request.authSelectionType?.userVerification,
       request.prf,
+      request.isConditional,
     );
 
     return RegisterResponseType(

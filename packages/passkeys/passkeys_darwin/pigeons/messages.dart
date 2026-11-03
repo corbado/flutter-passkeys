@@ -135,6 +135,7 @@ abstract class PasskeysApi {
     String? attestationPreference,
     String? userVerificationPreference,
     String? salt,
+    bool isConditional,
   );
 
   @async

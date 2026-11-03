@@ -187,6 +187,7 @@ abstract class PasskeysApi {
     String? attestation,
     List<ExcludeCredential> excludeCredentials,
     String? salt,
+    bool isConditional,
   );
 
   @async

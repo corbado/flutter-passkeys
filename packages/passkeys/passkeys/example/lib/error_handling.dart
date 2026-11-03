@@ -40,5 +40,9 @@ String getFriendlyErrorMessage(AuthenticatorException exception) {
           '(requires at least Android SDK 28). Please update your OS.',
     RestoreCredentialUnsupportedException() =>
       'Restore credentials are only available on Android 9 and above.',
+    ConditionalCreateNotEligibleException() =>
+      'No passkey was created automatically. You can create one manually.',
+    ConditionalCreateUnsupportedException() =>
+      'Automatic passkey creation is not supported on this device.',
   };
 }

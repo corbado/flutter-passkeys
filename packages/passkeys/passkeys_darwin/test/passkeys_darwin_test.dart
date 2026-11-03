@@ -7,6 +7,7 @@ import 'package:passkeys_platform_interface/types/types.dart';
 class _FakePasskeysApi extends pigeon.PasskeysApi {
   String? registerSalt;
   String? registerUserVerificationPreference;
+  bool? registerIsConditional;
   String? authenticateSalt;
   String? authenticateUserVerificationPreference;
   bool? authenticateCanBeSecurityKey;
@@ -47,8 +48,10 @@ class _FakePasskeysApi extends pigeon.PasskeysApi {
     String? attestationPreference,
     String? userVerificationPreference,
     String? salt,
+    bool isConditional,
   ) async {
     registerSalt = salt;
+    registerIsConditional = isConditional;
     registerUserVerificationPreference = userVerificationPreference;
     return pigeon.RegisterResponse(
       id: 'id',
@@ -176,6 +179,25 @@ void main() {
       );
 
       expect(api.registerUserVerificationPreference, isNull);
+    });
+
+    test('register forwards whether the create is conditional', () async {
+      final api = _FakePasskeysApi();
+      final platform = PasskeysDarwin(api: api);
+      RegisterRequestType request(MediationType mediation) =>
+          RegisterRequestType(
+            challenge: 'challenge',
+            relyingParty: RelyingPartyType(id: 'example.com', name: 'Example'),
+            user: const UserType(id: 'user', name: 'user', displayName: 'User'),
+            excludeCredentials: const [],
+            mediation: mediation,
+          );
+
+      await platform.register(request(MediationType.Conditional));
+      expect(api.registerIsConditional, isTrue);
+
+      await platform.register(request(MediationType.Optional));
+      expect(api.registerIsConditional, isFalse);
     });
 
     test('authenticate forwards the PRF salt and maps the result', () async {

@@ -8,6 +8,7 @@ import 'package:passkeys_platform_interface/types/types.dart';
 
 class _FakePasskeysApi extends pigeon.PasskeysApi {
   String? registerSalt;
+  bool? registerIsConditional;
   String? authenticateSalt;
   List<Object?>? signalUnknownCredentialArgs;
   List<Object?>? signalAllAcceptedCredentialsArgs;
@@ -109,8 +110,10 @@ class _FakePasskeysApi extends pigeon.PasskeysApi {
     String? attestation,
     List<pigeon.ExcludeCredential?> excludeCredentials,
     String? salt,
+    bool isConditional,
   ) async {
     registerSalt = salt;
+    registerIsConditional = isConditional;
     return pigeon.RegisterResponse(
       id: 'id',
       rawId: 'rawId',
@@ -196,6 +199,25 @@ void main() {
       );
 
       expect(api.registerSalt, isNull);
+    });
+
+    test('register forwards whether the create is conditional', () async {
+      final api = _FakePasskeysApi();
+      final platform = PasskeysAndroid(api: api);
+      RegisterRequestType request(MediationType mediation) =>
+          RegisterRequestType(
+            challenge: 'challenge',
+            relyingParty: RelyingPartyType(id: 'example.com', name: 'Example'),
+            user: const UserType(id: 'user', name: 'user', displayName: 'User'),
+            excludeCredentials: [],
+            mediation: mediation,
+          );
+
+      await platform.register(request(MediationType.Conditional));
+      expect(api.registerIsConditional, isTrue);
+
+      await platform.register(request(MediationType.Optional));
+      expect(api.registerIsConditional, isFalse);
     });
 
     test('authenticate forwards the PRF salt and maps the result', () async {

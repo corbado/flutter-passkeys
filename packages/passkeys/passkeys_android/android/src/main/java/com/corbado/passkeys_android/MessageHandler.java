@@ -62,6 +62,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -77,6 +78,8 @@ public class MessageHandler implements Messages.PasskeysApi {
     private static final String PASSKEY_UNSUPPORTED_ERROR = "Passkeys are only supported on Android API 28 and above.";
     private static final String RESTORE_CREDENTIAL_UNSUPPORTED_ERROR = "Restore credentials are only supported on Android API 28 and above.";
     private static final String RESTORE_CREDENTIAL_PROVIDER_ERROR = "Restore credentials need Google Play services 24.22 or newer.";
+    private static final String CONDITIONAL_CREATE_NOT_ELIGIBLE_ERROR = "The credential provider did not create a passkey without asking.";
+    private static final String CONDITIONAL_CREATE_UNSUPPORTED_ERROR = "The credential provider does not support conditional passkey creation.";
 
     private final FlutterPasskeysPlugin plugin;
 
@@ -114,6 +117,7 @@ public class MessageHandler implements Messages.PasskeysApi {
             @Nullable String attestation,
             @NonNull List<Messages.ExcludeCredential> excludeCredentials,
             @Nullable String salt,
+            @NonNull Boolean isConditional,
             @NonNull Messages.Result<Messages.RegisterResponse> result
             ) {
         if (android.os.Build.VERSION.SDK_INT < 28) {
@@ -130,7 +134,7 @@ public class MessageHandler implements Messages.PasskeysApi {
             Activity activity = plugin.requireActivity();
             CredentialManager credentialManager = CredentialManager.create(activity);
             CreatePublicKeyCredentialRequest createPublicKeyCredentialRequest = new CreatePublicKeyCredentialRequest(
-                    options);
+                    options, null, false, null, false, isConditional);
             currentCancellationSignal = new CancellationSignal();
             credentialManager.createCredentialAsync(activity, createPublicKeyCredentialRequest,
                     currentCancellationSignal, Runnable::run,
@@ -150,6 +154,15 @@ public class MessageHandler implements Messages.PasskeysApi {
 
                         @Override
                         public void onError(CreateCredentialException e) {
+                            if (isConditional) {
+                                Messages.FlutterError conditionalError = conditionalCreateError(e);
+                                if (conditionalError != null) {
+                                    Log.d(TAG, "Conditional create did not create a passkey", e);
+                                    result.error(conditionalError);
+                                    return;
+                                }
+                            }
+
                             Exception platformException = e;
                             if (Objects.equals(e.getMessage(), "Unable to create key during registration")) {
                                 // currently, Android throws this error when users skip the fingerPrint
@@ -169,7 +182,7 @@ public class MessageHandler implements Messages.PasskeysApi {
                                 } else if (Objects.equals(e.getMessage(), "Unable to get sync account.")) {
                                     platformException = new Messages.FlutterError("android-sync-account-not-available",
                                             e.getMessage(), SYNC_ACCOUNT_NOT_AVAILABLE_ERROR);
-                                } else if (e.getMessage() != null && e.getMessage().toLowerCase().contains("excluded credentials")) {
+                                } else if (e.getMessage() != null && e.getMessage().toLowerCase(Locale.ROOT).contains("excluded credentials")) {
                                     // Match excluded credentials error by substring instead of exact match,
                                     // as the error message may vary across Android / Google Play Services versions.
                                     // Also handles TYPE_INVALID_STATE_ERROR with excluded credentials message.
@@ -292,6 +305,29 @@ public class MessageHandler implements Messages.PasskeysApi {
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    /**
+     * Maps a conditional create failure to a Flutter error, or returns null when it is not specific to
+     * conditional create. Matches on getType() as well, because release builds obfuscate class names.
+     */
+    @Nullable
+    private static Messages.FlutterError conditionalCreateError(@NonNull CreateCredentialException e) {
+        // Play services reports an excludeCredentials match as TYPE_NO_CREATE_OPTIONS ([50157]) in conditional mode.
+        String message = e.getMessage();
+        if (message != null && message.toLowerCase(Locale.ROOT).contains("excluded credentials")) {
+            return new Messages.FlutterError("exclude-credentials-match", message, EXCLUDE_CREDENTIALS_MATCH_ERROR);
+        }
+        String type = e.getType();
+        if (e instanceof CreateCredentialNoCreateOptionException || type.endsWith("TYPE_NO_CREATE_OPTIONS")) {
+            return new Messages.FlutterError("not-eligible", e.getMessage(), CONDITIONAL_CREATE_NOT_ELIGIBLE_ERROR);
+        }
+        if (e instanceof CreateCredentialUnsupportedException
+                || type.endsWith("TYPE_CREATE_CREDENTIAL_UNSUPPORTED_EXCEPTION")) {
+            return new Messages.FlutterError("conditional-create-unsupported", e.getMessage(),
+                    CONDITIONAL_CREATE_UNSUPPORTED_ERROR);
+        }
+        return null;
     }
 
     @Override
