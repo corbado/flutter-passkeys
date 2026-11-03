@@ -38,15 +38,6 @@ class PasskeysWeb extends PasskeysPlatform {
 
   @override
   Future<RegisterResponseType> register(RegisterRequestType request) async {
-    // The bundled JS SDK has no conditional create; a modal create would show
-    // UI.
-    if (request.isConditional) {
-      throw PlatformException(
-        code: 'conditional-create-unsupported',
-        message: 'Conditional passkey creation is not supported on the web.',
-      );
-    }
-
     final r = PasskeySignUpRequest(
       PublicKey(
         request.relyingParty,
@@ -63,6 +54,9 @@ class PasskeysWeb extends PasskeysPlatform {
     try {
       final requestJson = r.toJson();
       _applyPrf(requestJson, request.prf);
+      if (request.isConditional) {
+        requestJson['mediation'] = 'conditional';
+      }
 
       final serializedRequest = jsonEncode(requestJson);
       final response = await authenticatorRegister(

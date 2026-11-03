@@ -224,17 +224,37 @@ var PasskeyAuthenticator = (function (exports) {
         }
         async register(params) {
             var _a;
+            let isConditional = false;
             try {
+                __classPrivateFieldSet(this, _PasskeyAuthenticator_abortController, new AbortController(), "f");
                 const typedParams = JSON.parse(params);
+                typedParams.signal = __classPrivateFieldGet(this, _PasskeyAuthenticator_abortController, "f").signal;
+                isConditional = typedParams.mediation === 'conditional';
                 const request = createRequestFromJSON(typedParams);
                 applyPrfInput(request.publicKey, (_a = typedParams.publicKey) === null || _a === void 0 ? void 0 : _a.extensions);
+                if (isConditional) {
+                    if (!(await isConditionalCreateAvailable())) {
+                        throw PlatformError.conditionalCreateUnsupported();
+                    }
+                    // The @github/webauthn-json create schema drops mediation.
+                    request.mediation = 'conditional';
+                }
                 const credential = await navigator.credentials.create(request);
                 const out = createResponseToJSON(credential);
                 return JSON.stringify(withPrfResults(out, credential));
             }
             catch (e) {
                 let error;
-                if (e instanceof DOMException) {
+                if (e instanceof PlatformError) {
+                    error = e;
+                }
+                else if (e === ABORTED_BY_USER) {
+                    error = PlatformError.cancelled();
+                }
+                else if (isConditional && e instanceof DOMException) {
+                    error = PlatformError.fromConditionalCreateDOMException(e);
+                }
+                else if (e instanceof DOMException) {
                     error = PlatformError.fromDOMException(e);
                 }
                 else if (e instanceof String) {
@@ -286,6 +306,20 @@ var PasskeyAuthenticator = (function (exports) {
         }
     }
     _PasskeyAuthenticator_abortController = new WeakMap();
+    async function isConditionalCreateAvailable() {
+        var _a;
+        const getClientCapabilities = (_a = window.PublicKeyCredential) === null || _a === void 0 ? void 0 : _a.getClientCapabilities;
+        if (typeof getClientCapabilities !== 'function') {
+            return false;
+        }
+        try {
+            const capabilities = await getClientCapabilities.call(window.PublicKeyCredential);
+            return (capabilities === null || capabilities === void 0 ? void 0 : capabilities.conditionalCreate) === true;
+        }
+        catch (e) {
+            return false;
+        }
+    }
     // The @github/webauthn-json schema does not know about the PRF extension, so
     // it drops the salts on the way in and the results on the way out. We convert
     // those base64url values ourselves and splice them back in.
@@ -335,6 +369,20 @@ var PasskeyAuthenticator = (function (exports) {
                 default:
                     return new PlatformError(error.name, error.message, '');
             }
+        }
+        // A conditional create shows no UI, so NotAllowedError means the browser declined, not the user.
+        static fromConditionalCreateDOMException(error) {
+            switch (error.name) {
+                case 'NotAllowedError':
+                    return new PlatformError('not-eligible', error.message, '');
+                case 'InvalidStateError':
+                    return new PlatformError('exclude-credentials-match', error.message, '');
+                default:
+                    return PlatformError.fromDOMException(error);
+            }
+        }
+        static conditionalCreateUnsupported() {
+            return new PlatformError('conditional-create-unsupported', 'This browser does not support conditional passkey creation.', '');
         }
         static unknownError(error) {
             return new PlatformError('unknown', error, '');

@@ -109,7 +109,7 @@ const Map<String, ExceptionInfo> exceptionInfos = {
     title: 'ConditionalCreateNotEligibleException',
     description:
         'Thrown by a conditional (automatic) create when the platform decides not to create a passkey. No UI was shown.',
-    platforms: ['Android', 'iOS', 'macOS'],
+    platforms: ['Android', 'iOS', 'macOS', 'Web'],
     suggestions: [
       'Treat it as "nothing happened".',
       'If you want a passkey, fall back to an ordinary create.',

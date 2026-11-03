@@ -308,9 +308,15 @@ try {
 }
 ```
 
-- Supported on Android (when the credential provider supports it) and on iOS 18 / macOS 15 and above.
-  Web, Windows and older Apple versions throw `ConditionalCreateUnsupportedException`, as do Apple
-  platforms when `authenticatorAttachment` is `cross-platform`.
+- Supported on Android (when the credential provider supports it), on iOS 18 / macOS 15 and above,
+  and on the web in browsers whose `PublicKeyCredential.getClientCapabilities()` reports
+  `conditionalCreate`. Windows, older Apple versions and other browsers throw
+  `ConditionalCreateUnsupportedException`, as do Apple platforms when `authenticatorAttachment` is
+  `cross-platform`.
+- On the web, update the `bundle.js` you include in your HTML to a version with conditional create
+  support. Chrome keeps an ineligible conditional create pending until the `timeout` in the creation
+  options expires and only then throws `ConditionalCreateNotEligibleException`, so set a short
+  `timeout`. Starting another passkey operation cancels a pending one.
 - Only `MediationType.Conditional` changes the behavior of `register`. Every other `MediationType`
   value is an ordinary create.
 - The platform decides whether to create. It typically requires that the user just signed in with a
