@@ -223,9 +223,10 @@ void main() {
       String code,
       Matcher matcher, {
       String? message,
+      Object? details,
     }) async {
       PasskeysPlatform.instance = _ThrowingPlatform(
-        PlatformException(code: code, message: message),
+        PlatformException(code: code, message: message, details: details),
       );
       final authenticator = PasskeyAuthenticator();
 
@@ -268,22 +269,17 @@ void main() {
     });
 
     test(
-      'android-credential-not-authenticated throws '
+      'cancelled with android-credential-not-authenticated details throws '
       'CredentialNotAuthenticatedException with the platform message',
       () async {
         await expectMapping(
-          'android-credential-not-authenticated',
-          isA<CredentialNotAuthenticatedException>()
-              .having(
-                (e) => e,
-                'cancellation',
-                isA<PasskeyAuthCancelledException>(),
-              )
-              .having(
-                (e) => e.message,
-                'message',
-                'None of the allowed credentials can be authenticated',
-              ),
+          'cancelled',
+          details: 'android-credential-not-authenticated',
+          isA<CredentialNotAuthenticatedException>().having(
+            (e) => e.message,
+            'message',
+            'None of the allowed credentials can be authenticated',
+          ),
           message: 'None of the allowed credentials can be authenticated',
         );
       },

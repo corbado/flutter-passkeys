@@ -83,7 +83,7 @@ class PasskeyAuthenticator
 
       switch (e.code) {
         case 'cancelled':
-          throw PasskeyAuthCancelledException(e.message);
+          throw _cancelledException(e);
         case 'exclude-credentials-match':
           throw ExcludeCredentialsCanNotBeRegisteredException();
         case 'android-missing-google-sign-in':
@@ -136,8 +136,10 @@ class PasskeyAuthenticator
   /// passwords are offered, even when [passkeyRequest] is given.
   ///
   /// Throws [PasskeyAuthCancelledException] when the user dismisses the sheet,
-  /// [NoCredentialsAvailableException] when nothing is saved, and
-  /// [PasswordCredentialUnsupportedException] on platforms other than Android.
+  /// [CredentialNotAuthenticatedException] when none of the allowed
+  /// credentials could be used, [NoCredentialsAvailableException] when nothing
+  /// is saved, and [PasswordCredentialUnsupportedException] on platforms other
+  /// than Android.
   Future<PasswordOrPasskeyResponseType> getPasswordOrPasskey(
     AuthenticateRequestType? passkeyRequest, {
     bool? preferImmediatelyAvailableCredentials,
@@ -174,9 +176,7 @@ class PasskeyAuthenticator
         case 'password-credential-unsupported':
           throw PasswordCredentialUnsupportedException(e.message);
         case 'cancelled':
-          throw PasskeyAuthCancelledException(e.message);
-        case 'android-credential-not-authenticated':
-          throw CredentialNotAuthenticatedException(e.message);
+          throw _cancelledException(e);
         case 'android-no-credential':
           throw NoCredentialsAvailableException();
         case 'domain-not-associated':
@@ -230,9 +230,7 @@ class PasskeyAuthenticator
         case 'no-credentials-available':
           throw NoCredentialsAvailableException();
         case 'cancelled':
-          throw PasskeyAuthCancelledException(e.message);
-        case 'android-credential-not-authenticated':
-          throw CredentialNotAuthenticatedException(e.message);
+          throw _cancelledException(e);
         case 'android-no-credential':
           throw NoCredentialsAvailableException();
         case 'deviceNotSupported':
@@ -422,7 +420,7 @@ class PasskeyAuthenticator
       case 'android-no-credential':
         throw NoCredentialsAvailableException();
       case 'cancelled':
-        throw PasskeyAuthCancelledException(e.message);
+        throw _cancelledException(e);
       case 'domain-not-associated':
         throw DomainNotAssociatedException(e.message);
       case 'android-timeout':
@@ -435,6 +433,11 @@ class PasskeyAuthenticator
     }
   }
 
+  PasskeyAuthCancelledException _cancelledException(PlatformException e) =>
+      e.details == 'android-credential-not-authenticated'
+      ? CredentialNotAuthenticatedException(e.message)
+      : PasskeyAuthCancelledException(e.message);
+
   Never _mapSignalException(PlatformException e, StackTrace stackTrace) {
     if (debugMode) {
       _doctor?.recordException(e);
@@ -442,7 +445,7 @@ class PasskeyAuthenticator
 
     switch (e.code) {
       case 'cancelled':
-        throw PasskeyAuthCancelledException(e.message);
+        throw _cancelledException(e);
       case 'domain-not-associated':
         throw DomainNotAssociatedException(e.message);
       case 'deviceNotSupported':

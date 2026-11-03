@@ -76,6 +76,10 @@ class _SignInPageState extends ConsumerState<SignInPage> {
             context.go(Routes.profile);
           })
           .onError((error, stackTrace) {
+            if (error is CredentialNotAuthenticatedException) {
+              debugPrint('passkey could not be used: ${error.message}');
+              return;
+            }
             if (error is PasskeyAuthCancelledException) {
               debugPrint(
                 'user cancelled authentication. This is not a problem. '
