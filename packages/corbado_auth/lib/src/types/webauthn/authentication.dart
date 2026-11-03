@@ -106,6 +106,9 @@ class AllowCredential {
   final String id;
 
   /// The transports
+  ///
+  /// Optional in WebAuthn, so this defaults to an empty list when absent.
+  @JsonKey(defaultValue: <String>[])
   final List<String> transports;
 
   /// Serializes object to json
