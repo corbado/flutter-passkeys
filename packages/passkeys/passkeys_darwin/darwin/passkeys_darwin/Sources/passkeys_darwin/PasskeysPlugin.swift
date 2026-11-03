@@ -70,8 +70,14 @@ public class PasskeysPlugin: NSObject, FlutterPlugin, PasskeysApi {
                                                 details: "")))
                 return
             }
+            guard canBePlatformAuthenticator else {
+                completion(.failure(PigeonError(code: "conditional-create-unsupported",
+                                                message: "Conditional passkey creation needs a platform authenticator.",
+                                                details: "")))
+                return
+            }
         }
-        
+
         guard let decodedChallenge = Data.fromBase64Url(challenge) else {
             completion(.failure(CustomErrors.decodingChallenge))
             return

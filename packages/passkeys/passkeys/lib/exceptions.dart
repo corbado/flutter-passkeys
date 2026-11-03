@@ -273,10 +273,11 @@ class ConditionalCreateNotEligibleException implements AuthenticatorException {
 }
 
 /// Thrown when a conditional (automatic) create is requested on a platform or
-/// OS version that does not support it (iOS/macOS below 18, or an Android
-/// credential provider without conditional create).
+/// OS version that does not support it (Web, Windows, iOS/macOS below 18, an
+/// Android credential provider without conditional create, or an Apple
+/// request that only allows a cross-platform authenticator).
 ///
-/// Platforms: Android, iOS, macOS
+/// Platforms: Android, iOS, macOS, Web, Windows
 ///
 /// Suggestions:
 /// - fall back to an ordinary (modal) create.

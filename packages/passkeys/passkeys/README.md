@@ -309,7 +309,10 @@ try {
 ```
 
 - Supported on Android (when the credential provider supports it) and on iOS 18 / macOS 15 and above.
-  Web, Windows and older Apple versions throw `ConditionalCreateUnsupportedException`.
+  Web, Windows and older Apple versions throw `ConditionalCreateUnsupportedException`, as do Apple
+  platforms when `authenticatorAttachment` is `cross-platform`.
+- Only `MediationType.Conditional` changes the behavior of `register`. Every other `MediationType`
+  value is an ordinary create.
 - The platform decides whether to create. It typically requires that the user just signed in with a
   password saved in the same provider, for the same username as `user.name`. On Android with Google
   Password Manager that means a password returned through Credential Manager, not one filled in by
