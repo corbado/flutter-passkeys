@@ -122,7 +122,8 @@ class RegisterRequestType {
   /// just signed in with a saved password for the same account, and fails
   /// with `not-eligible` otherwise. Every other value is an ordinary create.
   ///
-  /// Supported on Android and on iOS/macOS 18+.
+  /// Supported on Android, on iOS/macOS 18+ and in browsers with conditional
+  /// create.
   final MediationType mediation;
 
   /// Whether this is a conditional (automatic) create.

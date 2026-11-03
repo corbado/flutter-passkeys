@@ -27,10 +27,20 @@ export class PasskeyAuthenticator {
     }
 
     async register(params: string): Promise<string> {
+        let isConditional = false;
         try {
             const typedParams: CredentialCreationOptionsJSON = JSON.parse(params);
+            isConditional = (typedParams as any).mediation === 'conditional';
             const request = createRequestFromJSON(typedParams);
             applyPrfInput(request.publicKey, (typedParams.publicKey as any)?.extensions);
+
+            if (isConditional) {
+                if (!(await isConditionalCreateAvailable())) {
+                    throw PlatformError.conditionalCreateUnsupported();
+                }
+                // The @github/webauthn-json create schema drops mediation.
+                (request as any).mediation = 'conditional';
+            }
 
             const credential = await navigator.credentials.create(request) as PublicKeyCredential;
             const out: PublicKeyCredentialWithAttestationJSON = createResponseToJSON(credential);
@@ -38,7 +48,11 @@ export class PasskeyAuthenticator {
             return JSON.stringify(withPrfResults(out, credential));
         } catch (e) {
             let error: PlatformError;
-            if (e instanceof DOMException) {
+            if (e instanceof PlatformError) {
+                error = e;
+            } else if (isConditional && e instanceof DOMException) {
+                error = PlatformError.fromConditionalCreateDOMException(e)
+            } else if (e instanceof DOMException) {
                 error = PlatformError.fromDOMException(e)
             } else if (e instanceof String) {
                 error = PlatformError.unknownError(e.toString())
@@ -87,6 +101,20 @@ export class PasskeyAuthenticator {
         }
 
         this.#abortController.abort(ABORTED_BY_USER);
+    }
+}
+
+async function isConditionalCreateAvailable(): Promise<boolean> {
+    const getClientCapabilities = (window.PublicKeyCredential as any)?.getClientCapabilities;
+    if (typeof getClientCapabilities !== 'function') {
+        return false;
+    }
+
+    try {
+        const capabilities = await getClientCapabilities.call(window.PublicKeyCredential);
+        return capabilities?.conditionalCreate === true;
+    } catch (e) {
+        return false;
     }
 }
 
@@ -152,6 +180,26 @@ class PlatformError {
             default:
                 return new PlatformError(error.name, error.message, '');
         }
+    }
+
+    // A conditional create shows no UI, so NotAllowedError means the browser declined, not the user.
+    static fromConditionalCreateDOMException(error: Error): PlatformError {
+        switch (error.name) {
+            case 'NotAllowedError':
+                return new PlatformError('not-eligible', error.message, '');
+            case 'InvalidStateError':
+                return new PlatformError('exclude-credentials-match', error.message, '');
+            default:
+                return PlatformError.fromDOMException(error);
+        }
+    }
+
+    static conditionalCreateUnsupported(): PlatformError {
+        return new PlatformError(
+            'conditional-create-unsupported',
+            'This browser does not support conditional passkey creation.',
+            '',
+        );
     }
 
     static unknownError(error: string): PlatformError {

@@ -255,7 +255,7 @@ class RestoreCredentialUnsupportedException implements AuthenticatorException {
 /// create a passkey, typically because the user did not just sign in with a
 /// saved password for this account. No UI was shown.
 ///
-/// Platforms: Android, iOS, macOS
+/// Platforms: Android, iOS, macOS, Web
 ///
 /// Suggestions:
 /// - treat it as "nothing happened" and, if you want a passkey, fall back to
@@ -273,9 +273,10 @@ class ConditionalCreateNotEligibleException implements AuthenticatorException {
 }
 
 /// Thrown when a conditional (automatic) create is requested on a platform or
-/// OS version that does not support it (Web, Windows, iOS/macOS below 18, an
-/// Android credential provider without conditional create, or an Apple
-/// request that only allows a cross-platform authenticator).
+/// OS version that does not support it (Windows, iOS/macOS below 18, a
+/// browser without conditional create, an Android credential provider without
+/// conditional create, or an Apple request that only allows a cross-platform
+/// authenticator).
 ///
 /// Platforms: Android, iOS, macOS, Web, Windows
 ///
