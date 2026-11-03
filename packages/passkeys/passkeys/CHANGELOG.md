@@ -1,3 +1,11 @@
+## 2.24.0
+
+ - **FIX**(passkeys_android): report provider failures separately from cancellations ([#333](https://github.com/corbado/flutter-passkeys/issues/333)). ([e1f76074](https://github.com/corbado/flutter-passkeys/commit/e1f76074478266113457e1ab50e98b2f9a6350a0))
+ - **FIX**(passkeys_web): map an excluded credential match to ExcludeCredentialsCanNotBeRegisteredException ([#329](https://github.com/corbado/flutter-passkeys/issues/329)). ([212ed8a5](https://github.com/corbado/flutter-passkeys/commit/212ed8a5dec2a99a933c9df45836c5a74911f4e2))
+ - **FEAT**(passkeys_web): support conditional passkey creation ([#328](https://github.com/corbado/flutter-passkeys/issues/328)). ([87b47895](https://github.com/corbado/flutter-passkeys/commit/87b478952f026a522304ec4dffe3a19306f62dee))
+ - **FEAT**(passkeys_android): get a saved password or passkey in one request ([#325](https://github.com/corbado/flutter-passkeys/issues/325)). ([62905dae](https://github.com/corbado/flutter-passkeys/commit/62905daec5cb3510385d96ded9167ba6dd03ab6f))
+ - **FEAT**(passkeys): support conditional passkey creation ([#324](https://github.com/corbado/flutter-passkeys/issues/324)). ([e0fa3b50](https://github.com/corbado/flutter-passkeys/commit/e0fa3b5061d40e9268b35f8e2952e6ce2970bf60))
+
 ## 2.23.2
 
  - Update a dependency to the latest release.

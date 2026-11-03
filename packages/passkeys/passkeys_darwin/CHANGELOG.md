@@ -1,3 +1,7 @@
+## 0.4.7
+
+ - **FEAT**(passkeys): support conditional passkey creation ([#324](https://github.com/corbado/flutter-passkeys/issues/324)). ([e0fa3b50](https://github.com/corbado/flutter-passkeys/commit/e0fa3b5061d40e9268b35f8e2952e6ce2970bf60))
+
 ## 0.4.6
 
  - **FIX**(passkeys_darwin): declare a privacy manifest for Apple platforms ([#317](https://github.com/corbado/flutter-passkeys/issues/317)). ([90a2af97](https://github.com/corbado/flutter-passkeys/commit/90a2af9788333df5f00670fed4a9233b59e398e6))

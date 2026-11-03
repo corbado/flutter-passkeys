@@ -1,3 +1,11 @@
+## 1.7.0
+
+ - **FIX**(passkeys_android): report provider failures separately from cancellations ([#333](https://github.com/corbado/flutter-passkeys/issues/333)). ([e1f76074](https://github.com/corbado/flutter-passkeys/commit/e1f76074478266113457e1ab50e98b2f9a6350a0))
+ - **FIX**(passkeys_android): map TYPE_SECURITY_ERROR to DomainNotAssociatedException ([#330](https://github.com/corbado/flutter-passkeys/issues/330)). ([3718a98f](https://github.com/corbado/flutter-passkeys/commit/3718a98f3fc00eafad864dc435af530af4f5b4fb))
+ - **FIX**(passkeys_web): map an excluded credential match to ExcludeCredentialsCanNotBeRegisteredException ([#329](https://github.com/corbado/flutter-passkeys/issues/329)). ([212ed8a5](https://github.com/corbado/flutter-passkeys/commit/212ed8a5dec2a99a933c9df45836c5a74911f4e2))
+ - **FEAT**(passkeys_web): support conditional passkey creation ([#328](https://github.com/corbado/flutter-passkeys/issues/328)). ([87b47895](https://github.com/corbado/flutter-passkeys/commit/87b478952f026a522304ec4dffe3a19306f62dee))
+ - **FEAT**(passkeys): support conditional passkey creation ([#324](https://github.com/corbado/flutter-passkeys/issues/324)). ([e0fa3b50](https://github.com/corbado/flutter-passkeys/commit/e0fa3b5061d40e9268b35f8e2952e6ce2970bf60))
+
 ## 1.6.2
 
  - **FIX**(passkeys): declare the meta dependency required by Pigeon generated code ([#313](https://github.com/corbado/flutter-passkeys/issues/313)). ([e1f12615](https://github.com/corbado/flutter-passkeys/commit/e1f126157ef1498ff563d9c4e8622eddd16a1a50))
