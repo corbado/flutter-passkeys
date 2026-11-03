@@ -57,10 +57,11 @@ const Map<String, ExceptionInfo> exceptionInfos = {
   'domain-not-associated': ExceptionInfo(
     title: 'DomainNotAssociatedException',
     description:
-        'Thrown when your app’s domain isn’t correctly associated (no Digital Asset Links or AASA file). In your case it is caused by apple CDN Caching when dealing with AASA files. For more information check https://docs.corbado.com/corbado-complete/frontend-integration/flutter/run-on-physical-device/ios/overview#aasa-file-caching-and-the-%3Fmode%3Ddeveloper-parameter',
+        'Thrown when your app’s domain isn’t correctly associated with the relying party id (missing or mismatching Digital Asset Links or AASA file).',
     platforms: ['Android', 'iOS'],
     suggestions: [
-      'Check our docs on https://docs.corbado.com/corbado-complete/frontend-integration/flutter/run-on-physical-device/ios/configure-device and ',
+      'Android: make sure https://<rp-id>/.well-known/assetlinks.json lists your package name and the SHA-256 fingerprint of the certificate the running build is signed with. Debug, upload and Play App Signing certificates have different fingerprints.',
+      'iOS: check our docs on https://docs.corbado.com/corbado-complete/frontend-integration/flutter/run-on-physical-device/ios/configure-device',
     ],
   ),
   'deviceNotSupported': ExceptionInfo(
