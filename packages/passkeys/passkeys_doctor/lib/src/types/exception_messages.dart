@@ -197,7 +197,9 @@ Future<ExceptionInfo> getExceptionInfo(
       description:
           'In your case it is caused by Apple CDN caching of the AASA file; check docs for the `?mode=developer` parameter.',
       platforms: ['iOS'],
-      suggestions: ['Clear any CDN caches or use the `?mode=developer` flag.'],
+      suggestions: [
+        'Clear any CDN caches or use the `?mode=developer` flag, see https://docs.corbado.com/corbado-complete/frontend-integration/flutter/run-on-physical-device/ios/overview#aasa-file-caching-and-the-%3Fmode%3Ddeveloper-parameter',
+      ],
     );
   }
 

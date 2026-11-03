@@ -180,8 +180,7 @@ public class MessageHandler implements Messages.PasskeysApi {
                     //  See: https://www.corbado.com/blog/google-play-services-passkey-error-codes
                     } else if (e instanceof CreatePublicKeyCredentialDomException) {
                                 if (isSecurityError(e.getType())) {
-                                    platformException = new Messages.FlutterError("domain-not-associated",
-                                            e.getMessage(), DOMAIN_NOT_ASSOCIATED_ERROR);
+                                    platformException = domainNotAssociatedError(e.getMessage());
                                 } else if (Objects.equals(e.getMessage(), "User is unable to create passkeys.")) {
                                     platformException = new Messages.FlutterError("android-missing-google-sign-in",
                                             e.getMessage(), MISSING_GOOGLE_SIGN_IN_ERROR);
@@ -372,6 +371,14 @@ public class MessageHandler implements Messages.PasskeysApi {
         return type.endsWith("TYPE_SECURITY_ERROR");
     }
 
+    @NonNull
+    private static Messages.FlutterError domainNotAssociatedError(@Nullable String platformMessage) {
+        String message = platformMessage == null
+                ? DOMAIN_NOT_ASSOCIATED_ERROR
+                : DOMAIN_NOT_ASSOCIATED_ERROR + " Platform error: " + platformMessage;
+        return new Messages.FlutterError("domain-not-associated", message, platformMessage);
+    }
+
     private static Exception getCredentialError(@NonNull GetCredentialException e) {
         // currently, Android throws this error when users skip the fingerPrint
         // animation => we interpret this as a cancellation for now
@@ -387,8 +394,7 @@ public class MessageHandler implements Messages.PasskeysApi {
         } else if (e instanceof GetPublicKeyCredentialDomException) {
             Log.e(TAG, "onError called", e);
             if (isSecurityError(e.getType())) {
-                return new Messages.FlutterError("domain-not-associated", e.getMessage(),
-                        DOMAIN_NOT_ASSOCIATED_ERROR);
+                return domainNotAssociatedError(e.getMessage());
             } else if (Objects.equals(e.getMessage(), "Failed to decrypt credential.")) {
                 return new Messages.FlutterError("android-sync-account-not-available", e.getMessage(),
                         SYNC_ACCOUNT_NOT_AVAILABLE_ERROR);
