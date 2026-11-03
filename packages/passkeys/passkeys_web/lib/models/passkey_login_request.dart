@@ -30,7 +30,10 @@ class PasskeyLoginRequest {
           return PasskeyLoginAllowCredentialType(
             e.type,
             e.id,
-            e.transports.map(AuthenticatorTransport.fromPlatformType).toList(),
+            e.transports
+                .map(AuthenticatorTransport.tryFromPlatformType)
+                .nonNulls
+                .toList(),
           );
         }).toList() ??
         [];
@@ -145,18 +148,33 @@ enum AuthenticatorTransport {
   Usb,
 
   /// Bluetooth low energy transport.
-  @JsonValue('bluetooth')
-  Bluetooth;
+  @JsonValue('ble')
+  Bluetooth,
+
+  /// Smart card transport.
+  @JsonValue('smart-card')
+  SmartCard;
 
   /// Maps a platform interface transport string to an [AuthenticatorTransport].
+  ///
+  /// Throws an [ArgumentError] for unknown transports, use
+  /// [tryFromPlatformType] to ignore them instead.
   factory AuthenticatorTransport.fromPlatformType(String value) =>
+      tryFromPlatformType(value) ?? (throw ArgumentError.value(value));
+
+  /// Maps a platform interface transport string to an [AuthenticatorTransport],
+  /// returning `null` for transports this package does not know.
+  ///
+  /// WebAuthn requires clients to ignore unknown transports.
+  static AuthenticatorTransport? tryFromPlatformType(String value) =>
       switch (value) {
         'hybrid' => AuthenticatorTransport.Hybrid,
         'internal' => AuthenticatorTransport.Internal,
         'usb' => AuthenticatorTransport.Usb,
         'nfc' => AuthenticatorTransport.Nfc,
-        'bluetooth' => AuthenticatorTransport.Bluetooth,
-        _ => throw ArgumentError.value(value),
+        'ble' || 'bluetooth' => AuthenticatorTransport.Bluetooth,
+        'smart-card' => AuthenticatorTransport.SmartCard,
+        _ => null,
       };
 }
 
