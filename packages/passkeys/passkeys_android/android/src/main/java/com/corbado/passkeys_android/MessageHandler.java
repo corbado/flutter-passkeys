@@ -380,11 +380,12 @@ public class MessageHandler implements Messages.PasskeysApi {
     }
 
     private static Exception getCredentialError(@NonNull GetCredentialException e) {
-        // currently, Android throws this error when users skip the fingerPrint
-        // animation => we interpret this as a cancellation for now
+        // Android throws this both when users skip the fingerprint animation and
+        // when the credential provider fails to use the selected passkey.
         if (Objects.equals(e.getMessage(), "None of the allowed credentials can be authenticated")) {
             Log.d(TAG, "onError called", e);
-            return new Messages.FlutterError("cancelled", e.getMessage(), "");
+            return new Messages.FlutterError("android-credential-not-authenticated", e.getMessage(),
+                    e.getType());
         } else if (e instanceof GetCredentialCancellationException) {
             Log.d(TAG, "onError called", e);
             return new Messages.FlutterError("cancelled", e.getMessage(), "");

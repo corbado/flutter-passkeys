@@ -355,7 +355,9 @@ if (picked.passkey != null) {
 - Pass `null` instead of authentication options to offer saved passwords only. Below Android 9
   (API 28) only saved passwords are offered either way.
 - Throws `PasskeyAuthCancelledException` when the user dismisses the sheet and
-  `NoCredentialsAvailableException` when nothing is saved. Every other platform throws
+  `NoCredentialsAvailableException` when nothing is saved. When none of the allowed credentials could
+  be used, it throws `CredentialNotAuthenticatedException`, a subtype of
+  `PasskeyAuthCancelledException` whose `message` holds what the platform reported. Every other platform throws
   `PasswordCredentialUnsupportedException`; use the platform's autofill there.
 
 ## Restore Credentials (Android)

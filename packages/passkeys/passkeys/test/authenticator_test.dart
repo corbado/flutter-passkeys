@@ -255,6 +255,40 @@ void main() {
       await expectMapping('cancelled', isA<PasskeyAuthCancelledException>());
     });
 
+    test('cancelled keeps the platform message', () async {
+      await expectMapping(
+        'cancelled',
+        isA<PasskeyAuthCancelledException>().having(
+          (e) => e.message,
+          'message',
+          'User dismissed the sheet',
+        ),
+        message: 'User dismissed the sheet',
+      );
+    });
+
+    test(
+      'android-credential-not-authenticated throws '
+      'CredentialNotAuthenticatedException with the platform message',
+      () async {
+        await expectMapping(
+          'android-credential-not-authenticated',
+          isA<CredentialNotAuthenticatedException>()
+              .having(
+                (e) => e,
+                'cancellation',
+                isA<PasskeyAuthCancelledException>(),
+              )
+              .having(
+                (e) => e.message,
+                'message',
+                'None of the allowed credentials can be authenticated',
+              ),
+          message: 'None of the allowed credentials can be authenticated',
+        );
+      },
+    );
+
     test('domain-not-associated throws DomainNotAssociatedException', () async {
       await expectMapping(
         'domain-not-associated',
