@@ -54,10 +54,8 @@ export class PasskeyAuthenticator {
                 error = e;
             } else if (e === ABORTED_BY_USER) {
                 error = PlatformError.cancelled();
-            } else if (isConditional && e instanceof DOMException) {
-                error = PlatformError.fromConditionalCreateDOMException(e)
             } else if (e instanceof DOMException) {
-                error = PlatformError.fromDOMException(e)
+                error = PlatformError.fromCreateDOMException(e, isConditional)
             } else if (e instanceof String) {
                 error = PlatformError.unknownError(e.toString())
             } else {
@@ -186,13 +184,17 @@ class PlatformError {
         }
     }
 
-    // A conditional create shows no UI, so NotAllowedError means the browser declined, not the user.
-    static fromConditionalCreateDOMException(error: Error): PlatformError {
+    static fromCreateDOMException(error: Error, isConditional: boolean): PlatformError {
         switch (error.name) {
-            case 'NotAllowedError':
-                return new PlatformError('not-eligible', error.message, '');
+            // WebAuthn only rejects a create with InvalidStateError when an excludeCredentials entry matches.
             case 'InvalidStateError':
                 return new PlatformError('exclude-credentials-match', error.message, '');
+            // A conditional create shows no UI, so NotAllowedError means the browser declined, not the user.
+            case 'NotAllowedError':
+                if (isConditional) {
+                    return new PlatformError('not-eligible', error.message, '');
+                }
+                return PlatformError.fromDOMException(error);
             default:
                 return PlatformError.fromDOMException(error);
         }

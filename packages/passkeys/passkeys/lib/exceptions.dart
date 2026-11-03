@@ -44,7 +44,7 @@ class SyncAccountNotAvailableException implements AuthenticatorException {
 /// Thrown when the user tries to register but one of the excluded credentials
 /// matches an existing one on your local device.
 ///
-/// Platforms: Android
+/// Platforms: Android, iOS, macOS, Web
 ///
 /// Suggestions:
 /// - Inform the user that the credential already exists.
