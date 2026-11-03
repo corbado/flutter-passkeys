@@ -28,7 +28,7 @@ const Map<String, ExceptionInfo> exceptionInfos = {
     title: 'ExcludeCredentialsCanNotBeRegisteredException',
     description:
         'Thrown when the user tries to register but one of the excluded credentials matches an existing one.',
-    platforms: ['Android'],
+    platforms: ['Android', 'iOS', 'macOS', 'Web'],
     suggestions: [
       'Inform the user that the credential already exists.',
       'Allow the user to proceed with authentication instead of registration.',
