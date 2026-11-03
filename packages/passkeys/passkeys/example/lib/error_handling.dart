@@ -10,6 +10,8 @@ import 'package:passkeys/exceptions.dart';
 /// handled here.
 String getFriendlyErrorMessage(AuthenticatorException exception) {
   return switch (exception) {
+    CredentialNotAuthenticatedException() =>
+      'The selected passkey could not be used. Please try again.',
     PasskeyAuthCancelledException() =>
       'Authentication was cancelled. Please try again.',
     MissingGoogleSignInException() =>

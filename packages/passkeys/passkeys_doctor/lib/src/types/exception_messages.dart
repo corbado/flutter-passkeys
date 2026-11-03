@@ -96,6 +96,18 @@ const Map<String, ExceptionInfo> exceptionInfos = {
     platforms: ['Android', 'iOS'],
     suggestions: ['Use a fallback method (e.g. login via email OTP).'],
   ),
+  'android-credential-not-authenticated': ExceptionInfo(
+    title: 'CredentialNotAuthenticatedException',
+    description:
+        'Thrown when none of the allowed credentials could be used to authenticate. '
+        'Android reports this both when the user skips the biometric prompt and '
+        'when the credential provider fails to use the selected passkey.',
+    platforms: ['Android'],
+    suggestions: [
+      'Allow the user to start the flow again.',
+      'Log the exception message to diagnose credential provider failures.',
+    ],
+  ),
   'android-no-create-option': ExceptionInfo(
     title: 'NoCreateOptionException',
     description:

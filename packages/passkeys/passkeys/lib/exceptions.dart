@@ -10,7 +10,29 @@ sealed class AuthenticatorException implements Exception {}
 /// - allow the user to start the flow again.
 class PasskeyAuthCancelledException implements AuthenticatorException {
   /// Constructor
-  PasskeyAuthCancelledException();
+  PasskeyAuthCancelledException([this.message]);
+
+  /// The message reported by the platform, if any.
+  final String? message;
+}
+
+/// Thrown when none of the allowed credentials could be used to authenticate.
+///
+/// Android reports this both when the user skips the biometric prompt and when
+/// the credential provider fails to use the selected passkey, so the two can't
+/// be told apart. It extends [PasskeyAuthCancelledException] so existing
+/// cancellation handling keeps working, while [message] holds what the
+/// platform reported.
+///
+/// Platforms: Android
+///
+/// Suggestions:
+/// - allow the user to start the flow again.
+/// - log [message] to diagnose credential provider failures.
+class CredentialNotAuthenticatedException
+    extends PasskeyAuthCancelledException {
+  /// Constructor
+  CredentialNotAuthenticatedException([super.message]);
 }
 
 /// This exception is thrown when the user tries to login but is not logged in
