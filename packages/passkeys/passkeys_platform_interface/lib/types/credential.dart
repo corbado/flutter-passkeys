@@ -24,6 +24,9 @@ class CredentialType {
   final String id;
 
   /// The transports of the credential.
+  ///
+  /// Optional in WebAuthn, so this defaults to an empty list when absent.
+  @JsonKey(defaultValue: <String>[])
   final List<String> transports;
 
   /// Converts this instance to a JSON map.

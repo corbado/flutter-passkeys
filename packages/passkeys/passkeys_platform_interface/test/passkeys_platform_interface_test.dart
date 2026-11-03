@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:passkeys_platform_interface/passkeys_platform_interface.dart';
+import 'package:passkeys_platform_interface/types/credential.dart';
 import 'package:passkeys_platform_interface/types/types.dart';
 
 class PasskeysMock extends PasskeysPlatform {
@@ -481,6 +482,40 @@ void main() {
 
       expect(response.toJson()['clientExtensionResults'], <String, dynamic>{});
       expect(response.toJsonString(), isNot(contains('top-secret')));
+    });
+  });
+
+  group('CredentialType.fromJson', () {
+    test('defaults transports to an empty list when absent', () {
+      final credential = CredentialType.fromJson({
+        'id': 'AQID',
+        'type': 'public-key',
+      });
+
+      expect(credential.transports, isEmpty);
+    });
+
+    test('parses allowCredentials without transports', () {
+      final request = AuthenticateRequestType.fromJson({
+        'challenge': 'AAAA',
+        'rpId': 'example.com',
+        'timeout': 60000,
+        'allowCredentials': [
+          {'id': 'AQID', 'type': 'public-key'},
+        ],
+      });
+
+      expect(request.allowCredentials!.single.transports, isEmpty);
+    });
+
+    test('keeps transports when present', () {
+      final credential = CredentialType.fromJson({
+        'id': 'AQID',
+        'type': 'public-key',
+        'transports': ['internal', 'hybrid'],
+      });
+
+      expect(credential.transports, ['internal', 'hybrid']);
     });
   });
 }

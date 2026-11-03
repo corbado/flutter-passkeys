@@ -41,9 +41,11 @@ AllowCredential _$AllowCredentialFromJson(Map<String, dynamic> json) =>
     AllowCredential(
       type: json['type'] as String,
       id: json['id'] as String,
-      transports: (json['transports'] as List<dynamic>)
-          .map((e) => e as String)
-          .toList(),
+      transports:
+          (json['transports'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          [],
     );
 
 Map<String, dynamic> _$AllowCredentialToJson(AllowCredential instance) =>
