@@ -82,6 +82,7 @@ public class MessageHandler implements Messages.PasskeysApi {
     private static final String RESTORE_CREDENTIAL_PROVIDER_ERROR = "Restore credentials need Google Play services 24.22 or newer.";
     private static final String CONDITIONAL_CREATE_NOT_ELIGIBLE_ERROR = "The credential provider did not create a passkey without asking.";
     private static final String CONDITIONAL_CREATE_UNSUPPORTED_ERROR = "The credential provider does not support conditional passkey creation.";
+    private static final String DOMAIN_NOT_ASSOCIATED_ERROR = "The relying party id is not associated with this app. Make sure https://<rp-id>/.well-known/assetlinks.json grants delegate_permission/common.get_login_creds to this package name and to the SHA-256 fingerprint of the certificate this build is signed with (debug, upload and Play App Signing certificates differ).";
 
     private final FlutterPasskeysPlugin plugin;
 
@@ -178,7 +179,9 @@ public class MessageHandler implements Messages.PasskeysApi {
                     //  can change across Google Play Services versions.
                     //  See: https://www.corbado.com/blog/google-play-services-passkey-error-codes
                     } else if (e instanceof CreatePublicKeyCredentialDomException) {
-                                if (Objects.equals(e.getMessage(), "User is unable to create passkeys.")) {
+                                if (isSecurityError(e.getType())) {
+                                    platformException = domainNotAssociatedError(e.getMessage());
+                                } else if (Objects.equals(e.getMessage(), "User is unable to create passkeys.")) {
                                     platformException = new Messages.FlutterError("android-missing-google-sign-in",
                                             e.getMessage(), MISSING_GOOGLE_SIGN_IN_ERROR);
                                 } else if (Objects.equals(e.getMessage(), "Unable to get sync account.")) {
@@ -359,6 +362,23 @@ public class MessageHandler implements Messages.PasskeysApi {
         return null;
     }
 
+    /**
+     * A WebAuthn SecurityError means the relying party id is not verified for this app, which on Android
+     * almost always is a Digital Asset Links mismatch. Matches on getType() because release builds
+     * obfuscate class names.
+     */
+    private static boolean isSecurityError(@NonNull String type) {
+        return type.endsWith("TYPE_SECURITY_ERROR");
+    }
+
+    @NonNull
+    private static Messages.FlutterError domainNotAssociatedError(@Nullable String platformMessage) {
+        String message = platformMessage == null
+                ? DOMAIN_NOT_ASSOCIATED_ERROR
+                : DOMAIN_NOT_ASSOCIATED_ERROR + " Platform error: " + platformMessage;
+        return new Messages.FlutterError("domain-not-associated", message, platformMessage);
+    }
+
     private static Exception getCredentialError(@NonNull GetCredentialException e) {
         // currently, Android throws this error when users skip the fingerPrint
         // animation => we interpret this as a cancellation for now
@@ -373,7 +393,9 @@ public class MessageHandler implements Messages.PasskeysApi {
             return new Messages.FlutterError("android-no-credential", e.getMessage(), "");
         } else if (e instanceof GetPublicKeyCredentialDomException) {
             Log.e(TAG, "onError called", e);
-            if (Objects.equals(e.getMessage(), "Failed to decrypt credential.")) {
+            if (isSecurityError(e.getType())) {
+                return domainNotAssociatedError(e.getMessage());
+            } else if (Objects.equals(e.getMessage(), "Failed to decrypt credential.")) {
                 return new Messages.FlutterError("android-sync-account-not-available", e.getMessage(),
                         SYNC_ACCOUNT_NOT_AVAILABLE_ERROR);
             } else if (Objects.equals(e.getMessage(), "[15] Flow has timed out.")) {
