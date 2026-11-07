@@ -25,18 +25,22 @@ Packages with other changes:
 #### `corbado_auth` - `v3.8.8`
 
  - **FIX**(passkeys_darwin): add FlutterFramework SwiftPM dependency, require Flutter 3.41 ([#337](https://github.com/corbado/flutter-passkeys/issues/337)). ([beb9528a](https://github.com/corbado/flutter-passkeys/commit/beb9528ae45aedc932ead3b3c834a65791f0c3bb))
+ - **NOTE**: requires Dart 3.11 / Flutter 3.41 or later (also for CocoaPods builds). Apps on older Flutter versions keep resolving the previous release.
 
 #### `corbado_auth_firebase` - `v2.0.16`
 
  - **FIX**(passkeys_darwin): add FlutterFramework SwiftPM dependency, require Flutter 3.41 ([#337](https://github.com/corbado/flutter-passkeys/issues/337)). ([beb9528a](https://github.com/corbado/flutter-passkeys/commit/beb9528ae45aedc932ead3b3c834a65791f0c3bb))
+ - **NOTE**: requires Dart 3.11 / Flutter 3.41 or later (also for CocoaPods builds). Apps on older Flutter versions keep resolving the previous release.
 
 #### `passkeys` - `v2.24.1`
 
  - **FIX**(passkeys_darwin): add FlutterFramework SwiftPM dependency, require Flutter 3.41 ([#337](https://github.com/corbado/flutter-passkeys/issues/337)). ([beb9528a](https://github.com/corbado/flutter-passkeys/commit/beb9528ae45aedc932ead3b3c834a65791f0c3bb))
+ - **NOTE**: requires Dart 3.11 / Flutter 3.41 or later (also for CocoaPods builds). Apps on older Flutter versions keep resolving the previous release.
 
 #### `passkeys_darwin` - `v0.4.8`
 
  - **FIX**(passkeys_darwin): add FlutterFramework SwiftPM dependency, require Flutter 3.41 ([#337](https://github.com/corbado/flutter-passkeys/issues/337)). ([beb9528a](https://github.com/corbado/flutter-passkeys/commit/beb9528ae45aedc932ead3b3c834a65791f0c3bb))
+ - **NOTE**: requires Dart 3.11 / Flutter 3.41 or later (also for CocoaPods builds). Apps on older Flutter versions keep resolving the previous release.
 
 
 ## 2026-11-03
