@@ -1,3 +1,8 @@
+## 2.0.16
+
+ - **FIX**(passkeys_darwin): add FlutterFramework SwiftPM dependency, require Flutter 3.41 ([#337](https://github.com/corbado/flutter-passkeys/issues/337)). ([beb9528a](https://github.com/corbado/flutter-passkeys/commit/beb9528ae45aedc932ead3b3c834a65791f0c3bb))
+ - **NOTE**: requires Dart 3.11 / Flutter 3.41 or later (also for CocoaPods builds). Apps on older Flutter versions keep resolving the previous release.
+
 ## 2.0.15
 
  - Update a dependency to the latest release.
