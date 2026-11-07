@@ -7,8 +7,7 @@ enum CorbadoField {
   email,
 
   /// OTP code field
-  code
-  ;
+  code;
 
   /// Creates a [CorbadoField] from its backend string representation.
   factory CorbadoField.fromString(String v) => switch (v) {
