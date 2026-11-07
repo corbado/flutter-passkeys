@@ -10,11 +10,15 @@ let package = Package(
     products: [
         .library(name: "passkeys-darwin", targets: ["passkeys_darwin"])
     ],
-    dependencies: [],
+    dependencies: [
+        .package(name: "FlutterFramework", path: "../FlutterFramework")
+    ],
     targets: [
         .target(
             name: "passkeys_darwin",
-            dependencies: [],
+            dependencies: [
+                .product(name: "FlutterFramework", package: "FlutterFramework")
+            ],
             resources: [
                 .process("Resources")
             ]
