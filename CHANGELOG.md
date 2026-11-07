@@ -3,6 +3,42 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2026-11-07
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`corbado_auth` - `v3.8.8`](#corbado_auth---v388)
+ - [`corbado_auth_firebase` - `v2.0.16`](#corbado_auth_firebase---v2016)
+ - [`passkeys` - `v2.24.1`](#passkeys---v2241)
+ - [`passkeys_darwin` - `v0.4.8`](#passkeys_darwin---v048)
+
+---
+
+#### `corbado_auth` - `v3.8.8`
+
+ - **FIX**(passkeys_darwin): add FlutterFramework SwiftPM dependency, require Flutter 3.41 ([#337](https://github.com/corbado/flutter-passkeys/issues/337)). ([beb9528a](https://github.com/corbado/flutter-passkeys/commit/beb9528ae45aedc932ead3b3c834a65791f0c3bb))
+
+#### `corbado_auth_firebase` - `v2.0.16`
+
+ - **FIX**(passkeys_darwin): add FlutterFramework SwiftPM dependency, require Flutter 3.41 ([#337](https://github.com/corbado/flutter-passkeys/issues/337)). ([beb9528a](https://github.com/corbado/flutter-passkeys/commit/beb9528ae45aedc932ead3b3c834a65791f0c3bb))
+
+#### `passkeys` - `v2.24.1`
+
+ - **FIX**(passkeys_darwin): add FlutterFramework SwiftPM dependency, require Flutter 3.41 ([#337](https://github.com/corbado/flutter-passkeys/issues/337)). ([beb9528a](https://github.com/corbado/flutter-passkeys/commit/beb9528ae45aedc932ead3b3c834a65791f0c3bb))
+
+#### `passkeys_darwin` - `v0.4.8`
+
+ - **FIX**(passkeys_darwin): add FlutterFramework SwiftPM dependency, require Flutter 3.41 ([#337](https://github.com/corbado/flutter-passkeys/issues/337)). ([beb9528a](https://github.com/corbado/flutter-passkeys/commit/beb9528ae45aedc932ead3b3c834a65791f0c3bb))
+
+
 ## 2026-11-03
 
 ### Changes

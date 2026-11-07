@@ -1,3 +1,7 @@
+## 3.8.8
+
+ - **FIX**(passkeys_darwin): add FlutterFramework SwiftPM dependency, require Flutter 3.41 ([#337](https://github.com/corbado/flutter-passkeys/issues/337)). ([beb9528a](https://github.com/corbado/flutter-passkeys/commit/beb9528ae45aedc932ead3b3c834a65791f0c3bb))
+
 ## 3.8.7
 
  - **FIX**(passkeys_platform_interface): default missing credential transports to an empty list ([#331](https://github.com/corbado/flutter-passkeys/issues/331)). ([86404d9c](https://github.com/corbado/flutter-passkeys/commit/86404d9cf0501b32fef3b4702b9d057bc8e86b50))
