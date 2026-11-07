@@ -65,6 +65,15 @@ jobs:
             os: macos-latest
             swift-package-manager: false
             build: flutter build ios --debug --no-codesign
+          # Builds with the oldest Flutter the packages declare support for,
+          # so raising a dependency or using a newer API cannot silently break
+          # the advertised minimum. SwiftPM because the FlutterFramework
+          # package dependency is what set this minimum.
+          - name: iOS (minimum Flutter)
+            os: macos-latest
+            flutter: "3.41.9"
+            swift-package-manager: true
+            build: flutter build ios --debug --no-codesign
           # Guards against using APIs that only exist in the newest SDK. The
           # runtime availability checks in the native code do not stop the
           # compiler from needing the symbol, so one SDK back has to be built
@@ -119,7 +128,7 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: "3.44.5"
+          flutter-version: ${{ matrix.flutter || '3.44.5' }}
 
       - name: Set up melos
         uses: bluefireteam/melos-action@v3
