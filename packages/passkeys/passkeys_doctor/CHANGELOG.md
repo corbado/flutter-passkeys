@@ -1,3 +1,7 @@
+## 1.7.1
+
+ - **FIX**(passkeys_doctor): replace dead docs.corbado.com links ([#343](https://github.com/corbado/flutter-passkeys/issues/343)).
+
 ## 1.7.0
 
  - **FIX**(passkeys_android): report provider failures separately from cancellations ([#333](https://github.com/corbado/flutter-passkeys/issues/333)). ([e1f76074](https://github.com/corbado/flutter-passkeys/commit/e1f76074478266113457e1ab50e98b2f9a6350a0))
