@@ -61,7 +61,7 @@ const Map<String, ExceptionInfo> exceptionInfos = {
     platforms: ['Android', 'iOS'],
     suggestions: [
       'Android: make sure https://<rp-id>/.well-known/assetlinks.json lists your package name and the SHA-256 fingerprint of the certificate the running build is signed with. Debug, upload and Play App Signing certificates have different fingerprints.',
-      'iOS: check our docs on https://docs.corbado.com/corbado-complete/frontend-integration/flutter/run-on-physical-device/ios/configure-device',
+      'iOS: make sure https://<rp-id>/.well-known/apple-app-site-association lists your <TeamID>.<BundleID> and the app has the webcredentials:<rp-id> Associated Domains entitlement, see https://pub.dev/packages/passkeys#ios',
     ],
   ),
   'deviceNotSupported': ExceptionInfo(
@@ -210,7 +210,7 @@ Future<ExceptionInfo> getExceptionInfo(
           'In your case it is caused by Apple CDN caching of the AASA file; check docs for the `?mode=developer` parameter.',
       platforms: ['iOS'],
       suggestions: [
-        'Clear any CDN caches or use the `?mode=developer` flag, see https://docs.corbado.com/corbado-complete/frontend-integration/flutter/run-on-physical-device/ios/overview#aasa-file-caching-and-the-%3Fmode%3Ddeveloper-parameter',
+        'Clear any CDN caches or use the `?mode=developer` flag, see https://developer.apple.com/documentation/bundleresources/entitlements/com.apple.developer.associated-domains',
       ],
     );
   }

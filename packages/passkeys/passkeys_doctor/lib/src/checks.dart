@@ -4,11 +4,10 @@ import 'types/exceptions.dart';
 /// Documentation links surfaced on failing checkpoints.
 class DocLinks {
   static const flutterIntegration =
-      'https://docs.corbado.com/corbado-complete/frontend-integration/flutter';
-  static const ios =
-      'https://docs.corbado.com/corbado-complete/frontend-integration/flutter/run-on-physical-device/ios/overview';
-  static const android =
-      'https://docs.corbado.com/corbado-complete/frontend-integration/flutter/run-on-physical-device/android/overview';
+      'https://pub.dev/packages/passkeys#getting-started';
+  static const ios = 'https://pub.dev/packages/passkeys#ios';
+  static const android = 'https://pub.dev/packages/passkeys#android';
+  static const web = 'https://pub.dev/packages/passkeys#web';
 }
 
 /// Validates the RPID value.
