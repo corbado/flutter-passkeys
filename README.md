@@ -26,39 +26,7 @@ Currently Android, iOS, macOS, Web and Windows are supported.
 
 [Read more](./packages/passkeys/passkeys/README.md)
 
-### 2. Corbado Auth
-
-#### Description
-
-A Flutter package that builds on the passkeys package.
-It adds additional functionalities to make it simpler to use passkey authentication in your own Flutter app.
-
-[![integration-guides](https://github.com/user-attachments/assets/7859201b-a345-4b68-b336-6e2edcc6577b)](https://app.corbado.com/integration-guides/flutter)
-
-#### Features
-
-- sign up and login users with passkeys
-- connect Corbado as pre-implemented relying party server
-- keep users logged in even if they close the app (automatic session refresh)
-
-[Read more](./packages/corbado_auth/README.md)
-
-### 3. Corbado Auth Firebase
-
-A Flutter package that builds on the corbado_auth and the passkeys package.
-It helps you to integrate passkey authentication into your Flutter app that uses Firebase as a backend.
-
-> **Note:** This package is currently broken and will be fixed in the future. There is no specific ETA on when the fix will be available.
-
-#### Features
-
-- allow new users to sign up and log in using passkeys
-- allow existing users (that you created with Firebase authentication) to setup a passkey and then log in with it
-- email OTP codes as fallback mechanism for situations when passkeys can not be used (e.g. when a user logs in to a device where none of his passkeys is available)
-
-[Read more](./packages/corbado_auth_firebase/README.md)
-
-### 4. Supabase
+### 2. Supabase
 
 The `passkeys` package can be used as the platform authenticator for [supabase_flutter](https://pub.dev/packages/supabase_flutter).
 Supabase Auth acts as the relying party server, while `passkeys` handles the native passkey prompts on iOS, Android, macOS, Windows and Web.
