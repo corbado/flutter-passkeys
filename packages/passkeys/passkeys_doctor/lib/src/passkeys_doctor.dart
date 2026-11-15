@@ -115,7 +115,7 @@ class PasskeysDoctor {
           'index.html. Releases: '
           'https://github.com/corbado/flutter-passkeys/releases',
       type: CheckpointType.error,
-      documentationLink: DocLinks.flutterIntegration,
+      documentationLink: DocLinks.web,
     );
   }
 
