@@ -1,7 +1,7 @@
 name: corbado_telemetry_api_client
 description: Client for the Corbado Telemetry API
 version: 1.0.2
-homepage: https://docs.corbado.com/overview/welcome
+repository: https://github.com/corbado/flutter-passkeys/tree/main/packages/corbado_telemetry_api_client
 
 environment:
   sdk: '>=3.9.0 <4.0.0'

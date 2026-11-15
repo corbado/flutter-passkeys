@@ -41,8 +41,7 @@ The flow is shown in the image below.
 
 At first, the user will provide his email address or a username to your app.
 This email address will be sent to the relying party server.
-You can implement that server yourself, or you can rely on prebuilt ones (e.g. provided
-by [Corbado](https://app.corbado.com)).
+You can implement that server yourself, or you can rely on an existing one (e.g. Supabase Auth).
 The relying party server's response will contain _publicKeyCredentialCreationOptions_.
 It contains all information required by the user's device to set up a passkey.
 
@@ -138,9 +137,10 @@ There is no configuration required and you can go through sign up and login flow
 
 **Note:**
 
-- ⚠️ You share a relying party server with other Flutter developers. Its user table is flushed every
-  day. We have built the example this way to make it very simple to set up. For an example, this
-  works totally fine, but if you want to build your own app you need your own relying party server.
+- ⚠️ The example runs a minimal relying party server inside the app
+  (`example/lib/local_relying_party_server.dart`) and keeps users in memory only. This keeps the
+  example simple to set up, but if you want to build your own app you need your own relying party
+  server.
 - ⚠️ You cannot run the example on physical iOS devices but only on a simulator (for Android,
   physical devices + emulators work).
 
