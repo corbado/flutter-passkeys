@@ -17,8 +17,16 @@ import 'package:passkeys/authenticator.dart';
 
 /// The Cobardo Auth SDK helps you with bringing passkey authentication to your
 /// app.
+@Deprecated(
+  'corbado_auth is discontinued and no longer maintained. Use the passkeys '
+  'package with your own relying party server instead.',
+)
 class CorbadoAuth {
   /// Constructor
+  @Deprecated(
+    'corbado_auth is discontinued and no longer maintained. Use the '
+    'passkeys package with your own relying party server instead.',
+  )
   CorbadoAuth();
 
   /// Should be listened to to get updates to the User object

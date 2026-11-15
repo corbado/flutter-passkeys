@@ -30,6 +30,11 @@ linter:
 formatter:
   trailing_commas: preserve
 analyzer:
+  # Discontinued package: its own code and example still use the
+  # deprecated API on purpose.
+  errors:
+    deprecated_member_use: ignore
+    deprecated_member_use_from_same_package: ignore
   exclude:
     - build/**
     - android/**

@@ -1,6 +1,11 @@
 include: package:very_good_analysis/analysis_options.5.0.0.yaml
 
 analyzer:
+  # Discontinued package: its own code and example still use the
+  # deprecated API on purpose.
+  errors:
+    deprecated_member_use: ignore
+    deprecated_member_use_from_same_package: ignore
   exclude:
     - "**/*.g.dart"
     - build/**

@@ -1,3 +1,7 @@
+> **This package is discontinued and no longer maintained.** It requires Corbado Complete,
+> which is no longer offered. To use passkeys in Flutter, use the
+> [passkeys](https://pub.dev/packages/passkeys) package with your own relying party server.
+
 <img width="1070" alt="GitHub Repo Cover" src="https://raw.githubusercontent.com/corbado/flutter-passkeys/main/.github/images/root_headline.png">
 
 # Corbado Auth for Flutter

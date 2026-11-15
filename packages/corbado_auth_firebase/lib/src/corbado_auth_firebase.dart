@@ -7,8 +7,18 @@ import 'package:passkeys/authenticator.dart';
 import 'package:ua_client_hints/ua_client_hints.dart';
 
 /// Entry point that connects Firebase Functions with Corbado passkey flows.
+@Deprecated(
+  'corbado_auth_firebase is discontinued and no longer maintained. Uninstall '
+  'the authentication-corbado Firebase extension and use the passkeys '
+  'package with your own relying party server instead.',
+)
 class CorbadoAuthFirebase {
   /// Constructor
+  @Deprecated(
+    'corbado_auth_firebase is discontinued and no longer maintained. '
+    'Uninstall the authentication-corbado Firebase extension and use the '
+    'passkeys package with your own relying party server instead.',
+  )
   CorbadoAuthFirebase();
 
   late CorbadoService _corbadoService;
