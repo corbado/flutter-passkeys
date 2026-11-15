@@ -41,8 +41,7 @@ The flow is shown in the image below.
 
 At first, the user will provide his email address or a username to your app.
 This email address will be sent to the relying party server.
-You can implement that server yourself, or you can rely on prebuilt ones (e.g. provided
-by [Corbado](https://app.corbado.com)).
+You can implement that server yourself, or you can rely on an existing one (e.g. Supabase Auth).
 The relying party server's response will contain _publicKeyCredentialCreationOptions_.
 It contains all information required by the user's device to set up a passkey.
 
@@ -90,8 +89,6 @@ example's [README](https://github.com/corbado/flutter-passkeys/blob/main/package
 ## Usage
 
 To get an idea on how to use this package to sign up and login users take a look at the code below.
-It has been extracted from [corbado_auth](https://pub.dev/packages/corbado_auth).
-There we use it to build a passkey centered authentication SDK.
 To see this code in connection with a UI, take a look at the example and run it on your machine.
 Tip: You can also debug through it to get a better understanding of how it works.
 
@@ -140,9 +137,10 @@ There is no configuration required and you can go through sign up and login flow
 
 **Note:**
 
-- ⚠️ You share a relying party server with other Flutter developers. Its user table is flushed every
-  day. We have built the example this way to make it very simple to set up. For an example, this
-  works totally fine, but if you want to build your own app you need your own relying party server.
+- ⚠️ The example runs a minimal relying party server inside the app
+  (`example/lib/local_relying_party_server.dart`) and keeps users in memory only. This keeps the
+  example simple to set up, but if you want to build your own app you need your own relying party
+  server.
 - ⚠️ You cannot run the example on physical iOS devices but only on a simulator (for Android,
   physical devices + emulators work).
 
@@ -162,35 +160,14 @@ party server with this package.
 <summary>3. Use case: You want to use passkeys for your app but you don't want to build your own relying party server</summary>
 
 To use passkeys in your own app, you need a relying party server.
-If you don't want to build one, you can use already existing solutions.
-To save time and effort, you can use [Corbado](https://app.corbado.com) as a relying party server.
-If you want to try it out, use [corbado_auth](https://pub.dev/packages/corbado_auth).
-Find an example how to do this including a step by step
-guide [here](https://github.com/corbado/example-passkeys-flutter).
-
-FYI: You can use this approach in two variations:
-
-- You are building a new app and don't have an existing user base: In this case you can use
-  CorbadoAuth from [corbado_auth](https://pub.dev/packages/corbado_auth) and let it manage both
-  passkeys and users for you.
-- You want to introduce passkeys to an already existing app that has an existing user base: In this
-  case you can use CustomCorbadoAuth from [corbado_auth](https://pub.dev/packages/corbado_auth) and
-  let
-  it manage passkeys for you. You will continue to manage users and sessions yourself though.
+If you don't want to build one, you can use an existing solution that implements WebAuthn,
+for example Supabase Auth together with [supabase_flutter](https://pub.dev/packages/supabase_flutter)
+(see the [repository README](https://github.com/corbado/flutter-passkeys#2-supabase)).
 
 </details>
 
 <details>
-<summary>4. Use case: You want to use Firebase together with passkeys</summary>
-
-Firebase is a great technology that helps you with building your app.
-To use passkeys together with Firebase you can
-use [corbado_auth_firebase](https://pub.dev/packages/corbado_auth_firebase).
-
-</details>
-
-<details>
-<summary>5. Use case: You want to handle when the passkeys are not supported</summary>
+<summary>4. Use case: You want to handle when the passkeys are not supported</summary>
 
 ```dart
 if (kIsWeb) {
