@@ -3,6 +3,34 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2026-11-15
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`passkeys_doctor` - `v1.7.1`](#passkeys_doctor---v171)
+ - [`passkeys` - `v2.24.2`](#passkeys---v2242)
+
+Packages with dependency updates only:
+
+> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
+
+ - `passkeys` - `v2.24.2`
+
+---
+
+#### `passkeys_doctor` - `v1.7.1`
+
+ - **FIX**(passkeys_doctor): replace dead docs.corbado.com links ([#343](https://github.com/corbado/flutter-passkeys/issues/343)).
+
+
 ## 2026-11-07
 
 ### Changes
