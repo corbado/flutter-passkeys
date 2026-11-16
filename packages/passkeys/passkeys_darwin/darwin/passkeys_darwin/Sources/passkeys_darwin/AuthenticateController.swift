@@ -109,6 +109,19 @@ class AuthenticateController: NSObject, ASAuthorizationControllerDelegate, ASAut
             let window = flutterDelegate.window {
                 return window
         }
+        // With the UIScene lifecycle the window belongs to the scene and the app delegate's window is nil.
+        let windowScenes = UIApplication.shared.connectedScenes.compactMap { $0 as? UIWindowScene }
+        let activeScenesFirst = windowScenes.filter { $0.activationState == .foregroundActive }
+            + windowScenes.filter { $0.activationState != .foregroundActive }
+        for windowScene in activeScenesFirst {
+            if let sceneDelegate = windowScene.delegate as? UIWindowSceneDelegate,
+                let window = sceneDelegate.window ?? nil {
+                return window
+            }
+            if let window = windowScene.windows.first(where: { $0.isKeyWindow }) {
+                return window
+            }
+        }
         // Fallback: create a new window (shouldn't be reached if app is well configured)
         return UIWindow()
 #elseif os(macOS)
