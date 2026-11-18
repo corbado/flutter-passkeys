@@ -19,11 +19,10 @@ extension PigeonError {
             break
         case ASAuthorizationError.canceled:
             // Apple returns `.canceled` both when the user dismisses the sheet
-            // and when there are no credentials available, and intentionally
-            // exposes no locale independent way to tell them apart in the modal
-            // flow. `preferImmediatelyAvailableCredentials` avoids this ambiguity
-            // by surfacing `.notInteractive` instead (handled below). As a best
-            // effort for the modal flow we still inspect the error strings.
+            // and when there are no credentials available, including with
+            // `preferImmediatelyAvailableCredentials` (observed on iOS 26).
+            // Only the latter carries a failure reason; see
+            // `isNoCredentialsAvailable`.
             if (isNoCredentialsAvailable(error)) {
                 code = "no-credentials-available"
             } else {
@@ -44,10 +43,9 @@ extension PigeonError {
             }
             break
         default:
-            // ASAuthorizationError code 1005 (.notInteractive, iOS 15+) is returned
-            // when `preferImmediatelyAvailableCredentials` is set and no credentials
-            // are available, without showing any UI. This is the only reliable,
-            // locale independent signal for the no credentials case.
+            // ASAuthorizationError code 1005 (.notInteractive, iOS 15+) is documented
+            // for `preferImmediatelyAvailableCredentials` when no credentials are
+            // available, although iOS 26 returns `.canceled` instead (see above).
             if error.code.rawValue == 1005 {
                 code = "no-credentials-available"
             }
@@ -83,12 +81,18 @@ extension PigeonError {
     }
 }
 
+/// A `.canceled` for missing credentials carries a failure reason ("No
+/// credentials available for login.", localized to the device language), while
+/// a dismissed sheet carries none, so the presence of the key works in any
+/// language. The message check is kept as a fallback.
 @available(iOS 13.0, *)
 private func isNoCredentialsAvailable(_ error: ASAuthorizationError) -> Bool {
     let nsError = error as NSError
+    if nsError.userInfo[NSLocalizedFailureReasonErrorKey] != nil {
+        return true
+    }
     let candidates = [
         error.localizedDescription,
-        nsError.userInfo[NSLocalizedFailureReasonErrorKey] as? String,
         nsError.userInfo[NSDebugDescriptionErrorKey] as? String,
         (nsError.userInfo[NSUnderlyingErrorKey] as? NSError)?.localizedDescription,
     ]
